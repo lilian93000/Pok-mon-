@@ -1,0 +1,72 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+ * Design system AnalyseTaCopro
+ * Palette, typographie et rayons définis en tokens Tailwind v4 (@theme).
+ * Utilisables ensuite comme utilitaires : bg-brand, text-ink, bg-brand-soft…
+ */
+@theme {
+  /* Bleus de marque */
+  --color-brand: #0b5fff; /* bleu principal (signature) */
+  --color-brand-dark: #0a3d9e; /* bleu foncé */
+  --color-brand-night: #061a4a; /* bleu nuit (header/footer) */
+  --color-brand-soft: #e8f0ff; /* bleu clair (fonds doux) */
+  --color-brand-bright: #4d8bff; /* bleu lumineux (accent dégradé) */
+
+  /* Textes */
+  --color-ink: #0c1424; /* texte principal */
+  --color-slate: #5a6577; /* texte secondaire */
+
+  /* États / verdicts */
+  --color-success: #12b981;
+  --color-amber: #f5a524;
+  --color-danger: #ef4444;
+
+  /* Typographie */
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+
+  /* Rayons (coins arrondis 12–24px) */
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+
+  /* Ombres douces bleutées */
+  --shadow-soft: 0 10px 30px -12px rgba(11, 95, 255, 0.25);
+  --shadow-card: 0 4px 20px -6px rgba(11, 95, 255, 0.15);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #0c1424;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Titres : poids 800, letter-spacing négatif (-0.02em). */
+h1,
+h2,
+h3 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Dégradé bleu de marque, réutilisable. */
+.bg-brand-gradient {
+  background-image: linear-gradient(135deg, #0b5fff, #4d8bff);
+}
