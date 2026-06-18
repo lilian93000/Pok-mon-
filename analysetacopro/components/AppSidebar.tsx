@@ -10,6 +10,8 @@ import {
   Users,
   Settings,
   LogOut,
+  ShoppingBag,
+  Palette,
   type LucideIcon,
 } from "lucide-react";
 import { Logo } from "./Logo";
@@ -24,6 +26,14 @@ export interface NavItem {
 export const DASHBOARD_NAV: NavItem[] = [
   { label: "Tableau de bord", href: "/dashboard", icon: LayoutDashboard },
   { label: "Nouveau dossier", href: "/dashboard/nouveau", icon: FilePlus2 },
+];
+
+export const PRO_NAV: NavItem[] = [
+  { label: "Vue d'ensemble", href: "/pro", icon: LayoutDashboard },
+  { label: "Commander", href: "/pro#commander", icon: ShoppingBag },
+  { label: "Historique", href: "/pro#historique", icon: FolderOpen },
+  { label: "Mon équipe", href: "/pro#equipe", icon: Users },
+  { label: "Co-branding", href: "/pro#co-branding", icon: Palette },
 ];
 
 export const ADMIN_NAV: NavItem[] = [
@@ -56,8 +66,7 @@ export function AppSidebar({
         {items.map((item) => {
           const active =
             pathname === item.href ||
-            (item.href !== "/dashboard" &&
-              item.href !== "/admin" &&
+            (!["/dashboard", "/admin", "/pro"].includes(item.href) &&
               pathname.startsWith(item.href));
           return (
             <Link

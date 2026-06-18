@@ -37,8 +37,8 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Button href="/dashboard" variant="ghost" size="sm">
-            Espace client
+          <Button href="/connexion" variant="ghost" size="sm">
+            Connexion
           </Button>
           <Button href="/analyse-avant-achat" size="sm">
             Faire analyser
