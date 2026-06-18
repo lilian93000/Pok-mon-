@@ -34,13 +34,13 @@ npm run dev                  # http://localhost:3000
 | 1 | Fondations (design system, `ScoreGauge`, `calculateScore`) | ✅ Fait |
 | 2 | Page d'accueil | ✅ Fait |
 | 3 | Pages publiques (avant achat, agences, tarifs, à propos, contact, FAQ) | ✅ Fait |
-| 4 | Base de données (Prisma + PostgreSQL) | ⏳ À venir |
+| 4 | Base de données (Prisma + PostgreSQL) | ✅ Schéma + client + seed |
 | 5 | Authentification (NextAuth) | ⏳ À venir |
-| 6 | Espace client (dashboard) | ⏳ À venir |
-| 7 | Création de dossier (6 étapes + upload) | ⏳ À venir |
-| 8 | Paiement Stripe | ⏳ À venir |
+| 6 | Espace client (dashboard) | ✅ Fait (données démo) |
+| 7 | Création de dossier (6 étapes) | ✅ UI complète (upload simulé) |
+| 8 | Paiement Stripe | ⏳ À venir (UI de paiement en place) |
 | 9 | Emails automatiques (Resend) | ⏳ À venir |
-| 10 | Espace admin | ⏳ À venir |
+| 10 | Espace admin | ✅ KPIs + saisie du Score en live |
 | 11 | Espace agences (B2B) | ⏳ À venir |
 | 12 | Blog SEO | ⏳ À venir |
 

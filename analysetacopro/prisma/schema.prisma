@@ -1,0 +1,127 @@
+// AnalyseTaCopro — schéma de données (Phase 4)
+// Voir le brief, section 8.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String?
+  phone     String?
+  password  String?
+  role      Role       @default(PARTICULIER)
+  createdAt DateTime   @default(now())
+  dossiers  Dossier[]
+  paiements Paiement[]
+}
+
+enum Role {
+  PARTICULIER
+  PROFESSIONNEL
+  ADMIN
+  SUPER_ADMIN
+}
+
+model Dossier {
+  id         String        @id @default(cuid())
+  userId     String
+  user       User          @relation(fields: [userId], references: [id])
+  adresse    String
+  ville      String
+  codePostal String
+  typeBien   TypeBien      @default(APPARTEMENT)
+  statut     StatutDossier @default(NOUVEAU)
+  formule    Formule
+  prixHT     Float
+  scoreFinal Float?
+  createdAt  DateTime      @default(now())
+  documents  Document[]
+  rapport    Rapport?
+}
+
+enum TypeBien {
+  APPARTEMENT
+  LOCAL
+  PARKING
+}
+
+enum StatutDossier {
+  NOUVEAU
+  DOCUMENTS_RECUS
+  DOCUMENTS_INCOMPLETS
+  ANALYSE_EN_COURS
+  ANALYSE_TERMINEE
+  RAPPORT_LIVRE
+  CLOTURE
+}
+
+enum Formule {
+  ESSENTIEL
+  PREMIUM
+  INVESTISSEUR
+  FICHE_AGENCE
+  PACK_5
+  PACK_10
+  PACK_25
+  PACK_50
+}
+
+model Document {
+  id             String   @id @default(cuid())
+  dossierId      String
+  dossier        Dossier  @relation(fields: [dossierId], references: [id])
+  nom            String
+  type           TypeDoc
+  poids          Int
+  cheminStockage String
+  version        Int      @default(1)
+  createdAt      DateTime @default(now())
+}
+
+enum TypeDoc {
+  PV_AG
+  PRE_ETAT_DATE
+  CARNET_ENTRETIEN
+  REGLEMENT
+  DIAGNOSTIC
+  ANNEXE_COMPTABLE
+  AUTRE
+}
+
+model Rapport {
+  id               String   @id @default(cuid())
+  dossierId        String   @unique
+  dossier          Dossier  @relation(fields: [dossierId], references: [id])
+  version          Int      @default(1)
+  statut           String   @default("brouillon")
+  cheminPDF        String?
+  resume           String?
+  scoreFinal       Float?
+  noteFinances     Float?
+  noteTravaux      Float?
+  noteGestion      Float?
+  noteContentieux  Float?
+  noteImpayes      Float?
+  noteEnergie      Float?
+  noteTransparence Float?
+  createdAt        DateTime @default(now())
+}
+
+model Paiement {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  montant    Float
+  tva        Float    @default(0)
+  stripeId   String?
+  statut     String   @default("en_attente")
+  facturePDF String?
+  createdAt  DateTime @default(now())
+}
