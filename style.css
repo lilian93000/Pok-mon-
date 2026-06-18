@@ -1,0 +1,156 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: linear-gradient(160deg, #1b2a4a, #0e1726);
+  color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+#game {
+  width: 520px;
+  max-width: 100%;
+  background: #16203a;
+  border: 3px solid #2c3e66;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+}
+
+#topbar { text-align: center; margin-bottom: 12px; }
+#topbar h1 {
+  font-size: 28px;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #ffd54f, #ff7043);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+#hint { font-size: 12px; color: #9fb0d0; margin-top: 4px; }
+
+/* ---- Gestion des écrans ---- */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ---- Écran de départ ---- */
+#start-screen h2 { text-align: center; margin-bottom: 16px; }
+.starter-choices { display: flex; gap: 12px; justify-content: center; }
+.starter-card {
+  flex: 1;
+  border-radius: 12px;
+  padding: 16px 8px;
+  text-align: center;
+  cursor: pointer;
+  color: #222;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border: 3px solid rgba(0,0,0,0.1);
+}
+.starter-card:hover { transform: translateY(-6px); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+.starter-sprite { font-size: 52px; }
+.starter-name { font-weight: 700; margin: 6px 0; font-size: 18px; }
+.starter-type {
+  display: inline-block; padding: 2px 10px; border-radius: 10px;
+  color: #fff; font-size: 12px; font-weight: 600;
+}
+
+/* ---- Overworld ---- */
+#map {
+  display: block;
+  margin: 0 auto;
+  border-radius: 10px;
+  image-rendering: pixelated;
+  border: 3px solid #2c3e66;
+}
+#world-ui {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+#world-msg { font-size: 13px; color: #ffe082; flex: 1; }
+
+button {
+  background: #3a4f86;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.15s;
+}
+button:hover:not(:disabled) { background: #4d68ad; }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ---- Combat ---- */
+.battle-field {
+  background: linear-gradient(180deg, #aee1ff 0%, #cdeeb0 100%);
+  border-radius: 10px;
+  padding: 16px;
+  min-height: 240px;
+  position: relative;
+}
+.enemy-side { display: flex; justify-content: flex-end; align-items: flex-start; gap: 10px; }
+.player-side { display: flex; justify-content: flex-start; align-items: flex-end; gap: 10px; margin-top: 26px; }
+.player-side { flex-direction: row-reverse; justify-content: flex-end; }
+
+.sprite-box {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 56px;
+  box-shadow: inset 0 -6px 12px rgba(0,0,0,0.15);
+}
+.mon-info {
+  background: rgba(255,255,255,0.92);
+  color: #222;
+  border-radius: 8px;
+  padding: 8px 10px;
+  min-width: 180px;
+}
+.info-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.lvl { color: #555; font-weight: 600; font-size: 12px; }
+.type-badge {
+  display: inline-block; padding: 1px 8px; border-radius: 8px;
+  color: #fff; font-size: 11px; font-weight: 600; margin-left: 4px;
+}
+.hp-bar {
+  background: #444; border-radius: 6px; height: 8px; overflow: hidden; margin: 4px 0;
+}
+.hp-fill { height: 100%; transition: width 0.4s ease; }
+.hp-text { font-size: 11px; color: #444; }
+
+.battle-log {
+  background: #0e1726;
+  border: 2px solid #2c3e66;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 12px 0;
+  min-height: 46px;
+  font-size: 14px;
+  color: #ffe082;
+}
+.battle-menu {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.battle-menu button { width: 100%; }
+
+/* ---- Équipe ---- */
+#party-screen h2 { text-align: center; margin-bottom: 14px; }
+.party-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.party-card {
+  display: flex; align-items: center; gap: 12px;
+  background: #1f2c4d; border: 2px solid; border-radius: 10px; padding: 8px 12px;
+}
+.party-sprite {
+  width: 56px; height: 56px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 34px;
+}
+.party-meta { flex: 1; }
+.ball-info { text-align: center; color: #ffe082; font-weight: 600; }
