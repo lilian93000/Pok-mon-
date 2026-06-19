@@ -1,0 +1,74 @@
+name: Déployer AnalyseTaCopro sur GitHub Pages
+
+on:
+  push:
+    branches:
+      - claude/token-usage-check-vcinzx
+  workflow_dispatch:
+
+# Permissions nécessaires au déploiement Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un seul déploiement Pages à la fois
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: analysetacopro
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: analysetacopro/package-lock.json
+
+      - name: Calcul du chemin de base
+        id: base
+        run: echo "path=/$(echo '${{ github.repository }}' | cut -d/ -f2)" >> "$GITHUB_OUTPUT"
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Retrait de l'API (non supportée en site statique)
+        run: rm -rf app/api
+
+      - name: Build (export statique)
+        env:
+          STATIC_EXPORT: "true"
+          NEXT_PUBLIC_STATIC: "true"
+          BASE_PATH: ${{ steps.base.outputs.path }}
+        run: npm run build
+
+      - name: Désactiver Jekyll
+        run: touch out/.nojekyll
+
+      - name: Configuration de Pages
+        uses: actions/configure-pages@v5
+
+      - name: Empaquetage du site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: analysetacopro/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Déploiement
+        id: deployment
+        uses: actions/deploy-pages@v4

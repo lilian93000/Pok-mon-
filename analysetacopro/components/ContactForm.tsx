@@ -18,7 +18,28 @@ export function ContactForm() {
     setStatus("loading");
     setError("");
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<
+      string,
+      string
+    >;
+
+    // Site statique (GitHub Pages) : pas de backend → on ouvre la
+    // messagerie du visiteur (mailto), honnête et fonctionnel.
+    if (process.env.NEXT_PUBLIC_STATIC === "true") {
+      const to = "contact@analysetacopro.fr";
+      const subject = encodeURIComponent(
+        `[Contact] ${data.subject || "Nouveau message"} — ${data.name || ""}`
+      );
+      const body = encodeURIComponent(
+        `Nom : ${data.name || ""}\nEmail : ${data.email || ""}\nTéléphone : ${
+          data.phone || "—"
+        }\n\n${data.message || ""}`
+      );
+      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+      setStatus("success");
+      form.reset();
+      return;
+    }
 
     try {
       const res = await fetch("/api/contact", {
