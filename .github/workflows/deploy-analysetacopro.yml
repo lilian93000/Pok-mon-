@@ -6,19 +6,15 @@ on:
       - claude/token-usage-check-vcinzx
   workflow_dispatch:
 
-# Permissions nécessaires au déploiement Pages
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
-# Un seul déploiement Pages à la fois
 concurrency:
-  group: pages
+  group: deploy-ghpages
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -54,23 +50,14 @@ jobs:
       - name: Désactiver Jekyll
         run: touch out/.nojekyll
 
-      - name: Configuration de Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
-      - name: Empaquetage du site
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: analysetacopro/out
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Déploiement
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publication sur la branche gh-pages
+        working-directory: analysetacopro/out
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git init -q
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "deploy: site statique AnalyseTaCopro (${GITHUB_SHA::7})"
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:gh-pages
