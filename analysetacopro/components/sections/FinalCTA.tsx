@@ -18,7 +18,7 @@ export function FinalCTA() {
                 main et risques sous les yeux.
               </p>
               <div className="mt-9 flex justify-center">
-                <Button href="/analyse-avant-achat" size="lg">
+                <Button href="/dashboard/nouveau" size="lg">
                   Faire analyser ma copropriété
                   <ArrowRight className="h-5 w-5" />
                 </Button>

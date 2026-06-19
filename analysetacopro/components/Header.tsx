@@ -42,7 +42,7 @@ export function Header() {
           <Button href="/connexion" variant="ghost" size="sm">
             Connexion
           </Button>
-          <Button href="/analyse-avant-achat" size="sm">
+          <Button href="/dashboard/nouveau" size="sm">
             Faire analyser
           </Button>
         </div>
@@ -76,7 +76,7 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <Button href="/analyse-avant-achat" className="mt-2 w-full">
+          <Button href="/dashboard/nouveau" className="mt-2 w-full">
             Faire analyser ma copropriété
           </Button>
         </div>

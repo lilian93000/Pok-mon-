@@ -98,7 +98,7 @@ export default function ArticlePage({
             72h.
           </p>
           <div className="mt-5 flex justify-center">
-            <Button href="/analyse-avant-achat">
+            <Button href="/dashboard/nouveau">
               Faire analyser ma copropriété
             </Button>
           </div>
