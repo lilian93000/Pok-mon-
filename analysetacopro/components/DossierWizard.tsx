@@ -38,7 +38,7 @@ const TYPES: { value: TypeBien; icon: typeof Building2 }[] = [
 ];
 
 const inputCls =
-  "w-full rounded-2xl border border-brand/15 bg-white px-4 py-3 text-ink placeholder:text-slate/60 outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20";
+  "w-full rounded-2xl border border-brand/15 bg-surface px-4 py-3 text-foreground placeholder:text-muted/60 outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20";
 
 interface UploadedFile {
   id: string;
@@ -95,7 +95,7 @@ export function DossierWizard() {
                     "flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold transition-colors",
                     done && "bg-success text-white",
                     active && "bg-brand-gradient text-white shadow-soft",
-                    !done && !active && "bg-brand-soft text-slate"
+                    !done && !active && "bg-surface-soft text-muted"
                   )}
                 >
                   {done ? <Check className="h-4 w-4" /> : s.n}
@@ -103,7 +103,7 @@ export function DossierWizard() {
                 <span
                   className={cn(
                     "mt-1.5 hidden text-[11px] font-medium sm:block",
-                    active ? "text-brand" : "text-slate"
+                    active ? "text-brand" : "text-muted"
                   )}
                 >
                   {s.label}
@@ -113,7 +113,7 @@ export function DossierWizard() {
                 <span
                   className={cn(
                     "mx-1 h-0.5 flex-1 rounded-full transition-colors sm:mx-2",
-                    step > s.n ? "bg-success" : "bg-brand-soft"
+                    step > s.n ? "bg-success" : "bg-surface-soft"
                   )}
                 />
               )}
@@ -122,14 +122,14 @@ export function DossierWizard() {
         })}
       </ol>
 
-      <div className="rounded-3xl border border-brand/10 bg-white p-7 shadow-card md:p-9">
+      <div className="rounded-3xl border border-brand/10 bg-surface p-7 shadow-card md:p-9">
         {/* Étape 1 — Adresse */}
         {step === 1 && (
           <div className="animate-fade-up">
             <StepTitle icon={MapPin} title="Adresse du bien" sub="Où se situe la copropriété à analyser ?" />
             <div className="mt-6 space-y-4">
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-ink">
+                <label className="mb-1.5 block text-sm font-medium text-foreground">
                   Adresse
                 </label>
                 <input
@@ -141,7 +141,7 @@ export function DossierWizard() {
               </div>
               <div className="grid gap-4 sm:grid-cols-[1fr_140px]">
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-ink">
+                  <label className="mb-1.5 block text-sm font-medium text-foreground">
                     Ville
                   </label>
                   <input
@@ -152,7 +152,7 @@ export function DossierWizard() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-ink">
+                  <label className="mb-1.5 block text-sm font-medium text-foreground">
                     Code postal
                   </label>
                   <input
@@ -189,17 +189,17 @@ export function DossierWizard() {
                     className={cn(
                       "flex flex-col items-center gap-3 rounded-2xl border-2 p-6 transition-all",
                       selected
-                        ? "border-brand bg-brand-soft/60"
+                        ? "border-brand bg-surface-soft/60"
                         : "border-brand/10 hover:border-brand/30"
                     )}
                   >
                     <t.icon
                       className={cn(
                         "h-8 w-8",
-                        selected ? "text-brand" : "text-slate"
+                        selected ? "text-brand" : "text-muted"
                       )}
                     />
-                    <span className="text-sm font-semibold text-ink">
+                    <span className="text-sm font-semibold text-foreground">
                       {TYPE_BIEN_LABEL[t.value]}
                     </span>
                   </button>
@@ -232,15 +232,15 @@ export function DossierWizard() {
               className={cn(
                 "mt-6 flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center transition-colors",
                 dragging
-                  ? "border-brand bg-brand-soft/60"
-                  : "border-brand/20 hover:border-brand/40 hover:bg-brand-soft/30"
+                  ? "border-brand bg-surface-soft/60"
+                  : "border-brand/20 hover:border-brand/40 hover:bg-surface-soft/30"
               )}
             >
               <UploadCloud className="h-10 w-10 text-brand" />
-              <p className="mt-3 font-semibold text-ink">
+              <p className="mt-3 font-semibold text-foreground">
                 Glissez-déposez vos fichiers ici
               </p>
-              <p className="mt-1 text-sm text-slate">
+              <p className="mt-1 text-sm text-muted">
                 ou cliquez pour parcourir · PDF, DOCX, PNG, JPG · jusqu&apos;à
                 100 Mo
               </p>
@@ -259,13 +259,13 @@ export function DossierWizard() {
                 {files.map((f) => (
                   <li
                     key={f.id}
-                    className="flex items-center gap-3 rounded-xl border border-brand/10 bg-brand-soft/40 px-4 py-2.5"
+                    className="flex items-center gap-3 rounded-xl border border-brand/10 bg-surface-soft/40 px-4 py-2.5"
                   >
                     <FileText className="h-4 w-4 shrink-0 text-brand" />
-                    <span className="flex-1 truncate text-sm text-ink">
+                    <span className="flex-1 truncate text-sm text-foreground">
                       {f.name}
                     </span>
-                    <span className="text-xs text-slate">
+                    <span className="text-xs text-muted">
                       {formatPoids(f.size)}
                     </span>
                     <button
@@ -273,7 +273,7 @@ export function DossierWizard() {
                         e.stopPropagation();
                         setFiles((prev) => prev.filter((x) => x.id !== f.id));
                       }}
-                      className="text-slate transition-colors hover:text-danger"
+                      className="text-muted transition-colors hover:text-danger"
                       aria-label="Retirer"
                     >
                       <X className="h-4 w-4" />
@@ -303,7 +303,7 @@ export function DossierWizard() {
                     className={cn(
                       "flex w-full items-center justify-between gap-4 rounded-2xl border-2 p-4 text-left transition-all",
                       selected
-                        ? "border-brand bg-brand-soft/60"
+                        ? "border-brand bg-surface-soft/60"
                         : "border-brand/10 hover:border-brand/30"
                     )}
                   >
@@ -321,11 +321,11 @@ export function DossierWizard() {
                         )}
                       </span>
                       <div>
-                        <p className="font-bold text-ink">{o.name}</p>
-                        <p className="text-sm text-slate">{o.delivery}</p>
+                        <p className="font-bold text-foreground">{o.name}</p>
+                        <p className="text-sm text-muted">{o.delivery}</p>
                       </div>
                     </div>
-                    <span className="text-lg font-extrabold text-ink">
+                    <span className="text-lg font-extrabold text-foreground">
                       {o.price} €
                     </span>
                   </button>
@@ -353,8 +353,8 @@ export function DossierWizard() {
                   <div className="flex items-center gap-2">
                     <Zap className="h-4 w-4 text-amber" />
                     <div>
-                      <p className="font-bold text-ink">{OPTION_URGENCE.name}</p>
-                      <p className="text-sm text-slate">Livraison en 24h</p>
+                      <p className="font-bold text-foreground">{OPTION_URGENCE.name}</p>
+                      <p className="text-sm text-muted">Livraison en 24h</p>
                     </div>
                   </div>
                 </div>
@@ -374,52 +374,52 @@ export function DossierWizard() {
               title="Paiement sécurisé"
               sub="Réglez votre commande en toute sécurité (Stripe)."
             />
-            <div className="mt-6 rounded-2xl bg-brand-soft/50 p-5">
+            <div className="mt-6 rounded-2xl bg-surface-soft/50 p-5">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate">Formule {formule.name}</span>
-                <span className="font-semibold text-ink">
+                <span className="text-muted">Formule {formule.name}</span>
+                <span className="font-semibold text-foreground">
                   {formule.price} €
                 </span>
               </div>
               {urgence && (
                 <div className="mt-2 flex items-center justify-between text-sm">
-                  <span className="text-slate">Option Urgence (24h)</span>
-                  <span className="font-semibold text-ink">
+                  <span className="text-muted">Option Urgence (24h)</span>
+                  <span className="font-semibold text-foreground">
                     {OPTION_URGENCE.price} €
                   </span>
                 </div>
               )}
               <div className="mt-3 flex items-center justify-between border-t border-brand/10 pt-3">
-                <span className="font-bold text-ink">Total</span>
+                <span className="font-bold text-foreground">Total</span>
                 <span className="text-xl font-extrabold text-brand">
                   {total} €
                 </span>
               </div>
-              <p className="mt-1 text-right text-xs text-slate">
+              <p className="mt-1 text-right text-xs text-muted">
                 TVA non applicable, art. 293 B du CGI
               </p>
             </div>
 
             <div className="mt-5 space-y-4 opacity-90">
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-ink">
+                <label className="mb-1.5 block text-sm font-medium text-foreground">
                   Numéro de carte
                 </label>
                 <div className="flex items-center gap-2 rounded-2xl border border-brand/15 px-4 py-3">
-                  <CreditCard className="h-5 w-5 text-slate" />
-                  <span className="text-slate">4242 4242 4242 4242</span>
+                  <CreditCard className="h-5 w-5 text-muted" />
+                  <span className="text-muted">4242 4242 4242 4242</span>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-2xl border border-brand/15 px-4 py-3 text-slate">
+                <div className="rounded-2xl border border-brand/15 px-4 py-3 text-muted">
                   12 / 28
                 </div>
-                <div className="rounded-2xl border border-brand/15 px-4 py-3 text-slate">
+                <div className="rounded-2xl border border-brand/15 px-4 py-3 text-muted">
                   CVC
                 </div>
               </div>
             </div>
-            <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-slate">
+            <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted">
               <Lock className="h-3.5 w-3.5" />
               Paiement chiffré — démo (brancher Stripe en Phase 8).
             </p>
@@ -432,18 +432,18 @@ export function DossierWizard() {
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-success/10">
               <CheckCircle2 className="h-9 w-9 text-success" />
             </div>
-            <h2 className="mt-5 text-2xl font-extrabold tracking-tightest text-ink">
+            <h2 className="mt-5 text-2xl font-extrabold tracking-tightest text-foreground">
               Dossier créé avec succès !
             </h2>
-            <p className="mx-auto mt-3 max-w-md text-slate">
+            <p className="mx-auto mt-3 max-w-md text-muted">
               Nous avons bien reçu vos {files.length} document
               {files.length > 1 ? "s" : ""} pour le bien situé{" "}
-              <span className="font-semibold text-ink">
+              <span className="font-semibold text-foreground">
                 {adresse}, {ville}
               </span>
               . Un email de confirmation vous a été envoyé.
             </p>
-            <div className="mx-auto mt-6 max-w-sm space-y-2 rounded-2xl bg-brand-soft/50 p-5 text-left text-sm">
+            <div className="mx-auto mt-6 max-w-sm space-y-2 rounded-2xl bg-surface-soft/50 p-5 text-left text-sm">
               <Row label="Formule" value={formule.name} />
               <Row label="Type de bien" value={TYPE_BIEN_LABEL[typeBien]} />
               <Row label="Documents" value={`${files.length} fichier(s)`} />
@@ -468,7 +468,7 @@ export function DossierWizard() {
                 "inline-flex items-center gap-1.5 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors",
                 step === 1
                   ? "invisible"
-                  : "text-slate hover:bg-brand-soft hover:text-brand"
+                  : "text-muted hover:bg-surface-soft hover:text-brand"
               )}
             >
               <ArrowLeft className="h-4 w-4" />
@@ -504,10 +504,10 @@ function StepTitle({
         <Icon className="h-5 w-5" />
       </div>
       <div>
-        <h2 className="text-xl font-extrabold tracking-tightest text-ink">
+        <h2 className="text-xl font-extrabold tracking-tightest text-foreground">
           {title}
         </h2>
-        <p className="text-sm text-slate">{sub}</p>
+        <p className="text-sm text-muted">{sub}</p>
       </div>
     </div>
   );
@@ -524,8 +524,8 @@ function Row({
 }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-slate">{label}</span>
-      <span className={cn("text-ink", strong ? "font-extrabold text-brand" : "font-semibold")}>
+      <span className="text-muted">{label}</span>
+      <span className={cn("text-foreground", strong ? "font-extrabold text-brand" : "font-semibold")}>
         {value}
       </span>
     </div>

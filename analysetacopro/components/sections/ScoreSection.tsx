@@ -27,7 +27,7 @@ export function ScoreSection() {
               {CRITERIA.map((c) => (
                 <li
                   key={c.key}
-                  className="flex items-start justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-5 py-3.5"
+                  className="flex items-start justify-between gap-4 rounded-2xl border border-white/10 bg-surface/5 px-5 py-3.5"
                 >
                   <div>
                     <p className="font-semibold text-white">{c.label}</p>
@@ -44,7 +44,7 @@ export function ScoreSection() {
               {RISK_LEVELS.map((lvl) => (
                 <span
                   key={lvl.label}
-                  className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80"
+                  className="inline-flex items-center gap-2 rounded-full bg-surface/5 px-3 py-1.5 text-xs font-medium text-white/80"
                 >
                   <span
                     className="h-2.5 w-2.5 rounded-full"

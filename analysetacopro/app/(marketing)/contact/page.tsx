@@ -41,14 +41,14 @@ export default function ContactPage() {
             {INFOS.map((info) => (
               <div
                 key={info.title}
-                className="flex items-start gap-4 rounded-2xl border border-brand/10 bg-white p-5 shadow-card"
+                className="flex items-start gap-4 rounded-2xl border border-brand/10 bg-surface p-5 shadow-card"
               >
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-surface-soft text-brand">
                   <info.icon className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-ink">{info.title}</h3>
-                  <p className="text-sm text-slate">{info.text}</p>
+                  <h3 className="font-semibold text-foreground">{info.title}</h3>
+                  <p className="text-sm text-muted">{info.text}</p>
                 </div>
               </div>
             ))}

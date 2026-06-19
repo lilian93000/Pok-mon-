@@ -48,7 +48,7 @@ export default function OffrePage({ params }: { params: { id: string } }) {
       <Section>
         <Link
           href="/tarifs"
-          className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-slate transition-colors hover:text-brand"
+          className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-brand"
         >
           <ArrowLeft className="h-4 w-4" />
           Toutes les formules
@@ -63,23 +63,23 @@ export default function OffrePage({ params }: { params: { id: string } }) {
                 Notre formule la plus choisie
               </Badge>
             )}
-            <p className="text-lg leading-relaxed text-slate">{detail.intro}</p>
+            <p className="text-lg leading-relaxed text-muted">{detail.intro}</p>
 
             {detail.highlight && (
-              <p className="mt-6 rounded-2xl border-l-4 border-brand bg-brand-soft/50 p-4 font-medium text-ink">
+              <p className="mt-6 rounded-2xl border-l-4 border-brand bg-surface-soft/50 p-4 font-medium text-foreground">
                 {detail.highlight}
               </p>
             )}
 
             {/* À qui ça s'adresse */}
             <div className="mt-10">
-              <h2 className="flex items-center gap-2 text-xl font-extrabold tracking-tightest text-ink">
+              <h2 className="flex items-center gap-2 text-xl font-extrabold tracking-tightest text-foreground">
                 <Users className="h-5 w-5 text-brand" />
                 Pour qui ?
               </h2>
               <ul className="mt-4 space-y-2.5">
                 {detail.forWho.map((w) => (
-                  <li key={w} className="flex items-start gap-2.5 text-slate">
+                  <li key={w} className="flex items-start gap-2.5 text-muted">
                     <Check className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
                     <span className="leading-relaxed">{w}</span>
                   </li>
@@ -89,22 +89,22 @@ export default function OffrePage({ params }: { params: { id: string } }) {
 
             {/* Ce qui est inclus */}
             <div className="mt-10">
-              <h2 className="text-xl font-extrabold tracking-tightest text-ink">
+              <h2 className="text-xl font-extrabold tracking-tightest text-foreground">
                 Ce qui est inclus, en détail
               </h2>
               <div className="mt-5 space-y-3">
                 {detail.includes.map((inc) => (
                   <div
                     key={inc.title}
-                    className="rounded-2xl border border-brand/10 bg-white p-5 shadow-card"
+                    className="rounded-2xl border border-brand/10 bg-surface p-5 shadow-card"
                   >
                     <div className="flex items-start gap-3">
-                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
+                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface-soft text-brand">
                         <Check className="h-4 w-4" />
                       </span>
                       <div>
-                        <h3 className="font-bold text-ink">{inc.title}</h3>
-                        <p className="mt-1 text-[15px] leading-relaxed text-slate">
+                        <h3 className="font-bold text-foreground">{inc.title}</h3>
+                        <p className="mt-1 text-[15px] leading-relaxed text-muted">
                           {inc.text}
                         </p>
                       </div>
@@ -116,7 +116,7 @@ export default function OffrePage({ params }: { params: { id: string } }) {
 
             <div className="mt-8 flex items-center gap-3 rounded-2xl border border-amber/20 bg-amber/5 px-5 py-4">
               <Zap className="h-5 w-5 shrink-0 text-amber" />
-              <p className="text-sm text-ink">
+              <p className="text-sm text-foreground">
                 Besoin du rapport plus vite ?{" "}
                 <span className="font-semibold">
                   Option Urgence (24h) : +{OPTION_URGENCE.price} €
@@ -129,15 +129,15 @@ export default function OffrePage({ params }: { params: { id: string } }) {
           {/* Colonne récap / CTA (sticky) */}
           <div>
             <div className="sticky top-24 space-y-6">
-              <div className="rounded-3xl border border-brand/10 bg-white p-7 shadow-card">
-                <h3 className="text-lg font-bold text-ink">
+              <div className="rounded-3xl border border-brand/10 bg-surface p-7 shadow-card">
+                <h3 className="text-lg font-bold text-foreground">
                   Formule {offer.name}
                 </h3>
                 <div className="mt-3 flex items-end gap-1">
-                  <span className="text-4xl font-extrabold tracking-tightest text-ink">
+                  <span className="text-4xl font-extrabold tracking-tightest text-foreground">
                     {offer.price}
                   </span>
-                  <span className="mb-1 text-xl font-bold text-ink">
+                  <span className="mb-1 text-xl font-bold text-foreground">
                     {offer.unit}
                   </span>
                 </div>
@@ -150,7 +150,7 @@ export default function OffrePage({ params }: { params: { id: string } }) {
                   {offer.features.map((f) => (
                     <li key={f} className="flex items-start gap-2.5 text-sm">
                       <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
-                      <span className="text-ink/80">{f}</span>
+                      <span className="text-foreground/80">{f}</span>
                     </li>
                   ))}
                 </ul>
@@ -166,7 +166,7 @@ export default function OffrePage({ params }: { params: { id: string } }) {
                 >
                   Poser une question
                 </Button>
-                <p className="mt-4 text-center text-xs text-slate">
+                <p className="mt-4 text-center text-xs text-muted">
                   Paiement unique · TVA non applicable (art. 293 B du CGI)
                 </p>
               </div>

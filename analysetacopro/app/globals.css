@@ -3,12 +3,27 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --surface: 255 255 255;
+    --surface-soft: 232 240 255;
+    --foreground: 12 20 36;
+    --muted: 90 101 119;
+    color-scheme: light;
+  }
+  .dark {
+    --surface: 15 23 42;
+    --surface-soft: 27 37 64;
+    --foreground: 237 242 252;
+    --muted: 151 164 186;
+    color-scheme: dark;
+  }
   html {
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-white text-ink antialiased;
+    @apply bg-surface text-foreground antialiased;
     font-feature-settings: "cv11", "ss01";
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   ::selection {
     @apply bg-brand/20;

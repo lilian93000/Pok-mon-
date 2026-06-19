@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ShieldCheck, FileCheck2, Lock } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function AuthLayout({
   children,
@@ -28,7 +29,7 @@ export default function AuthLayout({
               { icon: Lock, t: "Confidentiel", s: "Vos documents chiffrés et protégés." },
             ].map((f) => (
               <li key={f.t} className="flex items-start gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-surface/10">
                   <f.icon className="h-5 w-5" />
                 </span>
                 <div>
@@ -45,7 +46,10 @@ export default function AuthLayout({
       </div>
 
       {/* Formulaire */}
-      <div className="flex items-center justify-center p-6 sm:p-12">
+      <div className="relative flex items-center justify-center p-6 sm:p-12">
+        <div className="absolute right-6 top-6">
+          <ThemeToggle />
+        </div>
         <div className="w-full max-w-sm">
           <Link href="/" className="mb-8 inline-block lg:hidden">
             <Logo />

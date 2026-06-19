@@ -15,6 +15,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Logo } from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
 import { cn } from "@/lib/utils";
 
 export interface NavItem {
@@ -52,13 +53,13 @@ export function AppSidebar({
 }) {
   const pathname = usePathname();
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r border-brand/10 bg-white md:flex">
+    <aside className="hidden w-64 shrink-0 flex-col border-r border-brand/10 bg-surface md:flex">
       <div className="flex h-16 items-center border-b border-brand/5 px-6">
         <Link href="/">
           <Logo />
         </Link>
       </div>
-      <div className="flex items-center gap-2 px-6 py-4 text-xs font-semibold uppercase tracking-wide text-slate">
+      <div className="flex items-center gap-2 px-6 py-4 text-xs font-semibold uppercase tracking-wide text-muted">
         <Shield className="h-3.5 w-3.5" />
         {label}
       </div>
@@ -76,7 +77,7 @@ export function AppSidebar({
                 "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                 active
                   ? "bg-brand-gradient text-white shadow-soft"
-                  : "text-slate hover:bg-brand-soft hover:text-brand"
+                  : "text-muted hover:bg-surface-soft hover:text-brand"
               )}
             >
               <item.icon className="h-[18px] w-[18px]" />
@@ -85,14 +86,15 @@ export function AppSidebar({
           );
         })}
       </nav>
-      <div className="border-t border-brand/5 p-3">
+      <div className="flex items-center justify-between gap-2 border-t border-brand/5 p-3">
         <Link
           href="/"
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate transition-colors hover:bg-brand-soft hover:text-brand"
+          className="flex flex-1 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-surface-soft hover:text-brand"
         >
           <LogOut className="h-[18px] w-[18px]" />
           Se déconnecter
         </Link>
+        <ThemeToggle />
       </div>
     </aside>
   );

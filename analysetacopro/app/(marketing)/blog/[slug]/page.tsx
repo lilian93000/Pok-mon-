@@ -33,19 +33,19 @@ export default function ArticlePage({
       <div className="container max-w-3xl">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-slate transition-colors hover:text-brand"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-brand"
         >
           <ArrowLeft className="h-4 w-4" />
           Tous les articles
         </Link>
 
-        <span className="mt-6 inline-flex rounded-full bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
+        <span className="mt-6 inline-flex rounded-full bg-surface-soft px-3 py-1 text-xs font-semibold text-brand">
           {article.category}
         </span>
-        <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tightest text-ink md:text-[42px] md:leading-[1.1]">
+        <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tightest text-foreground md:text-[42px] md:leading-[1.1]">
           {article.title}
         </h1>
-        <p className="mt-3 flex items-center gap-1.5 text-sm text-slate">
+        <p className="mt-3 flex items-center gap-1.5 text-sm text-muted">
           <Clock className="h-4 w-4" />
           {article.readingTime} min de lecture · {formatDate(article.date)}
         </p>
@@ -56,7 +56,7 @@ export default function ArticlePage({
               return (
                 <h2
                   key={i}
-                  className="pt-2 text-2xl font-extrabold tracking-tightest text-ink"
+                  className="pt-2 text-2xl font-extrabold tracking-tightest text-foreground"
                 >
                   {block.text}
                 </h2>
@@ -65,7 +65,7 @@ export default function ArticlePage({
               return (
                 <ul key={i} className="space-y-2">
                   {block.items.map((it, j) => (
-                    <li key={j} className="flex items-start gap-2.5 text-slate">
+                    <li key={j} className="flex items-start gap-2.5 text-muted">
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
                       <span className="leading-relaxed">{it}</span>
                     </li>
@@ -76,13 +76,13 @@ export default function ArticlePage({
               return (
                 <blockquote
                   key={i}
-                  className="rounded-2xl border-l-4 border-brand bg-brand-soft/50 p-5 text-lg font-medium italic text-ink"
+                  className="rounded-2xl border-l-4 border-brand bg-surface-soft/50 p-5 text-lg font-medium italic text-foreground"
                 >
                   {block.text}
                 </blockquote>
               );
             return (
-              <p key={i} className="text-lg leading-relaxed text-slate">
+              <p key={i} className="text-lg leading-relaxed text-muted">
                 {block.text}
               </p>
             );

@@ -40,19 +40,19 @@ export default function ProPage() {
           ].map((k) => (
             <div
               key={k.l}
-              className="rounded-3xl border border-brand/10 bg-white p-5 shadow-card"
+              className="rounded-3xl border border-brand/10 bg-surface p-5 shadow-card"
             >
-              <p className="text-2xl font-extrabold tracking-tightest text-ink">
+              <p className="text-2xl font-extrabold tracking-tightest text-foreground">
                 {k.v}
               </p>
-              <p className="text-sm text-slate">{k.l}</p>
+              <p className="text-sm text-muted">{k.l}</p>
             </div>
           ))}
         </div>
 
         {/* Commander */}
         <section id="commander">
-          <h2 className="mb-4 text-lg font-bold text-ink">Commander des fiches</h2>
+          <h2 className="mb-4 text-lg font-bold text-foreground">Commander des fiches</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {PACKS_B2B.map((p) => (
               <div
@@ -61,11 +61,11 @@ export default function ProPage() {
                   "rounded-3xl border p-5 text-center",
                   p.highlighted
                     ? "border-brand bg-brand-night text-white"
-                    : "border-brand/10 bg-white"
+                    : "border-brand/10 bg-surface"
                 )}
               >
                 <h3 className="text-sm font-bold">{p.name}</h3>
-                <p className={cn("text-sm", p.highlighted ? "text-white/60" : "text-slate")}>
+                <p className={cn("text-sm", p.highlighted ? "text-white/60" : "text-muted")}>
                   {p.sheets} {p.sheets > 1 ? "fiches" : "fiche"}
                 </p>
                 <p className="mt-3 text-2xl font-extrabold tracking-tightest">
@@ -89,12 +89,12 @@ export default function ProPage() {
 
         {/* Historique */}
         <section id="historique">
-          <h2 className="mb-4 text-lg font-bold text-ink">Historique des fiches</h2>
-          <div className="overflow-hidden rounded-3xl border border-brand/10 bg-white shadow-card">
+          <h2 className="mb-4 text-lg font-bold text-foreground">Historique des fiches</h2>
+          <div className="overflow-hidden rounded-3xl border border-brand/10 bg-surface shadow-card">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-brand/10 text-left text-xs uppercase tracking-wide text-slate">
+                  <tr className="border-b border-brand/10 text-left text-xs uppercase tracking-wide text-muted">
                     <th className="px-5 py-3 font-semibold">Référence</th>
                     <th className="px-5 py-3 font-semibold">Bien</th>
                     <th className="px-5 py-3 font-semibold">Date</th>
@@ -104,10 +104,10 @@ export default function ProPage() {
                 </thead>
                 <tbody>
                   {HISTORIQUE.map((h) => (
-                    <tr key={h.ref} className="border-b border-brand/5 last:border-0 hover:bg-brand-soft/30">
-                      <td className="px-5 py-3 font-mono text-xs text-slate">{h.ref}</td>
-                      <td className="px-5 py-3 font-medium text-ink">{h.bien}</td>
-                      <td className="px-5 py-3 text-slate">{h.date}</td>
+                    <tr key={h.ref} className="border-b border-brand/5 last:border-0 hover:bg-surface-soft/30">
+                      <td className="px-5 py-3 font-mono text-xs text-muted">{h.ref}</td>
+                      <td className="px-5 py-3 font-medium text-foreground">{h.bien}</td>
+                      <td className="px-5 py-3 text-muted">{h.date}</td>
                       <td className="px-5 py-3 font-bold text-brand">{h.score}/10</td>
                       <td className="px-5 py-3">
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
@@ -125,23 +125,23 @@ export default function ProPage() {
 
         {/* Équipe */}
         <section id="equipe">
-          <h2 className="mb-4 text-lg font-bold text-ink">Mon équipe</h2>
+          <h2 className="mb-4 text-lg font-bold text-foreground">Mon équipe</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {EQUIPE.map((m) => (
               <div
                 key={m.email}
-                className="flex items-center gap-4 rounded-3xl border border-brand/10 bg-white p-5 shadow-card"
+                className="flex items-center gap-4 rounded-3xl border border-brand/10 bg-surface p-5 shadow-card"
               >
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-gradient font-bold text-white">
                   {m.nom.split(" ").map((n) => n[0]).join("")}
                 </div>
                 <div className="min-w-0">
-                  <p className="truncate font-semibold text-ink">{m.nom}</p>
-                  <p className="truncate text-sm text-slate">{m.role}</p>
+                  <p className="truncate font-semibold text-foreground">{m.nom}</p>
+                  <p className="truncate text-sm text-muted">{m.role}</p>
                 </div>
               </div>
             ))}
-            <button className="flex items-center justify-center gap-2 rounded-3xl border-2 border-dashed border-brand/20 p-5 text-sm font-semibold text-brand transition hover:bg-brand-soft/40">
+            <button className="flex items-center justify-center gap-2 rounded-3xl border-2 border-dashed border-brand/20 p-5 text-sm font-semibold text-brand transition hover:bg-surface-soft/40">
               <Users className="h-5 w-5" />
               Inviter un collaborateur
             </button>
@@ -150,7 +150,7 @@ export default function ProPage() {
 
         {/* Co-branding */}
         <section id="co-branding">
-          <h2 className="mb-4 text-lg font-bold text-ink">Co-branding</h2>
+          <h2 className="mb-4 text-lg font-bold text-foreground">Co-branding</h2>
           <CoBranding />
         </section>
       </div>

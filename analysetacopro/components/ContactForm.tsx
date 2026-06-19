@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 type Status = "idle" | "loading" | "success" | "error";
 
 const inputCls =
-  "w-full rounded-2xl border border-brand/15 bg-white px-4 py-3 text-ink placeholder:text-slate/60 outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20";
+  "w-full rounded-2xl border border-brand/15 bg-surface px-4 py-3 text-foreground placeholder:text-muted/60 outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -61,8 +61,8 @@ export function ContactForm() {
     return (
       <div className="flex flex-col items-center gap-4 rounded-3xl border border-success/20 bg-success/5 p-10 text-center">
         <CheckCircle2 className="h-12 w-12 text-success" />
-        <h3 className="text-xl font-bold text-ink">Message envoyé !</h3>
-        <p className="max-w-sm text-slate">
+        <h3 className="text-xl font-bold text-foreground">Message envoyé !</h3>
+        <p className="max-w-sm text-muted">
           Merci de nous avoir contactés. Nous vous répondons généralement sous
           24h ouvrées.
         </p>
@@ -79,17 +79,17 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 rounded-3xl border border-brand/10 bg-white p-7 shadow-card"
+      className="space-y-4 rounded-3xl border border-brand/10 bg-surface p-7 shadow-card"
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-ink">
+          <label className="mb-1.5 block text-sm font-medium text-foreground">
             Nom *
           </label>
           <input name="name" required className={inputCls} placeholder="Jean Dupont" />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-ink">
+          <label className="mb-1.5 block text-sm font-medium text-foreground">
             Email *
           </label>
           <input
@@ -103,13 +103,13 @@ export function ContactForm() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-ink">
+          <label className="mb-1.5 block text-sm font-medium text-foreground">
             Téléphone
           </label>
           <input name="phone" className={inputCls} placeholder="06 12 34 56 78" />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-ink">
+          <label className="mb-1.5 block text-sm font-medium text-foreground">
             Sujet
           </label>
           <input
@@ -120,7 +120,7 @@ export function ContactForm() {
         </div>
       </div>
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-ink">
+        <label className="mb-1.5 block text-sm font-medium text-foreground">
           Message *
         </label>
         <textarea
@@ -151,7 +151,7 @@ export function ContactForm() {
           </>
         )}
       </button>
-      <p className="text-center text-xs text-slate">
+      <p className="text-center text-xs text-muted">
         En envoyant ce formulaire, vous acceptez notre politique de
         confidentialité. Vos données ne sont jamais revendues.
       </p>

@@ -29,7 +29,7 @@ export function Pricing({ withHeader = true, className }: PricingProps) {
                 "relative flex h-full flex-col rounded-3xl border p-7 transition-all duration-300",
                 offer.highlighted
                   ? "border-brand bg-brand-night text-white shadow-soft-lg lg:-translate-y-3"
-                  : "border-brand/10 bg-white text-ink shadow-card hover:-translate-y-1 hover:shadow-soft-lg"
+                  : "border-brand/10 bg-surface text-foreground shadow-card hover:-translate-y-1 hover:shadow-soft-lg"
               )}
             >
               {offer.highlighted && (
@@ -41,7 +41,7 @@ export function Pricing({ withHeader = true, className }: PricingProps) {
               <h3
                 className={cn(
                   "text-lg font-bold",
-                  offer.highlighted ? "text-white" : "text-ink"
+                  offer.highlighted ? "text-white" : "text-foreground"
                 )}
               >
                 {offer.name}
@@ -49,7 +49,7 @@ export function Pricing({ withHeader = true, className }: PricingProps) {
               <p
                 className={cn(
                   "mt-1 text-sm",
-                  offer.highlighted ? "text-white/70" : "text-slate"
+                  offer.highlighted ? "text-white/70" : "text-muted"
                 )}
               >
                 {offer.description}
@@ -80,7 +80,7 @@ export function Pricing({ withHeader = true, className }: PricingProps) {
                     />
                     <span
                       className={
-                        offer.highlighted ? "text-white/90" : "text-ink/80"
+                        offer.highlighted ? "text-white/90" : "text-foreground/80"
                       }
                     >
                       {f}
@@ -104,7 +104,7 @@ export function Pricing({ withHeader = true, className }: PricingProps) {
       <Reveal delay={120}>
         <div className="mx-auto mt-8 flex max-w-xl items-center justify-center gap-3 rounded-2xl border border-amber/20 bg-amber/5 px-6 py-4 text-center">
           <Zap className="h-5 w-5 shrink-0 text-amber" />
-          <p className="text-sm text-ink">
+          <p className="text-sm text-foreground">
             <span className="font-semibold">{OPTION_URGENCE.name} :</span>{" "}
             {OPTION_URGENCE.description}{" "}
             <span className="font-semibold text-amber">

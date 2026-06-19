@@ -37,29 +37,29 @@ export default function AdminPage() {
           {kpis.map((k) => (
             <div
               key={k.label}
-              className="rounded-3xl border border-brand/10 bg-white p-5 shadow-card"
+              className="rounded-3xl border border-brand/10 bg-surface p-5 shadow-card"
             >
               <div className="flex items-center justify-between">
-                <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+                <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-surface-soft text-brand">
                   <k.icon className="h-5 w-5" />
                 </span>
               </div>
-              <p className="mt-4 text-2xl font-extrabold tracking-tightest text-ink">
+              <p className="mt-4 text-2xl font-extrabold tracking-tightest text-foreground">
                 {k.value}
               </p>
-              <p className="text-sm text-slate">{k.label}</p>
+              <p className="text-sm text-muted">{k.label}</p>
             </div>
           ))}
         </div>
 
         {/* Table des dossiers */}
         <div id="dossiers">
-          <h2 className="mb-4 text-lg font-bold text-ink">Derniers dossiers</h2>
-          <div className="overflow-hidden rounded-3xl border border-brand/10 bg-white shadow-card">
+          <h2 className="mb-4 text-lg font-bold text-foreground">Derniers dossiers</h2>
+          <div className="overflow-hidden rounded-3xl border border-brand/10 bg-surface shadow-card">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-brand/10 text-left text-xs uppercase tracking-wide text-slate">
+                  <tr className="border-b border-brand/10 text-left text-xs uppercase tracking-wide text-muted">
                     <th className="px-5 py-3 font-semibold">Référence</th>
                     <th className="px-5 py-3 font-semibold">Bien</th>
                     <th className="px-5 py-3 font-semibold">Formule</th>
@@ -72,21 +72,21 @@ export default function AdminPage() {
                   {DOSSIERS_DEMO.map((d) => (
                     <tr
                       key={d.id}
-                      className="border-b border-brand/5 last:border-0 hover:bg-brand-soft/30"
+                      className="border-b border-brand/5 last:border-0 hover:bg-surface-soft/30"
                     >
-                      <td className="px-5 py-3 font-mono text-xs text-slate">
+                      <td className="px-5 py-3 font-mono text-xs text-muted">
                         {d.id}
                       </td>
-                      <td className="px-5 py-3 font-medium text-ink">
+                      <td className="px-5 py-3 font-medium text-foreground">
                         {d.adresse}, {d.ville}
                       </td>
-                      <td className="px-5 py-3 text-slate">
+                      <td className="px-5 py-3 text-muted">
                         {FORMULE_LABEL[d.formule]}
                       </td>
-                      <td className="px-5 py-3 text-slate">
+                      <td className="px-5 py-3 text-muted">
                         {formatDate(d.createdAt)}
                       </td>
-                      <td className="px-5 py-3 font-semibold text-ink">
+                      <td className="px-5 py-3 font-semibold text-foreground">
                         {d.prixHT} €
                       </td>
                       <td className="px-5 py-3">
@@ -102,10 +102,10 @@ export default function AdminPage() {
 
         {/* Saisie du score */}
         <div>
-          <h2 className="mb-1 text-lg font-bold text-ink">
+          <h2 className="mb-1 text-lg font-bold text-foreground">
             Saisie du AnalyseTaCopro Score
           </h2>
-          <p className="mb-5 text-sm text-slate">
+          <p className="mb-5 text-sm text-muted">
             Dossier <span className="font-mono">dos_2b9c</span> — 5 avenue Victor
             Hugo, Bordeaux
           </p>

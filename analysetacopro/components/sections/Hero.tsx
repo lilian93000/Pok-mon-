@@ -5,7 +5,7 @@ import { ScoreGauge } from "@/components/ScoreGauge";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-white">
+    <section className="relative overflow-hidden bg-surface">
       <div className="absolute inset-0 bg-hero-glow" aria-hidden />
       <div className="container relative grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
         {/* Colonne texte */}
@@ -14,13 +14,13 @@ export function Hero() {
             <ShieldCheck className="h-4 w-4" />
             Cabinet d&apos;analyse 100% indépendant
           </Badge>
-          <h1 className="mt-5 text-balance text-4xl font-extrabold leading-[1.05] tracking-tightest text-ink md:text-[56px]">
+          <h1 className="mt-5 text-balance text-4xl font-extrabold leading-[1.05] tracking-tightest text-foreground md:text-[56px]">
             N&apos;achetez pas un appartement sans{" "}
             <span className="bg-brand-gradient bg-clip-text text-transparent">
               analyser sa copropriété.
             </span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate">
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
             Nous décryptons les documents de copropriété pour révéler les
             risques cachés — travaux, impayés, litiges — avant que vous signiez.
             Rapport clair, indépendant, livré en 72h.
@@ -34,7 +34,7 @@ export function Hero() {
               Découvrir le Score
             </Button>
           </div>
-          <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm font-medium text-slate">
+          <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm font-medium text-muted">
             <span className="flex items-center gap-2">
               <Building2 className="h-4 w-4 text-brand" /> 1 200+ lots gérés
             </span>

@@ -51,15 +51,15 @@ export default function DossierDetailPage({
       <div className="space-y-8 p-6 md:p-8">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-slate transition-colors hover:text-brand"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-brand"
         >
           <ArrowLeft className="h-4 w-4" />
           Retour aux dossiers
         </Link>
 
         {/* Suivi de statut */}
-        <div className="rounded-3xl border border-brand/10 bg-white p-6 shadow-card">
-          <h2 className="mb-6 font-bold text-ink">Suivi de votre analyse</h2>
+        <div className="rounded-3xl border border-brand/10 bg-surface p-6 shadow-card">
+          <h2 className="mb-6 font-bold text-foreground">Suivi de votre analyse</h2>
           <ol className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-0">
             {STATUT_FLOW.map((st, i) => {
               const done = i < currentIdx;
@@ -75,7 +75,7 @@ export default function DossierDetailPage({
                         <span
                           className={cn(
                             "hidden h-0.5 flex-1 sm:block",
-                            i <= currentIdx ? "bg-brand" : "bg-brand-soft"
+                            i <= currentIdx ? "bg-brand" : "bg-surface-soft"
                           )}
                         />
                       )}
@@ -84,7 +84,7 @@ export default function DossierDetailPage({
                           "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold",
                           done && "bg-brand text-white",
                           active && "bg-brand-gradient text-white shadow-soft ring-4 ring-brand/15",
-                          !done && !active && "bg-brand-soft text-slate"
+                          !done && !active && "bg-surface-soft text-muted"
                         )}
                       >
                         {done ? <Check className="h-4 w-4" /> : i + 1}
@@ -93,7 +93,7 @@ export default function DossierDetailPage({
                         <span
                           className={cn(
                             "hidden h-0.5 flex-1 sm:block",
-                            i < currentIdx ? "bg-brand" : "bg-brand-soft"
+                            i < currentIdx ? "bg-brand" : "bg-surface-soft"
                           )}
                         />
                       )}
@@ -101,7 +101,7 @@ export default function DossierDetailPage({
                     <span
                       className={cn(
                         "text-xs font-medium sm:mt-2",
-                        active ? "text-brand" : "text-slate"
+                        active ? "text-brand" : "text-muted"
                       )}
                     >
                       {STATUT_META[st].label}
@@ -116,8 +116,8 @@ export default function DossierDetailPage({
         <div className="grid gap-6 lg:grid-cols-[1fr_1.3fr]">
           {/* Infos */}
           <div className="space-y-6">
-            <div className="rounded-3xl border border-brand/10 bg-white p-6 shadow-card">
-              <h2 className="mb-4 font-bold text-ink">Informations</h2>
+            <div className="rounded-3xl border border-brand/10 bg-surface p-6 shadow-card">
+              <h2 className="mb-4 font-bold text-foreground">Informations</h2>
               <dl className="space-y-3 text-sm">
                 <Info icon={MapPin} label="Adresse">
                   {dossier.adresse}, {dossier.codePostal} {dossier.ville}
@@ -131,22 +131,22 @@ export default function DossierDetailPage({
               </dl>
             </div>
 
-            <div className="rounded-3xl border border-brand/10 bg-white p-6 shadow-card">
-              <h2 className="mb-4 font-bold text-ink">
+            <div className="rounded-3xl border border-brand/10 bg-surface p-6 shadow-card">
+              <h2 className="mb-4 font-bold text-foreground">
                 Documents ({dossier.documents.length})
               </h2>
               <ul className="space-y-2">
                 {dossier.documents.map((doc, i) => (
                   <li
                     key={i}
-                    className="flex items-center gap-3 rounded-xl border border-brand/10 bg-brand-soft/30 px-4 py-2.5"
+                    className="flex items-center gap-3 rounded-xl border border-brand/10 bg-surface-soft/30 px-4 py-2.5"
                   >
                     <FileText className="h-4 w-4 shrink-0 text-brand" />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-ink">
+                      <p className="truncate text-sm font-medium text-foreground">
                         {doc.nom}
                       </p>
-                      <p className="text-xs text-slate">
+                      <p className="text-xs text-muted">
                         {TYPE_DOC_LABEL[doc.type]} · {formatPoids(doc.poids)}
                       </p>
                     </div>
@@ -161,28 +161,28 @@ export default function DossierDetailPage({
             {hasRapport ? (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-bold text-ink">Votre rapport</h2>
+                  <h2 className="font-bold text-foreground">Votre rapport</h2>
                   <Button href="#" variant="secondary" size="sm">
                     <Download className="h-4 w-4" />
                     Télécharger le PDF
                   </Button>
                 </div>
                 <ScoreGauge criteria={dossier.criteria} />
-                <p className="rounded-2xl border border-brand/10 bg-brand-soft/40 p-4 text-sm leading-relaxed text-slate">
+                <p className="rounded-2xl border border-brand/10 bg-surface-soft/40 p-4 text-sm leading-relaxed text-muted">
                   Copropriété saine, bien gérée, avec des finances solides.
                   Quelques travaux énergétiques à anticiper à moyen terme.
                   Aucun contentieux significatif relevé.
                 </p>
               </div>
             ) : (
-              <div className="flex h-full min-h-[300px] flex-col items-center justify-center rounded-3xl border border-dashed border-brand/20 bg-white p-8 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+              <div className="flex h-full min-h-[300px] flex-col items-center justify-center rounded-3xl border border-dashed border-brand/20 bg-surface p-8 text-center">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-soft text-brand">
                   <FileText className="h-7 w-7" />
                 </div>
-                <h3 className="mt-4 font-bold text-ink">
+                <h3 className="mt-4 font-bold text-foreground">
                   Rapport en préparation
                 </h3>
-                <p className="mt-1 max-w-xs text-sm text-slate">
+                <p className="mt-1 max-w-xs text-sm text-muted">
                   Votre rapport et votre AnalyseTaCopro Score apparaîtront ici
                   dès que l&apos;analyse sera terminée.
                 </p>
@@ -206,11 +206,11 @@ function Info({
 }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <dt className="flex items-center gap-1.5 text-slate">
+      <dt className="flex items-center gap-1.5 text-muted">
         {Icon && <Icon className="h-4 w-4" />}
         {label}
       </dt>
-      <dd className="text-right font-medium text-ink">{children}</dd>
+      <dd className="text-right font-medium text-foreground">{children}</dd>
     </div>
   );
 }

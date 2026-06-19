@@ -53,16 +53,16 @@ export default function DashboardPage() {
           {stats.map((s) => (
             <div
               key={s.label}
-              className="flex items-center gap-4 rounded-3xl border border-brand/10 bg-white p-5 shadow-card"
+              className="flex items-center gap-4 rounded-3xl border border-brand/10 bg-surface p-5 shadow-card"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-soft text-brand">
                 <s.icon className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-2xl font-extrabold tracking-tightest text-ink">
+                <p className="text-2xl font-extrabold tracking-tightest text-foreground">
                   {s.value}
                 </p>
-                <p className="text-sm text-slate">{s.label}</p>
+                <p className="text-sm text-muted">{s.label}</p>
               </div>
             </div>
           ))}
@@ -70,7 +70,7 @@ export default function DashboardPage() {
 
         {/* Liste des dossiers */}
         <div>
-          <h2 className="mb-4 text-lg font-bold text-ink">Mes dossiers</h2>
+          <h2 className="mb-4 text-lg font-bold text-foreground">Mes dossiers</h2>
           <div className="space-y-3">
             {DOSSIERS_DEMO.map((d) => {
               const risk =
@@ -79,17 +79,17 @@ export default function DashboardPage() {
                 <Link
                   key={d.id}
                   href={`/dashboard/dossier/${d.id}`}
-                  className="group flex flex-col gap-4 rounded-3xl border border-brand/10 bg-white p-5 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-soft-lg sm:flex-row sm:items-center sm:justify-between"
+                  className="group flex flex-col gap-4 rounded-3xl border border-brand/10 bg-surface p-5 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-soft-lg sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-surface-soft text-brand">
                       <MapPin className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="font-bold text-ink">
+                      <p className="font-bold text-foreground">
                         {d.adresse}, {d.ville}
                       </p>
-                      <p className="text-sm text-slate">
+                      <p className="text-sm text-muted">
                         {TYPE_BIEN_LABEL[d.typeBien]} · Formule{" "}
                         {FORMULE_LABEL[d.formule]} · {formatDate(d.createdAt)}
                       </p>
@@ -110,7 +110,7 @@ export default function DashboardPage() {
                       </span>
                     )}
                     <StatusBadge statut={d.statut} />
-                    <ArrowRight className="h-5 w-5 text-slate transition-transform group-hover:translate-x-1 group-hover:text-brand" />
+                    <ArrowRight className="h-5 w-5 text-muted transition-transform group-hover:translate-x-1 group-hover:text-brand" />
                   </div>
                 </Link>
               );

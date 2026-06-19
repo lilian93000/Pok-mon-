@@ -16,15 +16,15 @@ const TAGS = [
 
 export function Founder() {
   return (
-    <Section className="bg-brand-soft/40">
+    <Section className="bg-surface-soft/40">
       <div className="grid items-center gap-12 lg:grid-cols-2">
         <Reveal>
           <div>
             <Badge>Le fondateur</Badge>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tightest text-ink md:text-[40px] md:leading-[1.1]">
+            <h2 className="mt-4 text-3xl font-extrabold tracking-tightest text-foreground md:text-[40px] md:leading-[1.1]">
               Pas un théoricien. Un professionnel de la copropriété.
             </h2>
-            <p className="mt-5 text-lg leading-relaxed text-slate">
+            <p className="mt-5 text-lg leading-relaxed text-muted">
               AnalyseTaCopro n&apos;est pas né d&apos;une idée abstraite, mais
               d&apos;années passées à gérer des copropriétés au quotidien :
               budgets, assemblées générales, travaux, litiges. Je sais où se
@@ -45,12 +45,12 @@ export function Founder() {
             {STATS.map((s) => (
               <div
                 key={s.label}
-                className="rounded-3xl border border-brand/10 bg-white p-6 text-center shadow-card"
+                className="rounded-3xl border border-brand/10 bg-surface p-6 text-center shadow-card"
               >
                 <p className="bg-brand-gradient bg-clip-text text-3xl font-extrabold tracking-tightest text-transparent md:text-4xl">
                   {s.value}
                 </p>
-                <p className="mt-1 text-sm font-medium text-slate">{s.label}</p>
+                <p className="mt-1 text-sm font-medium text-muted">{s.label}</p>
               </div>
             ))}
           </div>

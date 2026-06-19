@@ -27,18 +27,18 @@ export default function BlogPage() {
             <Reveal key={a.slug} delay={i * 80}>
               <Link
                 href={`/blog/${a.slug}`}
-                className="group flex h-full flex-col rounded-3xl border border-brand/10 bg-white p-6 shadow-card transition-all hover:-translate-y-1 hover:shadow-soft-lg"
+                className="group flex h-full flex-col rounded-3xl border border-brand/10 bg-surface p-6 shadow-card transition-all hover:-translate-y-1 hover:shadow-soft-lg"
               >
-                <span className="inline-flex w-fit rounded-full bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
+                <span className="inline-flex w-fit rounded-full bg-surface-soft px-3 py-1 text-xs font-semibold text-brand">
                   {a.category}
                 </span>
-                <h2 className="mt-4 text-xl font-bold leading-snug text-ink">
+                <h2 className="mt-4 text-xl font-bold leading-snug text-foreground">
                   {a.title}
                 </h2>
-                <p className="mt-2 flex-1 text-[15px] leading-relaxed text-slate">
+                <p className="mt-2 flex-1 text-[15px] leading-relaxed text-muted">
                   {a.excerpt}
                 </p>
-                <div className="mt-5 flex items-center justify-between text-sm text-slate">
+                <div className="mt-5 flex items-center justify-between text-sm text-muted">
                   <span className="flex items-center gap-1.5">
                     <Clock className="h-4 w-4" />
                     {a.readingTime} min · {formatDate(a.date)}

@@ -41,8 +41,8 @@ export const STATUT_TONE_CLASSES: Record<
   string,
   { dot: string; badge: string }
 > = {
-  neutral: { dot: "bg-slate", badge: "bg-slate/10 text-slate" },
-  info: { dot: "bg-brand-bright", badge: "bg-brand-soft text-brand-dark" },
+  neutral: { dot: "bg-muted", badge: "bg-muted/10 text-muted" },
+  info: { dot: "bg-brand-bright", badge: "bg-surface-soft text-brand-dark" },
   warn: { dot: "bg-amber", badge: "bg-amber/10 text-amber" },
   progress: { dot: "bg-brand", badge: "bg-brand/10 text-brand" },
   success: { dot: "bg-success", badge: "bg-success/10 text-success" },

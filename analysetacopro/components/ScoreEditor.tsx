@@ -42,11 +42,11 @@ export function ScoreEditor({
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Saisie des 7 notes */}
-      <div className="rounded-3xl border border-brand/10 bg-white p-6 shadow-card">
-        <h3 className="font-bold text-ink">
+      <div className="rounded-3xl border border-brand/10 bg-surface p-6 shadow-card">
+        <h3 className="font-bold text-foreground">
           Saisie des notes{dossierLabel ? ` — ${dossierLabel}` : ""}
         </h3>
-        <p className="mt-1 text-sm text-slate">
+        <p className="mt-1 text-sm text-muted">
           Le score global est calculé automatiquement (pondération du brief).
         </p>
 
@@ -54,9 +54,9 @@ export function ScoreEditor({
           {CRITERIA.map((c) => (
             <div key={c.key}>
               <div className="mb-1.5 flex items-center justify-between">
-                <label className="text-sm font-medium text-ink">
+                <label className="text-sm font-medium text-foreground">
                   {c.label}{" "}
-                  <span className="text-xs text-slate">
+                  <span className="text-xs text-muted">
                     ({Math.round(c.weight * 100)}%)
                   </span>
                 </label>
@@ -71,7 +71,7 @@ export function ScoreEditor({
                 step={0.1}
                 value={criteria[c.key]}
                 onChange={(e) => set(c.key, parseFloat(e.target.value))}
-                className="h-2 w-full cursor-pointer appearance-none rounded-full bg-brand-soft accent-brand"
+                className="h-2 w-full cursor-pointer appearance-none rounded-full bg-surface-soft accent-brand"
               />
             </div>
           ))}
@@ -99,7 +99,7 @@ export function ScoreEditor({
               setCriteria(initial);
               setSaved(false);
             }}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-brand/15 px-5 py-3 text-sm font-semibold text-slate transition hover:text-brand"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-brand/15 px-5 py-3 text-sm font-semibold text-muted transition hover:text-brand"
           >
             <RotateCcw className="h-4 w-4" />
           </button>

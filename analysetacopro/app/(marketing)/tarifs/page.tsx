@@ -19,7 +19,7 @@ export default function TarifsPage() {
         subtitle="Paiement unique pour les particuliers, packs dégressifs pour les agences. TVA non applicable (art. 293 B du CGI)."
       />
       <Pricing />
-      <PricingB2B className="bg-brand-soft/40" />
+      <PricingB2B className="bg-surface-soft/40" />
       <FinalCTA />
     </>
   );

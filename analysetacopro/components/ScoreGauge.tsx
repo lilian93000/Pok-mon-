@@ -81,7 +81,7 @@ export function ScoreGauge({
     <div
       ref={ref}
       className={cn(
-        "rounded-3xl border border-brand/10 bg-white p-7 shadow-card",
+        "rounded-3xl border border-brand/10 bg-surface p-7 shadow-card",
         className
       )}
     >
@@ -123,16 +123,16 @@ export function ScoreGauge({
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-5xl font-extrabold tracking-tightest text-ink tabular-nums">
+            <span className="text-5xl font-extrabold tracking-tightest text-foreground tabular-nums">
               {displayed.toFixed(1)}
             </span>
-            <span className="text-sm font-medium text-slate">sur 10</span>
+            <span className="text-sm font-medium text-muted">sur 10</span>
           </div>
         </div>
 
         {/* Verdict + breakdown */}
         <div className="w-full">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted">
             AnalyseTaCopro Score
           </p>
           <div className="mt-1.5 flex items-center gap-2.5">
@@ -155,15 +155,15 @@ export function ScoreGauge({
                 return (
                   <div key={c.key}>
                     <div className="mb-1 flex items-center justify-between text-sm">
-                      <span className="font-medium text-ink">{c.label}</span>
-                      <span className="tabular-nums text-slate">
+                      <span className="font-medium text-foreground">{c.label}</span>
+                      <span className="tabular-nums text-muted">
                         {note.toFixed(1)}
-                        <span className="ml-1 text-xs text-slate/60">
+                        <span className="ml-1 text-xs text-muted/60">
                           {Math.round(c.weight * 100)}%
                         </span>
                       </span>
                     </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-brand-soft">
+                    <div className="h-2 overflow-hidden rounded-full bg-surface-soft">
                       <div
                         className="h-full rounded-full bg-brand-gradient"
                         style={{

@@ -53,12 +53,12 @@ export default function AProposPage() {
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {VALUES.map((v, i) => (
             <Reveal key={v.title} delay={i * 70}>
-              <div className="h-full rounded-3xl border border-brand/10 bg-white p-7 shadow-card">
+              <div className="h-full rounded-3xl border border-brand/10 bg-surface p-7 shadow-card">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-gradient text-white">
                   <v.icon className="h-6 w-6" />
                 </div>
-                <h3 className="mt-5 text-lg font-bold text-ink">{v.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-slate">
+                <h3 className="mt-5 text-lg font-bold text-foreground">{v.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-muted">
                   {v.text}
                 </p>
               </div>

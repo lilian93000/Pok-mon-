@@ -49,10 +49,10 @@ export default function AgencesPage() {
                 <Handshake className="h-4 w-4" />
                 La fiche vitrine co-brandée
               </Badge>
-              <h2 className="mt-4 text-3xl font-extrabold tracking-tightest text-ink md:text-[40px] md:leading-[1.1]">
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tightest text-foreground md:text-[40px] md:leading-[1.1]">
                 Un argument de vente puissant, clé en main
               </h2>
-              <p className="mt-5 text-lg leading-relaxed text-slate">
+              <p className="mt-5 text-lg leading-relaxed text-muted">
                 Pour chaque bien que vous commercialisez, offrez une fiche
                 d&apos;analyse de la copropriété portant votre marque. Vos
                 acheteurs voient le AnalyseTaCopro Score, comprennent les
@@ -61,12 +61,12 @@ export default function AgencesPage() {
               <ul className="mt-6 space-y-3">
                 {BENEFITS.map((b) => (
                   <li key={b.title} className="flex items-start gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-surface-soft text-brand">
                       <b.icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="font-semibold text-ink">{b.title}</p>
-                      <p className="text-sm text-slate">{b.text}</p>
+                      <p className="font-semibold text-foreground">{b.title}</p>
+                      <p className="text-sm text-muted">{b.text}</p>
                     </div>
                   </li>
                 ))}
@@ -82,7 +82,7 @@ export default function AgencesPage() {
         </div>
       </Section>
 
-      <PricingB2B className="bg-brand-soft/40" />
+      <PricingB2B className="bg-surface-soft/40" />
       <FinalCTA />
     </>
   );

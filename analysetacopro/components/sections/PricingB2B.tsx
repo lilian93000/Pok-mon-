@@ -29,7 +29,7 @@ export function PricingB2B({ withHeader = true, className }: PricingB2BProps) {
                 "relative flex h-full flex-col rounded-3xl border p-6 text-center transition-all duration-300",
                 pack.highlighted
                   ? "border-brand bg-brand-night text-white shadow-soft-lg lg:-translate-y-2"
-                  : "border-brand/10 bg-white text-ink shadow-card hover:-translate-y-1"
+                  : "border-brand/10 bg-surface text-foreground shadow-card hover:-translate-y-1"
               )}
             >
               {pack.highlighted && (
@@ -41,7 +41,7 @@ export function PricingB2B({ withHeader = true, className }: PricingB2BProps) {
               <p
                 className={cn(
                   "mt-1 text-sm",
-                  pack.highlighted ? "text-white/60" : "text-slate"
+                  pack.highlighted ? "text-white/60" : "text-muted"
                 )}
               >
                 {pack.sheets} {pack.sheets > 1 ? "fiches" : "fiche"}
@@ -54,7 +54,7 @@ export function PricingB2B({ withHeader = true, className }: PricingB2BProps) {
                 <span
                   className={cn(
                     "block text-xs",
-                    pack.highlighted ? "text-white/50" : "text-slate"
+                    pack.highlighted ? "text-white/50" : "text-muted"
                   )}
                 >
                   HT
@@ -82,7 +82,7 @@ export function PricingB2B({ withHeader = true, className }: PricingB2BProps) {
       </div>
 
       <Reveal delay={120}>
-        <ul className="mx-auto mt-10 flex max-w-2xl flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate">
+        <ul className="mx-auto mt-10 flex max-w-2xl flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted">
           {[
             "Co-branding inclus (votre logo)",
             "Fiches valables 12 mois",

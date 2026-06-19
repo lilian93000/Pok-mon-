@@ -9,7 +9,7 @@ interface BadgeProps {
 export function Badge({ children, className, tone = "brand" }: BadgeProps) {
   const tones = {
     brand: "bg-brand/10 text-brand",
-    light: "bg-white/10 text-white border border-white/15",
+    light: "bg-surface/10 text-white border border-white/15",
     success: "bg-success/10 text-success",
   };
   return (

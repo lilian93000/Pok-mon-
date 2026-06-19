@@ -15,6 +15,11 @@ const config: Config = {
     },
     extend: {
       colors: {
+        // Tokens sémantiques (basculent en mode clair/sombre via CSS vars)
+        surface: "rgb(var(--surface) / <alpha-value>)",
+        "surface-soft": "rgb(var(--surface-soft) / <alpha-value>)",
+        foreground: "rgb(var(--foreground) / <alpha-value>)",
+        muted: "rgb(var(--muted) / <alpha-value>)",
         // Brand — AnalyseTaCopro
         brand: {
           DEFAULT: "#0B5FFF", // bleu principal (signature)

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Loader2, Mail, Lock, User } from "lucide-react";
 
 const inputCls =
-  "w-full rounded-2xl border border-brand/15 bg-white py-3 pl-11 pr-4 text-ink placeholder:text-slate/60 outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20";
+  "w-full rounded-2xl border border-brand/15 bg-surface py-3 pl-11 pr-4 text-foreground placeholder:text-muted/60 outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20";
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const router = useRouter();
@@ -23,10 +23,10 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
 
   return (
     <div>
-      <h1 className="text-2xl font-extrabold tracking-tightest text-ink">
+      <h1 className="text-2xl font-extrabold tracking-tightest text-foreground">
         {isRegister ? "Créer un compte" : "Bon retour 👋"}
       </h1>
-      <p className="mt-1.5 text-sm text-slate">
+      <p className="mt-1.5 text-sm text-muted">
         {isRegister
           ? "Quelques secondes pour commencer votre première analyse."
           : "Connectez-vous pour accéder à vos dossiers."}
@@ -37,13 +37,13 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           setLoading(true);
           setTimeout(() => router.push("/dashboard"), 700);
         }}
-        className="mt-6 flex w-full items-center justify-center gap-3 rounded-2xl border border-brand/15 bg-white py-3 text-sm font-semibold text-ink transition hover:bg-brand-soft/50"
+        className="mt-6 flex w-full items-center justify-center gap-3 rounded-2xl border border-brand/15 bg-surface py-3 text-sm font-semibold text-foreground transition hover:bg-surface-soft/50"
       >
         <GoogleIcon />
         Continuer avec Google
       </button>
 
-      <div className="my-5 flex items-center gap-3 text-xs text-slate">
+      <div className="my-5 flex items-center gap-3 text-xs text-muted">
         <span className="h-px flex-1 bg-brand/10" />
         ou
         <span className="h-px flex-1 bg-brand/10" />
@@ -87,7 +87,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate">
+      <p className="mt-6 text-center text-sm text-muted">
         {isRegister ? (
           <>
             Déjà un compte ?{" "}
@@ -117,7 +117,7 @@ function Field({
 }) {
   return (
     <div className="relative">
-      <Icon className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate" />
+      <Icon className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted" />
       {children}
     </div>
   );

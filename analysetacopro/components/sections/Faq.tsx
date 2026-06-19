@@ -57,13 +57,13 @@ export function Faq({ items = DEFAULT_FAQ, withHeader = true }: FaqProps) {
           return (
             <div
               key={item.q}
-              className="overflow-hidden rounded-2xl border border-brand/10 bg-white shadow-card"
+              className="overflow-hidden rounded-2xl border border-brand/10 bg-surface shadow-card"
             >
               <button
                 onClick={() => setOpen(isOpen ? null : i)}
                 className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
               >
-                <span className="font-semibold text-ink">{item.q}</span>
+                <span className="font-semibold text-foreground">{item.q}</span>
                 <Plus
                   className={cn(
                     "h-5 w-5 shrink-0 text-brand transition-transform duration-300",
@@ -78,7 +78,7 @@ export function Faq({ items = DEFAULT_FAQ, withHeader = true }: FaqProps) {
                 )}
               >
                 <div className="overflow-hidden">
-                  <p className="px-6 pb-5 leading-relaxed text-slate">
+                  <p className="px-6 pb-5 leading-relaxed text-muted">
                     {item.a}
                   </p>
                 </div>

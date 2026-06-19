@@ -56,12 +56,12 @@ export default function AnalyseAvantAchatPage() {
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {DELIVERABLES.map((d, i) => (
             <Reveal key={d.title} delay={i * 70}>
-              <div className="h-full rounded-3xl border border-brand/10 bg-white p-7 shadow-card">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+              <div className="h-full rounded-3xl border border-brand/10 bg-surface p-7 shadow-card">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-soft text-brand">
                   <d.icon className="h-6 w-6" />
                 </div>
-                <h3 className="mt-5 text-lg font-bold text-ink">{d.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-slate">
+                <h3 className="mt-5 text-lg font-bold text-foreground">{d.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-muted">
                   {d.text}
                 </p>
               </div>
@@ -73,7 +73,7 @@ export default function AnalyseAvantAchatPage() {
       <Problem />
       <Steps />
       <ScoreSection />
-      <Pricing className="bg-brand-soft/40" />
+      <Pricing className="bg-surface-soft/40" />
       <Faq />
       <FinalCTA />
     </>

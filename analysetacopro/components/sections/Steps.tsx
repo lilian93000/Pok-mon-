@@ -41,8 +41,8 @@ export function Steps() {
                   {i + 1}
                 </span>
               </div>
-              <h3 className="mt-5 text-xl font-bold text-ink">{s.title}</h3>
-              <p className="mx-auto mt-2 max-w-xs text-[15px] leading-relaxed text-slate">
+              <h3 className="mt-5 text-xl font-bold text-foreground">{s.title}</h3>
+              <p className="mx-auto mt-2 max-w-xs text-[15px] leading-relaxed text-muted">
                 {s.text}
               </p>
             </div>

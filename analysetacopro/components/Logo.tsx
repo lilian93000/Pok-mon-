@@ -34,7 +34,7 @@ export function Logo({ className, variant = "dark", withText = true }: LogoProps
         <span
           className={cn(
             "text-lg font-extrabold tracking-tightest",
-            variant === "light" ? "text-white" : "text-ink"
+            variant === "light" ? "text-white" : "text-foreground"
           )}
         >
           AnalyseTa<span className="text-brand">Copro</span>
