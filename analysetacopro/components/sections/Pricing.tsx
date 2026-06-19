@@ -90,7 +90,7 @@ export function Pricing({ withHeader = true, className }: PricingProps) {
               </ul>
 
               <Button
-                href="/analyse-avant-achat"
+                href={`/offres/${offer.id}`}
                 variant={offer.highlighted ? "primary" : "secondary"}
                 className="mt-7 w-full"
               >
