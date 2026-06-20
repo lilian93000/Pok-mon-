@@ -48,7 +48,7 @@ interface UploadedFile {
 
 // Clé Web3Forms (reçue par email après inscription sur web3forms.com).
 // Permet d'envoyer chaque commande par email, sans serveur.
-const WEB3FORMS_KEY = "VOTRE_CLE_WEB3FORMS";
+const WEB3FORMS_KEY = "7affa5b5-f488-4288-b4c1-1d72e2fbf310";
 
 export function DossierWizard() {
   const [step, setStep] = useState(1);
@@ -99,7 +99,7 @@ export function DossierWizard() {
 
   // Envoi de la commande par email (via Web3Forms) — sans serveur.
   async function submitOrder() {
-    if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "VOTRE_CLE_WEB3FORMS") return;
+    if (!WEB3FORMS_KEY) return;
     try {
       await fetch("https://api.web3forms.com/submit", {
         method: "POST",
