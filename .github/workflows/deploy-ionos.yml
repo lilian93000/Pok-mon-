@@ -43,13 +43,11 @@ jobs:
       - name: Page 404 + config
         run: printf 'ErrorDocument 404 /404.html\nOptions -Indexes\n' > out/.htaccess
 
-      - name: Envoi vers IONOS par SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.5
-        with:
-          server: ${{ secrets.IONOS_SFTP_SERVER }}
-          username: ${{ secrets.IONOS_SFTP_USERNAME }}
-          password: ${{ secrets.IONOS_SFTP_PASSWORD }}
-          port: 22
-          local_path: "./analysetacopro/out/*"
-          remote_path: "public/ionos/analysetacopro-ionos"
-          sftp_only: true
+      - name: Diagnostic — structure du serveur IONOS
+        env:
+          H: ${{ secrets.IONOS_SFTP_SERVER }}
+          U: ${{ secrets.IONOS_SFTP_USERNAME }}
+          P: ${{ secrets.IONOS_SFTP_PASSWORD }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          lftp -c "set sftp:auto-confirm yes; open -u '$U','$P' sftp://$H; echo '== PWD =='; pwd; echo '== RACINE =='; cls -l; echo '== public =='; cls -l public/ || echo '(pas de public)'; echo '== public/ionos =='; cls -l public/ionos/ || echo '(pas de public/ionos)'"
