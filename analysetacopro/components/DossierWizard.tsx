@@ -51,6 +51,9 @@ export function DossierWizard() {
   const [adresse, setAdresse] = useState("");
   const [ville, setVille] = useState("");
   const [codePostal, setCodePostal] = useState("");
+  const [nom, setNom] = useState("");
+  const [email, setEmail] = useState("");
+  const [telephone, setTelephone] = useState("");
   const [typeBien, setTypeBien] = useState<TypeBien>("APPARTEMENT");
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [formuleId, setFormuleId] = useState("premium");
@@ -71,8 +74,18 @@ export function DossierWizard() {
     setFiles((prev) => [...prev, ...next]);
   }, []);
 
+  const emailValide = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+
   const canNext = () => {
-    if (step === 1) return adresse && ville && /^\d{5}$/.test(codePostal);
+    if (step === 1)
+      return (
+        !!adresse &&
+        !!ville &&
+        /^\d{5}$/.test(codePostal) &&
+        !!nom &&
+        emailValide &&
+        telephone.replace(/\D/g, "").length >= 9
+      );
     if (step === 3) return files.length > 0;
     return true;
   };
@@ -165,6 +178,56 @@ export function DossierWizard() {
                     }
                     placeholder="69003"
                   />
+                </div>
+              </div>
+
+              {/* Coordonnées du client */}
+              <div className="mt-2 border-t border-brand/10 pt-5">
+                <p className="mb-3 text-sm font-semibold text-foreground">
+                  Vos coordonnées{" "}
+                  <span className="font-normal text-muted">
+                    (pour vous envoyer le rapport et vous recontacter)
+                  </span>
+                </p>
+                <div className="space-y-4">
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-foreground">
+                      Nom complet
+                    </label>
+                    <input
+                      className={inputCls}
+                      value={nom}
+                      onChange={(e) => setNom(e.target.value)}
+                      placeholder="Jean Dupont"
+                    />
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-foreground">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        className={inputCls}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="jean@email.fr"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-foreground">
+                        Téléphone
+                      </label>
+                      <input
+                        type="tel"
+                        inputMode="tel"
+                        className={inputCls}
+                        value={telephone}
+                        onChange={(e) => setTelephone(e.target.value)}
+                        placeholder="06 12 34 56 78"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -441,9 +504,13 @@ export function DossierWizard() {
               <span className="font-semibold text-foreground">
                 {adresse}, {ville}
               </span>
-              . Un email de confirmation vous a été envoyé.
+              . Un email de confirmation vous a été envoyé à{" "}
+              <span className="font-semibold text-foreground">{email}</span>.
             </p>
             <div className="mx-auto mt-6 max-w-sm space-y-2 rounded-2xl bg-surface-soft/50 p-5 text-left text-sm">
+              <Row label="Nom" value={nom} />
+              <Row label="Email" value={email} />
+              <Row label="Téléphone" value={telephone} />
               <Row label="Formule" value={formule.name} />
               <Row label="Type de bien" value={TYPE_BIEN_LABEL[typeBien]} />
               <Row label="Documents" value={`${files.length} fichier(s)`} />
