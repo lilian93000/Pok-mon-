@@ -51,5 +51,5 @@ jobs:
           password: ${{ secrets.IONOS_SFTP_PASSWORD }}
           port: 22
           local_path: "./analysetacopro/out/*"
-          remote_path: "/public/ionos/analysetacopro-ionos"
+          remote_path: "public/ionos/analysetacopro-ionos"
           sftp_only: true
