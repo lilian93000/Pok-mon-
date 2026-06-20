@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>R&B 2000s — Beat synthétisé</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: radial-gradient(120% 120% at 50% 0%, #2a1740 0%, #160a26 45%, #0a0512 100%);
+    color: #f3e9ff;
+  }
+  .card {
+    width: min(420px, 92vw);
+    padding: 32px 28px 28px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 22px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+    backdrop-filter: blur(6px);
+    text-align: center;
+  }
+  h1 {
+    margin: 0 0 4px;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #ffd0f0, #b388ff, #7fd8ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .sub { margin: 0 0 24px; font-size: 13px; color: #b9a8d6; }
+  .play {
+    width: 96px; height: 96px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 36px;
+    color: #160a26;
+    background: linear-gradient(145deg, #f7c9ff, #b388ff);
+    box-shadow: 0 10px 30px rgba(179,136,255,0.45), inset 0 2px 6px rgba(255,255,255,0.6);
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
+  }
+  .play:active { transform: scale(0.94); }
+  .play.playing { background: linear-gradient(145deg, #ff9ec9, #ff6f91); box-shadow: 0 10px 30px rgba(255,111,145,0.5), inset 0 2px 6px rgba(255,255,255,0.6); }
+  .controls { margin-top: 26px; display: grid; gap: 16px; text-align: left; }
+  .row { display: grid; grid-template-columns: 70px 1fr 48px; align-items: center; gap: 12px; font-size: 13px; color: #cdbce8; }
+  input[type=range] { width: 100%; accent-color: #b388ff; }
+  .val { text-align: right; font-variant-numeric: tabular-nums; color: #f3e9ff; }
+  .chord {
+    margin-top: 22px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #8f7bb3;
+    min-height: 16px;
+  }
+  .chord b { color: #ffd0f0; font-weight: 600; }
+  .tip { margin-top: 18px; font-size: 11px; color: #6f5f8c; line-height: 1.5; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>R&amp;B · 2000s</h1>
+    <p class="sub">Beat slow jam synthétisé en direct · Web Audio</p>
+
+    <button id="play" class="play" aria-label="Lecture">▶</button>
+
+    <div class="controls">
+      <div class="row">
+        <label for="tempo">Tempo</label>
+        <input id="tempo" type="range" min="68" max="100" value="82" />
+        <span class="val" id="tempoVal">82</span>
+      </div>
+      <div class="row">
+        <label for="vol">Volume</label>
+        <input id="vol" type="range" min="0" max="100" value="80" />
+        <span class="val" id="volVal">80</span>
+      </div>
+    </div>
+
+    <div class="chord" id="chordView">—</div>
+
+    <p class="tip">Astuce : monte le casque 🎧 — la basse 808 et la reverb se sentent mieux.</p>
+  </div>
+
+<script>
+/* =========================================================
+   R&B 2000s — moteur audio synthétisé (Web Audio API)
+   Aucun fichier audio : tout est généré à la volée.
+   Rhodes (accords 9e) · basse 808 · kick/clap/snap · hats
+   swingués · reverb · grain de vinyle.
+   ========================================================= */
+
+let ctx = null;
+let master, comp, reverbWet, reverbConv, vinylGain, vinylSrc;
+let playing = false;
+
+const ui = {
+  play: document.getElementById("play"),
+  tempo: document.getElementById("tempo"),
+  tempoVal: document.getElementById("tempoVal"),
+  vol: document.getElementById("vol"),
+  volVal: document.getElementById("volVal"),
+  chord: document.getElementById("chordView"),
+};
+
+/* ---------- Théorie : note -> fréquence ---------- */
+const midiToFreq = (m) => 440 * Math.pow(2, (m - 69) / 12);
+
+// Progression sultry en Do mineur : Cm9 – Abmaj9 – Ebmaj9 – Bb9
+const PROG = [
+  { name: "Cm9",     ep: [48, 51, 55, 58, 62], bass: 36 },
+  { name: "Ab maj9", ep: [44, 48, 51, 55, 58], bass: 32 },
+  { name: "Eb maj9", ep: [51, 55, 58, 62, 65], bass: 39 },
+  { name: "Bb 9",    ep: [46, 50, 53, 56, 60], bass: 34 },
+];
+
+// Patterns sur 16 doubles-croches
+const KICK = [1,0,0,0, 0,0,0,1, 1,0,0,0, 0,0,1,0];
+const CLAP = [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0];
+const SNAP = [0,0,1,0, 0,0,0,0, 0,0,1,0, 0,0,0,1];
+const OPEN = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,1,0]; // hi-hat ouvert
+// vélocités des hi-hats (accent sur les contretemps)
+const HATV = [1,.5,.7,.5, 1,.5,.7,.55, 1,.5,.7,.5, 1,.5,.45,.6];
+
+// Petite mélodie pentatonique (Do mineur), placée sur certaines mesures.
+// Chaque entrée : [step, midi, durée en 16e]. null = silence.
+const LICKS = {
+  1: [[8,75,2],[10,72,2],[13,70,3]],          // mesure 2
+  3: [[2,72,2],[4,70,1],[5,68,3],[12,75,4]],  // mesure 4
+};
+
+/* ---------- Bruit blanc réutilisable ---------- */
+let noiseBuffer = null;
+function makeNoise() {
+  const len = ctx.sampleRate * 1.0;
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  return buf;
+}
+function noiseSource() {
+  const s = ctx.createBufferSource();
+  s.buffer = noiseBuffer;
+  s.loop = true;
+  s.playbackRate.value = 0.8 + Math.random() * 0.4;
+  return s;
+}
+
+/* ---------- Reverb (impulse générée) ---------- */
+function makeImpulse(seconds, decay) {
+  const rate = ctx.sampleRate;
+  const len = rate * seconds;
+  const buf = ctx.createBuffer(2, len, rate);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = buf.getChannelData(ch);
+    for (let i = 0; i < len; i++) {
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+    }
+  }
+  return buf;
+}
+
+/* ---------- Chaîne audio ---------- */
+function buildGraph() {
+  master = ctx.createGain();
+  master.gain.value = (ui.vol.value / 100) * 0.9;
+
+  comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -16;
+  comp.knee.value = 26;
+  comp.ratio.value = 3.5;
+  comp.attack.value = 0.004;
+  comp.release.value = 0.18;
+
+  reverbConv = ctx.createConvolver();
+  reverbConv.buffer = makeImpulse(2.4, 3.2);
+  reverbWet = ctx.createGain();
+  reverbWet.gain.value = 0.32;
+
+  master.connect(comp);
+  comp.connect(ctx.destination);
+  reverbConv.connect(reverbWet);
+  reverbWet.connect(master);
+
+  // Grain de vinyle continu (très discret)
+  vinylSrc = noiseSource();
+  const vhp = ctx.createBiquadFilter();
+  vhp.type = "highpass"; vhp.frequency.value = 3500;
+  const vlp = ctx.createBiquadFilter();
+  vlp.type = "lowpass"; vlp.frequency.value = 9000;
+  vinylGain = ctx.createGain();
+  vinylGain.gain.value = 0.012;
+  vinylSrc.connect(vhp); vhp.connect(vlp); vlp.connect(vinylGain);
+  vinylGain.connect(master);
+  vinylSrc.start();
+}
+
+function toReverb(node, amount) {
+  const send = ctx.createGain();
+  send.gain.value = amount;
+  node.connect(send);
+  send.connect(reverbConv);
+}
+
+/* =========================================================
+   INSTRUMENTS
+   ========================================================= */
+function kick(t) {
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = "sine";
+  o.frequency.setValueAtTime(160, t);
+  o.frequency.exponentialRampToValueAtTime(48, t + 0.11);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(1.0, t + 0.005);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
+  o.connect(g); g.connect(master);
+  o.start(t); o.stop(t + 0.4);
+
+  // petit "click" d'attaque
+  const c = noiseSource();
+  const ch = ctx.createBiquadFilter();
+  ch.type = "highpass"; ch.frequency.value = 1500;
+  const cg = ctx.createGain();
+  cg.gain.setValueAtTime(0.5, t);
+  cg.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
+  c.connect(ch); ch.connect(cg); cg.connect(master);
+  c.start(t); c.stop(t + 0.04);
+}
+
+function clap(t) {
+  // plusieurs micro-bursts pour le grain "clap"
+  const bp = ctx.createBiquadFilter();
+  bp.type = "bandpass"; bp.frequency.value = 1600; bp.Q.value = 0.9;
+  const g = ctx.createGain();
+  g.connect(master);
+  toReverb(g, 0.5);
+  bp.connect(g);
+  const offs = [0, 0.011, 0.021, 0.031];
+  offs.forEach((o, i) => {
+    const n = noiseSource();
+    const ng = ctx.createGain();
+    const tt = t + o;
+    const peak = i === offs.length - 1 ? 0.7 : 0.4;
+    ng.gain.setValueAtTime(0.0001, tt);
+    ng.gain.exponentialRampToValueAtTime(peak, tt + 0.002);
+    ng.gain.exponentialRampToValueAtTime(0.0001, tt + (i === offs.length - 1 ? 0.18 : 0.03));
+    n.connect(ng); ng.connect(bp);
+    n.start(tt); n.stop(tt + 0.2);
+  });
+}
+
+function snap(t, vel = 1) {
+  const n = noiseSource();
+  const bp = ctx.createBiquadFilter();
+  bp.type = "bandpass"; bp.frequency.value = 2600; bp.Q.value = 2.2;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.35 * vel, t + 0.002);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+  n.connect(bp); bp.connect(g); g.connect(master);
+  toReverb(g, 0.25);
+  n.start(t); n.stop(t + 0.06);
+}
+
+function hat(t, vel, open) {
+  const n = noiseSource();
+  const hp = ctx.createBiquadFilter();
+  hp.type = "highpass"; hp.frequency.value = 7800;
+  const g = ctx.createGain();
+  const dur = open ? 0.26 : 0.045;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.22 * vel, t + 0.002);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  n.connect(hp); hp.connect(g); g.connect(master);
+  n.start(t); n.stop(t + dur + 0.02);
+}
+
+function bass808(t, midi, dur) {
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  const lp = ctx.createBiquadFilter();
+  lp.type = "lowpass"; lp.frequency.value = 220;
+  const f = midiToFreq(midi);
+  o.type = "sine";
+  o.frequency.setValueAtTime(f * 1.5, t);
+  o.frequency.exponentialRampToValueAtTime(f, t + 0.06);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.85, t + 0.02);
+  g.gain.setValueAtTime(0.85, t + dur * 0.6);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(lp); lp.connect(g); g.connect(master);
+  o.start(t); o.stop(t + dur + 0.05);
+}
+
+function rhodes(t, midiList, dur) {
+  // Rhodes/EP feutré : 2 oscillateurs détunés par note + trémolo léger
+  const out = ctx.createGain();
+  out.gain.value = 0.0001;
+  out.gain.setValueAtTime(0.0001, t);
+  out.gain.linearRampToValueAtTime(0.18, t + 0.04);
+  out.gain.setValueAtTime(0.18, t + dur * 0.7);
+  out.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  out.connect(master);
+  toReverb(out, 0.4);
+
+  // trémolo
+  const trem = ctx.createGain();
+  trem.gain.value = 1;
+  const lfo = ctx.createOscillator();
+  const lfoG = ctx.createGain();
+  lfo.frequency.value = 4.5;
+  lfoG.gain.value = 0.12;
+  lfo.connect(lfoG); lfoG.connect(trem.gain);
+  trem.connect(out);
+  lfo.start(t); lfo.stop(t + dur + 0.1);
+
+  midiList.forEach((m) => {
+    const f = midiToFreq(m);
+    [0, 1].forEach((k) => {
+      const o = ctx.createOscillator();
+      o.type = k === 0 ? "sine" : "triangle";
+      o.frequency.value = f * (k === 0 ? 1 : 1.003);
+      const og = ctx.createGain();
+      og.gain.value = k === 0 ? 0.6 : 0.25;
+      o.connect(og); og.connect(trem);
+      o.start(t); o.stop(t + dur + 0.1);
+    });
+  });
+}
+
+function lead(t, midi, dur) {
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  const f = midiToFreq(midi);
+  o.type = "triangle";
+  o.frequency.setValueAtTime(f, t);
+  // léger vibrato
+  const vib = ctx.createOscillator();
+  const vibG = ctx.createGain();
+  vib.frequency.value = 5.5; vibG.gain.value = f * 0.012;
+  vib.connect(vibG); vibG.connect(o.frequency);
+  vib.start(t); vib.stop(t + dur + 0.1);
+
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.16, t + 0.03);
+  g.gain.setValueAtTime(0.16, t + dur * 0.6);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(master);
+  toReverb(g, 0.45);
+  o.start(t); o.stop(t + dur + 0.1);
+}
+
+/* =========================================================
+   SÉQUENCEUR (lookahead scheduler)
+   ========================================================= */
+let step = 0;        // 0..15
+let bar = 0;         // 0..3
+let nextTime = 0;
+let timerId = null;
+const SWING = 0.16;  // décalage des doubles-croches impaires
+
+function bpm() { return +ui.tempo.value; }
+function sixteenth() { return (60 / bpm()) / 4; }
+
+function scheduleStep(s, b, t) {
+  const chord = PROG[b];
+
+  // Hi-hats (swing déjà appliqué dans t)
+  hat(t, HATV[s], OPEN[s] === 1);
+  if (KICK[s]) kick(t);
+  if (CLAP[s]) clap(t);
+  if (SNAP[s]) snap(t, 0.9);
+
+  // Rhodes : frappé en début de mesure + relance à mi-mesure
+  if (s === 0) rhodes(t, chord.ep, sixteenth() * 16 * 0.95);
+  if (s === 8) rhodes(t, chord.ep.slice(1), sixteenth() * 8 * 0.95);
+
+  // Basse 808 : root sur le 1 et rebond syncopé
+  if (s === 0) bass808(t, chord.bass, sixteenth() * 6);
+  if (s === 7) bass808(t, chord.bass, sixteenth() * 3);
+  if (s === 10) bass808(t, chord.bass + 12, sixteenth() * 2);
+
+  // Mélodie lead éventuelle
+  const lick = LICKS[b];
+  if (lick) {
+    lick.forEach(([ls, lm, ld]) => {
+      if (ls === s) lead(t, lm, sixteenth() * ld * 0.9);
+    });
+  }
+
+  // Affichage de l'accord courant
+  if (s === 0) {
+    ui.chord.innerHTML = `mesure ${b + 1}/4 · <b>${chord.name}</b>`;
+  }
+}
+
+function tick() {
+  while (nextTime < ctx.currentTime + 0.12) {
+    const swung = (step % 2 === 1) ? SWING * sixteenth() : 0;
+    scheduleStep(step, bar, nextTime + swung);
+    nextTime += sixteenth();
+    step++;
+    if (step >= 16) { step = 0; bar = (bar + 1) % PROG.length; }
+  }
+  timerId = setTimeout(tick, 25);
+}
+
+/* =========================================================
+   CONTRÔLES
+   ========================================================= */
+function start() {
+  if (!ctx) {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    noiseBuffer = makeNoise();
+    buildGraph();
+  }
+  ctx.resume();
+  step = 0; bar = 0;
+  nextTime = ctx.currentTime + 0.08;
+  tick();
+  playing = true;
+  ui.play.textContent = "⏸";
+  ui.play.classList.add("playing");
+}
+
+function stop() {
+  clearTimeout(timerId);
+  playing = false;
+  ui.play.textContent = "▶";
+  ui.play.classList.remove("playing");
+  ui.chord.textContent = "—";
+}
+
+ui.play.addEventListener("click", () => playing ? stop() : start());
+
+ui.tempo.addEventListener("input", () => { ui.tempoVal.textContent = ui.tempo.value; });
+ui.vol.addEventListener("input", () => {
+  ui.volVal.textContent = ui.vol.value;
+  if (master) master.gain.value = (ui.vol.value / 100) * 0.9;
+});
+</script>
+</body>
+</html>
