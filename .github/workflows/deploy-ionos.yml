@@ -43,11 +43,11 @@ jobs:
       - name: Page 404 + config
         run: printf 'ErrorDocument 404 /404.html\nOptions -Indexes\n' > out/.htaccess
 
-      - name: Diagnostic — structure du serveur IONOS
+      - name: Envoi vers IONOS (lftp / SFTP) dans public/web
         env:
           H: ${{ secrets.IONOS_SFTP_SERVER }}
           U: ${{ secrets.IONOS_SFTP_USERNAME }}
           P: ${{ secrets.IONOS_SFTP_PASSWORD }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
-          lftp -c "set sftp:auto-confirm yes; open -u '$U','$P' sftp://$H; echo '== PWD =='; pwd; echo '== RACINE =='; cls -l; echo '== public =='; cls -l public/ || echo '(pas de public)'; echo '== public/ionos =='; cls -l public/ionos/ || echo '(pas de public/ionos)'"
+          lftp -c "set sftp:auto-confirm yes; set net:max-retries 2; open -u '$U','$P' sftp://$H; mirror -R --delete --parallel=4 --verbose ./out/ public/web/"
