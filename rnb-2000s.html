@@ -80,8 +80,8 @@
       </div>
       <div class="row">
         <label for="vol">Volume</label>
-        <input id="vol" type="range" min="0" max="100" value="80" />
-        <span class="val" id="volVal">80</span>
+        <input id="vol" type="range" min="0" max="100" value="90" />
+        <span class="val" id="volVal">90</span>
       </div>
     </div>
 
@@ -99,7 +99,7 @@
    ========================================================= */
 
 let ctx = null;
-let master, comp, reverbWet, reverbConv, vinylGain, vinylSrc;
+let master, comp, limiter, reverbWet, reverbConv, vinylGain, vinylSrc;
 let playing = false;
 
 const ui = {
@@ -169,24 +169,41 @@ function makeImpulse(seconds, decay) {
 }
 
 /* ---------- Chaîne audio ---------- */
+// Courbe de saturation douce (tanh) pour le limiteur de sortie
+function softClipCurve(drive) {
+  const n = 2048, curve = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    const x = (i / (n - 1)) * 2 - 1;
+    curve[i] = Math.tanh(x * drive) / Math.tanh(drive);
+  }
+  return curve;
+}
+
 function buildGraph() {
   master = ctx.createGain();
-  master.gain.value = (ui.vol.value / 100) * 0.9;
+  master.gain.value = (ui.vol.value / 100) * 1.35;
 
+  // Compression plus marquée = plus de niveau perçu (ça "tape")
   comp = ctx.createDynamicsCompressor();
-  comp.threshold.value = -16;
-  comp.knee.value = 26;
-  comp.ratio.value = 3.5;
-  comp.attack.value = 0.004;
-  comp.release.value = 0.18;
+  comp.threshold.value = -22;
+  comp.knee.value = 18;
+  comp.ratio.value = 6;
+  comp.attack.value = 0.003;
+  comp.release.value = 0.16;
+
+  // Limiteur de sortie : on peut pousser fort sans clipping moche
+  limiter = ctx.createWaveShaper();
+  limiter.curve = softClipCurve(2.2);
+  limiter.oversample = "4x";
 
   reverbConv = ctx.createConvolver();
   reverbConv.buffer = makeImpulse(2.4, 3.2);
   reverbWet = ctx.createGain();
-  reverbWet.gain.value = 0.32;
+  reverbWet.gain.value = 0.28;
 
   master.connect(comp);
-  comp.connect(ctx.destination);
+  comp.connect(limiter);
+  limiter.connect(ctx.destination);
   reverbConv.connect(reverbWet);
   reverbWet.connect(master);
 
@@ -217,20 +234,20 @@ function kick(t) {
   const o = ctx.createOscillator();
   const g = ctx.createGain();
   o.type = "sine";
-  o.frequency.setValueAtTime(160, t);
-  o.frequency.exponentialRampToValueAtTime(48, t + 0.11);
+  o.frequency.setValueAtTime(180, t);
+  o.frequency.exponentialRampToValueAtTime(44, t + 0.12);
   g.gain.setValueAtTime(0.0001, t);
-  g.gain.exponentialRampToValueAtTime(1.0, t + 0.005);
-  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
+  g.gain.exponentialRampToValueAtTime(1.5, t + 0.005);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.40);
   o.connect(g); g.connect(master);
-  o.start(t); o.stop(t + 0.4);
+  o.start(t); o.stop(t + 0.45);
 
-  // petit "click" d'attaque
+  // "click" d'attaque (plus présent pour que le kick claque)
   const c = noiseSource();
   const ch = ctx.createBiquadFilter();
   ch.type = "highpass"; ch.frequency.value = 1500;
   const cg = ctx.createGain();
-  cg.gain.setValueAtTime(0.5, t);
+  cg.gain.setValueAtTime(0.85, t);
   cg.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
   c.connect(ch); ch.connect(cg); cg.connect(master);
   c.start(t); c.stop(t + 0.04);
@@ -251,7 +268,7 @@ function clap(t) {
     const tt = t + o;
     const peak = i === offs.length - 1 ? 0.7 : 0.4;
     ng.gain.setValueAtTime(0.0001, tt);
-    ng.gain.exponentialRampToValueAtTime(peak, tt + 0.002);
+    ng.gain.exponentialRampToValueAtTime(peak * 1.5, tt + 0.002);
     ng.gain.exponentialRampToValueAtTime(0.0001, tt + (i === offs.length - 1 ? 0.18 : 0.03));
     n.connect(ng); ng.connect(bp);
     n.start(tt); n.stop(tt + 0.2);
@@ -288,16 +305,19 @@ function bass808(t, midi, dur) {
   const o = ctx.createOscillator();
   const g = ctx.createGain();
   const lp = ctx.createBiquadFilter();
-  lp.type = "lowpass"; lp.frequency.value = 220;
+  lp.type = "lowpass"; lp.frequency.value = 260;
+  // saturation douce -> harmoniques audibles sur petites enceintes/casque
+  const drive = ctx.createWaveShaper();
+  drive.curve = softClipCurve(1.8);
   const f = midiToFreq(midi);
   o.type = "sine";
   o.frequency.setValueAtTime(f * 1.5, t);
   o.frequency.exponentialRampToValueAtTime(f, t + 0.06);
   g.gain.setValueAtTime(0.0001, t);
-  g.gain.exponentialRampToValueAtTime(0.85, t + 0.02);
-  g.gain.setValueAtTime(0.85, t + dur * 0.6);
+  g.gain.exponentialRampToValueAtTime(1.25, t + 0.02);
+  g.gain.setValueAtTime(1.25, t + dur * 0.6);
   g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-  o.connect(lp); lp.connect(g); g.connect(master);
+  o.connect(lp); lp.connect(drive); drive.connect(g); g.connect(master);
   o.start(t); o.stop(t + dur + 0.05);
 }
 
@@ -445,7 +465,7 @@ ui.play.addEventListener("click", () => playing ? stop() : start());
 ui.tempo.addEventListener("input", () => { ui.tempoVal.textContent = ui.tempo.value; });
 ui.vol.addEventListener("input", () => {
   ui.volVal.textContent = ui.vol.value;
-  if (master) master.gain.value = (ui.vol.value / 100) * 0.9;
+  if (master) master.gain.value = (ui.vol.value / 100) * 1.35;
 });
 </script>
 </body>
