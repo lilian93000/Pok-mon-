@@ -46,6 +46,10 @@ interface UploadedFile {
   size: number;
 }
 
+// Clé Web3Forms (reçue par email après inscription sur web3forms.com).
+// Permet d'envoyer chaque commande par email, sans serveur.
+const WEB3FORMS_KEY = "VOTRE_CLE_WEB3FORMS";
+
 export function DossierWizard() {
   const [step, setStep] = useState(1);
   const [adresse, setAdresse] = useState("");
@@ -92,6 +96,33 @@ export function DossierWizard() {
 
   const next = () => setStep((s) => Math.min(6, s + 1));
   const prev = () => setStep((s) => Math.max(1, s - 1));
+
+  // Envoi de la commande par email (via Web3Forms) — sans serveur.
+  async function submitOrder() {
+    if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "VOTRE_CLE_WEB3FORMS") return;
+    try {
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `Nouvelle commande — ${formule.name} — ${nom}`,
+          from_name: "AnalyseTaCopro",
+          Nom: nom,
+          Email: email,
+          Téléphone: telephone,
+          Adresse: `${adresse}, ${codePostal} ${ville}`,
+          "Type de bien": TYPE_BIEN_LABEL[typeBien],
+          Formule: formule.name,
+          "Option urgence": urgence ? `Oui (+${OPTION_URGENCE.price} €)` : "Non",
+          Total: `${total} €`,
+          Documents: files.map((f) => f.name).join(", ") || "(aucun listé)",
+        }),
+      });
+    } catch {
+      /* on n'empêche pas la confirmation si l'email échoue */
+    }
+  }
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -542,7 +573,10 @@ export function DossierWizard() {
               Retour
             </button>
             <button
-              onClick={next}
+              onClick={() => {
+                if (step === 5) submitOrder();
+                next();
+              }}
               disabled={!canNext()}
               className="inline-flex items-center gap-2 rounded-2xl bg-brand-gradient px-7 py-3 text-sm font-semibold text-white shadow-soft transition hover:shadow-soft-lg disabled:cursor-not-allowed disabled:opacity-50"
             >
