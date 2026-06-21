@@ -18,7 +18,13 @@ import {
   Lock,
 } from "lucide-react";
 import { OFFERS_B2C, OPTION_URGENCE } from "@/lib/pricing";
-import { TYPE_BIEN_LABEL, formatPoids, type TypeBien } from "@/lib/dossier";
+import {
+  TYPE_BIEN_LABEL,
+  formatPoids,
+  type TypeBien,
+  type Formule,
+} from "@/lib/dossier";
+import { addClientDossier, newDossierId } from "@/lib/clientDossiers";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -131,6 +137,24 @@ export function DossierWizard() {
     } catch {
       /* on n'empêche pas la confirmation si l'email échoue */
     }
+  }
+
+  // Enregistre le dossier dans le navigateur du client (son tableau de bord).
+  function saveDossier() {
+    addClientDossier({
+      id: newDossierId(),
+      adresse,
+      ville,
+      codePostal,
+      typeBien,
+      formule: formuleId.toUpperCase() as Formule,
+      formuleName: formule.name,
+      total,
+      urgence,
+      documents: files.map((f) => ({ name: f.name, size: f.size })),
+      statut: "DOCUMENTS_RECUS",
+      createdAt: new Date().toISOString(),
+    });
   }
 
   return (
@@ -557,8 +581,8 @@ export function DossierWizard() {
               <Row label="Total réglé" value={`${total} €`} strong />
             </div>
             <div className="mt-7 flex justify-center">
-              <Button href="/">
-                Retour à l'accueil
+              <Button href="/dashboard">
+                Voir ma demande dans mon tableau de bord
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </div>
@@ -583,7 +607,10 @@ export function DossierWizard() {
             </button>
             <button
               onClick={() => {
-                if (step === 5) submitOrder();
+                if (step === 5) {
+                  submitOrder();
+                  saveDossier();
+                }
                 next();
               }}
               disabled={!canNext()}
