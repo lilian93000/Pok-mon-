@@ -44,6 +44,7 @@ interface UploadedFile {
   id: string;
   name: string;
   size: number;
+  file: File;
 }
 
 // Clé Web3Forms (reçue par email après inscription sur web3forms.com).
@@ -74,6 +75,7 @@ export function DossierWizard() {
       id: `${f.name}-${f.size}-${Math.random().toString(36).slice(2, 7)}`,
       name: f.name,
       size: f.size,
+      file: f,
     }));
     setFiles((prev) => [...prev, ...next]);
   }, []);
@@ -101,23 +103,30 @@ export function DossierWizard() {
   async function submitOrder() {
     if (!WEB3FORMS_KEY) return;
     try {
+      // FormData (multipart) : permet de joindre les documents à l'email.
+      const fd = new FormData();
+      fd.append("access_key", WEB3FORMS_KEY);
+      fd.append("subject", `Nouvelle commande — ${formule.name} — ${nom}`);
+      fd.append("from_name", "AnalyseTaCopro");
+      fd.append("Nom", nom);
+      fd.append("Email", email);
+      fd.append("Téléphone", telephone);
+      fd.append("Adresse", `${adresse}, ${codePostal} ${ville}`);
+      fd.append("Type de bien", TYPE_BIEN_LABEL[typeBien]);
+      fd.append("Formule", formule.name);
+      fd.append("Option urgence", urgence ? `Oui (+${OPTION_URGENCE.price} €)` : "Non");
+      fd.append("Total", `${total} €`);
+      fd.append(
+        "Documents",
+        files.map((f) => f.name).join(", ") || "(aucun)"
+      );
+      // Pièces jointes : on attache chaque fichier réellement téléversé.
+      files.forEach((f, i) => {
+        fd.append(`Document ${i + 1}`, f.file, f.name);
+      });
       await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          subject: `Nouvelle commande — ${formule.name} — ${nom}`,
-          from_name: "AnalyseTaCopro",
-          Nom: nom,
-          Email: email,
-          Téléphone: telephone,
-          Adresse: `${adresse}, ${codePostal} ${ville}`,
-          "Type de bien": TYPE_BIEN_LABEL[typeBien],
-          Formule: formule.name,
-          "Option urgence": urgence ? `Oui (+${OPTION_URGENCE.price} €)` : "Non",
-          Total: `${total} €`,
-          Documents: files.map((f) => f.name).join(", ") || "(aucun listé)",
-        }),
+        body: fd,
       });
     } catch {
       /* on n'empêche pas la confirmation si l'email échoue */
