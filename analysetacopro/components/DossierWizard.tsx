@@ -557,8 +557,8 @@ export function DossierWizard() {
               <Row label="Total réglé" value={`${total} €`} strong />
             </div>
             <div className="mt-7 flex justify-center">
-              <Button href="/dashboard">
-                Accéder à mon tableau de bord
+              <Button href="/">
+                Retour à l'accueil
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </div>

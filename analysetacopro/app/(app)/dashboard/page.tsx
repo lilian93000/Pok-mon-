@@ -71,6 +71,23 @@ export default function DashboardPage() {
         {/* Liste des dossiers */}
         <div>
           <h2 className="mb-4 text-lg font-bold text-foreground">Mes dossiers</h2>
+          {DOSSIERS_DEMO.length === 0 && (
+            <div className="rounded-3xl border border-dashed border-brand/20 bg-surface p-10 text-center">
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-soft text-brand">
+                <FolderOpen className="h-6 w-6" />
+              </div>
+              <p className="font-semibold text-foreground">
+                Aucun dossier pour le moment
+              </p>
+              <p className="mx-auto mt-1 max-w-sm text-sm text-muted">
+                Lancez votre première analyse de copropriété en quelques minutes.
+              </p>
+              <Button href="/dashboard/nouveau" size="sm" className="mt-5">
+                <FilePlus2 className="h-4 w-4" />
+                Nouveau dossier
+              </Button>
+            </div>
+          )}
           <div className="space-y-3">
             {DOSSIERS_DEMO.map((d) => {
               const risk =

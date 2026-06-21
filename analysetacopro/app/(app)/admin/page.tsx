@@ -15,7 +15,9 @@ import {
 
 export default function AdminPage() {
   const ca = DOSSIERS_DEMO.reduce((sum, d) => sum + d.prixHT, 0);
-  const panier = Math.round(ca / DOSSIERS_DEMO.length);
+  const panier = DOSSIERS_DEMO.length
+    ? Math.round(ca / DOSSIERS_DEMO.length)
+    : 0;
 
   const kpis = [
     { label: "Chiffre d'affaires", value: `${ca} €`, icon: Euro },

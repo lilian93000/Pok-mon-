@@ -94,62 +94,12 @@ export interface DossierDemo {
   documents: { nom: string; type: TypeDoc; poids: number }[];
 }
 
-/** Jeu de données de démonstration (en attendant la connexion DB). */
-export const DOSSIERS_DEMO: DossierDemo[] = [
-  {
-    id: "dos_8f3a",
-    adresse: "12 rue des Lilas",
-    ville: "Lyon",
-    codePostal: "69003",
-    typeBien: "APPARTEMENT",
-    formule: "PREMIUM",
-    statut: "RAPPORT_LIVRE",
-    prixHT: 249,
-    scoreFinal: 8.4,
-    criteria: {
-      finances: 8.5,
-      travaux: 8,
-      gestion: 8.8,
-      contentieux: 9,
-      impayes: 7.5,
-      energie: 7.8,
-      transparence: 9.2,
-    },
-    createdAt: "2026-05-28",
-    documents: [
-      { nom: "PV AG 2025.pdf", type: "PV_AG", poids: 2_400_000 },
-      { nom: "Pré-état daté.pdf", type: "PRE_ETAT_DATE", poids: 1_100_000 },
-      { nom: "Règlement copro.pdf", type: "REGLEMENT", poids: 3_800_000 },
-    ],
-  },
-  {
-    id: "dos_2b9c",
-    adresse: "5 avenue Victor Hugo",
-    ville: "Bordeaux",
-    codePostal: "33000",
-    typeBien: "APPARTEMENT",
-    formule: "INVESTISSEUR",
-    statut: "ANALYSE_EN_COURS",
-    prixHT: 349,
-    createdAt: "2026-06-12",
-    documents: [
-      { nom: "PV AG 2024.pdf", type: "PV_AG", poids: 2_100_000 },
-      { nom: "Annexes comptables.pdf", type: "ANNEXE_COMPTABLE", poids: 900_000 },
-    ],
-  },
-  {
-    id: "dos_5d1e",
-    adresse: "8 place du Marché",
-    ville: "Nantes",
-    codePostal: "44000",
-    typeBien: "APPARTEMENT",
-    formule: "ESSENTIEL",
-    statut: "DOCUMENTS_INCOMPLETS",
-    prixHT: 149,
-    createdAt: "2026-06-16",
-    documents: [{ nom: "PV AG 2025.pdf", type: "PV_AG", poids: 1_800_000 }],
-  },
-];
+/**
+ * Liste des dossiers affichés dans l'espace privé.
+ * Vide : aucune donnée fictive n'est montrée aux visiteurs. Les commandes
+ * réelles sont reçues par email (voir DossierWizard / Web3Forms).
+ */
+export const DOSSIERS_DEMO: DossierDemo[] = [];
 
 /** Formate un poids en octets vers une chaîne lisible. */
 export function formatPoids(bytes: number): string {
