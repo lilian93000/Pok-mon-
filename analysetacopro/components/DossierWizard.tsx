@@ -7,7 +7,6 @@ import {
   Warehouse,
   Car,
   UploadCloud,
-  CreditCard,
   CheckCircle2,
   Check,
   X,
@@ -15,7 +14,6 @@ import {
   ArrowLeft,
   Zap,
   FileText,
-  Lock,
 } from "lucide-react";
 import { OFFERS_B2C, OPTION_URGENCE } from "@/lib/pricing";
 import {
@@ -33,7 +31,7 @@ const STEPS = [
   { n: 2, label: "Type de bien" },
   { n: 3, label: "Documents" },
   { n: 4, label: "Formule" },
-  { n: 5, label: "Paiement" },
+  { n: 5, label: "Récapitulatif" },
   { n: 6, label: "Confirmation" },
 ];
 
@@ -493,13 +491,13 @@ export function DossierWizard() {
           </div>
         )}
 
-        {/* Étape 5 — Paiement */}
+        {/* Étape 5 — Récapitulatif et envoi (sans paiement pour le moment) */}
         {step === 5 && (
           <div className="animate-fade-up">
             <StepTitle
-              icon={CreditCard}
-              title="Paiement sécurisé"
-              sub="Réglez votre commande en toute sécurité (Stripe)."
+              icon={CheckCircle2}
+              title="Récapitulatif de votre demande"
+              sub="Vérifiez les informations puis envoyez votre demande. Aucun paiement ne vous est demandé maintenant."
             />
             <div className="mt-6 rounded-2xl bg-surface-soft/50 p-5">
               <div className="flex items-center justify-between text-sm">
@@ -517,7 +515,7 @@ export function DossierWizard() {
                 </div>
               )}
               <div className="mt-3 flex items-center justify-between border-t border-brand/10 pt-3">
-                <span className="font-bold text-foreground">Total</span>
+                <span className="font-bold text-foreground">Montant estimé</span>
                 <span className="text-xl font-extrabold text-brand">
                   {total} €
                 </span>
@@ -527,29 +525,16 @@ export function DossierWizard() {
               </p>
             </div>
 
-            <div className="mt-5 space-y-4 opacity-90">
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-foreground">
-                  Numéro de carte
-                </label>
-                <div className="flex items-center gap-2 rounded-2xl border border-brand/15 px-4 py-3">
-                  <CreditCard className="h-5 w-5 text-muted" />
-                  <span className="text-muted">4242 4242 4242 4242</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-2xl border border-brand/15 px-4 py-3 text-muted">
-                  12 / 28
-                </div>
-                <div className="rounded-2xl border border-brand/15 px-4 py-3 text-muted">
-                  CVC
-                </div>
-              </div>
+            <div className="mt-5 rounded-2xl border border-brand/15 bg-brand/5 p-4 text-sm text-muted">
+              <p className="font-semibold text-foreground">
+                Pas de paiement en ligne pour l&apos;instant.
+              </p>
+              <p className="mt-1">
+                Envoyez votre demande dès maintenant : nous vous recontactons
+                rapidement par email ou téléphone pour finaliser votre dossier
+                et convenir du règlement.
+              </p>
             </div>
-            <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted">
-              <Lock className="h-3.5 w-3.5" />
-              Paiement chiffré — démo (brancher Stripe en Phase 8).
-            </p>
           </div>
         )}
 
@@ -570,6 +555,8 @@ export function DossierWizard() {
               </span>
               . Un email de confirmation vous a été envoyé à{" "}
               <span className="font-semibold text-foreground">{email}</span>.
+              Nous vous recontactons rapidement pour finaliser votre dossier et
+              convenir du règlement.
             </p>
             <div className="mx-auto mt-6 max-w-sm space-y-2 rounded-2xl bg-surface-soft/50 p-5 text-left text-sm">
               <Row label="Nom" value={nom} />
@@ -578,7 +565,7 @@ export function DossierWizard() {
               <Row label="Formule" value={formule.name} />
               <Row label="Type de bien" value={TYPE_BIEN_LABEL[typeBien]} />
               <Row label="Documents" value={`${files.length} fichier(s)`} />
-              <Row label="Total réglé" value={`${total} €`} strong />
+              <Row label="Montant estimé" value={`${total} €`} strong />
             </div>
             <div className="mt-7 flex justify-center">
               <Button href="/dashboard">
@@ -616,7 +603,7 @@ export function DossierWizard() {
               disabled={!canNext()}
               className="inline-flex items-center gap-2 rounded-2xl bg-brand-gradient px-7 py-3 text-sm font-semibold text-white shadow-soft transition hover:shadow-soft-lg disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {step === 5 ? "Payer et confirmer" : "Continuer"}
+              {step === 5 ? "Envoyer ma demande" : "Continuer"}
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
