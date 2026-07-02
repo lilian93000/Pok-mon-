@@ -1,0 +1,13 @@
+{
+  "name": "walaxy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Recréation de Waalaxy — prospection LinkedIn automatisée (démo, simulateur intégré)",
+  "scripts": {
+    "start": "node server/serveur.js",
+    "start:rapide": "WALAXY_JOUR_MS=20000 WALAXY_TICK_MS=2000 node server/serveur.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

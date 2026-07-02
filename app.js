@@ -2,9 +2,22 @@
    Walaxy — logique de l'application (SPA sans dépendance)
    ============================================================ */
 
-/* ---------- État ---------- */
+/* ---------- État ----------
+   Deux modes de fonctionnement :
+   - "api"  : un serveur Walaxy répond sur /api → comptes, moteur
+              d'automatisation et persistance côté serveur (SSE pour
+              le temps réel) ;
+   - "demo" : pas de serveur (ex. GitHub Pages) → données de démo
+              persistées dans le localStorage.                       */
 
 const CLE_STOCKAGE = "walaxy-state-v1";
+const CLE_TOKEN = "walaxy-token";
+
+let MODE = "demo";
+let TOKEN = localStorage.getItem(CLE_TOKEN);
+let EMAIL = "";
+let sse = null;
+let etat = null;
 
 function chargerEtat() {
   try {
@@ -15,10 +28,62 @@ function chargerEtat() {
 }
 
 function sauverEtat() {
+  if (MODE !== "demo") return; // en mode API, le serveur est la source de vérité
   try { localStorage.setItem(CLE_STOCKAGE, JSON.stringify(etat)); } catch (e) { /* mode privé */ }
 }
 
-let etat = chargerEtat();
+/* ---------- Client API ---------- */
+
+async function api(chemin, corps) {
+  const options = {
+    method: corps !== undefined ? "POST" : "GET",
+    headers: {}
+  };
+  if (TOKEN) options.headers["Authorization"] = "Bearer " + TOKEN;
+  if (corps !== undefined) {
+    options.headers["Content-Type"] = "application/json";
+    options.body = JSON.stringify(corps);
+  }
+  const reponse = await fetch(chemin, options);
+  const donnees = await reponse.json().catch(() => ({}));
+  if (reponse.status === 401 && !chemin.startsWith("/api/auth/")) {
+    deconnecter();
+    throw new Error("Session expirée, reconnectez-vous.");
+  }
+  if (!reponse.ok) throw new Error(donnees.erreur || "Erreur serveur");
+  return donnees;
+}
+
+function ouvrirSSE() {
+  if (sse) sse.close();
+  sse = new EventSource("/api/events?token=" + encodeURIComponent(TOKEN));
+  sse.onmessage = async () => {
+    try {
+      const r = await api("/api/etat");
+      etat = r.etat;
+      rafraichirDoucement();
+    } catch (e) { /* la prochaine notification retentera */ }
+  };
+}
+
+/* Re-rend la vue sans écraser une saisie ou une modale en cours */
+function rafraichirDoucement() {
+  const actif = document.activeElement;
+  const enSaisie = actif && (actif.tagName === "TEXTAREA" || actif.tagName === "INPUT");
+  const modaleOuverte = !$("#modal-backdrop").hidden;
+  if (enSaisie || modaleOuverte) { majBadges(); return; }
+  rendre();
+}
+
+function deconnecter() {
+  TOKEN = null;
+  EMAIL = "";
+  etat = null;
+  localStorage.removeItem(CLE_TOKEN);
+  if (sse) { sse.close(); sse = null; }
+  location.hash = "#/accueil";
+  rendre();
+}
 
 /* ---------- Utilitaires ---------- */
 
@@ -425,21 +490,32 @@ const VIVIER_IMPORT = [
   { prenom: "Kevin",    nom: "Aubert",   poste: "VP Marketing",        societe: "Drivana" }
 ];
 
-function confirmerImport() {
+async function confirmerImport() {
   const nb = parseInt($("#nb-import").value, 10);
-  const dejaPris = new Set(etat.prospects.map(p => p.prenom + p.nom));
-  const dispo = VIVIER_IMPORT.filter(v => !dejaPris.has(v.prenom + v.nom));
-  const pris = dispo.slice(0, nb);
-  pris.forEach((v, i) => {
-    etat.prospects.push({
-      id: "p" + Date.now() + i,
-      prenom: v.prenom, nom: v.nom, poste: v.poste, societe: v.societe,
-      statut: "Nouveau", degre: Math.random() < 0.5 ? "2e" : "3e", tags: ["Import"]
+  let ajoutes = 0;
+
+  if (MODE === "api") {
+    try {
+      const r = await api("/api/prospects/import", { nb });
+      etat = r.etat;
+      ajoutes = r.ajoutes;
+    } catch (e) { toast(e.message); return; }
+  } else {
+    const dejaPris = new Set(etat.prospects.map(p => p.prenom + p.nom));
+    const pris = VIVIER_IMPORT.filter(v => !dejaPris.has(v.prenom + v.nom)).slice(0, nb);
+    pris.forEach((v, i) => {
+      etat.prospects.push({
+        id: "p" + Date.now() + i,
+        prenom: v.prenom, nom: v.nom, poste: v.poste, societe: v.societe,
+        statut: "Nouveau", degre: Math.random() < 0.5 ? "2e" : "3e", tags: ["Import"]
+      });
     });
-  });
-  sauverEtat();
+    ajoutes = pris.length;
+    sauverEtat();
+  }
+
   fermerModale();
-  toast(pris.length ? `${pris.length} prospect(s) importé(s) ✓` : "Tous les prospects de cette recherche sont déjà importés.");
+  toast(ajoutes ? `${ajoutes} prospect(s) importé(s) ✓` : "Tous les prospects de cette recherche sont déjà importés.");
   rendre();
 }
 
@@ -487,12 +563,18 @@ function brancherCampagnes() {
     });
   });
   $$("[data-basculer-campagne]").forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
       const c = campagneParId(btn.dataset.basculerCampagne);
       if (!c || c.statut === "Terminée") return;
-      c.statut = c.statut === "En cours" ? "En pause" : "En cours";
-      sauverEtat();
-      toast(c.statut === "En cours" ? "Campagne relancée ▶" : "Campagne mise en pause ⏸");
+      if (MODE === "api") {
+        try { etat = (await api(`/api/campagnes/${c.id}/basculer`, {})).etat; }
+        catch (e) { toast(e.message); return; }
+      } else {
+        c.statut = c.statut === "En cours" ? "En pause" : "En cours";
+        sauverEtat();
+      }
+      const maj = campagneParId(btn.dataset.basculerCampagne);
+      toast(maj && maj.statut === "En cours" ? "Campagne relancée ▶" : "Campagne mise en pause ⏸");
       rendre();
     });
   });
@@ -669,39 +751,48 @@ function rendreWizard() {
   }
 }
 
-function lancerCampagne() {
+async function lancerCampagne() {
   const w = wizard;
-  const seq = sequenceParId(w.sequenceId);
-  const id = "c" + Date.now();
   const ids = [...w.prospects];
+  let id;
 
-  etat.campagnes.unshift({
-    id,
-    nom: w.nom.trim(),
-    sequenceId: w.sequenceId,
-    statut: "En cours",
-    creeLe: new Date().toISOString().slice(0, 10),
-    prospects: ids,
-    stats: { envoyees: 0, acceptees: 0, repondues: 0 }
-  });
-
-  // Planifie la première étape de la séquence pour chaque prospect
-  const premiereEtape = seq ? seq.etapes.find(e => !e.startsWith("Attendre")) : "Invitation";
-  ids.forEach((pid, i) => {
-    etat.file.push({
-      id: "q" + Date.now() + i,
-      type: premiereEtape,
-      prospectId: pid,
-      campagneId: id,
-      prevu: i < 3 ? "Aujourd'hui" : "Demain"
+  if (MODE === "api") {
+    try {
+      const r = await api("/api/campagnes", { nom: w.nom.trim(), sequenceId: w.sequenceId, prospectIds: ids });
+      etat = r.etat;
+      id = r.id;
+    } catch (e) { toast(e.message); return; }
+  } else {
+    const seq = sequenceParId(w.sequenceId);
+    id = "c" + Date.now();
+    etat.campagnes.unshift({
+      id,
+      nom: w.nom.trim(),
+      sequenceId: w.sequenceId,
+      statut: "En cours",
+      creeLe: new Date().toISOString().slice(0, 10),
+      prospects: ids,
+      stats: { envoyees: 0, acceptees: 0, repondues: 0 }
     });
-  });
+    // Planifie la première étape de la séquence pour chaque prospect
+    const premiereEtape = seq ? seq.etapes.find(e => !e.startsWith("Attendre")) : "Invitation";
+    ids.forEach((pid, i) => {
+      etat.file.push({
+        id: "q" + Date.now() + i,
+        type: premiereEtape,
+        prospectId: pid,
+        campagneId: id,
+        prevu: i < 3 ? "Aujourd'hui" : "Demain"
+      });
+    });
+    sauverEtat();
+  }
 
-  sauverEtat();
   fermerModale();
   wizard = null;
   toast(`Campagne « ${w.nom.trim()} » lancée 🚀`);
   location.hash = "#/campagne/" + id;
+  rendre();
 }
 
 /* ---------- Messagerie ---------- */
@@ -769,7 +860,11 @@ function brancherMessagerie() {
   $$("[data-ouvrir-conv]").forEach(item => item.addEventListener("click", () => {
     convOuverte = item.dataset.ouvrirConv;
     const conv = etat.conversations.find(c => c.id === convOuverte);
-    if (conv && conv.nonLu) { conv.nonLu = false; sauverEtat(); }
+    if (conv && conv.nonLu) {
+      conv.nonLu = false;
+      if (MODE === "api") api(`/api/conversations/${conv.id}/lu`, {}).catch(() => {});
+      else sauverEtat();
+    }
     rendre();
   }));
 
@@ -787,20 +882,26 @@ function brancherMessagerie() {
   }
 }
 
-function envoyerMessage() {
+async function envoyerMessage() {
   const saisie = $("#saisie-message");
   const texte = saisie.value.trim();
   if (!texte) return;
   const conv = etat.conversations.find(c => c.id === convOuverte);
   if (!conv) return;
-  const maintenant = new Date();
-  conv.messages.push({
-    de: "moi",
-    texte,
-    date: maintenant.toISOString().slice(0, 10) + " " +
-          String(maintenant.getHours()).padStart(2, "0") + ":" + String(maintenant.getMinutes()).padStart(2, "0")
-  });
-  sauverEtat();
+
+  if (MODE === "api") {
+    try { etat = (await api(`/api/conversations/${conv.id}/messages`, { texte })).etat; }
+    catch (e) { toast(e.message); return; }
+  } else {
+    const maintenant = new Date();
+    conv.messages.push({
+      de: "moi",
+      texte,
+      date: maintenant.toISOString().slice(0, 10) + " " +
+            String(maintenant.getHours()).padStart(2, "0") + ":" + String(maintenant.getMinutes()).padStart(2, "0")
+    });
+    sauverEtat();
+  }
   rendre();
   toast("Message envoyé ✓");
 }
@@ -840,9 +941,14 @@ function vueFile() {
 }
 
 function brancherFile() {
-  $$("[data-annuler-action]").forEach(btn => btn.addEventListener("click", () => {
-    etat.file = etat.file.filter(f => f.id !== btn.dataset.annulerAction);
-    sauverEtat();
+  $$("[data-annuler-action]").forEach(btn => btn.addEventListener("click", async () => {
+    if (MODE === "api") {
+      try { etat = (await api(`/api/file/${btn.dataset.annulerAction}/annuler`, {})).etat; }
+      catch (e) { toast(e.message); return; }
+    } else {
+      etat.file = etat.file.filter(f => f.id !== btn.dataset.annulerAction);
+      sauverEtat();
+    }
     toast("Action annulée");
     rendre();
   }));
@@ -892,6 +998,76 @@ function brancherAbonnement() {
 }
 
 /* ============================================================
+   Écran de connexion / inscription (mode API)
+   ============================================================ */
+
+function vueAuth(onglet = "connexion") {
+  const inscription = onglet === "inscription";
+  return `
+    <div class="auth-ecran">
+      <div class="card auth-carte">
+        <div class="auth-logo">👽 <strong>Walaxy</strong></div>
+        <h2 style="margin:0 0 4px;">${inscription ? "Créer un compte" : "Connexion"}</h2>
+        <p class="card-sub">${inscription
+          ? "Votre espace arrive avec des données de démonstration prêtes à l'emploi."
+          : "Connectez-vous pour retrouver vos campagnes."}</p>
+        <form id="form-auth" data-onglet="${onglet}">
+          <div class="champ">
+            <label>Adresse e-mail</label>
+            <input class="input" id="auth-email" type="email" required autocomplete="email" placeholder="vous@exemple.fr">
+          </div>
+          <div class="champ">
+            <label>Mot de passe</label>
+            <input class="input" id="auth-mdp" type="password" required minlength="6"
+                   autocomplete="${inscription ? "new-password" : "current-password"}" placeholder="6 caractères minimum">
+          </div>
+          <div class="auth-erreur" id="auth-erreur" hidden></div>
+          <button class="btn btn-primaire" type="submit" style="width:100%; justify-content:center;">
+            ${inscription ? "Créer mon compte" : "Se connecter"}
+          </button>
+        </form>
+        <div class="auth-bascule">
+          ${inscription
+            ? `Déjà un compte ? <a href="#" data-auth-onglet="connexion">Se connecter</a>`
+            : `Pas encore de compte ? <a href="#" data-auth-onglet="inscription">S'inscrire</a>`}
+        </div>
+      </div>
+    </div>`;
+}
+
+function brancherAuth() {
+  $$("[data-auth-onglet]").forEach(lien => lien.addEventListener("click", e => {
+    e.preventDefault();
+    $("#main").innerHTML = vueAuth(lien.dataset.authOnglet);
+    brancherAuth();
+  }));
+
+  $("#form-auth").addEventListener("submit", async e => {
+    e.preventDefault();
+    const onglet = e.target.dataset.onglet;
+    const zoneErreur = $("#auth-erreur");
+    zoneErreur.hidden = true;
+    try {
+      const r = await api(`/api/auth/${onglet}`, {
+        email: $("#auth-email").value.trim(),
+        motDePasse: $("#auth-mdp").value
+      });
+      TOKEN = r.token;
+      EMAIL = r.email;
+      localStorage.setItem(CLE_TOKEN, TOKEN);
+      etat = (await api("/api/etat")).etat;
+      ouvrirSSE();
+      location.hash = "#/accueil";
+      rendre();
+      toast(onglet === "inscription" ? "Bienvenue à bord 👽" : "Content de vous revoir 👋");
+    } catch (erreur) {
+      zoneErreur.textContent = erreur.message;
+      zoneErreur.hidden = false;
+    }
+  });
+}
+
+/* ============================================================
    Routeur & rendu
    ============================================================ */
 
@@ -901,8 +1077,17 @@ function routeCourante() {
 }
 
 function rendre() {
-  const route = routeCourante();
   const main = $("#main");
+
+  // Mode API sans session : écran de connexion
+  if (MODE === "api" && !etat) {
+    main.innerHTML = vueAuth();
+    brancherAuth();
+    majCarteUtilisateur();
+    return;
+  }
+
+  const route = routeCourante();
   const [base, param] = route.split("/");
 
   $$(".nav-item").forEach(item => {
@@ -941,6 +1126,26 @@ function rendre() {
   }
 
   majBadges();
+  majCarteUtilisateur();
+}
+
+/* La carte utilisateur de la barre latérale reflète la session */
+function majCarteUtilisateur() {
+  const nom = $(".user-card-name");
+  const plan = $(".user-card-plan");
+  const avatar = $(".avatar-me");
+  if (MODE === "api") {
+    if (etat && EMAIL) {
+      const pseudo = EMAIL.split("@")[0];
+      nom.textContent = pseudo.charAt(0).toUpperCase() + pseudo.slice(1);
+      avatar.textContent = pseudo.slice(0, 2).toUpperCase();
+      plan.innerHTML = `<a href="#" data-action="deconnexion" style="color:var(--brand); font-weight:600;">Se déconnecter</a>`;
+    } else {
+      nom.textContent = "Non connecté";
+      avatar.textContent = "👽";
+      plan.textContent = "Serveur Walaxy détecté";
+    }
+  }
 }
 
 /* ---------- Délégation des actions globales ---------- */
@@ -957,8 +1162,36 @@ document.addEventListener("click", e => {
     case "wiz-retour":         wizard.etape--; rendreWizard(); break;
     case "wiz-lancer":         lancerCampagne(); break;
     case "envoyer-message":    envoyerMessage(); break;
+    case "deconnexion":        e.preventDefault(); deconnecter(); toast("À bientôt 👋"); break;
   }
 });
 
 window.addEventListener("hashchange", rendre);
-rendre();
+
+/* ---------- Démarrage ----------
+   On sonde /api/sante : si un serveur Walaxy répond, on passe en
+   mode API (comptes + moteur d'automatisation) ; sinon on retombe
+   sur la démo localStorage (ex. GitHub Pages).                    */
+
+async function demarrer() {
+  try {
+    const reponse = await fetch("/api/sante", { signal: AbortSignal.timeout(1500) });
+    if (reponse.ok && (await reponse.json()).nom === "walaxy") MODE = "api";
+  } catch (e) { /* pas de serveur : mode démo */ }
+
+  if (MODE === "api") {
+    if (TOKEN) {
+      try {
+        const r = await api("/api/etat");
+        etat = r.etat;
+        EMAIL = r.email;
+        ouvrirSSE();
+      } catch (e) { /* jeton invalide : deconnecter() a déjà nettoyé */ }
+    }
+  } else {
+    etat = chargerEtat();
+  }
+  rendre();
+}
+
+demarrer();

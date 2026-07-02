@@ -184,3 +184,6 @@ const SEED = {
     { id: "q7", type: "Invitation",       prospectId: "p15", campagneId: "c01", prevu: "Demain, 14:15" }
   ]
 };
+
+/* Permet au serveur Node de réutiliser les mêmes données de départ */
+if (typeof module !== "undefined" && module.exports) module.exports = SEED;

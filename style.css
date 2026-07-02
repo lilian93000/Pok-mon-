@@ -569,6 +569,27 @@ td.num { font-variant-numeric: tabular-nums; }
 .champ .input { width: 100%; }
 .champ textarea.input { min-height: 90px; resize: vertical; }
 
+/* ===== Écran de connexion (mode serveur) ===== */
+.auth-ecran {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-carte { width: 380px; max-width: 100%; padding: 28px; }
+.auth-logo { font-size: 22px; margin-bottom: 14px; }
+.auth-erreur {
+  background: rgba(208, 59, 59, 0.10);
+  color: var(--statut-critique);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.auth-bascule { margin-top: 16px; font-size: 13px; color: var(--ink-2); text-align: center; }
+.auth-bascule a { color: var(--brand); font-weight: 600; }
+
 /* ===== Toasts ===== */
 .toasts {
   position: fixed;

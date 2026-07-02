@@ -1,42 +1,60 @@
 # Walaxy 👽
 
-Recréation de l'interface de **Waalaxy**, l'outil d'automatisation de prospection LinkedIn — en HTML, CSS et JavaScript pur, sans aucune dépendance.
+Recréation complète de **Waalaxy**, l'outil d'automatisation de prospection LinkedIn — front-end **et** back-end, sans aucune dépendance externe.
 
-> ⚠️ **Démo front-end uniquement.** Cette application ne se connecte pas à LinkedIn et n'automatise rien : toutes les données sont fictives et stockées dans le `localStorage` du navigateur.
+> ⚠️ **L'intégration LinkedIn est simulée.** Automatiser un compte LinkedIn viole ses conditions d'utilisation : le moteur remplace donc les appels réels par un simulateur (acceptations ~60 %, réponses ~35 %). Tout le reste — comptes, API, moteur de séquences, quotas, persistance, temps réel — est réel et fonctionnel.
 
-## Fonctionnalités
+## Deux modes de fonctionnement
 
-- **Accueil** — tableau de bord avec tuiles de statistiques, graphique d'activité interactif sur 14 jours (SVG fait main, tooltip au survol), quotas journaliers et prochaines actions.
-- **Prospects** — base de prospects avec recherche, filtre par statut, sélection multiple, import simulé et ajout à une campagne.
-- **Campagnes** — liste des campagnes avec statistiques (envois, taux d'acceptation, taux de réponse), pause/reprise, et un **assistant de création en 3 étapes** (nom → séquence → prospects).
-- **Détail de campagne** — entonnoir de conversion, visualisation de la séquence, progression prospect par prospect.
-- **Messagerie** — boîte de réception à deux volets avec conversations, badges non-lus et envoi de réponses.
-- **File d'attente** — actions planifiées avec possibilité d'annulation.
-- **Abonnement** — page de tarifs (Freemium / Avancé / Business).
+| Mode | Quand | Ce que ça donne |
+|---|---|---|
+| **Serveur** | `npm start` puis http://localhost:3000 | Comptes multi-utilisateurs, moteur d'automatisation en tâche de fond, persistance disque, mises à jour temps réel (SSE) |
+| **Démo** | ouverture directe d'`index.html` (ou GitHub Pages) | Interface identique, données de démo dans le `localStorage` |
 
-L'interface s'adapte automatiquement au **mode sombre** du système et aux écrans mobiles.
+Le front détecte automatiquement la présence du serveur via `/api/sante`.
 
-## Lancer en local
+## Lancer le serveur
 
-Aucune installation nécessaire :
+Node ≥ 18, aucune installation :
 
 ```bash
-# ouvrez simplement le fichier
-open index.html        # macOS
-xdg-open index.html    # Linux
-
-# ou servez le dossier
-python3 -m http.server 8000
+npm start            # http://localhost:3000 — 1 « jour » de séquence = 3 min
+npm run start:rapide # échelle accélérée : 1 « jour » = 20 s
 ```
+
+Variables d'environnement : `PORT`, `WALAXY_JOUR_MS` (durée réelle d'un « jour » de séquence, `86400000` pour un rythme réel), `WALAXY_TICK_MS` (fréquence du moteur).
+
+## Ce que fait le back-end
+
+- **Comptes** — inscription/connexion, mots de passe hachés (scrypt + sel), jetons de session signés HMAC avec expiration, données isolées par utilisateur.
+- **Moteur d'automatisation** (`server/moteur.js`) — à chaque passage : remise à zéro des quotas au changement de jour, exécution des actions de la file arrivées à échéance (invitations, messages, visites) dans la limite des quotas, avancement des séquences étape par étape (« Attendre N jours » compris), arrêt des relances dès qu'un prospect répond, clôture automatique des campagnes finies.
+- **Simulateur** — à l'endroit exact où le produit réel piloterait LinkedIn : tirages probabilistes d'acceptations et de réponses (textes générés), avec délais aléatoires « humains ».
+- **API REST** — `/api/auth/*`, `/api/etat`, `/api/campagnes`, `/api/prospects/import`, `/api/file/:id/annuler`, `/api/conversations/:id/*`.
+- **Temps réel** — `/api/events` (Server-Sent Events) : l'interface se met à jour dès que le moteur travaille.
+- **Persistance** — JSON sur disque (`server/data/`, non versionné), écritures atomiques.
+
+## L'interface
+
+- **Accueil** — tuiles de stats, graphique d'activité interactif sur 14 jours (SVG fait main, tooltip), quotas journaliers, prochaines actions.
+- **Prospects** — recherche, filtres, sélection multiple, import simulé, ajout à une campagne.
+- **Campagnes** — assistant de création en 3 étapes (nom → séquence → prospects), pause/reprise, détail avec entonnoir de conversion et progression par prospect.
+- **Messagerie** — boîte à deux volets ; les messages automatiques du moteur et les réponses simulées y arrivent en direct.
+- **File d'attente** — actions planifiées avec échéances, annulables.
+- **Abonnement** — page de tarifs.
+
+Modes clair/sombre automatiques, responsive.
 
 ## Structure
 
 | Fichier | Rôle |
 |---|---|
-| `index.html` | Coquille de l'application (barre latérale, modale, toasts) |
-| `style.css` | Design system complet, modes clair et sombre |
-| `data.js` | Données de démonstration (prospects, campagnes, conversations…) |
-| `app.js` | Routeur, vues, graphique SVG, assistant de campagne, persistance |
+| `index.html` / `style.css` | Coquille et design system |
+| `data.js` | Données de départ (partagées front/serveur) |
+| `app.js` | Routeur, vues, graphique SVG, client API + SSE, bascule serveur/démo |
+| `server/serveur.js` | Serveur HTTP : statique + API REST + SSE |
+| `server/moteur.js` | Moteur d'automatisation et simulateur LinkedIn |
+| `server/authentification.js` | scrypt + jetons HMAC |
+| `server/magasin.js` | Persistance JSON atomique, état initial des comptes |
+| `server/config.js` | Port, échelle de temps, cadence du moteur |
 
-Pour réinitialiser les données de démo : ouvrez la console et lancez
-`localStorage.removeItem("walaxy-state-v1")` puis rechargez la page.
+Réinitialiser la démo localStorage : `localStorage.removeItem("walaxy-state-v1")` dans la console. Réinitialiser le serveur : supprimer `server/data/`.

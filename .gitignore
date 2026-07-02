@@ -1,0 +1,5 @@
+# Données du serveur (comptes, états, secret de signature)
+server/data/
+
+# Dépendances éventuelles
+node_modules/
