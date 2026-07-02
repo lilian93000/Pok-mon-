@@ -7,7 +7,7 @@ Recréation complète de **Waalaxy**, l'outil d'automatisation de prospection �
 | Canal | Statut | Pourquoi |
 |---|---|---|
 | **📧 Email** | **Automatisation RÉELLE** | L'envoi d'emails de prospection est **légal** s'il respecte les règles anti-spam. Le moteur envoie de vrais emails via un client SMTP, avec désabonnement en un clic, liste de suppression et mentions légales. |
-| **in LinkedIn** | **Simulé** | Automatiser LinkedIn **viole ses conditions d'utilisation** et fait bannir les comptes. Ce canal est donc un simulateur (acceptations ~60 %, réponses ~35 %) — jamais branché sur un vrai compte. |
+| **in LinkedIn** | **Semi-automatique** | Automatiser LinkedIn **viole ses conditions d'utilisation** et fait bannir les comptes. Le programme prépare donc tout (message personnalisé, ordre, liste) mais **c'est vous qui ouvrez le profil et envoyez** — voir la page « À faire ». Les campagnes de démo existantes restent simulées. |
 
 Tout le reste — comptes, API, moteur de séquences, quotas, persistance, temps réel — est réel et fonctionnel.
 
@@ -35,6 +35,16 @@ npm start
 ```
 
 > ⚠️ Pour un envoi de masse en production, utilisez un domaine avec **SPF, DKIM et DMARC** configurés, et un fournisseur d'envoi réputé — sinon vos emails finiront en spam.
+
+## Le canal LinkedIn (semi-automatique, sans risque)
+
+Créez une campagne avec une séquence **in LinkedIn** : elle n'est **pas** envoyée automatiquement. Chaque action apparaît dans la page **« À faire »** avec :
+
+- le **message personnalisé** déjà rédigé (bouton « Copier le message ») ;
+- un lien **« Ouvrir le profil LinkedIn »** (recherche du prospect) ;
+- un bouton **« C'est envoyé »** qui fait avancer la séquence à l'étape suivante.
+
+Vous gardez la main sur chaque envoi — le programme ne fait que préparer et ordonner. Aucun pilotage automatisé de LinkedIn, donc **aucun risque de bannissement** : c'est la différence avec les extensions qui automatisent réellement (et exposent votre compte).
 
 ## Deux modes de fonctionnement
 

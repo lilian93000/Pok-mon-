@@ -199,6 +199,61 @@ function texteSortant(type, prospect) {
   return gabarit(prospect);
 }
 
+/* ---------- Semi-automatique LinkedIn (préparation, envoi manuel) ---------- */
+
+/* Une campagne LinkedIn créée depuis l'assistant est en mode "manuel" :
+   le moteur NE l'exécute PAS. Ses actions attendent que l'utilisateur
+   les fasse à la main (copier le message, ouvrir le profil, envoyer),
+   puis les valide. Aucune automatisation contraire aux CGU de LinkedIn. */
+function estActionManuelle(etat, action) {
+  const c = campagneDe(etat, action.campagneId);
+  return !!(c && c.manuel);
+}
+
+/* Message pré-rédigé à copier-coller pour une action manuelle. */
+function messagePourAction(prospect, type) {
+  if (type.startsWith("Invitation")) return TEXTES_SORTANTS["Invitation note"](prospect);
+  return texteSortant(type, prospect);
+}
+
+/* URL de recherche LinkedIn du prospect (le clic reste fait par l'humain). */
+function urlProfilLinkedIn(prospect) {
+  const q = encodeURIComponent(`${prospect.prenom} ${prospect.nom} ${prospect.societe}`);
+  return `https://www.linkedin.com/search/results/people/?keywords=${q}`;
+}
+
+/* L'utilisateur a effectué l'action à la main : on avance la séquence. */
+function executerManuel(etat, actionId) {
+  const action = etat.file.find(f => f.id === actionId);
+  if (!action) return { ok: false, erreur: "Action introuvable." };
+  const campagne = campagneDe(etat, action.campagneId);
+  const prospect = prospectDe(etat, action.prospectId);
+  if (!campagne || !prospect) {
+    etat.file = etat.file.filter(f => f.id !== actionId);
+    return { ok: true };
+  }
+
+  // Trace le message dans le fil (marqué « envoyé manuellement »)
+  const texte = messagePourAction(prospect, action.type);
+  const conv = conversationPour(etat, prospect.id);
+  conv.messages.push({ de: "moi", canal: "linkedin", manuel: true, texte, date: horodatage() });
+
+  // Statut : invitation → Invité ; message → Contacté
+  if (action.type.startsWith("Invitation")) {
+    if (prospect.statut === "Nouveau") prospect.statut = "Invité";
+  } else if (!["Répondu", "Désabonné"].includes(prospect.statut)) {
+    prospect.statut = "Contacté";
+  }
+  campagne.stats.envoyees++;
+  campagne.progression[prospect.id] = action.etapeIndex;
+  activiteDuJour(etat).invitations += action.type.startsWith("Invitation") ? 1 : 0;
+
+  // Étape suivante (elle reviendra dans la liste « À faire » après son délai)
+  planifierSuite(etat, campagne, prospect.id, action.etapeIndex);
+  etat.file = etat.file.filter(f => f.id !== actionId);
+  return { ok: true };
+}
+
 /* ---------- Simulateur (frontière de l'intégration réelle) ---------- */
 
 function programmerAcceptation(etat, campagne, prospect, etapeIndex) {
@@ -395,7 +450,8 @@ async function passer(etat) {
 
   // Actions de la file arrivées à échéance (traitées une par une :
   // l'envoi d'email est asynchrone et doit consommer le quota en série).
-  const echues = etat.file.filter(f => f.dueAt <= maintenant);
+  // Les actions LinkedIn en mode manuel sont laissées à l'utilisateur.
+  const echues = etat.file.filter(f => f.dueAt <= maintenant && !estActionManuelle(etat, f));
   for (const action of echues) {
     const resultat = await executerAction(etat, action);
     if (resultat.retirer) etat.file = etat.file.filter(f => f.id !== action.id);
@@ -442,5 +498,6 @@ function demarrerMoteur(surChangement) {
 
 module.exports = {
   demarrerMoteur, planifierCampagne, programmerReponse,
-  conversationPour, horodatage, PROBA_REPONSE_MANUELLE
+  conversationPour, horodatage, PROBA_REPONSE_MANUELLE,
+  executerManuel, messagePourAction, urlProfilLinkedIn, estActionManuelle
 };

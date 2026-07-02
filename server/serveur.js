@@ -73,14 +73,26 @@ function libellePrevu(dueAt) {
          ` à ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
-/* Vue de l'état envoyée au client (échéances lisibles, tri de la file) */
+/* Vue de l'état envoyée au client (échéances lisibles, tri de la file).
+   Les actions LinkedIn manuelles reçoivent le message prêt à copier et
+   l'URL du profil, pour la liste « À faire ». */
 function serialiserEtat(etat) {
   return {
     ...etat,
     evenements: undefined, // détail interne du simulateur
     file: [...etat.file]
       .sort((a, b) => a.dueAt - b.dueAt)
-      .map(f => ({ ...f, prevu: libellePrevu(f.dueAt) }))
+      .map(f => {
+        const item = { ...f, prevu: libellePrevu(f.dueAt), manuel: moteur.estActionManuelle(etat, f) };
+        if (item.manuel) {
+          const p = etat.prospects.find(x => x.id === f.prospectId);
+          if (p) {
+            item.message = moteur.messagePourAction(p, f.type);
+            item.urlProfil = moteur.urlProfilLinkedIn(p);
+          }
+        }
+        return item;
+      })
   };
 }
 
@@ -194,12 +206,16 @@ async function routerApi(req, res, url) {
     const ids = Array.isArray(prospectIds) ? prospectIds.filter(id => etat.prospects.some(p => p.id === id)) : [];
     if (!ids.length) return repondreJson(res, 400, { erreur: "Sélectionnez au moins un prospect." });
 
+    const seq = etat.sequences.find(s => s.id === sequenceId);
     const campagne = {
       id: "c" + Date.now(),
       nom: String(nom).trim().slice(0, 80),
       sequenceId,
       statut: "En cours",
       creeLe: new Date().toISOString().slice(0, 10),
+      // Les campagnes LinkedIn sont en SEMI-AUTO : le moteur prépare,
+      // l'utilisateur envoie à la main (pas d'automatisation LinkedIn).
+      manuel: seq && seq.canal === "linkedin",
       prospects: ids,
       progression: {},
       stats: { envoyees: 0, acceptees: 0, repondues: 0 }
@@ -238,6 +254,13 @@ async function routerApi(req, res, url) {
     const avant = etat.file.length;
     etat.file = etat.file.filter(f => f.id !== segments[2]);
     if (etat.file.length === avant) return repondreJson(res, 404, { erreur: "Action introuvable." });
+    return sauverEtRepondre();
+  }
+
+  /* ----- Action LinkedIn faite manuellement (semi-auto) ----- */
+  if (segments[1] === "file" && segments[3] === "fait" && methode === "POST") {
+    const resultat = moteur.executerManuel(etat, segments[2]);
+    if (!resultat.ok) return repondreJson(res, 404, { erreur: resultat.erreur });
     return sauverEtRepondre();
   }
 

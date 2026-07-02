@@ -145,9 +145,18 @@ function majBadges() {
   badgeInbox.textContent = nonLus;
   badgeInbox.classList.toggle("visible", nonLus > 0);
 
+  const manuelles = (etat.file || []).filter(f => f.manuel);
+  const auto = (etat.file || []).filter(f => !f.manuel);
+
   const badgeFile = $("#badge-queue");
-  badgeFile.textContent = etat.file.length;
-  badgeFile.classList.toggle("visible", etat.file.length > 0);
+  badgeFile.textContent = auto.length;
+  badgeFile.classList.toggle("visible", auto.length > 0);
+
+  const badgeAfaire = $("#badge-afaire");
+  if (badgeAfaire) {
+    badgeAfaire.textContent = manuelles.length;
+    badgeAfaire.classList.toggle("visible", manuelles.length > 0);
+  }
 }
 
 /* ============================================================
@@ -816,6 +825,7 @@ async function lancerCampagne() {
     } catch (e) { toast(e.message); return; }
   } else {
     const seq = sequenceParId(w.sequenceId);
+    const manuel = seq && seq.canal === "linkedin"; // LinkedIn = semi-auto manuel
     id = "c" + Date.now();
     etat.campagnes.unshift({
       id,
@@ -823,6 +833,7 @@ async function lancerCampagne() {
       sequenceId: w.sequenceId,
       statut: "En cours",
       creeLe: new Date().toISOString().slice(0, 10),
+      manuel,
       prospects: ids,
       stats: { envoyees: 0, acceptees: 0, repondues: 0 }
     });
@@ -834,6 +845,7 @@ async function lancerCampagne() {
         type: premiereEtape,
         prospectId: pid,
         campagneId: id,
+        manuel,
         prevu: i < 3 ? "Aujourd'hui" : "Demain"
       });
     });
@@ -963,10 +975,103 @@ async function envoyerMessage() {
   toast("Message envoyé ✓");
 }
 
-/* ---------- File d'attente ---------- */
+/* ---------- À faire : semi-auto LinkedIn (préparé, envoi manuel) ---------- */
+
+function vueAfaire() {
+  const actions = (etat.file || []).filter(f => f.manuel);
+
+  const cartes = actions.map(f => {
+    const p = prospectParId(f.prospectId);
+    const c = campagneParId(f.campagneId);
+    // En démo (sans serveur), on reconstruit message et URL côté client
+    const message = f.message || messageManuelDemo(p, f.type);
+    const url = f.urlProfil || urlLinkedInDemo(p);
+    return `
+      <div class="card afaire-card" data-action-id="${f.id}">
+        <div class="afaire-tete">
+          <div class="cell-nom"><span class="avatar">${p ? initiales(p) : "?"}</span>
+            <div>${p ? echap(nomComplet(p)) : "Prospect"}<div class="cell-sous">${p ? echap(p.poste) + " · " + echap(p.societe) : ""}</div></div></div>
+          <span class="pill">${echap(f.type)}</span>
+        </div>
+        <div class="afaire-meta">${c ? "Campagne « " + echap(c.nom) + " »" : ""} · à faire ${echap(f.prevu || "")}</div>
+        <div class="afaire-message">
+          <div class="afaire-message-label">Message prêt à envoyer</div>
+          <div class="afaire-message-texte">${echap(message)}</div>
+        </div>
+        <div class="afaire-actions">
+          <button class="btn btn-petit" data-copier="${f.id}">📋 Copier le message</button>
+          <a class="btn btn-petit" href="${url}" target="_blank" rel="noopener">🔗 Ouvrir le profil LinkedIn</a>
+          <div class="toolbar-espace"></div>
+          <button class="btn btn-petit btn-danger" data-sauter="${f.id}">Passer</button>
+          <button class="btn btn-petit btn-primaire" data-fait="${f.id}">✓ C'est envoyé</button>
+        </div>
+        <textarea class="afaire-clip" id="clip-${f.id}" readonly>${echap(message)}</textarea>
+      </div>`;
+  }).join("");
+
+  return `
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">À faire — LinkedIn (semi-automatique)</h1>
+        <p class="page-sub">Le programme prépare le message et l'ordre. <strong>Vous</strong> ouvrez le profil et envoyez à la main :
+        aucune automatisation contraire aux conditions de LinkedIn, donc aucun risque pour votre compte.</p>
+      </div>
+    </div>
+    ${actions.length ? `<div class="afaire-liste">${cartes}</div>`
+      : `<div class="card vide"><div class="vide-icone">🎉</div>Rien à faire pour l'instant.
+         Créez une campagne LinkedIn pour préparer vos messages ici.</div>`}`;
+}
+
+/* Reconstructions côté client pour le mode démo (sans serveur) */
+function messageManuelDemo(p, type) {
+  if (!p) return "";
+  if (type.startsWith("Invitation"))
+    return `Bonjour ${p.prenom}, votre parcours chez ${p.societe} a retenu mon attention. Au plaisir d'échanger !`;
+  return `Bonjour ${p.prenom}, ravi d'être en contact ! Curieux d'en savoir plus sur vos enjeux chez ${p.societe}. Un échange de 15 min cette semaine ?`;
+}
+function urlLinkedInDemo(p) {
+  if (!p) return "https://www.linkedin.com";
+  return "https://www.linkedin.com/search/results/people/?keywords=" +
+    encodeURIComponent(`${p.prenom} ${p.nom} ${p.societe}`);
+}
+
+function brancherAfaire() {
+  $$("[data-copier]").forEach(btn => btn.addEventListener("click", () => {
+    const zone = $("#clip-" + btn.dataset.copier);
+    const texte = zone.value;
+    const ok = () => toast("Message copié ✓ — collez-le dans LinkedIn");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texte).then(ok, () => { zone.select(); document.execCommand("copy"); ok(); });
+    } else { zone.select(); document.execCommand("copy"); ok(); }
+  }));
+
+  const retirer = async (id, message) => {
+    if (MODE === "api") {
+      const route = message === "Action passée" ? `/api/file/${id}/annuler` : `/api/file/${id}/fait`;
+      try { etat = (await api(route, {})).etat; } catch (e) { toast(e.message); return; }
+    } else {
+      // Démo : on avance la séquence localement de façon simplifiée
+      const action = etat.file.find(f => f.id === id);
+      if (action && message !== "Action passée") {
+        const p = prospectParId(action.prospectId);
+        if (p && action.type.startsWith("Invitation") && p.statut === "Nouveau") p.statut = "Invité";
+        else if (p) p.statut = "Contacté";
+      }
+      etat.file = etat.file.filter(f => f.id !== id);
+      sauverEtat();
+    }
+    toast(message);
+    rendre();
+  };
+
+  $$("[data-fait]").forEach(btn => btn.addEventListener("click", () => retirer(btn.dataset.fait, "Bien envoyé ✓")));
+  $$("[data-sauter]").forEach(btn => btn.addEventListener("click", () => retirer(btn.dataset.sauter, "Action passée")));
+}
+
+/* ---------- File d'attente (actions automatiques : email, démo) ---------- */
 
 function vueFile() {
-  const lignes = etat.file.map(f => {
+  const lignes = etat.file.filter(f => !f.manuel).map(f => {
     const p = prospectParId(f.prospectId);
     const c = campagneParId(f.campagneId);
     return `
@@ -983,8 +1088,9 @@ function vueFile() {
   return `
     <div class="page-head">
       <div>
-        <h1 class="page-title">File d'attente</h1>
-        <p class="page-sub">Les actions sont espacées aléatoirement, pendant vos heures d'activité, pour imiter un comportement humain.</p>
+        <h1 class="page-title">File d'attente (automatique)</h1>
+        <p class="page-sub">Actions envoyées automatiquement par le moteur : emails de séquence (canal légal) et actions de démonstration.
+        Les actions LinkedIn, elles, se font à la main depuis <a href="#/afaire" style="color:var(--brand); font-weight:600;">« À faire »</a>.</p>
       </div>
     </div>
     <div class="card" style="padding:0;">
@@ -1168,6 +1274,10 @@ function rendre() {
     case "messagerie":
       main.innerHTML = vueMessagerie();
       brancherMessagerie();
+      break;
+    case "afaire":
+      main.innerHTML = vueAfaire();
+      brancherAfaire();
       break;
     case "file":
       main.innerHTML = vueFile();
