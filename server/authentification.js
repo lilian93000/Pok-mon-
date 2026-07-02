@@ -72,4 +72,20 @@ function verifierToken(token) {
   } catch (e) { return null; }
 }
 
-module.exports = { hacherMotDePasse, verifierMotDePasse, creerToken, verifierToken };
+/* ---------- Signature générique (jetons de désabonnement, etc.) ---------- */
+
+function signerValeur(valeur) {
+  return signer(String(valeur));
+}
+
+function verifierValeur(valeur, signature) {
+  const attendu = signer(String(valeur));
+  const a = Buffer.from(String(signature));
+  const b = Buffer.from(attendu);
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
+module.exports = {
+  hacherMotDePasse, verifierMotDePasse, creerToken, verifierToken,
+  signerValeur, verifierValeur
+};

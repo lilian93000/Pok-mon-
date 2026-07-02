@@ -18,6 +18,7 @@ const config = require("./config");
 const magasin = require("./magasin");
 const auth = require("./authentification");
 const moteur = require("./moteur");
+const email = require("./email");
 
 const RACINE = path.join(__dirname, "..");
 
@@ -106,7 +107,10 @@ async function routerApi(req, res, url) {
 
   /* ----- Santé (permet au front de détecter le back) ----- */
   if (url.pathname === "/api/sante" && methode === "GET") {
-    return repondreJson(res, 200, { ok: true, nom: "walaxy", version: "1.0.0" });
+    return repondreJson(res, 200, {
+      ok: true, nom: "walaxy", version: "1.1.0",
+      modeEnvoi: email.modeEnvoi() // "smtp" (envoi réel) ou "apercu"
+    });
   }
 
   /* ----- Authentification ----- */
@@ -293,13 +297,76 @@ function servirStatique(req, res, url) {
 }
 
 /* ============================================================
+   Désabonnement (page publique, sans authentification)
+   ------------------------------------------------------------
+   Répond au clic dans l'email ET à la requête POST « un clic »
+   déclenchée automatiquement par Gmail/Outlook (List-Unsubscribe-Post).
+   ============================================================ */
+
+function pageDesabonnement(titre, message, ok) {
+  return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${titre}</title>
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;background:#f9f9f7;color:#0b0b0b;
+       display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
+  .c{background:#fff;border:1px solid rgba(11,11,11,.1);border-radius:16px;padding:36px 40px;
+     max-width:440px;text-align:center;box-shadow:0 4px 24px rgba(11,11,11,.06)}
+  .i{font-size:44px;margin-bottom:8px}
+  h1{font-size:20px;margin:0 0 8px}
+  p{color:#52514e;line-height:1.55;margin:0}
+</style></head><body>
+  <div class="c"><div class="i">${ok ? "✅" : "⚠️"}</div>
+  <h1>${titre}</h1><p>${message}</p></div>
+</body></html>`;
+}
+
+/* Répercute le désabonnement dans les états de tous les comptes :
+   le prospect passe en « Désabonné » et ses relances sont annulées. */
+function repercuterDesabonnement(adresse) {
+  for (const uid of magasin.listerIdsUtilisateurs()) {
+    const etat = magasin.lireEtat(uid);
+    if (!etat) continue;
+    let modifie = false;
+    for (const p of etat.prospects) {
+      if ((p.email || "").toLowerCase() === adresse && p.statut !== "Désabonné") {
+        p.statut = "Désabonné";
+        etat.file = etat.file.filter(f => f.prospectId !== p.id);
+        modifie = true;
+      }
+    }
+    if (modifie) { magasin.ecrireEtat(uid, etat); diffuser(uid); }
+  }
+}
+
+async function routerDesabonnement(req, res, url) {
+  const jeton = url.searchParams.get("jeton");
+  const adresse = email.verifierJetonDesabonnement(jeton);
+  if (!adresse) {
+    res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
+    return res.end(pageDesabonnement("Lien invalide",
+      "Ce lien de désabonnement est invalide ou a expiré.", false));
+  }
+  email.desabonner(adresse);
+  repercuterDesabonnement(adresse);
+
+  // La requête POST « un clic » n'attend pas de page, juste un 200
+  if (req.method === "POST") { res.writeHead(200); return res.end("OK"); }
+
+  res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+  return res.end(pageDesabonnement("Désabonnement confirmé",
+    `L'adresse <strong>${adresse.replace(/[&<>"]/g, "")}</strong> ne recevra plus aucun email de prospection.`, true));
+}
+
+/* ============================================================
    Démarrage
    ============================================================ */
 
 const serveur = http.createServer(async (req, res) => {
   const url = new URL(req.url, "http://localhost");
   try {
-    if (url.pathname.startsWith("/api/")) await routerApi(req, res, url);
+    if (url.pathname === "/desabonnement") await routerDesabonnement(req, res, url);
+    else if (url.pathname.startsWith("/api/")) await routerApi(req, res, url);
     else if (req.method === "GET") servirStatique(req, res, url);
     else { res.writeHead(405); res.end(); }
   } catch (erreur) {
@@ -314,4 +381,10 @@ serveur.listen(config.PORT, () => {
   console.log(`👽 Walaxy écoute sur http://localhost:${config.PORT}`);
   console.log(`   Échelle de temps : 1 « jour » de séquence = ${Math.round(config.JOUR_MS / 1000)} s réelles`);
   console.log(`   Moteur : un passage toutes les ${config.TICK_MS / 1000} s`);
+  if (email.modeEnvoi() === "smtp") {
+    console.log(`   Emails : ENVOI RÉEL via ${config.SMTP.hote}:${config.SMTP.port} (${config.SMTP.securite})`);
+  } else {
+    console.log(`   Emails : mode APERÇU (aucun SMTP configuré) → écrits dans server/data/outbox/`);
+    console.log(`            Pour envoyer réellement : définir WALAXY_SMTP_HOTE / _USER / _PASS.`);
+  }
 });

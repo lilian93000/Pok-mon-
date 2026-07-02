@@ -8,16 +8,20 @@
      3. fait avancer chaque prospect dans sa séquence
      4. traite les événements simulés (acceptations, réponses)
 
-   ⚠ SIMULATEUR : là où le produit réel piloterait un compte
-   LinkedIn, ce moteur tire des probabilités (acceptation ~60 %,
-   réponse ~35 %). L'intégration réelle n'est volontairement pas
-   implémentée : automatiser LinkedIn viole ses conditions
-   d'utilisation.
+   DEUX CANAUX :
+   · LinkedIn (canal "linkedin") — SIMULÉ. Automatiser LinkedIn
+     viole ses conditions d'utilisation ; les acceptations et
+     réponses sont donc tirées au sort (~60 % / ~35 %).
+   · Email (canal "email") — RÉEL. L'envoi d'emails de prospection
+     est légal s'il respecte les règles anti-spam ; le moteur
+     envoie de vrais emails via server/email.js (client SMTP),
+     avec désabonnement en un clic et liste de suppression.
    ============================================================ */
 
 const crypto = require("crypto");
 const config = require("./config");
 const magasin = require("./magasin");
+const email = require("./email");
 
 /* ---------- Probabilités et délais du simulateur ---------- */
 
@@ -64,6 +68,7 @@ function remettreQuotas(etat) {
 }
 
 function quotaPour(etat, typeAction) {
+  if (typeAction.startsWith("Email")) return etat.quotas.emails;
   if (typeAction === "Invitation") return etat.quotas.invitations;
   if (typeAction.startsWith("Message")) return etat.quotas.messages;
   return etat.quotas.visites;
@@ -140,6 +145,31 @@ const TEXTES_SORTANTS = {
   "Message 3": p => `Bonjour ${p.prenom}, dernière relance promis 🙂 Si le moment est mal choisi, aucun souci — je reste disponible quand vous voudrez.`
 };
 
+/* Emails de séquence : sujet + corps (texte et HTML). Le pied de page
+   légal (désabonnement + adresse) est ajouté par server/email.js. */
+const EMAILS_SORTANTS = {
+  "Email": p => ({
+    sujet: `Prospection chez ${p.societe} ?`,
+    texte: `Bonjour ${p.prenom},\r\n\r\nJe travaille avec des équipes comme la vôtre chez ${p.societe} sur l'automatisation de la prospection B2B (email, séquences, suivi). Seriez-vous ouvert(e) à un échange de 15 minutes cette semaine ?\r\n\r\nBien à vous,\r\nLilian`,
+    html: `<p>Bonjour ${p.prenom},</p><p>Je travaille avec des équipes comme la vôtre chez <strong>${p.societe}</strong> sur l'automatisation de la prospection B2B (email, séquences, suivi). Seriez-vous ouvert(e) à un échange de 15 minutes cette semaine ?</p><p>Bien à vous,<br>Lilian</p>`
+  }),
+  "Email 1": p => ({
+    sujet: `${p.prenom}, une idée pour la prospection de ${p.societe}`,
+    texte: `Bonjour ${p.prenom},\r\n\r\nEn regardant ${p.societe}, je me suis dit que notre approche des séquences d'emails pourrait vous faire gagner du temps sur la génération de rendez-vous. On peut en parler ?\r\n\r\nLilian`,
+    html: `<p>Bonjour ${p.prenom},</p><p>En regardant <strong>${p.societe}</strong>, je me suis dit que notre approche des séquences d'emails pourrait vous faire gagner du temps sur la génération de rendez-vous. On peut en parler ?</p><p>Lilian</p>`
+  }),
+  "Email 2": p => ({
+    sujet: `Re: prospection ${p.societe}`,
+    texte: `Bonjour ${p.prenom},\r\n\r\nJe me permets une relance — le sujet de l'automatisation d'emails vous parle-t-il ? Je peux vous envoyer deux exemples concrets de séquences qui convertissent bien.\r\n\r\nLilian`,
+    html: `<p>Bonjour ${p.prenom},</p><p>Je me permets une relance — le sujet de l'automatisation d'emails vous parle-t-il ? Je peux vous envoyer deux exemples concrets de séquences qui convertissent bien.</p><p>Lilian</p>`
+  }),
+  "Email 3": p => ({
+    sujet: `Dernière relance, ${p.prenom}`,
+    texte: `Bonjour ${p.prenom},\r\n\r\nDernier message promis. Si le moment n'est pas le bon, aucun souci — répondez simplement « plus tard » et je reviendrai vers vous au bon moment.\r\n\r\nBonne journée,\r\nLilian`,
+    html: `<p>Bonjour ${p.prenom},</p><p>Dernier message promis. Si le moment n'est pas le bon, aucun souci — répondez simplement « plus tard » et je reviendrai vers vous au bon moment.</p><p>Bonne journée,<br>Lilian</p>`
+  })
+};
+
 const TEXTES_REPONSES = [
   "Bonjour Lilian, merci pour votre message ! Oui, le sujet m'intéresse. Vous auriez un créneau la semaine prochaine ?",
   "Bonjour, c'est un sujet qu'on regarde en ce moment justement. Pouvez-vous m'en dire plus ?",
@@ -195,9 +225,63 @@ function programmerReponse(etat, campagneId, prospectId, probabilite) {
   });
 }
 
+/* ---------- Canal EMAIL (réel) ---------- */
+
+async function executerEmail(etat, action, campagne, prospect, quota) {
+  // Consentement / conformité : jamais d'envoi à un désabonné
+  if (email.estDesabonne(prospect.email)) {
+    prospect.statut = "Désabonné";
+    stopperSequence(etat, campagne.id, prospect.id);
+    return { retirer: true, changement: true };
+  }
+
+  const gabarit = (EMAILS_SORTANTS[action.type] || EMAILS_SORTANTS["Email"])(prospect);
+  const resultat = await email.envoyer({
+    destinataire: prospect.email,
+    sujet: gabarit.sujet,
+    texte: gabarit.texte,
+    html: gabarit.html
+  });
+
+  if (!resultat.ok) {
+    if (resultat.statut === "desabonne") {
+      prospect.statut = "Désabonné";
+      stopperSequence(etat, campagne.id, prospect.id);
+      return { retirer: true, changement: true };
+    }
+    // Adresse invalide ou erreur SMTP : on abandonne cette étape sans boucler
+    prospect.dernierEmail = { statut: resultat.statut, erreur: resultat.erreur, date: horodatage() };
+    return { retirer: true, changement: true };
+  }
+
+  quota.utilise++;
+  campagne.stats.envoyees++;
+  prospect.statut = ["Répondu", "Désabonné"].includes(prospect.statut) ? prospect.statut : "Contacté";
+  prospect.dernierEmail = { statut: resultat.statut, date: horodatage(), apercu: resultat.apercu || null };
+  campagne.progression[prospect.id] = action.etapeIndex;
+
+  // Trace l'email dans le fil de conversation (canal email)
+  const conv = conversationPour(etat, prospect.id);
+  conv.messages.push({
+    de: "moi", canal: "email", sujet: gabarit.sujet,
+    texte: gabarit.texte, date: horodatage(), statut: resultat.statut
+  });
+
+  // Journal d'envoi
+  etat.emails = etat.emails || [];
+  etat.emails.unshift({
+    id: idUnique("m"), prospectId: prospect.id, campagneId: campagne.id,
+    sujet: gabarit.sujet, statut: resultat.statut, date: horodatage(), apercu: resultat.apercu || null
+  });
+  if (etat.emails.length > 200) etat.emails.length = 200;
+
+  planifierSuite(etat, campagne, prospect.id, action.etapeIndex);
+  return { retirer: true, changement: true };
+}
+
 /* ---------- Exécution d'une action de la file ---------- */
 
-function executerAction(etat, action) {
+async function executerAction(etat, action) {
   const campagne = campagneDe(etat, action.campagneId);
   const prospect = prospectDe(etat, action.prospectId);
 
@@ -212,6 +296,11 @@ function executerAction(etat, action) {
   if (quota.utilise >= quota.max) {
     action.dueAt = Date.now() + 0.5 * config.JOUR_MS;
     return { retirer: false, changement: true };
+  }
+
+  // Canal email : envoi réel
+  if (action.type.startsWith("Email")) {
+    return executerEmail(etat, action, campagne, prospect, quota);
   }
 
   const act = activiteDuJour(etat);
@@ -300,14 +389,15 @@ function cloreCampagnesFinies(etat) {
 
 /* ---------- Un passage du moteur pour un utilisateur ---------- */
 
-function passer(etat) {
+async function passer(etat) {
   const maintenant = Date.now();
   let changement = remettreQuotas(etat);
 
-  // Actions de la file arrivées à échéance
+  // Actions de la file arrivées à échéance (traitées une par une :
+  // l'envoi d'email est asynchrone et doit consommer le quota en série).
   const echues = etat.file.filter(f => f.dueAt <= maintenant);
   for (const action of echues) {
-    const resultat = executerAction(etat, action);
+    const resultat = await executerAction(etat, action);
     if (resultat.retirer) etat.file = etat.file.filter(f => f.id !== action.id);
     changement = changement || resultat.changement;
   }
@@ -327,19 +417,24 @@ function passer(etat) {
 /* ---------- Boucle de fond ---------- */
 
 function demarrerMoteur(surChangement) {
-  const boucle = () => {
-    for (const uid of magasin.listerIdsUtilisateurs()) {
-      const etat = magasin.lireEtat(uid);
-      if (!etat) continue;
-      try {
-        if (passer(etat)) {
-          magasin.ecrireEtat(uid, etat);
-          surChangement(uid);
+  let enCours = false;
+  const boucle = async () => {
+    if (enCours) return; // évite les passages qui se chevauchent (I/O email lente)
+    enCours = true;
+    try {
+      for (const uid of magasin.listerIdsUtilisateurs()) {
+        const etat = magasin.lireEtat(uid);
+        if (!etat) continue;
+        try {
+          if (await passer(etat)) {
+            magasin.ecrireEtat(uid, etat);
+            surChangement(uid);
+          }
+        } catch (e) {
+          console.error(`Moteur : erreur pour l'utilisateur ${uid} —`, e.message);
         }
-      } catch (e) {
-        console.error(`Moteur : erreur pour l'utilisateur ${uid} —`, e.message);
       }
-    }
+    } finally { enCours = false; }
   };
   boucle();
   return setInterval(boucle, config.TICK_MS);

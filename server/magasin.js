@@ -111,8 +111,11 @@ function creerEtatInitial() {
     dueAt: Math.round(maintenant + (i + 1) * 0.12 * config.JOUR_MS * (0.8 + Math.random() * 0.6))
   }));
 
-  // Événements simulés en attente (acceptations, réponses)
+  // Événements simulés en attente (acceptations, réponses LinkedIn)
   etat.evenements = [];
+
+  // Journal des emails réellement envoyés (canal email)
+  etat.emails = [];
 
   // Progression de chaque prospect dans la séquence de sa campagne
   etat.campagnes.forEach(c => { c.progression = {}; });

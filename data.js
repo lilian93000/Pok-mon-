@@ -41,7 +41,24 @@ const SEED = {
       nom: "Message (relations existantes)",
       description: "Envoie un message direct à vos relations de 1er niveau.",
       etapes: ["Message"],
+      canal: "linkedin",
       icone: "💬"
+    },
+    {
+      id: "seq-email-simple",
+      nom: "Email de contact",
+      description: "Un email de prise de contact. Canal légal, désabonnement inclus.",
+      etapes: ["Email"],
+      canal: "email",
+      icone: "📧"
+    },
+    {
+      id: "seq-email-3-relances",
+      nom: "Email + 2 relances",
+      description: "Email d'accroche puis deux relances espacées. 100 % légal (opt-out en 1 clic).",
+      etapes: ["Email 1", "Attendre 3 jours", "Email 2", "Attendre 4 jours", "Email 3"],
+      canal: "email",
+      icone: "✉️"
     }
   ],
 
@@ -184,6 +201,24 @@ const SEED = {
     { id: "q7", type: "Invitation",       prospectId: "p15", campagneId: "c01", prevu: "Demain, 14:15" }
   ]
 };
+
+/* ---------- Dérivations ---------- */
+
+/* Toute séquence sans canal explicite est du LinkedIn (simulé). */
+SEED.sequences.forEach(s => { if (!s.canal) s.canal = "linkedin"; });
+
+/* Adresse email plausible pour chaque prospect, dérivée du nom et de
+   la société (le canal email a besoin d'une vraie adresse d'envoi). */
+function _slug(txt) {
+  return txt.normalize("NFD").replace(/[̀-ͯ]/g, "")
+            .toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+SEED.prospects.forEach(p => {
+  if (!p.email) p.email = `${_slug(p.prenom)}.${_slug(p.nom)}@${_slug(p.societe)}.example`;
+});
+
+/* Quota journalier d'emails, à côté des quotas LinkedIn. */
+if (!SEED.quotas.emails) SEED.quotas.emails = { utilise: 12, max: 200 };
 
 /* Permet au serveur Node de réutiliser les mêmes données de départ */
 if (typeof module !== "undefined" && module.exports) module.exports = SEED;

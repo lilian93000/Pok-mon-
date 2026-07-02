@@ -14,6 +14,7 @@ const CLE_STOCKAGE = "walaxy-state-v1";
 const CLE_TOKEN = "walaxy-token";
 
 let MODE = "demo";
+let MODE_ENVOI = "apercu"; // "smtp" (envoi réel) ou "apercu"
 let TOKEN = localStorage.getItem(CLE_TOKEN);
 let EMAIL = "";
 let sse = null;
@@ -94,6 +95,12 @@ function echap(txt) {
   return String(txt).replace(/[&<>"']/g, c => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[c]);
+}
+
+function badgeCanal(canal) {
+  return canal === "email"
+    ? `<span class="canal canal-email">📧 Email · légal</span>`
+    : `<span class="canal canal-linkedin">in · simulé</span>`;
 }
 
 function initiales(p) { return (p.prenom[0] + p.nom[0]).toUpperCase(); }
@@ -278,6 +285,26 @@ function activerSurvolGraphique(donnees) {
 
 /* ---------- Accueil ---------- */
 
+/* Explique les deux canaux et l'état de l'envoi d'emails */
+function banniereCanal() {
+  if (MODE !== "api") {
+    return `<div class="banniere banniere-info">
+      📧 <strong>Deux canaux :</strong> l'<strong>email</strong> est une vraie automatisation légale
+      (désabonnement en un clic, liste de suppression). Le canal <strong>LinkedIn</strong> reste simulé —
+      l'automatiser violerait ses conditions d'utilisation.
+      Lancez le serveur (<code>npm start</code>) pour l'envoi d'emails réel.</div>`;
+  }
+  if (MODE_ENVOI === "smtp") {
+    return `<div class="banniere banniere-ok">
+      ✅ <strong>Envoi d'emails réel activé</strong> (SMTP configuré). Les séquences email partent pour de vrai,
+      avec désabonnement conforme. Le canal LinkedIn, lui, reste simulé (automatisation interdite par LinkedIn).</div>`;
+  }
+  return `<div class="banniere banniere-info">
+    📧 <strong>Canal email opérationnel en mode aperçu.</strong> Les emails de séquence sont générés et écrits
+    dans <code>server/data/outbox/</code> au lieu d'être envoyés. Définissez <code>WALAXY_SMTP_HOTE/_USER/_PASS</code>
+    pour un envoi réel. Le canal LinkedIn reste simulé.</div>`;
+}
+
 function vueAccueil() {
   const a = etat.activite;
   const tot = cle => a.reduce((somme, j) => somme + j[cle], 0);
@@ -291,8 +318,9 @@ function vueAccueil() {
   const quotasHtml = Object.entries({
     "Invitations": q.invitations,
     "Messages": q.messages,
-    "Visites de profil": q.visites
-  }).map(([nom, v]) => `
+    "Visites de profil": q.visites,
+    "Emails": q.emails
+  }).filter(([, v]) => v).map(([nom, v]) => `
     <div class="quota">
       <div class="quota-head"><span>${nom}</span><span class="quota-val">${v.utilise} / ${v.max}</span></div>
       <div class="quota-track"><div class="quota-fill" style="width:${pct(v.utilise, v.max)}%"></div></div>
@@ -317,6 +345,8 @@ function vueAccueil() {
       </div>
       <button class="btn btn-primaire" data-action="nouvelle-campagne">＋ Créer une campagne</button>
     </div>
+
+    ${banniereCanal()}
 
     <div class="stats-row">
       <div class="card stat-tile">
@@ -529,7 +559,7 @@ function vueCampagnes() {
     return `
       <div class="card camp-card" data-ouvrir-campagne="${c.id}">
         <div>
-          <div class="camp-nom">${echap(c.nom)}</div>
+          <div class="camp-nom">${echap(c.nom)} ${badgeCanal(seq ? seq.canal : "linkedin")}</div>
           <div class="camp-meta">${seq ? seq.icone + " " + echap(seq.nom) : ""} · ${c.prospects.length} prospects · créée le ${c.creeLe}</div>
         </div>
         <span class="pill ${classePill(c.statut)}">${c.statut}</span>
@@ -593,13 +623,23 @@ function vueCampagneDetail(id) {
            (i < seq.etapes.length - 1 ? `<span class="seq-fleche">→</span>` : "");
   }).join("") : "";
 
-  // Entonnoir : rampe séquentielle ordinale (un seul teinte, clair → foncé)
+  const estEmail = seq && seq.canal === "email";
+
+  // Entonnoir : rampe séquentielle ordinale (une seule teinte, clair → foncé)
   const s = c.stats;
-  const etapesFunnel = [
-    { label: "Envoyées",  val: s.envoyees,  varCss: "--ramp-1" },
-    { label: "Acceptées", val: s.acceptees, varCss: "--ramp-2" },
-    { label: "Répondues", val: s.repondues, varCss: "--ramp-3" }
-  ];
+  const nbDesabonnes = c.prospects.filter(pid => {
+    const p = prospectParId(pid); return p && p.statut === "Désabonné";
+  }).length;
+  const etapesFunnel = estEmail
+    ? [
+        { label: "Emails envoyés", val: s.envoyees, varCss: "--ramp-1" },
+        { label: "Désabonnés",     val: nbDesabonnes, varCss: "--ramp-3" }
+      ]
+    : [
+        { label: "Envoyées",  val: s.envoyees,  varCss: "--ramp-1" },
+        { label: "Acceptées", val: s.acceptees, varCss: "--ramp-2" },
+        { label: "Répondues", val: s.repondues, varCss: "--ramp-3" }
+      ];
   const maxF = Math.max(1, ...etapesFunnel.map(e => e.val));
   const funnel = etapesFunnel.map(e => `
     <div class="funnel-row">
@@ -607,6 +647,18 @@ function vueCampagneDetail(id) {
       <div class="funnel-track"><div class="funnel-bar" style="width:${pct(e.val, maxF)}%; background: var(${e.varCss})"></div></div>
       <span class="f-val">${e.val}</span>
     </div>`).join("");
+  const resumeFunnel = estEmail
+    ? `${s.envoyees} email(s) réellement envoyé(s) · ${nbDesabonnes} désabonnement(s)`
+    : `Taux d'acceptation ${pct(s.acceptees, s.envoyees)} % · taux de réponse ${pct(s.repondues, s.acceptees)} %`;
+
+  function progressionTexte(p) {
+    if (p.statut === "Désabonné") return "S'est désabonné — retiré de la séquence";
+    if (estEmail) return p.statut === "Contacté" ? "Email(s) envoyé(s)" : "En attente dans la file";
+    if (p.statut === "Nouveau") return "En attente dans la file";
+    if (p.statut === "Invité") return "Invitation envoyée";
+    if (p.statut === "Connecté") return "Séquence de messages en cours";
+    return "Séquence terminée — a répondu";
+  }
 
   const lignes = c.prospects.map(pid => {
     const p = prospectParId(pid);
@@ -616,7 +668,7 @@ function vueCampagneDetail(id) {
         <td><div class="cell-nom"><span class="avatar">${initiales(p)}</span>
           <div>${echap(nomComplet(p))}<div class="cell-sous">${echap(p.poste)} · ${echap(p.societe)}</div></div></div></td>
         <td><span class="pill pill-${p.statut}">${p.statut}</span></td>
-        <td class="cell-sous">${p.statut === "Nouveau" ? "En attente dans la file" : p.statut === "Invité" ? "Invitation envoyée" : p.statut === "Connecté" ? "Séquence de messages en cours" : "Séquence terminée — a répondu"}</td>
+        <td class="cell-sous">${progressionTexte(p)}</td>
       </tr>`;
   }).join("");
 
@@ -637,7 +689,7 @@ function vueCampagneDetail(id) {
     <div class="dash-grid" style="margin-bottom:14px;">
       <div class="card">
         <h3 class="card-title">Entonnoir de conversion</h3>
-        <p class="card-sub">Taux d'acceptation ${pct(s.acceptees, s.envoyees)} % · taux de réponse ${pct(s.repondues, s.acceptees)} %</p>
+        <p class="card-sub">${resumeFunnel}</p>
         <div class="funnel">${funnel}</div>
       </div>
       <div class="card">
@@ -687,7 +739,7 @@ function rendreWizard() {
       <div class="choix-seq-item ${w.sequenceId === s.id ? "choisi" : ""}" data-choisir-seq="${s.id}">
         <span class="icone">${s.icone}</span>
         <div>
-          <div class="titre">${echap(s.nom)}</div>
+          <div class="titre">${echap(s.nom)} ${badgeCanal(s.canal)}</div>
           <div class="desc">${echap(s.description)}</div>
         </div>
       </div>`).join("") + `</div>`;
@@ -808,7 +860,7 @@ function vueMessagerie() {
         <span class="avatar">${p ? initiales(p) : "?"}</span>
         <div style="min-width:0;">
           <div class="conv-nom">${p ? echap(nomComplet(p)) : "Inconnu"} ${c.nonLu ? `<span class="point-nonlu"></span>` : ""}</div>
-          <div class="conv-apercu">${echap(dernier.texte)}</div>
+          <div class="conv-apercu">${dernier.canal === "email" ? "📧 " : ""}${echap(dernier.sujet || dernier.texte)}</div>
         </div>
       </div>`;
   }).join("");
@@ -817,11 +869,16 @@ function vueMessagerie() {
   const conv = etat.conversations.find(c => c.id === convOuverte);
   if (conv) {
     const p = prospectParId(conv.prospectId);
-    const bulles = conv.messages.map(msg => `
-      <div class="bulle ${msg.de === "moi" ? "bulle-moi" : "bulle-eux"}">
-        ${echap(msg.texte)}
+    const bulles = conv.messages.map(msg => {
+      const enteteEmail = msg.canal === "email"
+        ? `<div class="bulle-canal">📧 Email envoyé${msg.statut === "apercu" ? " (aperçu)" : ""}${msg.sujet ? ` · <strong>${echap(msg.sujet)}</strong>` : ""}</div>`
+        : "";
+      return `
+      <div class="bulle ${msg.de === "moi" ? "bulle-moi" : "bulle-eux"} ${msg.canal === "email" ? "bulle-email" : ""}">
+        ${enteteEmail}${echap(msg.texte).replace(/\r?\n/g, "<br>")}
         <div class="bulle-date">${msg.date}</div>
-      </div>`).join("");
+      </div>`;
+    }).join("");
     thread = `
       <div class="thread">
         <div class="thread-head">
@@ -1176,7 +1233,10 @@ window.addEventListener("hashchange", rendre);
 async function demarrer() {
   try {
     const reponse = await fetch("/api/sante", { signal: AbortSignal.timeout(1500) });
-    if (reponse.ok && (await reponse.json()).nom === "walaxy") MODE = "api";
+    if (reponse.ok) {
+      const sante = await reponse.json();
+      if (sante.nom === "walaxy") { MODE = "api"; MODE_ENVOI = sante.modeEnvoi || "apercu"; }
+    }
   } catch (e) { /* pas de serveur : mode démo */ }
 
   if (MODE === "api") {

@@ -1,8 +1,40 @@
 # Walaxy 👽
 
-Recréation complète de **Waalaxy**, l'outil d'automatisation de prospection LinkedIn — front-end **et** back-end, sans aucune dépendance externe.
+Recréation complète de **Waalaxy**, l'outil d'automatisation de prospection — front-end **et** back-end, sans aucune dépendance externe.
 
-> ⚠️ **L'intégration LinkedIn est simulée.** Automatiser un compte LinkedIn viole ses conditions d'utilisation : le moteur remplace donc les appels réels par un simulateur (acceptations ~60 %, réponses ~35 %). Tout le reste — comptes, API, moteur de séquences, quotas, persistance, temps réel — est réel et fonctionnel.
+## Deux canaux, deux philosophies
+
+| Canal | Statut | Pourquoi |
+|---|---|---|
+| **📧 Email** | **Automatisation RÉELLE** | L'envoi d'emails de prospection est **légal** s'il respecte les règles anti-spam. Le moteur envoie de vrais emails via un client SMTP, avec désabonnement en un clic, liste de suppression et mentions légales. |
+| **in LinkedIn** | **Simulé** | Automatiser LinkedIn **viole ses conditions d'utilisation** et fait bannir les comptes. Ce canal est donc un simulateur (acceptations ~60 %, réponses ~35 %) — jamais branché sur un vrai compte. |
+
+Tout le reste — comptes, API, moteur de séquences, quotas, persistance, temps réel — est réel et fonctionnel.
+
+## Le canal email (vraie automatisation légale)
+
+Créez une campagne avec une séquence **📧 Email** : le moteur envoie réellement les emails, échelonnés, dans la limite du quota journalier, et gère les relances.
+
+**Conformité intégrée** (RGPD / CAN-SPAM) :
+- lien **« se désabonner en un clic »** dans chaque email + en-têtes `List-Unsubscribe` / `List-Unsubscribe-Post` (le désabonnement automatique de Gmail/Outlook fonctionne) ;
+- **liste de suppression** consultée avant *chaque* envoi — un désabonné ne reçoit plus rien, et son prospect passe en « Désabonné » ;
+- **identité de l'expéditeur** et **adresse postale physique** dans le pied de chaque message.
+
+**Configurer l'envoi réel** (sinon mode « aperçu » : les emails sont écrits dans `server/data/outbox/*.eml` au lieu d'être envoyés) :
+
+```bash
+export WALAXY_SMTP_HOTE=smtp.votrefournisseur.com
+export WALAXY_SMTP_PORT=587           # 465 pour TLS implicite
+export WALAXY_SMTP_SECURITE=starttls  # "tls" | "starttls" | "aucune"
+export WALAXY_SMTP_USER=...  WALAXY_SMTP_PASS=...
+export WALAXY_FROM_EMAIL="vous@votredomaine.fr"
+export WALAXY_FROM_NOM="Votre Nom"
+export WALAXY_ADRESSE="Votre société, adresse postale complète"
+export WALAXY_URL_PUBLIQUE="https://votredomaine.fr"  # pour les liens de désabonnement
+npm start
+```
+
+> ⚠️ Pour un envoi de masse en production, utilisez un domaine avec **SPF, DKIM et DMARC** configurés, et un fournisseur d'envoi réputé — sinon vos emails finiront en spam.
 
 ## Deux modes de fonctionnement
 
@@ -27,9 +59,10 @@ Variables d'environnement : `PORT`, `WALAXY_JOUR_MS` (durée réelle d'un « jou
 ## Ce que fait le back-end
 
 - **Comptes** — inscription/connexion, mots de passe hachés (scrypt + sel), jetons de session signés HMAC avec expiration, données isolées par utilisateur.
-- **Moteur d'automatisation** (`server/moteur.js`) — à chaque passage : remise à zéro des quotas au changement de jour, exécution des actions de la file arrivées à échéance (invitations, messages, visites) dans la limite des quotas, avancement des séquences étape par étape (« Attendre N jours » compris), arrêt des relances dès qu'un prospect répond, clôture automatique des campagnes finies.
-- **Simulateur** — à l'endroit exact où le produit réel piloterait LinkedIn : tirages probabilistes d'acceptations et de réponses (textes générés), avec délais aléatoires « humains ».
-- **API REST** — `/api/auth/*`, `/api/etat`, `/api/campagnes`, `/api/prospects/import`, `/api/file/:id/annuler`, `/api/conversations/:id/*`.
+- **Moteur d'automatisation** (`server/moteur.js`) — à chaque passage : remise à zéro des quotas au changement de jour, exécution des actions de la file arrivées à échéance (invitations, messages, visites, **emails**) dans la limite des quotas, avancement des séquences étape par étape (« Attendre N jours » compris), arrêt des relances dès qu'un prospect répond ou se désabonne, clôture automatique des campagnes finies.
+- **Envoi d'emails réel** (`server/email.js`) — client SMTP écrit à la main (TLS implicite, STARTTLS, ou clair en dev), message MIME multipart (texte + HTML), en-têtes de désabonnement, liste de suppression, jetons de désabonnement signés (HMAC). Bascule en mode « aperçu » sans configuration SMTP.
+- **Simulateur LinkedIn** — à l'endroit exact où le produit réel piloterait LinkedIn : tirages probabilistes d'acceptations et de réponses (textes générés), avec délais aléatoires « humains ».
+- **API REST** — `/api/auth/*`, `/api/etat`, `/api/campagnes`, `/api/prospects/import`, `/api/file/:id/annuler`, `/api/conversations/:id/*`, et la page publique `/desabonnement`.
 - **Temps réel** — `/api/events` (Server-Sent Events) : l'interface se met à jour dès que le moteur travaille.
 - **Persistance** — JSON sur disque (`server/data/`, non versionné), écritures atomiques.
 
@@ -51,8 +84,9 @@ Modes clair/sombre automatiques, responsive.
 | `index.html` / `style.css` | Coquille et design system |
 | `data.js` | Données de départ (partagées front/serveur) |
 | `app.js` | Routeur, vues, graphique SVG, client API + SSE, bascule serveur/démo |
-| `server/serveur.js` | Serveur HTTP : statique + API REST + SSE |
-| `server/moteur.js` | Moteur d'automatisation et simulateur LinkedIn |
+| `server/serveur.js` | Serveur HTTP : statique + API REST + SSE + désabonnement |
+| `server/moteur.js` | Moteur d'automatisation (email réel + simulateur LinkedIn) |
+| `server/email.js` | Client SMTP, emails MIME conformes, liste de suppression |
 | `server/authentification.js` | scrypt + jetons HMAC |
 | `server/magasin.js` | Persistance JSON atomique, état initial des comptes |
 | `server/config.js` | Port, échelle de temps, cadence du moteur |
