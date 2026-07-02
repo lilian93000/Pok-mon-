@@ -1,139 +1,186 @@
-/* =========================================================
-   Données du jeu : types, table d'efficacité, attaques,
-   et espèces de créatures ("Polkamons").
-   ========================================================= */
+/* ============================================================
+   Walaxy — données de démonstration
+   Ces données servent d'état initial ; l'état courant est
+   persisté dans localStorage (clé "walaxy-state").
+   ============================================================ */
 
-// Types élémentaires
-const TYPES = {
-  NORMAL: { name: "Normal", color: "#a8a878" },
-  FEU: { name: "Feu", color: "#f08030" },
-  EAU: { name: "Eau", color: "#6890f0" },
-  PLANTE: { name: "Plante", color: "#78c850" },
-  ELECTRIK: { name: "Électrik", color: "#f8d030" },
+const SEED = {
+
+  /* ---------- Modèles de séquences ---------- */
+  sequences: [
+    {
+      id: "seq-invitation",
+      nom: "Invitation",
+      description: "Envoie une simple demande de connexion, avec ou sans note.",
+      etapes: ["Invitation"],
+      icone: "🤝"
+    },
+    {
+      id: "seq-invitation-message",
+      nom: "Invitation + Message",
+      description: "Demande de connexion puis message de suivi une fois acceptée.",
+      etapes: ["Invitation", "Attendre 1 jour", "Message"],
+      icone: "✉️"
+    },
+    {
+      id: "seq-visite-invitation",
+      nom: "Visite + Invitation",
+      description: "Visite le profil pour créer une notification, puis invite.",
+      etapes: ["Visite de profil", "Attendre 1 jour", "Invitation"],
+      icone: "👀"
+    },
+    {
+      id: "seq-invitation-2-relances",
+      nom: "Invitation + 2 relances",
+      description: "Connexion, message de bienvenue, puis deux relances espacées.",
+      etapes: ["Invitation", "Attendre 1 jour", "Message 1", "Attendre 3 jours", "Message 2", "Attendre 5 jours", "Message 3"],
+      icone: "🔁"
+    },
+    {
+      id: "seq-message-simple",
+      nom: "Message (relations existantes)",
+      description: "Envoie un message direct à vos relations de 1er niveau.",
+      etapes: ["Message"],
+      icone: "💬"
+    }
+  ],
+
+  /* ---------- Prospects ---------- */
+  prospects: [
+    { id: "p01", prenom: "Camille",   nom: "Roux",      poste: "Head of Growth",        societe: "Novaly",       statut: "Répondu",  degre: "1er",  tags: ["SaaS", "Paris"] },
+    { id: "p02", prenom: "Thomas",    nom: "Lefèvre",   poste: "CEO",                   societe: "Brightpath",   statut: "Connecté", degre: "1er",  tags: ["SaaS"] },
+    { id: "p03", prenom: "Inès",      nom: "Moreau",    poste: "Directrice Marketing",  societe: "Kelvio",       statut: "Invité",   degre: "2e",   tags: ["Marketing"] },
+    { id: "p04", prenom: "Julien",    nom: "Garnier",   poste: "CTO",                   societe: "Datanest",     statut: "Connecté", degre: "1er",  tags: ["Tech", "Scale-up"] },
+    { id: "p05", prenom: "Sophie",    nom: "Bernard",   poste: "Talent Acquisition",    societe: "Hirely",       statut: "Répondu",  degre: "1er",  tags: ["RH"] },
+    { id: "p06", prenom: "Maxime",    nom: "Dubois",    poste: "Sales Director",        societe: "Cloudméa",     statut: "Invité",   degre: "2e",   tags: ["Sales"] },
+    { id: "p07", prenom: "Léa",       nom: "Fontaine",  poste: "Founder",               societe: "Wando",        statut: "Nouveau",  degre: "2e",   tags: ["SaaS", "Paris"] },
+    { id: "p08", prenom: "Antoine",   nom: "Chevalier", poste: "VP Engineering",        societe: "Loopside",     statut: "Nouveau",  degre: "3e",   tags: ["Tech"] },
+    { id: "p09", prenom: "Chloé",     nom: "Marchand",  poste: "Head of Sales",         societe: "Ventizo",      statut: "Connecté", degre: "1er",  tags: ["Sales"] },
+    { id: "p10", prenom: "Nicolas",   nom: "Perrot",    poste: "CEO",                   societe: "Squarelane",   statut: "Invité",   degre: "2e",   tags: ["Scale-up"] },
+    { id: "p11", prenom: "Manon",     nom: "Gauthier",  poste: "CMO",                   societe: "Pixelio",      statut: "Nouveau",  degre: "2e",   tags: ["Marketing", "Paris"] },
+    { id: "p12", prenom: "Hugo",      nom: "Renard",    poste: "Product Manager",       societe: "Flowdesk",     statut: "Connecté", degre: "1er",  tags: ["Produit"] },
+    { id: "p13", prenom: "Élise",     nom: "Baron",     poste: "Recruteuse Tech",       societe: "Talentbee",    statut: "Répondu",  degre: "1er",  tags: ["RH", "Tech"] },
+    { id: "p14", prenom: "Romain",    nom: "Colin",     poste: "CTO",                   societe: "Neomatik",     statut: "Nouveau",  degre: "3e",   tags: ["Tech", "Scale-up"] },
+    { id: "p15", prenom: "Julie",     nom: "Vidal",     poste: "Growth Manager",        societe: "Splend",       statut: "Invité",   degre: "2e",   tags: ["SaaS"] },
+    { id: "p16", prenom: "Alexandre", nom: "Masson",    poste: "Directeur Commercial",  societe: "Orbiwell",     statut: "Nouveau",  degre: "2e",   tags: ["Sales", "Lyon"] },
+    { id: "p17", prenom: "Sarah",     nom: "Lemoine",   poste: "Head of People",        societe: "Yumana",       statut: "Nouveau",  degre: "2e",   tags: ["RH"] },
+    { id: "p18", prenom: "Baptiste",  nom: "Guérin",    poste: "CEO",                   societe: "Finchly",      statut: "Connecté", degre: "1er",  tags: ["Fintech"] },
+    { id: "p19", prenom: "Clara",     nom: "Navarro",   poste: "Account Executive",     societe: "Sellsy Lab",   statut: "Nouveau",  degre: "3e",   tags: ["Sales"] },
+    { id: "p20", prenom: "Quentin",   nom: "Fabre",     poste: "Lead Developer",        societe: "Codexia",      statut: "Nouveau",  degre: "2e",   tags: ["Tech"] },
+    { id: "p21", prenom: "Emma",      nom: "Rousseau",  poste: "Founder & CEO",         societe: "Miraya",       statut: "Invité",   degre: "2e",   tags: ["SaaS", "Bordeaux"] },
+    { id: "p22", prenom: "Lucas",     nom: "Ferrand",   poste: "VP Sales",              societe: "Zentio",       statut: "Nouveau",  degre: "2e",   tags: ["Sales", "Scale-up"] },
+    { id: "p23", prenom: "Anaïs",     nom: "Delacroix", poste: "Marketing Ops",         societe: "Brioz",        statut: "Nouveau",  degre: "3e",   tags: ["Marketing"] },
+    { id: "p24", prenom: "Victor",    nom: "Lambert",   poste: "COO",                   societe: "Nordicwave",   statut: "Connecté", degre: "1er",  tags: ["Scale-up", "Lille"] }
+  ],
+
+  /* ---------- Campagnes ---------- */
+  campagnes: [
+    {
+      id: "c01",
+      nom: "Fondateurs SaaS — Paris",
+      sequenceId: "seq-invitation-2-relances",
+      statut: "En cours",
+      creeLe: "2026-06-18",
+      prospects: ["p01", "p02", "p03", "p07", "p10", "p15", "p21"],
+      stats: { envoyees: 96, acceptees: 41, repondues: 17 }
+    },
+    {
+      id: "c02",
+      nom: "Recruteurs Tech Q3",
+      sequenceId: "seq-invitation-message",
+      statut: "En cours",
+      creeLe: "2026-06-24",
+      prospects: ["p05", "p13", "p17"],
+      stats: { envoyees: 54, acceptees: 19, repondues: 8 }
+    },
+    {
+      id: "c03",
+      nom: "CTO Scale-ups France",
+      sequenceId: "seq-visite-invitation",
+      statut: "En pause",
+      creeLe: "2026-06-10",
+      prospects: ["p04", "p08", "p14", "p20"],
+      stats: { envoyees: 73, acceptees: 22, repondues: 5 }
+    },
+    {
+      id: "c04",
+      nom: "Relance clients dormants",
+      sequenceId: "seq-message-simple",
+      statut: "Terminée",
+      creeLe: "2026-05-20",
+      prospects: ["p09", "p12", "p18", "p24"],
+      stats: { envoyees: 40, acceptees: 40, repondues: 12 }
+    }
+  ],
+
+  /* ---------- Activité sur 14 jours (graphique du tableau de bord) ---------- */
+  activite: [
+    { jour: "19/06", invitations: 22, acceptations:  8, reponses: 3 },
+    { jour: "20/06", invitations: 28, acceptations: 11, reponses: 4 },
+    { jour: "21/06", invitations: 12, acceptations:  9, reponses: 2 },
+    { jour: "22/06", invitations:  0, acceptations:  5, reponses: 1 },
+    { jour: "23/06", invitations: 31, acceptations:  7, reponses: 5 },
+    { jour: "24/06", invitations: 26, acceptations: 13, reponses: 6 },
+    { jour: "25/06", invitations: 30, acceptations: 12, reponses: 4 },
+    { jour: "26/06", invitations: 24, acceptations: 15, reponses: 7 },
+    { jour: "27/06", invitations: 18, acceptations: 10, reponses: 3 },
+    { jour: "28/06", invitations:  9, acceptations:  6, reponses: 2 },
+    { jour: "29/06", invitations: 27, acceptations: 14, reponses: 6 },
+    { jour: "30/06", invitations: 33, acceptations: 16, reponses: 8 },
+    { jour: "01/07", invitations: 29, acceptations: 18, reponses: 9 },
+    { jour: "02/07", invitations: 21, acceptations: 12, reponses: 6 }
+  ],
+
+  /* ---------- Quotas journaliers ---------- */
+  quotas: {
+    invitations: { utilise: 21, max: 80 },
+    messages:    { utilise: 46, max: 120 },
+    visites:     { utilise: 63, max: 100 }
+  },
+
+  /* ---------- Conversations ---------- */
+  conversations: [
+    {
+      id: "conv1", prospectId: "p01", nonLu: true,
+      messages: [
+        { de: "moi",  texte: "Bonjour Camille, merci d'avoir accepté ma demande ! Je travaille avec des équipes growth de SaaS B2B sur l'automatisation de la prospection. Curieux d'échanger sur vos process actuels ?", date: "2026-06-30 09:12" },
+        { de: "eux",  texte: "Bonjour Lilian, avec plaisir. On utilise pas mal d'outils maison mais on atteint nos limites. Vous proposez quoi exactement ?", date: "2026-06-30 14:47" },
+        { de: "moi",  texte: "On automatise les séquences LinkedIn + email avec des quotas sécurisés. Je peux vous montrer en 15 min cette semaine ?", date: "2026-07-01 08:30" },
+        { de: "eux",  texte: "Ok pour jeudi 14h, envoyez-moi une invitation 👍", date: "2026-07-02 07:58" }
+      ]
+    },
+    {
+      id: "conv2", prospectId: "p05", nonLu: true,
+      messages: [
+        { de: "moi", texte: "Bonjour Sophie, je vois que vous recrutez beaucoup de profils tech chez Hirely. On aide les équipes TA à sourcer sur LinkedIn sans y passer leurs journées — ça vous parle ?", date: "2026-07-01 10:05" },
+        { de: "eux", texte: "Bonjour ! Oui carrément, le sourcing manuel nous prend un temps fou. Vous avez une démo ou une doc à partager ?", date: "2026-07-02 06:42" }
+      ]
+    },
+    {
+      id: "conv3", prospectId: "p13", nonLu: false,
+      messages: [
+        { de: "moi", texte: "Bonjour Élise, merci pour la connexion ! Comment gérez-vous vos campagnes d'approche candidats en ce moment ?", date: "2026-06-28 11:20" },
+        { de: "eux", texte: "Bonjour Lilian, on fait tout à la main pour l'instant. Pas encore convaincue par les outils d'automatisation, mais je reste ouverte.", date: "2026-06-29 09:15" },
+        { de: "moi", texte: "Je comprends la prudence ! Si ça vous dit, je peux vous montrer comment on reste sous les limites LinkedIn. Sans engagement 🙂", date: "2026-06-29 17:03" }
+      ]
+    },
+    {
+      id: "conv4", prospectId: "p18", nonLu: false,
+      messages: [
+        { de: "eux", texte: "Merci pour votre message Lilian. Pas de besoin immédiat côté Finchly mais je garde vos coordonnées.", date: "2026-06-26 15:30" },
+        { de: "moi", texte: "Parfait Baptiste, au plaisir d'échanger plus tard. Bonne semaine !", date: "2026-06-26 16:02" }
+      ]
+    }
+  ],
+
+  /* ---------- File d'attente ---------- */
+  file: [
+    { id: "q1", type: "Invitation",       prospectId: "p07", campagneId: "c01", prevu: "Aujourd'hui, 14:20" },
+    { id: "q2", type: "Invitation",       prospectId: "p21", campagneId: "c01", prevu: "Aujourd'hui, 15:05" },
+    { id: "q3", type: "Message 1",        prospectId: "p02", campagneId: "c01", prevu: "Aujourd'hui, 16:40" },
+    { id: "q4", type: "Message",          prospectId: "p17", campagneId: "c02", prevu: "Demain, 09:10" },
+    { id: "q5", type: "Visite de profil", prospectId: "p14", campagneId: "c03", prevu: "Demain, 10:35" },
+    { id: "q6", type: "Message 2",        prospectId: "p10", campagneId: "c01", prevu: "Demain, 11:50" },
+    { id: "q7", type: "Invitation",       prospectId: "p15", campagneId: "c01", prevu: "Demain, 14:15" }
+  ]
 };
-
-// Table d'efficacité : EFFECTIVENESS[attaque][defenseur] = multiplicateur
-const EFFECTIVENESS = {
-  FEU: { PLANTE: 2, EAU: 0.5, FEU: 0.5, ELECTRIK: 1, NORMAL: 1 },
-  EAU: { FEU: 2, PLANTE: 0.5, EAU: 0.5, ELECTRIK: 1, NORMAL: 1 },
-  PLANTE: { EAU: 2, FEU: 0.5, PLANTE: 0.5, ELECTRIK: 1, NORMAL: 1 },
-  ELECTRIK: { EAU: 2, PLANTE: 0.5, ELECTRIK: 0.5, FEU: 1, NORMAL: 1 },
-  NORMAL: { FEU: 1, EAU: 1, PLANTE: 1, ELECTRIK: 1, NORMAL: 1 },
-};
-
-function typeMultiplier(attackType, defenderType) {
-  return (EFFECTIVENESS[attackType] && EFFECTIVENESS[attackType][defenderType]) || 1;
-}
-
-// Attaques disponibles
-const MOVES = {
-  charge: { name: "Charge", type: "NORMAL", power: 35, accuracy: 100 },
-  griffe: { name: "Griffe", type: "NORMAL", power: 40, accuracy: 100 },
-  flammeche: { name: "Flammèche", type: "FEU", power: 45, accuracy: 100 },
-  lance_flammes: { name: "Lance-Flammes", type: "FEU", power: 65, accuracy: 90 },
-  pistolet_a_o: { name: "Pistolet à O", type: "EAU", power: 45, accuracy: 100 },
-  hydrocanon: { name: "Hydrocanon", type: "EAU", power: 65, accuracy: 90 },
-  fouet_lianes: { name: "Fouet Lianes", type: "PLANTE", power: 45, accuracy: 100 },
-  tempete_verte: { name: "Tempête Verte", type: "PLANTE", power: 65, accuracy: 90 },
-  eclair: { name: "Éclair", type: "ELECTRIK", power: 45, accuracy: 100 },
-  tonnerre: { name: "Tonnerre", type: "ELECTRIK", power: 65, accuracy: 90 },
-};
-
-/* Chaque espèce :
-   - base : stats de base (pv, atk, def, vitesse)
-   - moves : attaques connues
-   - sprite : emoji utilisé comme "sprite"
-   - color : couleur d'arrière-plan du sprite
-   - evolvesTo / evolveLevel : évolution (optionnel)
-*/
-const SPECIES = {
-  flammulot: {
-    id: "flammulot", name: "Flammulot", type: "FEU", sprite: "🦊",
-    color: "#ffd9b3",
-    base: { pv: 39, atk: 12, def: 9, vit: 13 },
-    moves: ["griffe", "flammeche"],
-    evolvesTo: "pyrofox", evolveLevel: 16,
-  },
-  pyrofox: {
-    id: "pyrofox", name: "Pyrofox", type: "FEU", sprite: "🔥",
-    color: "#ffb380",
-    base: { pv: 58, atk: 18, def: 13, vit: 18 },
-    moves: ["griffe", "flammeche", "lance_flammes"],
-  },
-  aquoque: {
-    id: "aquoque", name: "Aquoque", type: "EAU", sprite: "🐢",
-    color: "#bcdcff",
-    base: { pv: 44, atk: 10, def: 13, vit: 9 },
-    moves: ["charge", "pistolet_a_o"],
-    evolvesTo: "tortidal", evolveLevel: 16,
-  },
-  tortidal: {
-    id: "tortidal", name: "Tortidal", type: "EAU", sprite: "🌊",
-    color: "#99ccff",
-    base: { pv: 63, atk: 15, def: 19, vit: 12 },
-    moves: ["charge", "pistolet_a_o", "hydrocanon"],
-  },
-  bourgemon: {
-    id: "bourgemon", name: "Bourgemon", type: "PLANTE", sprite: "🌱",
-    color: "#cdeeb0",
-    base: { pv: 45, atk: 11, def: 11, vit: 10 },
-    moves: ["charge", "fouet_lianes"],
-    evolvesTo: "floralion", evolveLevel: 16,
-  },
-  floralion: {
-    id: "floralion", name: "Floralion", type: "PLANTE", sprite: "🌻",
-    color: "#aadd88",
-    base: { pv: 60, atk: 16, def: 16, vit: 14 },
-    moves: ["charge", "fouet_lianes", "tempete_verte"],
-  },
-  // Créatures sauvages communes
-  ratnoir: {
-    id: "ratnoir", name: "Ratnoir", type: "NORMAL", sprite: "🐀",
-    color: "#d9d9c3",
-    base: { pv: 30, atk: 10, def: 8, vit: 12 },
-    moves: ["charge", "griffe"],
-  },
-  piafou: {
-    id: "piafou", name: "Piafou", type: "NORMAL", sprite: "🐦",
-    color: "#e8e0c0",
-    base: { pv: 28, atk: 9, def: 7, vit: 14 },
-    moves: ["charge", "griffe"],
-  },
-  voltepuce: {
-    id: "voltepuce", name: "Voltepuce", type: "ELECTRIK", sprite: "⚡",
-    color: "#fff0a8",
-    base: { pv: 35, atk: 11, def: 8, vit: 16 },
-    moves: ["charge", "eclair"],
-    evolvesTo: "tonneron", evolveLevel: 18,
-  },
-  tonneron: {
-    id: "tonneron", name: "Tonnerron", type: "ELECTRIK", sprite: "🌩️",
-    color: "#ffe680",
-    base: { pv: 55, atk: 17, def: 12, vit: 22 },
-    moves: ["charge", "eclair", "tonnerre"],
-  },
-  aquabave: {
-    id: "aquabave", name: "Aquabave", type: "EAU", sprite: "🐟",
-    color: "#c7e6ff",
-    base: { pv: 32, atk: 10, def: 9, vit: 11 },
-    moves: ["charge", "pistolet_a_o"],
-  },
-  herbiboule: {
-    id: "herbiboule", name: "Herbiboule", type: "PLANTE", sprite: "🍃",
-    color: "#d4f0bb",
-    base: { pv: 33, atk: 9, def: 12, vit: 8 },
-    moves: ["charge", "fouet_lianes"],
-  },
-};
-
-// Starters proposés au début
-const STARTERS = ["flammulot", "aquoque", "bourgemon"];
-
-// Créatures rencontrables dans les hautes herbes (avec leur poids d'apparition)
-const WILD_POOL = [
-  { id: "ratnoir", weight: 30 },
-  { id: "piafou", weight: 25 },
-  { id: "voltepuce", weight: 15 },
-  { id: "aquabave", weight: 15 },
-  { id: "herbiboule", weight: 15 },
-];

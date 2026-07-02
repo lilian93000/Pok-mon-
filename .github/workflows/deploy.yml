@@ -3,7 +3,7 @@ name: Déployer le site sur GitHub Pages
 on:
   push:
     branches:
-      - claude/pokemon-like-game-j2cjmy
+      - claude/waalaxy-recreation-otghc0
   workflow_dispatch:
 
 # Permissions nécessaires au déploiement Pages

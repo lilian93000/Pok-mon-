@@ -1,45 +1,42 @@
-# Monstrobattle 🐲
+# Walaxy 👽
 
-Un petit jeu de rôle au tour par tour inspiré de Pokémon, codé en **HTML / CSS / JavaScript pur** (aucune dépendance, aucune installation).
+Recréation de l'interface de **Waalaxy**, l'outil d'automatisation de prospection LinkedIn — en HTML, CSS et JavaScript pur, sans aucune dépendance.
 
-## ▶️ Jouer
+> ⚠️ **Démo front-end uniquement.** Cette application ne se connecte pas à LinkedIn et n'automatise rien : toutes les données sont fictives et stockées dans le `localStorage` du navigateur.
 
-Ouvre simplement `index.html` dans ton navigateur.
+## Fonctionnalités
 
-Ou, depuis le dossier du projet, lance un petit serveur local :
+- **Accueil** — tableau de bord avec tuiles de statistiques, graphique d'activité interactif sur 14 jours (SVG fait main, tooltip au survol), quotas journaliers et prochaines actions.
+- **Prospects** — base de prospects avec recherche, filtre par statut, sélection multiple, import simulé et ajout à une campagne.
+- **Campagnes** — liste des campagnes avec statistiques (envois, taux d'acceptation, taux de réponse), pause/reprise, et un **assistant de création en 3 étapes** (nom → séquence → prospects).
+- **Détail de campagne** — entonnoir de conversion, visualisation de la séquence, progression prospect par prospect.
+- **Messagerie** — boîte de réception à deux volets avec conversations, badges non-lus et envoi de réponses.
+- **File d'attente** — actions planifiées avec possibilité d'annulation.
+- **Abonnement** — page de tarifs (Freemium / Avancé / Business).
+
+L'interface s'adapte automatiquement au **mode sombre** du système et aux écrans mobiles.
+
+## Lancer en local
+
+Aucune installation nécessaire :
 
 ```bash
+# ouvrez simplement le fichier
+open index.html        # macOS
+xdg-open index.html    # Linux
+
+# ou servez le dossier
 python3 -m http.server 8000
-# puis ouvre http://localhost:8000
 ```
 
-## 🎮 Comment jouer
+## Structure
 
-1. **Choisis ton starter** parmi trois créatures (Feu / Eau / Plante).
-2. **Déplace-toi** sur la carte avec les **flèches** ou **ZQSD**.
-3. Marche dans les **hautes herbes** 🌿 pour déclencher des **rencontres sauvages**.
-4. En combat tu peux :
-   - **⚔️ Attaquer** avec les attaques de ta créature,
-   - **🎯 Lancer une Polkaball** pour capturer l'adversaire (plus il est affaibli, plus c'est facile),
-   - **🔄 Changer** de créature,
-   - **🏃 Fuir**.
-5. Reviens sur le **centre de soins** 🏥 (ou clique sur « Centre de soins ») pour récupérer tous tes PV.
+| Fichier | Rôle |
+|---|---|
+| `index.html` | Coquille de l'application (barre latérale, modale, toasts) |
+| `style.css` | Design system complet, modes clair et sombre |
+| `data.js` | Données de démonstration (prospects, campagnes, conversations…) |
+| `app.js` | Routeur, vues, graphique SVG, assistant de campagne, persistance |
 
-## ✨ Fonctionnalités
-
-- Système de **types** (Feu, Eau, Plante, Électrik, Normal) avec table d'efficacité (super efficace / pas très efficace) et bonus STAB.
-- **Combat au tour par tour** avec précision des attaques, dégâts variables et ordre d'action.
-- **Capture** de créatures sauvages (équipe de 6 max).
-- **XP et niveaux**, avec **évolutions** à certains paliers.
-- Carte générée aléatoirement avec herbes, arbres, eau et centre de soins.
-
-## 📁 Structure
-
-| Fichier      | Rôle                                              |
-|--------------|---------------------------------------------------|
-| `index.html` | Structure des écrans (accueil, carte, combat).    |
-| `style.css`  | Mise en forme et interface.                       |
-| `data.js`    | Types, attaques et espèces de créatures.          |
-| `game.js`    | Moteur : overworld, combat, capture, progression. |
-
-Bon jeu ! 🎉
+Pour réinitialiser les données de démo : ouvrez la console et lancez
+`localStorage.removeItem("walaxy-state-v1")` puis rechargez la page.
