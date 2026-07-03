@@ -7,36 +7,52 @@ en a pas.
 
 ## Étapes
 
-1. **Actualiser l'historique** : lancer `python3 telecharger_donnees.py`
-   (saisons 2025-2026). Si un miroir plus frais répond, commit + push des
-   CSV mis à jour. Noter la date du dernier tournoi couvert.
+1. **Ingérer les résultats de la veille (OBLIGATOIRE, en premier)** :
+   rechercher sur le web les matchs WTA terminés la veille, tous
+   tournois (« WTA [tournoi] results yesterday », « [tournoi] women's
+   results [date] »). Ajouter chaque résultat vérifié dans
+   `donnees/resultats_recents.csv` (format :
+   `date,gagnante,perdante,surface,tournoi,source`), sans doublon.
+   Ce fichier est chargé automatiquement par tennis.py : l'Elo intègre
+   donc la forme récente jour après jour. **Commit + push** après ajout.
 
-2. **Programme du jour** : rechercher sur le web (WebSearch) les matchs
-   WTA du jour, tous tournois confondus (Grand Chelem, WTA 1000/500/250).
-   Requêtes types : « WTA [tournoi] order of play [date] »,
-   « [tournoi] women's singles schedule today ».
+2. **Actualiser l'historique de base** : lancer
+   `python3 telecharger_donnees.py` (saisons 2025-2026). Si un miroir
+   plus frais répond, commit + push, et purger de resultats_recents.csv
+   les lignes désormais couvertes par les fichiers officiels.
 
-3. **Cotes réelles** : rechercher les cotes de chaque match
+3. **Programme du jour** : rechercher les matchs WTA du jour, tous
+   tournois confondus (« WTA [tournoi] order of play [date] »).
+
+4. **Cotes réelles** : rechercher les cotes de chaque match
    (« [joueuse1] vs [joueuse2] odds »). Convertir les cotes américaines
-   en décimales si besoin (+150 → 2.50 ; -200 → 1.50). Ne jamais
-   inventer une cote : si introuvable, écarter le match.
+   en décimales (+150 → 2.50 ; -200 → 1.50). Ne jamais inventer une
+   cote : si introuvable, écarter le match.
 
-4. **Analyse** : écrire les matchs + cotes dans un CSV et lancer
+5. **Analyse** : écrire les matchs + cotes dans un CSV et lancer
    `python3 tennis.py --cotes fichier.csv --bankroll 100`.
 
-5. **Sélection (1 à 3 bets max)** :
+6. **Vérification forme & stats des candidats** : pour chaque pick
+   envisagé, rechercher les stats récentes de la joueuse
+   (« [joueuse] last matches stats », « [joueuse] serve stats
+   [tournoi] », blessure, fatigue, titres récents sur la surface).
+   Chercher notamment : résultats des 2-4 dernières semaines, % de
+   points gagnés au service dans les derniers matchs (utilisable avec
+   `tennis.py --service pA:pB` en contre-vérification Markov), abandons
+   récents. Ajuster ou écarter le pick si la forme contredit l'Elo.
+
+7. **Sélection (1 à 3 bets max)** :
    - viser les edges entre **+3 % et +20 %** : c'est la zone saine ;
-   - un edge > 25 % signifie presque toujours que le modèle manque une
-     info (forme récente, blessure, retour de maternité…) — le signaler
-     comme « divergence forte » avec avertissement, jamais comme bet sûr ;
+   - un edge > 25 % = presque toujours une info manquante côté modèle —
+     le signaler comme « divergence forte » avec avertissement, jamais
+     comme bet sûr ;
    - écarter les joueuses avec < 15 matchs dans les données ;
-   - croiser avec l'actualité (recherche « [joueuse] injury/form ») pour
-     les picks retenus ;
    - si rien ne passe les filtres : le dire, ne rien forcer.
 
-6. **Livraison** : envoyer une notification push avec les picks résumés
+8. **Livraison** : envoyer une notification push avec les picks résumés
    + un message détaillé dans la session (proba modèle, cote, edge,
-   mise Kelly 25 % conseillée en % de bankroll).
+   mise Kelly 25 % conseillée en % de bankroll, et la forme récente qui
+   justifie ou nuance chaque pick).
 
 ## Limites connues de l'environnement
 

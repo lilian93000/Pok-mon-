@@ -101,8 +101,9 @@ def charger_historique(chemins):
 
 
 def fichiers_donnees_par_defaut():
-    """Cherche les wta_matches_*.csv téléchargés dans paris-sportifs/donnees/."""
+    """Les wta_matches_*.csv téléchargés + les résultats récents ajoutés à la main."""
     fichiers = sorted(glob.glob(os.path.join(DOSSIER_DONNEES, "*matches*_[0-9]*.csv")))
+    fichiers += sorted(glob.glob(os.path.join(DOSSIER_DONNEES, "resultats_recents*.csv")))
     if not fichiers:
         sys.exit(
             "Aucune donnée trouvée dans " + DOSSIER_DONNEES + "\n"
