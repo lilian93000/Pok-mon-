@@ -24,11 +24,13 @@ MIROIRS = [
     "https://raw.githubusercontent.com/DawidSobol/tennis_wta/master",
 ]
 ANNEES_DEFAUT = ["2022", "2023", "2024", "2025", "2026"]
+ANNEES_COMPLETES = [str(a) for a in range(2019, 2027)]  # avec --tout
 DOSSIER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "donnees")
 
 
-def telecharger(annee):
-    nom = f"wta_matches_{annee}.csv"
+def telecharger(annee, qual_itf=False):
+    nom = (f"wta_matches_qual_itf_{annee}.csv" if qual_itf
+           else f"wta_matches_{annee}.csv")
     destination = os.path.join(DOSSIER, nom)
     for miroir in MIROIRS:
         url = f"{miroir}/{nom}"
@@ -49,11 +51,15 @@ def telecharger(annee):
 
 
 def main():
-    annees = sys.argv[1:] or ANNEES_DEFAUT
+    args = [a for a in sys.argv[1:] if a != "--tout"]
+    tout = "--tout" in sys.argv[1:]
+    annees = args or (ANNEES_COMPLETES if tout else ANNEES_DEFAUT)
     os.makedirs(DOSSIER, exist_ok=True)
     print(f"Téléchargement des saisons WTA {', '.join(annees)} vers {DOSSIER}/")
     ok = sum(telecharger(a) for a in annees)
-    print(f"\n{ok}/{len(annees)} fichiers téléchargés.")
+    # circuit secondaire : qualifications + ITF (fiches complètes des joueuses)
+    ok += sum(telecharger(a, qual_itf=True) for a in annees)
+    print(f"\n{ok}/{2 * len(annees)} fichiers téléchargés.")
     if ok:
         print("Tu peux maintenant lancer :  python3 tennis.py --classement")
 

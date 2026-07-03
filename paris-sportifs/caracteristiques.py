@@ -82,6 +82,8 @@ def charger_matchs(chemins):
     chronologiquement. Retourne des dicts riches (stats incluses si dispo)."""
     matchs = []
     for chemin in chemins:
+        # circuit secondaire (qualifications + ITF) : poids Elo réduit
+        secondaire = "qual_itf" in os.path.basename(chemin)
         with open(chemin, newline="", encoding="utf-8") as f:
             lecteur = csv.DictReader(f)
             sackmann = "winner_name" in (lecteur.fieldnames or [])
@@ -100,6 +102,7 @@ def charger_matchs(chemins):
                         "perdante": L["loser_name"].strip(),
                         "surface": surface,
                         "niveau": (L.get("tourney_level") or "").strip(),
+                        "circuit": "S" if secondaire else "P",
                         "minutes": _f(L.get("minutes")),
                         "decisif": sets_joues >= int(_f(L.get("best_of")) or 3),
                         "g": {"main": (L.get("winner_hand") or "U").strip(),
@@ -130,7 +133,7 @@ def charger_matchs(chemins):
                         "cle": (L["date"].strip(), "zzz", 0),
                         "gagnante": L["gagnante"].strip(),
                         "perdante": L["perdante"].strip(),
-                        "surface": surface, "niveau": "",
+                        "surface": surface, "niveau": "", "circuit": "P",
                         "minutes": None, "decisif": None,
                         "g": {}, "p": {},
                     }
@@ -175,7 +178,7 @@ class Joueuse:
         main_adv = adv.get("main", "U")
         if main_adv in ("L", "R"):
             (self.v_main if victoire else self.d_main)[main_adv] += 1
-        if m["niveau"] == "G":
+        if m["niveau"] == "G" and m.get("circuit") != "S":
             if victoire:
                 self.v_gc += 1
             else:
@@ -257,10 +260,10 @@ class Moteur:
     def _p_elo(ra, rb):
         return 1 / (1 + 10 ** (-(ra - rb) / 400))
 
-    def _maj_elo(self, table, npar, g, p):
+    def _maj_elo(self, table, npar, g, p, mult=1.0):
         pg = self._p_elo(table[g], table[p])
-        kg = 250 / (npar[g] + 5) ** 0.4
-        kp = 250 / (npar[p] + 5) ** 0.4
+        kg = mult * 250 / (npar[g] + 5) ** 0.4
+        kp = mult * 250 / (npar[p] + 5) ** 0.4
         table[g] += kg * (1 - pg)
         table[p] -= kp * (1 - pg)
         npar[g] += 1
@@ -322,12 +325,20 @@ class Moteur:
     def ingerer(self, m, collecter=True):
         g, p = m["gagnante"], m["perdante"]
         exemple = None
-        if (collecter and self.j[g].n() >= MIN_MATCHS_ENTRAINEMENT
+        # les poids ne sont appris que sur le circuit principal (là où on
+        # parie) ; les matchs ITF/qualifs nourrissent quand même les fiches
+        if (collecter and m.get("circuit") == "P"
+                and self.j[g].n() >= MIN_MATCHS_ENTRAINEMENT
                 and self.j[p].n() >= MIN_MATCHS_ENTRAINEMENT):
             exemple = self.vecteur(g, p, m["surface"], m["date"],
                                    m["niveau"] or "I")
-        self._maj_elo(self.elo_g, self.n_elo, g, p)
-        self._maj_elo(self.elo_s[m["surface"]], self.n_elo_s[m["surface"]], g, p)
+        # matchs ITF : demi-poids dans l'Elo ; qualifications du circuit : 75 %
+        if m.get("circuit") == "S":
+            mult = 0.75 if m["niveau"] in ("G", "P", "PM", "I") else 0.5
+        else:
+            mult = 1.0
+        self._maj_elo(self.elo_g, self.n_elo, g, p, mult)
+        self._maj_elo(self.elo_s[m["surface"]], self.n_elo_s[m["surface"]], g, p, mult)
         self.h2h[(g, p)] += 1
         self.h2h_s[(g, p, m["surface"])] += 1
         self.j[g].maj(True, m, m["g"], m["p"])
@@ -369,14 +380,15 @@ class Moteur:
     # ---- cache des poids ----
     def sauver_poids(self, n_exemples):
         with open(FICHIER_POIDS, "w", encoding="utf-8") as f:
-            json.dump({"n": n_exemples, "poids": self.poids,
+            json.dump({"n": n_exemples, "version": 2, "poids": self.poids,
                        "ecarts": self.ecarts, "features": NOMS_FEATURES}, f)
 
     def charger_poids(self, n_exemples):
         try:
             with open(FICHIER_POIDS, encoding="utf-8") as f:
                 d = json.load(f)
-            if d["n"] == n_exemples and d["features"] == NOMS_FEATURES:
+            if (d["n"] == n_exemples and d["features"] == NOMS_FEATURES
+                    and d.get("version") == 2):
                 self.poids, self.ecarts = d["poids"], d["ecarts"]
                 return True
         except (OSError, ValueError, KeyError):
@@ -423,7 +435,9 @@ def backtest():
     ll = ll_elo = 0.0
     for m in test:
         g, p = m["gagnante"], m["perdante"]
-        if moteur.j[g].n() >= 10 and moteur.j[p].n() >= 10:
+        # évaluation sur le circuit principal uniquement (là où on parie)
+        if (m.get("circuit") == "P" and moteur.j[g].n() >= 10
+                and moteur.j[p].n() >= 10):
             proba, _, _ = moteur.proba(g, p, m["surface"], m["date"],
                                        m["niveau"] or "I")
             pe = moteur._p_elo(moteur.elo_combine(g, m["surface"]),
