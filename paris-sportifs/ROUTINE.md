@@ -41,6 +41,19 @@ en a pas.
    `tennis.py --service pA:pB` en contre-vérification Markov), abandons
    récents. Ajuster ou écarter le pick si la forme contredit l'Elo.
 
+6bis. **Revue de presse & interviews d'après-match** : pour chaque pick
+   candidat, rechercher les déclarations d'après-match et conférences
+   de presse des deux joueuses (« [joueuse] press conference quotes
+   [tournoi] », « [joueuse] interview after match »). Les vidéos
+   YouTube ne sont pas lisibles depuis cet environnement, mais leurs
+   contenus sont retranscrits par la presse spécialisée (tennis365,
+   tennishead, puntodebreak, wtatennis.com…). Y chercher : blessure ou
+   gêne évoquée, fatigue, confiance/doute, changement de matériel ou
+   d'entraîneur, conditions (vent, toit fermé). Exemple réel : la
+   presse a révélé le retour de blessure au poignet d'Anisimova et un
+   2e tour arraché au super tie-break — invisible dans les chiffres,
+   décisif pour écarter un « value bet » illusoire.
+
 7. **Sélection (1 à 3 bets max)** :
    - viser les edges entre **+3 % et +20 %** : c'est la zone saine ;
    - un edge > 25 % = presque toujours une info manquante côté modèle —
