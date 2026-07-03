@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Analyse mathématique de matchs de tennis (ATP / WTA) pour les paris sportifs.
+Analyse mathématique de matchs de tennis WTA (et ATP) pour les paris sportifs,
+à partir de VRAIES données de matchs (format Jeff Sackmann / tennis_wta).
 
 Deux modèles complémentaires :
 
@@ -11,29 +12,29 @@ Deux modèles complémentaires :
          P(A bat B) = 1 / (1 + 10^(-(Ra - Rb) / 400))
      Le facteur K décroît avec l'expérience (formule FiveThirtyEight) :
          K = 250 / (nb_matchs + 5)^0.4
-     → grosse mise à jour pour une joueuse peu connue, fine pour une star.
 
   B. CHAÎNE DE MARKOV POINT PAR POINT (mode --service)
      À partir de la probabilité de gagner un point sur son service,
-     on remonte toute la hiérarchie du tennis par calcul exact :
+     calcul exact de toute la hiérarchie :
          point -> jeu -> tie-break -> set -> match (2 sets gagnants)
-     Utile pour estimer les marchés "score exact en sets" et la solidité
-     d'un favori.
 
-Ensuite, comme pour le foot : comparaison avec les cotes du bookmaker,
-détection de value bets (espérance positive) et mise de Kelly fractionné.
+Ensuite : comparaison avec les cotes du bookmaker, détection de value bets
+(espérance positive) et mise de Kelly fractionné.
 
 Usage :
-    python3 tennis.py --historique matchs_tennis_exemple.csv --cotes cotes_tennis_exemple.csv
-    python3 tennis.py --historique matchs_tennis_exemple.csv \
-        --match "Swiatek:Gauff" --surface terre --cote1 1.45 --cote2 2.90
-    python3 tennis.py --service 0.62:0.55          # modèle de Markov pur
+    # Télécharger d'abord les vraies données : python3 telecharger_donnees.py
+    python3 tennis.py --match "Swiatek:Sabalenka" --surface gazon --cote1 1.85 --cote2 1.95
+    python3 tennis.py --classement --surface gazon
+    python3 tennis.py --cotes mes_cotes.csv --bankroll 200
+    python3 tennis.py --service 0.60:0.55       # modèle de Markov pur
 
 Aucune dépendance externe : Python 3 standard uniquement.
 """
 
 import argparse
 import csv
+import glob
+import os
 import sys
 from collections import defaultdict
 from functools import lru_cache
@@ -43,6 +44,93 @@ POIDS_SURFACE = 0.5    # mélange : 50 % Elo global + 50 % Elo de la surface
 SEUIL_VALUE = 0.03     # edge minimal (3 %) pour signaler un value bet
 FRACTION_KELLY = 0.25  # Kelly fractionné : 25 % de la mise Kelly pleine
 SURFACES = ("dur", "terre", "gazon")
+DOSSIER_DONNEES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "donnees")
+
+# Correspondance surfaces du format Sackmann -> français
+TRAD_SURFACE = {"hard": "dur", "clay": "terre", "grass": "gazon",
+                "carpet": "dur", "dur": "dur", "terre": "terre", "gazon": "gazon"}
+
+
+# ----------------------------------------------------------------------
+# Chargement des vraies données (format Jeff Sackmann : tennis_wta)
+# ----------------------------------------------------------------------
+
+def charger_historique(chemins):
+    """
+    Charge un ou plusieurs CSV au format Sackmann (wta_matches_XXXX.csv) :
+    colonnes utiles : tourney_date, tourney_id, match_num, winner_name,
+    loser_name, surface, score.
+    Accepte aussi le format simple : date,gagnante,perdante,surface.
+    Les forfaits (W/O) sont exclus ; les abandons comptent comme des victoires.
+    """
+    matchs = []
+    ignores = 0
+    for chemin in chemins:
+        with open(chemin, newline="", encoding="utf-8") as f:
+            lecteur = csv.DictReader(f)
+            sackmann = "winner_name" in (lecteur.fieldnames or [])
+            for ligne in lecteur:
+                if sackmann:
+                    surface = TRAD_SURFACE.get(ligne["surface"].strip().lower())
+                    score = (ligne.get("score") or "").upper()
+                    if surface is None or "W/O" in score or "WEA" in score:
+                        ignores += 1
+                        continue
+                    matchs.append({
+                        "cle": (ligne["tourney_date"], ligne["tourney_id"],
+                                int(ligne["match_num"] or 0)),
+                        "gagnante": ligne["winner_name"].strip(),
+                        "perdante": ligne["loser_name"].strip(),
+                        "surface": surface,
+                    })
+                else:
+                    surface = TRAD_SURFACE.get(ligne["surface"].strip().lower())
+                    if surface is None:
+                        ignores += 1
+                        continue
+                    matchs.append({
+                        "cle": (ligne["date"].strip(), "", 0),
+                        "gagnante": ligne["gagnante"].strip(),
+                        "perdante": ligne["perdante"].strip(),
+                        "surface": surface,
+                    })
+    if not matchs:
+        sys.exit("Aucun match exploitable dans les fichiers fournis.")
+    matchs.sort(key=lambda m: m["cle"])
+    return matchs, ignores
+
+
+def fichiers_donnees_par_defaut():
+    """Cherche les wta_matches_*.csv téléchargés dans paris-sportifs/donnees/."""
+    fichiers = sorted(glob.glob(os.path.join(DOSSIER_DONNEES, "*matches*_[0-9]*.csv")))
+    if not fichiers:
+        sys.exit(
+            "Aucune donnée trouvée dans " + DOSSIER_DONNEES + "\n"
+            "Lance d'abord :  python3 telecharger_donnees.py\n"
+            "ou indique tes fichiers avec --historique fichier1.csv fichier2.csv")
+    return fichiers
+
+
+# ----------------------------------------------------------------------
+# Résolution des noms (permet de taper « Swiatek » pour « Iga Swiatek »)
+# ----------------------------------------------------------------------
+
+def resoudre_nom(saisie, joueuses, nb_matchs):
+    s = saisie.strip().lower()
+    exactes = [j for j in joueuses if j.lower() == s]
+    if exactes:
+        return exactes[0]
+    candidates = [j for j in joueuses if s in j.lower()]
+    if not candidates:
+        sys.exit(f"Joueuse introuvable dans les données : « {saisie} »")
+    if len(candidates) == 1:
+        return candidates[0]
+    # plusieurs correspondances : on prend la plus active, en prévenant
+    candidates.sort(key=lambda j: nb_matchs[j], reverse=True)
+    if nb_matchs[candidates[0]] >= 3 * max(1, nb_matchs[candidates[1]]):
+        return candidates[0]
+    sys.exit(f"« {saisie} » est ambigu : " + ", ".join(candidates[:6])
+             + " — précise le nom complet.")
 
 
 # ----------------------------------------------------------------------
@@ -73,12 +161,10 @@ class Elo:
 
     def enregistrer(self, gagnante, perdante, surface):
         self._maj(self.global_, self.nb_matchs, gagnante, perdante)
-        if surface in self.surface:
-            self._maj(self.surface[surface], self.nb_matchs_surface[surface],
-                      gagnante, perdante)
+        self._maj(self.surface[surface], self.nb_matchs_surface[surface],
+                  gagnante, perdante)
 
     def note(self, joueuse, surface):
-        """Elo combiné : mélange global / surface."""
         if surface in self.surface and self.nb_matchs_surface[surface][joueuse] > 0:
             return ((1 - POIDS_SURFACE) * self.global_[joueuse]
                     + POIDS_SURFACE * self.surface[surface][joueuse])
@@ -86,26 +172,6 @@ class Elo:
 
     def proba_match(self, j1, j2, surface):
         return self.proba(self.note(j1, surface), self.note(j2, surface))
-
-
-def charger_historique(chemin):
-    """CSV : date,gagnante,perdante,surface — trié chronologiquement."""
-    matchs = []
-    with open(chemin, newline="", encoding="utf-8") as f:
-        for ligne in csv.DictReader(f):
-            surface = ligne["surface"].strip().lower()
-            if surface not in SURFACES:
-                sys.exit(f"Surface inconnue « {surface} » (attendu : dur/terre/gazon)")
-            matchs.append({
-                "date": ligne["date"].strip(),
-                "gagnante": ligne["gagnante"].strip(),
-                "perdante": ligne["perdante"].strip(),
-                "surface": surface,
-            })
-    if not matchs:
-        sys.exit(f"Aucun match trouvé dans {chemin}")
-    matchs.sort(key=lambda m: m["date"])
-    return matchs
 
 
 def construire_elo(matchs):
@@ -123,7 +189,7 @@ def charger_cotes(chemin):
             rencontres.append({
                 "j1": ligne["joueuse_1"].strip(),
                 "j2": ligne["joueuse_2"].strip(),
-                "surface": ligne["surface"].strip().lower(),
+                "surface": TRAD_SURFACE.get(ligne["surface"].strip().lower(), "dur"),
                 "cote_1": float(ligne["cote_1"]),
                 "cote_2": float(ligne["cote_2"]),
             })
@@ -136,8 +202,8 @@ def charger_cotes(chemin):
 
 def proba_jeu(p):
     """
-    Probabilité de gagner son jeu de service si on gagne chaque point
-    avec probabilité p. Formule fermée classique (deuce = série géométrique) :
+    Probabilité de tenir son jeu de service si on gagne chaque point
+    avec probabilité p (l'égalité est une série géométrique) :
         P = p⁴(1 + 4q + 10q²) + 20 p³q³ · p²/(1 − 2pq)
     """
     q = 1 - p
@@ -146,13 +212,7 @@ def proba_jeu(p):
 
 
 def proba_tiebreak(pa, pb):
-    """
-    Tie-break à 7 points (écart de 2). pa = proba que A gagne un point sur
-    SON service ; pb = idem pour B. A sert en premier ; le service tourne
-    après le 1er point puis tous les 2 points. À égalité >= 6-6, les deux
-    points suivants comptent un service chacun -> série géométrique :
-        P(A) = pa(1-pb) / (pa(1-pb) + (1-pa)pb)
-    """
+    """Tie-break à 7 points (écart de 2), A sert en premier. Calcul exact."""
     p_deuce_a = pa * (1 - pb)
     p_deuce_b = (1 - pa) * pb
     p_tie = p_deuce_a / (p_deuce_a + p_deuce_b)
@@ -163,9 +223,9 @@ def proba_tiebreak(pa, pb):
             return 1.0
         if b >= 7 and b - a >= 2:
             return 0.0
-        if a >= 6 and b >= 6 and a == b:
+        if a >= 6 and a == b:
             return p_tie
-        n = a + b  # le serveur du point n : A si ((n+1)//2) pair
+        n = a + b  # serveur du point n : A si ((n+1)//2) pair
         p_point_a = pa if ((n + 1) // 2) % 2 == 0 else 1 - pb
         return p_point_a * rec(a + 1, b) + (1 - p_point_a) * rec(a, b + 1)
 
@@ -173,12 +233,9 @@ def proba_tiebreak(pa, pb):
 
 
 def proba_set(pa, pb, a_sert_en_premier=True):
-    """
-    Set à 6 jeux (écart de 2, tie-break à 6-6), par récurrence exacte
-    sur (jeux_a, jeux_b, serveur).
-    """
-    ga = proba_jeu(pa)        # A tient son service
-    gb = proba_jeu(pb)        # B tient son service
+    """Set à 6 jeux (écart de 2, tie-break à 6-6), récurrence exacte."""
+    ga = proba_jeu(pa)
+    gb = proba_jeu(pb)
     tb = proba_tiebreak(pa, pb)
 
     @lru_cache(maxsize=None)
@@ -197,26 +254,16 @@ def proba_set(pa, pb, a_sert_en_premier=True):
 
 
 def proba_match_markov(pa, pb):
-    """
-    Match en 2 sets gagnants. On moyenne selon qui sert en premier
-    (l'effet est minime) et on suppose les sets indépendants :
-        P(match) = s² (3 − 2s)
-    Retourne aussi les probabilités de score en sets (2-0, 2-1, ...).
-    """
+    """Match en 2 sets gagnants, sets supposés indépendants."""
     s = 0.5 * (proba_set(pa, pb, True) + proba_set(pa, pb, False))
-    p20 = s * s
-    p21 = 2 * s * s * (1 - s)
-    p02 = (1 - s) ** 2
-    p12 = 2 * s * (1 - s) ** 2
-    return {
-        "set": s,
-        "match": p20 + p21,
-        "scores": {"2-0": p20, "2-1": p21, "1-2": p12, "0-2": p02},
-    }
+    p20, p21 = s * s, 2 * s * s * (1 - s)
+    p02, p12 = (1 - s) ** 2, 2 * s * (1 - s) ** 2
+    return {"set": s, "match": p20 + p21,
+            "scores": {"2-0": p20, "2-1": p21, "1-2": p12, "0-2": p02}}
 
 
 # ----------------------------------------------------------------------
-# Value bets et critère de Kelly (commun aux deux modèles)
+# Value bets et critère de Kelly
 # ----------------------------------------------------------------------
 
 def kelly(p, cote, fraction=FRACTION_KELLY):
@@ -230,22 +277,20 @@ def analyser_rencontre(elo, r, bankroll):
     j1, j2, surface = r["j1"], r["j2"], r["surface"]
     p1 = elo.proba_match(j1, j2, surface)
     p2 = 1 - p1
-
-    n1 = elo.note(j1, surface)
-    n2 = elo.note(j2, surface)
+    n1, n2 = elo.note(j1, surface), elo.note(j2, surface)
     marge = 1 / r["cote_1"] + 1 / r["cote_2"] - 1
 
-    print("=" * 66)
+    print("=" * 68)
     print(f"  {j1}  vs  {j2}   ({surface})")
-    print("=" * 66)
+    print("=" * 68)
     print(f"Elo combiné : {j1} {n1:.0f}  |  {j2} {n2:.0f}")
     print(f"(global {elo.global_[j1]:.0f}/{elo.global_[j2]:.0f}, "
           f"surface {elo.surface[surface][j1]:.0f}/{elo.surface[surface][j2]:.0f}, "
-          f"matchs joués {elo.nb_matchs[j1]}/{elo.nb_matchs[j2]})")
+          f"matchs dans les données {elo.nb_matchs[j1]}/{elo.nb_matchs[j2]})")
     print()
-    print(f"{'Marché':<30}{'Proba modèle':>13}{'Cote juste':>11}{'Cote book':>10}")
-    print(f"{'Victoire ' + j1:<30}{p1:>12.1%}{1 / p1:>11.2f}{r['cote_1']:>10.2f}")
-    print(f"{'Victoire ' + j2:<30}{p2:>12.1%}{1 / p2:>11.2f}{r['cote_2']:>10.2f}")
+    print(f"{'Marché':<34}{'Proba modèle':>13}{'Cote juste':>11}{'Cote book':>10}")
+    print(f"{'Victoire ' + j1:<34}{p1:>12.1%}{1 / p1:>11.2f}{r['cote_1']:>10.2f}")
+    print(f"{'Victoire ' + j2:<34}{p2:>12.1%}{1 / p2:>11.2f}{r['cote_2']:>10.2f}")
     print(f"\nMarge du bookmaker : {marge:.1%}")
 
     value_bets = []
@@ -269,9 +314,9 @@ def analyser_rencontre(elo, r, bankroll):
 
 def afficher_markov(pa, pb):
     res = proba_match_markov(pa, pb)
-    print("=" * 66)
+    print("=" * 68)
     print("  Modèle de Markov point par point (match en 2 sets gagnants)")
-    print("=" * 66)
+    print("=" * 68)
     print(f"Joueuse A gagne {pa:.0%} des points sur son service")
     print(f"Joueuse B gagne {pb:.0%} des points sur son service\n")
     print(f"A tient son jeu de service : {proba_jeu(pa):.1%}")
@@ -281,41 +326,47 @@ def afficher_markov(pa, pb):
     print("Score en sets le plus probable :")
     for score, p in sorted(res["scores"].items(), key=lambda x: x[1], reverse=True):
         print(f"   {score}  ({p:.1%})")
-    print("\nAstuce : au tennis féminin le service pèse moins qu'en ATP ;")
-    print("des probas de points au service de 55-62 % sont typiques en WTA.")
+    print("\nRepère : en WTA, gagner 55-62 % des points sur son service est typique.")
     print()
 
 
-# ----------------------------------------------------------------------
-# Classement et programme principal
-# ----------------------------------------------------------------------
-
-def afficher_classement(elo, surface=None):
-    titre = f"Classement Elo ({'surface ' + surface if surface else 'global'})"
+def afficher_classement(elo, surface=None, n=25, min_matchs=20):
+    titre = (f"Top {n} Elo " + (f"sur {surface}" if surface else "(toutes surfaces)")
+             + f" — joueuses avec ≥ {min_matchs} matchs")
     print(titre)
     print("-" * len(titre))
     if surface:
-        notes = [(elo.note(j, surface), j) for j in elo.global_]
+        notes = [(elo.note(j, surface), j) for j in elo.global_
+                 if elo.nb_matchs[j] >= min_matchs
+                 and elo.nb_matchs_surface[surface][j] >= 5]
     else:
-        notes = [(elo.global_[j], j) for j in elo.global_]
-    for i, (note, j) in enumerate(sorted(notes, reverse=True), 1):
-        print(f"{i:>2}. {j:<22}{note:7.0f}  ({elo.nb_matchs[j]} matchs)")
+        notes = [(elo.global_[j], j) for j in elo.global_
+                 if elo.nb_matchs[j] >= min_matchs]
+    for i, (note, j) in enumerate(sorted(notes, reverse=True)[:n], 1):
+        print(f"{i:>2}. {j:<28}{note:7.0f}  ({elo.nb_matchs[j]} matchs)")
     print()
 
 
+# ----------------------------------------------------------------------
+# Programme principal
+# ----------------------------------------------------------------------
+
 def main():
     ap = argparse.ArgumentParser(
-        description="Analyse probabiliste de paris tennis (Elo par surface + Markov)")
-    ap.add_argument("--historique", help="CSV des matchs passés (date,gagnante,perdante,surface)")
-    ap.add_argument("--cotes", help="CSV des rencontres à venir avec les cotes")
-    ap.add_argument("--match", help='Analyser un seul match : "Joueuse1:Joueuse2"')
+        description="Analyse probabiliste de paris tennis WTA (Elo par surface + Markov), "
+                    "sur données réelles")
+    ap.add_argument("--historique", nargs="+",
+                    help="CSV de matchs (format Sackmann wta_matches_XXXX.csv ou simple). "
+                         "Par défaut : tous les CSV du dossier donnees/")
+    ap.add_argument("--cotes", help="CSV des rencontres à venir : joueuse_1,joueuse_2,surface,cote_1,cote_2")
+    ap.add_argument("--match", help='Analyser un match : "Joueuse1:Joueuse2" (nom partiel accepté)')
     ap.add_argument("--surface", default="dur", choices=SURFACES, help="Surface du match")
     ap.add_argument("--cote1", type=float, help="Cote victoire joueuse 1")
     ap.add_argument("--cote2", type=float, help="Cote victoire joueuse 2")
     ap.add_argument("--bankroll", type=float, default=100.0, help="Bankroll en euros (défaut 100)")
     ap.add_argument("--classement", action="store_true", help="Afficher le classement Elo")
     ap.add_argument("--service", metavar="pA:pB",
-                    help="Modèle de Markov : probas de gagner un point sur son service, ex. 0.60:0.55")
+                    help="Modèle de Markov : probas de point sur son service, ex. 0.60:0.55")
     args = ap.parse_args()
 
     if args.service:
@@ -325,17 +376,18 @@ def main():
         afficher_markov(pa, pb)
         return
 
-    if not args.historique:
-        sys.exit("Fournir --historique fichier.csv (ou --service pA:pB pour le mode Markov)")
-
-    matchs = charger_historique(args.historique)
+    fichiers = args.historique or fichiers_donnees_par_defaut()
+    matchs, ignores = charger_historique(fichiers)
     elo = construire_elo(matchs)
-    print(f"\nHistorique chargé : {len(matchs)} matchs, {len(elo.global_)} joueuses.\n")
+    derniere = max(m["cle"][0] for m in matchs)
+    print(f"\nDonnées réelles chargées : {len(matchs)} matchs, "
+          f"{len(elo.global_)} joueuses, dernier tournoi commencé le {derniere} "
+          f"({ignores} lignes ignorées : forfaits/surface manquante).\n")
 
     if args.classement:
         afficher_classement(elo)
-        for s in SURFACES:
-            afficher_classement(elo, s)
+        if args.surface:
+            afficher_classement(elo, args.surface)
 
     rencontres = []
     if args.cotes:
@@ -345,14 +397,16 @@ def main():
         rencontres = [{"j1": j1, "j2": j2, "surface": args.surface,
                        "cote_1": args.cote1, "cote_2": args.cote2}]
     elif not args.classement:
-        sys.exit("Fournir --cotes fichier.csv OU --match \"A:B\" --cote1 --cote2")
+        sys.exit('Fournir --match "A:B" --cote1 --cote2, ou --cotes fichier.csv, '
+                 "ou --classement")
 
     for r in rencontres:
-        inconnues = [j for j in (r["j1"], r["j2"]) if j not in elo.global_]
-        if inconnues:
-            print(f"[!] Joueuse(s) absente(s) de l'historique : {', '.join(inconnues)} "
-                  "— match ignoré.\n")
-            continue
+        r["j1"] = resoudre_nom(r["j1"], elo.global_.keys(), elo.nb_matchs)
+        r["j2"] = resoudre_nom(r["j2"], elo.global_.keys(), elo.nb_matchs)
+        for j in (r["j1"], r["j2"]):
+            if elo.nb_matchs[j] < 10:
+                print(f"[!] Attention : {j} n'a que {elo.nb_matchs[j]} matchs dans "
+                      "les données, son Elo est peu fiable.")
         analyser_rencontre(elo, r, args.bankroll)
 
     if rencontres:

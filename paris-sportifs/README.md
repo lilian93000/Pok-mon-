@@ -1,22 +1,41 @@
-# Analyse probabiliste de paris sportifs 🎾⚽📊
+# Analyse probabiliste de paris tennis WTA 🎾📊
 
-Des programmes Python (sans aucune dépendance) qui analysent des matchs
-avec des modèles probabilistes et détectent les **value bets** : les
-paris où la cote du bookmaker est plus élevée que ce que les
-probabilités justifient.
+Un programme Python (sans aucune dépendance) qui analyse des matchs de
+tennis avec des modèles probabilistes construits sur de **vraies données
+de matchs**, et détecte les **value bets** : les paris où la cote du
+bookmaker est plus élevée que ce que les probabilités justifient.
 
-- **`tennis.py`** — tennis ATP/WTA : Elo par surface + chaîne de Markov
-- **`analyse.py`** — football : modèle de Poisson
+## Les données (réelles)
 
----
+Le dossier `donnees/` contient les résultats réels du circuit WTA au
+format Jeff Sackmann (`wta_matches_XXXX.csv`), la base de référence
+utilisée par les chercheurs et les modélisateurs tennis :
 
-## 🎾 Tennis (`tennis.py`)
+- **saisons 2022 à 2026** : ~11 700 matchs du circuit principal
+  (Grands Chelems, WTA 1000/500/250, Finals, United Cup, BJK Cup)
+- pour chaque match : tournoi, date, surface, joueuses, score, stats
+  de service
 
-### Modèle A : Elo par surface
+Le dépôt GitHub original (`JeffSackmann/tennis_wta`) a été retiré ;
+`telecharger_donnees.py` récupère donc les fichiers depuis des miroirs
+publics (forks) et peut mettre à jour ou étendre les saisons :
 
-Chaque joueuse a un classement Elo mis à jour match après match à
-partir de l'historique. La probabilité de victoire vient de la formule
-Elo :
+```bash
+python3 telecharger_donnees.py            # saisons 2022-2026
+python3 telecharger_donnees.py 2019 2020  # années supplémentaires
+```
+
+⚠️ **Fraîcheur** : le miroir le plus récent s'arrête au 21 avril 2026
+(fin de Madrid). Les matchs depuis (Rome, Roland-Garros…) ne sont pas
+encore dans les données — l'Elo bouge lentement, mais garde-le en tête
+et relance le script de téléchargement régulièrement pour vérifier si
+un miroir plus frais existe.
+
+## Modèle A : Elo par surface
+
+Chaque joueuse a un classement Elo mis à jour match après match, dans
+l'ordre chronologique des ~11 700 matchs réels. La probabilité de
+victoire vient de la formule Elo :
 
 ```
 P(A bat B) = 1 / (1 + 10^(−(Ra − Rb) / 400))
@@ -32,9 +51,10 @@ K = 250 / (nb_matchs + 5)^0.4
 Le programme maintient un **Elo global + un Elo par surface**
 (dur / terre / gazon) et mélange les deux (50/50) pour la prédiction —
 essentiel au tennis où certaines joueuses sont bien plus fortes sur une
-surface (ex. terre battue).
+surface. Les forfaits (W/O) sont exclus, les abandons comptent comme
+des victoires.
 
-### Modèle B : chaîne de Markov point par point (`--service`)
+## Modèle B : chaîne de Markov point par point
 
 À partir de la probabilité de gagner un point sur son service, on
 remonte **toute la hiérarchie du tennis par calcul exact** :
@@ -48,154 +68,67 @@ P(jeu) = p⁴(1 + 4q + 10q²) + 20p³q³ · p²/(1 − 2pq)     avec q = 1 − p
 ```
 
 Le set et le tie-break sont calculés par récurrence exacte sur le
-score. Utile pour les marchés « score exact en sets » et pour jauger
-la solidité d'un favori. En WTA, les probabilités de points gagnés au
-service tournent typiquement autour de 55-62 % (moins qu'en ATP : le
-service y pèse moins, donc plus de breaks et plus de retournements).
+score. Utile pour les marchés « score exact en sets ». En WTA, les
+probabilités de points gagnés au service tournent autour de 55-62 %
+(moins qu'en ATP : plus de breaks, plus de retournements).
 
-### Utilisation
+## Détection des value bets
 
-```bash
-# Journée complète avec fichier de cotes
-python3 tennis.py --historique matchs_tennis_exemple.csv --cotes cotes_tennis_exemple.csv --bankroll 200
-
-# Un seul match, cotes tapées à la main
-python3 tennis.py --historique matchs_tennis_exemple.csv \
-    --match "Swiatek:Gauff" --surface terre --cote1 1.45 --cote2 2.90
-
-# Afficher le classement Elo (global + par surface)
-python3 tennis.py --historique matchs_tennis_exemple.csv --classement
-
-# Modèle de Markov pur (probas de points au service)
-python3 tennis.py --service 0.60:0.55
-```
-
-### Format des fichiers tennis
-
-`matchs_tennis_exemple.csv` — l'historique, trié par date :
-
-```csv
-date,gagnante,perdante,surface
-2025-04-16,Swiatek,Sabalenka,terre
-```
-
-`cotes_tennis_exemple.csv` — les rencontres à analyser :
-
-```csv
-joueuse_1,joueuse_2,surface,cote_1,cote_2
-Swiatek,Gauff,terre,1.40,3.00
-```
-
-Pour de vraies données WTA : **tennis-data.co.uk** publie des CSV
-gratuits de chaque saison WTA (et ATP) avec les résultats **et les
-cotes de clôture des bookmakers** — parfait pour alimenter l'historique
-et même backtester le modèle. Plus l'historique est long (1 à 2 saisons),
-plus l'Elo est fiable.
-
----
-
-## ⚽ Football (`analyse.py`)
-
-### 1. Forces des équipes
-À partir de l'historique des matchs, on calcule pour chaque équipe :
-- une **force d'attaque** = buts marqués par match ÷ moyenne de la ligue
-- une **force de défense** = buts encaissés par match ÷ moyenne de la ligue
-
-Le tout séparément à domicile et à l'extérieur, pour capturer
-l'avantage du terrain.
-
-### 2. Modèle de Poisson
-Le nombre de buts d'une équipe suit une loi de Poisson :
-
-```
-P(k buts) = e^(-λ) · λ^k / k!
-```
-
-avec l'espérance de buts :
-
-```
-λ_domicile = moyenne_ligue_dom × attaque(dom) × défense(ext)
-λ_extérieur = moyenne_ligue_ext × attaque(ext) × défense(dom)
-```
-
-En croisant les deux lois, on obtient la probabilité de **chaque score
-exact** (0-0, 1-0, 2-1…), et en sommant : victoire / nul / défaite,
-plus/moins de 2,5 buts, les deux équipes marquent (BTTS).
-
-### 3. Détection des value bets
 Une cote `c` implique une probabilité `1/c`. Le bookmaker gonfle ces
-probabilités (sa **marge**, généralement 5-8 %). Si le modèle estime
-une probabilité `p` telle que :
+probabilités (sa **marge**, ~3-7 %). Si le modèle estime une
+probabilité `p` telle que :
 
 ```
 edge = p × c − 1 > 0
 ```
 
-alors le pari a une **espérance de gain positive** : c'est un value bet.
-
-### 4. Critère de Kelly
-Pour dimensionner la mise, on utilise la formule de Kelly :
+alors le pari a une **espérance de gain positive** : c'est un value
+bet. La mise est dimensionnée par le **critère de Kelly** :
 
 ```
 f* = (p × (c − 1) − (1 − p)) / (c − 1)
 ```
 
-`f*` est la fraction optimale de la bankroll à miser. Le programme
-applique un **Kelly fractionné à 25 %** pour limiter la variance (le
-Kelly plein est très agressif quand le modèle se trompe).
+fractionné à 25 % pour limiter la variance (le Kelly plein est très
+agressif quand le modèle se trompe).
 
 ## Utilisation
 
-Analyser une journée complète (fichier de cotes) :
-
 ```bash
-python3 analyse.py --historique matchs_exemple.csv --cotes cotes_exemple.csv --bankroll 200
+# Un match : tu tapes les cotes de ton bookmaker (noms partiels acceptés)
+python3 tennis.py --match "Rybakina:Anisimova" --surface gazon \
+    --cote1 1.72 --cote2 2.20 --bankroll 200
+
+# Plusieurs matchs d'un coup via un fichier de cotes
+python3 tennis.py --cotes mes_cotes.csv --bankroll 200
+
+# Classement Elo (global + surface choisie)
+python3 tennis.py --classement --surface gazon
+
+# Modèle de Markov pur (probas de points au service)
+python3 tennis.py --service 0.60:0.55
 ```
 
-Analyser un seul match en tapant les cotes à la main :
-
-```bash
-python3 analyse.py --historique matchs_exemple.csv \
-    --match "Monaco:Marseille" --cote1 2.10 --coteX 3.60 --cote2 3.30
-```
-
-## Format des fichiers
-
-`matchs_exemple.csv` — l'historique (plus il y a de matchs, mieux c'est) :
+Format du fichier de cotes (`mes_cotes.csv`) :
 
 ```csv
-domicile,exterieur,buts_dom,buts_ext
-PSG,Marseille,3,1
+joueuse_1,joueuse_2,surface,cote_1,cote_2
+Sabalenka,Swiatek,gazon,1.85,1.95
+Gauff,Pegula,gazon,1.60,2.35
 ```
-
-`cotes_exemple.csv` — les rencontres à analyser (les colonnes
-`cote_plus25`/`cote_moins25` sont optionnelles) :
-
-```csv
-domicile,exterieur,cote_1,cote_X,cote_2,cote_plus25,cote_moins25
-PSG,Monaco,1.75,3.90,4.50,1.72,2.10
-```
-
-Pour utiliser de vraies données, remplace les CSV par les résultats de
-la saison en cours (ex. les CSV gratuits de football-data.co.uk) et les
-cotes de ton bookmaker.
-
----
 
 ## Limites et avertissement ⚠️
 
-- Ces modèles ignorent la forme du jour, les blessures, la fatigue
-  (enchaînement de tournois) et la motivation. Au tennis, l'Elo ne voit
-  pas non plus les abandons ni les retours de blessure — vérifie
-  toujours le contexte avant de suivre un signal.
-- Un edge affiché n'est fiable que si l'historique est suffisant
-  (idéalement une saison complète ou plus, et au moins 10-15 matchs
-  par joueuse).
-- Les gros edges (> 20 %) sont plus souvent le signe que le modèle
-  manque une information (blessure, forfait probable) que d'une vraie
-  erreur du bookmaker. Les vrais value bets durables sont petits
+- L'Elo ne voit pas la forme du jour, les blessures, la fatigue
+  (enchaînement de tournois), les abandons récents ni les retours de
+  blessure — vérifie toujours le contexte avant de suivre un signal.
+- Une joueuse avec peu de matchs dans les données (< 10-15) a un Elo
+  peu fiable ; le programme t'avertit dans ce cas.
+- Les gros edges (> 15-20 %) sont plus souvent le signe que le modèle
+  manque une information (blessure, méforme connue du marché) que d'une
+  vraie erreur du bookmaker. Les vrais value bets durables sont petits
   (2-8 %).
 - **Aucun modèle ne garantit un gain.** Les paris sportifs comportent un
-  risque réel de perte. Jouez de manière responsable, uniquement de
-  l'argent que vous pouvez vous permettre de perdre. Si le jeu devient
-  un problème : joueurs-info-service.fr / 09 74 75 13 13.
+  risque réel de perte. Joue de manière responsable, uniquement de
+  l'argent que tu peux te permettre de perdre. Si le jeu devient un
+  problème : joueurs-info-service.fr / 09 74 75 13 13.
