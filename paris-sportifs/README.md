@@ -31,6 +31,38 @@ encore dans les données — l'Elo bouge lentement, mais garde-le en tête
 et relance le script de téléchargement régulièrement pour vérifier si
 un miroir plus frais existe.
 
+## Le moteur multi-facteurs (caracteristiques.py)
+
+Pour chaque match, **23 indicateurs** sont calculés pour chaque joueuse
+à partir de l'intégralité de son historique réel :
+
+| Famille | Indicateurs |
+|---|---|
+| Niveau | Elo global+surface, classement WTA, expérience |
+| Face-à-face | H2H total, H2H sur la surface du jour |
+| Forme | % victoires (5 et 15 derniers), série en cours |
+| Calendrier / fatigue | minutes jouées sur 14 j, matchs sur 7 j, jours de repos |
+| Profil | gauchère/droitière, bilan contre ce profil de main, taille, âge |
+| Qualité de jeu | % pts gagnés au service et en retour (10 derniers), aces/match, doubles fautes/match |
+| Mental | % balles de break sauvées (20 derniers), % sets décisifs gagnés |
+| Contexte | % victoires sur la surface, bilan en Grand Chelem |
+
+Le poids de chaque facteur n'est pas choisi à la main : une **régression
+logistique** (pure Python) est entraînée sur ~9 600 matchs historiques.
+La probabilité finale est `P(A bat B) = σ(Σᵢ wᵢ·(xᵢ(A) − xᵢ(B)))`.
+Les poids appris sont mis en cache (`donnees/poids_modele.json`) et
+recalculés automatiquement quand les données changent.
+
+**Backtest** (`python3 caracteristiques.py --backtest`) — entraînement
+sur 2022-2025, test sur les 906 matchs de 2026 jamais vus : le
+multi-facteurs trouve la gagnante dans **67,1 %** des cas (Elo seul :
+66,4 %) avec une meilleure calibration (log-loss 0,605 contre 0,611).
+Les facteurs les plus prédictifs appris : Elo, classement WTA, % de
+points gagnés au service récemment, forme, retour, fatigue.
+
+L'analyse d'un match affiche la fiche comparative complète des deux
+joueuses + les facteurs qui pèsent le plus dans la prédiction du jour.
+
 ## Modèle A : Elo par surface
 
 Chaque joueuse a un classement Elo mis à jour match après match, dans

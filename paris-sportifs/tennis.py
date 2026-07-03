@@ -39,6 +39,8 @@ import sys
 from collections import defaultdict
 from functools import lru_cache
 
+import caracteristiques
+
 ELO_INITIAL = 1500.0
 POIDS_SURFACE = 0.5    # mélange : 50 % Elo global + 50 % Elo de la surface
 SEUIL_VALUE = 0.03     # edge minimal (3 %) pour signaler un value bet
@@ -54,51 +56,6 @@ TRAD_SURFACE = {"hard": "dur", "clay": "terre", "grass": "gazon",
 # ----------------------------------------------------------------------
 # Chargement des vraies données (format Jeff Sackmann : tennis_wta)
 # ----------------------------------------------------------------------
-
-def charger_historique(chemins):
-    """
-    Charge un ou plusieurs CSV au format Sackmann (wta_matches_XXXX.csv) :
-    colonnes utiles : tourney_date, tourney_id, match_num, winner_name,
-    loser_name, surface, score.
-    Accepte aussi le format simple : date,gagnante,perdante,surface.
-    Les forfaits (W/O) sont exclus ; les abandons comptent comme des victoires.
-    """
-    matchs = []
-    ignores = 0
-    for chemin in chemins:
-        with open(chemin, newline="", encoding="utf-8") as f:
-            lecteur = csv.DictReader(f)
-            sackmann = "winner_name" in (lecteur.fieldnames or [])
-            for ligne in lecteur:
-                if sackmann:
-                    surface = TRAD_SURFACE.get(ligne["surface"].strip().lower())
-                    score = (ligne.get("score") or "").upper()
-                    if surface is None or "W/O" in score or "WEA" in score:
-                        ignores += 1
-                        continue
-                    matchs.append({
-                        "cle": (ligne["tourney_date"], ligne["tourney_id"],
-                                int(ligne["match_num"] or 0)),
-                        "gagnante": ligne["winner_name"].strip(),
-                        "perdante": ligne["loser_name"].strip(),
-                        "surface": surface,
-                    })
-                else:
-                    surface = TRAD_SURFACE.get(ligne["surface"].strip().lower())
-                    if surface is None:
-                        ignores += 1
-                        continue
-                    matchs.append({
-                        "cle": (ligne["date"].strip(), "", 0),
-                        "gagnante": ligne["gagnante"].strip(),
-                        "perdante": ligne["perdante"].strip(),
-                        "surface": surface,
-                    })
-    if not matchs:
-        sys.exit("Aucun match exploitable dans les fichiers fournis.")
-    matchs.sort(key=lambda m: m["cle"])
-    return matchs, ignores
-
 
 def fichiers_donnees_par_defaut():
     """Les wta_matches_*.csv téléchargés + les résultats récents ajoutés à la main."""
@@ -183,7 +140,8 @@ def construire_elo(matchs):
 
 
 def charger_cotes(chemin):
-    """CSV : joueuse_1,joueuse_2,surface,cote_1,cote_2"""
+    """CSV : joueuse_1,joueuse_2,surface,cote_1,cote_2[,niveau]
+    niveau : G pour un Grand Chelem (active le facteur « bilan en GC »)."""
     rencontres = []
     with open(chemin, newline="", encoding="utf-8") as f:
         for ligne in csv.DictReader(f):
@@ -193,6 +151,7 @@ def charger_cotes(chemin):
                 "surface": TRAD_SURFACE.get(ligne["surface"].strip().lower(), "dur"),
                 "cote_1": float(ligne["cote_1"]),
                 "cote_2": float(ligne["cote_2"]),
+                "niveau": (ligne.get("niveau") or "").strip().upper(),
             })
     return rencontres
 
@@ -274,20 +233,79 @@ def kelly(p, cote, fraction=FRACTION_KELLY):
     return max(0.0, (p * b - (1 - p)) / b * fraction)
 
 
-def analyser_rencontre(elo, r, bankroll):
+def fiche_joueuses(moteur, j1, j2, surface):
+    """Tableau comparatif des indicateurs des deux joueuses."""
+    import datetime
+    auj = datetime.date.today().toordinal()
+    A, B = moteur.j[j1], moteur.j[j2]
+
+    def moy(liste, defaut):
+        return sum(liste) / len(liste) if liste else defaut
+
+    def bp(J):
+        s = sum(x for x, _ in J.bp)
+        f = sum(y for _, y in J.bp)
+        return f"{s / f:.0%}" if f else "?"
+
+    h12 = moteur.h2h[(j1, j2)]
+    h21 = moteur.h2h[(j2, j1)]
+    lignes = [
+        ("Main", A.main or "?", B.main or "?"),
+        ("Taille", f"{A.taille:.0f} cm" if A.taille else "?",
+         f"{B.taille:.0f} cm" if B.taille else "?"),
+        ("Âge", f"{A.age:.1f}" if A.age else "?", f"{B.age:.1f}" if B.age else "?"),
+        ("Classement WTA", f"{A.rang:.0f}" if A.rang else "?",
+         f"{B.rang:.0f}" if B.rang else "?"),
+        ("Bilan carrière (données)", f"{A.v}V-{A.d}D", f"{B.v}V-{B.d}D"),
+        (f"Bilan sur {surface}",
+         f"{A.v_surface[surface]}V-{A.d_surface[surface]}D",
+         f"{B.v_surface[surface]}V-{B.d_surface[surface]}D"),
+        ("Bilan en Grand Chelem", f"{A.v_gc}V-{A.d_gc}D", f"{B.v_gc}V-{B.d_gc}D"),
+        ("Face-à-face", f"{h12} victoire(s)", f"{h21} victoire(s)"),
+        ("Forme 5 derniers", f"{A.forme(5):.0%}", f"{B.forme(5):.0%}"),
+        ("Forme 15 derniers", f"{A.forme(15):.0%}", f"{B.forme(15):.0%}"),
+        ("Série en cours", f"{A.serie():+d}", f"{B.serie():+d}"),
+        ("Matchs (7 derniers jours)", A.matchs_recents(auj), B.matchs_recents(auj)),
+        ("Minutes jouées (14 jours)", f"{A.minutes_recentes(auj):.0f}",
+         f"{B.minutes_recentes(auj):.0f}"),
+        ("Jours depuis dernier match", A.repos(auj), B.repos(auj)),
+        ("% pts service (10 der.)", f"{moy(A.serve, 0):.1%}", f"{moy(B.serve, 0):.1%}"),
+        ("% pts retour (10 der.)", f"{moy(A.retour, 0):.1%}", f"{moy(B.retour, 0):.1%}"),
+        ("Aces / match (10 der.)", f"{moy(A.aces, 0):.1f}", f"{moy(B.aces, 0):.1f}"),
+        ("Doubles fautes / match", f"{moy(A.df, 0):.1f}", f"{moy(B.df, 0):.1f}"),
+        ("Balles de break sauvées", bp(A), bp(B)),
+        ("Sets décisifs gagnés",
+         f"{A.v_dec}/{A.v_dec + A.d_dec}" if A.v_dec + A.d_dec else "?",
+         f"{B.v_dec}/{B.v_dec + B.d_dec}" if B.v_dec + B.d_dec else "?"),
+    ]
+    n1 = j1.split()[-1][:16]
+    n2 = j2.split()[-1][:16]
+    print(f"{'Indicateur':<28}{n1:>18}{n2:>18}")
+    print("-" * 64)
+    for nom, a, b in lignes:
+        print(f"{nom:<28}{str(a):>18}{str(b):>18}")
+
+
+def analyser_rencontre(moteur, elo, r, bankroll):
     j1, j2, surface = r["j1"], r["j2"], r["surface"]
-    p1 = elo.proba_match(j1, j2, surface)
+    niveau = r.get("niveau") or "I"
+    p1, _, contributions = moteur.proba(j1, j2, surface, niveau=niveau)
     p2 = 1 - p1
     n1, n2 = elo.note(j1, surface), elo.note(j2, surface)
     marge = 1 / r["cote_1"] + 1 / r["cote_2"] - 1
 
     print("=" * 68)
-    print(f"  {j1}  vs  {j2}   ({surface})")
+    print(f"  {j1}  vs  {j2}   ({surface}"
+          + (", Grand Chelem" if niveau == "G" else "") + ")")
     print("=" * 68)
-    print(f"Elo combiné : {j1} {n1:.0f}  |  {j2} {n2:.0f}")
-    print(f"(global {elo.global_[j1]:.0f}/{elo.global_[j2]:.0f}, "
-          f"surface {elo.surface[surface][j1]:.0f}/{elo.surface[surface][j2]:.0f}, "
-          f"matchs dans les données {elo.nb_matchs[j1]}/{elo.nb_matchs[j2]})")
+    fiche_joueuses(moteur, j1, j2, surface)
+    print(f"\nElo combiné : {j1} {n1:.0f}  |  {j2} {n2:.0f}")
+
+    print("\nFacteurs les plus influents pour ce match "
+          f"(+ pousse vers {j1.split()[-1]}, − vers {j2.split()[-1]}) :")
+    for nom, c in contributions[:6]:
+        if abs(c) > 0.005:
+            print(f"   {nom:<34}{c:+.2f}")
     print()
     print(f"{'Marché':<34}{'Proba modèle':>13}{'Cote juste':>11}{'Cote book':>10}")
     print(f"{'Victoire ' + j1:<34}{p1:>12.1%}{1 / p1:>11.2f}{r['cote_1']:>10.2f}")
@@ -362,6 +380,8 @@ def main():
     ap.add_argument("--cotes", help="CSV des rencontres à venir : joueuse_1,joueuse_2,surface,cote_1,cote_2")
     ap.add_argument("--match", help='Analyser un match : "Joueuse1:Joueuse2" (nom partiel accepté)')
     ap.add_argument("--surface", default="dur", choices=SURFACES, help="Surface du match")
+    ap.add_argument("--niveau", default="I", choices=["G", "I"],
+                    help="G = Grand Chelem (active le facteur bilan en GC)")
     ap.add_argument("--cote1", type=float, help="Cote victoire joueuse 1")
     ap.add_argument("--cote2", type=float, help="Cote victoire joueuse 2")
     ap.add_argument("--bankroll", type=float, default=100.0, help="Bankroll en euros (défaut 100)")
@@ -378,12 +398,13 @@ def main():
         return
 
     fichiers = args.historique or fichiers_donnees_par_defaut()
-    matchs, ignores = charger_historique(fichiers)
+    matchs = caracteristiques.charger_matchs(fichiers)
     elo = construire_elo(matchs)
     derniere = max(m["cle"][0] for m in matchs)
     print(f"\nDonnées réelles chargées : {len(matchs)} matchs, "
-          f"{len(elo.global_)} joueuses, dernier tournoi commencé le {derniere} "
-          f"({ignores} lignes ignorées : forfaits/surface manquante).\n")
+          f"{len(elo.global_)} joueuses, dernier tournoi commencé le {derniere}.")
+    moteur = caracteristiques.construire_moteur(matchs)
+    print()
 
     if args.classement:
         afficher_classement(elo)
@@ -396,7 +417,8 @@ def main():
     elif args.match and args.cote1 and args.cote2:
         j1, j2 = (x.strip() for x in args.match.split(":"))
         rencontres = [{"j1": j1, "j2": j2, "surface": args.surface,
-                       "cote_1": args.cote1, "cote_2": args.cote2}]
+                       "cote_1": args.cote1, "cote_2": args.cote2,
+                       "niveau": args.niveau}]
     elif not args.classement:
         sys.exit('Fournir --match "A:B" --cote1 --cote2, ou --cotes fichier.csv, '
                  "ou --classement")
@@ -407,8 +429,8 @@ def main():
         for j in (r["j1"], r["j2"]):
             if elo.nb_matchs[j] < 10:
                 print(f"[!] Attention : {j} n'a que {elo.nb_matchs[j]} matchs dans "
-                      "les données, son Elo est peu fiable.")
-        analyser_rencontre(elo, r, args.bankroll)
+                      "les données, sa prédiction est peu fiable.")
+        analyser_rencontre(moteur, elo, r, args.bankroll)
 
     if rencontres:
         print("Rappel : un modèle ne garantit jamais un gain. Jouez de manière")
