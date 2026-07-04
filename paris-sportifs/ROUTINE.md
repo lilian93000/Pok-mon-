@@ -21,13 +21,28 @@ en a pas.
    plus frais répond, commit + push, et purger de resultats_recents.csv
    les lignes désormais couvertes par les fichiers officiels.
 
-3. **Programme du jour** : rechercher les matchs WTA du jour, tous
-   tournois confondus (« WTA [tournoi] order of play [date] »).
+3. **Programme du jour + cotes AUTOMATIQUES** : lancer
+   `python3 cotes_du_jour.py` — il télécharge le flux GitHub
+   Mriganka-codes/tennis_data (scrape de tennisexplorer toutes les 6 h,
+   accessible via raw.githubusercontent.com) et écrit `cotes_auto.csv`
+   avec les matchs WTA du jour, cotes réelles et noms résolus.
+   Vérifier la fraîcheur du flux (champ last_updated < 12 h). Adapter
+   le dictionnaire SURFACES_TOURNOIS au calendrier (gazon/terre/dur).
 
-4. **Cotes réelles** : rechercher les cotes de chaque match
-   (« [joueuse1] vs [joueuse2] odds »). Convertir les cotes américaines
-   en décimales (+150 → 2.50 ; -200 → 1.50). Ne jamais inventer une
-   cote : si introuvable, écarter le match.
+4. **Complément par recherche web** : pour les matchs signalés « non
+   résolus » par le script, les tournois absents du flux, ou si le flux
+   est en panne : rechercher « [joueuse1] vs [joueuse2] odds ».
+   Convertir les cotes américaines en décimales (+150 → 2.50 ;
+   -200 → 1.50). Ne jamais inventer une cote : si introuvable, écarter
+   le match.
+
+4bis. **Complétude des résultats (anti-trou de données)** : chaque
+   dimanche, ou à la fin de chaque tournoi, vérifier que TOUS les
+   résultats du tableau final (au minimum des quarts à la finale) sont
+   dans resultats_recents.csv ; pour les Grands Chelems, tous les tours.
+   Si un miroir Sackmann redevient vivant (telecharger_donnees.py),
+   purger de resultats_recents.csv les lignes couvertes par les
+   fichiers officiels.
 
 5. **Analyse** : écrire les matchs + cotes dans un CSV et lancer
    `python3 tennis.py --cotes fichier.csv --bankroll 100`.
