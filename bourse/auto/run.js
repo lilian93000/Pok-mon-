@@ -1,13 +1,18 @@
 #!/usr/bin/env node
 /* ═══════════════════════════════════════════════════════════════════
    Oracle Bourse — auto/run.js
-   Robot d'analyse quotidienne (GitHub Actions, Node ≥ 18).
+   Screener quotidien du marché US en deux étapes (GitHub Actions,
+   Node ≥ 18). Aucune clé API requise.
 
-   Sources — aucune clé requise :
-     · Cours + volumes : Yahoo Finance chart API (repli : Stooq CSV)
-     · News            : flux RSS Yahoo Finance par ticker
-     · Fondamentaux    : Finnhub, seulement si FINNHUB_API_KEY est défini
-                         (secret optionnel — sinon pilier neutralisé)
+   ÉTAPE 1 — scan large : toutes les actions ordinaires US cotées
+     (NASDAQ Trader Symbol Directory, ~5-6 000 titres), historiques
+     1 an par lots de 20 via Yahoo Spark, pré-score technique+momentum.
+
+   ÉTAPE 2 — analyse profonde des meilleurs candidats + favoris :
+     · Cours + volumes : Yahoo Finance chart (repli : closes du scan)
+     · News            : flux RSS Yahoo Finance
+     · Fondamentaux    : rapports annuels SEC EDGAR (XBRL) — autonome ;
+                         Finnhub utilisé à la place si FINNHUB_API_KEY existe
 
    Sorties :
      · bourse/data/latest.json  — résultats complets pour la page web
@@ -19,19 +24,21 @@
 const fs = require("fs");
 const path = require("path");
 const Engine = require("../engine.js");
+const { loadUniverse, loadCikMap } = require("./universe.js");
+const { fundamentalsFromEdgar } = require("./edgar.js");
 
 const ROOT = path.join(__dirname, "..");
 const DATA_DIR = path.join(ROOT, "data");
 const UA = { "User-Agent": "Mozilla/5.0 (compatible; OracleBourse/1.0)" };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/* ───────────── HTTP avec retries ───────────── */
+/* ───────────── HTTP + pool de concurrence ───────────── */
 
-async function get(url, { asText = false, tries = 3 } = {}) {
+async function get(url, { asText = false, tries = 3, headers = UA } = {}) {
   let lastErr;
   for (let i = 0; i < tries; i++) {
     try {
-      const res = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
+      const res = await fetch(url, { headers, signal: AbortSignal.timeout(25000) });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return asText ? await res.text() : await res.json();
     } catch (e) {
@@ -42,7 +49,69 @@ async function get(url, { asText = false, tries = 3 } = {}) {
   throw lastErr;
 }
 
-/* ───────────── Cours : Yahoo, repli Stooq ───────────── */
+/** Exécute fn(item) sur tous les items avec au plus n en parallèle. */
+async function pool(items, n, fn) {
+  const results = new Array(items.length);
+  let idx = 0;
+  async function worker() {
+    while (idx < items.length) {
+      const i = idx++;
+      try { results[i] = await fn(items[i], i); }
+      catch (e) { results[i] = { __error: e }; }
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(n, items.length) }, worker));
+  return results;
+}
+
+/* ───────────── ÉTAPE 1 : scan du marché via Yahoo Spark ───────────── */
+
+function parseSparkPayload(j) {
+  // Format moderne : { spark: { result: [{ symbol, response: [chartLike] }] } }
+  // Formats tolérés : { result: [...] } ou map { SYM: chartLike }
+  const out = new Map();
+  const list = j?.spark?.result || j?.result;
+  const push = (symbol, node) => {
+    const closes = (node?.indicators?.quote?.[0]?.close || node?.close || [])
+      .filter((c) => c != null && isFinite(c));
+    if (closes.length >= 60) out.set(symbol, closes);
+  };
+  if (Array.isArray(list)) {
+    for (const r of list) push(r.symbol, r.response?.[0] || r);
+  } else if (j && typeof j === "object") {
+    for (const [sym, node] of Object.entries(j)) {
+      if (node && typeof node === "object") push(sym, node.response?.[0] || node);
+    }
+  }
+  return out;
+}
+
+async function scanMarket(symbols) {
+  const closesBySym = new Map();
+  const batches = [];
+  for (let i = 0; i < symbols.length; i += 20) batches.push(symbols.slice(i, i + 20));
+
+  let done = 0;
+  await pool(batches, 5, async (batch) => {
+    try {
+      const j = await get(`https://query1.finance.yahoo.com/v8/finance/spark?symbols=${batch.join(",")}&range=1y&interval=1d`);
+      for (const [sym, closes] of parseSparkPayload(j)) closesBySym.set(sym, closes);
+    } catch { /* lot perdu — les titres seront simplement absents du scan du jour */ }
+    done++;
+    if (done % 40 === 0) console.log(`  … scan ${done}/${batches.length} lots (${closesBySym.size} historiques)`);
+    await sleep(150);
+  });
+  return closesBySym;
+}
+
+function preScore(closes) {
+  const t = Engine.scoreTechnical(closes, null).score;
+  const m = Engine.scoreMomentum(closes).score;
+  if (t == null || m == null) return null;
+  return 0.55 * t + 0.45 * m;
+}
+
+/* ───────────── ÉTAPE 2 : analyse profonde ───────────── */
 
 async function yahooChart(symbol) {
   const j = await get(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1y&interval=1d`);
@@ -58,26 +127,8 @@ async function yahooChart(symbol) {
     }
   }
   if (closes.length < 40) throw new Error(`historique trop court (${closes.length} points)`);
-  return { closes, volumes, name: r.meta?.longName || r.meta?.shortName || symbol, source: "Yahoo Finance" };
+  return { closes, volumes, name: r.meta?.longName || r.meta?.shortName || symbol };
 }
-
-async function stooqDaily(symbol) {
-  const csv = await get(`https://stooq.com/q/d/l/?s=${symbol.toLowerCase()}.us&i=d`, { asText: true });
-  const lines = csv.trim().split("\n").slice(1); // en-tête : Date,Open,High,Low,Close,Volume
-  const closes = [], volumes = [];
-  for (const line of lines.slice(-300)) {
-    const cols = line.split(",");
-    const c = parseFloat(cols[4]);
-    if (isFinite(c)) {
-      closes.push(c);
-      volumes.push(parseFloat(cols[5]) || 0);
-    }
-  }
-  if (closes.length < 40) throw new Error("historique Stooq trop court");
-  return { closes, volumes, name: symbol, source: "Stooq" };
-}
-
-/* ───────────── News : RSS Yahoo ───────────── */
 
 function decodeEntities(s) {
   return s
@@ -89,8 +140,7 @@ function decodeEntities(s) {
 async function yahooNews(symbol) {
   const xml = await get(`https://feeds.finance.yahoo.com/rss/2.0/headline?s=${encodeURIComponent(symbol)}&region=US&lang=en-US`, { asText: true });
   const items = [];
-  const blocks = xml.match(/<item>[\s\S]*?<\/item>/g) || [];
-  for (const b of blocks.slice(0, 20)) {
+  for (const b of (xml.match(/<item>[\s\S]*?<\/item>/g) || []).slice(0, 20)) {
     const title = decodeEntities((b.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || "").trim();
     const link = decodeEntities((b.match(/<link>([\s\S]*?)<\/link>/) || [])[1] || "").trim();
     const pub = (b.match(/<pubDate>([\s\S]*?)<\/pubDate>/) || [])[1];
@@ -105,8 +155,6 @@ async function yahooNews(symbol) {
   }
   return items;
 }
-
-/* ───────────── Fondamentaux : Finnhub (optionnel) ───────────── */
 
 async function finnhubFundamentals(symbol, key) {
   const j = await get(`https://finnhub.io/api/v1/stock/metric?symbol=${symbol}&metric=all&token=${key}`);
@@ -124,24 +172,24 @@ async function finnhubFundamentals(symbol, key) {
   };
 }
 
-/* ───────────── Analyse d'un titre ───────────── */
-
-async function analyzeSymbol(symbol, finnhubKey) {
+async function deepAnalyze(symbol, ctx) {
   const warnings = [];
   const sources = [];
 
   let prices = null;
   try {
     prices = await yahooChart(symbol);
-  } catch (e1) {
-    try {
-      prices = await stooqDaily(symbol);
-      warnings.push(`Yahoo indisponible (${e1.message}) — repli sur Stooq.`);
-    } catch (e2) {
-      throw new Error(`cours introuvables (Yahoo : ${e1.message} ; Stooq : ${e2.message})`);
+    sources.push("Yahoo Finance (cours)");
+  } catch (e) {
+    const scanned = ctx.scanCloses.get(symbol);
+    if (scanned) {
+      prices = { closes: scanned, volumes: null, name: ctx.names.get(symbol) || symbol };
+      sources.push("Yahoo Spark (cours du scan)");
+      warnings.push(`Détail des cours indisponible (${e.message}) — volumes non analysés.`);
+    } else {
+      throw new Error(`cours introuvables : ${e.message}`);
     }
   }
-  sources.push(`${prices.source} (cours)`);
 
   let news = null;
   try {
@@ -151,65 +199,86 @@ async function analyzeSymbol(symbol, finnhubKey) {
     warnings.push(`News indisponibles : ${e.message}`);
   }
 
+  const price = prices.closes[prices.closes.length - 1];
   let fundamentals = null;
-  if (finnhubKey) {
+  if (ctx.finnhubKey) {
     try {
-      fundamentals = await finnhubFundamentals(symbol, finnhubKey);
+      fundamentals = await finnhubFundamentals(symbol, ctx.finnhubKey);
       sources.push("Finnhub (fondamentaux)");
     } catch (e) {
-      warnings.push(`Fondamentaux indisponibles : ${e.message}`);
+      warnings.push(`Fondamentaux Finnhub indisponibles : ${e.message}`);
+    }
+  }
+  if (!fundamentals) {
+    const cik = ctx.cikMap.get(symbol);
+    if (cik) {
+      try {
+        fundamentals = await fundamentalsFromEdgar(cik, price);
+        if (fundamentals) sources.push("SEC EDGAR (fondamentaux annuels)");
+        else warnings.push("Pas de données US-GAAP exploitables sur EDGAR (société étrangère ?).");
+      } catch (e) {
+        warnings.push(`Fondamentaux EDGAR indisponibles : ${e.message}`);
+      }
+      await sleep(120); // ≤ 10 req/s exigé par la SEC
+    } else {
+      warnings.push("Ticker absent de la table SEC — pilier fondamental neutralisé.");
     }
   }
 
   const res = Engine.analyze({
     symbol,
-    name: prices.name,
+    name: prices.name || ctx.names.get(symbol) || symbol,
     closes: prices.closes,
     volumes: prices.volumes,
     fundamentals,
     news,
   });
-  res.closes = res.closes.slice(-130); // la page n'a besoin que de ~6 mois
+  res.closes = res.closes.slice(-130);
   res.news = (res.news || []).slice(0, 15);
   res.warnings = warnings;
   res.sources = sources;
+  res.fromScan = !ctx.favorites.has(symbol);
   return res;
 }
 
 /* ───────────── Rapport markdown ───────────── */
 
-function buildReport(results, generatedAt, failed) {
-  const d = new Date(generatedAt);
+function buildReport(results, meta) {
+  const d = new Date(meta.generatedAt);
   const lines = [
-    `# ◆ Oracle Bourse — rapport automatique`,
+    `# ◆ Oracle Bourse — screener quotidien du marché US`,
     ``,
-    `Généré le **${d.toISOString().slice(0, 16).replace("T", " ")} UTC** · ${results.length} titres analysés` +
-      (failed.length ? ` · ${failed.length} en échec (${failed.join(", ")})` : ""),
+    `Généré le **${d.toISOString().slice(0, 16).replace("T", " ")} UTC**`,
+    ``,
+    `**${meta.universe}** actions cotées répertoriées → **${meta.scanned}** scannées (technique + momentum) → ` +
+      `**${results.length}** analysées en profondeur (+ fondamentaux SEC/news)` +
+      (meta.failed.length ? ` · ${meta.failed.length} en échec` : ""),
     ``,
     `> ⚠️ Analyse statistique automatique — **pas un conseil financier**. Aucune garantie.`,
     ``,
-    `| # | Titre | Score | Verdict | Technique | Momentum | Fondamental | Sentiment | Confiance |`,
-    `|---|-------|------:|---------|----------:|---------:|------------:|----------:|----------:|`,
+    `| # | Titre | Score | Verdict | Tech. | Mom. | Fond. | Sent. | Conf. | Origine |`,
+    `|---|-------|------:|---------|------:|-----:|------:|------:|------:|---------|`,
   ];
   const fmt = (v) => (v == null ? "—" : String(Math.round(v)));
   results.forEach((r, i) => {
     lines.push(
-      `| ${i + 1} | **${r.symbol}** ${r.name !== r.symbol ? `(${r.name})` : ""} | **${fmt(r.score)}** | ${r.verdict.emoji} ${r.verdict.label} ` +
-      `| ${fmt(r.pillars.technical?.score)} | ${fmt(r.pillars.momentum?.score)} | ${fmt(r.pillars.fundamental?.score)} | ${fmt(r.pillars.sentiment?.score)} | ${r.confidence} % |`
+      `| ${i + 1} | **${r.symbol}** ${r.name && r.name !== r.symbol ? `(${r.name.slice(0, 40)})` : ""} | **${fmt(r.score)}** | ${r.verdict.emoji} ${r.verdict.label} ` +
+      `| ${fmt(r.pillars.technical?.score)} | ${fmt(r.pillars.momentum?.score)} | ${fmt(r.pillars.fundamental?.score)} | ${fmt(r.pillars.sentiment?.score)} | ${r.confidence} % ` +
+      `| ${r.fromScan ? "🔍 scan marché" : "⭐ favori"} |`
     );
   });
 
-  const top = results.filter((r) => r.score >= 70).slice(0, 5);
+  const top = results.filter((r) => r.score >= 72).slice(0, 8);
   if (top.length) {
-    lines.push(``, `## 🚀 Configurations les plus favorables`);
+    lines.push(``, `## 🚀 Configurations les plus favorables du jour`);
     for (const r of top) {
-      lines.push(``, `### ${r.symbol} — ${Math.round(r.score)}/100`);
+      lines.push(``, `### ${r.symbol}${r.name && r.name !== r.symbol ? ` — ${r.name}` : ""} · ${Math.round(r.score)}/100`);
       const sigs = [
         ...(r.pillars.technical?.signals || []),
         ...(r.pillars.momentum?.signals || []),
         ...(r.pillars.fundamental?.signals || []),
         ...(r.pillars.sentiment?.signals || []),
-      ].filter((s) => s.good).slice(0, 5);
+      ].filter((s) => s.good).slice(0, 6);
       for (const s of sigs) lines.push(`- ▲ ${s.label}${s.detail ? ` — ${s.detail}` : ""}`);
     }
   }
@@ -219,24 +288,71 @@ function buildReport(results, generatedAt, failed) {
 /* ───────────── Main ───────────── */
 
 async function main() {
+  const t0 = Date.now();
   const finnhubKey = process.env.FINNHUB_API_KEY || "";
-  const wl = JSON.parse(fs.readFileSync(path.join(__dirname, "watchlist.json"), "utf8"));
-  const symbols = wl.symbols || [];
-  console.log(`Oracle Bourse — analyse de ${symbols.length} titres` + (finnhubKey ? " (fondamentaux Finnhub activés)" : " (sans fondamentaux — pas de clé Finnhub)"));
+  const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, "watchlist.json"), "utf8"));
+  const favorites = cfg.favorites || cfg.symbols || [];
+  const nFinalists = cfg.finalists || 80;
+  const minPrice = cfg.minPrice || 2;
 
+  /* Étape 0 : univers + table CIK */
+  let universe = [];
+  try {
+    universe = await loadUniverse();
+    console.log(`Univers : ${universe.length} actions ordinaires US répertoriées.`);
+  } catch (e) {
+    console.error(`Univers indisponible (${e.message}) — repli sur les favoris uniquement.`);
+  }
+  let cikMap = new Map();
+  try {
+    cikMap = await loadCikMap();
+    console.log(`Table SEC : ${cikMap.size} tickers → CIK.`);
+  } catch (e) {
+    console.error(`Table SEC indisponible (${e.message}) — fondamentaux neutralisés.`);
+  }
+  const names = new Map(universe.map((u) => [u.symbol, u.name]));
+
+  /* Étape 1 : scan du marché */
+  let scanCloses = new Map();
+  let candidates = [];
+  if (universe.length) {
+    console.log(`Étape 1 — scan technique+momentum du marché…`);
+    scanCloses = await scanMarket(universe.map((u) => u.symbol));
+    console.log(`  ${scanCloses.size} historiques récupérés.`);
+    for (const [sym, closes] of scanCloses) {
+      if (closes[closes.length - 1] < minPrice) continue;
+      const s = preScore(closes);
+      if (s != null) candidates.push({ sym, s });
+    }
+    candidates.sort((a, b) => b.s - a.s);
+    console.log(`  ${candidates.length} candidats scorés — top 5 provisoire : ${candidates.slice(0, 5).map((c) => `${c.sym} (${c.s.toFixed(0)})`).join(", ")}`);
+  }
+
+  /* Étape 2 : analyse profonde (top scan + favoris) */
+  const finalSet = new Set(favorites);
+  for (const c of candidates) {
+    if (finalSet.size >= nFinalists + favorites.length) break;
+    finalSet.add(c.sym);
+  }
+  const finalSyms = [...finalSet];
+  console.log(`Étape 2 — analyse profonde de ${finalSyms.length} titres (${favorites.length} favoris + top scan)…`);
+
+  const ctx = { scanCloses, names, cikMap, finnhubKey, favorites: new Set(favorites) };
   const results = [];
   const failed = [];
-  for (const sym of symbols) {
-    try {
-      const r = await analyzeSymbol(sym, finnhubKey);
+  const analyzed = await pool(finalSyms, 3, async (sym) => {
+    const r = await deepAnalyze(sym, ctx);
+    await sleep(250);
+    return r;
+  });
+  analyzed.forEach((r, i) => {
+    if (r && !r.__error) {
       results.push(r);
-      console.log(`  ✓ ${sym.padEnd(6)} score ${r.score != null ? Math.round(r.score) : "—"} — ${r.verdict.label}`);
-    } catch (e) {
-      failed.push(sym);
-      console.error(`  ✗ ${sym.padEnd(6)} ${e.message}`);
+    } else {
+      failed.push(finalSyms[i]);
+      console.error(`  ✗ ${finalSyms[i]} : ${r?.__error?.message || "erreur inconnue"}`);
     }
-    await sleep(400); // politesse envers les API
-  }
+  });
 
   if (!results.length) {
     console.error("Aucun titre analysé — abandon sans écrire de données.");
@@ -245,14 +361,14 @@ async function main() {
 
   results.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
   const generatedAt = new Date().toISOString();
+  const meta = { generatedAt, universe: universe.length, scanned: scanCloses.size, failed };
 
   fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.writeFileSync(
     path.join(DATA_DIR, "latest.json"),
-    JSON.stringify({ generatedAt, auto: true, failed, results }, null, 1)
+    JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, failed, results }, null, 1)
   );
 
-  // Historique : top 5 du jour, 120 derniers points
   const histFile = path.join(DATA_DIR, "history.json");
   let hist = [];
   try { hist = JSON.parse(fs.readFileSync(histFile, "utf8")); } catch { /* premier passage */ }
@@ -261,12 +377,13 @@ async function main() {
   hist.push({ date: day, top: results.slice(0, 5).map((r) => ({ symbol: r.symbol, score: Math.round(r.score ?? 0) })) });
   fs.writeFileSync(histFile, JSON.stringify(hist.slice(-120), null, 1));
 
-  const report = buildReport(results, generatedAt, failed);
+  const report = buildReport(results, meta);
   fs.writeFileSync(path.join(DATA_DIR, "rapport.md"), report);
   if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, report);
 
-  console.log(`\nTerminé : ${results.length} analysés, ${failed.length} échecs.`);
-  console.log(`Top 3 : ${results.slice(0, 3).map((r) => `${r.symbol} (${Math.round(r.score)})`).join(", ")}`);
+  const withFund = results.filter((r) => r.pillars.fundamental?.score != null).length;
+  console.log(`\nTerminé en ${((Date.now() - t0) / 60000).toFixed(1)} min : ${meta.scanned} scannées, ${results.length} analysées (${withFund} avec fondamentaux), ${failed.length} échecs.`);
+  console.log(`Top 5 : ${results.slice(0, 5).map((r) => `${r.symbol} (${Math.round(r.score)})`).join(", ")}`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

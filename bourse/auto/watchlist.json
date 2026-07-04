@@ -1,9 +1,11 @@
 {
-  "comment": "Watchlist du robot d'analyse quotidienne. Ajoutez/retirez des tickers US ici.",
-  "symbols": [
+  "comment": "Config du screener quotidien. 'favorites' sont toujours analysées en profondeur en plus du top du scan de marché. 'finalists' = nombre de candidats du scan qui passent l'analyse complète. 'minPrice' écarte les penny stocks.",
+  "favorites": [
     "NVDA", "AAPL", "MSFT", "TSLA", "AMZN", "GOOGL", "META", "AMD",
     "PLTR", "AVGO", "NFLX", "CRM", "ORCL", "SMCI", "COIN", "MSTR",
     "SHOP", "UBER", "ABNB", "SNOW", "CRWD", "PANW", "LLY", "NVO",
     "JPM", "V", "MA", "COST", "WMT", "XOM"
-  ]
+  ],
+  "finalists": 80,
+  "minPrice": 2
 }

@@ -139,8 +139,9 @@
       tr.appendChild(el("td", "rank", String(i + 1)));
 
       const tdName = el("td", "name-cell");
-      tdName.appendChild(el("strong", null, r.symbol));
+      tdName.appendChild(el("strong", null, (r.fromScan ? "🔍 " : "") + r.symbol));
       tdName.appendChild(el("span", "sub", r.name !== r.symbol ? r.name : ""));
+      if (r.fromScan) tdName.title = "Détecté par le scan du marché (pas dans les favoris)";
       tr.appendChild(tdName);
 
       const tdScore = el("td", "num score-main");
@@ -363,8 +364,11 @@
 
       const d = new Date(data.generatedAt);
       const banner = $("autoBanner");
-      banner.textContent = `🤖 Analyse automatique du ${d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })} à ${d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })} — ${data.results.length} titres, mise à jour chaque jour ouvré après la clôture de Wall Street.`
-        + (data.failed && data.failed.length ? ` (échecs : ${data.failed.join(", ")})` : "");
+      const funnel = data.universe
+        ? `${data.universe.toLocaleString("fr-FR")} actions cotées → ${data.scanned.toLocaleString("fr-FR")} scannées → top ${data.results.length} analysées en profondeur`
+        : `${data.results.length} titres analysés`;
+      banner.textContent = `🤖 Screener automatique du ${d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })} à ${d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })} — ${funnel}. Mise à jour chaque jour ouvré après la clôture de Wall Street.`
+        + (data.failed && data.failed.length ? ` (échecs : ${data.failed.length})` : "");
       banner.classList.remove("hidden");
 
       const pill = $("modePill");
