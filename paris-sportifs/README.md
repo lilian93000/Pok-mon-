@@ -31,34 +31,43 @@ encore dans les données — l'Elo bouge lentement, mais garde-le en tête
 et relance le script de téléchargement régulièrement pour vérifier si
 un miroir plus frais existe.
 
-## Le moteur multi-facteurs (caracteristiques.py)
+## Le moteur multi-facteurs : 103 facteurs (caracteristiques.py)
 
-Pour chaque match, **23 indicateurs** sont calculés pour chaque joueuse
-à partir de l'intégralité de son historique réel :
+Pour chaque match, **103 indicateurs** sont calculés pour chaque joueuse
+à partir de l'intégralité de son historique réel (226 000+ matchs :
+circuit principal + qualifications + ITF depuis 2019), en 13 familles :
 
-| Famille | Indicateurs |
-|---|---|
-| Niveau | Elo global+surface, classement WTA, expérience |
-| Face-à-face | H2H total, H2H sur la surface du jour |
-| Forme | % victoires (5 et 15 derniers), série en cours |
-| Calendrier / fatigue | minutes jouées sur 14 j, matchs sur 7 j, jours de repos |
-| Profil | gauchère/droitière, bilan contre ce profil de main, taille, âge |
-| Qualité de jeu | % pts gagnés au service et en retour (10 derniers), aces/match, doubles fautes/match |
-| Mental | % balles de break sauvées (20 derniers), % sets décisifs gagnés |
-| Contexte | % victoires sur la surface, bilan en Grand Chelem |
+| Famille | Nb | Exemples |
+|---|---|---|
+| Elo & niveau | 8 | Elo combiné/global/surface, momentum Elo, distance au pic, classement, points, meilleur classement carrière |
+| Expérience | 5 | matchs carrière, % victoires, années de circuit, expérience du circuit principal |
+| Face-à-face | 3 | H2H total, H2H surface, H2H 2 dernières années |
+| Forme | 12 | fenêtres 3/5/10/25/50 matchs, série, forme surface, bilan 52 sem., trajectoire |
+| Titres & parcours | 6 | titres/finales 52 sem. et carrière, bilan en finale, en quarts et + |
+| Adversité | 6 | bilans vs top 10/50/100, force du calendrier, scalps récents |
+| Fatigue & rythme | 10 | minutes 7/14/30 j, matchs 7/14/30 j, repos, matchs saison, tournois 90 j, matchs longs |
+| Profil physique | 7 | main, bilan vs ce profil, duel de mains, taille, grande serveuse, âge |
+| Service | 10 | % pts gagnés 10/30/surface, % 1res dedans, gains 1re/2de balle, jeux tenus, aces, doubles fautes |
+| Retour | 7 | % pts retour 10/30/surface, breaks/match, retour 1re/2de balle, jeux retour gagnés |
+| Domination | 7 | % jeux/sets/points gagnés, sets blancs, victoires sèches, marge moyenne |
+| Clutch & mental | 10 | sets décisifs, tie-breaks, BdB sauvées, remontées, conversion, défaillances |
+| Surface & contexte | 12 | spécialisation, adaptation, polyvalence, Grand Chelem, gros matchs, abandons (santé), usure |
 
 Le poids de chaque facteur n'est pas choisi à la main : une **régression
-logistique** (pure Python) est entraînée sur ~9 600 matchs historiques.
-La probabilité finale est `P(A bat B) = σ(Σᵢ wᵢ·(xᵢ(A) − xᵢ(B)))`.
+logistique** (pure Python) est entraînée sur ~19 000 matchs du circuit
+principal (les matchs ITF/qualifs nourrissent les fiches mais pas les
+poids). La probabilité finale est `P(A bat B) = σ(Σᵢ wᵢ·(xᵢ(A) − xᵢ(B)))`.
 Les poids appris sont mis en cache (`donnees/poids_modele.json`) et
 recalculés automatiquement quand les données changent.
 
 **Backtest** (`python3 caracteristiques.py --backtest`) — entraînement
-sur 2022-2025, test sur les 906 matchs de 2026 jamais vus : le
-multi-facteurs trouve la gagnante dans **67,1 %** des cas (Elo seul :
-66,4 %) avec une meilleure calibration (log-loss 0,605 contre 0,611).
-Les facteurs les plus prédictifs appris : Elo, classement WTA, % de
-points gagnés au service récemment, forme, retour, fatigue.
+sur 2019-2025, test sur les 1 013 matchs 2026 du circuit principal
+jamais vus : le modèle 103 facteurs trouve la gagnante dans **70,2 %**
+des cas (Elo seul : 68,2 %) avec la meilleure calibration (log-loss
+0,579 contre 0,589). Facteurs les plus prédictifs appris : Elo
+global/surface, force du calendrier 52 sem., âge, expérience du circuit
+principal, meilleur classement carrière, minutes jouées sur 7 jours,
+retour sur 30 matchs.
 
 L'analyse d'un match affiche la fiche comparative complète des deux
 joueuses + les facteurs qui pèsent le plus dans la prédiction du jour.
