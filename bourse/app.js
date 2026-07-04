@@ -348,6 +348,34 @@
     $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  /* ───────────── Chargement automatique de l'analyse quotidienne ─────────────
+     Le robot GitHub Actions (bourse/auto/run.js) committe data/latest.json
+     chaque jour ouvré ; si le fichier existe, la page l'affiche sans un clic. */
+
+  async function tryAutoLoad() {
+    try {
+      const res = await fetch("data/latest.json", { cache: "no-store" });
+      if (!res.ok) return false;
+      const data = await res.json();
+      if (!Array.isArray(data.results) || !data.results.length) return false;
+      results = data.results;
+      renderTable();
+
+      const d = new Date(data.generatedAt);
+      const banner = $("autoBanner");
+      banner.textContent = `🤖 Analyse automatique du ${d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })} à ${d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })} — ${data.results.length} titres, mise à jour chaque jour ouvré après la clôture de Wall Street.`
+        + (data.failed && data.failed.length ? ` (échecs : ${data.failed.join(", ")})` : "");
+      banner.classList.remove("hidden");
+
+      const pill = $("modePill");
+      pill.textContent = "Analyse auto quotidienne";
+      pill.classList.add("live");
+      return true;
+    } catch {
+      return false; // pas de fichier (usage local / robot pas encore passé) → mode manuel
+    }
+  }
+
   /* ───────────── Init ───────────── */
 
   function init() {
@@ -368,6 +396,8 @@
       const hidden = b.classList.toggle("hidden");
       $("toggleConfig").textContent = hidden ? "Déplier" : "Replier";
     };
+
+    tryAutoLoad(); // affiche l'analyse du robot sans aucun clic, si elle existe
   }
 
   document.addEventListener("DOMContentLoaded", init);

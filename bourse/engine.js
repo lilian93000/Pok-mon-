@@ -461,3 +461,6 @@ const Engine = (() => {
     clamp, ramp,
   };
 })();
+
+// Export Node (robot d'analyse automatique) — sans effet dans le navigateur
+if (typeof module !== "undefined" && module.exports) module.exports = Engine;
