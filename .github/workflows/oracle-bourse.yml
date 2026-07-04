@@ -17,6 +17,7 @@ concurrency:
 jobs:
   analyse:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - name: Récupération du code
         uses: actions/checkout@v4
@@ -26,7 +27,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Analyse multi-facteurs
+      - name: Analyse multi-facteurs (screener marché entier)
         env:
           # Secret optionnel (Settings → Secrets → Actions) : active le pilier fondamental
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}

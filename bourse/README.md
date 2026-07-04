@@ -15,22 +15,28 @@ et produit un score composite 0–100 mesurant la qualité de la configuration h
 Si une source manque, le pilier est neutralisé, les poids sont redistribués et l'indicateur
 de **confiance** baisse — le moteur n'invente jamais de données.
 
-## 🤖 Mode automatique (zéro clic)
+## 🤖 Mode automatique : screener du marché entier (zéro clic)
 
 Le workflow GitHub Actions [`oracle-bourse.yml`](../.github/workflows/oracle-bourse.yml)
 lance le robot [`auto/run.js`](auto/run.js) **chaque jour ouvré à 21h35 UTC**
-(≈ 35 min après la clôture de Wall Street) :
+(≈ 35 min après la clôture de Wall Street). Entonnoir en deux étapes,
+**aucune clé API requise** :
 
-1. Il récupère cours + volumes (Yahoo Finance, repli Stooq) et les news (RSS Yahoo)
-   pour tous les tickers de [`auto/watchlist.json`](auto/watchlist.json) — **aucune clé requise** ;
-2. il calcule les scores et committe `data/latest.json`, `data/history.json` et
-   `data/rapport.md` dans le repo ;
-3. la page web charge automatiquement `data/latest.json` à l'ouverture : le classement
-   du jour s'affiche **sans aucun clic**, et le rapport markdown est lisible
-   directement sur GitHub.
+1. **Scan large** — liste officielle de toutes les actions ordinaires US cotées
+   (NASDAQ Trader Symbol Directory, ~5-6 000 titres, ETF/warrants/SPAC exclus),
+   historiques 1 an par lots via Yahoo Spark, pré-score technique + momentum
+   sur **tout le marché** ;
+2. **Analyse profonde** — les ~80 meilleurs candidats du scan **+ les favoris**
+   de [`auto/watchlist.json`](auto/watchlist.json) passent l'analyse complète :
+   volumes, news (RSS Yahoo) et **fondamentaux calculés automatiquement depuis
+   les rapports annuels déposés à la SEC** (API XBRL d'EDGAR : croissance CA/BPA,
+   marges, ROE, dette, PER, PEG) ;
+3. le robot committe `data/latest.json`, `data/history.json` et `data/rapport.md` ;
+   la page web charge `latest.json` à l'ouverture : le classement du jour s'affiche
+   **sans aucun clic** (les titres 🔍 viennent du scan, les ⭐ des favoris).
 
-Optionnel : ajouter un secret d'Actions `FINNHUB_API_KEY` (Settings → Secrets and
-variables → Actions) pour activer le pilier fondamental dans l'analyse quotidienne.
+Optionnel : un secret d'Actions `FINNHUB_API_KEY` remplace EDGAR par des
+fondamentaux TTM plus frais pour l'analyse profonde.
 
 > ⚠️ Les crons GitHub ne s'exécutent que sur la **branche par défaut** du dépôt —
 > le robot s'active une fois cette branche fusionnée (ou via « Run workflow »
