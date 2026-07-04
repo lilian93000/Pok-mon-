@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oracle Bourse — Machine d'analyse multi-facteurs</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>◆</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon">◆</span>
+      <div>
+        <h1>Oracle Bourse</h1>
+        <p class="tagline">Machine d'analyse multi-facteurs : technique · fondamental · news · momentum</p>
+      </div>
+    </div>
+    <div class="mode-pill" id="modePill">Mode démo</div>
+  </header>
+
+  <div class="disclaimer" role="note">
+    ⚠️ <strong>Ceci n'est pas un conseil financier.</strong> Aucun modèle — celui-ci inclus — ne peut prédire la bourse
+    avec certitude. Le score mesure une <em>configuration favorable</em> selon des critères objectifs, pas une garantie.
+    N'investissez que ce que vous pouvez vous permettre de perdre.
+  </div>
+
+  <main>
+    <!-- ═══════════ CONFIGURATION ═══════════ -->
+    <section class="panel" id="configPanel">
+      <div class="panel-head">
+        <h2>1 · Sources de données</h2>
+        <button class="btn-ghost" id="toggleConfig">Replier</button>
+      </div>
+      <div class="panel-body" id="configBody">
+        <div class="config-grid">
+          <div class="config-block">
+            <label for="finnhubKey">Clé API Finnhub <span class="hint">(gratuite — finnhub.io — news, fondamentaux, cours)</span></label>
+            <input type="password" id="finnhubKey" placeholder="Coller votre clé Finnhub (optionnel)" autocomplete="off">
+          </div>
+          <div class="config-block">
+            <label for="alphaKey">Clé API Alpha Vantage <span class="hint">(gratuite — alphavantage.co — historique + news notées)</span></label>
+            <input type="password" id="alphaKey" placeholder="Coller votre clé Alpha Vantage (optionnel)" autocomplete="off">
+          </div>
+        </div>
+        <p class="config-note">
+          Sans clé, la machine tourne en <strong>mode démo</strong> sur des données simulées réalistes — parfait pour
+          comprendre le moteur. Avec une ou deux clés (les offres gratuites suffisent), elle analyse les
+          <strong>vraies données du marché</strong>. Les clés restent dans votre navigateur (localStorage), rien n'est envoyé ailleurs.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════ WATCHLIST ═══════════ -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2>2 · Watchlist</h2>
+        <span class="hint" id="watchCount"></span>
+      </div>
+      <div class="panel-body">
+        <div class="chips" id="chips"></div>
+        <div class="add-row">
+          <input type="text" id="tickerInput" placeholder="Ajouter un ticker US (ex : NVDA, PLTR…)" maxlength="8">
+          <button class="btn" id="addTicker">Ajouter</button>
+          <button class="btn-ghost" id="resetWatch">Liste par défaut</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ LANCEMENT ═══════════ -->
+    <section class="launch">
+      <button class="btn-primary" id="runBtn">⚡ Lancer l'analyse complète</button>
+      <div class="progress hidden" id="progress">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <span class="progress-label" id="progressLabel"></span>
+      </div>
+    </section>
+
+    <!-- ═══════════ RÉSULTATS ═══════════ -->
+    <section class="panel hidden" id="resultsPanel">
+      <div class="panel-head">
+        <h2>3 · Classement — potentiel de hausse</h2>
+        <span class="hint">Cliquez sur une ligne pour le détail complet</span>
+      </div>
+      <div class="table-wrap">
+        <table id="resultsTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Titre</th>
+              <th class="num">Score</th>
+              <th>Verdict</th>
+              <th class="num">Technique</th>
+              <th class="num">Momentum</th>
+              <th class="num">Fondamental</th>
+              <th class="num">Sentiment</th>
+              <th class="num">Confiance</th>
+              <th>90 jours</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════════ DÉTAIL ═══════════ -->
+    <section class="panel hidden" id="detailPanel">
+      <div class="panel-head">
+        <h2 id="detailTitle">Détail</h2>
+        <button class="btn-ghost" id="closeDetail">Fermer ✕</button>
+      </div>
+      <div class="panel-body" id="detailBody"></div>
+    </section>
+
+    <!-- ═══════════ MÉTHODO ═══════════ -->
+    <section class="panel">
+      <div class="panel-head"><h2>Comment la machine calcule</h2></div>
+      <div class="panel-body methodo">
+        <div class="pillar">
+          <h3>📐 Technique — 35 %</h3>
+          <p>RSI 14 jours, croisement MACD (12/26/9), position dans les bandes de Bollinger, prix vs moyennes mobiles
+          50/200 j, pente de tendance (régression linéaire), proximité du plus-haut 52 semaines, poussée de volume.</p>
+        </div>
+        <div class="pillar">
+          <h3>🚀 Momentum — 15 %</h3>
+          <p>Performances 1/3/6 mois ajustées du risque (rendement ÷ volatilité), accélération récente,
+          régularité de la hausse. Un momentum fort et régulier pèse plus qu'un pic isolé.</p>
+        </div>
+        <div class="pillar">
+          <h3>🏛️ Fondamental — 30 %</h3>
+          <p>Croissance du chiffre d'affaires et des bénéfices, marges, PER et PEG, endettement, rentabilité (ROE).
+          Une croissance forte à valorisation raisonnable score haut ; une boîte chère sans croissance score bas.</p>
+        </div>
+        <div class="pillar">
+          <h3>📰 Sentiment & news — 20 %</h3>
+          <p>Analyse lexicale des titres de presse (FR + EN) pondérée par fraîcheur : contrats, résultats records,
+          relèvements d'objectifs vs procès, avertissements, dégradations. Le volume d'articles mesure le « buzz ».</p>
+        </div>
+        <p class="methodo-note">
+          Chaque pilier va de 0 à 100. Si une source manque (ex : pas de clé API pour les fondamentaux), le pilier est
+          neutralisé, les poids sont redistribués et la <strong>confiance</strong> baisse — la machine ne devine jamais.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Oracle Bourse — moteur 100 % local, aucun serveur. Données : Finnhub / Alpha Vantage (clés personnelles) ou simulation.
+  </footer>
+
+  <div class="tooltip hidden" id="tooltip"></div>
+
+  <script src="engine.js"></script>
+  <script src="providers.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

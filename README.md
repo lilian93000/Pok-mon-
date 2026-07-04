@@ -43,3 +43,12 @@ python3 -m http.server 8000
 | `game.js`    | Moteur : overworld, combat, capture, progression. |
 
 Bon jeu ! 🎉
+
+---
+
+## ◆ Bonus : Oracle Bourse
+
+Le dossier [`bourse/`](bourse/) contient un autre projet : une **machine d'analyse
+boursière multi-facteurs** (technique, fondamental, momentum, sentiment des news)
+qui classe les actions selon leur potentiel de hausse. Ouvre `bourse/index.html`
+ou consulte [`bourse/README.md`](bourse/README.md).
