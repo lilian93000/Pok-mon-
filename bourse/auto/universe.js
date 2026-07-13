@@ -6,12 +6,18 @@
 "use strict";
 
 const UA = { "User-Agent": "Mozilla/5.0 (compatible; OracleBourse/1.0; +https://github.com/lilian93000/Pok-mon-)" };
+// La SEC rejette (403) tout User-Agent ne déclarant pas une identité + e-mail
+// de contact (politique « fair access »). Format exigé : "Nom email@domaine".
+const SEC_UA = {
+  "User-Agent": "Oracle Bourse Screener oracle-bourse@users.noreply.github.com",
+  "Accept-Encoding": "gzip, deflate",
+};
 
-async function getText(url, tries = 3) {
+async function getText(url, { tries = 3, headers = UA } = {}) {
   let lastErr;
   for (let i = 0; i < tries; i++) {
     try {
-      const res = await fetch(url, { headers: UA, signal: AbortSignal.timeout(30000) });
+      const res = await fetch(url, { headers, signal: AbortSignal.timeout(30000) });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.text();
     } catch (e) {
@@ -78,7 +84,7 @@ async function loadUniverse() {
  * Renvoie Map("AAPL" → "0000320193").
  */
 async function loadCikMap() {
-  const txt = await getText("https://www.sec.gov/files/company_tickers.json");
+  const txt = await getText("https://www.sec.gov/files/company_tickers.json", { headers: SEC_UA });
   const j = JSON.parse(txt);
   const map = new Map();
   for (const k of Object.keys(j)) {

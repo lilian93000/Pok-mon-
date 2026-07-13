@@ -7,8 +7,10 @@
    ═══════════════════════════════════════════════════════════════════ */
 "use strict";
 
+// La SEC exige un User-Agent déclarant une identité + un e-mail de contact,
+// sinon elle répond 403 (politique « fair access »). Format : "Nom email@domaine".
 const UA = {
-  "User-Agent": "OracleBourse/1.0 (outil open source; +https://github.com/lilian93000/Pok-mon-)",
+  "User-Agent": "Oracle Bourse Screener oracle-bourse@users.noreply.github.com",
   "Accept-Encoding": "gzip, deflate",
 };
 
