@@ -349,6 +349,65 @@
     $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  /* ───────────── Picks du jour ───────────── */
+
+  const PICK_META = {
+    longTerme: { emoji: "🏛️", cls: "pick-lt" },
+    complet: { emoji: "⭐", cls: "pick-cp" },
+    oneShot: { emoji: "🚀", cls: "pick-os" },
+  };
+
+  function renderPicks(picks) {
+    const grid = $("picksGrid");
+    grid.innerHTML = "";
+    let any = false;
+    for (const key of ["longTerme", "complet", "oneShot"]) {
+      const p = picks[key];
+      if (!p) continue;
+      any = true;
+      const meta = PICK_META[key];
+      const card = el("div", `pick-card ${meta.cls}`);
+
+      const head = el("div", "pick-head");
+      head.appendChild(el("span", "pick-cat", `${meta.emoji} ${p.category}`));
+      head.appendChild(el("span", "pick-score", String(p.score)));
+      card.appendChild(head);
+
+      const tick = el("div", "pick-ticker");
+      tick.appendChild(el("strong", null, p.symbol));
+      tick.appendChild(el("span", "pick-name", p.name !== p.symbol ? p.name : ""));
+      card.appendChild(tick);
+
+      card.appendChild(el("div", "pick-verdict", `${p.verdict.emoji} ${p.verdict.label}`));
+
+      // mini-barres des piliers
+      const bars = el("div", "pick-pillars");
+      for (const [lbl, v] of [["Tech", p.technical], ["Mom", p.momentum], ["Fond", p.fundamental], ["Sent", p.sentiment]]) {
+        const b = el("div", "pick-pillar");
+        b.appendChild(el("span", "pp-lbl", lbl));
+        b.appendChild(el("span", "pp-val", v == null ? "—" : String(v)));
+        bars.appendChild(b);
+      }
+      card.appendChild(bars);
+
+      card.appendChild(el("div", "pick-note", p.note));
+
+      if (p.why && p.why.length) {
+        const why = el("ul", "pick-why");
+        for (const s of p.why.slice(0, 3)) why.appendChild(el("li", null, s.label));
+        card.appendChild(why);
+      }
+
+      const foot = el("div", "pick-foot", `volatilité ${p.volatility}% · confiance ${p.confidence}%`);
+      card.appendChild(foot);
+
+      const r = results.find((x) => x.symbol === p.symbol);
+      if (r) { card.classList.add("clickable"); card.onclick = () => showDetail(r); }
+      grid.appendChild(card);
+    }
+    if (any) $("picksSection").classList.remove("hidden");
+  }
+
   /* ───────────── Chargement automatique de l'analyse quotidienne ─────────────
      Le robot GitHub Actions (bourse/auto/run.js) committe data/latest.json
      chaque jour ouvré ; si le fichier existe, la page l'affiche sans un clic. */
@@ -361,6 +420,11 @@
       if (!Array.isArray(data.results) || !data.results.length) return false;
       results = data.results;
       renderTable();
+      if (data.picks) renderPicks(data.picks);
+
+      // En mode auto, les clés API manuelles ne servent pas : on replie la config.
+      $("configBody").classList.add("hidden");
+      $("toggleConfig").textContent = "Déplier";
 
       const d = new Date(data.generatedAt);
       const banner = $("autoBanner");
