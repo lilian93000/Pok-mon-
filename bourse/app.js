@@ -357,6 +357,23 @@
     oneShot: { emoji: "🚀", cls: "pick-os" },
   };
 
+  function pickPillar(lbl, v) {
+    const row = el("div", "pp-row");
+    row.appendChild(el("span", "pp-lbl", lbl));
+    const track = el("div", "pp-track");
+    const fill = el("div", "pp-fill");
+    if (v == null) {
+      fill.classList.add("pp-none");
+    } else {
+      fill.style.width = `${Math.round(v)}%`;
+      fill.classList.add(v >= 70 ? "s-good-bg" : v >= 50 ? "s-mid-bg" : v >= 35 ? "s-low-bg" : "s-bad-bg");
+    }
+    track.appendChild(fill);
+    row.appendChild(track);
+    row.appendChild(el("span", "pp-val", v == null ? "—" : String(v)));
+    return row;
+  }
+
   function renderPicks(picks) {
     const grid = $("picksGrid");
     grid.innerHTML = "";
@@ -368,39 +385,41 @@
       const meta = PICK_META[key];
       const card = el("div", `pick-card ${meta.cls}`);
 
+      // En-tête : pastille profil + gros score
       const head = el("div", "pick-head");
       head.appendChild(el("span", "pick-cat", `${meta.emoji} ${p.category}`));
-      head.appendChild(el("span", "pick-score", String(p.score)));
+      const scoreWrap = el("div", "pick-score-wrap");
+      scoreWrap.appendChild(el("span", "pick-score", String(p.score)));
+      scoreWrap.appendChild(el("span", "pick-score-max", "/100"));
+      head.appendChild(scoreWrap);
       card.appendChild(head);
 
+      // Ticker + nom + verdict
       const tick = el("div", "pick-ticker");
       tick.appendChild(el("strong", null, p.symbol));
-      tick.appendChild(el("span", "pick-name", p.name !== p.symbol ? p.name : ""));
+      if (p.name && p.name !== p.symbol) tick.appendChild(el("span", "pick-name", p.name));
       card.appendChild(tick);
+      card.appendChild(el("div", `pick-verdict ${p.verdict.cls || ""}`, `${p.verdict.emoji} ${p.verdict.label}`));
 
-      card.appendChild(el("div", "pick-verdict", `${p.verdict.emoji} ${p.verdict.label}`));
-
-      // mini-barres des piliers
-      const bars = el("div", "pick-pillars");
-      for (const [lbl, v] of [["Tech", p.technical], ["Mom", p.momentum], ["Fond", p.fundamental], ["Sent", p.sentiment]]) {
-        const b = el("div", "pick-pillar");
-        b.appendChild(el("span", "pp-lbl", lbl));
-        b.appendChild(el("span", "pp-val", v == null ? "—" : String(v)));
-        bars.appendChild(b);
-      }
-      card.appendChild(bars);
-
-      // Phrase « pourquoi cette action » en clair (l'essentiel pour un débutant)
+      // « Pourquoi elle » — le cœur, en clair
       if (p.plain) {
         const plain = el("div", "pick-plain");
-        plain.appendChild(el("span", "pick-plain-lbl", "Pourquoi elle : "));
-        plain.appendChild(document.createTextNode(p.plain));
+        plain.appendChild(el("span", "pick-plain-lbl", "Pourquoi elle"));
+        plain.appendChild(el("p", null, p.plain));
         card.appendChild(plain);
+      } else if (p.note) {
+        card.appendChild(el("div", "pick-plain", p.note));
       }
 
-      card.appendChild(el("div", "pick-note", p.note));
+      // Piliers en barres labellisées
+      const bars = el("div", "pick-pillars");
+      bars.appendChild(pickPillar("Technique", p.technical));
+      bars.appendChild(pickPillar("Momentum", p.momentum));
+      bars.appendChild(pickPillar("Fondamental", p.fundamental));
+      bars.appendChild(pickPillar("Sentiment", p.sentiment));
+      card.appendChild(bars);
 
-      // Détails techniques, repliés par défaut (pour les curieux)
+      // Détails techniques repliés
       if (p.why && p.why.length) {
         const det = document.createElement("details");
         det.className = "pick-why-wrap";
@@ -411,11 +430,17 @@
         card.appendChild(det);
       }
 
-      const foot = el("div", "pick-foot", `volatilité ${p.volatility}% · confiance ${p.confidence}%`);
+      // Pied : volatilité + confiance, avec bouton d'ouverture
+      const foot = el("div", "pick-foot");
+      foot.appendChild(el("span", null, `volatilité ${p.volatility}% · confiance ${p.confidence}%`));
+      const r = results.find((x) => x.symbol === p.symbol);
+      if (r) {
+        foot.appendChild(el("span", "pick-open", "Détail →"));
+        card.classList.add("clickable");
+        card.onclick = (e) => { if (!e.target.closest(".pick-why-wrap")) showDetail(r); };
+      }
       card.appendChild(foot);
 
-      const r = results.find((x) => x.symbol === p.symbol);
-      if (r) { card.classList.add("clickable"); card.onclick = () => showDetail(r); }
       grid.appendChild(card);
     }
     if (any) $("picksSection").classList.remove("hidden");
@@ -435,9 +460,8 @@
       renderTable();
       if (data.picks) renderPicks(data.picks);
 
-      // En mode auto, les clés API manuelles ne servent pas : on replie la config.
-      $("configBody").classList.add("hidden");
-      $("toggleConfig").textContent = "Déplier";
+      const rankHint = $("rankHint");
+      if (rankHint) rankHint.textContent = `${data.results.length} actions`;
 
       const d = new Date(data.generatedAt);
       const banner = $("autoBanner");
@@ -472,11 +496,6 @@
     $("closeDetail").onclick = () => $("detailPanel").classList.add("hidden");
     $("finnhubKey").addEventListener("input", refreshMode);
     $("alphaKey").addEventListener("input", refreshMode);
-    $("toggleConfig").onclick = () => {
-      const b = $("configBody");
-      const hidden = b.classList.toggle("hidden");
-      $("toggleConfig").textContent = hidden ? "Déplier" : "Replier";
-    };
 
     tryAutoLoad(); // affiche l'analyse du robot sans aucun clic, si elle existe
   }
