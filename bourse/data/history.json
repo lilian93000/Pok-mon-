@@ -153,24 +153,24 @@
   "date": "2026-07-13",
   "top": [
    {
-    "symbol": "WBI",
-    "score": 85
+    "symbol": "DAVE",
+    "score": 80
    },
    {
-    "symbol": "KOP",
-    "score": 85
+    "symbol": "OPHC",
+    "score": 80
    },
    {
-    "symbol": "ACRS",
-    "score": 83
+    "symbol": "LOB",
+    "score": 80
    },
    {
-    "symbol": "TTRX",
-    "score": 81
+    "symbol": "IFS",
+    "score": 79
    },
    {
-    "symbol": "AAPL",
-    "score": 81
+    "symbol": "AMG",
+    "score": 79
    }
   ]
  }
