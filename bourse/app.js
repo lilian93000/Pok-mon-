@@ -390,12 +390,25 @@
       }
       card.appendChild(bars);
 
+      // Phrase « pourquoi cette action » en clair (l'essentiel pour un débutant)
+      if (p.plain) {
+        const plain = el("div", "pick-plain");
+        plain.appendChild(el("span", "pick-plain-lbl", "Pourquoi elle : "));
+        plain.appendChild(document.createTextNode(p.plain));
+        card.appendChild(plain);
+      }
+
       card.appendChild(el("div", "pick-note", p.note));
 
+      // Détails techniques, repliés par défaut (pour les curieux)
       if (p.why && p.why.length) {
+        const det = document.createElement("details");
+        det.className = "pick-why-wrap";
+        det.appendChild(el("summary", null, "Détails techniques"));
         const why = el("ul", "pick-why");
-        for (const s of p.why.slice(0, 3)) why.appendChild(el("li", null, s.label));
-        card.appendChild(why);
+        for (const s of p.why.slice(0, 4)) why.appendChild(el("li", null, s.label + (s.detail ? ` — ${s.detail}` : "")));
+        det.appendChild(why);
+        card.appendChild(det);
       }
 
       const foot = el("div", "pick-foot", `volatilité ${p.volatility}% · confiance ${p.confidence}%`);
