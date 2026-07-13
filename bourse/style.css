@@ -185,6 +185,53 @@ main { max-width: 980px; margin: 0 auto; padding: 0 16px; display: flex; flex-di
 .progress-fill { height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width 0.3s; }
 .progress-label { font-size: 12.5px; color: var(--ink-2); }
 
+/* ───────── Picks du jour ───────── */
+
+.picks { margin-top: 4px; }
+.picks-title { font-size: 18px; margin-bottom: 12px; }
+.picks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 760px) { .picks-grid { grid-template-columns: 1fr; } }
+
+.pick-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--accent);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pick-card.clickable { cursor: pointer; transition: transform 0.12s, box-shadow 0.12s; }
+.pick-card.clickable:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+.pick-lt { border-top-color: var(--good); }
+.pick-cp { border-top-color: var(--accent); }
+.pick-os { border-top-color: var(--serious); }
+
+.pick-head { display: flex; align-items: center; justify-content: space-between; }
+.pick-cat { font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.pick-score { font-size: 30px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+
+.pick-ticker { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.pick-ticker strong { font-size: 22px; letter-spacing: 0.5px; }
+.pick-name { font-size: 12px; color: var(--muted); }
+
+.pick-verdict { font-size: 13px; font-weight: 600; }
+.pick-lt .pick-verdict { color: var(--good-text); }
+.pick-os .pick-verdict { color: var(--serious); }
+.pick-cp .pick-verdict { color: var(--accent); }
+
+.pick-pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 4px 0; }
+.pick-pillar { text-align: center; background: var(--page); border-radius: 6px; padding: 5px 2px; }
+.pp-lbl { display: block; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.pp-val { display: block; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.pick-note { font-size: 12.5px; color: var(--ink-2); }
+.pick-why { list-style: none; padding: 0; margin: 2px 0; display: flex; flex-direction: column; gap: 3px; }
+.pick-why li { font-size: 12px; color: var(--ink-2); padding-left: 16px; position: relative; }
+.pick-why li::before { content: "▲"; position: absolute; left: 0; color: var(--good); font-size: 9px; top: 3px; }
+.pick-foot { font-size: 11px; color: var(--muted); border-top: 1px solid var(--grid); padding-top: 8px; margin-top: auto; }
+
 /* ───────── Bandeau auto ───────── */
 
 .auto-banner {

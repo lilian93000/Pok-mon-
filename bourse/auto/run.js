@@ -235,9 +235,83 @@ async function deepAnalyze(symbol, ctx) {
   return res;
 }
 
+/* ───────────── Picks du jour ─────────────
+   Trois sélections complémentaires parmi les titres analysés :
+     · long terme  — fondamentaux solides + faible volatilité
+     · complet     — meilleur score global (équilibré sur les 4 piliers)
+     · one shot    — momentum/technique explosif (risqué)
+   Les trois sont distincts. */
+
+function selectPicks(results) {
+  const pil = (r, k) => r.pillars?.[k]?.score;
+  const vol = (r) => r.pillars?.momentum?.volatility ?? 60;
+  const scored = results.filter((r) => r.score != null);
+  if (!scored.length) return null;
+
+  const topSignals = (r) => [
+    ...(r.pillars.technical?.signals || []),
+    ...(r.pillars.momentum?.signals || []),
+    ...(r.pillars.fundamental?.signals || []),
+    ...(r.pillars.sentiment?.signals || []),
+  ].filter((s) => s.good).slice(0, 4).map((s) => ({ label: s.label, detail: s.detail || "" }));
+
+  const pack = (r, category, note) => ({
+    category, note,
+    symbol: r.symbol, name: r.name || r.symbol,
+    score: Math.round(r.score),
+    technical: pil(r, "technical") != null ? Math.round(pil(r, "technical")) : null,
+    momentum: pil(r, "momentum") != null ? Math.round(pil(r, "momentum")) : null,
+    fundamental: pil(r, "fundamental") != null ? Math.round(pil(r, "fundamental")) : null,
+    sentiment: pil(r, "sentiment") != null ? Math.round(pil(r, "sentiment")) : null,
+    volatility: Math.round(vol(r)),
+    confidence: r.confidence,
+    verdict: r.verdict,
+    why: topSignals(r),
+    fromScan: !!r.fromScan,
+  });
+
+  const best = (arr, keyFn) => arr.reduce((a, b) => (keyFn(b) > keyFn(a) ? b : a));
+  const used = new Set();
+
+  // One shot : momentum + technique, volatilité assumée
+  const oneShot = best(scored, (r) => 0.45 * (pil(r, "momentum") || 0) + 0.35 * (pil(r, "technical") || 0) + 0.20 * (pil(r, "sentiment") || 0));
+  used.add(oneShot.symbol);
+
+  // Long terme : fondamentaux présents, on récompense qualité + calme
+  const ltPool = scored.filter((r) => pil(r, "fundamental") != null && !used.has(r.symbol));
+  const longTerme = (ltPool.length ? best(ltPool, (r) => 0.45 * r.score + 0.40 * pil(r, "fundamental") + 0.15 * Math.max(0, 100 - vol(r))) : null);
+  if (longTerme) used.add(longTerme.symbol);
+
+  // Complet : meilleur score global, fondamentaux présents, volatilité contenue
+  const balPool = scored.filter((r) => !used.has(r.symbol) && pil(r, "fundamental") != null && vol(r) < 55);
+  const complet = (balPool.length ? best(balPool, (r) => r.score) : scored.find((r) => !used.has(r.symbol)) || null);
+  if (complet) used.add(complet.symbol);
+
+  return {
+    longTerme: longTerme ? pack(longTerme, "Long terme", "À garder — fondamentaux solides, faible volatilité.") : null,
+    complet: complet ? pack(complet, "Le plus complet", "Le meilleur équilibre technique + fondamental + momentum.") : null,
+    oneShot: oneShot ? pack(oneShot, "One shot", "Pari performance — momentum fort mais volatil. Petite taille + stop.") : null,
+  };
+}
+
 /* ───────────── Rapport markdown ───────────── */
 
-function buildReport(results, meta) {
+function reportPicks(picks) {
+  if (!picks) return [];
+  const emoji = { longTerme: "🏛️", complet: "⭐", oneShot: "🚀" };
+  const out = ["", "## 🎯 Picks du jour", ""];
+  for (const key of ["longTerme", "complet", "oneShot"]) {
+    const p = picks[key];
+    if (!p) continue;
+    out.push(`### ${emoji[key]} ${p.category} — ${p.symbol}${p.name !== p.symbol ? ` (${p.name})` : ""} · ${p.score}/100`);
+    out.push(`*${p.note}* — volatilité ${p.volatility}%, confiance ${p.confidence}%.`);
+    for (const s of p.why) out.push(`- ▲ ${s.label}${s.detail ? ` — ${s.detail}` : ""}`);
+    out.push("");
+  }
+  return out;
+}
+
+function buildReport(results, meta, picks) {
   const d = new Date(meta.generatedAt);
   const lines = [
     `# ◆ Oracle Bourse — screener quotidien du marché US`,
@@ -245,10 +319,13 @@ function buildReport(results, meta) {
     `Généré le **${d.toISOString().slice(0, 16).replace("T", " ")} UTC**`,
     ``,
     `**${meta.universe}** actions cotées répertoriées → **${meta.scanned}** scannées (technique + momentum) → ` +
-      `**${results.length}** analysées en profondeur (+ fondamentaux SEC/news)` +
+      `**${results.length}** analysées en profondeur (+ fondamentaux/news)` +
       (meta.failed.length ? ` · ${meta.failed.length} en échec` : ""),
     ``,
     `> ⚠️ Analyse statistique automatique — **pas un conseil financier**. Aucune garantie.`,
+    ...reportPicks(picks),
+    ``,
+    `## Classement complet`,
     ``,
     `| # | Titre | Score | Verdict | Tech. | Mom. | Fond. | Sent. | Conf. | Origine |`,
     `|---|-------|------:|---------|------:|-----:|------:|------:|------:|---------|`,
@@ -358,11 +435,12 @@ async function main() {
   results.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
   const generatedAt = new Date().toISOString();
   const meta = { generatedAt, universe: universe.length, scanned: scanCloses.size, failed };
+  const picks = selectPicks(results);
 
   fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.writeFileSync(
     path.join(DATA_DIR, "latest.json"),
-    JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, failed, results }, null, 1)
+    JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, failed, picks, results }, null, 1)
   );
 
   const histFile = path.join(DATA_DIR, "history.json");
@@ -373,9 +451,11 @@ async function main() {
   hist.push({ date: day, top: results.slice(0, 5).map((r) => ({ symbol: r.symbol, score: Math.round(r.score ?? 0) })) });
   fs.writeFileSync(histFile, JSON.stringify(hist.slice(-120), null, 1));
 
-  const report = buildReport(results, meta);
+  const report = buildReport(results, meta, picks);
   fs.writeFileSync(path.join(DATA_DIR, "rapport.md"), report);
   if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, report);
+
+  if (picks) console.log(`Picks : long terme ${picks.longTerme?.symbol || "—"} · complet ${picks.complet?.symbol || "—"} · one shot ${picks.oneShot?.symbol || "—"}`);
 
   const withFund = results.filter((r) => r.pillars.fundamental?.score != null).length;
   console.log(`\nTerminé en ${((Date.now() - t0) / 60000).toFixed(1)} min : ${meta.scanned} scannées, ${results.length} analysées (${withFund} avec fondamentaux), ${failed.length} échecs.`);
