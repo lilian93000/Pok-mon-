@@ -28,8 +28,14 @@ import urllib.request
 
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
 URL = "https://raw.githubusercontent.com/Mriganka-codes/tennis_data/main/matches.json"
-# tournois sur gazon en cours (à ajuster selon le calendrier)
-SURFACES_TOURNOIS = {"wimbledon": ("gazon", "G")}
+# surface par tournoi en cours (à ajuster selon le calendrier)
+SURFACES_TOURNOIS = {
+    "wimbledon": ("gazon", "G"),
+    "iasi": ("terre", "I"),
+    "kitzb": ("terre", "I"),
+    "rome": ("terre", "I"),
+    "athens": ("dur", "I"),
+}
 SURFACE_DEFAUT = ("dur", "I")
 
 
