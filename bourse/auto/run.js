@@ -451,17 +451,24 @@ async function main() {
   /* Étape 1 : scan du marché */
   let scanCloses = new Map();
   let candidates = [];
+  const market = []; // index léger pour le moteur de recherche (tout le marché)
   if (universe.length) {
     console.log(`Étape 1 — scan technique+momentum du marché…`);
     scanCloses = await scanMarket(universe.map((u) => u.symbol));
     console.log(`  ${scanCloses.size} historiques récupérés.`);
     for (const [sym, closes] of scanCloses) {
-      if (closes[closes.length - 1] < minPrice) continue;
-      const s = preScore(closes);
-      if (s != null) candidates.push({ sym, s });
+      const t = Engine.scoreTechnical(closes, null).score;
+      const m = Engine.scoreMomentum(closes).score;
+      if (t == null || m == null) continue;
+      const price = closes[closes.length - 1];
+      // Index recherche : symbole, nom, prix, technique, momentum
+      market.push({ s: sym, n: names.get(sym) || sym, p: Math.round(price * 100) / 100, t: Math.round(t), m: Math.round(m) });
+      if (price >= minPrice) candidates.push({ sym, s: 0.55 * t + 0.45 * m });
     }
     candidates.sort((a, b) => b.s - a.s);
-    console.log(`  ${candidates.length} candidats scorés — top 5 provisoire : ${candidates.slice(0, 5).map((c) => `${c.sym} (${c.s.toFixed(0)})`).join(", ")}`);
+    market.sort((a, b) => a.s.localeCompare(b.s));
+    console.log(`  ${candidates.length} candidats scorés, ${market.length} au total dans l'index recherche.`);
+    console.log(`  Top 5 provisoire : ${candidates.slice(0, 5).map((c) => `${c.sym} (${c.s.toFixed(0)})`).join(", ")}`);
   }
 
   /* Étape 2 : analyse profonde (top scan + favoris) */
@@ -504,6 +511,12 @@ async function main() {
   fs.writeFileSync(
     path.join(DATA_DIR, "latest.json"),
     JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, failed, picks, results }, null, 1)
+  );
+
+  // Index du moteur de recherche : tout le marché scanné (technique + momentum)
+  fs.writeFileSync(
+    path.join(DATA_DIR, "market.json"),
+    JSON.stringify({ generatedAt, count: market.length, stocks: market })
   );
 
   const histFile = path.join(DATA_DIR, "history.json");
