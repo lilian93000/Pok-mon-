@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - claude/pokemon-like-game-j2cjmy
+  # Redéploie après chaque analyse quotidienne : le commit du robot est fait
+  # avec GITHUB_TOKEN et ne déclenche pas le trigger « push » ci-dessus, mais
+  # « workflow_run » se déclenche, lui, à la fin du workflow d'analyse.
+  workflow_run:
+    workflows: ["Oracle Bourse — analyse quotidienne"]
+    types:
+      - completed
   workflow_dispatch:
 
 # Permissions nécessaires au déploiement Pages
@@ -26,6 +33,10 @@ jobs:
     steps:
       - name: Récupération du code
         uses: actions/checkout@v4
+        with:
+          # Toujours déployer la pointe de la branche (inclut la donnée que le
+          # robot vient de committer), et pas le SHA figé de l'événement.
+          ref: claude/pokemon-like-game-j2cjmy
 
       - name: Configuration de Pages
         uses: actions/configure-pages@v5
