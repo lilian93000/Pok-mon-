@@ -11,7 +11,8 @@
    ÉTAPE 2 — analyse profonde des meilleurs candidats + favoris :
      · Cours + volumes : Yahoo Finance chart (repli : closes du scan)
      · News            : flux RSS Yahoo Finance
-     · Fondamentaux    : rapports annuels SEC EDGAR (XBRL) — autonome ;
+     · Fondamentaux    : Yahoo Finance quoteSummary — autonome, sans clé
+                         (EDGAR est filtré par IP depuis les runners cloud) ;
                          Finnhub utilisé à la place si FINNHUB_API_KEY existe
 
    Sorties :
@@ -24,8 +25,8 @@
 const fs = require("fs");
 const path = require("path");
 const Engine = require("../engine.js");
-const { loadUniverse, loadCikMap } = require("./universe.js");
-const { fundamentalsFromEdgar } = require("./edgar.js");
+const { loadUniverse } = require("./universe.js");
+const Fundamentals = require("./fundamentals.js");
 
 const ROOT = path.join(__dirname, "..");
 const DATA_DIR = path.join(ROOT, "data");
@@ -199,7 +200,6 @@ async function deepAnalyze(symbol, ctx) {
     warnings.push(`News indisponibles : ${e.message}`);
   }
 
-  const price = prices.closes[prices.closes.length - 1];
   let fundamentals = null;
   if (ctx.finnhubKey) {
     try {
@@ -209,19 +209,13 @@ async function deepAnalyze(symbol, ctx) {
       warnings.push(`Fondamentaux Finnhub indisponibles : ${e.message}`);
     }
   }
-  if (!fundamentals) {
-    const cik = ctx.cikMap.get(symbol);
-    if (cik) {
-      try {
-        fundamentals = await fundamentalsFromEdgar(cik, price);
-        if (fundamentals) sources.push("SEC EDGAR (fondamentaux annuels)");
-        else warnings.push("Pas de données US-GAAP exploitables sur EDGAR (société étrangère ?).");
-      } catch (e) {
-        warnings.push(`Fondamentaux EDGAR indisponibles : ${e.message}`);
-      }
-      await sleep(120); // ≤ 10 req/s exigé par la SEC
-    } else {
-      warnings.push("Ticker absent de la table SEC — pilier fondamental neutralisé.");
+  if (!fundamentals && ctx.ysession) {
+    try {
+      fundamentals = await Fundamentals.fetchFundamentals(symbol, ctx.ysession);
+      if (fundamentals) sources.push("Yahoo Finance (fondamentaux)");
+      else warnings.push("Pas de fondamentaux Yahoo pour ce titre — pilier neutralisé.");
+    } catch (e) {
+      warnings.push(`Fondamentaux Yahoo indisponibles : ${e.message}`);
     }
   }
 
@@ -295,7 +289,7 @@ async function main() {
   const nFinalists = cfg.finalists || 80;
   const minPrice = cfg.minPrice || 2;
 
-  /* Étape 0 : univers + table CIK */
+  /* Étape 0 : univers + session Yahoo pour les fondamentaux */
   let universe = [];
   try {
     universe = await loadUniverse();
@@ -303,12 +297,14 @@ async function main() {
   } catch (e) {
     console.error(`Univers indisponible (${e.message}) — repli sur les favoris uniquement.`);
   }
-  let cikMap = new Map();
-  try {
-    cikMap = await loadCikMap();
-    console.log(`Table SEC : ${cikMap.size} tickers → CIK.`);
-  } catch (e) {
-    console.error(`Table SEC indisponible (${e.message}) — fondamentaux neutralisés.`);
+  let ysession = null;
+  if (!finnhubKey) {
+    try {
+      ysession = await Fundamentals.initSession();
+      console.log(`Session fondamentaux Yahoo ouverte (crumb OK).`);
+    } catch (e) {
+      console.error(`Session fondamentaux Yahoo indisponible (${e.message}) — pilier fondamental neutralisé.`);
+    }
   }
   const names = new Map(universe.map((u) => [u.symbol, u.name]));
 
@@ -337,7 +333,7 @@ async function main() {
   const finalSyms = [...finalSet];
   console.log(`Étape 2 — analyse profonde de ${finalSyms.length} titres (${favorites.length} favoris + top scan)…`);
 
-  const ctx = { scanCloses, names, cikMap, finnhubKey, favorites: new Set(favorites) };
+  const ctx = { scanCloses, names, ysession, finnhubKey, favorites: new Set(favorites) };
   const results = [];
   const failed = [];
   const analyzed = await pool(finalSyms, 3, async (sym) => {

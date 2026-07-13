@@ -28,9 +28,11 @@ lance le robot [`auto/run.js`](auto/run.js) **chaque jour ouvré à 21h35 UTC**
    sur **tout le marché** ;
 2. **Analyse profonde** — les ~80 meilleurs candidats du scan **+ les favoris**
    de [`auto/watchlist.json`](auto/watchlist.json) passent l'analyse complète :
-   volumes, news (RSS Yahoo) et **fondamentaux calculés automatiquement depuis
-   les rapports annuels déposés à la SEC** (API XBRL d'EDGAR : croissance CA/BPA,
-   marges, ROE, dette, PER, PEG) ;
+   volumes, news (RSS Yahoo) et **fondamentaux récupérés automatiquement**
+   (croissance CA/BPA, marges, ROE, dette/fonds propres, PER, PEG) via Yahoo
+   Finance quoteSummary — sans clé. *(La source officielle SEC EDGAR a été
+   écartée : son pare-feu filtre par IP et bloque les runners cloud de GitHub
+   Actions ; Yahoo agrège les mêmes états financiers et reste joignable.)* ;
 3. le robot committe `data/latest.json`, `data/history.json` et `data/rapport.md` ;
    la page web charge `latest.json` à l'ouverture : le classement du jour s'affiche
    **sans aucun clic** (les titres 🔍 viennent du scan, les ⭐ des favoris).
