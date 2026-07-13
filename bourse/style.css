@@ -226,9 +226,24 @@ main { max-width: 980px; margin: 0 auto; padding: 0 16px; display: flex; flex-di
 .pp-lbl { display: block; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
 .pp-val { display: block; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-.pick-note { font-size: 12.5px; color: var(--ink-2); }
-.pick-why { list-style: none; padding: 0; margin: 2px 0; display: flex; flex-direction: column; gap: 3px; }
-.pick-why li { font-size: 12px; color: var(--ink-2); padding-left: 16px; position: relative; }
+.pick-plain {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: 9px 11px;
+}
+.pick-lt .pick-plain { background: color-mix(in srgb, var(--good) 8%, var(--surface)); border-left-color: var(--good); }
+.pick-os .pick-plain { background: color-mix(in srgb, var(--serious) 8%, var(--surface)); border-left-color: var(--serious); }
+.pick-plain-lbl { font-weight: 700; }
+
+.pick-note { font-size: 12px; color: var(--muted); }
+.pick-why-wrap { font-size: 12px; }
+.pick-why-wrap summary { cursor: pointer; color: var(--muted); font-size: 11.5px; }
+.pick-why { list-style: none; padding: 6px 0 0; margin: 0; display: flex; flex-direction: column; gap: 3px; }
+.pick-why li { font-size: 11.5px; color: var(--ink-2); padding-left: 16px; position: relative; }
 .pick-why li::before { content: "▲"; position: absolute; left: 0; color: var(--good); font-size: 9px; top: 3px; }
 .pick-foot { font-size: 11px; color: var(--muted); border-top: 1px solid var(--grid); padding-top: 8px; margin-top: auto; }
 

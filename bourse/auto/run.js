@@ -242,6 +242,67 @@ async function deepAnalyze(symbol, ctx) {
      · one shot    — momentum/technique explosif (risqué)
    Les trois sont distincts. */
 
+/* Traduit les signaux techniques en une phrase compréhensible par un débutant :
+   « pourquoi cette action précise est intéressante ». */
+function plainReason(r, category) {
+  const good = (k) => (r.pillars?.[k]?.signals || []).filter((s) => s.good);
+  const has = (k, re) => good(k).some((s) => re.test(s.label));
+  const grab = (k, re) => {
+    for (const s of good(k)) { const m = s.label.match(re); if (m) return parseFloat(m[1]); }
+    return null;
+  };
+
+  const caG = grab("fundamental", /Croissance CA\s*:\s*\+?(-?[\d.]+)/);
+  const epsG = grab("fundamental", /Croissance BPA\s*:\s*\+?(-?[\d.]+)/);
+  const per = grab("fundamental", /PER\s*:\s*([\d.]+)/);
+  const pegCheap = has("fundamental", /PEG/);
+  const lowDebt = has("fundamental", /Dette\/fonds/); // signalé seulement si bon
+
+  const perf3 = grab("momentum", /Perf 3 mois\s*:\s*\+?(-?[\d.]+)/);
+  const accel = has("momentum", /accélération/);
+  const trend = has("technical", /Tendance/);
+  const breakout = has("technical", /plus-haut|Cassure/);
+  const aboveMA = has("technical", /Prix vs MM/);
+  const news = has("sentiment", /Ton des news|Buzz/);
+  const accumulation = has("technical", /Volume/);
+
+  // Briques « fondamental » (la qualité de l'entreprise)
+  const fond = [];
+  if (caG != null && caG > 12) fond.push(`son chiffre d'affaires progresse vite (+${Math.round(caG)} %/an)`);
+  if (epsG != null && epsG > 12) fond.push(`ses bénéfices sont en forte hausse (+${Math.round(epsG)} %/an)`);
+  if (per != null && per > 0 && per < 22) fond.push(`et l'action reste raisonnablement valorisée (PER ${Math.round(per)})`);
+  else if (pegCheap) fond.push(`et sa croissance n'est pas encore payée au prix fort`);
+  if (!fond.length && lowDebt) fond.push(`l'entreprise est peu endettée`);
+
+  // Briques « marché » (le comportement du cours)
+  const marche = [];
+  if (perf3 != null && perf3 > 0) marche.push(`elle a déjà pris +${Math.round(perf3)} % en 3 mois`);
+  if (breakout) marche.push(`elle est au plus haut de l'année`);
+  else if (trend || aboveMA) marche.push(`sa tendance de fond est haussière`);
+  if (accel) marche.push(`et le mouvement s'accélère`);
+  if (!marche.length && accumulation) marche.push(`les gros investisseurs accumulent le titre`);
+  if (news) marche.push(`l'actualité récente joue en sa faveur`);
+
+  // Capitalise le début de chaque phrase (après un point)
+  const capSentences = (s) => s.replace(/(^\s*|[.!?]\s+)([a-zà-ÿ])/g, (_, p, c) => p + c.toUpperCase());
+  let phrase;
+  if (category === "Long terme") {
+    phrase = [fond.slice(0, 3).join(", "), marche.slice(0, 1).join("")].filter(Boolean).join(". ");
+  } else if (category === "One shot") {
+    phrase = [marche.slice(0, 3).join(", "), fond.slice(0, 1).join("")].filter(Boolean).join(". ");
+  } else {
+    phrase = [fond.slice(0, 2).join(", "), marche.slice(0, 2).join(", ")].filter(Boolean).join(". ");
+  }
+  phrase = phrase ? capSentences(phrase.replace(/\.\s*\.$/, ".")) : "Configuration globalement favorable selon les 4 piliers.";
+  if (!/[.!?]$/.test(phrase)) phrase += ".";
+
+  const v = r.pillars?.momentum?.volatility ?? null;
+  if (category === "One shot" && v != null && v > 45) {
+    phrase += ` ⚠️ Mais elle bouge beaucoup (volatilité ${Math.round(v)} %) : petite somme et sortie prévue.`;
+  }
+  return phrase;
+}
+
 function selectPicks(results) {
   const pil = (r, k) => r.pillars?.[k]?.score;
   const vol = (r) => r.pillars?.momentum?.volatility ?? 60;
@@ -257,6 +318,7 @@ function selectPicks(results) {
 
   const pack = (r, category, note) => ({
     category, note,
+    plain: plainReason(r, category),
     symbol: r.symbol, name: r.name || r.symbol,
     score: Math.round(r.score),
     technical: pil(r, "technical") != null ? Math.round(pil(r, "technical")) : null,
@@ -304,6 +366,7 @@ function reportPicks(picks) {
     const p = picks[key];
     if (!p) continue;
     out.push(`### ${emoji[key]} ${p.category} — ${p.symbol}${p.name !== p.symbol ? ` (${p.name})` : ""} · ${p.score}/100`);
+    if (p.plain) out.push(`**Pourquoi cette action :** ${p.plain}`, "");
     out.push(`*${p.note}* — volatilité ${p.volatility}%, confiance ${p.confidence}%.`);
     for (const s of p.why) out.push(`- ▲ ${s.label}${s.detail ? ` — ${s.detail}` : ""}`);
     out.push("");
