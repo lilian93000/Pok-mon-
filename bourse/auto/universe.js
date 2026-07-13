@@ -6,18 +6,12 @@
 "use strict";
 
 const UA = { "User-Agent": "Mozilla/5.0 (compatible; OracleBourse/1.0; +https://github.com/lilian93000/Pok-mon-)" };
-// La SEC rejette (403) tout User-Agent ne déclarant pas une identité + e-mail
-// de contact (politique « fair access »). Format exigé : "Nom email@domaine".
-const SEC_UA = {
-  "User-Agent": "Oracle Bourse Screener oracle-bourse@users.noreply.github.com",
-  "Accept-Encoding": "gzip, deflate",
-};
 
-async function getText(url, { tries = 3, headers = UA } = {}) {
+async function getText(url, tries = 3) {
   let lastErr;
   for (let i = 0; i < tries; i++) {
     try {
-      const res = await fetch(url, { headers, signal: AbortSignal.timeout(30000) });
+      const res = await fetch(url, { headers: UA, signal: AbortSignal.timeout(30000) });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.text();
     } catch (e) {
@@ -79,21 +73,4 @@ async function loadUniverse() {
   return out;
 }
 
-/**
- * Table ticker → CIK depuis la SEC (pour interroger EDGAR).
- * Renvoie Map("AAPL" → "0000320193").
- */
-async function loadCikMap() {
-  const txt = await getText("https://www.sec.gov/files/company_tickers.json", { headers: SEC_UA });
-  const j = JSON.parse(txt);
-  const map = new Map();
-  for (const k of Object.keys(j)) {
-    const e = j[k];
-    if (e && e.ticker && e.cik_str != null) {
-      map.set(String(e.ticker).toUpperCase(), String(e.cik_str).padStart(10, "0"));
-    }
-  }
-  return map;
-}
-
-module.exports = { loadUniverse, loadCikMap, parseNasdaqListed, parseOtherListed };
+module.exports = { loadUniverse, parseNasdaqListed, parseOtherListed };
