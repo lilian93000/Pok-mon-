@@ -446,6 +446,139 @@
     if (any) $("picksSection").classList.remove("hidden");
   }
 
+  /* ───────────── Moteur de recherche ─────────────
+     Cherche dans l'index de marché (data/market.json, ~5 000 actions
+     scannées) chargé à la volée. Si l'action fait partie du top analysé
+     en profondeur du jour → analyse complète (4 piliers). Sinon → analyse
+     technique + momentum (les piliers calculables sur le seul cours). */
+
+  let marketIndex = null;   // [{ s, n, p, t, m }]
+  let marketLoading = null;
+
+  function loadMarket() {
+    if (marketIndex) return Promise.resolve(marketIndex);
+    if (marketLoading) return marketLoading;
+    marketLoading = fetch("data/market.json", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => { marketIndex = (j && j.stocks) || []; return marketIndex; })
+      .catch(() => { marketIndex = []; return marketIndex; });
+    return marketLoading;
+  }
+
+  function searchMatches(q) {
+    q = q.trim().toUpperCase();
+    if (!q || !marketIndex) return [];
+    const bySym = [], byName = [];
+    for (const e of marketIndex) {
+      if (e.s.startsWith(q)) bySym.push(e);
+      else if (e.n && e.n.toUpperCase().includes(q)) byName.push(e);
+      if (bySym.length >= 10) break;
+    }
+    return [...bySym, ...byName].slice(0, 10);
+  }
+
+  function marketVerdict(t, m) {
+    const avg = 0.55 * t + 0.45 * m;
+    if (avg >= 70) return { label: "Cours bien orienté", emoji: "📈", cls: "v-up" };
+    if (avg >= 55) return { label: "Tendance positive", emoji: "🙂", cls: "v-up" };
+    if (avg >= 45) return { label: "Neutre", emoji: "😐", cls: "v-flat" };
+    if (avg >= 35) return { label: "Sous pression", emoji: "🌧️", cls: "v-down" };
+    return { label: "Faible", emoji: "⚠️", cls: "v-bad" };
+  }
+
+  function renderDropdown(matches) {
+    const dd = $("searchDropdown");
+    dd.innerHTML = "";
+    if (!matches.length) { dd.classList.add("hidden"); return; }
+    for (const e of matches) {
+      const deep = results.find((r) => r.symbol === e.s);
+      const row = el("div", "sr-row");
+      const left = el("div", "sr-left");
+      left.appendChild(el("strong", null, e.s));
+      left.appendChild(el("span", "sr-name", e.n !== e.s ? e.n : ""));
+      row.appendChild(left);
+      row.appendChild(el("span", "sr-tag", deep ? "⭐ analyse complète" : `T ${e.t} · M ${e.m}`));
+      row.onmousedown = (ev) => { ev.preventDefault(); analyzeSearch(e.s); };
+      dd.appendChild(row);
+    }
+    dd.classList.remove("hidden");
+  }
+
+  function analyzeSearch(symbol) {
+    symbol = symbol.trim().toUpperCase();
+    if (!symbol) return;
+    $("searchInput").value = symbol;
+    $("searchDropdown").classList.add("hidden");
+    $("searchHint").textContent = "";
+
+    const deep = results.find((r) => r.symbol === symbol);
+    if (deep) { showDetail(deep); return; }
+
+    const entry = marketIndex && marketIndex.find((e) => e.s === symbol);
+    if (entry) { showQuickAnalysis(entry); return; }
+
+    $("searchHint").textContent = marketIndex && marketIndex.length
+      ? `« ${symbol} » introuvable dans l'univers analysé (${marketIndex.length.toLocaleString("fr-FR")} actions US). Vérifie le symbole.`
+      : "Index de marché indisponible pour l'instant.";
+  }
+
+  // Analyse « rapide » (cours only) pour une action hors du top du jour
+  function showQuickAnalysis(e) {
+    const v = marketVerdict(e.t, e.m);
+    $("detailTitle").textContent = `${v.emoji} ${e.s}${e.n !== e.s ? ` — ${e.n}` : ""}`;
+    const body = $("detailBody");
+    body.innerHTML = "";
+
+    const head = el("div", "detail-head");
+    const scoreBox = el("div", "score-box");
+    scoreBox.appendChild(el("div", "score-big", String(Math.round(0.55 * e.t + 0.45 * e.m))));
+    scoreBox.appendChild(el("div", "score-sub", "note marché"));
+    head.appendChild(scoreBox);
+    const meta = el("div", "detail-meta");
+    meta.appendChild(el("div", `badge big ${v.cls}`, `${v.emoji} ${v.label}`));
+    meta.appendChild(el("div", "meta-line", `Dernier cours : ${e.p.toFixed(2)} $`));
+    meta.appendChild(el("div", "meta-line sub", "Analyse fondée sur le cours (technique + momentum)."));
+    head.appendChild(meta);
+    body.appendChild(head);
+
+    const pb = el("div", "pillar-box");
+    pb.appendChild(el("h3", null, "Analyse du cours"));
+    pb.appendChild(pillarBar("Technique", 0.55, e.t));
+    pb.appendChild(pillarBar("Momentum", 0.45, e.m));
+    body.appendChild(pb);
+
+    const note = el("div", "warn-box");
+    note.appendChild(el("div", "warn-line",
+      "ℹ️ Cette action n'est pas dans le top analysé en profondeur aujourd'hui. Les piliers fondamental (chiffres financiers) et sentiment (news) ne sont calculés que pour la sélection du jour, mais sa configuration technique et son momentum sont à jour ci-dessus."));
+    body.appendChild(note);
+
+    $("detailPanel").classList.remove("hidden");
+    $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function initSearch() {
+    const input = $("searchInput");
+    if (!input) return;
+    input.addEventListener("focus", loadMarket);
+    input.addEventListener("input", async () => {
+      await loadMarket();
+      $("searchHint").textContent = "";
+      renderDropdown(searchMatches(input.value));
+    });
+    input.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter") {
+        const matches = searchMatches(input.value);
+        const exact = matches.find((m) => m.s === input.value.trim().toUpperCase());
+        if (exact) analyzeSearch(exact.s);
+        else if (matches.length) analyzeSearch(matches[0].s);
+        else analyzeSearch(input.value);
+      } else if (ev.key === "Escape") {
+        $("searchDropdown").classList.add("hidden");
+      }
+    });
+    input.addEventListener("blur", () => setTimeout(() => $("searchDropdown").classList.add("hidden"), 150));
+  }
+
   /* ───────────── Chargement automatique de l'analyse quotidienne ─────────────
      Le robot GitHub Actions (bourse/auto/run.js) committe data/latest.json
      chaque jour ouvré ; si le fichier existe, la page l'affiche sans un clic. */
@@ -496,6 +629,7 @@
     $("closeDetail").onclick = () => $("detailPanel").classList.add("hidden");
     $("finnhubKey").addEventListener("input", refreshMode);
     $("alphaKey").addEventListener("input", refreshMode);
+    initSearch();
 
     tryAutoLoad(); // affiche l'analyse du robot sans aucun clic, si elle existe
   }
