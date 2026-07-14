@@ -427,6 +427,34 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); 
 .detail-meta { display: flex; flex-direction: column; gap: 6px; }
 .meta-line { font-size: 13.5px; color: var(--ink-2); }
 
+/* Analyse écrite */
+.analysis-box {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--page);
+}
+.analysis-box > h3 { font-size: 15px; margin-bottom: 12px; }
+.analysis-box p { font-size: 14px; line-height: 1.62; color: var(--ink-2); margin-bottom: 6px; }
+.an-resume { font-size: 15px !important; color: var(--ink) !important; font-weight: 600; line-height: 1.55 !important; margin-bottom: 14px !important; }
+.an-h { font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 16px 0 7px; }
+.an-h.an-good { color: var(--good-text); }
+.an-h.an-warn { color: var(--serious); }
+.an-list { list-style: none; padding: 0; margin: 0 0 6px; display: flex; flex-direction: column; gap: 6px; }
+.an-list li { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); padding-left: 20px; position: relative; }
+.an-list-good li::before { content: "✅"; position: absolute; left: 0; font-size: 11px; top: 2px; }
+.an-list-warn li::before { content: "⚠️"; position: absolute; left: 0; font-size: 11px; top: 2px; }
+.an-pratique {
+  margin-top: 14px !important;
+  padding: 11px 13px;
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  border-radius: 6px;
+  font-size: 13px !important;
+  color: var(--ink-2) !important;
+}
+
 .chart-box, .pillar-box, .signal-box, .news-box { margin-top: 20px; }
 .chart-box h3, .pillar-box h3, .signal-box h3, .news-box h3 {
   font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 10px;
