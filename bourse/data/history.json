@@ -179,23 +179,23 @@
   "top": [
    {
     "symbol": "ASIC",
-    "score": 87
+    "score": 85
    },
    {
     "symbol": "DAVE",
-    "score": 81
-   },
-   {
-    "symbol": "OPHC",
     "score": 80
    },
    {
-    "symbol": "MFG",
-    "score": 78
+    "symbol": "OPHC",
+    "score": 79
    },
    {
-    "symbol": "VIRT",
-    "score": 78
+    "symbol": "TCBK",
+    "score": 79
+   },
+   {
+    "symbol": "MFG",
+    "score": 79
    }
   ]
  }
