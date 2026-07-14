@@ -232,7 +232,8 @@ async function deepAnalyze(symbol, ctx) {
   res.warnings = warnings;
   res.sources = sources;
   res.fromScan = !ctx.favorites.has(symbol);
-  res.analysis = writtenAnalysis(res); // analyse écrite (pourquoi investir, forces, risques…)
+  res.fundamentals = fundamentals || null;   // chiffres bruts, pour l'analyse détaillée
+  res.analysis = writtenAnalysis(res);       // analyse écrite (pourquoi investir, forces, risques…)
   return res;
 }
 
@@ -304,10 +305,11 @@ function plainReason(r, category) {
   return phrase;
 }
 
-/* Analyse écrite, détaillée et simple, générée à partir des chiffres réels.
-   Renvoie un objet { resume, pourquoi, forces[], vigilance[], profil, pratique }. */
+/* Analyse écrite détaillée et pédagogique, générée à partir des chiffres réels.
+   Renvoie { resume, pourquoi, piliers[], forces[{lead,detail}], vigilance[{lead,detail}], profil, pratique }. */
 function writtenAnalysis(r) {
   const P = r.pillars || {};
+  const f = r.fundamentals || {};
   const sc = (k) => (P[k]?.score != null ? Math.round(P[k].score) : null);
   const grab = (k, re) => {
     for (const s of (P[k]?.signals || [])) { const m = s.label.match(re); if (m) return parseFloat(m[1]); }
@@ -316,89 +318,150 @@ function writtenAnalysis(r) {
   const has = (k, re, good = true) => (P[k]?.signals || []).some((s) => s.good === good && re.test(s.label));
   const vol = P.momentum?.volatility != null ? Math.round(P.momentum.volatility) : null;
   const name = r.name && r.name !== r.symbol ? r.name : r.symbol;
+  const round = (x) => Math.round(x);
 
-  const caG = grab("fundamental", /Croissance CA\s*:\s*\+?(-?[\d.]+)/);
-  const epsG = grab("fundamental", /Croissance BPA\s*:\s*\+?(-?[\d.]+)/);
-  const per = grab("fundamental", /PER\s*:\s*([\d.]+)/);
-  const peg = grab("fundamental", /PEG\s*:\s*([\d.]+)/);
-  const perf3 = grab("momentum", /Perf 3 mois\s*:\s*\+?(-?[\d.]+)/);
+  // Fondamentaux (bruts si dispo, sinon relus dans les signaux)
+  const caG = f.revenueGrowth != null ? f.revenueGrowth : grab("fundamental", /Croissance CA\s*:\s*\+?(-?[\d.]+)/);
+  const epsG = f.epsGrowth != null ? f.epsGrowth : grab("fundamental", /Croissance BPA\s*:\s*\+?(-?[\d.]+)/);
+  const per = f.pe != null ? f.pe : grab("fundamental", /PER\s*:\s*([\d.]+)/);
+  const peg = f.peg != null ? f.peg : grab("fundamental", /PEG\s*:\s*([\d.]+)/);
+  const margin = f.netMargin;
+  const roe = f.roe;
+  const debt = f.debtToEquity;
+
+  // Technique / momentum (relus dans les signaux)
+  const rsi = grab("technical", /RSI 14 j\s*:\s*(\d+)/);
   const trendM = grab("technical", /Tendance 60 j\s*:\s*\+?(-?[\d.]+)/);
+  const distHigh = grab("technical", /À\s*(-?[\d.]+)\s*% du plus-haut/);
+  const perf3 = grab("momentum", /Perf 3 mois\s*:\s*\+?(-?[\d.]+)/);
   const breakout = has("technical", /plus-haut|Cassure/);
   const aboveMA = has("technical", /Prix vs MM/);
+  const macdUp = has("technical", /MACD : positif/) && has("technical", /en hausse/);
+  const volumeAcc = has("technical", /Volume/);
   const accel = has("momentum", /accélération/);
+  const decel = has("momentum", /décélération/, false);
   const newsPos = has("sentiment", /Ton des news|Buzz/);
   const newsNeg = has("sentiment", /Ton des news|avertissement/, false);
 
   // ── Résumé ──
-  let resume = `${name} obtient une note globale de ${Math.round(r.score)}/100 (${r.verdict.label.toLowerCase()}).`;
+  let resume = `${name} obtient une note globale de ${round(r.score)}/100 (${r.verdict.label.toLowerCase()}), en pesant quatre familles de critères : la santé financière de l'entreprise, la tendance de son cours, sa dynamique récente et le ton de l'actualité.`;
   if (caG != null && caG > 12 && (aboveMA || (trendM != null && trendM > 0))) {
-    resume += " C'est une entreprise en croissance dont le cours est déjà bien orienté — les deux vont dans le même sens.";
+    resume += " Le point clé : c'est une entreprise qui grandit vite ET dont le cours suit — les fondamentaux et le marché racontent la même histoire, ce qui est le cas de figure le plus solide.";
   } else if (aboveMA || (trendM != null && trendM > 0)) {
-    resume += " Son cours est en tendance haussière ; c'est surtout un pari sur la dynamique de marché.";
+    resume += " Le point clé : sa force vient surtout de la dynamique de son cours ; c'est davantage un pari sur la tendance que sur les chiffres de l'entreprise.";
   } else if (caG != null && caG > 12) {
-    resume += " L'entreprise croît vite, même si le cours est plus hésitant à court terme.";
+    resume += " Le point clé : l'entreprise croît vite, mais son cours est encore hésitant — l'intérêt est là si tu es patient.";
   } else {
-    resume += " Sa configuration est mitigée : à regarder de près avant de se décider.";
+    resume += " Sa configuration est contrastée : il y a du bon et du moins bon, à peser avant de décider.";
   }
 
   // ── Pourquoi maintenant ──
   const now = [];
-  if (trendM != null && trendM > 0.05 * 21) now.push(`le cours monte de façon régulière (environ ${Math.round(trendM)} %/mois sur les 3 derniers mois)`);
-  else if (aboveMA) now.push("le cours se tient au-dessus de ses moyennes de long terme, signe d'une tendance saine");
-  if (breakout) now.push("il vient de toucher son plus haut de l'année, un niveau que les acheteurs aiment franchir");
-  if (accel) now.push("et le mouvement s'accélère ces dernières semaines");
+  if (trendM != null && trendM > 1) now.push(`le cours progresse de façon régulière (environ ${round(trendM)} %/mois sur les 3 derniers mois), ce qui montre un flux d'achats constant et pas un simple coup de chaud`);
+  else if (aboveMA) now.push("le cours se maintient au-dessus de ses moyennes 50 et 200 jours — la manière la plus simple de constater que la tendance est saine à court comme à long terme");
+  if (breakout) now.push("il évolue au contact de son plus-haut de l'année : quand une action franchit ses sommets, plus personne n'est « coincé » avec une perte au-dessus, ce qui dégage la voie pour continuer à monter");
+  if (rsi != null && rsi >= 45 && rsi <= 72) now.push(`son élan est sain (RSI ${round(rsi)}, ni suracheté ni survendu), donc la hausse a encore de la marge avant de fatiguer`);
+  if (macdUp) now.push("son principal indicateur de tendance (le MACD) est orienté à la hausse et s'accélère");
+  if (volumeAcc) now.push("les volumes d'échange sont au-dessus de la normale, signe que de gros investisseurs accumulent");
+  if (accel) now.push("et la performance du dernier mois dépasse le rythme du trimestre — le mouvement gagne en vitesse");
+
   let pourquoi;
   if (now.length) {
-    pourquoi = `Ce qui rend le moment intéressant : ${now.join(", ")}. `;
+    pourquoi = `Ce qui rend le moment intéressant, concrètement : ${now.slice(0, 4).join(" ; ")}. `;
   } else {
-    pourquoi = "Le cours n'est pas dans une dynamique forte pour l'instant ; l'intérêt vient surtout des fondamentaux. ";
+    pourquoi = "Côté timing, le cours n'est pas dans une dynamique forte pour l'instant : l'intérêt de ce titre repose surtout sur ses chiffres, pas sur son momentum. ";
   }
-  if (caG != null && caG > 12) {
-    pourquoi += `En face, l'entreprise a de la substance : son chiffre d'affaires progresse de ${Math.round(caG)} %/an`;
-    if (epsG != null && epsG > 0) pourquoi += ` et ses bénéfices de ${Math.round(epsG)} %/an`;
-    pourquoi += ". Une hausse portée par de vrais résultats tient mieux dans la durée qu'une hausse portée par le seul enthousiasme.";
+  if (caG != null && caG > 8) {
+    pourquoi += `Et surtout, cette hausse s'appuie sur du concret : le chiffre d'affaires progresse de ${round(caG)} %/an`;
+    if (epsG != null && epsG > 0) pourquoi += `, et les bénéfices encore plus vite (+${round(epsG)} %/an), ce qui veut dire que l'entreprise devient plus rentable à mesure qu'elle grandit`;
+    pourquoi += ". Une action portée par de vrais résultats se tient mieux dans la durée qu'une action portée par le seul enthousiasme — c'est la différence entre une tendance et une bulle.";
   } else if (sc("fundamental") != null) {
-    pourquoi += "Côté chiffres, l'entreprise est correcte sans être exceptionnelle.";
+    pourquoi += "Côté chiffres, l'entreprise est correcte sans être exceptionnelle : le principal moteur reste ici le comportement du cours.";
   }
-  if (newsPos) pourquoi += " L'actualité récente joue aussi en sa faveur.";
+  if (newsPos) pourquoi += " Enfin, l'actualité récente (résultats, contrats, relèvements d'objectifs) alimente l'intérêt et entretient le mouvement.";
 
-  // ── Forces ──
+  // ── Ce que disent les 4 piliers ──
+  const lvl = (s, hi, mid) => (s == null ? null : s >= hi ? "haut" : s >= mid ? "moyen" : "bas");
+  const piliers = [];
+  const t = sc("technical"), m = sc("momentum"), fo = sc("fundamental"), se = sc("sentiment");
+  if (t != null) piliers.push(`Technique ${t}/100 (poids 35 %) — ${t >= 70 ? "le graphique est clairement bien orienté" : t >= 50 ? "graphique correct, sans excès" : "graphique fragile, tendance peu convaincante"}.`);
+  if (m != null) piliers.push(`Momentum ${m}/100 (poids 15 %) — ${m >= 70 ? "forte dynamique récente, le titre surperforme" : m >= 50 ? "dynamique honnête" : "peu de dynamique, le marché n'accompagne pas encore"}.`);
+  piliers.push(fo != null
+    ? `Fondamental ${fo}/100 (poids 30 %) — ${fo >= 70 ? "chiffres financiers solides (croissance, rentabilité, valorisation)" : fo >= 50 ? "chiffres corrects, dans la moyenne" : "chiffres financiers faibles"}.`
+    : `Fondamental — non évalué (données financières indisponibles pour ce titre).`);
+  if (se != null) piliers.push(`Sentiment ${se}/100 (poids 20 %) — ${se >= 65 ? "la presse récente est nettement positive" : se >= 50 ? "actualité neutre à légèrement positive" : "actualité mitigée à négative"}.`);
+
+  // ── Forces (lead + explication avec repères) ──
   const forces = [];
-  if (caG != null && caG > 12) forces.push(`Croissance rapide : chiffre d'affaires +${Math.round(caG)} %/an${epsG != null && epsG > 0 ? `, bénéfices +${Math.round(epsG)} %/an` : ""}.`);
-  if (per != null && per > 0 && per < 22) forces.push(`Valorisation raisonnable (PER ${Math.round(per)})${peg != null && peg < 1.2 ? `, croissance pas encore payée au prix fort (PEG ${peg.toFixed(2)})` : ""} — tu n'achètes pas trop cher.`);
-  if (aboveMA) forces.push("Tendance de fond haussière : le cours est au-dessus de ses moyennes 50 et 200 jours.");
-  if (breakout) forces.push("Cassure de plus-haut : souvent le point de départ de nouvelles hausses.");
-  if (perf3 != null && perf3 > 0) forces.push(`Déjà +${Math.round(perf3)} % sur 3 mois${accel ? ", avec un mouvement qui s'accélère" : ""}.`);
-  if (has("fundamental", /Dette\/fonds/)) forces.push("Entreprise peu endettée : plus solide si les taux montent.");
-  if (newsPos) forces.push("Flux de nouvelles positif dans la presse.");
-  if (!forces.length) forces.push("Configuration globalement équilibrée sur les 4 piliers analysés.");
+  const push = (arr, lead, detail) => arr.push({ lead, detail });
+  if (caG != null && caG > 12) {
+    let d = `Une entreprise « normale » croît de 3 à 8 % par an ; au-delà de 12-15 %, on parle de forte croissance. C'est le premier moteur d'une action qui monte durablement.`;
+    push(forces, `Croissance rapide : chiffre d'affaires +${round(caG)} %/an${epsG != null && epsG > 0 ? `, bénéfices +${round(epsG)} %/an` : ""}`, d);
+  }
+  if (per != null && per > 0 && per < 25) {
+    let d = `Pour comparer : le marché américain se paie en moyenne autour de 20 fois les bénéfices. `;
+    if (peg != null && peg > 0 && peg < 1.2) d += `Ici tu paies ${round(per)} fois pour une entreprise en forte croissance, et le PEG de ${peg.toFixed(2)} (sous 1 = bon marché) confirme que la croissance n'est pas encore payée au prix fort — le critère favori des investisseurs « croissance à bon prix ».`;
+    else d += `Un PER de ${round(per)} est ${per < 15 ? "plutôt bas" : "raisonnable"} : tu n'achètes pas l'action trop cher.`;
+    push(forces, `Action pas chère pour ce qu'elle offre (PER ${round(per)}${peg != null && peg > 0 ? `, PEG ${peg.toFixed(2)}` : ""})`, d);
+  }
+  if (margin != null && margin >= 8) {
+    push(forces, `Entreprise rentable : marge nette de ${round(margin)} %`,
+      `Sur 100 $ de ventes, il reste ${round(margin)} $ de bénéfice net. Au-dessus de 15 %, c'est très rentable ; une bonne marge protège l'entreprise quand la conjoncture se durcit.`);
+  }
+  if (roe != null && roe >= 15) {
+    push(forces, `Bon rendement des capitaux (ROE ${round(roe)} %)`,
+      `Le ROE mesure ce que l'entreprise rapporte avec l'argent des actionnaires. Au-dessus de 15 %, c'est le signe d'une société bien gérée qui réinvestit efficacement.`);
+  }
+  if (debt != null && debt < 1) {
+    push(forces, `Peu endettée (dette/fonds propres ${debt.toFixed(1)})`,
+      `Elle ne dépend pas des banques pour fonctionner — un vrai atout quand les taux d'intérêt sont élevés, car sa charge d'intérêts reste légère.`);
+  }
+  if (aboveMA) {
+    push(forces, `Tendance haussière confirmée`,
+      `Le cours est au-dessus de ses moyennes 50 et 200 jours. C'est la façon la plus fiable de constater que la tendance est bonne à court terme (50 j) ET à long terme (200 j).`);
+  }
+  if (breakout) {
+    push(forces, `Au plus haut de l'année`,
+      `Franchir ses sommets libère l'action des vendeurs « piégés » au-dessus du cours ; historiquement, les cassures de plus-hauts attirent de nouveaux acheteurs.`);
+  }
+  if (perf3 != null && perf3 > 0) {
+    push(forces, `Déjà +${round(perf3)} % sur 3 mois${accel ? ", et ça accélère" : ""}`,
+      `L'effet « momentum » est l'un des rares phénomènes robustes en bourse : les actions qui montent ont tendance à continuer à court terme, portées par l'afflux d'acheteurs.`);
+  }
+  if (newsPos) {
+    push(forces, `Actualité porteuse`,
+      `Le flux de nouvelles (contrats, résultats records, relèvements d'objectifs, notes d'analystes) est favorable et entretient l'attention du marché sur le titre.`);
+  }
+  if (!forces.length) push(forces, "Configuration équilibrée", "Aucun pilier ne se détache nettement, mais l'ensemble reste correct sur les quatre familles de critères.");
 
-  // ── Vigilance ──
+  // ── Vigilance (lead + explication) ──
   const vigilance = [];
-  if (vol != null && vol > 50) vigilance.push(`Titre très volatil (${vol} %) : il peut chuter de 20-30 % en peu de temps. Dimensionne petit.`);
-  else if (vol != null && vol > 35) vigilance.push(`Volatilité modérée à élevée (${vol} %) : attends-toi à des à-coups.`);
-  if (per != null && per > 45) vigilance.push(`Valorisation élevée (PER ${Math.round(per)}) : la moindre déception sur les résultats peut faire mal.`);
-  if (sc("momentum") != null && sc("momentum") < 40) vigilance.push("Momentum faible : la dynamique de hausse n'est pas (encore) là.");
-  if (has("momentum", /décélération/, false)) vigilance.push("La hausse récente montre des signes d'essoufflement.");
-  if (newsNeg) vigilance.push("Actualité récente plutôt négative — à surveiller.");
-  if (sc("fundamental") == null) vigilance.push("Fondamentaux non disponibles pour ce titre : l'analyse repose surtout sur le cours.");
-  if (r.confidence != null && r.confidence < 100) vigilance.push(`Analyse partielle (confiance ${r.confidence} %) : certaines données manquaient au moment du calcul.`);
-  vigilance.push("Personne ne peut garantir la suite : même une belle configuration peut se retourner.");
+  if (vol != null && vol > 50) push(vigilance, `Titre très volatil (${vol} %)`, `Il peut perdre 20 à 30 % en quelques séances sur une mauvaise nouvelle. N'y mets qu'une petite part de ton épargne et fixe une limite de perte à l'avance.`);
+  else if (vol != null && vol > 35) push(vigilance, `Volatilité notable (${vol} %)`, `Attends-toi à des variations marquées : ce n'est pas un titre « tranquille » que l'on oublie dans un tiroir.`);
+  if (per != null && per > 45) push(vigilance, `Valorisation tendue (PER ${round(per)})`, `Tu paies très cher les bénéfices actuels : beaucoup de croissance est déjà « dans le prix », donc la moindre déception peut faire chuter le cours brutalement.`);
+  if (debt != null && debt > 2) push(vigilance, `Endettement élevé (dette/fonds propres ${debt.toFixed(1)})`, `L'entreprise s'appuie fortement sur la dette : c'est un facteur de fragilité si les taux montent ou si l'activité ralentit.`);
+  if (sc("momentum") != null && sc("momentum") < 40) push(vigilance, `Momentum faible`, `La dynamique de hausse n'est pas là : le marché n'accompagne pas (encore) l'histoire de l'entreprise.`);
+  if (decel) push(vigilance, `Hausse en essoufflement`, `Le rythme des dernières semaines ralentit par rapport au trimestre — la tendance pourrait marquer une pause.`);
+  if (distHigh != null && distHigh < -20) push(vigilance, `Loin de ses sommets (${round(distHigh)} % sous le plus-haut)`, `Le titre doit encore prouver qu'il peut repartir : il reste du chemin avant de retrouver ses niveaux hauts.`);
+  if (newsNeg) push(vigilance, `Actualité récente défavorable`, `Le ton de la presse est négatif en ce moment : à surveiller de près avant d'entrer.`);
+  if (sc("fundamental") == null) push(vigilance, `Pas de données financières`, `L'analyse repose seulement sur le cours : on ne sait pas si l'entreprise est rentable ni comment elle croît. Prudence supplémentaire.`);
+  if (r.confidence != null && r.confidence < 100) push(vigilance, `Analyse partielle (confiance ${r.confidence} %)`, `Une partie des données manquait au moment du calcul ; le score est donc moins fiable que pour un titre à 100 %.`);
+  push(vigilance, `Rien n'est garanti`, `Même la plus belle configuration peut se retourner : un score élevé mesure une probabilité favorable, pas une certitude.`);
 
   // ── Profil ──
   let profil;
   if (vol != null && vol > 50) {
-    profil = "Plutôt un pari court terme (« one shot ») : potentiel élevé mais risqué. À jouer avec une petite somme et une limite de perte claire.";
+    profil = "Plutôt un pari court terme (« one shot ») : le potentiel de hausse rapide est réel, mais le risque de baisse l'est tout autant. À jouer avec une petite somme et une sortie planifiée (objectif de gain et limite de perte).";
   } else if ((sc("fundamental") ?? 0) >= 65 && (vol == null || vol < 35)) {
-    profil = "Plutôt un placement de fond : fondamentaux solides et cours peu agité, adapté pour être gardé plusieurs mois voire années.";
+    profil = "Plutôt un placement de fond : fondamentaux solides et cours relativement calme, adapté pour être gardé plusieurs mois voire années. Le genre de titre que l'on renforce régulièrement plutôt que de trader.";
   } else {
-    profil = "Profil intermédiaire : convient à un investisseur prêt à accepter quelques secousses pour viser une belle progression.";
+    profil = "Profil intermédiaire : convient à un investisseur prêt à accepter quelques secousses en échange d'un vrai potentiel de progression. Ni un fond de portefeuille ultra-défensif, ni un pur pari spéculatif.";
   }
 
   // ── En pratique ──
-  const pratique = "Ceci n'est pas un conseil financier. Si tu décides d'investir : commence petit, ne mets pas tout sur une seule action, et fixe-toi à l'avance un objectif et une limite de perte. Le prochain rendez-vous à surveiller est en général la publication des résultats trimestriels de l'entreprise.";
+  const pratique = "Ceci n'est pas un conseil financier, mais une lecture objective des données. Si tu décides d'investir : commence petit, ne mets jamais tout sur une seule action, et fixe-toi dès le départ un objectif de gain et une limite de perte. Le prochain rendez-vous à surveiller est en général la publication des résultats trimestriels de l'entreprise, qui peut faire bouger fortement le cours.";
 
-  return { resume, pourquoi, forces, vigilance, profil, pratique };
+  return { resume, pourquoi, piliers, forces, vigilance, profil, pratique };
 }
 
 function selectPicks(results) {

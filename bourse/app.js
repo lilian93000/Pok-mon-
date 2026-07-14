@@ -279,21 +279,41 @@
       const box = el("div", "analysis-box");
       box.appendChild(el("h3", null, "📝 L'analyse de la machine"));
       if (a.resume) box.appendChild(el("p", "an-resume", a.resume));
+
       if (a.pourquoi) {
         box.appendChild(el("h4", "an-h", "Pourquoi c'est intéressant maintenant"));
         box.appendChild(el("p", null, a.pourquoi));
       }
+
+      // liste avec intitulé en gras + explication
+      const richList = (items, cls) => {
+        const ul = el("ul", `an-list ${cls}`);
+        for (const it of items) {
+          const li = document.createElement("li");
+          if (it && typeof it === "object") {
+            li.appendChild(el("strong", null, it.lead));
+            if (it.detail) li.appendChild(document.createTextNode(" — " + it.detail));
+          } else {
+            li.textContent = it;
+          }
+          ul.appendChild(li);
+        }
+        return ul;
+      };
+
       if (a.forces && a.forces.length) {
-        box.appendChild(el("h4", "an-h an-good", "Les points forts"));
-        const ul = el("ul", "an-list an-list-good");
-        for (const f of a.forces) ul.appendChild(el("li", null, f));
+        box.appendChild(el("h4", "an-h an-good", "Les points forts, en détail"));
+        box.appendChild(richList(a.forces, "an-list-good"));
+      }
+      if (a.piliers && a.piliers.length) {
+        box.appendChild(el("h4", "an-h", "Ce que disent les 4 piliers"));
+        const ul = el("ul", "an-list an-list-pillars");
+        for (const p of a.piliers) ul.appendChild(el("li", null, p));
         box.appendChild(ul);
       }
       if (a.vigilance && a.vigilance.length) {
         box.appendChild(el("h4", "an-h an-warn", "Les points de vigilance"));
-        const ul = el("ul", "an-list an-list-warn");
-        for (const w of a.vigilance) ul.appendChild(el("li", null, w));
-        box.appendChild(ul);
+        box.appendChild(richList(a.vigilance, "an-list-warn"));
       }
       if (a.profil) {
         box.appendChild(el("h4", "an-h", "Pour quel profil"));
