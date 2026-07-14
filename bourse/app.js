@@ -273,6 +273,36 @@
     head.appendChild(meta);
     body.appendChild(head);
 
+    // Analyse écrite : pourquoi investir maintenant, forces, risques, profil
+    if (r.analysis) {
+      const a = r.analysis;
+      const box = el("div", "analysis-box");
+      box.appendChild(el("h3", null, "📝 L'analyse de la machine"));
+      if (a.resume) box.appendChild(el("p", "an-resume", a.resume));
+      if (a.pourquoi) {
+        box.appendChild(el("h4", "an-h", "Pourquoi c'est intéressant maintenant"));
+        box.appendChild(el("p", null, a.pourquoi));
+      }
+      if (a.forces && a.forces.length) {
+        box.appendChild(el("h4", "an-h an-good", "Les points forts"));
+        const ul = el("ul", "an-list an-list-good");
+        for (const f of a.forces) ul.appendChild(el("li", null, f));
+        box.appendChild(ul);
+      }
+      if (a.vigilance && a.vigilance.length) {
+        box.appendChild(el("h4", "an-h an-warn", "Les points de vigilance"));
+        const ul = el("ul", "an-list an-list-warn");
+        for (const w of a.vigilance) ul.appendChild(el("li", null, w));
+        box.appendChild(ul);
+      }
+      if (a.profil) {
+        box.appendChild(el("h4", "an-h", "Pour quel profil"));
+        box.appendChild(el("p", null, a.profil));
+      }
+      if (a.pratique) box.appendChild(el("p", "an-pratique", a.pratique));
+      body.appendChild(box);
+    }
+
     // Graphique interactif
     if (r.closes && r.closes.length > 5) {
       const chartBox = el("div", "chart-box");
