@@ -198,5 +198,30 @@
     "score": 79
    }
   ]
+ },
+ {
+  "date": "2026-07-15",
+  "top": [
+   {
+    "symbol": "ASIC",
+    "score": 85
+   },
+   {
+    "symbol": "DAVE",
+    "score": 80
+   },
+   {
+    "symbol": "OPHC",
+    "score": 80
+   },
+   {
+    "symbol": "MFG",
+    "score": 78
+   },
+   {
+    "symbol": "V",
+    "score": 78
+   }
+  ]
  }
 ]
