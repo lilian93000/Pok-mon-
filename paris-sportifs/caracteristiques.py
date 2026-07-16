@@ -57,7 +57,7 @@ from collections import defaultdict
 
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
 FICHIER_POIDS = os.path.join(DOSSIER, "donnees", "poids_modele.json")
-VERSION_MODELE = 3
+VERSION_MODELE = 5
 
 TRAD_SURFACE = {"hard": "dur", "clay": "terre", "grass": "gazon",
                 "carpet": "dur", "dur": "dur", "terre": "terre", "gazon": "gazon"}
@@ -447,7 +447,9 @@ class Joueuse:
         return len(self._fenetre_jours(date, jours))
 
     def repos(self, date):
-        return min(date - self.hist[-1]["d"], 60) if self.hist else 60
+        # plafonné à 30 j : au-delà c'est de l'absence (captée par la forme
+        # et l'Elo), et un retard d'ingestion ne crée plus d'écart géant
+        return min(date - self.hist[-1]["d"], 30) if self.hist else 30
 
     @staticmethod
     def taux(v, d):
@@ -503,6 +505,8 @@ class Moteur:
         self.h2h = defaultdict(int)
         self.h2h_s = defaultdict(int)
         self.h2h_dates = defaultdict(list)   # dates des victoires de (A,B)
+        self.derniere_date = {}              # dernier match joué par joueuse
+        self.boost_k = defaultdict(int)      # matchs restants à K accéléré
         self.poids = None
         self.ecarts = None
 
@@ -510,10 +514,10 @@ class Moteur:
     def _p_elo(ra, rb):
         return 1 / (1 + 10 ** (-(ra - rb) / 400))
 
-    def _maj_elo(self, table, npar, g, p, mult=1.0):
+    def _maj_elo(self, table, npar, g, p, mult_g=1.0, mult_p=1.0):
         pg = self._p_elo(table[g], table[p])
-        table[g] += mult * 250 / (npar[g] + 5) ** 0.4 * (1 - pg)
-        table[p] -= mult * 250 / (npar[p] + 5) ** 0.4 * (1 - pg)
+        table[g] += mult_g * 250 / (npar[g] + 5) ** 0.4 * (1 - pg)
+        table[p] -= mult_p * 250 / (npar[p] + 5) ** 0.4 * (1 - pg)
         npar[g] += 1
         npar[p] += 1
 
@@ -802,9 +806,21 @@ class Moteur:
             mult = 0.75 if m["niveau"] in ("G", "P", "PM", "I") else 0.5
         else:
             mult = 1.0
-        self._maj_elo(self.elo_g, self.n_elo, g, p, mult)
+        # après une absence de 90+ jours, l'incertitude sur le niveau est
+        # grande : le K est accéléré (x1.75) pendant 8 matchs pour que
+        # l'Elo rattrape vite la réalité du retour (blessure, pause...)
+        mults = {}
+        for nom in (g, p):
+            der = self.derniere_date.get(nom)
+            if der is not None and m["date"] - der > 90:
+                self.boost_k[nom] = 8
+            mults[nom] = mult * (1.75 if self.boost_k[nom] > 0 else 1.0)
+            if self.boost_k[nom] > 0:
+                self.boost_k[nom] -= 1
+            self.derniere_date[nom] = m["date"]
+        self._maj_elo(self.elo_g, self.n_elo, g, p, mults[g], mults[p])
         self._maj_elo(self.elo_s[m["surface"]], self.n_elo_s[m["surface"]],
-                      g, p, mult)
+                      g, p, mults[g], mults[p])
         for nom in (g, p):
             h = self.elo_hist[nom]
             h.append(self.elo_g[nom])
@@ -848,6 +864,34 @@ class Moteur:
         contributions = sorted(zip(NOMS_FEATURES, contribs),
                                key=lambda c: abs(c[1]), reverse=True)
         return p, x, contributions
+
+    def avertissements(self, a, b, date=None):
+        """Détecte les 3 profils où le modèle se trompe souvent : retard
+        d'ingestion, retour d'absence longue, montée récente en ITF."""
+        date = date or datetime.date.today().toordinal()
+        alertes = []
+        for nom in (a, b):
+            J = self.j[nom]
+            if not J.hist:
+                alertes.append(f"{nom} : aucune donnée")
+                continue
+            trou = date - J.hist[-1]["d"]
+            if 20 < trou < 120:
+                alertes.append(
+                    f"{nom} : aucun match depuis {trou} j dans la base — "
+                    "retard d'ingestion probable ou absence, fiche périmée")
+            dates = [e["d"] for e in J.hist[-40:]]
+            if any(d2 - d1 > 90 for d1, d2 in zip(dates, dates[1:])
+                   if date - d2 <= 365):
+                alertes.append(
+                    f"{nom} : retour d'absence longue sur les 12 derniers "
+                    "mois — niveau réel incertain (blessure/pause)")
+            recents = J.hist[-20:]
+            if len(recents) >= 10 and sum(not e["P"] for e in recents) / len(recents) > 0.6:
+                alertes.append(
+                    f"{nom} : matchs récents surtout en ITF/qualifs — si en "
+                    "pleine ascension, le modèle peut la sous-estimer")
+        return alertes
 
     def sauver_poids(self, n_exemples):
         with open(FICHIER_POIDS, "w", encoding="utf-8") as f:

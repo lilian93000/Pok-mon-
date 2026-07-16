@@ -318,7 +318,16 @@ def analyser_rencontre(moteur, elo, r, bankroll):
         if edge >= SEUIL_VALUE:
             value_bets.append((nom, p, cote, edge, kelly(p, cote)))
 
-    if value_bets:
+    alertes = moteur.avertissements(j1, j2)
+    if alertes:
+        print("\n⚠ AVERTISSEMENTS (fiabilité de la prédiction réduite) :")
+        for al in alertes:
+            print(f"   - {al}")
+
+    if value_bets and alertes:
+        print("\n*** VALUE BET NON FIABLE (voir avertissements) — à "
+              "confirmer manuellement avant toute mise ***")
+    elif value_bets:
         print("\n*** VALUE BETS DÉTECTÉS ***")
         for nom, p, cote, edge, f in sorted(value_bets, key=lambda v: v[3], reverse=True):
             print(f" -> Victoire {nom}")
