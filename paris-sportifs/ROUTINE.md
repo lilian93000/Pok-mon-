@@ -32,6 +32,11 @@ en a pas.
 4. **Complément par recherche web** : pour les matchs signalés « non
    résolus » par le script, les tournois absents du flux, ou si le flux
    est en panne : rechercher « [joueuse1] vs [joueuse2] odds ».
+   **Chaque lundi** : vérifier la liste des tournois de la semaine
+   (« WTA calendar this week », y compris les 125) et confirmer que
+   chacun apparaît dans le flux — sinon, le couvrir manuellement par
+   recherche (exemple raté : Enka Open Istanbul 125, semaine du 13/07,
+   absent du flux tennisexplorer).
    Convertir les cotes américaines en décimales (+150 → 2.50 ;
    -200 → 1.50). Ne jamais inventer une cote : si introuvable, écarter
    le match.
