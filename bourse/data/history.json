@@ -248,5 +248,30 @@
     "score": 79
    }
   ]
+ },
+ {
+  "date": "2026-07-17",
+  "top": [
+   {
+    "symbol": "COFS",
+    "score": 85
+   },
+   {
+    "symbol": "PLBC",
+    "score": 80
+   },
+   {
+    "symbol": "WSFS",
+    "score": 79
+   },
+   {
+    "symbol": "CBC",
+    "score": 79
+   },
+   {
+    "symbol": "LOB",
+    "score": 79
+   }
+  ]
  }
 ]
