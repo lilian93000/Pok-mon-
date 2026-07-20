@@ -35,6 +35,9 @@ SURFACES_TOURNOIS = {
     "kitzb": ("terre", "I"),
     "rome": ("terre", "I"),
     "athens": ("dur", "I"),
+    "hamburg": ("terre", "I"),
+    "prague": ("dur", "I"),
+    "palermo": ("terre", "I"),
 }
 SURFACE_DEFAUT = ("dur", "I")
 
