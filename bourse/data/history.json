@@ -303,23 +303,23 @@
   "date": "2026-07-21",
   "top": [
    {
+    "symbol": "COFS",
+    "score": 85
+   },
+   {
     "symbol": "PLBC",
-    "score": 83
+    "score": 81
    },
    {
-    "symbol": "MTB",
-    "score": 80
-   },
-   {
-    "symbol": "DAVE",
+    "symbol": "FFBC",
     "score": 79
    },
    {
-    "symbol": "FSBC",
+    "symbol": "BNY",
     "score": 78
    },
    {
-    "symbol": "CBC",
+    "symbol": "DAVE",
     "score": 78
    }
   ]
