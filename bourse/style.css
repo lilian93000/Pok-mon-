@@ -468,6 +468,23 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); 
   color: var(--ink-2) !important;
 }
 
+/* Backtest */
+.bt-scope { font-size: 12.5px; color: var(--muted); margin: 8px 0 14px; font-style: italic; }
+.bt-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 8px; }
+@media (max-width: 600px) { .bt-stats { grid-template-columns: repeat(2, 1fr); } }
+.bt-stat { background: var(--page); border: 1px solid var(--grid); border-radius: 10px; padding: 12px; text-align: center; }
+.bt-val { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.bt-lbl { font-size: 11px; color: var(--ink-2); margin-top: 3px; }
+.bt-sub { font-size: 10px; color: var(--muted); }
+.bt-chart { display: block; }
+.bt-chart .bt-strat { stroke: var(--accent); }
+.bt-chart .bt-market { stroke: var(--muted); stroke-dasharray: 4 3; }
+.bt-legend { display: flex; gap: 16px; margin-top: 8px; font-size: 12px; }
+.bt-leg::before { content: "—"; font-weight: 700; margin-right: 4px; }
+.bt-leg-strat { color: var(--accent); }
+.bt-leg-mkt { color: var(--muted); }
+.bt-note { font-size: 12.5px; color: var(--ink-2); margin-top: 10px; }
+
 .profile-summary { margin-top: 14px; font-size: 13px; }
 .profile-summary summary { cursor: pointer; color: var(--accent); font-weight: 600; }
 .profile-summary p { margin-top: 8px; color: var(--ink-2); line-height: 1.6; }

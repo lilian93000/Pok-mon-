@@ -8,7 +8,7 @@ on:
   # avec GITHUB_TOKEN et ne déclenche pas le trigger « push » ci-dessus, mais
   # « workflow_run » se déclenche, lui, à la fin du workflow d'analyse.
   workflow_run:
-    workflows: ["Oracle Bourse — analyse quotidienne"]
+    workflows: ["Oracle Bourse — analyse quotidienne", "Oracle Bourse — backtest"]
     types:
       - completed
   workflow_dispatch:

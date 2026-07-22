@@ -689,6 +689,99 @@
     input.addEventListener("blur", () => setTimeout(() => $("searchDropdown").classList.add("hidden"), 150));
   }
 
+  /* ───────────── Backtest : fiabilité du modèle ───────────── */
+
+  function twoLineChart(curve, w, h) {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`); svg.setAttribute("width", w); svg.setAttribute("height", h);
+    svg.classList.add("bt-chart");
+    const vals = curve.flatMap((p) => [p.strat, p.market]);
+    const min = Math.min(...vals), max = Math.max(...vals), span = max - min || 1, pad = 6;
+    const xy = (v, i) => [pad + (i / (curve.length - 1)) * (w - 2 * pad), h - pad - ((v - min) / span) * (h - 2 * pad)];
+    const line = (key, cls) => {
+      const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      p.setAttribute("d", "M" + curve.map((pt, i) => xy(pt[key], i).map((n) => n.toFixed(1)).join(",")).join(" L"));
+      p.setAttribute("fill", "none"); p.setAttribute("stroke-width", "2"); p.classList.add(cls);
+      svg.appendChild(p);
+    };
+    line("market", "bt-market"); line("strat", "bt-strat");
+    return svg;
+  }
+
+  async function loadBacktest() {
+    let data;
+    try {
+      const res = await fetch("data/backtest.json", { cache: "no-store" });
+      if (!res.ok) return;
+      data = await res.json();
+    } catch { return; }
+    if (!data || !data.periods) return;
+
+    const V = { edge: { txt: "✅ Le modèle a montré un vrai avantage", cls: "v-hot" },
+      leger: { txt: "🟡 Avantage léger / non concluant", cls: "v-flat" },
+      faible: { txt: "🔴 Pas d'avantage démontré sur cette période", cls: "v-bad" } }[data.verdict] || { txt: "—", cls: "" };
+
+    const body = $("backtestBody");
+    body.innerHTML = "";
+    $("backtestHint").textContent = `${data.years} ans · ${data.universeSize} valeurs`;
+
+    body.appendChild(el("div", `badge big ${V.cls}`, V.txt));
+    body.appendChild(el("p", "bt-scope", data.scope));
+
+    // Chiffres clés
+    const stats = el("div", "bt-stats");
+    const stat = (lbl, val, sub) => { const b = el("div", "bt-stat"); b.appendChild(el("div", "bt-val", val)); b.appendChild(el("div", "bt-lbl", lbl)); if (sub) b.appendChild(el("div", "bt-sub", sub)); return b; };
+    stats.appendChild(stat("Stratégie (top 20 %)", `${data.annReturnStrategy >= 0 ? "+" : ""}${data.annReturnStrategy} %/an`));
+    stats.appendChild(stat("Marché (S&P 500)", `${data.annReturnMarket >= 0 ? "+" : ""}${data.annReturnMarket} %/an`));
+    stats.appendChild(stat("Réussite vs marché", `${data.hitRatePct} %`, "des mois"));
+    stats.appendChild(stat("Pire perte subie", `−${data.maxDrawdownPct} %`));
+    body.appendChild(stats);
+
+    // Courbe stratégie vs marché
+    if (data.curve && data.curve.length > 3) {
+      const cb = el("div", "chart-box");
+      cb.appendChild(el("h3", null, "100 investis au départ deviennent…"));
+      const wrap = el("div", "chart-wrap");
+      wrap.appendChild(twoLineChart(data.curve, 640, 150));
+      const leg = el("div", "bt-legend");
+      leg.appendChild(el("span", "bt-leg bt-leg-strat", `Stratégie : ${data.finalStrategy}`));
+      leg.appendChild(el("span", "bt-leg bt-leg-mkt", `Marché : ${data.finalMarket}`));
+      cb.appendChild(wrap); cb.appendChild(leg);
+      body.appendChild(cb);
+    }
+
+    // Quintiles : rendement mensuel du meilleur au pire groupe
+    if (data.quintileMonthlyReturnsPct) {
+      const qb = el("div", "pillar-box");
+      qb.appendChild(el("h3", null, "Rendement mensuel moyen, du groupe le mieux noté au moins bien noté"));
+      const labels = ["Top 20 %", "20-40 %", "40-60 %", "60-80 %", "Bottom 20 %"];
+      const q = data.quintileMonthlyReturnsPct;
+      const maxAbs = Math.max(0.1, ...q.map((v) => Math.abs(v)));
+      q.forEach((v, i) => {
+        const row = el("div", "pbar-row");
+        row.appendChild(el("span", "pbar-label", labels[i] || `Q${i + 1}`));
+        const track = el("div", "pbar-track");
+        const fill = el("div", "pbar-fill");
+        fill.style.width = `${(Math.abs(v) / maxAbs) * 100}%`;
+        fill.classList.add(v >= 0 ? "s-good-bg" : "s-bad-bg");
+        track.appendChild(fill); row.appendChild(track);
+        row.appendChild(el("span", "pbar-val", `${v >= 0 ? "+" : ""}${v.toFixed(2)} %`));
+        qb.appendChild(row);
+      });
+      qb.appendChild(el("p", "bt-note", `Idéalement, le haut rapporte plus que le bas (écart : ${data.topMinusBottomMonthlyPct >= 0 ? "+" : ""}${data.topMinusBottomMonthlyPct} %/mois). Un écart positif régulier = le score a un pouvoir prédictif.`));
+      body.appendChild(qb);
+    }
+
+    // Précautions
+    if (data.caveats) {
+      const wb = el("div", "warn-box");
+      wb.appendChild(el("h3", null, "À lire avant de conclure"));
+      for (const c of data.caveats) wb.appendChild(el("div", "warn-line", "• " + c));
+      body.appendChild(wb);
+    }
+    $("backtestPanel").classList.remove("hidden");
+  }
+
   /* ───────────── Chargement automatique de l'analyse quotidienne ─────────────
      Le robot GitHub Actions (bourse/auto/run.js) committe data/latest.json
      chaque jour ouvré ; si le fichier existe, la page l'affiche sans un clic. */
@@ -743,6 +836,7 @@
     initSearch();
 
     tryAutoLoad(); // affiche l'analyse du robot sans aucun clic, si elle existe
+    loadBacktest(); // affiche la fiabilité du modèle si le backtest existe
   }
 
   document.addEventListener("DOMContentLoaded", init);
