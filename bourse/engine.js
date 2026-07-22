@@ -509,8 +509,46 @@ const Engine = (() => {
     };
   }
 
+  /* ───────────── Force relative vs marché (S&P 500) ─────────────
+     Le signal n°1 des « grands gagnants » : une action qui surperforme
+     déjà l'indice avant de casser. idx = { r21, r63, r126 } (perfs indice). */
+  function relStrength(closes, idx) {
+    if (!closes || !idx) return null;
+    const parts = [];
+    const add = (d, w, ir) => { const s = periodReturn(closes, d); if (s != null && ir != null) parts.push([s - ir, w]); };
+    add(21, 1, idx.r21); add(63, 2, idx.r63); add(126, 1.5, idx.r126);
+    if (!parts.length) return null;
+    const excess = parts.reduce((s, [v, w]) => s + v * w, 0) / parts.reduce((s, [, w]) => s + w, 0);
+    return { excess, score: clamp(ramp(excess, [[-40, 8], [-15, 30], [0, 52], [10, 72], [25, 88], [50, 98]]), 0, 100) };
+  }
+
+  /* ───────────── « Trend template » (Minervini) ─────────────
+     Coche les critères d'une action en tendance de fond confirmée,
+     historiquement le terreau des fortes hausses. */
+  function trendTemplate(closes) {
+    if (!closes || closes.length < 150) return null;
+    const price = last(closes);
+    const ma50 = last(sma(closes, 50));
+    const ma150 = closes.length >= 150 ? last(sma(closes, 150)) : null;
+    const ma200 = closes.length >= 200 ? last(sma(closes, 200)) : null;
+    const ma200prev = closes.length >= 221 ? last(sma(closes.slice(0, -21), 200)) : null;
+    const hi = Math.max(...closes.slice(-252));
+    const lo = Math.min(...closes.slice(-252));
+    const checks = [
+      { k: "Cours au-dessus de la MM200", ok: ma200 != null ? price > ma200 : price > ma50 },
+      { k: "MM150 au-dessus de la MM200", ok: ma150 != null && ma200 != null ? ma150 > ma200 : true },
+      { k: "MM200 orientée à la hausse", ok: ma200 != null && ma200prev != null ? ma200 > ma200prev : true },
+      { k: "MM50 au-dessus des MM150/200", ok: ma50 != null && ma150 != null ? ma50 > ma150 : true },
+      { k: "Cours au-dessus de la MM50", ok: ma50 != null ? price > ma50 : true },
+      { k: "≥ 30 % au-dessus du plus-bas 52 sem.", ok: price >= lo * 1.3 },
+      { k: "À moins de 25 % du plus-haut 52 sem.", ok: price >= hi * 0.75 },
+    ];
+    const passed = checks.filter((c) => c.ok).length;
+    return { passed, total: checks.length, checks, score: clamp((passed / checks.length) * 100, 0, 100), pass: passed >= 6 };
+  }
+
   return {
-    analyze, verdict, composite, WEIGHTS, earlySetup,
+    analyze, verdict, composite, WEIGHTS, earlySetup, relStrength, trendTemplate,
     scoreTechnical, scoreMomentum, scoreFundamental, scoreSentiment, scoreHeadline,
     rsi, macd, sma, ema, trendSlope, annualVol, periodReturn, bollingerPos, volumeSurge,
     clamp, ramp,
