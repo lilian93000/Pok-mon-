@@ -323,5 +323,30 @@
     "score": 78
    }
   ]
+ },
+ {
+  "date": "2026-07-22",
+  "top": [
+   {
+    "symbol": "SIF",
+    "score": 83
+   },
+   {
+    "symbol": "PLBC",
+    "score": 81
+   },
+   {
+    "symbol": "WSBC",
+    "score": 81
+   },
+   {
+    "symbol": "KARO",
+    "score": 80
+   },
+   {
+    "symbol": "SMBK",
+    "score": 80
+   }
+  ]
  }
 ]
