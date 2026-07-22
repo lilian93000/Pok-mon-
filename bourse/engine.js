@@ -454,8 +454,63 @@ const Engine = (() => {
     };
   }
 
+  /* ───────────── « Avant le boum » : détection de démarrage précoce ─────────────
+     Objectif inverse du momentum : repérer les ressorts comprimés AVANT la hausse
+     — base plate qui se resserre, cours qui presse sous sa résistance, gain encore
+     modeste, tout début d'accélération — et écarter ce qui a déjà explosé.
+     Ne travaille que sur les cours (utilisable sur tout le marché). */
+
+  function earlySetup(closes) {
+    if (!closes || closes.length < 80) return null;
+    const price = last(closes);
+    const ret = (d) => (closes.length > d ? (price / closes[closes.length - 1 - d] - 1) * 100 : null);
+    const perf1 = ret(21);
+    const perf3 = ret(63);
+    if (perf3 == null || perf1 == null) return null;
+
+    const ma50 = last(sma(closes, Math.min(50, closes.length - 1)));
+    const win = closes.slice(-126);
+    const highN = Math.max(...win);
+    const lowN = Math.min(...win);
+    const distHigh = (price / highN - 1) * 100;      // 0 = au plus-haut 6 mois
+    const extMa50 = ma50 ? (price / ma50 - 1) * 100 : 0;
+
+    // Resserrement de la base : volatilité récente (20 j) faible = ressort comprimé
+    const recent = closes.slice(-21);
+    const rets = [];
+    for (let i = 1; i < recent.length; i++) rets.push(recent[i] / recent[i - 1] - 1);
+    const tight = std(rets) * Math.sqrt(252) * 100;
+    // Amplitude de la base sur ~40 j : étroite = consolidation saine
+    const base = closes.slice(-40);
+    const baseRange = (Math.max(...base) - Math.min(...base)) / mean(base) * 100;
+
+    // Filtres durs : ni déjà envolé, ni en chute
+    const alreadyMooned = perf3 > 30;
+    const nearHigh = distHigh >= -12;                // proche de sa résistance
+    const eligible = !alreadyMooned && perf3 >= -12 && nearHigh && price > 1;
+
+    // Composantes du score (0-100)
+    const sBreak = ramp(distHigh, [[-30, 10], [-15, 35], [-8, 65], [-3, 88], [0, 95], [4, 78]]);
+    const sSweet = ramp(perf3, [[-15, 20], [-5, 50], [5, 82], [14, 92], [22, 72], [30, 40], [45, 12]]);
+    const accel = perf1 - perf3 / 3;                 // le dernier mois dépasse-t-il le rythme ?
+    const sAccel = ramp(accel, [[-6, 25], [0, 55], [4, 80], [10, 92]]);
+    const sTight = ramp(tight, [[15, 92], [28, 74], [45, 50], [70, 25], [110, 8]]);
+    const sBase = ramp(baseRange, [[8, 90], [16, 72], [28, 48], [45, 22]]);
+    const sExt = ramp(extMa50, [[-8, 30], [-2, 62], [3, 92], [10, 78], [20, 42], [35, 12]]);
+
+    const parts = [[sBreak, 2], [sSweet, 2], [sAccel, 1.5], [sTight, 1.3], [sBase, 1], [sExt, 1]];
+    const totW = parts.reduce((s, [, w]) => s + w, 0);
+    let score = parts.reduce((s, [v, w]) => s + v * w, 0) / totW;
+    if (!eligible) score = Math.min(score, alreadyMooned ? 25 : 40); // pénalise le hors-cible
+
+    return {
+      score: clamp(score, 0, 100), eligible,
+      perf1, perf3, distHigh, extMa50, tight, baseRange, alreadyMooned,
+    };
+  }
+
   return {
-    analyze, verdict, composite, WEIGHTS,
+    analyze, verdict, composite, WEIGHTS, earlySetup,
     scoreTechnical, scoreMomentum, scoreFundamental, scoreSentiment, scoreHeadline,
     rsi, macd, sma, ema, trendSlope, annualVol, periodReturn, bollingerPos, volumeSurge,
     clamp, ramp,
