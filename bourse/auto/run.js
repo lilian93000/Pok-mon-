@@ -131,6 +131,21 @@ async function yahooChart(symbol) {
   return { closes, volumes, name: r.meta?.longName || r.meta?.shortName || symbol };
 }
 
+/* Perfs de l'indice S&P 500 (^GSPC) — référence pour la force relative. */
+async function fetchIndexReturns() {
+  try {
+    const { closes } = await yahooChart("^GSPC");
+    return {
+      r21: Engine.periodReturn(closes, 21),
+      r63: Engine.periodReturn(closes, 63),
+      r126: Engine.periodReturn(closes, 126),
+    };
+  } catch (e) {
+    console.error(`Indice S&P 500 indisponible (${e.message}) — force relative désactivée.`);
+    return null;
+  }
+}
+
 function decodeEntities(s) {
   return s
     .replace(/<!\[CDATA\[(.*?)\]\]>/gs, "$1")
@@ -209,17 +224,22 @@ async function deepAnalyze(symbol, ctx) {
       warnings.push(`Fondamentaux Finnhub indisponibles : ${e.message}`);
     }
   }
-  let profile = null;
+  let profile = null, extra = null;
   if (ctx.ysession) {
     try {
       const qs = await Fundamentals.fetchQuoteSummary(symbol, ctx.ysession);
       profile = qs.profile;
+      extra = qs.extra;
       if (!fundamentals && qs.fundamentals) { fundamentals = qs.fundamentals; sources.push("Yahoo Finance (fondamentaux)"); }
       else if (!fundamentals) warnings.push("Pas de fondamentaux Yahoo pour ce titre — pilier neutralisé.");
     } catch (e) {
       if (!fundamentals) warnings.push(`Fondamentaux Yahoo indisponibles : ${e.message}`);
     }
   }
+
+  // Signaux avancés (sur l'historique complet, avant réduction)
+  const rs = Engine.relStrength(prices.closes, ctx.idx);
+  const trend = Engine.trendTemplate(prices.closes);
 
   const res = Engine.analyze({
     symbol,
@@ -236,6 +256,9 @@ async function deepAnalyze(symbol, ctx) {
   res.fromScan = !ctx.favorites.has(symbol);
   res.fundamentals = fundamentals || null;   // chiffres bruts, pour l'analyse détaillée
   res.profile = profile || null;             // profil d'entreprise du jour (secteur, taille…)
+  res.extra = extra || null;                 // objectif analystes, short interest, prochain résultat
+  res.rs = rs ? { excess: Math.round(rs.excess), score: Math.round(rs.score) } : null; // force relative vs S&P 500
+  res.trend = trend ? { passed: trend.passed, total: trend.total, pass: trend.pass, score: Math.round(trend.score) } : null;
   res.analysis = writtenAnalysis(res);       // analyse écrite (pourquoi investir, forces, risques…)
   return res;
 }
@@ -348,6 +371,7 @@ function writtenAnalysis(r) {
   const margin = f.netMargin;
   const roe = f.roe;
   const debt = f.debtToEquity;
+  const rs = r.rs, trend = r.trend, ex = r.extra || {};
 
   // Technique / momentum (relus dans les signaux)
   const rsi = grab("technical", /RSI 14 j\s*:\s*(\d+)/);
@@ -459,6 +483,23 @@ function writtenAnalysis(r) {
     push(forces, `Actualité porteuse`,
       `Le flux de nouvelles (contrats, résultats records, relèvements d'objectifs, notes d'analystes) est favorable et entretient l'attention du marché sur le titre.`);
   }
+  // Signaux avancés « chasseur de grands gagnants »
+  if (rs && rs.excess >= 5) {
+    push(forces, `Surperforme le marché (+${round(rs.excess)} pts vs S&P 500)`,
+      `Elle fait mieux que l'indice sur les 3-6 derniers mois. La « force relative » est le signal n°1 des grands gagnants : les leaders montent avant et plus fort que la moyenne.`);
+  }
+  if (trend && trend.pass) {
+    push(forces, `Tendance de fond confirmée (${trend.passed}/${trend.total} critères)`,
+      `Elle coche le « trend template » des grands gagnants : moyennes mobiles bien empilées et orientées à la hausse, cours proche de son plus-haut et loin de son plus-bas — le terreau statistique des fortes hausses.`);
+  }
+  if (ex.targetUpside != null && ex.targetUpside >= 12 && ex.numAnalysts) {
+    push(forces, `Potentiel analystes +${round(ex.targetUpside)} %`,
+      `Objectif de cours moyen ${ex.targetMean ? ex.targetMean.toFixed(0) + " $" : ""} sur ${ex.numAnalysts} analystes — à prendre avec recul (les objectifs sont souvent optimistes), mais un écart positif large reflète un consensus favorable.`);
+  }
+  if (ex.shortPercent != null && ex.shortPercent >= 10) {
+    push(forces, `Short interest élevé (${round(ex.shortPercent)} % du flottant)`,
+      `Beaucoup d'investisseurs parient sur la baisse. Si le cours monte, ils doivent racheter en urgence → « short squeeze », qui peut amplifier violemment la hausse. C'est un carburant (mais aussi un signe que d'autres doutent).`);
+  }
   if (!forces.length) push(forces, "Configuration équilibrée", "Aucun pilier ne se détache nettement, mais l'ensemble reste correct sur les quatre familles de critères.");
 
   // ── Vigilance (lead + explication) ──
@@ -471,6 +512,9 @@ function writtenAnalysis(r) {
   if (decel) push(vigilance, `Hausse en essoufflement`, `Le rythme des dernières semaines ralentit par rapport au trimestre — la tendance pourrait marquer une pause.`);
   if (distHigh != null && distHigh < -20) push(vigilance, `Loin de ses sommets (${round(distHigh)} % sous le plus-haut)`, `Le titre doit encore prouver qu'il peut repartir : il reste du chemin avant de retrouver ses niveaux hauts.`);
   if (newsNeg) push(vigilance, `Actualité récente défavorable`, `Le ton de la presse est négatif en ce moment : à surveiller de près avant d'entrer.`);
+  if (rs && rs.excess <= -5) push(vigilance, `Sous-performe le marché`, `Elle fait moins bien que le S&P 500 sur les derniers mois : ce n'est pas (encore) un titre leader, ce qui réduit les chances d'une forte hausse à court terme.`);
+  if (ex.targetUpside != null && ex.targetUpside <= -5 && ex.numAnalysts) push(vigilance, `Cours au-dessus de l'objectif analystes`, `Le consensus des analystes situe la juste valeur ${round(-ex.targetUpside)} % plus bas : le potentiel de hausse est limité selon eux.`);
+  if (ex.earningsInDays != null && ex.earningsInDays >= 0 && ex.earningsInDays <= 10) push(vigilance, `Résultats dans ${ex.earningsInDays} jour${ex.earningsInDays > 1 ? "s" : ""}`, `La publication des résultats est imminente : c'est un catalyseur à double tranchant, le cours peut bondir OU chuter fortement selon la surprise. Entrer juste avant, c'est jouer à pile ou face sur le chiffre.`);
   if (sc("fundamental") == null) push(vigilance, `Pas de données financières`, `L'analyse repose seulement sur le cours : on ne sait pas si l'entreprise est rentable ni comment elle croît. Prudence supplémentaire.`);
   if (r.confidence != null && r.confidence < 100) push(vigilance, `Analyse partielle (confiance ${r.confidence} %)`, `Une partie des données manquait au moment du calcul ; le score est donc moins fiable que pour un titre à 100 %.`);
   push(vigilance, `Rien n'est garanti`, `Même la plus belle configuration peut se retourner : un score élevé mesure une probabilité favorable, pas une certitude.`);
@@ -545,7 +589,11 @@ function selectPicks(results) {
     return es && es.eligible && es.perf3 <= 25 && es.score >= 55;
   });
   const avantBoum = abPool.length
-    ? best(abPool, (r) => earlyMap.get(r.symbol).score + (pil(r, "fundamental") != null ? 8 : 0) + (pil(r, "sentiment") || 0) * 0.05)
+    ? best(abPool, (r) => earlyMap.get(r.symbol).score
+        + (pil(r, "fundamental") != null ? 8 : 0)
+        + (pil(r, "sentiment") || 0) * 0.05
+        + (r.rs ? r.rs.score * 0.20 : 0)          // bonus leader (force relative)
+        + (r.trend ? r.trend.score * 0.10 : 0))   // bonus tendance de fond confirmée
     : null;
   if (avantBoum) used.add(avantBoum.symbol);
 
@@ -654,13 +702,17 @@ async function main() {
   }
   const names = new Map(universe.map((u) => [u.symbol, u.name]));
 
+  // Référence marché (S&P 500) pour la force relative
+  const idxReturns = await fetchIndexReturns();
+  if (idxReturns) console.log(`S&P 500 — perfs : 1m ${idxReturns.r21?.toFixed(1)}% · 3m ${idxReturns.r63?.toFixed(1)}% · 6m ${idxReturns.r126?.toFixed(1)}%`);
+
   /* Étape 1 : scan du marché */
   let scanCloses = new Map();
   let candidates = [];
   let earlyCandidates = [];   // « avant le boum » : ressorts comprimés, pas encore envolés
   const market = []; // index léger pour le moteur de recherche (tout le marché)
   if (universe.length) {
-    console.log(`Étape 1 — scan technique+momentum+démarrage du marché…`);
+    console.log(`Étape 1 — scan technique+momentum+démarrage+force relative…`);
     scanCloses = await scanMarket(universe.map((u) => u.symbol));
     console.log(`  ${scanCloses.size} historiques récupérés.`);
     for (const [sym, closes] of scanCloses) {
@@ -672,7 +724,15 @@ async function main() {
       if (price >= minPrice) {
         candidates.push({ sym, s: 0.55 * t + 0.45 * m });
         const es = Engine.earlySetup(closes);
-        if (es && es.eligible) earlyCandidates.push({ sym, s: es.score });
+        if (es && es.eligible) {
+          // Score de démarrage enrichi : ressort comprimé + leader (RS) + tendance de fond
+          const rs = Engine.relStrength(closes, idxReturns);
+          const tt = Engine.trendTemplate(closes);
+          const blended = rs
+            ? es.score * 0.55 + rs.score * 0.25 + (tt ? tt.score : 50) * 0.20
+            : es.score;
+          earlyCandidates.push({ sym, s: blended });
+        }
       }
     }
     candidates.sort((a, b) => b.s - a.s);
@@ -693,7 +753,7 @@ async function main() {
   const finalSyms = [...finalSet];
   console.log(`Étape 2 — analyse profonde de ${finalSyms.length} titres (${favorites.length} favoris + top scan + démarrages)…`);
 
-  const ctx = { scanCloses, names, ysession, finnhubKey, favorites: new Set(favorites) };
+  const ctx = { scanCloses, names, ysession, finnhubKey, favorites: new Set(favorites), idx: idxReturns };
   const results = [];
   const failed = [];
   const analyzed = await pool(finalSyms, 3, async (sym) => {

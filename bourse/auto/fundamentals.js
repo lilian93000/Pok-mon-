@@ -55,8 +55,8 @@ const pct = (x) => { const v = raw(x); return v == null ? null : v * 100; };
  * Renvoie le format attendu par Engine.scoreFundamental, ou null.
  */
 async function fetchQuoteSummary(symbol, session, tries = 2) {
-  // On récupère en un seul appel : fondamentaux + profil d'entreprise (frais du jour)
-  const mods = "financialData,defaultKeyStatistics,summaryDetail,assetProfile,price";
+  // On récupère en un seul appel : fondamentaux + profil + signaux avancés + calendrier
+  const mods = "financialData,defaultKeyStatistics,summaryDetail,assetProfile,price,calendarEvents";
   const url = `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(symbol)}`
     + `?modules=${mods}&crumb=${encodeURIComponent(session.crumb)}`;
   let lastErr;
@@ -95,7 +95,28 @@ async function fetchQuoteSummary(symbol, session, tries = 2) {
         summary: ap.longBusinessSummary ? ap.longBusinessSummary.slice(0, 600) : null,
       } : null;
 
-      return { fundamentals, profile };
+      // Signaux avancés : potentiel analystes, short interest, prochain résultat
+      const price = raw(fd.currentPrice) ?? raw(pr.regularMarketPrice);
+      const target = raw(fd.targetMeanPrice);
+      const ce = r.calendarEvents || {};
+      let earningsInDays = null, earningsDate = null;
+      const edArr = ce.earnings && ce.earnings.earningsDate;
+      if (Array.isArray(edArr) && edArr.length && edArr[0].raw) {
+        const dt = new Date(edArr[0].raw * 1000);
+        earningsDate = dt.toISOString().slice(0, 10);
+        earningsInDays = Math.round((dt.getTime() - Date.now()) / 864e5);
+      }
+      const extra = {
+        targetMean: target ?? null,
+        targetUpside: (target && price) ? (target / price - 1) * 100 : null,
+        recommendation: fd.recommendationKey || null,     // strong_buy / buy / hold…
+        numAnalysts: raw(fd.numberOfAnalystOpinions),
+        shortPercent: pct(ks.shortPercentOfFloat),        // % du flottant vendu à découvert
+        earningsDate, earningsInDays,
+      };
+      const hasExtra = Object.values(extra).some((v) => v != null);
+
+      return { fundamentals, profile, extra: hasExtra ? extra : null };
     } catch (e) {
       lastErr = e;
       if (i < tries - 1) await new Promise((r) => setTimeout(r, 800 * (i + 1)));

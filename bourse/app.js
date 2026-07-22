@@ -297,6 +297,15 @@
       if (pr.employees) bits.push(pr.employees.toLocaleString("fr-FR") + " employés");
       if (bits.length) meta.appendChild(el("div", "meta-line", "🏢 " + bits.join(" · ")));
     }
+    // Signaux avancés (force relative, tendance de fond, analystes, short, résultats)
+    const adv = [];
+    if (r.rs) adv.push(`RS marché ${r.rs.excess >= 0 ? "+" : ""}${r.rs.excess} pts`);
+    if (r.trend) adv.push(`tendance ${r.trend.passed}/${r.trend.total}`);
+    const ex = r.extra || {};
+    if (ex.targetUpside != null) adv.push(`potentiel analystes ${ex.targetUpside >= 0 ? "+" : ""}${Math.round(ex.targetUpside)} %`);
+    if (ex.shortPercent != null && ex.shortPercent >= 8) adv.push(`short ${Math.round(ex.shortPercent)} %`);
+    if (ex.earningsInDays != null && ex.earningsInDays >= 0 && ex.earningsInDays <= 30) adv.push(`résultats dans ${ex.earningsInDays} j`);
+    if (adv.length) meta.appendChild(el("div", "meta-line", "📊 " + adv.join(" · ")));
     meta.appendChild(el("div", "meta-line", `Confiance : ${r.confidence} % des critères couverts par des données`));
     if (dataGeneratedAt) {
       const d = new Date(dataGeneratedAt);
