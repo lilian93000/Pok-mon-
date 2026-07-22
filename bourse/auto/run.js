@@ -209,13 +209,15 @@ async function deepAnalyze(symbol, ctx) {
       warnings.push(`Fondamentaux Finnhub indisponibles : ${e.message}`);
     }
   }
-  if (!fundamentals && ctx.ysession) {
+  let profile = null;
+  if (ctx.ysession) {
     try {
-      fundamentals = await Fundamentals.fetchFundamentals(symbol, ctx.ysession);
-      if (fundamentals) sources.push("Yahoo Finance (fondamentaux)");
-      else warnings.push("Pas de fondamentaux Yahoo pour ce titre — pilier neutralisé.");
+      const qs = await Fundamentals.fetchQuoteSummary(symbol, ctx.ysession);
+      profile = qs.profile;
+      if (!fundamentals && qs.fundamentals) { fundamentals = qs.fundamentals; sources.push("Yahoo Finance (fondamentaux)"); }
+      else if (!fundamentals) warnings.push("Pas de fondamentaux Yahoo pour ce titre — pilier neutralisé.");
     } catch (e) {
-      warnings.push(`Fondamentaux Yahoo indisponibles : ${e.message}`);
+      if (!fundamentals) warnings.push(`Fondamentaux Yahoo indisponibles : ${e.message}`);
     }
   }
 
@@ -233,6 +235,7 @@ async function deepAnalyze(symbol, ctx) {
   res.sources = sources;
   res.fromScan = !ctx.favorites.has(symbol);
   res.fundamentals = fundamentals || null;   // chiffres bruts, pour l'analyse détaillée
+  res.profile = profile || null;             // profil d'entreprise du jour (secteur, taille…)
   res.analysis = writtenAnalysis(res);       // analyse écrite (pourquoi investir, forces, risques…)
   return res;
 }
@@ -305,6 +308,15 @@ function plainReason(r, category) {
   return phrase;
 }
 
+/* Formate une capitalisation boursière en dollars lisibles (2,3 Md$, 450 M$…). */
+function fmtCap(x) {
+  if (x == null || !isFinite(x)) return null;
+  if (x >= 1e12) return `${(x / 1e12).toFixed(1).replace(".", ",")} T$`;
+  if (x >= 1e9) return `${(x / 1e9).toFixed(1).replace(".", ",")} Md$`;
+  if (x >= 1e6) return `${Math.round(x / 1e6)} M$`;
+  return `${Math.round(x)} $`;
+}
+
 /* Analyse écrite détaillée et pédagogique, générée à partir des chiffres réels.
    Renvoie { resume, pourquoi, piliers[], forces[{lead,detail}], vigilance[{lead,detail}], profil, pratique }. */
 function writtenAnalysis(r) {
@@ -343,8 +355,15 @@ function writtenAnalysis(r) {
   const newsPos = has("sentiment", /Ton des news|Buzz/);
   const newsNeg = has("sentiment", /Ton des news|avertissement/, false);
 
-  // ── Résumé ──
-  let resume = `${name} obtient une note globale de ${round(r.score)}/100 (${r.verdict.label.toLowerCase()}), en pesant quatre familles de critères : la santé financière de l'entreprise, la tendance de son cours, sa dynamique récente et le ton de l'actualité.`;
+  // ── Résumé ── (ancré sur le profil du jour quand il est disponible)
+  const prof = r.profile || {};
+  let ident = "";
+  if (prof.sector || prof.industry) {
+    const bits = [prof.industry || prof.sector];
+    if (prof.marketCap) bits.push(`capitalisation ${fmtCap(prof.marketCap)}`);
+    ident = ` C'est une entreprise du secteur « ${prof.sector || prof.industry} »${prof.industry && prof.sector ? ` (${prof.industry})` : ""}${prof.marketCap ? `, capitalisée ${fmtCap(prof.marketCap)}` : ""}.`;
+  }
+  let resume = `${name} obtient une note globale de ${round(r.score)}/100 (${r.verdict.label.toLowerCase()}), en pesant quatre familles de critères : la santé financière de l'entreprise, la tendance de son cours, sa dynamique récente et le ton de l'actualité.${ident}`;
   if (caG != null && caG > 12 && (aboveMA || (trendM != null && trendM > 0))) {
     resume += " Le point clé : c'est une entreprise qui grandit vite ET dont le cours suit — les fondamentaux et le marché racontent la même histoire, ce qui est le cas de figure le plus solide.";
   } else if (aboveMA || (trendM != null && trendM > 0)) {

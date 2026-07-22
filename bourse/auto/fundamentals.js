@@ -54,8 +54,9 @@ const pct = (x) => { const v = raw(x); return v == null ? null : v * 100; };
  * session : { cookie, crumb } issu d'initSession().
  * Renvoie le format attendu par Engine.scoreFundamental, ou null.
  */
-async function fetchFundamentals(symbol, session, tries = 2) {
-  const mods = "financialData,defaultKeyStatistics,summaryDetail";
+async function fetchQuoteSummary(symbol, session, tries = 2) {
+  // On récupère en un seul appel : fondamentaux + profil d'entreprise (frais du jour)
+  const mods = "financialData,defaultKeyStatistics,summaryDetail,assetProfile,price";
   const url = `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(symbol)}`
     + `?modules=${mods}&crumb=${encodeURIComponent(session.crumb)}`;
   let lastErr;
@@ -70,6 +71,7 @@ async function fetchFundamentals(symbol, session, tries = 2) {
       const r = j?.quoteSummary?.result?.[0];
       if (!r) throw new Error("réponse vide");
       const fd = r.financialData || {}, ks = r.defaultKeyStatistics || {}, sd = r.summaryDetail || {};
+      const ap = r.assetProfile || {}, pr = r.price || {};
       const de = raw(fd.debtToEquity); // Yahoo l'exprime en % (150 = 1,5x)
       const f = {
         revenueGrowth: pct(fd.revenueGrowth),
@@ -80,8 +82,20 @@ async function fetchFundamentals(symbol, session, tries = 2) {
         debtToEquity: de != null ? de / 100 : null,
         roe: pct(fd.returnOnEquity),
       };
-      if (Object.values(f).every((v) => v == null)) return null;
-      return f;
+      const fundamentals = Object.values(f).every((v) => v == null) ? null : f;
+
+      // Profil d'entreprise (secteur, industrie, taille) — données du jour
+      const marketCap = raw(pr.marketCap) ?? raw(sd.marketCap);
+      const profile = (ap.sector || ap.industry || ap.longBusinessSummary || marketCap != null) ? {
+        sector: ap.sector || null,
+        industry: ap.industry || null,
+        employees: ap.fullTimeEmployees ?? null,
+        country: ap.country || null,
+        marketCap: marketCap ?? null,
+        summary: ap.longBusinessSummary ? ap.longBusinessSummary.slice(0, 600) : null,
+      } : null;
+
+      return { fundamentals, profile };
     } catch (e) {
       lastErr = e;
       if (i < tries - 1) await new Promise((r) => setTimeout(r, 800 * (i + 1)));
@@ -90,4 +104,4 @@ async function fetchFundamentals(symbol, session, tries = 2) {
   throw lastErr;
 }
 
-module.exports = { initSession, fetchFundamentals };
+module.exports = { initSession, fetchQuoteSummary };

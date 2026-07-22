@@ -20,6 +20,25 @@
 
   let watchlist = loadWatchlist();
   let results = [];
+  let dataGeneratedAt = null; // horodatage de l'analyse chargée (fraîcheur des données)
+
+  // Format capitalisation boursière (2,3 Md$, 450 M$…)
+  function fmtCap(x) {
+    if (x == null || !isFinite(x)) return null;
+    if (x >= 1e12) return (x / 1e12).toFixed(1).replace(".", ",") + " T$";
+    if (x >= 1e9) return (x / 1e9).toFixed(1).replace(".", ",") + " Md$";
+    if (x >= 1e6) return Math.round(x / 1e6) + " M$";
+    return Math.round(x) + " $";
+  }
+
+  const SECTORS_FR = {
+    "Financial Services": "Finance", "Healthcare": "Santé", "Technology": "Technologie",
+    "Energy": "Énergie", "Consumer Cyclical": "Consommation cyclique",
+    "Consumer Defensive": "Consommation de base", "Industrials": "Industrie",
+    "Basic Materials": "Matériaux", "Communication Services": "Communication",
+    "Utilities": "Services aux collectivités", "Real Estate": "Immobilier",
+  };
+  const translateSector = (s) => SECTORS_FR[s] || s;
 
   /* ───────────── Persistance ───────────── */
 
@@ -268,10 +287,34 @@
     const meta = el("div", "detail-meta");
     meta.appendChild(el("div", `badge big ${r.verdict.cls}`, `${r.verdict.emoji} ${r.verdict.label}`));
     if (r.price != null) meta.appendChild(el("div", "meta-line", `Dernier cours : ${r.price.toFixed(2)} $`));
+    // Profil d'entreprise (données du jour)
+    if (r.profile) {
+      const pr = r.profile;
+      const bits = [];
+      if (pr.sector) bits.push(translateSector(pr.sector));
+      if (pr.industry && pr.industry !== pr.sector) bits.push(pr.industry);
+      if (pr.marketCap) bits.push("capi. " + fmtCap(pr.marketCap));
+      if (pr.employees) bits.push(pr.employees.toLocaleString("fr-FR") + " employés");
+      if (bits.length) meta.appendChild(el("div", "meta-line", "🏢 " + bits.join(" · ")));
+    }
     meta.appendChild(el("div", "meta-line", `Confiance : ${r.confidence} % des critères couverts par des données`));
-    if (r.sources.length) meta.appendChild(el("div", "meta-line sub", `Sources : ${r.sources.join(" · ")}`));
+    if (dataGeneratedAt) {
+      const d = new Date(dataGeneratedAt);
+      meta.appendChild(el("div", "meta-line sub", `🕒 Données du ${d.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })} à ${d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}` + (r.sources.length ? ` · ${r.sources.join(" · ")}` : "")));
+    } else if (r.sources.length) {
+      meta.appendChild(el("div", "meta-line sub", `Sources : ${r.sources.join(" · ")}`));
+    }
     head.appendChild(meta);
     body.appendChild(head);
+
+    // Description de l'entreprise (repliée) — texte source Yahoo
+    if (r.profile && r.profile.summary) {
+      const det = document.createElement("details");
+      det.className = "profile-summary";
+      det.appendChild(el("summary", null, "Que fait l'entreprise ?"));
+      det.appendChild(el("p", null, r.profile.summary + "…"));
+      body.appendChild(det);
+    }
 
     // Analyse écrite : pourquoi investir maintenant, forces, risques, profil
     if (r.analysis) {
@@ -640,6 +683,7 @@
       const data = await res.json();
       if (!Array.isArray(data.results) || !data.results.length) return false;
       results = data.results;
+      dataGeneratedAt = data.generatedAt || null;
       renderTable();
       if (data.picks) renderPicks(data.picks);
 
