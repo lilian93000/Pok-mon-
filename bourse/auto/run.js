@@ -291,7 +291,15 @@ function plainReason(r, category) {
   // Capitalise le début de chaque phrase (après un point)
   const capSentences = (s) => s.replace(/(^\s*|[.!?]\s+)([a-zà-ÿ])/g, (_, p, c) => p + c.toUpperCase());
   let phrase;
-  if (category === "Long terme") {
+  if (category === "Avant le boum") {
+    const es = Engine.earlySetup(r.closes) || {};
+    const bits = [];
+    bits.push("le cours sort d'une phase de calme et presse sous sa résistance, mais n'a pas encore explosé");
+    if (es.perf3 != null) bits.push(`il n'a pris que +${Math.max(0, Math.round(es.perf3))} % sur 3 mois (le gros du mouvement est peut-être devant)`);
+    if (fond.length) bits.push(fond.slice(0, 2).join(", "));
+    if (news) bits.push("et l'actualité commence à s'y intéresser");
+    phrase = bits.join(", ");
+  } else if (category === "Long terme") {
     phrase = [fond.slice(0, 3).join(", "), marche.slice(0, 1).join("")].filter(Boolean).join(". ");
   } else if (category === "One shot") {
     phrase = [marche.slice(0, 3).join(", "), fond.slice(0, 1).join("")].filter(Boolean).join(". ");
@@ -529,20 +537,38 @@ function selectPicks(results) {
   const complet = (balPool.length ? best(balPool, (r) => r.score) : scored.find((r) => !used.has(r.symbol)) || null);
   if (complet) used.add(complet.symbol);
 
-  return {
+  // Avant le boum : démarrage précoce, ressort comprimé, PAS encore envolé
+  const earlyMap = new Map(scored.map((r) => [r.symbol, Engine.earlySetup(r.closes)]));
+  const abPool = scored.filter((r) => {
+    if (used.has(r.symbol)) return false;
+    const es = earlyMap.get(r.symbol);
+    return es && es.eligible && es.perf3 <= 25 && es.score >= 55;
+  });
+  const avantBoum = abPool.length
+    ? best(abPool, (r) => earlyMap.get(r.symbol).score + (pil(r, "fundamental") != null ? 8 : 0) + (pil(r, "sentiment") || 0) * 0.05)
+    : null;
+  if (avantBoum) used.add(avantBoum.symbol);
+
+  const out = {
+    avantBoum: avantBoum ? pack(avantBoum, "Avant le boum", "Le mouvement n'a pas encore eu lieu — signaux de démarrage réunis, cours pas encore envolé.") : null,
     longTerme: longTerme ? pack(longTerme, "Long terme", "À garder — fondamentaux solides, faible volatilité.") : null,
     complet: complet ? pack(complet, "Le plus complet", "Le meilleur équilibre technique + fondamental + momentum.") : null,
     oneShot: oneShot ? pack(oneShot, "One shot", "Pari performance — momentum fort mais volatil. Petite taille + stop.") : null,
   };
+  if (out.avantBoum) {
+    const es = earlyMap.get(avantBoum.symbol);
+    out.avantBoum.early = { perf3: Math.round(es.perf3), distHigh: Math.round(es.distHigh), earlyScore: Math.round(es.score) };
+  }
+  return out;
 }
 
 /* ───────────── Rapport markdown ───────────── */
 
 function reportPicks(picks) {
   if (!picks) return [];
-  const emoji = { longTerme: "🏛️", complet: "⭐", oneShot: "🚀" };
+  const emoji = { avantBoum: "🌱", longTerme: "🏛️", complet: "⭐", oneShot: "🚀" };
   const out = ["", "## 🎯 Picks du jour", ""];
-  for (const key of ["longTerme", "complet", "oneShot"]) {
+  for (const key of ["avantBoum", "longTerme", "complet", "oneShot"]) {
     const p = picks[key];
     if (!p) continue;
     out.push(`### ${emoji[key]} ${p.category} — ${p.symbol}${p.name !== p.symbol ? ` (${p.name})` : ""} · ${p.score}/100`);
@@ -631,9 +657,10 @@ async function main() {
   /* Étape 1 : scan du marché */
   let scanCloses = new Map();
   let candidates = [];
+  let earlyCandidates = [];   // « avant le boum » : ressorts comprimés, pas encore envolés
   const market = []; // index léger pour le moteur de recherche (tout le marché)
   if (universe.length) {
-    console.log(`Étape 1 — scan technique+momentum du marché…`);
+    console.log(`Étape 1 — scan technique+momentum+démarrage du marché…`);
     scanCloses = await scanMarket(universe.map((u) => u.symbol));
     console.log(`  ${scanCloses.size} historiques récupérés.`);
     for (const [sym, closes] of scanCloses) {
@@ -641,24 +668,30 @@ async function main() {
       const m = Engine.scoreMomentum(closes).score;
       if (t == null || m == null) continue;
       const price = closes[closes.length - 1];
-      // Index recherche : symbole, nom, prix, technique, momentum
       market.push({ s: sym, n: names.get(sym) || sym, p: Math.round(price * 100) / 100, t: Math.round(t), m: Math.round(m) });
-      if (price >= minPrice) candidates.push({ sym, s: 0.55 * t + 0.45 * m });
+      if (price >= minPrice) {
+        candidates.push({ sym, s: 0.55 * t + 0.45 * m });
+        const es = Engine.earlySetup(closes);
+        if (es && es.eligible) earlyCandidates.push({ sym, s: es.score });
+      }
     }
     candidates.sort((a, b) => b.s - a.s);
+    earlyCandidates.sort((a, b) => b.s - a.s);
     market.sort((a, b) => a.s.localeCompare(b.s));
-    console.log(`  ${candidates.length} candidats scorés, ${market.length} au total dans l'index recherche.`);
-    console.log(`  Top 5 provisoire : ${candidates.slice(0, 5).map((c) => `${c.sym} (${c.s.toFixed(0)})`).join(", ")}`);
+    console.log(`  ${candidates.length} candidats momentum, ${earlyCandidates.length} candidats « avant le boum », ${market.length} dans l'index recherche.`);
+    console.log(`  Top momentum : ${candidates.slice(0, 5).map((c) => `${c.sym} (${c.s.toFixed(0)})`).join(", ")}`);
+    console.log(`  Top démarrage : ${earlyCandidates.slice(0, 5).map((c) => `${c.sym} (${c.s.toFixed(0)})`).join(", ")}`);
   }
 
-  /* Étape 2 : analyse profonde (top scan + favoris) */
+  /* Étape 2 : analyse profonde (top momentum + top « avant le boum » + favoris) */
   const finalSet = new Set(favorites);
   for (const c of candidates) {
     if (finalSet.size >= nFinalists + favorites.length) break;
     finalSet.add(c.sym);
   }
+  for (const c of earlyCandidates.slice(0, 30)) finalSet.add(c.sym); // ajoute les meilleurs démarrages
   const finalSyms = [...finalSet];
-  console.log(`Étape 2 — analyse profonde de ${finalSyms.length} titres (${favorites.length} favoris + top scan)…`);
+  console.log(`Étape 2 — analyse profonde de ${finalSyms.length} titres (${favorites.length} favoris + top scan + démarrages)…`);
 
   const ctx = { scanCloses, names, ysession, finnhubKey, favorites: new Set(favorites) };
   const results = [];
