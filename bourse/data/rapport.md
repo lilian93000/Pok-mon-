@@ -1,12 +1,21 @@
 # ◆ Oracle Bourse — screener quotidien du marché US
 
-Généré le **2026-07-22 22:03 UTC**
+Généré le **2026-07-22 22:30 UTC**
 
-**5399** actions cotées répertoriées → **5270** scannées (technique + momentum) → **110** analysées en profondeur (+ fondamentaux/news)
+**5399** actions cotées répertoriées → **5267** scannées (technique + momentum) → **131** analysées en profondeur (+ fondamentaux/news)
 
 > ⚠️ Analyse statistique automatique — **pas un conseil financier**. Aucune garantie.
 
 ## 🎯 Picks du jour
+
+### 🌱 Avant le boum — PAGP (Plains GP Holdings, L.P.) · 66/100
+**Pourquoi cette action :** Le cours sort d'une phase de calme et presse sous sa résistance, mais n'a pas encore explosé, il n'a pris que +15 % sur 3 mois (le gros du mouvement est peut-être devant), et sa croissance n'est pas encore payée au prix fort.
+
+*Le mouvement n'a pas encore eu lieu — signaux de démarrage réunis, cours pas encore envolé.* — volatilité 21%, confiance 100%.
+- ▲ RSI 14 j : 71 — dynamique haussière saine
+- ▲ MACD : positif, en hausse — accélération haussière
+- ▲ Prix vs MM50/MM200 — au-dessus des deux moyennes — structure haussière
+- ▲ Tendance 60 j : +1.5 %/mois — tendance haussière
 
 ### 🏛️ Long terme — PLBC (Plumas Bancorp) · 81/100
 **Pourquoi cette action :** Son chiffre d'affaires progresse vite (+43 %/an), ses bénéfices sont en forte hausse (+34 %/an), et l'action reste raisonnablement valorisée (PER 12). Elle a déjà pris +18 % en 3 mois.
@@ -40,7 +49,7 @@ Généré le **2026-07-22 22:03 UTC**
 
 | # | Titre | Score | Verdict | Tech. | Mom. | Fond. | Sent. | Conf. | Origine |
 |---|-------|------:|---------|------:|-----:|------:|------:|------:|---------|
-| 1 | **SIF** (SIFCO Industries, Inc.) | **83** | 🚀 Explosif (risqué) | 86 | 86 | 75 | 86 | 100 % | 🔍 scan marché |
+| 1 | **SIF** (SIFCO Industries, Inc.) | **84** | 🚀 Explosif (risqué) | 86 | 86 | 78 | 86 | 100 % | 🔍 scan marché |
 | 2 | **PLBC** (Plumas Bancorp) | **81** | 🚀 Fort potentiel | 80 | 90 | 83 | 74 | 100 % | 🔍 scan marché |
 | 3 | **WSBC** (WesBanco, Inc.) | **81** | 🚀 Fort potentiel | 84 | 91 | 81 | 67 | 100 % | 🔍 scan marché |
 | 4 | **KARO** (Karooooo Ltd.) | **80** | 🚀 Fort potentiel | 82 | 92 | 74 | 77 | 100 % | 🔍 scan marché |
@@ -58,102 +67,123 @@ Généré le **2026-07-22 22:03 UTC**
 | 16 | **OPHC** (OptimumBank Holdings, Inc.) | **76** | 🚀 Fort potentiel | 82 | 87 | 80 | 50 | 100 % | 🔍 scan marché |
 | 17 | **AMD** (Advanced Micro Devices, Inc.) | **76** | 🚀 Explosif (risqué) | 77 | 68 | 74 | 82 | 100 % | ⭐ favori |
 | 18 | **BOTJ** (Bank of the James Financial Group, Inc.) | **75** | 🚀 Fort potentiel | 79 | 90 | 81 | 50 | 100 % | 🔍 scan marché |
-| 19 | **CHCO** (City Holding Company) | **75** | 🚀 Fort potentiel | 82 | 89 | 63 | 71 | 100 % | 🔍 scan marché |
-| 20 | **ETON** (Eton Pharmaceuticals, Inc.) | **75** | 📈 Configuration haussière | 85 | 91 | 59 | 67 | 100 % | 🔍 scan marché |
-| 21 | **NVDA** (NVIDIA Corporation) | **74** | 📈 Configuration haussière | 71 | 63 | 90 | 66 | 100 % | ⭐ favori |
-| 22 | **JAN** (Janus Living, Inc.) | **74** | 📈 Configuration haussière | 83 | 93 | 71 | 50 | 100 % | 🔍 scan marché |
-| 23 | **AGM** (Federal Agricultural Mortgage Corporatio) | **74** | 📈 Configuration haussière | 84 | 90 | 71 | 50 | 100 % | 🔍 scan marché |
-| 24 | **RPRX** (Royalty Pharma plc) | **74** | 📈 Configuration haussière | 84 | 90 | 67 | 54 | 100 % | 🔍 scan marché |
-| 25 | **KYN** (Kayne Anderson Energy Infrastructure Fun) | **74** | 📈 Configuration haussière | 82 | 91 | 71 | 50 | 100 % | 🔍 scan marché |
-| 26 | **BBY** (Best Buy Co., Inc.) | **74** | 📈 Configuration haussière | 81 | 88 | 66 | 60 | 100 % | 🔍 scan marché |
-| 27 | **CBL** (CBL & Associates Properties, Inc.) | **73** | 📈 Configuration haussière | 82 | 92 | 70 | 50 | 100 % | 🔍 scan marché |
-| 28 | **AAPL** (Apple Inc.) | **73** | 📈 Configuration haussière | 77 | 88 | 69 | 62 | 100 % | ⭐ favori |
-| 29 | **PRI** (Primerica, Inc.) | **73** | 📈 Configuration haussière | 79 | 90 | 74 | 50 | 100 % | 🔍 scan marché |
-| 30 | **FBIZ** (First Business Financial Services, Inc.) | **73** | 📈 Configuration haussière | 84 | 89 | 68 | 51 | 100 % | 🔍 scan marché |
-| 31 | **MSM** (MSC Industrial Direct Co., Inc.) | **73** | 📈 Configuration haussière | 85 | 84 | 65 | 56 | 100 % | 🔍 scan marché |
-| 32 | **OOMA** (Ooma, Inc.) | **73** | 📈 Configuration haussière | 77 | 93 | 63 | 66 | 100 % | 🔍 scan marché |
-| 33 | **PBT** (Permian Basin Royalty Trust) | **73** | 📈 Configuration haussière | 78 | 91 | 73 | 50 | 100 % | 🔍 scan marché |
-| 34 | **NBTB** (NBT Bancorp Inc.) | **73** | 📈 Configuration haussière | 79 | 90 | 72 | 50 | 100 % | 🔍 scan marché |
-| 35 | **SLN** (Silence Therapeutics plc) | **73** | 📈 Configuration haussière | 83 | 93 | 66 | 49 | 100 % | 🔍 scan marché |
-| 36 | **BNL** (Broadstone Net Lease, Inc.) | **72** | 📈 Configuration haussière | 78 | 91 | 71 | 50 | 100 % | 🔍 scan marché |
-| 37 | **PNTG** (The Pennant Group, Inc.) | **72** | 📈 Configuration haussière | 79 | 91 | 59 | 65 | 100 % | 🔍 scan marché |
-| 38 | **WELL** (Welltower Inc.) | **72** | 📈 Configuration haussière | 78 | 93 | 65 | 57 | 100 % | 🔍 scan marché |
-| 39 | **TIGO** (Millicom International Cellular S.A.) | **72** | 📈 Configuration haussière | 81 | 90 | 65 | 53 | 100 % | 🔍 scan marché |
-| 40 | **JAZZ** (Jazz Pharmaceuticals plc) | **72** | 📈 Configuration haussière | 83 | 88 | 57 | 64 | 100 % | 🔍 scan marché |
-| 41 | **V** (Visa Inc.) | **72** | 📈 Configuration haussière | 68 | 82 | 78 | 61 | 100 % | ⭐ favori |
-| 42 | **CTVA** (Corteva, Inc.) | **72** | 📈 Configuration haussière | 81 | 90 | 61 | 56 | 100 % | 🔍 scan marché |
-| 43 | **KIM** (Kimco Realty Corporation) | **71** | 📈 Configuration haussière | 83 | 87 | 60 | 57 | 100 % | 🔍 scan marché |
-| 44 | **META** (Meta Platforms, Inc.) | **71** | 📈 Configuration haussière | 61 | 65 | 87 | 70 | 100 % | ⭐ favori |
-| 45 | **GREE** (Greenidge Generation Holdings Inc.) | **71** | 📈 Configuration haussière | 83 | 92 | 62 | 50 | 100 % | 🔍 scan marché |
-| 46 | **GHRS** (GH Research PLC) | **71** | 📈 Configuration haussière | 88 | 94 | 47 | 60 | 100 % | 🔍 scan marché |
-| 47 | **LLY** (Eli Lilly and Company) | **71** | 📈 Configuration haussière | 72 | 74 | 81 | 52 | 100 % | ⭐ favori |
-| 48 | **ADX** (Adams Diversified Equity Fund, Inc.) | **71** | 📈 Configuration haussière | 82 | 87 | 64 | 50 | 100 % | 🔍 scan marché |
-| 49 | **CNXN** (PC Connection, Inc.) | **70** | 📈 Configuration haussière | 79 | 93 | 63 | 50 | 100 % | 🔍 scan marché |
-| 50 | **KFRC** (Kforce Inc.) | **70** | 📈 Configuration haussière | 81 | 90 | 58 | 56 | 100 % | 🔍 scan marché |
-| 51 | **SJM** (The J. M. Smucker Company) | **70** | 📈 Configuration haussière | 84 | 83 | 45 | 74 | 100 % | 🔍 scan marché |
-| 52 | **TRGP** (Targa Resources Corp.) | **70** | 📈 Configuration haussière | 82 | 85 | 60 | 52 | 100 % | 🔍 scan marché |
-| 53 | **PM** (Philip Morris International Inc.) | **70** | 📈 Configuration haussière | 81 | 86 | 51 | 66 | 100 % | 🔍 scan marché |
-| 54 | **IOVA** (Iovance Biotherapeutics, Inc.) | **70** | 📈 Configuration haussière | 79 | 91 | 61 | 51 | 100 % | 🔍 scan marché |
-| 55 | **BLFS** (BioLife Solutions, Inc.) | **70** | 📈 Configuration haussière | 87 | 91 | 51 | 50 | 100 % | 🔍 scan marché |
-| 56 | **CNI** (Canadian National Railway Company) | **69** | 📈 Configuration haussière | 79 | 92 | 52 | 62 | 100 % | 🔍 scan marché |
-| 57 | **MNPR** (Monopar Therapeutics Inc.) | **69** | 📈 Configuration haussière | 80 | 92 | 47 | 68 | 100 % | 🔍 scan marché |
-| 58 | **MA** (Mastercard Incorporated) | **69** | 📈 Configuration haussière | 72 | 72 | 70 | 60 | 100 % | ⭐ favori |
-| 59 | **SAH** (Sonic Automotive, Inc.) | **69** | 📈 Configuration haussière | 81 | 94 | 46 | 62 | 100 % | 🔍 scan marché |
-| 60 | **TFSL** (TFS Financial Corporation) | **69** | 📈 Configuration haussière | 81 | 88 | 53 | 56 | 100 % | 🔍 scan marché |
-| 61 | **INNV** (InnovAge Holding Corp.) | **68** | 📈 Configuration haussière | 77 | 93 | 54 | 56 | 100 % | 🔍 scan marché |
-| 62 | **VLO** (Valero Energy Corporation) | **68** | 📈 Configuration haussière | 78 | 94 | 54 | 53 | 100 % | 🔍 scan marché |
-| 63 | **AHR** (American Healthcare REIT, Inc.) | **68** | 📈 Configuration haussière | 78 | 90 | 58 | 50 | 100 % | 🔍 scan marché |
-| 64 | **AVGO** (Broadcom Inc.) | **68** | 📈 Configuration haussière | 61 | 55 | 85 | 64 | 100 % | ⭐ favori |
-| 65 | **GEF** (Greif, Inc.) | **68** | 📈 Configuration haussière | 84 | 84 | 52 | 50 | 100 % | 🔍 scan marché |
-| 66 | **KELYA** (Kelly Services, Inc.) | **67** | 📈 Configuration haussière | 76 | 94 | 40 | 74 | 100 % | 🔍 scan marché |
-| 67 | **EIX** (Edison International) | **67** | 📈 Configuration haussière | 78 | 92 | 46 | 61 | 100 % | 🔍 scan marché |
-| 68 | **SOPH** (SOPHiA GENETICS SA) | **67** | 📈 Configuration haussière | 83 | 87 | 49 | 50 | 100 % | 🔍 scan marché |
-| 69 | **PAGP** (Plains GP Holdings, L.P.) | **66** | 📈 Configuration haussière | 78 | 93 | 51 | 50 | 100 % | 🔍 scan marché |
-| 70 | **PANW** (Palo Alto Networks, Inc.) | **66** | 📈 Configuration haussière | 70 | 79 | 56 | 65 | 100 % | ⭐ favori |
-| 71 | **PLSE** (Pulse Biosciences, Inc.) | **66** | 📈 Configuration haussière | 82 | 92 | 46 | 50 | 100 % | 🔍 scan marché |
-| 72 | **TTRX** (Turn Therapeutics Inc.) | **66** | 📈 Configuration haussière | 79 | 90 | 38 | 67 | 100 % | 🔍 scan marché |
-| 73 | **OII** (Oceaneering International, Inc.) | **66** | 📈 Configuration haussière | 81 | 92 | 45 | 50 | 100 % | 🔍 scan marché |
-| 74 | **PAG** (Penske Automotive Group, Inc.) | **66** | 📈 Configuration haussière | 82 | 92 | 45 | 47 | 100 % | 🔍 scan marché |
-| 75 | **LBRX** (LB Pharmaceuticals Inc) | **66** | 📈 Configuration haussière | 80 | 89 | 47 | 51 | 100 % | 🔍 scan marché |
-| 76 | **WTTR** (Select Water Solutions, Inc.) | **65** | 📈 Configuration haussière | 82 | 89 | 38 | 61 | 100 % | 🔍 scan marché |
-| 77 | **TXG** (10x Genomics, Inc.) | **65** | 📈 Configuration haussière | 84 | 93 | 39 | 53 | 100 % | 🔍 scan marché |
-| 78 | **AMZN** (Amazon.com, Inc.) | **65** | 📈 Configuration haussière | 55 | 65 | 77 | 65 | 100 % | ⭐ favori |
-| 79 | **WNC** (Wabash National Corporation) | **65** | 📈 Configuration haussière | 83 | 80 | 36 | 67 | 100 % | 🔍 scan marché |
-| 80 | **FNKO** (Funko, Inc.) | **65** | 📈 Configuration haussière | 86 | 85 | 35 | 59 | 100 % | 🔍 scan marché |
-| 81 | **CRWD** (CrowdStrike Holdings, Inc.) | **65** | 📈 Configuration haussière | 66 | 79 | 53 | 69 | 100 % | ⭐ favori |
-| 82 | **SAIH** (SAIHEAT Limited) | **64** | 📈 Configuration haussière | 84 | 89 | 25 | 72 | 100 % | 🔍 scan marché |
-| 83 | **XNCR** (Xencor, Inc.) | **64** | 📈 Configuration haussière | 83 | 92 | 26 | 68 | 100 % | 🔍 scan marché |
-| 84 | **SMCI** (Super Micro Computer, Inc.) | **64** | 📈 Configuration haussière | 53 | 38 | 81 | 77 | 100 % | ⭐ favori |
-| 85 | **MSFT** (Microsoft Corporation) | **64** | 📈 Configuration haussière | 49 | 56 | 79 | 73 | 100 % | ⭐ favori |
-| 86 | **CROX** (Crocs, Inc.) | **64** | 📈 Configuration haussière | 81 | 86 | 39 | 52 | 100 % | 🔍 scan marché |
-| 87 | **NVO** (Novo Nordisk A/S) | **63** | 📈 Configuration haussière | 58 | 65 | 78 | 50 | 100 % | ⭐ favori |
-| 88 | **BZH** (Beazer Homes USA, Inc.) | **63** | 📈 Configuration haussière | 81 | 88 | 32 | 62 | 100 % | 🔍 scan marché |
-| 89 | **AMWL** (American Well Corporation) | **63** | 📈 Configuration haussière | 81 | 94 | 28 | 62 | 100 % | 🔍 scan marché |
-| 90 | **XOM** (ExxonMobil Holdings Corporation) | **63** | 📈 Configuration haussière | 68 | 80 | 50 | 60 | 100 % | ⭐ favori |
-| 91 | **ACHC** (Acadia Healthcare Company, Inc.) | **63** | 📈 Configuration haussière | 79 | 92 | 38 | 50 | 100 % | 🔍 scan marché |
-| 92 | **SNOW** (Snowflake Inc.) | **63** | 📈 Configuration haussière | 71 | 74 | 43 | 69 | 100 % | ⭐ favori |
-| 93 | **VSTS** (Vestis Corporation) | **62** | 📈 Configuration haussière | 80 | 88 | 36 | 50 | 100 % | 🔍 scan marché |
-| 94 | **RHI** (Robert Half Inc.) | **62** | 📈 Configuration haussière | 78 | 93 | 36 | 51 | 100 % | 🔍 scan marché |
-| 95 | **ABNB** (Airbnb, Inc.) | **61** | 📈 Configuration haussière | 58 | 52 | 70 | 62 | 100 % | ⭐ favori |
-| 96 | **PLTR** (Palantir Technologies Inc.) | **60** | 😐 Neutre | 44 | 51 | 79 | 65 | 100 % | ⭐ favori |
-| 97 | **GOOGL** (Alphabet Inc.) | **60** | 😐 Neutre | 42 | 47 | 84 | 63 | 100 % | ⭐ favori |
-| 98 | **FBLA** (FB Bancorp, Inc.) | **60** | 😐 Neutre | 80 | 89 | 27 | 50 | 100 % | 🔍 scan marché |
-| 99 | **UFI** (Unifi, Inc.) | **59** | 😐 Neutre | 76 | 94 | 27 | 52 | 100 % | 🔍 scan marché |
-| 100 | **SHOP** (Shopify Inc.) | **59** | 😐 Neutre | 54 | 59 | 63 | 62 | 100 % | ⭐ favori |
-| 101 | **CRM** (Salesforce, Inc.) | **59** | 😐 Neutre | 45 | 55 | 78 | 57 | 100 % | ⭐ favori |
-| 102 | **MKDW** (MKDWELL Tech Inc.) | **55** | 😐 Neutre | 79 | 93 | 12 | 50 | 100 % | 🔍 scan marché |
-| 103 | **ORCL** (Oracle Corporation) | **52** | 😐 Neutre | 41 | 18 | 76 | 63 | 100 % | ⭐ favori |
-| 104 | **COST** (Costco Wholesale Corporation) | **52** | 😐 Neutre | 48 | 32 | 65 | 55 | 100 % | ⭐ favori |
-| 105 | **MSTR** (Strategy Inc) | **49** | 😐 Neutre | 47 | 31 | 49 | 66 | 100 % | ⭐ favori |
-| 106 | **COIN** (Coinbase Global, Inc.) | **47** | 😐 Neutre | 46 | 45 | 45 | 52 | 100 % | ⭐ favori |
-| 107 | **UBER** (Uber Technologies, Inc.) | **47** | 😐 Neutre | 38 | 38 | 52 | 63 | 100 % | ⭐ favori |
-| 108 | **WMT** (Walmart Inc.) | **47** | 😐 Neutre | 43 | 23 | 56 | 56 | 100 % | ⭐ favori |
-| 109 | **NFLX** (Netflix, Inc.) | **45** | 😐 Neutre | 26 | 25 | 72 | 54 | 100 % | ⭐ favori |
-| 110 | **TSLA** (Tesla, Inc.) | **43** | 🌧️ Fragile | 38 | 31 | 49 | 53 | 100 % | ⭐ favori |
+| 19 | **AFL** (Aflac Incorporated) | **75** | 🚀 Fort potentiel | 78 | 84 | 84 | 52 | 100 % | 🔍 scan marché |
+| 20 | **CHCO** (City Holding Company) | **75** | 🚀 Fort potentiel | 82 | 89 | 63 | 71 | 100 % | 🔍 scan marché |
+| 21 | **ETON** (Eton Pharmaceuticals, Inc.) | **75** | 📈 Configuration haussière | 85 | 91 | 59 | 67 | 100 % | 🔍 scan marché |
+| 22 | **NVDA** (NVIDIA Corporation) | **74** | 📈 Configuration haussière | 71 | 63 | 90 | 66 | 100 % | ⭐ favori |
+| 23 | **OHI** (Omega Healthcare Investors, Inc.) | **74** | 📈 Configuration haussière | 80 | 87 | 66 | 66 | 100 % | 🔍 scan marché |
+| 24 | **JAN** (Janus Living, Inc.) | **74** | 📈 Configuration haussière | 83 | 93 | 71 | 50 | 100 % | 🔍 scan marché |
+| 25 | **AGM** (Federal Agricultural Mortgage Corporatio) | **74** | 📈 Configuration haussière | 84 | 90 | 71 | 50 | 100 % | 🔍 scan marché |
+| 26 | **RPRX** (Royalty Pharma plc) | **74** | 📈 Configuration haussière | 84 | 90 | 67 | 54 | 100 % | 🔍 scan marché |
+| 27 | **KYN** (Kayne Anderson Energy Infrastructure Fun) | **74** | 📈 Configuration haussière | 82 | 91 | 71 | 50 | 100 % | 🔍 scan marché |
+| 28 | **BBY** (Best Buy Co., Inc.) | **74** | 📈 Configuration haussière | 81 | 88 | 66 | 60 | 100 % | 🔍 scan marché |
+| 29 | **CBL** (CBL & Associates Properties, Inc.) | **73** | 📈 Configuration haussière | 82 | 92 | 70 | 50 | 100 % | 🔍 scan marché |
+| 30 | **AAPL** (Apple Inc.) | **73** | 📈 Configuration haussière | 77 | 88 | 69 | 62 | 100 % | ⭐ favori |
+| 31 | **PRI** (Primerica, Inc.) | **73** | 📈 Configuration haussière | 79 | 90 | 74 | 50 | 100 % | 🔍 scan marché |
+| 32 | **FBIZ** (First Business Financial Services, Inc.) | **73** | 📈 Configuration haussière | 84 | 89 | 68 | 51 | 100 % | 🔍 scan marché |
+| 33 | **MSM** (MSC Industrial Direct Co., Inc.) | **73** | 📈 Configuration haussière | 85 | 84 | 65 | 56 | 100 % | 🔍 scan marché |
+| 34 | **OOMA** (Ooma, Inc.) | **73** | 📈 Configuration haussière | 77 | 93 | 63 | 66 | 100 % | 🔍 scan marché |
+| 35 | **PBT** (Permian Basin Royalty Trust) | **73** | 📈 Configuration haussière | 78 | 91 | 73 | 50 | 100 % | 🔍 scan marché |
+| 36 | **NBTB** (NBT Bancorp Inc.) | **73** | 📈 Configuration haussière | 79 | 90 | 72 | 50 | 100 % | 🔍 scan marché |
+| 37 | **SLN** (Silence Therapeutics plc) | **73** | 📈 Configuration haussière | 83 | 93 | 66 | 49 | 100 % | 🔍 scan marché |
+| 38 | **BNL** (Broadstone Net Lease, Inc.) | **72** | 📈 Configuration haussière | 78 | 91 | 71 | 50 | 100 % | 🔍 scan marché |
+| 39 | **PNTG** (The Pennant Group, Inc.) | **72** | 📈 Configuration haussière | 79 | 91 | 59 | 65 | 100 % | 🔍 scan marché |
+| 40 | **WELL** (Welltower Inc.) | **72** | 📈 Configuration haussière | 78 | 93 | 65 | 57 | 100 % | 🔍 scan marché |
+| 41 | **TIGO** (Millicom International Cellular S.A.) | **72** | 📈 Configuration haussière | 81 | 90 | 65 | 53 | 100 % | 🔍 scan marché |
+| 42 | **JAZZ** (Jazz Pharmaceuticals plc) | **72** | 📈 Configuration haussière | 83 | 88 | 57 | 64 | 100 % | 🔍 scan marché |
+| 43 | **V** (Visa Inc.) | **72** | 📈 Configuration haussière | 68 | 82 | 78 | 61 | 100 % | ⭐ favori |
+| 44 | **CTVA** (Corteva, Inc.) | **72** | 📈 Configuration haussière | 81 | 90 | 61 | 56 | 100 % | 🔍 scan marché |
+| 45 | **KIM** (Kimco Realty Corporation) | **71** | 📈 Configuration haussière | 83 | 87 | 60 | 57 | 100 % | 🔍 scan marché |
+| 46 | **META** (Meta Platforms, Inc.) | **71** | 📈 Configuration haussière | 61 | 65 | 87 | 70 | 100 % | ⭐ favori |
+| 47 | **GREE** (Greenidge Generation Holdings Inc.) | **71** | 📈 Configuration haussière | 83 | 92 | 62 | 50 | 100 % | 🔍 scan marché |
+| 48 | **GHRS** (GH Research PLC) | **71** | 📈 Configuration haussière | 88 | 94 | 47 | 60 | 100 % | 🔍 scan marché |
+| 49 | **LLY** (Eli Lilly and Company) | **71** | 📈 Configuration haussière | 72 | 74 | 81 | 52 | 100 % | ⭐ favori |
+| 50 | **ADX** (Adams Diversified Equity Fund, Inc.) | **71** | 📈 Configuration haussière | 82 | 87 | 64 | 50 | 100 % | 🔍 scan marché |
+| 51 | **CNXN** (PC Connection, Inc.) | **70** | 📈 Configuration haussière | 79 | 93 | 63 | 50 | 100 % | 🔍 scan marché |
+| 52 | **KFRC** (Kforce Inc.) | **70** | 📈 Configuration haussière | 81 | 90 | 58 | 56 | 100 % | 🔍 scan marché |
+| 53 | **SJM** (The J. M. Smucker Company) | **70** | 📈 Configuration haussière | 84 | 83 | 45 | 74 | 100 % | 🔍 scan marché |
+| 54 | **TRGP** (Targa Resources Corp.) | **70** | 📈 Configuration haussière | 82 | 85 | 60 | 52 | 100 % | 🔍 scan marché |
+| 55 | **CTO** (CTO Realty Growth, Inc.) | **70** | 📈 Configuration haussière | 78 | 89 | 63 | 51 | 100 % | 🔍 scan marché |
+| 56 | **PM** (Philip Morris International Inc.) | **70** | 📈 Configuration haussière | 81 | 86 | 51 | 66 | 100 % | 🔍 scan marché |
+| 57 | **IOVA** (Iovance Biotherapeutics, Inc.) | **70** | 📈 Configuration haussière | 79 | 91 | 61 | 51 | 100 % | 🔍 scan marché |
+| 58 | **BLFS** (BioLife Solutions, Inc.) | **70** | 📈 Configuration haussière | 87 | 91 | 51 | 50 | 100 % | 🔍 scan marché |
+| 59 | **CNI** (Canadian National Railway Company) | **69** | 📈 Configuration haussière | 79 | 92 | 52 | 62 | 100 % | 🔍 scan marché |
+| 60 | **BDJ** (BlackRock Enhanced Equity Dividend Trust) | **69** | 📈 Configuration haussière | 75 | 80 | 71 | 50 | 100 % | 🔍 scan marché |
+| 61 | **MNPR** (Monopar Therapeutics Inc.) | **69** | 📈 Configuration haussière | 80 | 92 | 47 | 68 | 100 % | 🔍 scan marché |
+| 62 | **GD** (General Dynamics Corporation) | **69** | 📈 Configuration haussière | 75 | 80 | 62 | 61 | 100 % | 🔍 scan marché |
+| 63 | **MA** (Mastercard Incorporated) | **69** | 📈 Configuration haussière | 72 | 72 | 70 | 60 | 100 % | ⭐ favori |
+| 64 | **HESM** (Hess Midstream LP) | **69** | 📈 Configuration haussière | 75 | 86 | 57 | 64 | 100 % | 🔍 scan marché |
+| 65 | **SAH** (Sonic Automotive, Inc.) | **69** | 📈 Configuration haussière | 81 | 94 | 46 | 62 | 100 % | 🔍 scan marché |
+| 66 | **NJR** (New Jersey Resources Corporation) | **69** | 📈 Configuration haussière | 76 | 87 | 56 | 60 | 100 % | 🔍 scan marché |
+| 67 | **TFSL** (TFS Financial Corporation) | **69** | 📈 Configuration haussière | 81 | 88 | 53 | 56 | 100 % | 🔍 scan marché |
+| 68 | **INNV** (InnovAge Holding Corp.) | **68** | 📈 Configuration haussière | 77 | 93 | 54 | 56 | 100 % | 🔍 scan marché |
+| 69 | **VLO** (Valero Energy Corporation) | **68** | 📈 Configuration haussière | 78 | 94 | 54 | 53 | 100 % | 🔍 scan marché |
+| 70 | **AHR** (American Healthcare REIT, Inc.) | **68** | 📈 Configuration haussière | 78 | 90 | 58 | 50 | 100 % | 🔍 scan marché |
+| 71 | **AVGO** (Broadcom Inc.) | **68** | 📈 Configuration haussière | 61 | 55 | 85 | 64 | 100 % | ⭐ favori |
+| 72 | **GEF** (Greif, Inc.) | **68** | 📈 Configuration haussière | 84 | 84 | 52 | 50 | 100 % | 🔍 scan marché |
+| 73 | **KELYA** (Kelly Services, Inc.) | **67** | 📈 Configuration haussière | 76 | 94 | 40 | 74 | 100 % | 🔍 scan marché |
+| 74 | **NATL** (NCR Atleos Corporation) | **67** | 📈 Configuration haussière | 69 | 89 | 66 | 50 | 100 % | 🔍 scan marché |
+| 75 | **EIX** (Edison International) | **67** | 📈 Configuration haussière | 78 | 92 | 46 | 61 | 100 % | 🔍 scan marché |
+| 76 | **DPG** (Duff & Phelps Utility and Infrastructure) | **67** | 📈 Configuration haussière | 78 | 87 | 55 | 50 | 100 % | 🔍 scan marché |
+| 77 | **SOPH** (SOPHiA GENETICS SA) | **67** | 📈 Configuration haussière | 83 | 87 | 49 | 50 | 100 % | 🔍 scan marché |
+| 78 | **PAGP** (Plains GP Holdings, L.P.) | **66** | 📈 Configuration haussière | 78 | 93 | 51 | 50 | 100 % | 🔍 scan marché |
+| 79 | **JRS** (Nuveen Real Estate Income Fund) | **66** | 📈 Configuration haussière | 77 | 84 | 45 | — | 80 % | 🔍 scan marché |
+| 80 | **EPR** (EPR Properties) | **66** | 📈 Configuration haussière | 78 | 85 | 54 | 50 | 100 % | 🔍 scan marché |
+| 81 | **PANW** (Palo Alto Networks, Inc.) | **66** | 📈 Configuration haussière | 70 | 79 | 56 | 65 | 100 % | ⭐ favori |
+| 82 | **PLSE** (Pulse Biosciences, Inc.) | **66** | 📈 Configuration haussière | 82 | 92 | 46 | 50 | 100 % | 🔍 scan marché |
+| 83 | **TTRX** (Turn Therapeutics Inc.) | **66** | 📈 Configuration haussière | 79 | 90 | 38 | 67 | 100 % | 🔍 scan marché |
+| 84 | **OII** (Oceaneering International, Inc.) | **66** | 📈 Configuration haussière | 81 | 92 | 45 | 50 | 100 % | 🔍 scan marché |
+| 85 | **PEO** (Adams Natural Resources Fund, Inc.) | **66** | 📈 Configuration haussière | 69 | 85 | 63 | 50 | 100 % | 🔍 scan marché |
+| 86 | **NSC** (Norfolk Southern Corporation) | **66** | 📈 Configuration haussière | 75 | 87 | 42 | 70 | 100 % | 🔍 scan marché |
+| 87 | **PAG** (Penske Automotive Group, Inc.) | **66** | 📈 Configuration haussière | 82 | 92 | 45 | 47 | 100 % | 🔍 scan marché |
+| 88 | **LBRX** (LB Pharmaceuticals Inc) | **66** | 📈 Configuration haussière | 80 | 89 | 47 | 51 | 100 % | 🔍 scan marché |
+| 89 | **WTTR** (Select Water Solutions, Inc.) | **65** | 📈 Configuration haussière | 82 | 89 | 38 | 61 | 100 % | 🔍 scan marché |
+| 90 | **TXG** (10x Genomics, Inc.) | **65** | 📈 Configuration haussière | 84 | 93 | 39 | 53 | 100 % | 🔍 scan marché |
+| 91 | **UNF** (UniFirst Corporation) | **65** | 📈 Configuration haussière | 76 | 92 | 43 | 61 | 100 % | 🔍 scan marché |
+| 92 | **BTO** (John Hancock Financial Opportunities Fun) | **65** | 📈 Configuration haussière | 78 | 87 | 49 | 50 | 100 % | 🔍 scan marché |
+| 93 | **AMZN** (Amazon.com, Inc.) | **65** | 📈 Configuration haussière | 55 | 65 | 77 | 65 | 100 % | ⭐ favori |
+| 94 | **WNC** (Wabash National Corporation) | **65** | 📈 Configuration haussière | 83 | 80 | 36 | 67 | 100 % | 🔍 scan marché |
+| 95 | **FNKO** (Funko, Inc.) | **65** | 📈 Configuration haussière | 86 | 85 | 35 | 59 | 100 % | 🔍 scan marché |
+| 96 | **CRWD** (CrowdStrike Holdings, Inc.) | **65** | 📈 Configuration haussière | 66 | 79 | 53 | 69 | 100 % | ⭐ favori |
+| 97 | **SAIH** (SAIHEAT Limited) | **64** | 📈 Configuration haussière | 84 | 89 | 25 | 72 | 100 % | 🔍 scan marché |
+| 98 | **ARTNA** (Artesian Resources Corporation) | **64** | 📈 Configuration haussière | 73 | 78 | 58 | 50 | 100 % | 🔍 scan marché |
+| 99 | **XNCR** (Xencor, Inc.) | **64** | 📈 Configuration haussière | 83 | 92 | 26 | 68 | 100 % | 🔍 scan marché |
+| 100 | **CROX** (Crocs, Inc.) | **64** | 📈 Configuration haussière | 81 | 86 | 39 | 52 | 100 % | 🔍 scan marché |
+| 101 | **SMCI** (Super Micro Computer, Inc.) | **64** | 📈 Configuration haussière | 53 | 38 | 81 | 75 | 100 % | ⭐ favori |
+| 102 | **MSFT** (Microsoft Corporation) | **64** | 📈 Configuration haussière | 49 | 56 | 79 | 70 | 100 % | ⭐ favori |
+| 103 | **NVO** (Novo Nordisk A/S) | **63** | 📈 Configuration haussière | 58 | 65 | 78 | 50 | 100 % | ⭐ favori |
+| 104 | **BZH** (Beazer Homes USA, Inc.) | **63** | 📈 Configuration haussière | 81 | 88 | 32 | 62 | 100 % | 🔍 scan marché |
+| 105 | **AMWL** (American Well Corporation) | **63** | 📈 Configuration haussière | 81 | 94 | 28 | 62 | 100 % | 🔍 scan marché |
+| 106 | **XOM** (ExxonMobil Holdings Corporation) | **63** | 📈 Configuration haussière | 68 | 80 | 50 | 60 | 100 % | ⭐ favori |
+| 107 | **ACHC** (Acadia Healthcare Company, Inc.) | **63** | 📈 Configuration haussière | 79 | 92 | 38 | 50 | 100 % | 🔍 scan marché |
+| 108 | **STHO** (Star Holdings) | **63** | 📈 Configuration haussière | 78 | 79 | 56 | 34 | 100 % | 🔍 scan marché |
+| 109 | **SNOW** (Snowflake Inc.) | **63** | 📈 Configuration haussière | 71 | 74 | 43 | 69 | 100 % | ⭐ favori |
+| 110 | **VSTS** (Vestis Corporation) | **62** | 📈 Configuration haussière | 80 | 88 | 36 | 50 | 100 % | 🔍 scan marché |
+| 111 | **RHI** (Robert Half Inc.) | **62** | 📈 Configuration haussière | 78 | 93 | 36 | 51 | 100 % | 🔍 scan marché |
+| 112 | **ABNB** (Airbnb, Inc.) | **61** | 📈 Configuration haussière | 58 | 52 | 70 | 62 | 100 % | ⭐ favori |
+| 113 | **AEG** (Aegon Ltd.) | **61** | 📈 Configuration haussière | 77 | 88 | 35 | 52 | 100 % | 🔍 scan marché |
+| 114 | **CCEC** (Capital Clean Energy Carriers Corp.) | **60** | 📈 Configuration haussière | 78 | 76 | 39 | 50 | 100 % | 🔍 scan marché |
+| 115 | **PLTR** (Palantir Technologies Inc.) | **60** | 😐 Neutre | 44 | 51 | 79 | 65 | 100 % | ⭐ favori |
+| 116 | **FBLA** (FB Bancorp, Inc.) | **60** | 😐 Neutre | 80 | 89 | 27 | 50 | 100 % | 🔍 scan marché |
+| 117 | **UFI** (Unifi, Inc.) | **59** | 😐 Neutre | 76 | 94 | 27 | 52 | 100 % | 🔍 scan marché |
+| 118 | **GOOGL** (Alphabet Inc.) | **59** | 😐 Neutre | 42 | 47 | 84 | 60 | 100 % | ⭐ favori |
+| 119 | **EMO** (ClearBridge Energy Midstream Opportunity) | **59** | 😐 Neutre | 73 | 85 | 35 | 50 | 100 % | 🔍 scan marché |
+| 120 | **SHOP** (Shopify Inc.) | **59** | 😐 Neutre | 54 | 59 | 63 | 62 | 100 % | ⭐ favori |
+| 121 | **CRM** (Salesforce, Inc.) | **59** | 😐 Neutre | 45 | 55 | 78 | 57 | 100 % | ⭐ favori |
+| 122 | **NML** (Neuberger Berman Income Funds - Neuberge) | **57** | 😐 Neutre | 74 | 86 | 29 | 50 | 100 % | 🔍 scan marché |
+| 123 | **MKDW** (MKDWELL Tech Inc.) | **55** | 😐 Neutre | 79 | 93 | 12 | 50 | 100 % | 🔍 scan marché |
+| 124 | **ORCL** (Oracle Corporation) | **52** | 😐 Neutre | 41 | 18 | 76 | 63 | 100 % | ⭐ favori |
+| 125 | **COST** (Costco Wholesale Corporation) | **52** | 😐 Neutre | 48 | 32 | 65 | 55 | 100 % | ⭐ favori |
+| 126 | **MSTR** (Strategy Inc) | **49** | 😐 Neutre | 47 | 31 | 49 | 66 | 100 % | ⭐ favori |
+| 127 | **COIN** (Coinbase Global, Inc.) | **47** | 😐 Neutre | 46 | 45 | 45 | 52 | 100 % | ⭐ favori |
+| 128 | **UBER** (Uber Technologies, Inc.) | **47** | 😐 Neutre | 38 | 38 | 52 | 63 | 100 % | ⭐ favori |
+| 129 | **WMT** (Walmart Inc.) | **47** | 😐 Neutre | 43 | 23 | 56 | 56 | 100 % | ⭐ favori |
+| 130 | **NFLX** (Netflix, Inc.) | **45** | 😐 Neutre | 26 | 25 | 72 | 54 | 100 % | ⭐ favori |
+| 131 | **TSLA** (Tesla, Inc.) | **43** | 🌧️ Fragile | 38 | 31 | 49 | 52 | 100 % | ⭐ favori |
 
 ## 🚀 Configurations les plus favorables du jour
 
-### SIF — SIFCO Industries, Inc. · 83/100
+### SIF — SIFCO Industries, Inc. · 84/100
 - ▲ RSI 14 j : 66 — dynamique haussière saine
 - ▲ MACD : positif, en hausse — accélération haussière
 - ▲ Prix vs MM50/MM200 — au-dessus des deux moyennes — structure haussière
