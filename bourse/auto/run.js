@@ -139,11 +139,33 @@ async function fetchIndexReturns() {
       r21: Engine.periodReturn(closes, 21),
       r63: Engine.periodReturn(closes, 63),
       r126: Engine.periodReturn(closes, 126),
+      closes,
     };
   } catch (e) {
     console.error(`Indice S&P 500 indisponible (${e.message}) — force relative désactivée.`);
     return null;
   }
+}
+
+/* Régime de marché : le S&P 500 est-il au-dessus de sa moyenne 200 jours ?
+   Le backtest montre qu'investir seulement en régime haussier réduit
+   fortement les pertes (pire perte −14 % au lieu de −22 %). */
+function marketRegime(idx) {
+  if (!idx || !idx.closes || idx.closes.length < 200) return null;
+  const closes = idx.closes;
+  const price = closes[closes.length - 1];
+  const ma200 = Engine.sma(closes, 200).filter((x) => x != null).pop();
+  if (ma200 == null) return null;
+  const pctAbove = (price / ma200 - 1) * 100;
+  const up = price > ma200;
+  return {
+    up,
+    pctAbove: Math.round(pctAbove * 10) / 10,
+    label: up ? "Marché haussier" : "Marché baissier",
+    guidance: up
+      ? "Conditions favorables : le S&P 500 est au-dessus de sa moyenne 200 jours. C'est historiquement le meilleur moment pour être investi en actions."
+      : "Prudence : le S&P 500 est SOUS sa moyenne 200 jours. Historiquement, c'est là que se concentrent les grosses pertes — mieux vaut alléger, privilégier le cash/défensif et attendre le retour au-dessus de la moyenne.",
+  };
 }
 
 function decodeEntities(s) {
@@ -566,19 +588,22 @@ function selectPicks(results) {
 
   const best = (arr, keyFn) => arr.reduce((a, b) => (keyFn(b) > keyFn(a) ? b : a));
   const used = new Set();
+  // Signaux prouvés par le backtest (edge réel) : trend template + force relative
+  const tScore = (r) => (r.trend ? r.trend.score : 50);
+  const rScore = (r) => (r.rs ? r.rs.score : 50);
 
-  // One shot : momentum + technique, volatilité assumée
-  const oneShot = best(scored, (r) => 0.45 * (pil(r, "momentum") || 0) + 0.35 * (pil(r, "technical") || 0) + 0.20 * (pil(r, "sentiment") || 0));
+  // One shot : momentum + force relative (prouvée), technique allégée (perdante seule)
+  const oneShot = best(scored, (r) => 0.40 * (pil(r, "momentum") || 0) + 0.25 * rScore(r) + 0.20 * (pil(r, "sentiment") || 0) + 0.15 * (pil(r, "technical") || 0));
   used.add(oneShot.symbol);
 
-  // Long terme : fondamentaux présents, on récompense qualité + calme
+  // Long terme : qualité + calme + tendance de fond confirmée (trend template)
   const ltPool = scored.filter((r) => pil(r, "fundamental") != null && !used.has(r.symbol));
-  const longTerme = (ltPool.length ? best(ltPool, (r) => 0.45 * r.score + 0.40 * pil(r, "fundamental") + 0.15 * Math.max(0, 100 - vol(r))) : null);
+  const longTerme = (ltPool.length ? best(ltPool, (r) => 0.40 * r.score + 0.35 * pil(r, "fundamental") + 0.12 * Math.max(0, 100 - vol(r)) + 0.13 * tScore(r)) : null);
   if (longTerme) used.add(longTerme.symbol);
 
-  // Complet : meilleur score global, fondamentaux présents, volatilité contenue
+  // Complet : meilleur score global, penché vers les signaux prouvés (trend + force relative)
   const balPool = scored.filter((r) => !used.has(r.symbol) && pil(r, "fundamental") != null && vol(r) < 55);
-  const complet = (balPool.length ? best(balPool, (r) => r.score) : scored.find((r) => !used.has(r.symbol)) || null);
+  const complet = (balPool.length ? best(balPool, (r) => r.score + 0.15 * tScore(r) + 0.12 * rScore(r)) : scored.find((r) => !used.has(r.symbol)) || null);
   if (complet) used.add(complet.symbol);
 
   // Avant le boum : démarrage précoce, ressort comprimé, PAS encore envolé
@@ -702,9 +727,11 @@ async function main() {
   }
   const names = new Map(universe.map((u) => [u.symbol, u.name]));
 
-  // Référence marché (S&P 500) pour la force relative
+  // Référence marché (S&P 500) pour la force relative + régime de marché
   const idxReturns = await fetchIndexReturns();
   if (idxReturns) console.log(`S&P 500 — perfs : 1m ${idxReturns.r21?.toFixed(1)}% · 3m ${idxReturns.r63?.toFixed(1)}% · 6m ${idxReturns.r126?.toFixed(1)}%`);
+  const regime = marketRegime(idxReturns);
+  if (regime) console.log(`Régime de marché : ${regime.label} (S&P ${regime.pctAbove >= 0 ? "+" : ""}${regime.pctAbove}% vs MM200).`);
 
   /* Étape 1 : scan du marché */
   let scanCloses = new Map();
@@ -783,7 +810,7 @@ async function main() {
   fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.writeFileSync(
     path.join(DATA_DIR, "latest.json"),
-    JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, failed, picks, results }, null, 1)
+    JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, failed, regime, picks, results }, null, 1)
   );
 
   // Index du moteur de recherche : tout le marché scanné (technique + momentum)
