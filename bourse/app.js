@@ -451,6 +451,21 @@
     $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  /* ───────────── Régime de marché ───────────── */
+
+  function renderRegime(reg) {
+    const host = $("regimeBanner");
+    if (!host) return;
+    host.innerHTML = "";
+    host.className = "regime " + (reg.up ? "regime-up" : "regime-down");
+    host.appendChild(el("span", "regime-dot", reg.up ? "🟢" : "🔴"));
+    const txt = el("div", "regime-txt");
+    txt.appendChild(el("strong", null, `${reg.label} (S&P 500 ${reg.pctAbove >= 0 ? "+" : ""}${reg.pctAbove} % vs sa moyenne 200 jours)`));
+    txt.appendChild(el("span", null, reg.guidance));
+    host.appendChild(txt);
+    host.classList.remove("hidden");
+  }
+
   /* ───────────── Picks du jour ───────────── */
 
   const PICK_META = {
@@ -820,6 +835,7 @@
       results = data.results;
       dataGeneratedAt = data.generatedAt || null;
       renderTable();
+      if (data.regime) renderRegime(data.regime);
       if (data.picks) renderPicks(data.picks);
 
       const rankHint = $("rankHint");
