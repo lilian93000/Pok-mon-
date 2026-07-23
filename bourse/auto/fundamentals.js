@@ -73,6 +73,12 @@ async function fetchQuoteSummary(symbol, session, tries = 2) {
       const fd = r.financialData || {}, ks = r.defaultKeyStatistics || {}, sd = r.summaryDetail || {};
       const ap = r.assetProfile || {}, pr = r.price || {};
       const de = raw(fd.debtToEquity); // Yahoo l'exprime en % (150 = 1,5x)
+      // Qualité comptable (facteur le plus robuste hors-échantillon, cf. Piotroski) :
+      // rentabilité des actifs, marges, bénéfices adossés au cash (anomalie des accruals), solvabilité.
+      const fcf = raw(fd.freeCashflow);
+      const rev = raw(fd.totalRevenue), pm = raw(fd.profitMargins);
+      const niProxy = (pm != null && rev != null) ? pm * rev : null; // bénéfice net ≈ marge × CA
+      const cashConversion = (fcf != null && niProxy != null && niProxy > 0) ? fcf / niProxy : null;
       const f = {
         revenueGrowth: pct(fd.revenueGrowth),
         epsGrowth: pct(fd.earningsGrowth),
@@ -81,6 +87,12 @@ async function fetchQuoteSummary(symbol, session, tries = 2) {
         peg: raw(ks.pegRatio),
         debtToEquity: de != null ? de / 100 : null,
         roe: pct(fd.returnOnEquity),
+        roa: pct(fd.returnOnAssets),                 // rentabilité des actifs
+        grossMargin: pct(fd.grossMargins),           // marge brute (pricing power)
+        operatingMargin: pct(fd.operatingMargins),   // marge d'exploitation (efficacité)
+        currentRatio: raw(fd.currentRatio),          // solvabilité court terme
+        cashConversion,                              // FCF / bénéfice : bénéfices adossés au cash
+        fcfPositive: fcf != null ? fcf > 0 : null,   // génère-t-elle vraiment du cash ?
       };
       const fundamentals = Object.values(f).every((v) => v == null) ? null : f;
 
@@ -106,6 +118,10 @@ async function fetchQuoteSummary(symbol, session, tries = 2) {
         earningsDate = dt.toISOString().slice(0, 10);
         earningsInDays = Math.round((dt.getTime() - Date.now()) / 864e5);
       }
+      // Liquidité : un pick doit être réellement négociable (éviter les « pump traps »
+      // peu liquides, manipulables). Volume en dollars = prix × volume quotidien moyen.
+      const avgVol = raw(sd.averageDailyVolume3Month) ?? raw(sd.averageDailyVolume10Day) ?? raw(sd.averageVolume);
+      const avgDollarVolume = (price != null && avgVol != null) ? price * avgVol : null;
       const extra = {
         targetMean: target ?? null,
         targetUpside: (target && price) ? (target / price - 1) * 100 : null,
@@ -113,6 +129,8 @@ async function fetchQuoteSummary(symbol, session, tries = 2) {
         numAnalysts: raw(fd.numberOfAnalystOpinions),
         shortPercent: pct(ks.shortPercentOfFloat),        // % du flottant vendu à découvert
         earningsDate, earningsInDays,
+        price: price ?? null,
+        avgDollarVolume,                                  // liquidité quotidienne en $
       };
       const hasExtra = Object.values(extra).some((v) => v != null);
 
