@@ -822,6 +822,62 @@
     $("backtestPanel").classList.remove("hidden");
   }
 
+  /* ───────────── Validation hors-échantillon (le vrai contrôle anti-triche) ─────
+     Un signal peut sembler gagnant juste par chance sur les données où on l'a
+     trouvé. validate.js le re-teste sur des périodes ET un panier d'actions
+     différents. Si l'avantage tient partout → vrai edge ; sinon → chance. */
+  async function loadValidation() {
+    let data;
+    try {
+      const res = await fetch("data/validate.json", { cache: "no-store" });
+      if (!res.ok) return;
+      data = await res.json();
+    } catch { return; }
+    if (!data || !Array.isArray(data.segments) || !data.segments.length) return;
+
+    const V = {
+      robuste: { txt: "✅ Avantage confirmé hors-échantillon — vrai edge", cls: "v-hot" },
+      partiel: { txt: "🟡 Avantage partiel — fragile, à surveiller", cls: "v-flat" },
+      non_confirme: { txt: "🔴 Non confirmé hors-échantillon — c'était sans doute la chance", cls: "v-bad" },
+    }[data.verdict] || { txt: "—", cls: "" };
+
+    const body = $("backtestBody");
+    const box = el("div", "bt-validate");
+    box.appendChild(el("h3", null, "🛡️ Preuve anti-triche : validation hors-échantillon"));
+    box.appendChild(el("div", `badge big ${V.cls}`, V.txt));
+    box.appendChild(el("p", "bt-scope", data.verdictText || data.method));
+
+    const tbl = document.createElement("table");
+    tbl.className = "bt-table";
+    tbl.innerHTML = "<thead><tr><th>Test</th><th class='num'>Trend vs marché</th><th class='num'>Réussite</th><th class='num'>Écart haut/bas</th></tr></thead>";
+    const tb = document.createElement("tbody");
+    for (const s of data.segments) {
+      const t = s.trend; if (!t) continue;
+      const tr = document.createElement("tr");
+      const vs = t.vsMarket;
+      tr.innerHTML =
+        `<td>${s.label}${s.oos ? " <span class='oos-tag'>hors-échantillon</span>" : ""}</td>` +
+        `<td class='num ${vs > 0 ? "s-good" : vs < 0 ? "s-bad" : ""}'>${vs >= 0 ? "+" : ""}${vs}</td>` +
+        `<td class='num'>${t.hitPct} %</td>` +
+        `<td class='num ${t.spread > 0 ? "s-good" : t.spread < 0 ? "s-bad" : ""}'>${t.spread >= 0 ? "+" : ""}${t.spread} %</td>`;
+      tb.appendChild(tr);
+    }
+    tbl.appendChild(tb);
+    box.appendChild(tbl);
+    box.appendChild(el("p", "bt-note", "« Hors-échantillon » = testé sur des données que le signal n'a jamais « vues » (autre période, autres actions). Si l'avantage y survit, il n'est probablement pas dû au hasard. « Écart haut/bas » = ce que rapporte le groupe le mieux noté de moins que le moins bien noté chaque mois ; positif = le score trie utilement."));
+
+    if (Array.isArray(data.caveats) && data.caveats.length) {
+      const wb = el("div", "warn-box");
+      wb.appendChild(el("h3", null, "Limites de ce test"));
+      for (const c of data.caveats) wb.appendChild(el("div", "warn-line", "• " + c));
+      box.appendChild(wb);
+    }
+
+    body.appendChild(box);
+    $("backtestPanel").classList.remove("hidden");
+    if (!$("backtestHint").textContent) $("backtestHint").textContent = `validation ${data.verdict}`;
+  }
+
   /* ───────────── Chargement automatique de l'analyse quotidienne ─────────────
      Le robot GitHub Actions (bourse/auto/run.js) committe data/latest.json
      chaque jour ouvré ; si le fichier existe, la page l'affiche sans un clic. */
@@ -877,7 +933,7 @@
     initSearch();
 
     tryAutoLoad(); // affiche l'analyse du robot sans aucun clic, si elle existe
-    loadBacktest(); // affiche la fiabilité du modèle si le backtest existe
+    loadBacktest().then(loadValidation); // fiabilité du modèle + preuve anti-triche
   }
 
   document.addEventListener("DOMContentLoaded", init);

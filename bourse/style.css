@@ -506,6 +506,18 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); 
 .bt-table td { padding: 8px 10px; border-bottom: 1px solid var(--grid); }
 .bt-table .bt-best { background: color-mix(in srgb, var(--good) 8%, transparent); font-weight: 600; }
 
+.bt-validate {
+  margin-top: 24px; padding-top: 20px; border-top: 2px dashed var(--grid);
+}
+.bt-validate h3 {
+  font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 12px;
+}
+.oos-tag {
+  display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent);
+  padding: 1px 6px; border-radius: 6px; margin-left: 6px; vertical-align: middle;
+}
+
 .profile-summary { margin-top: 14px; font-size: 13px; }
 .profile-summary summary { cursor: pointer; color: var(--accent); font-weight: 600; }
 .profile-summary p { margin-top: 8px; color: var(--ink-2); line-height: 1.6; }
