@@ -737,6 +737,31 @@
     stats.appendChild(stat("Pire perte subie", `−${data.maxDrawdownPct} %`));
     body.appendChild(stats);
 
+    // Comparatif des stratégies (quel signal marche vraiment ?)
+    if (data.strategies && data.strategies.length) {
+      const box = el("div", "bt-strats");
+      box.appendChild(el("h3", null, "Chaque signal testé séparément — qui bat le marché ?"));
+      const tbl = document.createElement("table");
+      tbl.className = "bt-table";
+      tbl.innerHTML = "<thead><tr><th>Stratégie</th><th class='num'>Perf/an</th><th class='num'>vs marché</th><th class='num'>Pire perte</th></tr></thead>";
+      const tb = document.createElement("tbody");
+      for (const s of data.strategies) {
+        const tr = document.createElement("tr");
+        if (s.key === data.bestKey) tr.className = "bt-best";
+        const vs = s.vsMarket;
+        tr.innerHTML =
+          `<td>${s.label}${s.key === data.bestKey ? " 🏆" : ""}</td>` +
+          `<td class='num'>${s.annReturn >= 0 ? "+" : ""}${s.annReturn} %</td>` +
+          `<td class='num ${vs > 0 ? "s-good" : vs < 0 ? "s-bad" : ""}'>${vs >= 0 ? "+" : ""}${vs}</td>` +
+          `<td class='num'>−${s.maxDrawdownPct} %</td>`;
+        tb.appendChild(tr);
+      }
+      tbl.appendChild(tb);
+      const marketRow = el("p", "bt-note", `Référence : acheter le S&P 500 = ${data.annReturnMarket >= 0 ? "+" : ""}${data.annReturnMarket} %/an, pire perte −${data.marketMaxDrawdownPct || data.maxDrawdownPct} %.`);
+      box.appendChild(tbl); box.appendChild(marketRow);
+      body.appendChild(box);
+    }
+
     // Courbe stratégie vs marché
     if (data.curve && data.curve.length > 3) {
       const cb = el("div", "chart-box");

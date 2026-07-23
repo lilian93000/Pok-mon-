@@ -96,14 +96,26 @@ function window(bars, idx) {
   return w;
 }
 
-// Score de PRIX point-in-time (technique + momentum + force relative)
-function priceScore(w, idxRet) {
+// Scores de base point-in-time (calculés une fois, réutilisés par toutes les stratégies)
+function baseScores(w, idxRet) {
   const t = Engine.scoreTechnical(w, null).score;
   const m = Engine.scoreMomentum(w).score;
   if (t == null || m == null) return null;
   const rs = Engine.relStrength(w, idxRet);
-  return 0.45 * t + 0.30 * m + 0.25 * (rs ? rs.score : 50);
+  const tt = Engine.trendTemplate(w);
+  const r21 = Engine.periodReturn(w, 21);
+  return { t, m, rs: rs ? rs.score : 50, trend: tt ? tt.score : 50, meanrev: r21 == null ? null : -r21 };
 }
+
+// Chaque stratégie = une façon de noter à partir des scores de base
+const STRATEGIES = {
+  composite:    { label: "Modèle complet (tech+mom+RS)", fn: (b) => 0.45 * b.t + 0.30 * b.m + 0.25 * b.rs },
+  momentum:     { label: "Momentum seul",                fn: (b) => b.m },
+  technique:    { label: "Technique seule",              fn: (b) => b.t },
+  forceRel:     { label: "Force relative seule",         fn: (b) => b.rs },
+  trend:        { label: "Trend template seul",          fn: (b) => b.trend },
+  retourMoyenne:{ label: "Retour à la moyenne (survendu)", fn: (b) => b.meanrev },
+};
 
 function idxReturnsAt(gspc, idx) {
   const w = window(gspc, idx);
@@ -129,9 +141,15 @@ async function main() {
   const rebalIdx = [];
   for (let i = MIN_HIST; i + HORIZON < timeline.length; i += REBAL) rebalIdx.push(i);
 
-  const quintFwd = Array.from({ length: QUINTILES }, () => []); // rendements fwd par quintile
-  const topReturns = [], mktReturns = [];                       // par période (top quintile vs marché)
-  let stratEquity = 100, mktEquity = 100, peak = 100, maxDD = 0;
+  const keys = Object.keys(STRATEGIES);
+  // état par stratégie
+  const S = {};
+  for (const k of keys) S[k] = { top: [], bottom: [], eq: 100, peak: 100, maxDD: 0 };
+  // version « prudente » : le modèle complet, mais uniquement quand le marché est haussier (sinon cash)
+  const REG = { eq: 100, peak: 100, maxDD: 0, invested: 0 };
+  const mktReturns = [];
+  let mktEquity = 100, mPeak = 100, mMaxDD = 0;
+  const quintFwd = Array.from({ length: QUINTILES }, () => []); // quintiles du modèle complet
   const curve = [];
 
   for (const gi of rebalIdx) {
@@ -139,71 +157,104 @@ async function main() {
     const Tfwd = timeline[gi + HORIZON];
     const idxRet = idxReturnsAt(gspcBars, gi);
 
-    // Score + rendement futur de chaque titre à cette date
+    // Scores de base + rendement futur pour chaque titre
     const rows = [];
     for (const [sym, bars] of barsBySym) {
       const iT = closeAt(bars, T);
       if (iT < MIN_HIST - 1) continue;
       const iF = closeAt(bars, Tfwd);
       if (iF <= iT) continue;
-      const score = priceScore(window(bars, iT), idxRet);
-      if (score == null) continue;
-      const fwd = bars[iF].c / bars[iT].c - 1;
-      rows.push({ sym, score, fwd });
+      const b = baseScores(window(bars, iT), idxRet);
+      if (!b) continue;
+      rows.push({ sym, b, fwd: bars[iF].c / bars[iT].c - 1 });
     }
     if (rows.length < QUINTILES * 3) continue;
-
-    rows.sort((a, b) => b.score - a.score);
     const per = rows.length / QUINTILES;
-    for (let q = 0; q < QUINTILES; q++) {
-      const slice = rows.slice(Math.floor(q * per), Math.floor((q + 1) * per));
-      const avg = mean(slice.map((r) => r.fwd));
-      quintFwd[q].push(avg);
-    }
-    // Stratégie = quintile du haut, équipondéré, moins les frais
-    const top = rows.slice(0, Math.floor(per));
-    const topRet = mean(top.map((r) => r.fwd)) - COST;
     const mktRet = gspcBars[gi + HORIZON].c / gspcBars[gi].c - 1;
-    topReturns.push(topRet); mktReturns.push(mktRet);
+    mktReturns.push(mktRet);
+    mktEquity *= (1 + mktRet); mPeak = Math.max(mPeak, mktEquity); mMaxDD = Math.max(mMaxDD, (mPeak - mktEquity) / mPeak);
 
-    stratEquity *= (1 + topRet);
-    mktEquity *= (1 + mktRet);
-    peak = Math.max(peak, stratEquity);
-    maxDD = Math.max(maxDD, (peak - stratEquity) / peak);
-    curve.push({ date: new Date(T * 1000).toISOString().slice(0, 10), strat: Math.round(stratEquity * 10) / 10, market: Math.round(mktEquity * 10) / 10 });
+    // Régime de marché : S&P au-dessus de sa moyenne 200 jours ?
+    const gWin = window(gspcBars, gi);
+    const gma200 = gWin.length >= 200 ? Engine.sma(gWin, 200).filter((x) => x != null).pop() : null;
+    const regimeUp = gma200 == null ? true : gspcBars[gi].c > gma200;
+
+    for (const k of keys) {
+      const scored = rows.filter((r) => STRATEGIES[k].fn(r.b) != null)
+        .map((r) => ({ fwd: r.fwd, score: STRATEGIES[k].fn(r.b) }))
+        .sort((a, b) => b.score - a.score);
+      if (scored.length < QUINTILES * 3) continue;
+      const p = scored.length / QUINTILES;
+      const topRet = mean(scored.slice(0, Math.floor(p)).map((r) => r.fwd)) - COST;
+      const botRet = mean(scored.slice(Math.floor((QUINTILES - 1) * p)).map((r) => r.fwd));
+      S[k].top.push(topRet); S[k].bottom.push(botRet);
+      S[k].eq *= (1 + topRet); S[k].peak = Math.max(S[k].peak, S[k].eq); S[k].maxDD = Math.max(S[k].maxDD, (S[k].peak - S[k].eq) / S[k].peak);
+
+      if (k === "composite") {
+        for (let q = 0; q < QUINTILES; q++) quintFwd[q].push(mean(scored.slice(Math.floor(q * p), Math.floor((q + 1) * p)).map((r) => r.fwd)));
+        // Modèle complet + filtre de régime : investi si marché haussier, sinon cash (0 %)
+        const regRet = regimeUp ? topRet : 0;
+        if (regimeUp) REG.invested++;
+        REG.eq *= (1 + regRet); REG.peak = Math.max(REG.peak, REG.eq); REG.maxDD = Math.max(REG.maxDD, (REG.peak - REG.eq) / REG.peak);
+        curve.push({ date: new Date(T * 1000).toISOString().slice(0, 10), strat: Math.round(S.composite.eq * 10) / 10, market: Math.round(mktEquity * 10) / 10, prudent: Math.round(REG.eq * 10) / 10 });
+      }
+    }
   }
 
-  const periods = topReturns.length;
+  const periods = S.composite.top.length;
   const yearsCovered = (timeline[rebalIdx[rebalIdx.length - 1] + HORIZON] - timeline[rebalIdx[0]]) / (365.25 * 86400);
-  const annStrat = (Math.pow(stratEquity / 100, 1 / yearsCovered) - 1) * 100;
-  const annMkt = (Math.pow(mktEquity / 100, 1 / yearsCovered) - 1) * 100;
-  const hit = topReturns.filter((r, i) => r > mktReturns[i]).length / periods * 100;
-  const quintMean = quintFwd.map((a) => mean(a) * 100);
-  // Sharpe simplifié (mensuel annualisé), sans taux sans risque
-  const sharpe = std(topReturns) ? (mean(topReturns) / std(topReturns)) * Math.sqrt(12) : 0;
-  const spread = quintMean[0] - quintMean[QUINTILES - 1]; // top − bottom, par mois
+  const ann = (eq) => (Math.pow(eq / 100, 1 / yearsCovered) - 1) * 100;
+  const r1 = (x) => Math.round(x * 10) / 10;
+  const annMkt = ann(mktEquity);
 
-  const monotonic = quintMean.every((v, i) => i === 0 || v <= quintMean[i - 1] + 0.15); // score plus haut ⇒ rendement ≥
+  // Résumé par stratégie
+  const strategies = keys.map((k) => {
+    const st = S[k];
+    const hit = st.top.filter((r, i) => r > mktReturns[i]).length / periods * 100;
+    const spread = (mean(st.top) - mean(st.bottom)) * 100;
+    const sharpe = std(st.top) ? (mean(st.top) / std(st.top)) * Math.sqrt(12) : 0;
+    return {
+      key: k, label: STRATEGIES[k].label,
+      annReturn: r1(ann(st.eq)), vsMarket: r1(ann(st.eq) - annMkt),
+      hitRatePct: Math.round(hit), spreadMonthlyPct: Math.round(spread * 100) / 100,
+      maxDrawdownPct: r1(st.maxDD * 100), sharpe: Math.round(sharpe * 100) / 100, final: Math.round(st.eq),
+    };
+  });
+  // Ajoute la version prudente (modèle + régime)
+  strategies.push({
+    key: "prudent", label: "Modèle complet + filtre marché (prudent)",
+    annReturn: r1(ann(REG.eq)), vsMarket: r1(ann(REG.eq) - annMkt),
+    hitRatePct: null, spreadMonthlyPct: null,
+    maxDrawdownPct: r1(REG.maxDD * 100), sharpe: null, final: Math.round(REG.eq),
+    note: `Investi ${Math.round(REG.invested / periods * 100)} % du temps (marché haussier), cash le reste.`,
+  });
+
+  // La meilleure stratégie « au sens risque/rendement » (rendement puis moindre drawdown)
+  const best = [...strategies].sort((a, b) => (b.annReturn - b.maxDrawdownPct * 0.25) - (a.annReturn - a.maxDrawdownPct * 0.25))[0];
+
+  const comp = strategies.find((s) => s.key === "composite");
+  const quintMean = quintFwd.map((a) => mean(a) * 100);
+  const spread = quintMean[0] - quintMean[QUINTILES - 1];
+  const monotonic = quintMean.every((v, i) => i === 0 || v <= quintMean[i - 1] + 0.15);
   let verdict;
-  if (spread > 0.4 && annStrat > annMkt + 1 && hit >= 52) verdict = "edge";
-  else if (spread > 0.1 && annStrat >= annMkt - 0.5) verdict = "leger";
+  if (best.vsMarket > 1.5 && best.key !== "prudent") verdict = "edge";
+  else if (best.vsMarket > -0.5 || (best.key === "prudent" && best.maxDrawdownPct < mMaxDD * 100 - 5)) verdict = "leger";
   else verdict = "faible";
 
   const out = {
     generatedAt: new Date().toISOString(),
-    scope: "Signaux de prix uniquement (technique + momentum + force relative). Fondamentaux/news non backtestables (pas d'historique).",
-    universeSize: barsBySym.size, years: Math.round(yearsCovered * 10) / 10, periods,
+    scope: "Signaux de prix uniquement (technique + momentum + force relative + trend + retour à la moyenne). Fondamentaux/news non backtestables (pas d'historique).",
+    universeSize: barsBySym.size, years: r1(yearsCovered), periods,
     rebalance: "≈ mensuel", horizon: "≈ 1 mois", costPerRebalancePct: COST * 100,
-    annReturnStrategy: Math.round(annStrat * 10) / 10,
-    annReturnMarket: Math.round(annMkt * 10) / 10,
-    hitRatePct: Math.round(hit),
+    annReturnMarket: r1(annMkt), marketMaxDrawdownPct: r1(mMaxDD * 100), finalMarket: Math.round(mktEquity),
+    // compat affichage historique (modèle complet)
+    annReturnStrategy: comp.annReturn, hitRatePct: comp.hitRatePct,
+    maxDrawdownPct: comp.maxDrawdownPct, sharpe: comp.sharpe, finalStrategy: comp.final,
     quintileMonthlyReturnsPct: quintMean.map((v) => Math.round(v * 100) / 100),
-    topMinusBottomMonthlyPct: Math.round(spread * 100) / 100,
-    monotonic, maxDrawdownPct: Math.round(maxDD * 1000) / 10, sharpe: Math.round(sharpe * 100) / 100,
-    finalStrategy: Math.round(stratEquity), finalMarket: Math.round(mktEquity),
-    verdict, curve,
+    topMinusBottomMonthlyPct: Math.round(spread * 100) / 100, monotonic,
+    strategies, bestKey: best.key, verdict, curve,
     caveats: [
-      "Biais du survivant : univers de grandes valeurs actuelles (les faillites/retraits passés manquent) → résultats un peu flattés.",
+      "Biais du survivant : univers de grandes valeurs actuelles → résultats un peu flattés.",
       "Ne teste que les signaux de prix, pas les fondamentaux ni les news.",
       "Coût de rotation estimé à 0,1 %/mois ; le vrai coût dépend de ton courtier.",
       "Les performances passées ne préjugent pas des performances futures.",
@@ -213,11 +264,11 @@ async function main() {
   fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.writeFileSync(path.join(DATA_DIR, "backtest.json"), JSON.stringify(out, null, 1));
 
-  console.log(`\n=== RÉSULTAT (${out.years} ans, ${periods} périodes) ===`);
-  console.log(`Stratégie top quintile : ${out.annReturnStrategy}%/an  |  Marché : ${out.annReturnMarket}%/an`);
-  console.log(`Rendement mensuel par quintile (haut→bas) : ${out.quintileMonthlyReturnsPct.join("  ")}`);
-  console.log(`Écart haut−bas : ${out.topMinusBottomMonthlyPct}%/mois | Réussite vs marché : ${out.hitRatePct}% | Sharpe ${out.sharpe} | pire perte ${out.maxDrawdownPct}%`);
-  console.log(`Verdict : ${verdict}`);
+  console.log(`\n=== RÉSULTAT (${out.years} ans, ${periods} périodes) — Marché ${r1(annMkt)}%/an, pire perte -${r1(mMaxDD * 100)}% ===`);
+  for (const s of strategies) {
+    console.log(`  ${s.label.padEnd(42)} ${String(s.annReturn).padStart(6)}%/an  vs marché ${(s.vsMarket >= 0 ? "+" : "") + s.vsMarket}  | DD -${s.maxDrawdownPct}%${s.note ? "  (" + s.note + ")" : ""}`);
+  }
+  console.log(`\nMeilleure : ${best.label} | Verdict : ${verdict}`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
