@@ -555,9 +555,19 @@
         card.appendChild(det);
       }
 
+      // Liquidité : négociabilité réelle (anti « pump trap »)
+      if (p.liquid === false) {
+        const warn = el("div", "pick-liq-warn", "⚠️ Peu liquide / petit prix — négociable difficilement, risque de manipulation. Très petite taille uniquement.");
+        card.appendChild(warn);
+      } else if (p.dollarVol != null) {
+        const m = p.dollarVol >= 1e9 ? `${(p.dollarVol / 1e9).toFixed(1)} Md$` : `${Math.round(p.dollarVol / 1e6)} M$`;
+        card.appendChild(el("div", "pick-liq-ok", `💧 Liquidité : ~${m}/jour échangés — négociable sans souci.`));
+      }
+
       // Pied : volatilité + confiance, avec bouton d'ouverture
       const foot = el("div", "pick-foot");
-      foot.appendChild(el("span", null, `volatilité ${p.volatility}% · confiance ${p.confidence}%`));
+      const meta2 = p.price != null ? `${p.price.toFixed(2)} $ · volatilité ${p.volatility}% · confiance ${p.confidence}%` : `volatilité ${p.volatility}% · confiance ${p.confidence}%`;
+      foot.appendChild(el("span", null, meta2));
       const r = results.find((x) => x.symbol === p.symbol);
       if (r) {
         foot.appendChild(el("span", "pick-open", "Détail →"));

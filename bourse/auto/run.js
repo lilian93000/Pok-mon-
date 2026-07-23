@@ -584,31 +584,55 @@ function selectPicks(results) {
     verdict: r.verdict,
     why: topSignals(r),
     fromScan: !!r.fromScan,
+    price: r.extra && r.extra.price != null ? r.extra.price : null,
+    dollarVol: r.extra && r.extra.avgDollarVolume != null ? Math.round(r.extra.avgDollarVolume) : null,
+    liquid: (r.extra && (r.extra.avgDollarVolume != null || r.extra.price != null))
+      ? ((r.extra.avgDollarVolume == null || r.extra.avgDollarVolume >= 3e6) && (r.extra.price == null || r.extra.price >= 3))
+      : null,
   });
 
   const best = (arr, keyFn) => arr.reduce((a, b) => (keyFn(b) > keyFn(a) ? b : a));
   const used = new Set();
-  // Signaux prouvés par le backtest (edge réel) : trend template + force relative
+  // Force relative : garde une pondération légère (edge modeste mais réel au backtest).
+  // Le trend template a ÉCHOUÉ le test hors-échantillon → on ne s'y fie plus qu'à la marge.
   const tScore = (r) => (r.trend ? r.trend.score : 50);
   const rScore = (r) => (r.rs ? r.rs.score : 50);
 
+  // ── Garde-fou de LIQUIDITÉ ──────────────────────────────────────────
+  // Un pick doit être réellement négociable : les micro-caps peu liquides et
+  // les penny stocks sont facilement manipulables (« pump traps ») et souvent
+  // impossibles à revendre proprement. On écarte < 3 M$/j de volume ou < 3 $.
+  const MIN_DOLLAR_VOL = 3e6, MIN_PRICE = 3;
+  const liq = (r) => (r.extra ? r.extra.avgDollarVolume : null);
+  const prc = (r) => (r.extra ? r.extra.price : null);
+  const tradable = (r) => {
+    const dv = liq(r), p = prc(r);
+    if (dv != null && dv < MIN_DOLLAR_VOL) return false; // trop illiquide
+    if (p != null && p < MIN_PRICE) return false;        // penny stock
+    return true;
+  };
+  // On privilégie les valeurs négociables ; on ne retombe sur l'ensemble que
+  // si le filtre ne laisse rien (mieux vaut un pick signalé qu'aucun pick).
+  const liquidPool = scored.filter(tradable);
+  const pickable = liquidPool.length >= 4 ? liquidPool : scored;
+
   // One shot : momentum + force relative (prouvée), technique allégée (perdante seule)
-  const oneShot = best(scored, (r) => 0.40 * (pil(r, "momentum") || 0) + 0.25 * rScore(r) + 0.20 * (pil(r, "sentiment") || 0) + 0.15 * (pil(r, "technical") || 0));
+  const oneShot = best(pickable, (r) => 0.40 * (pil(r, "momentum") || 0) + 0.25 * rScore(r) + 0.20 * (pil(r, "sentiment") || 0) + 0.15 * (pil(r, "technical") || 0));
   used.add(oneShot.symbol);
 
-  // Long terme : qualité + calme + tendance de fond confirmée (trend template)
-  const ltPool = scored.filter((r) => pil(r, "fundamental") != null && !used.has(r.symbol));
-  const longTerme = (ltPool.length ? best(ltPool, (r) => 0.40 * r.score + 0.35 * pil(r, "fundamental") + 0.12 * Math.max(0, 100 - vol(r)) + 0.13 * tScore(r)) : null);
+  // Long terme : qualité fondamentale d'abord (facteur robuste OOS) + calme
+  const ltPool = pickable.filter((r) => pil(r, "fundamental") != null && !used.has(r.symbol));
+  const longTerme = (ltPool.length ? best(ltPool, (r) => 0.40 * r.score + 0.42 * pil(r, "fundamental") + 0.13 * Math.max(0, 100 - vol(r)) + 0.05 * tScore(r)) : null);
   if (longTerme) used.add(longTerme.symbol);
 
-  // Complet : meilleur score global, penché vers les signaux prouvés (trend + force relative)
-  const balPool = scored.filter((r) => !used.has(r.symbol) && pil(r, "fundamental") != null && vol(r) < 55);
-  const complet = (balPool.length ? best(balPool, (r) => r.score + 0.15 * tScore(r) + 0.12 * rScore(r)) : scored.find((r) => !used.has(r.symbol)) || null);
+  // Complet : meilleur score global (value+qualité+momentum), force relative en appoint
+  const balPool = pickable.filter((r) => !used.has(r.symbol) && pil(r, "fundamental") != null && vol(r) < 55);
+  const complet = (balPool.length ? best(balPool, (r) => r.score + 0.15 * (pil(r, "fundamental") || 50) / 100 * 10 + 0.12 * rScore(r) + 0.05 * tScore(r)) : pickable.find((r) => !used.has(r.symbol)) || null);
   if (complet) used.add(complet.symbol);
 
   // Avant le boum : démarrage précoce, ressort comprimé, PAS encore envolé
   const earlyMap = new Map(scored.map((r) => [r.symbol, Engine.earlySetup(r.closes)]));
-  const abPool = scored.filter((r) => {
+  const abPool = pickable.filter((r) => {
     if (used.has(r.symbol)) return false;
     const es = earlyMap.get(r.symbol);
     return es && es.eligible && es.perf3 <= 25 && es.score >= 55;
@@ -618,7 +642,7 @@ function selectPicks(results) {
         + (pil(r, "fundamental") != null ? 8 : 0)
         + (pil(r, "sentiment") || 0) * 0.05
         + (r.rs ? r.rs.score * 0.20 : 0)          // bonus leader (force relative)
-        + (r.trend ? r.trend.score * 0.10 : 0))   // bonus tendance de fond confirmée
+        + (r.trend ? r.trend.score * 0.05 : 0))   // tendance de fond (allégé : échec OOS)
     : null;
   if (avantBoum) used.add(avantBoum.symbol);
 

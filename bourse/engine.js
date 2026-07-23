@@ -279,8 +279,11 @@ const Engine = (() => {
   }
 
   /* ───────────── Pilier 3 : score fondamental (0–100) ─────────────
-     f = { revenueGrowth, epsGrowth, netMargin, pe, peg, debtToEquity, roe }
-     (champs en %, null si inconnu) */
+     Combine VALEUR + CROISSANCE + QUALITÉ (multi-facteur = plus robuste, car
+     les facteurs sont peu corrélés entre eux).
+     f = { revenueGrowth, epsGrowth, netMargin, pe, peg, debtToEquity, roe,
+           roa, grossMargin, operatingMargin, cashConversion, fcfPositive,
+           currentRatio }  (champs en %, null si inconnu) */
 
   function scoreFundamental(f) {
     if (!f) return { score: null, signals: [] };
@@ -324,6 +327,48 @@ const Engine = (() => {
     }
     if (f.roe != null) {
       parts.push([ramp(f.roe, [[-10, 15], [0, 35], [10, 55], [20, 80], [40, 92]]), 1]);
+    }
+
+    // ── Sous-score QUALITÉ (inspiré du F-score de Piotroski) ──
+    // Le facteur qualité est l'un des rares à résister au test hors-échantillon,
+    // et il est particulièrement efficace sur les petites capitalisations —
+    // exactement le type d'actions que le screener remonte.
+    if (f.roa != null) {
+      parts.push([ramp(f.roa, [[-5, 15], [0, 40], [5, 62], [12, 82], [25, 93]]), 1.5]);
+      signals.push({
+        label: `Rentabilité des actifs (ROA) : ${f.roa >= 0 ? "+" : ""}${f.roa.toFixed(1)} %`,
+        good: f.roa > 5,
+        detail: f.roa > 12 ? "actifs très rentables — signe de qualité" : f.roa > 5 ? "actifs correctement rentabilisés" : f.roa > 0 ? "rentabilité faible des actifs" : "actifs non rentables",
+      });
+    }
+    if (f.grossMargin != null) {
+      parts.push([ramp(f.grossMargin, [[10, 35], [30, 55], [50, 75], [70, 90]]), 1]);
+      if (f.grossMargin > 50) signals.push({ label: `Marge brute : ${f.grossMargin.toFixed(0)} %`, good: true, detail: "fort pouvoir de fixation des prix" });
+    }
+    if (f.operatingMargin != null) {
+      parts.push([ramp(f.operatingMargin, [[-5, 15], [5, 45], [15, 70], [30, 88]]), 1.5]);
+      signals.push({
+        label: `Marge d'exploitation : ${f.operatingMargin >= 0 ? "+" : ""}${f.operatingMargin.toFixed(1)} %`,
+        good: f.operatingMargin > 12,
+        detail: f.operatingMargin > 25 ? "entreprise très efficace" : f.operatingMargin > 12 ? "bonne efficacité opérationnelle" : f.operatingMargin > 0 ? "marges d'exploitation minces" : "activité non rentable",
+      });
+    }
+    // Bénéfices adossés au cash (anomalie des accruals) : un bénéfice non
+    // converti en cash est un signal d'alerte bien documenté (Sloan, 1996).
+    if (f.cashConversion != null) {
+      parts.push([ramp(f.cashConversion, [[-0.5, 12], [0, 30], [0.6, 65], [1, 85], [1.6, 92]]), 1.5]);
+      signals.push({
+        label: `Conversion en cash : ${Math.round(f.cashConversion * 100)} % du bénéfice`,
+        good: f.cashConversion > 0.7,
+        detail: f.cashConversion > 1 ? "bénéfices intégralement adossés au cash — très sain" : f.cashConversion > 0.7 ? "bénéfices majoritairement convertis en cash" : "bénéfices peu convertis en cash — prudence",
+      });
+    } else if (f.fcfPositive != null) {
+      parts.push([f.fcfPositive ? 72 : 22, 1]);
+      if (!f.fcfPositive) signals.push({ label: "Flux de trésorerie libre négatif", good: false, detail: "l'entreprise brûle du cash — fragilité" });
+    }
+    if (f.currentRatio != null) {
+      parts.push([ramp(f.currentRatio, [[0.6, 22], [1, 48], [1.5, 72], [3, 85]]), 1]);
+      if (f.currentRatio < 1) signals.push({ label: `Ratio de liquidité : ${f.currentRatio.toFixed(2)}`, good: false, detail: "passif court terme supérieur à l'actif court terme" });
     }
 
     if (!parts.length) return { score: null, signals };

@@ -229,6 +229,12 @@ main {
 .pick-why li { font-size: 11.5px; color: var(--ink-2); padding-left: 16px; position: relative; }
 .pick-why li::before { content: "▲"; position: absolute; left: 0; color: var(--good); font-size: 9px; top: 3px; }
 
+.pick-liq-warn, .pick-liq-ok {
+  font-size: 11px; line-height: 1.4; border-radius: 8px; padding: 6px 9px; margin: 8px 0 2px;
+}
+.pick-liq-warn { color: var(--critical); background: color-mix(in srgb, var(--critical) 10%, transparent); }
+.pick-liq-ok { color: var(--muted); background: color-mix(in srgb, var(--accent) 7%, transparent); }
+
 .pick-foot {
   display: flex; align-items: center; justify-content: space-between;
   font-size: 11.5px; color: var(--muted);
