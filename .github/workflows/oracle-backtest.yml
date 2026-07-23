@@ -29,11 +29,14 @@ jobs:
       - name: Backtest du modèle (signaux de prix)
         run: node bourse/auto/backtest.js
 
+      - name: Validation hors-échantillon (anti-triche)
+        run: node bourse/auto/validate.js
+
       - name: Commit du résultat
         run: |
           git config user.name "oracle-bourse[bot]"
           git config user.email "oracle-bourse[bot]@users.noreply.github.com"
-          git add bourse/data/backtest.json
+          git add bourse/data/backtest.json bourse/data/validate.json
           if git diff --cached --quiet; then
             echo "Aucun changement."
           else
