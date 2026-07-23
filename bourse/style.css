@@ -484,6 +484,11 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); 
 .bt-leg-strat { color: var(--accent); }
 .bt-leg-mkt { color: var(--muted); }
 .bt-note { font-size: 12.5px; color: var(--ink-2); margin-top: 10px; }
+.bt-strats { margin-top: 20px; }
+.bt-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.bt-table th { text-align: left; padding: 8px 10px; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--grid); }
+.bt-table td { padding: 8px 10px; border-bottom: 1px solid var(--grid); }
+.bt-table .bt-best { background: color-mix(in srgb, var(--good) 8%, transparent); font-weight: 600; }
 
 .profile-summary { margin-top: 14px; font-size: 13px; }
 .profile-summary summary { cursor: pointer; color: var(--accent); font-weight: 600; }
