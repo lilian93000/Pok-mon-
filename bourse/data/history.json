@@ -358,19 +358,19 @@
    },
    {
     "symbol": "SIF",
-    "score": 83
+    "score": 82
    },
    {
-    "symbol": "PLBC",
+    "symbol": "ACNB",
     "score": 81
    },
    {
-    "symbol": "WSBC",
-    "score": 81
-   },
-   {
-    "symbol": "KARO",
+    "symbol": "SMBK",
     "score": 80
+   },
+   {
+    "symbol": "JPM",
+    "score": 79
    }
   ]
  }
