@@ -1,0 +1,130 @@
+{
+ "generatedAt": "2026-07-26T08:09:27.648Z",
+ "method": "Validation hors-échantillon : re-test du trend template sur des périodes distinctes (1re/2e moitié) et sur un panier d'actions entièrement différent (univers B).",
+ "universeA": 74,
+ "universeB": 103,
+ "segments": [
+  {
+   "key": "A_full",
+   "label": "Univers A — période complète",
+   "oos": false,
+   "trend": {
+    "periods": 59,
+    "years": 5,
+    "annStrat": 16.8,
+    "annMkt": 11.3,
+    "vsMarket": 5.5,
+    "hitPct": 59,
+    "spread": 0.24
+   },
+   "composite": {
+    "periods": 59,
+    "years": 5,
+    "annStrat": 13.5,
+    "annMkt": 11.3,
+    "vsMarket": 2.2,
+    "hitPct": 56,
+    "spread": -0.34
+   }
+  },
+  {
+   "key": "A_h1",
+   "label": "Univers A — 1re moitié",
+   "oos": false,
+   "trend": {
+    "periods": 29,
+    "years": 2.5,
+    "annStrat": 4.4,
+    "annMkt": 2.8,
+    "vsMarket": 1.6,
+    "hitPct": 55,
+    "spread": -1.06
+   },
+   "composite": {
+    "periods": 29,
+    "years": 2.5,
+    "annStrat": 0.8,
+    "annMkt": 2.8,
+    "vsMarket": -2,
+    "hitPct": 55,
+    "spread": -1.32
+   }
+  },
+  {
+   "key": "A_h2",
+   "label": "Univers A — 2e moitié",
+   "oos": true,
+   "trend": {
+    "periods": 29,
+    "years": 2.5,
+    "annStrat": 24.1,
+    "annMkt": 18.7,
+    "vsMarket": 5.4,
+    "hitPct": 48,
+    "spread": 1.13
+   },
+   "composite": {
+    "periods": 29,
+    "years": 2.5,
+    "annStrat": 26.4,
+    "annMkt": 18.7,
+    "vsMarket": 7.7,
+    "hitPct": 52,
+    "spread": 1.15
+   }
+  },
+  {
+   "key": "B_full",
+   "label": "Univers B — panier DIFFÉRENT (hors-échantillon)",
+   "oos": true,
+   "trend": {
+    "periods": 59,
+    "years": 5,
+    "annStrat": 8.9,
+    "annMkt": 11.3,
+    "vsMarket": -2.4,
+    "hitPct": 47,
+    "spread": -0.05
+   },
+   "composite": {
+    "periods": 59,
+    "years": 5,
+    "annStrat": 6.8,
+    "annMkt": 11.3,
+    "vsMarket": -4.4,
+    "hitPct": 46,
+    "spread": -0.68
+   }
+  },
+  {
+   "key": "B_h2",
+   "label": "Univers B — 2e moitié (double hors-échantillon)",
+   "oos": true,
+   "trend": {
+    "periods": 29,
+    "years": 2.5,
+    "annStrat": 16.7,
+    "annMkt": 18.7,
+    "vsMarket": -1.9,
+    "hitPct": 34,
+    "spread": 1.32
+   },
+   "composite": {
+    "periods": 29,
+    "years": 2.5,
+    "annStrat": 17,
+    "annMkt": 18.7,
+    "vsMarket": -1.7,
+    "hitPct": 41,
+    "spread": 0.92
+   }
+  }
+ ],
+ "verdict": "non_confirme",
+ "verdictText": "Le trend template ne se confirme PAS hors-échantillon : son avantage sur la période initiale était probablement dû à la chance. On ne se ment pas — on n'y accorde pas de confiance particulière.",
+ "caveats": [
+  "Toujours biais du survivant (valeurs actuelles).",
+  "Signaux de prix uniquement ; ~6 ans d'historique — un vrai institutionnel testerait sur 20-30 ans et plusieurs marchés.",
+  "Performances passées ≠ performances futures."
+ ]
+}
