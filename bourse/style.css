@@ -229,10 +229,11 @@ main {
 .pick-why li { font-size: 11.5px; color: var(--ink-2); padding-left: 16px; position: relative; }
 .pick-why li::before { content: "▲"; position: absolute; left: 0; color: var(--good); font-size: 9px; top: 3px; }
 
-.pick-liq-warn, .pick-liq-ok {
+.pick-liq-warn, .pick-liq-ok, .pick-liq-mid {
   font-size: 11px; line-height: 1.4; border-radius: 8px; padding: 6px 9px; margin: 8px 0 2px;
 }
 .pick-liq-warn { color: var(--critical); background: color-mix(in srgb, var(--critical) 10%, transparent); }
+.pick-liq-mid { color: var(--warn-text, #b7791f); background: color-mix(in srgb, #e0a800 12%, transparent); }
 .pick-liq-ok { color: var(--muted); background: color-mix(in srgb, var(--accent) 7%, transparent); }
 
 .pick-foot {
