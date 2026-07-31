@@ -33,6 +33,9 @@ jobs:
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
         run: node bourse/auto/run.js
 
+      - name: Suivi de performance des picks passés (vs S&P 500)
+        run: node bourse/auto/track.js || echo "suivi indisponible (non bloquant)"
+
       - name: Commit des résultats
         run: |
           git config user.name "oracle-bourse[bot]"

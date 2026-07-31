@@ -832,6 +832,70 @@
     $("backtestPanel").classList.remove("hidden");
   }
 
+  /* ───────────── Performance réelle des picks passés ─────────────
+     Rendement de chaque top-pick depuis sa reco, comparé au S&P 500. */
+  async function loadTrack() {
+    let data;
+    try {
+      const res = await fetch("data/track.json", { cache: "no-store" });
+      if (!res.ok) return;
+      data = await res.json();
+    } catch { return; }
+    if (!data || !data.all || !data.all.n) return;
+
+    const body = $("trackBody");
+    body.innerHTML = "";
+    $("trackHint").textContent = `${data.all.n} picks · ${data.horizon || ""}`;
+
+    const a = data.all;
+    const beat = a.beatMktPct != null ? a.beatMktPct : null;
+    const V = beat == null ? { txt: "—", cls: "" }
+      : beat >= 60 ? { txt: `✅ ${beat}% des picks battent le S&P 500`, cls: "v-hot" }
+      : beat >= 45 ? { txt: `🟡 ${beat}% des picks battent le S&P 500`, cls: "v-flat" }
+      : { txt: `🔴 Seuls ${beat}% des picks battent le S&P 500`, cls: "v-bad" };
+    body.appendChild(el("div", `badge big ${V.cls}`, V.txt));
+    body.appendChild(el("p", "bt-scope", data.method || ""));
+
+    const stats = el("div", "bt-stats");
+    const stat = (lbl, val, sub) => { const b = el("div", "bt-stat"); b.appendChild(el("div", "bt-val", val)); b.appendChild(el("div", "bt-lbl", lbl)); if (sub) b.appendChild(el("div", "bt-sub", sub)); return b; };
+    stats.appendChild(stat("Rendement moyen", `${a.avgRet >= 0 ? "+" : ""}${a.avgRet} %`));
+    stats.appendChild(stat("Médiane", `${a.medRet >= 0 ? "+" : ""}${a.medRet} %`));
+    stats.appendChild(stat("Picks gagnants", `${a.winPct} %`));
+    if (a.avgAlpha != null) stats.appendChild(stat("Écart vs marché", `${a.avgAlpha >= 0 ? "+" : ""}${a.avgAlpha} %`, "en moyenne"));
+    body.appendChild(stats);
+
+    if (data.top1 && data.top1.n) {
+      const t1 = data.top1;
+      body.appendChild(el("p", "bt-note", `Le pick n°1 de chaque jour (le plus haut score) : ${t1.avgRet >= 0 ? "+" : ""}${t1.avgRet} % en moyenne, ${t1.winPct} % gagnants${t1.avgAlpha != null ? `, ${t1.avgAlpha >= 0 ? "+" : ""}${t1.avgAlpha} % vs le marché` : ""}.`));
+    }
+
+    const tblBox = (title, rows) => {
+      const box = el("div", "bt-strats");
+      box.appendChild(el("h3", null, title));
+      const tbl = document.createElement("table"); tbl.className = "bt-table";
+      tbl.innerHTML = "<thead><tr><th>Action</th><th>Reco</th><th class='num'>Rendement</th><th class='num'>vs marché</th></tr></thead>";
+      const tb = document.createElement("tbody");
+      for (const p of rows) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${p.symbol}</td><td>${p.date}</td>` +
+          `<td class='num ${p.ret > 0 ? "s-good" : p.ret < 0 ? "s-bad" : ""}'>${p.ret >= 0 ? "+" : ""}${p.ret} %</td>` +
+          `<td class='num ${p.alpha > 0 ? "s-good" : p.alpha < 0 ? "s-bad" : ""}'>${p.alpha == null ? "—" : (p.alpha >= 0 ? "+" : "") + p.alpha}</td>`;
+        tb.appendChild(tr);
+      }
+      tbl.appendChild(tb); box.appendChild(tbl); return box;
+    };
+    if (data.best && data.best.length) body.appendChild(tblBox("🏆 Meilleurs picks", data.best));
+    if (data.worst && data.worst.length) body.appendChild(tblBox("🥶 Pires picks", data.worst));
+
+    if (Array.isArray(data.caveats) && data.caveats.length) {
+      const wb = el("div", "warn-box");
+      wb.appendChild(el("h3", null, "À lire avant de conclure"));
+      for (const c of data.caveats) wb.appendChild(el("div", "warn-line", "• " + c));
+      body.appendChild(wb);
+    }
+    $("trackPanel").classList.remove("hidden");
+  }
+
   /* ───────────── Validation hors-échantillon (le vrai contrôle anti-triche) ─────
      Un signal peut sembler gagnant juste par chance sur les données où on l'a
      trouvé. validate.js le re-teste sur des périodes ET un panier d'actions
@@ -943,6 +1007,7 @@
     initSearch();
 
     tryAutoLoad(); // affiche l'analyse du robot sans aucun clic, si elle existe
+    loadTrack(); // performance réelle des picks passés
     loadBacktest().then(loadValidation); // fiabilité du modèle + preuve anti-triche
   }
 
