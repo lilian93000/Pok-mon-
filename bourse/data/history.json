@@ -503,23 +503,23 @@
   "date": "2026-07-31",
   "top": [
    {
-    "symbol": "FCBC",
+    "symbol": "DINO",
     "score": 81
    },
    {
     "symbol": "AAMI",
+    "score": 80
+   },
+   {
+    "symbol": "NMIH",
+    "score": 80
+   },
+   {
+    "symbol": "DXCM",
     "score": 79
    },
    {
-    "symbol": "DINO",
-    "score": 78
-   },
-   {
-    "symbol": "INSW",
-    "score": 78
-   },
-   {
-    "symbol": "V",
+    "symbol": "LNC",
     "score": 78
    }
   ]
