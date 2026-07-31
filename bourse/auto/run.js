@@ -557,6 +557,26 @@ function writtenAnalysis(r) {
   return { resume, pourquoi, piliers, forces, vigilance, profil, pratique };
 }
 
+/* Niveau de liquidité gradué + conseil de taille adapté à un particulier.
+   On n'exclut plus les petites valeurs : on informe sur le risque réel. */
+function liquidityTier(dv, price) {
+  if (dv == null && price == null) return null;
+  if ((dv != null && dv < 3e5) || (price != null && price < 2)) {
+    return { level: "insuffisante", dollarVol: dv, label: "Trop peu liquide / penny stock",
+      hint: "Piège potentiel (manipulable, difficile à revendre) — à éviter.", ok: false };
+  }
+  if (dv != null && dv < 1e6) {
+    return { level: "limitée", dollarVol: dv, label: "Liquidité limitée",
+      hint: "Négociable pour de petites sommes, mais passe des ordres à cours limité et vise une petite position.", ok: true };
+  }
+  if (dv != null && dv < 1e7) {
+    return { level: "correcte", dollarVol: dv, label: "Liquidité correcte",
+      hint: "Sans souci pour une position normale à ton échelle.", ok: true };
+  }
+  return { level: "profonde", dollarVol: dv, label: "Liquidité profonde",
+    hint: "Très liquide — aucune contrainte de taille à ton échelle.", ok: true };
+}
+
 function selectPicks(results) {
   const pil = (r, k) => r.pillars?.[k]?.score;
   const vol = (r) => r.pillars?.momentum?.volatility ?? 60;
@@ -586,9 +606,7 @@ function selectPicks(results) {
     fromScan: !!r.fromScan,
     price: r.extra && r.extra.price != null ? r.extra.price : null,
     dollarVol: r.extra && r.extra.avgDollarVolume != null ? Math.round(r.extra.avgDollarVolume) : null,
-    liquid: (r.extra && (r.extra.avgDollarVolume != null || r.extra.price != null))
-      ? ((r.extra.avgDollarVolume == null || r.extra.avgDollarVolume >= 3e6) && (r.extra.price == null || r.extra.price >= 3))
-      : null,
+    liquidity: liquidityTier(r.extra ? r.extra.avgDollarVolume : null, r.extra ? r.extra.price : null),
   });
 
   const best = (arr, keyFn) => arr.reduce((a, b) => (keyFn(b) > keyFn(a) ? b : a));
@@ -598,21 +616,24 @@ function selectPicks(results) {
   const tScore = (r) => (r.trend ? r.trend.score : 50);
   const rScore = (r) => (r.rs ? r.rs.score : 50);
 
-  // ── Garde-fou de LIQUIDITÉ ──────────────────────────────────────────
-  // Un pick doit être réellement négociable : les micro-caps peu liquides et
-  // les penny stocks sont facilement manipulables (« pump traps ») et souvent
-  // impossibles à revendre proprement. On écarte < 3 M$/j de volume ou < 3 $.
-  const MIN_DOLLAR_VOL = 3e6, MIN_PRICE = 3;
+  // ── Garde-fou de LIQUIDITÉ (calibré pour un PARTICULIER) ─────────────
+  // Leçon apprise : un seuil « institutionnel » (3 M$/j) écarte à tort de
+  // très bonnes petites valeurs (ex. OPHC, +17 %). Pour de petites sommes,
+  // la vraie ligne rouge est bien plus basse : penny stocks (< 2 $) et
+  // extrême illiquidité (< 300 K$/j) = pièges manipulables. Au-dessus, on
+  // GARDE la valeur mais on adapte le conseil de taille de position.
+  const HARD_MIN_DOLLAR_VOL = 3e5, HARD_MIN_PRICE = 2;
   const liq = (r) => (r.extra ? r.extra.avgDollarVolume : null);
   const prc = (r) => (r.extra ? r.extra.price : null);
+  // Piège avéré → exclu. Le reste passe, avec un niveau de liquidité gradué.
   const tradable = (r) => {
     const dv = liq(r), p = prc(r);
-    if (dv != null && dv < MIN_DOLLAR_VOL) return false; // trop illiquide
-    if (p != null && p < MIN_PRICE) return false;        // penny stock
+    if (dv != null && dv < HARD_MIN_DOLLAR_VOL) return false; // vrai piège illiquide
+    if (p != null && p < HARD_MIN_PRICE) return false;        // penny stock
     return true;
   };
-  // On privilégie les valeurs négociables ; on ne retombe sur l'ensemble que
-  // si le filtre ne laisse rien (mieux vaut un pick signalé qu'aucun pick).
+  // Liquidité suffisante pour une position de long terme un peu plus grosse.
+  const deepLiquid = (r) => { const dv = liq(r); return dv == null || dv >= 1e6; };
   const liquidPool = scored.filter(tradable);
   const pickable = liquidPool.length >= 4 ? liquidPool : scored;
 
@@ -620,8 +641,11 @@ function selectPicks(results) {
   const oneShot = best(pickable, (r) => 0.40 * (pil(r, "momentum") || 0) + 0.25 * rScore(r) + 0.20 * (pil(r, "sentiment") || 0) + 0.15 * (pil(r, "technical") || 0));
   used.add(oneShot.symbol);
 
-  // Long terme : qualité fondamentale d'abord (facteur robuste OOS) + calme
-  const ltPool = pickable.filter((r) => pil(r, "fundamental") != null && !used.has(r.symbol));
+  // Long terme : qualité fondamentale d'abord (facteur robuste OOS) + calme.
+  // On préfère une liquidité profonde (position tenue plus longtemps), mais
+  // sans exclure : on retombe sur l'ensemble si le vivier profond est vide.
+  const ltDeep = pickable.filter((r) => pil(r, "fundamental") != null && !used.has(r.symbol) && deepLiquid(r));
+  const ltPool = ltDeep.length ? ltDeep : pickable.filter((r) => pil(r, "fundamental") != null && !used.has(r.symbol));
   const longTerme = (ltPool.length ? best(ltPool, (r) => 0.40 * r.score + 0.42 * pil(r, "fundamental") + 0.13 * Math.max(0, 100 - vol(r)) + 0.05 * tScore(r)) : null);
   if (longTerme) used.add(longTerme.symbol);
 
