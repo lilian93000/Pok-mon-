@@ -567,8 +567,17 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); 
 .news-pos { color: var(--good-text); border-color: var(--good); }
 .news-neg { color: var(--critical); border-color: var(--critical); }
 .news-neu { color: var(--muted); }
+.news-txt { display: flex; flex-direction: column; gap: 2px; }
 .news-txt a { color: var(--accent); text-decoration: none; }
 .news-txt a:hover { text-decoration: underline; }
+.news-date { color: var(--muted); font-size: 11px; }
+
+/* News sur les cartes de picks */
+.pick-news { margin: 8px 0 2px; padding: 8px 10px; border-radius: 8px; background: color-mix(in srgb, var(--accent) 5%, transparent); }
+.pick-news-lbl { display: block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 4px; }
+.pick-news-line { font-size: 12px; line-height: 1.4; margin-bottom: 3px; }
+.pick-news-line a { color: var(--ink); text-decoration: none; }
+.pick-news-line a:hover { color: var(--accent); text-decoration: underline; }
 
 .warn-box { margin-top: 16px; }
 .warn-line { font-size: 12.5px; color: var(--ink-2); padding: 3px 0; }
