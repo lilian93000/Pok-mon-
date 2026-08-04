@@ -469,7 +469,7 @@
   /* ───────────── Picks du jour ───────────── */
 
   const PICK_META = {
-    avantBoum: { emoji: "🌱", cls: "pick-ab" },
+    avantBoum: { emoji: "🌊", cls: "pick-ab" },
     longTerme: { emoji: "🏛️", cls: "pick-lt" },
     complet: { emoji: "⭐", cls: "pick-cp" },
     oneShot: { emoji: "🚀", cls: "pick-os" },
@@ -496,9 +496,14 @@
     const grid = $("picksGrid");
     grid.innerHTML = "";
     let any = false;
-    for (const key of ["avantBoum", "longTerme", "complet", "oneShot"]) {
-      const p = picks[key];
-      if (!p) continue;
+    // 🌊 « Avant la vague » en tête (jusqu'à 3), puis les picks secondaires.
+    const waveList = Array.isArray(picks.avantBoumTop) && picks.avantBoumTop.length
+      ? picks.avantBoumTop : (picks.avantBoum ? [picks.avantBoum] : []);
+    const order = [
+      ...waveList.map((p) => ({ p, key: "avantBoum" })),
+      ...["longTerme", "complet", "oneShot"].map((key) => ({ p: picks[key], key })),
+    ].filter((x) => x.p);
+    for (const { p, key } of order) {
       any = true;
       const meta = PICK_META[key];
       const card = el("div", `pick-card ${meta.cls}`);
@@ -522,8 +527,9 @@
       // Badge « avant le boum » : où en est le mouvement
       if (key === "avantBoum" && p.early) {
         const e = p.early;
+        const tightTxt = e.tight != null ? ` · base resserrée (${e.tight}%)` : "";
         card.appendChild(el("div", "pick-early",
-          `🌱 seulement +${Math.max(0, e.perf3)} % sur 3 mois · à ${e.distHigh}% du sommet · démarrage ${e.earlyScore}/100`));
+          `🌊 seulement +${Math.max(0, e.perf3)} % sur 3 mois · à ${e.distHigh}% de la cassure${tightTxt}`));
       }
 
       // « Pourquoi elle » — le cœur, en clair
