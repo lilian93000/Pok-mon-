@@ -553,15 +553,11 @@
   "date": "2026-08-04",
   "top": [
    {
-    "symbol": "FCBC",
-    "score": 83
-   },
-   {
     "symbol": "VCTR",
     "score": 82
    },
    {
-    "symbol": "ATLO",
+    "symbol": "FCBC",
     "score": 81
    },
    {
@@ -569,8 +565,12 @@
     "score": 80
    },
    {
-    "symbol": "CHMG",
-    "score": 80
+    "symbol": "JMSB",
+    "score": 78
+   },
+   {
+    "symbol": "LNC",
+    "score": 78
    }
   ]
  }
