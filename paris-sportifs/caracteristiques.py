@@ -57,7 +57,24 @@ from collections import defaultdict
 
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
 FICHIER_POIDS = os.path.join(DOSSIER, "donnees", "poids_modele.json")
-VERSION_MODELE = 5
+VERSION_MODELE = 6
+
+# Fin des données officielles (miroir Sackmann mikecristancho) : au-delà, on
+# ne dispose que d'une ingestion manuelle incomplète. Un « trou » dans
+# l'historique d'une joueuse qui ENJAMBE cette date n'est donc PAS une vraie
+# absence (blessure/pause) mais un trou de données connu : on ne doit ni
+# lever d'alerte « retour d'absence », ni appliquer le boost Elo de retour.
+# À relever si un miroir plus frais réapparaît.
+CUTOFF_DONNEES_OFFICIELLES = datetime.date(2026, 4, 21).toordinal()
+
+
+def _gap_est_trou_donnees(d1, d2):
+    """Le gap [d1, d2] est-il dû au trou de données post-avril plutôt qu'à une
+    vraie absence ? Vrai si le gap DÉBUTE autour de la fin des données
+    officielles (à ±3 semaines) et se termine après : c'est alors la période
+    mai→été où le miroir ne fournit plus rien, pas une blessure. Un gap
+    entièrement postérieur (ex. juillet→octobre) reste, lui, une vraie absence."""
+    return d1 <= CUTOFF_DONNEES_OFFICIELLES + 21 and d2 > CUTOFF_DONNEES_OFFICIELLES
 
 TRAD_SURFACE = {"hard": "dur", "clay": "terre", "grass": "gazon",
                 "carpet": "dur", "dur": "dur", "terre": "terre", "gazon": "gazon"}
@@ -823,7 +840,8 @@ class Moteur:
         mults = {}
         for nom in (g, p):
             der = self.derniere_date.get(nom)
-            if der is not None and m["date"] - der > 90:
+            if (der is not None and m["date"] - der > 90
+                    and not _gap_est_trou_donnees(der, m["date"])):
                 self.boost_k[nom] = 8
             mults[nom] = mult * (1.75 if self.boost_k[nom] > 0 else 1.0)
             if self.boost_k[nom] > 0:
@@ -892,8 +910,12 @@ class Moteur:
                     f"{nom} : aucun match depuis {trou} j dans la base — "
                     "retard d'ingestion probable ou absence, fiche périmée")
             dates = [e["d"] for e in J.hist[-40:]]
-            if any(d2 - d1 > 90 for d1, d2 in zip(dates, dates[1:])
-                   if date - d2 <= 365):
+            # seul un retour RÉCENT (gap terminé dans les ~120 derniers jours)
+            # rend la forme actuelle incertaine ; un vieux break d'intersaison
+            # n'est pas pertinent. On exclut aussi les trous de données.
+            if any(d2 - d1 > 90 and not _gap_est_trou_donnees(d1, d2)
+                   for d1, d2 in zip(dates, dates[1:])
+                   if date - d2 <= 120):
                 alertes.append(
                     f"{nom} : retour d'absence longue sur les 12 derniers "
                     "mois — niveau réel incertain (blessure/pause)")
