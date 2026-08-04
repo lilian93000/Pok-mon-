@@ -637,9 +637,29 @@ function selectPicks(results) {
   const liquidPool = scored.filter(tradable);
   const pickable = liquidPool.length >= 4 ? liquidPool : scored;
 
-  // One shot : momentum + force relative (prouvée), technique allégée (perdante seule)
-  const oneShot = best(pickable, (r) => 0.40 * (pil(r, "momentum") || 0) + 0.25 * rScore(r) + 0.20 * (pil(r, "sentiment") || 0) + 0.15 * (pil(r, "technical") || 0));
-  used.add(oneShot.symbol);
+  // ═══ 🌊 AVANT LA VAGUE (priorité n°1) ═══
+  // Ce que tu veux : prendre la vague AVANT qu'elle se forme. On sélectionne
+  // donc d'abord les « ressorts comprimés » — base resserrée, proche cassure,
+  // PAS encore envolés — et on les réserve avant tout le reste.
+  const earlyMap = new Map(scored.map((r) => [r.symbol, Engine.earlySetup(r.closes)]));
+  const waveKey = (r) => {
+    const es = earlyMap.get(r.symbol); if (!es) return -1;
+    return es.score
+      + (pil(r, "fundamental") != null ? Math.max(0, pil(r, "fundamental") - 50) * 0.20 : 0) // qualité en appoint
+      + (r.rs ? r.rs.score * 0.15 : 0)                 // début de force relative (le leader bouge avant)
+      + (pil(r, "sentiment") || 50) * 0.04;            // premier frémissement d'actu
+  };
+  const wavePool = pickable.filter((r) => {
+    const es = earlyMap.get(r.symbol);
+    return es && es.eligible && es.perf3 <= 20 && es.score >= 55; // strict : pas encore explosé
+  }).sort((a, b) => waveKey(b) - waveKey(a));
+  const waveTop = wavePool.slice(0, 3);
+  for (const r of waveTop) used.add(r.symbol);
+  const avantBoum = waveTop[0] || null;
+
+  // One shot : momentum + force relative (déjà monté — secondaire)
+  const oneShot = best(pickable.filter((r) => !used.has(r.symbol)), (r) => 0.40 * (pil(r, "momentum") || 0) + 0.25 * rScore(r) + 0.20 * (pil(r, "sentiment") || 0) + 0.15 * (pil(r, "technical") || 0));
+  if (oneShot) used.add(oneShot.symbol);
 
   // Long terme : qualité fondamentale d'abord (facteur robuste OOS) + calme.
   // On préfère une liquidité profonde (position tenue plus longtemps), mais
@@ -654,32 +674,19 @@ function selectPicks(results) {
   const complet = (balPool.length ? best(balPool, (r) => r.score + 0.15 * (pil(r, "fundamental") || 50) / 100 * 10 + 0.12 * rScore(r) + 0.05 * tScore(r)) : pickable.find((r) => !used.has(r.symbol)) || null);
   if (complet) used.add(complet.symbol);
 
-  // Avant le boum : démarrage précoce, ressort comprimé, PAS encore envolé
-  const earlyMap = new Map(scored.map((r) => [r.symbol, Engine.earlySetup(r.closes)]));
-  const abPool = pickable.filter((r) => {
-    if (used.has(r.symbol)) return false;
+  const packWave = (r) => {
+    const p = pack(r, "Avant la vague", "Ressort comprimé : base resserrée, proche d'une cassure, cours pas encore envolé.");
     const es = earlyMap.get(r.symbol);
-    return es && es.eligible && es.perf3 <= 25 && es.score >= 55;
-  });
-  const avantBoum = abPool.length
-    ? best(abPool, (r) => earlyMap.get(r.symbol).score
-        + (pil(r, "fundamental") != null ? 8 : 0)
-        + (pil(r, "sentiment") || 0) * 0.05
-        + (r.rs ? r.rs.score * 0.20 : 0)          // bonus leader (force relative)
-        + (r.trend ? r.trend.score * 0.05 : 0))   // tendance de fond (allégé : échec OOS)
-    : null;
-  if (avantBoum) used.add(avantBoum.symbol);
-
+    if (es) p.early = { perf3: Math.round(es.perf3), distHigh: Math.round(es.distHigh), earlyScore: Math.round(es.score), tight: Math.round(es.tight) };
+    return p;
+  };
   const out = {
-    avantBoum: avantBoum ? pack(avantBoum, "Avant le boum", "Le mouvement n'a pas encore eu lieu — signaux de démarrage réunis, cours pas encore envolé.") : null,
+    avantBoumTop: waveTop.map(packWave),                // 🌊 le produit principal : 3 pré-cassures
+    avantBoum: avantBoum ? packWave(avantBoum) : null,  // compat rétro (1er de la vague)
     longTerme: longTerme ? pack(longTerme, "Long terme", "À garder — fondamentaux solides, faible volatilité.") : null,
     complet: complet ? pack(complet, "Le plus complet", "Le meilleur équilibre technique + fondamental + momentum.") : null,
-    oneShot: oneShot ? pack(oneShot, "One shot", "Pari performance — momentum fort mais volatil. Petite taille + stop.") : null,
+    oneShot: oneShot ? pack(oneShot, "One shot", "⚠️ Déjà bien monté — pari sur la continuation, pas « avant la vague ». Petite taille + stop.") : null,
   };
-  if (out.avantBoum) {
-    const es = earlyMap.get(avantBoum.symbol);
-    out.avantBoum.early = { perf3: Math.round(es.perf3), distHigh: Math.round(es.distHigh), earlyScore: Math.round(es.score) };
-  }
   return out;
 }
 
