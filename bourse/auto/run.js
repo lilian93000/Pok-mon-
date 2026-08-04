@@ -281,7 +281,7 @@ async function deepAnalyze(symbol, ctx) {
   res.extra = extra || null;                 // objectif analystes, short interest, prochain résultat
   res.rs = rs ? { excess: Math.round(rs.excess), score: Math.round(rs.score) } : null; // force relative vs S&P 500
   res.trend = trend ? { passed: trend.passed, total: trend.total, pass: trend.pass, score: Math.round(trend.score) } : null;
-  res.redFlags = Engine.detectRedFlags(news); // événements à risque (rachat, procès, dilution…)
+  res.redFlags = Engine.detectRedFlags(news, res.name); // événements à risque (rachat, procès, dilution…)
   res.analysis = writtenAnalysis(res);       // analyse écrite (pourquoi investir, forces, risques…)
   return res;
 }
