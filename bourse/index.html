@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oracle Bourse — Machine d'analyse multi-facteurs</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>◆</text></svg>">
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
   <header class="topbar">
@@ -40,8 +40,8 @@
     <!-- ═══════════ HÉROS : PICKS DU JOUR ═══════════ -->
     <section class="picks hidden" id="picksSection">
       <div class="section-head">
-        <h2>🎯 Tes picks du jour</h2>
-        <p class="section-sub">Choisis par la machine parmi des milliers d'actions — dont 🌱 « Avant le boum », les démarrages détectés avant la hausse. Clique une carte pour tout voir.</p>
+        <h2>🌊 Tes 5 « avant la vague » du jour</h2>
+        <p class="section-sub">5 ressorts comprimés repérés par la machine parmi des milliers d'actions : base resserrée, proches d'une cassure, cours <strong>pas encore envolé</strong>. Le but : entrer avant le mouvement, pas après. Clique une carte pour tout voir.</p>
       </div>
       <div class="picks-grid" id="picksGrid"></div>
     </section>
@@ -103,15 +103,18 @@
           </div>
         </div>
 
-        <h3 class="intro-sub">Comment lire tes 3 picks</h3>
+        <h3 class="intro-sub">Comment lire tes 5 picks « avant la vague »</h3>
+        <p>Chaque jour, la machine te sort <strong>5 actions « ressort comprimé »</strong> : des entreprises dont
+        le cours est resté <strong>calme et coincé sous un plafond</strong> alors que l'entreprise va bien. L'idée :
+        <strong>entrer avant la hausse</strong>, pas après. Sur chaque carte tu vois :</p>
         <ul class="intro-list">
-          <li><strong>🏛️ Long terme</strong> — une entreprise solide et peu agitée, à garder plusieurs mois ou années.
-          Le plus rassurant pour débuter.</li>
-          <li><strong>⭐ Le plus complet</strong> — le meilleur équilibre général : bons chiffres, bonne tendance,
-          risque maîtrisé.</li>
-          <li><strong>🚀 One shot</strong> — un pari sur une hausse rapide. Plus de potentiel, mais aussi plus de
-          risque : on y met une <strong>petite somme</strong>, jamais tout.</li>
+          <li><strong>🌊 « seulement +X % sur 3 mois »</strong> — la preuve que ça n'a <strong>pas encore explosé</strong>.</li>
+          <li><strong>« à X % de la cassure »</strong> — à quel point le cours est proche de casser son plafond.</li>
+          <li><strong>« base resserrée »</strong> — plus c'est bas, plus le « ressort » est tendu.</li>
+          <li><strong>✅ Points forts</strong> et <strong>📰 actualité</strong> — pourquoi l'entreprise est solide.</li>
         </ul>
+        <p>⚠️ Un ressort peut ne jamais partir. On met <strong>de petites sommes</strong> sur chacun, et le cœur
+        de ton épargne reste un placement large et régulier (type indice S&P 500).</p>
 
         <h3 class="intro-sub">Les 4 règles d'or du débutant</h3>
         <ul class="intro-list">
@@ -285,8 +288,8 @@
 
   <div class="tooltip hidden" id="tooltip"></div>
 
-  <script src="engine.js?v=2"></script>
-  <script src="providers.js?v=2"></script>
-  <script src="app.js?v=2"></script>
+  <script src="engine.js?v=3"></script>
+  <script src="providers.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

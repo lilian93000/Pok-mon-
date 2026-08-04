@@ -685,30 +685,24 @@ function selectPicks(results) {
       + (r.rs ? r.rs.score * 0.15 : 0)                 // début de force relative (le leader bouge avant)
       + (pil(r, "sentiment") || 50) * 0.04;            // premier frémissement d'actu
   };
-  const wavePool = pickable.filter((r) => {
+  // Vivier strict : ressorts comprimés, pas encore envolés (perf 3 mois ≤ 20 %).
+  const waveStrict = pickable.filter((r) => {
     const es = earlyMap.get(r.symbol);
-    return es && es.eligible && es.perf3 <= 20 && es.score >= 55; // strict : pas encore explosé
-  }).sort((a, b) => waveKey(b) - waveKey(a));
-  const waveTop = wavePool.slice(0, 3);
+    return es && es.eligible && es.perf3 <= 20 && es.score >= 55;
+  });
+  // Repli élargi si moins de 5 : on garde l'esprit « avant la vague » (jamais
+  // déjà envolé), avec des critères un peu plus souples, pour toujours en sortir 5.
+  const haveW = new Set(waveStrict.map((r) => r.symbol));
+  const waveRelaxed = pickable.filter((r) => {
+    if (haveW.has(r.symbol)) return false;
+    const es = earlyMap.get(r.symbol);
+    return es && es.eligible && !es.alreadyMooned && es.perf3 <= 30 && es.score >= 45;
+  });
+  const waveTop = [...waveStrict, ...waveRelaxed]
+    .sort((a, b) => waveKey(b) - waveKey(a))
+    .slice(0, 5);
   for (const r of waveTop) used.add(r.symbol);
   const avantBoum = waveTop[0] || null;
-
-  // One shot : momentum + force relative (déjà monté — secondaire)
-  const oneShot = best(pickable.filter((r) => !used.has(r.symbol)), (r) => 0.40 * (pil(r, "momentum") || 0) + 0.25 * rScore(r) + 0.20 * (pil(r, "sentiment") || 0) + 0.15 * (pil(r, "technical") || 0));
-  if (oneShot) used.add(oneShot.symbol);
-
-  // Long terme : qualité fondamentale d'abord (facteur robuste OOS) + calme.
-  // On préfère une liquidité profonde (position tenue plus longtemps), mais
-  // sans exclure : on retombe sur l'ensemble si le vivier profond est vide.
-  const ltDeep = pickable.filter((r) => pil(r, "fundamental") != null && !used.has(r.symbol) && deepLiquid(r));
-  const ltPool = ltDeep.length ? ltDeep : pickable.filter((r) => pil(r, "fundamental") != null && !used.has(r.symbol));
-  const longTerme = (ltPool.length ? best(ltPool, (r) => 0.40 * r.score + 0.42 * pil(r, "fundamental") + 0.13 * Math.max(0, 100 - vol(r)) + 0.05 * tScore(r)) : null);
-  if (longTerme) used.add(longTerme.symbol);
-
-  // Complet : meilleur score global (value+qualité+momentum), force relative en appoint
-  const balPool = pickable.filter((r) => !used.has(r.symbol) && pil(r, "fundamental") != null && vol(r) < 55);
-  const complet = (balPool.length ? best(balPool, (r) => r.score + 0.15 * (pil(r, "fundamental") || 50) / 100 * 10 + 0.12 * rScore(r) + 0.05 * tScore(r)) : pickable.find((r) => !used.has(r.symbol)) || null);
-  if (complet) used.add(complet.symbol);
 
   const packWave = (r) => {
     const p = pack(r, "Avant la vague", "Ressort comprimé : base resserrée, proche d'une cassure, cours pas encore envolé.");
@@ -716,12 +710,13 @@ function selectPicks(results) {
     if (es) p.early = { perf3: Math.round(es.perf3), distHigh: Math.round(es.distHigh), earlyScore: Math.round(es.score), tight: Math.round(es.tight) };
     return p;
   };
+  const packedWave = waveTop.map(packWave);
+
   const out = {
-    avantBoumTop: waveTop.map(packWave),                // 🌊 le produit principal : 3 pré-cassures
-    avantBoum: avantBoum ? packWave(avantBoum) : null,  // compat rétro (1er de la vague)
-    longTerme: longTerme ? pack(longTerme, "Long terme", "À garder — fondamentaux solides, faible volatilité.") : null,
-    complet: complet ? pack(complet, "Le plus complet", "Le meilleur équilibre technique + fondamental + momentum.") : null,
-    oneShot: oneShot ? pack(oneShot, "One shot", "⚠️ Déjà bien monté — pari sur la continuation, pas « avant la vague ». Petite taille + stop.") : null,
+    top5: packedWave,          // 🎯 les 5 « avant la vague » du jour (ce que tu veux)
+    avantBoumTop: packedWave,  // alias
+    avantBoum: avantBoum ? packedWave[0] : null,
+    longTerme: null, complet: null, oneShot: null, // désactivés : uniquement « avant la vague »
   };
   return out;
 }
@@ -730,12 +725,12 @@ function selectPicks(results) {
 
 function reportPicks(picks) {
   if (!picks) return [];
-  const emoji = { avantBoum: "🌱", longTerme: "🏛️", complet: "⭐", oneShot: "🚀" };
-  const out = ["", "## 🎯 Picks du jour", ""];
-  for (const key of ["avantBoum", "longTerme", "complet", "oneShot"]) {
-    const p = picks[key];
+  const list = Array.isArray(picks.top5) && picks.top5.length ? picks.top5
+    : ["avantBoum", "longTerme", "complet", "oneShot"].map((k) => picks[k]).filter(Boolean);
+  const out = ["", "## 🌊 5 « avant la vague » du jour", ""];
+  for (const p of list) {
     if (!p) continue;
-    out.push(`### ${emoji[key]} ${p.category} — ${p.symbol}${p.name !== p.symbol ? ` (${p.name})` : ""} · ${p.score}/100`);
+    out.push(`### 🌊 ${p.category} — ${p.symbol}${p.name !== p.symbol ? ` (${p.name})` : ""} · ${p.score}/100`);
     if (p.plain) out.push(`**Pourquoi cette action :** ${p.plain}`, "");
     out.push(`*${p.note}* — volatilité ${p.volatility}%, confiance ${p.confidence}%.`);
     for (const s of p.why) out.push(`- ▲ ${s.label}${s.detail ? ` — ${s.detail}` : ""}`);
