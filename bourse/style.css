@@ -403,6 +403,28 @@ details[open] > .acc-summary .acc-chevron { transform: rotate(180deg); }
 .panel-head h2 { font-size: 16px; }
 .panel-body { padding: 18px; }
 
+/* Vue détail plein écran (comme une nouvelle page) */
+.detail-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  margin: 0; border: none; border-radius: 0; box-shadow: none;
+  background: var(--page);
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+}
+.detail-topbar {
+  position: sticky; top: 0; z-index: 2;
+  background: color-mix(in srgb, var(--page) 92%, transparent);
+  backdrop-filter: blur(8px);
+  padding: 12px 18px; border-bottom: 1px solid var(--grid);
+}
+.btn-back {
+  font-size: 14px; font-weight: 600; color: var(--accent);
+  background: none; border: none; cursor: pointer; padding: 6px 4px;
+}
+.btn-back:hover { text-decoration: underline; }
+.detail-overlay .panel-head { border-bottom: none; padding: 8px 18px 0; }
+.detail-overlay .panel-body { max-width: 860px; margin: 0 auto; padding: 12px 18px 60px; }
+body.detail-open { overflow: hidden; }
+
 /* ───────── Classement (tableau) ───────── */
 
 .table-tip { font-size: 12.5px; color: var(--muted); margin-bottom: 10px; }
