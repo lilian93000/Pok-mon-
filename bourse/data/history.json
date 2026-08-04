@@ -554,22 +554,22 @@
   "top": [
    {
     "symbol": "VCTR",
-    "score": 82
+    "score": 83
    },
    {
     "symbol": "FCBC",
+    "score": 82
+   },
+   {
+    "symbol": "ATLO",
     "score": 81
    },
    {
-    "symbol": "NVEC",
-    "score": 80
+    "symbol": "IMAX",
+    "score": 79
    },
    {
-    "symbol": "JMSB",
-    "score": 78
-   },
-   {
-    "symbol": "LNC",
+    "symbol": "PBF",
     "score": 78
    }
   ]
