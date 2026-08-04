@@ -583,6 +583,19 @@
         card.appendChild(el("div", "pick-plain", p.note));
       }
 
+      // ✅ Points forts fiables (avec explication pédagogique)
+      if (Array.isArray(p.forces) && p.forces.length) {
+        const fb = el("div", "pick-forces");
+        fb.appendChild(el("span", "pick-forces-lbl", "✅ Points forts"));
+        for (const f of p.forces) {
+          const item = el("div", "pick-force");
+          item.appendChild(el("div", "pick-force-lead", f.lead));
+          if (f.detail) item.appendChild(el("div", "pick-force-detail", f.detail));
+          fb.appendChild(item);
+        }
+        card.appendChild(fb);
+      }
+
       // Dernières news sur l'action (ce qui bouge en ce moment)
       if (Array.isArray(p.news) && p.news.length) {
         const nw = el("div", "pick-news");

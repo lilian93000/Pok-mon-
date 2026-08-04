@@ -576,6 +576,15 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); 
 .news-digest { font-size: 13px; line-height: 1.5; color: var(--ink); background: color-mix(in srgb, var(--accent) 7%, transparent); border-radius: 8px; padding: 8px 11px; margin-bottom: 10px; }
 .pick-news-digest { font-size: 12px; line-height: 1.45; color: var(--ink); margin-bottom: 6px; font-weight: 500; }
 
+/* Points forts fiables sur les cartes de picks */
+.pick-forces { margin: 10px 0 2px; padding: 9px 11px; border-radius: 8px; background: color-mix(in srgb, var(--good) 8%, transparent); border: 1px solid color-mix(in srgb, var(--good) 25%, transparent); }
+.pick-forces-lbl { display: block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--good-text); margin-bottom: 6px; }
+.pick-force { margin-bottom: 7px; }
+.pick-force:last-child { margin-bottom: 0; }
+.pick-force-lead { font-size: 12.5px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+.pick-force-lead::before { content: "▲ "; color: var(--good); font-size: 9px; }
+.pick-force-detail { font-size: 11px; color: var(--ink-2); line-height: 1.4; margin-top: 1px; }
+
 /* News sur les cartes de picks */
 .pick-news { margin: 8px 0 2px; padding: 8px 10px; border-radius: 8px; background: color-mix(in srgb, var(--accent) 5%, transparent); }
 .pick-news-lbl { display: block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 4px; }
