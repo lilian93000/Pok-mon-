@@ -44,7 +44,9 @@ import caracteristiques
 ELO_INITIAL = 1500.0
 POIDS_SURFACE = 0.5    # mélange : 50 % Elo global + 50 % Elo de la surface
 SEUIL_VALUE = 0.03     # edge minimal (3 %) pour signaler un value bet
-FRACTION_KELLY = 0.25  # Kelly fractionné : 25 % de la mise Kelly pleine
+EDGE_MAX = 0.15        # au-dela : divergence suspecte (modele rate une info), pas un bet
+FRACTION_KELLY = 0.15  # Kelly fractionné (abaisse de 0.25 -> 0.15 : survivre a la variance)
+POIDS_MARCHE = 0.5     # ancrage marche : proba pariee = 50% modele + 50% marche de-vigge
 SURFACES = ("dur", "terre", "gazon")
 DOSSIER_DONNEES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "donnees")
 
@@ -312,31 +314,53 @@ def analyser_rencontre(moteur, elo, r, bankroll):
     print(f"{'Victoire ' + j2:<34}{p2:>12.1%}{1 / p2:>11.2f}{r['cote_2']:>10.2f}")
     print(f"\nMarge du bookmaker : {marge:.1%}")
 
-    value_bets = []
-    for nom, p, cote in ((j1, p1, r["cote_1"]), (j2, p2, r["cote_2"])):
-        edge = p * cote - 1
-        if edge >= SEUIL_VALUE:
-            value_bets.append((nom, p, cote, edge, kelly(p, cote)))
-
+    # Proba de pari ANCRÉE AU MARCHÉ : 50 % modèle + 50 % marché dé-viggé.
+    # Le marché est sharp ; en live le modèle tourne sur données d'avril et
+    # ses grosses divergences sont surtout des infos manquantes de son côté.
+    S = 1 / r["cote_1"] + 1 / r["cote_2"]
+    q1, q2 = (1 / r["cote_1"]) / S, (1 / r["cote_2"]) / S   # marché dé-viggé
+    pb1 = POIDS_MARCHE * q1 + (1 - POIDS_MARCHE) * p1
+    pb2 = 1 - pb1
     alertes = moteur.avertissements(j1, j2)
+
+    value_bets = []            # value fiables
+    suspects = []              # divergences trop fortes (edge > EDGE_MAX)
+    for nom, p, pb, cote in ((j1, p1, pb1, r["cote_1"]),
+                             (j2, p2, pb2, r["cote_2"])):
+        edge_b = pb * cote - 1          # edge sur la proba ancrée au marché
+        edge_m = p * cote - 1           # edge modèle brut (info)
+        if edge_m < SEUIL_VALUE:
+            continue
+        if edge_b > EDGE_MAX or edge_m > 0.25:
+            suspects.append((nom, p, pb, cote, edge_m))
+        elif edge_b >= SEUIL_VALUE and not alertes:
+            value_bets.append((nom, pb, cote, edge_b, edge_m, kelly(pb, cote)))
+
     if alertes:
-        print("\n⚠ AVERTISSEMENTS (fiabilité de la prédiction réduite) :")
+        print("\n⚠ AVERTISSEMENTS (fiabilité réduite) :")
         for al in alertes:
             print(f"   - {al}")
 
-    if value_bets and alertes:
-        print("\n*** VALUE BET NON FIABLE (voir avertissements) — à "
-              "confirmer manuellement avant toute mise ***")
-    elif value_bets:
-        print("\n*** VALUE BETS DÉTECTÉS ***")
-        for nom, p, cote, edge, f in sorted(value_bets, key=lambda v: v[3], reverse=True):
+    if value_bets:
+        print("\n*** VALUE BETS FIABLES (ancrés marché) ***")
+        for nom, pb, cote, eb, em, f in sorted(value_bets, key=lambda v: v[3], reverse=True):
             print(f" -> Victoire {nom}")
-            print(f"    Proba modèle {p:.1%} | cote juste {1 / p:.2f} | cote proposée {cote:.2f}")
-            print(f"    Edge (espérance) : {edge:+.1%} par euro misé")
+            print(f"    Proba pari {pb:.1%} (modèle brut, edge modèle {em:+.1%})"
+                  f" | cote {cote:.2f}")
+            print(f"    Edge ancré marché : {eb:+.1%} par euro misé")
             print(f"    Mise Kelly ({FRACTION_KELLY:.0%}) : {f:.1%} de la bankroll "
                   f"≈ {f * bankroll:.2f} €")
-    else:
-        print(f"\nAucun value bet (edge < {SEUIL_VALUE:.0%}).")
+    if suspects:
+        print("\n⚠ DIVERGENCE FORTE (edge > 15 % ou modèle > 25 %) — presque "
+              "toujours une info manquante côté modèle, PAS un bet :")
+        for nom, p, pb, cote, em in suspects:
+            print(f"   - {nom} : modèle {p:.0%} vs marché {1/cote:.0%} "
+                  f"(edge modèle {em:+.0%}) → à investiguer, ne pas miser à l'aveugle")
+    if not value_bets:
+        raison = ("avertissements de fiabilité" if alertes and not suspects
+                  else "divergence non fiable" if suspects
+                  else f"edge ancré marché < {SEUIL_VALUE:.0%}")
+        print(f"\nAucun value bet fiable ({raison}).")
     print()
 
 
