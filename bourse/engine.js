@@ -562,20 +562,33 @@ const Engine = (() => {
      repérer. severity "hard" = à exclure des picks ; "warn" = à signaler.
      news : [{ headline, summary? }] */
   const RISK_PATTERNS = [
-    [/\b(take[-\s]?private|go(?:ing)?\s+private|tender\s+offer|buyout|to\s+acquire\s+(?:the\s+)?remaining|acquisition\s+proposal|proposal\s+to\s+acquire|to\s+be\s+acquired|agreement\s+to\s+be\s+acquired|squeeze[-\s]?out|minority\s+buy[-\s]?out)\b/i, "Rachat / retrait de la cote", "hard"],
-    [/\b(going\s+concern|bankrupt(?:cy)?|chapter\s+(?:11|7)|insolven|liquidation|files?\s+for\s+bankruptcy|debt\s+restructuring)\b/i, "Risque de faillite", "hard"],
-    [/\b(accounting\s+(?:fraud|irregular)|financial\s+restat|restatement|SEC\s+(?:investigation|charges|probe|subpoena)|securities\s+fraud|misstatement|material\s+weakness)\b/i, "Fraude / enquête comptable", "hard"],
+    [/\b(take[-\s]?private|go(?:ing)?\s+private|tender\s+offer|to\s+acquire\s+(?:the\s+)?remaining|acquisition\s+proposal|proposal\s+to\s+acquire|to\s+be\s+acquired|agreement\s+to\s+be\s+acquired|buyout\s+(?:offer|proposal|of)|squeeze[-\s]?out|minority\s+buy[-\s]?out)\b/i, "Rachat / retrait de la cote", "hard"],
+    [/\b(going\s+concern|files?\s+for\s+bankruptcy|bankruptcy\s+protection|files?\s+chapter\s+(?:11|7)|chapter\s+(?:11|7)\s+(?:filing|bankruptcy|protection)|enters?\s+bankruptcy|insolven|debt\s+restructuring)\b/i, "Risque de faillite", "hard"],
+    [/\b(accounting\s+(?:fraud|irregular)|financial\s+restat|restatement|SEC\s+(?:investigation|charges|probe|subpoena)|securities\s+fraud|material\s+weakness)\b/i, "Fraude / enquête comptable", "hard"],
     [/\b(delist(?:ing|ed)?|notice\s+of\s+noncompliance|deficiency\s+(?:letter|notice)|fails?\s+to\s+regain\s+compliance)\b/i, "Risque de radiation (delisting)", "hard"],
     [/\b(secondary\s+offering|public\s+offering|proposed\s+offering|priced\s+(?:its\s+)?(?:public\s+)?offering|at[-\s]?the[-\s]?market\s+offering|shelf\s+registration|dilut|convertible\s+notes?\s+offering|registered\s+direct\s+offering)\b/i, "Dilution (émission d'actions)", "warn"],
-    [/\b(class[-\s]?action|securities\s+(?:class\s+)?(?:lawsuit|litigation)|shareholder\s+(?:suit|lawsuit|investigation)|investor\s+alert|probe\s+into|investigation\s+into)\b/i, "Litige / enquête", "warn"],
+    [/\b(class[-\s]?action|securities\s+(?:class\s+)?(?:lawsuit|litigation)|shareholder\s+(?:suit|lawsuit|investigation)|investor\s+alert)\b/i, "Litige / enquête", "warn"],
     [/\b(reverse\s+(?:stock\s+)?split)\b/i, "Regroupement d'actions", "warn"],
     [/\b(profit\s+warning|cuts?\s+(?:its\s+)?(?:guidance|outlook|forecast)|withdraws?\s+guidance|slashes?\s+(?:outlook|guidance))\b/i, "Avertissement sur résultats", "warn"],
   ];
-  function detectRedFlags(news) {
+  const NAME_STOP = new Set(["inc", "corp", "corporation", "ltd", "limited", "company", "holdings", "holding", "group", "plc", "the", "common", "stock", "shares", "ordinary", "class", "depositary", "receipt", "and", "for", "financial", "capital", "international", "technologies", "technology", "industries"]);
+  function nameTokens(name) {
+    if (!name) return [];
+    return name.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter((w) => w.length > 3 && !NAME_STOP.has(w));
+  }
+  /** news : [{ headline, summary? }] ; name : raison sociale (pour éviter de
+      flaguer un simple voisin cité dans l'article — on exige que le titre
+      parle bien de CETTE société). */
+  function detectRedFlags(news, name) {
     if (!news || !news.length) return [];
+    const tokens = nameTokens(name);
     const found = new Map();
     for (const n of news) {
       const text = `${n.headline || ""} ${n.summary || ""}`;
+      const lc = text.toLowerCase();
+      // Le titre doit mentionner la société elle-même (sinon : voisin cité).
+      const aboutUs = !tokens.length || tokens.some((t) => lc.includes(t));
+      if (!aboutUs) continue;
       for (const [re, type, severity] of RISK_PATTERNS) {
         if (re.test(text) && !found.has(type)) {
           found.set(type, { type, severity, evidence: (n.headline || "").slice(0, 160) });
