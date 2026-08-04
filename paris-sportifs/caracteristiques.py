@@ -507,8 +507,17 @@ class Moteur:
         self.h2h_dates = defaultdict(list)   # dates des victoires de (A,B)
         self.derniere_date = {}              # dernier match joué par joueuse
         self.boost_k = defaultdict(int)      # matchs restants à K accéléré
+        self.date_max = 0                    # date du match le plus récent ingéré
         self.poids = None
         self.ecarts = None
+
+    def date_ref(self, date=None):
+        """Date de référence pour « aujourd'hui » : la donnée la plus récente
+        ingérée, PAS l'horloge système (qui peut dériver de la timeline des
+        données). Évite de croire toutes les fiches périmées."""
+        if date is not None:
+            return date
+        return self.date_max or datetime.date.today().toordinal()
 
     @staticmethod
     def _p_elo(ra, rb):
@@ -796,6 +805,8 @@ class Moteur:
     # ------------------------------------------------------------------
     def ingerer(self, m, collecter=True):
         g, p = m["gagnante"], m["perdante"]
+        if m["date"] > self.date_max:
+            self.date_max = m["date"]
         exemple = None
         if (collecter and m.get("circuit") == "P"
                 and self.j[g].n() >= MIN_MATCHS_ENTRAINEMENT
@@ -856,7 +867,7 @@ class Moteur:
         self.poids = w
 
     def proba(self, a, b, surface, date=None, niveau="G"):
-        date = date or datetime.date.today().toordinal()
+        date = self.date_ref(date)
         x = self.vecteur(a, b, surface, date, niveau)
         contribs = [w * xi / e for w, xi, e in zip(self.poids, x, self.ecarts)]
         z = sum(contribs)
@@ -868,7 +879,7 @@ class Moteur:
     def avertissements(self, a, b, date=None):
         """Détecte les 3 profils où le modèle se trompe souvent : retard
         d'ingestion, retour d'absence longue, montée récente en ITF."""
-        date = date or datetime.date.today().toordinal()
+        date = self.date_ref(date)
         alertes = []
         for nom in (a, b):
             J = self.j[nom]
