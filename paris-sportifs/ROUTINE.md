@@ -7,14 +7,33 @@ en a pas.
 
 ## Étapes
 
-1. **Ingérer les résultats de la veille (OBLIGATOIRE, en premier)** :
-   rechercher sur le web les matchs WTA terminés la veille, tous
-   tournois (« WTA [tournoi] results yesterday », « [tournoi] women's
-   results [date] »). Ajouter chaque résultat vérifié dans
-   `donnees/resultats_recents.csv` (format :
-   `date,gagnante,perdante,surface,tournoi,source`), sans doublon.
-   Ce fichier est chargé automatiquement par tennis.py : l'Elo intègre
-   donc la forme récente jour après jour. **Commit + push** après ajout.
+1. **Ingérer les résultats de la veille — COMPREHENSIF (priorité absolue)** :
+   la donnée jour par jour est LA priorité. Ne pas se limiter aux picks :
+   ingérer **TOUS les matchs terminés de TOUS les tournois actifs** (chaque
+   tour, chaque tournoi WTA + 125), pour que la fiche de chaque joueuse en
+   activité reste fraîche. Pour chaque tournoi actif, rechercher
+   « [tournoi] WTA all results [date] » / « [tournoi] scores round [date] ».
+   Utiliser l'outil dédié qui déduit la surface et dédoublonne :
+     ```
+     python3 ingerer_resultats.py --tournoi "Toronto WTA" --date 20260804 <<'FIN'
+     Coco Gauff def. Kayla Day 6-2 6-1
+     Iga Swiatek bat Sara Bejlek
+     ... (toutes les rencontres terminées, une par ligne)
+     FIN
+     ```
+   **Règle anti-erreur** : n'ingérer qu'une gagnante *clairement vérifiée*
+   (jamais un score garbled d'un snippet ; recouper si doute — cf. erreur
+   Bondar-Zidansek). Le score est optionnel (l'outil ne garde que
+   gagnante/perdante/surface). Format final :
+   `date,gagnante,perdante,surface,tournoi,source`. Ce fichier est chargé
+   automatiquement par tennis.py : l'Elo intègre donc la forme récente jour
+   après jour. **Commit + push** après ajout.
+
+   *Contexte réseau (constat 04/08)* : la politique proxy bloque tout sauf
+   GitHub (raw) et WebSearch — pas d'API de résultats ni de miroir GitHub
+   frais au-delà d'avril. La seule voie fiable pour « jour par jour » est
+   donc ce harvest WebSearch comprehensif. Le système d'avertissements de
+   tennis.py signale toute fiche encore périmée : ne jamais parier dessus.
 
 2. **Actualiser l'historique de base** : lancer
    `python3 telecharger_donnees.py` (saisons 2025-2026). Si un miroir
