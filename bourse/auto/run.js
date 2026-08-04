@@ -637,6 +637,8 @@ function selectPicks(results) {
     news: [...(r.news || [])].sort((a, b) => (a.daysAgo || 0) - (b.daysAgo || 0)).slice(0, 2)
       .map((n) => ({ headline: n.headline, daysAgo: Math.round(n.daysAgo || 0), url: n.url })),
     newsDigest: Engine.newsDigest(r.news), // résumé écrit de l'actualité de l'action
+    forces: (r.analysis && r.analysis.forces ? r.analysis.forces : []).slice(0, 4)
+      .map((f) => ({ lead: f.lead, detail: f.detail })), // points forts fiables
   });
 
   const best = (arr, keyFn) => arr.reduce((a, b) => (keyFn(b) > keyFn(a) ? b : a));
