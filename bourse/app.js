@@ -427,6 +427,8 @@
     if (r.news && r.news.length) {
       const nb = el("div", "news-box");
       nb.appendChild(el("h3", null, `Dernières news analysées (${r.news.length})`));
+      const dg = (typeof Engine !== "undefined" && Engine.newsDigest) ? Engine.newsDigest(r.news) : r.newsDigest;
+      if (dg) nb.appendChild(el("p", "news-digest", "📝 " + dg));
       for (const n of [...r.news].sort((a, b) => (a.daysAgo || 0) - (b.daysAgo || 0)).slice(0, 12)) {
         const row = el("div", "news-item");
         const tone = n.raw > 0.5 ? ["news-pos", "positif"] : n.raw < -0.5 ? ["news-neg", "négatif"] : ["news-neu", "neutre"];
@@ -480,11 +482,12 @@
     if (d < 2) return "hier";
     return `il y a ${Math.round(d)} j`;
   }
-  function renderMarketNews(items) {
+  function renderMarketNews(items, digest) {
     if (!Array.isArray(items) || !items.length) return;
     const body = $("marketNewsBody");
     body.innerHTML = "";
     $("marketNewsHint").textContent = `${items.length} titres`;
+    if (digest) body.appendChild(el("p", "news-digest", "📝 " + digest));
     for (const n of items) {
       const tone = n.tone > 0.5 ? ["news-pos", "positif"] : n.tone < -0.5 ? ["news-neg", "négatif"] : ["news-neu", "neutre"];
       const row = el("div", "news-item");
@@ -583,7 +586,8 @@
       // Dernières news sur l'action (ce qui bouge en ce moment)
       if (Array.isArray(p.news) && p.news.length) {
         const nw = el("div", "pick-news");
-        nw.appendChild(el("span", "pick-news-lbl", "📰 Dernières news"));
+        nw.appendChild(el("span", "pick-news-lbl", "📰 Actualité"));
+        if (p.newsDigest) nw.appendChild(el("div", "pick-news-digest", p.newsDigest));
         for (const n of p.news) {
           const line = el("div", "pick-news-line");
           if (n.url) {
@@ -1038,7 +1042,7 @@
       dataGeneratedAt = data.generatedAt || null;
       renderTable();
       if (data.regime) renderRegime(data.regime);
-      if (data.marketNews) renderMarketNews(data.marketNews);
+      if (data.marketNews) renderMarketNews(data.marketNews, data.marketNewsDigest);
       if (data.picks) renderPicks(data.picks);
 
       const rankHint = $("rankHint");

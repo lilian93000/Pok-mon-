@@ -598,6 +598,46 @@ const Engine = (() => {
     return [...found.values()];
   }
 
+  /* ───────────── Résumé écrit de l'actualité (règles, sans LLM) ─────────
+     Transforme une liste de titres en une phrase française lisible : ton
+     général + thèmes détectés. Sert pour une action comme pour le marché.
+     news : [{ headline, summary?, daysAgo? }] */
+  const NEWS_TOPICS = [
+    [/\b(beats?|tops?|record|surpass|blowout|strong\s+(?:results|quarter|earnings))\b/i, "de bons résultats", 1],
+    [/\b(raises?\s+(?:guidance|outlook|forecast)|lifts?\s+outlook)\b/i, "des prévisions relevées", 1],
+    [/\b(upgrade|strong\s+buy|buy\s+rating|price\s+target\s+(?:raise|hike|boost)|raised\s+.*target|outperform|top\s+.*stock|top\s+dividend)\b/i, "des avis d'analystes favorables", 1],
+    [/\b(all[-\s]?time\s+high|record\s+high|52[-\s]?week\s+high|rally|surge|soar|jump|rockets?|spikes?)\b/i, "une forte hausse récente", 1],
+    [/\b(dividend|payout|buyback|share\s+repurchase)\b/i, "un dividende / rachat d'actions", 1],
+    [/\b(partnership|deal|contract|launch|approval|expansion|new\s+product)\b/i, "un développement stratégique", 1],
+    [/\b(earnings|results|quarter|Q[1-4]\b|to\s+report|conference\s+call)\b/i, "des résultats attendus ou publiés", 0],
+    [/\b(downgrade|sell\s+rating|price\s+target\s+(?:cut|lower)|underperform)\b/i, "des avis d'analystes prudents", -1],
+    [/\b(miss(?:es|ed)?|disappoint|plunge|tumble|slump|sinks?|falls?\s+\d|drops?\s+\d)\b/i, "une déception / baisse", -1],
+    [/\b(cuts?\s+(?:guidance|outlook|forecast)|profit\s+warning|withdraws?\s+guidance)\b/i, "un avertissement sur les prévisions", -1],
+    [/\b(acquire|acquisition|merger|buyout|take[-\s]?private|tender\s+offer)\b/i, "une opération de rachat/fusion", 0],
+    [/\b(offering|dilut|shelf\s+registration|convertible\s+notes?)\b/i, "une émission d'actions (dilution)", -1],
+    [/\b(lawsuit|class[-\s]?action|investigation|probe|SEC\s+charges|subpoena)\b/i, "un litige ou une enquête", -1],
+  ];
+  function newsDigest(news) {
+    if (!news || !news.length) return null;
+    const n = news.length;
+    let tot = 0;
+    const topics = [];
+    const seen = new Set();
+    for (const item of news) {
+      const h = `${item.headline || ""} ${item.summary || ""}`;
+      tot += scoreHeadline(item.headline || "");
+      for (const [re, label] of NEWS_TOPICS) {
+        if (re.test(h) && !seen.has(label)) { seen.add(label); topics.push(label); }
+      }
+    }
+    const avg = tot / n;
+    const ton = avg > 0.6 ? "plutôt positive" : avg < -0.6 ? "plutôt négative" : "mitigée";
+    let s = `Actualité récente ${ton} (${n} article${n > 1 ? "s" : ""})`;
+    const list = topics.slice(0, 3);
+    s += list.length ? " : " + list.join(", ") + "." : ".";
+    return s;
+  }
+
   /* ───────────── Force relative vs marché (S&P 500) ─────────────
      Le signal n°1 des « grands gagnants » : une action qui surperforme
      déjà l'indice avant de casser. idx = { r21, r63, r126 } (perfs indice). */
@@ -637,7 +677,7 @@ const Engine = (() => {
   }
 
   return {
-    analyze, verdict, composite, WEIGHTS, earlySetup, relStrength, trendTemplate, detectRedFlags,
+    analyze, verdict, composite, WEIGHTS, earlySetup, relStrength, trendTemplate, detectRedFlags, newsDigest,
     scoreTechnical, scoreMomentum, scoreFundamental, scoreSentiment, scoreHeadline,
     rsi, macd, sma, ema, trendSlope, annualVol, periodReturn, bollingerPos, volumeSurge,
     clamp, ramp,
