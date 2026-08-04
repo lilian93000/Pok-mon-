@@ -554,6 +554,37 @@ const Engine = (() => {
     };
   }
 
+  /* ───────────── Détecteur de DRAPEAUX ROUGES (événements de société) ─────
+     La machine lit des chiffres et des cours, PAS le contexte. Or certains
+     événements (rachat/retrait de cote, faillite, fraude, dilution, procès)
+     rendent une action FAUSSEMENT belle : le cours se fige, la valorisation
+     semble basse… alors que c'est un piège. On scanne donc les news pour les
+     repérer. severity "hard" = à exclure des picks ; "warn" = à signaler.
+     news : [{ headline, summary? }] */
+  const RISK_PATTERNS = [
+    [/\b(take[-\s]?private|go(?:ing)?\s+private|tender\s+offer|buyout|to\s+acquire\s+(?:the\s+)?remaining|acquisition\s+proposal|proposal\s+to\s+acquire|to\s+be\s+acquired|agreement\s+to\s+be\s+acquired|squeeze[-\s]?out|minority\s+buy[-\s]?out)\b/i, "Rachat / retrait de la cote", "hard"],
+    [/\b(going\s+concern|bankrupt(?:cy)?|chapter\s+(?:11|7)|insolven|liquidation|files?\s+for\s+bankruptcy|debt\s+restructuring)\b/i, "Risque de faillite", "hard"],
+    [/\b(accounting\s+(?:fraud|irregular)|financial\s+restat|restatement|SEC\s+(?:investigation|charges|probe|subpoena)|securities\s+fraud|misstatement|material\s+weakness)\b/i, "Fraude / enquête comptable", "hard"],
+    [/\b(delist(?:ing|ed)?|notice\s+of\s+noncompliance|deficiency\s+(?:letter|notice)|fails?\s+to\s+regain\s+compliance)\b/i, "Risque de radiation (delisting)", "hard"],
+    [/\b(secondary\s+offering|public\s+offering|proposed\s+offering|priced\s+(?:its\s+)?(?:public\s+)?offering|at[-\s]?the[-\s]?market\s+offering|shelf\s+registration|dilut|convertible\s+notes?\s+offering|registered\s+direct\s+offering)\b/i, "Dilution (émission d'actions)", "warn"],
+    [/\b(class[-\s]?action|securities\s+(?:class\s+)?(?:lawsuit|litigation)|shareholder\s+(?:suit|lawsuit|investigation)|investor\s+alert|probe\s+into|investigation\s+into)\b/i, "Litige / enquête", "warn"],
+    [/\b(reverse\s+(?:stock\s+)?split)\b/i, "Regroupement d'actions", "warn"],
+    [/\b(profit\s+warning|cuts?\s+(?:its\s+)?(?:guidance|outlook|forecast)|withdraws?\s+guidance|slashes?\s+(?:outlook|guidance))\b/i, "Avertissement sur résultats", "warn"],
+  ];
+  function detectRedFlags(news) {
+    if (!news || !news.length) return [];
+    const found = new Map();
+    for (const n of news) {
+      const text = `${n.headline || ""} ${n.summary || ""}`;
+      for (const [re, type, severity] of RISK_PATTERNS) {
+        if (re.test(text) && !found.has(type)) {
+          found.set(type, { type, severity, evidence: (n.headline || "").slice(0, 160) });
+        }
+      }
+    }
+    return [...found.values()];
+  }
+
   /* ───────────── Force relative vs marché (S&P 500) ─────────────
      Le signal n°1 des « grands gagnants » : une action qui surperforme
      déjà l'indice avant de casser. idx = { r21, r63, r126 } (perfs indice). */
@@ -593,7 +624,7 @@ const Engine = (() => {
   }
 
   return {
-    analyze, verdict, composite, WEIGHTS, earlySetup, relStrength, trendTemplate,
+    analyze, verdict, composite, WEIGHTS, earlySetup, relStrength, trendTemplate, detectRedFlags,
     scoreTechnical, scoreMomentum, scoreFundamental, scoreSentiment, scoreHeadline,
     rsi, macd, sma, ema, trendSlope, annualVol, periodReturn, bollingerPos, volumeSurge,
     clamp, ramp,
