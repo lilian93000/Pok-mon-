@@ -553,12 +553,12 @@
   "date": "2026-08-04",
   "top": [
    {
-    "symbol": "VCTR",
-    "score": 82
+    "symbol": "FCBC",
+    "score": 83
    },
    {
-    "symbol": "FCBC",
-    "score": 81
+    "symbol": "VCTR",
+    "score": 82
    },
    {
     "symbol": "ATLO",
@@ -570,7 +570,7 @@
    },
    {
     "symbol": "CHMG",
-    "score": 79
+    "score": 80
    }
   ]
  }
