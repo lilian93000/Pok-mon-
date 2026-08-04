@@ -281,6 +281,7 @@ async function deepAnalyze(symbol, ctx) {
   res.extra = extra || null;                 // objectif analystes, short interest, prochain résultat
   res.rs = rs ? { excess: Math.round(rs.excess), score: Math.round(rs.score) } : null; // force relative vs S&P 500
   res.trend = trend ? { passed: trend.passed, total: trend.total, pass: trend.pass, score: Math.round(trend.score) } : null;
+  res.redFlags = Engine.detectRedFlags(news); // événements à risque (rachat, procès, dilution…)
   res.analysis = writtenAnalysis(res);       // analyse écrite (pourquoi investir, forces, risques…)
   return res;
 }
@@ -607,6 +608,7 @@ function selectPicks(results) {
     price: r.extra && r.extra.price != null ? r.extra.price : null,
     dollarVol: r.extra && r.extra.avgDollarVolume != null ? Math.round(r.extra.avgDollarVolume) : null,
     liquidity: liquidityTier(r.extra ? r.extra.avgDollarVolume : null, r.extra ? r.extra.price : null),
+    redFlags: r.redFlags || [],
   });
 
   const best = (arr, keyFn) => arr.reduce((a, b) => (keyFn(b) > keyFn(a) ? b : a));
@@ -634,8 +636,12 @@ function selectPicks(results) {
   };
   // Liquidité suffisante pour une position de long terme un peu plus grosse.
   const deepLiquid = (r) => { const dv = liq(r); return dv == null || dv >= 1e6; };
-  const liquidPool = scored.filter(tradable);
-  const pickable = liquidPool.length >= 4 ? liquidPool : scored;
+  // ── DRAPEAUX ROUGES : on n'inclut JAMAIS dans les picks un titre frappé
+  // d'un événement grave (rachat/retrait de cote, faillite, fraude, delisting).
+  // C'est la leçon DDI : ces titres paraissent « pas chers / calmes » à tort.
+  const hardFlag = (r) => (r.redFlags || []).some((f) => f.severity === "hard");
+  const liquidPool = scored.filter((r) => tradable(r) && !hardFlag(r));
+  const pickable = liquidPool.length >= 4 ? liquidPool : scored.filter((r) => !hardFlag(r));
 
   // ═══ 🌊 AVANT LA VAGUE (priorité n°1) ═══
   // Ce que tu veux : prendre la vague AVANT qu'elle se forme. On sélectionne

@@ -286,6 +286,13 @@
 
     const meta = el("div", "detail-meta");
     meta.appendChild(el("div", `badge big ${r.verdict.cls}`, `${r.verdict.emoji} ${r.verdict.label}`));
+    // Drapeaux rouges (événements de société) — en haut, bien visibles
+    if (Array.isArray(r.redFlags) && r.redFlags.length) {
+      for (const f of r.redFlags) {
+        const cls = f.severity === "hard" ? "pick-flag-hard" : "pick-flag-warn";
+        meta.appendChild(el("div", cls, `🚩 ${f.type}${f.evidence ? ` — « ${f.evidence} »` : ""}`));
+      }
+    }
     if (r.price != null) meta.appendChild(el("div", "meta-line", `Dernier cours : ${r.price.toFixed(2)} $`));
     // Profil d'entreprise (données du jour)
     if (r.profile) {
@@ -571,6 +578,14 @@
       } else if (p.dollarVol != null) {
         const m = p.dollarVol >= 1e9 ? `${(p.dollarVol / 1e9).toFixed(1)} Md$` : `${Math.round(p.dollarVol / 1e6)} M$`;
         card.appendChild(el("div", "pick-liq-ok", `💧 Liquidité : ~${m}/jour échangés.`));
+      }
+
+      // Drapeaux rouges : événements de société à risque (procès, dilution…)
+      if (Array.isArray(p.redFlags) && p.redFlags.length) {
+        for (const f of p.redFlags) {
+          const cls = f.severity === "hard" ? "pick-flag-hard" : "pick-flag-warn";
+          card.appendChild(el("div", cls, `🚩 ${f.type}${f.evidence ? ` — « ${f.evidence} »` : ""}`));
+        }
       }
 
       // Pied : volatilité + confiance, avec bouton d'ouverture
