@@ -272,6 +272,28 @@
     return row;
   }
 
+  // Ouvre la vue détail en plein écran (comme une nouvelle page)
+  function openDetailView() {
+    const panel = $("detailPanel");
+    panel.classList.remove("hidden");
+    document.body.classList.add("detail-open");
+    panel.scrollTop = 0;
+    window.scrollTo(0, 0);
+    // Empile une entrée d'historique → le bouton « retour » du navigateur ferme la vue
+    if (!history.state || !history.state.detail) {
+      history.pushState({ detail: true }, "");
+    }
+  }
+  function closeDetailView(fromPop) {
+    $("detailPanel").classList.add("hidden");
+    document.body.classList.remove("detail-open");
+    // Si fermeture par bouton (pas par le retour navigateur), on annule l'entrée d'historique
+    if (!fromPop && history.state && history.state.detail) history.back();
+  }
+  window.addEventListener("popstate", () => {
+    if (!$("detailPanel").classList.contains("hidden")) closeDetailView(true);
+  });
+
   function showDetail(r) {
     $("detailTitle").textContent = `${r.verdict.emoji} ${r.symbol} — ${r.name}`;
     const body = $("detailBody");
@@ -456,8 +478,7 @@
       body.appendChild(wb);
     }
 
-    $("detailPanel").classList.remove("hidden");
-    $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+    openDetailView();
   }
 
   /* ───────────── Régime de marché ───────────── */
@@ -776,8 +797,7 @@
       "ℹ️ Cette action n'est pas dans le top analysé en profondeur aujourd'hui. Les piliers fondamental (chiffres financiers) et sentiment (news) ne sont calculés que pour la sélection du jour, mais sa configuration technique et son momentum sont à jour ci-dessus."));
     body.appendChild(note);
 
-    $("detailPanel").classList.remove("hidden");
-    $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+    openDetailView();
   }
 
   function initSearch() {
@@ -1091,7 +1111,7 @@
     $("tickerInput").addEventListener("keydown", (e) => { if (e.key === "Enter") addTicker(); });
     $("resetWatch").onclick = () => { watchlist = [...DEFAULT_WATCHLIST]; saveWatchlist(); renderChips(); };
     $("runBtn").onclick = run;
-    $("closeDetail").onclick = () => $("detailPanel").classList.add("hidden");
+    $("closeDetail").onclick = () => closeDetailView();
     $("finnhubKey").addEventListener("input", refreshMode);
     $("alphaKey").addEventListener("input", refreshMode);
     initSearch();

@@ -184,11 +184,13 @@
       <div class="acc-body" id="backtestBody"></div>
     </details>
 
-    <!-- ═══════════ DÉTAIL (apparaît au clic) ═══════════ -->
-    <section class="panel hidden" id="detailPanel">
+    <!-- ═══════════ DÉTAIL (vue plein écran au clic) ═══════════ -->
+    <section class="panel detail-overlay hidden" id="detailPanel">
+      <div class="detail-topbar">
+        <button class="btn-back" id="closeDetail">← Retour</button>
+      </div>
       <div class="panel-head">
         <h2 id="detailTitle">Détail</h2>
-        <button class="btn-ghost" id="closeDetail">Fermer ✕</button>
       </div>
       <div class="panel-body" id="detailBody"></div>
     </section>
