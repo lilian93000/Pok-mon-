@@ -535,7 +535,17 @@
     longTerme: { emoji: "🏛️", cls: "pick-lt" },
     complet: { emoji: "⭐", cls: "pick-cp" },
     oneShot: { emoji: "🚀", cls: "pick-os" },
+    recommandation: { emoji: "🎯", cls: "pick-cp" },
   };
+  // Retrouve le style/emoji à partir du libellé de catégorie (pour le Top 5).
+  function metaForCategory(cat) {
+    const c = (cat || "").toLowerCase();
+    if (c.includes("vague") || c.includes("boum")) return PICK_META.avantBoum;
+    if (c.includes("long")) return PICK_META.longTerme;
+    if (c.includes("complet")) return PICK_META.complet;
+    if (c.includes("shot")) return PICK_META.oneShot;
+    return PICK_META.recommandation;
+  }
 
   function pickPillar(lbl, v) {
     const row = el("div", "pp-row");
@@ -558,16 +568,14 @@
     const grid = $("picksGrid");
     grid.innerHTML = "";
     let any = false;
-    // 🌊 « Avant la vague » en tête (jusqu'à 3), puis les picks secondaires.
-    const waveList = Array.isArray(picks.avantBoumTop) && picks.avantBoumTop.length
-      ? picks.avantBoumTop : (picks.avantBoum ? [picks.avantBoum] : []);
-    const order = [
-      ...waveList.map((p) => ({ p, key: "avantBoum" })),
-      ...["longTerme", "complet", "oneShot"].map((key) => ({ p: picks[key], key })),
-    ].filter((x) => x.p);
-    for (const { p, key } of order) {
+    // Top 5 du jour (uniquement « avant la vague »). Repli sur l'ancienne
+    // structure si un vieux latest.json est encore en cache.
+    let list = Array.isArray(picks.top5) && picks.top5.length ? picks.top5
+      : (Array.isArray(picks.avantBoumTop) && picks.avantBoumTop.length ? picks.avantBoumTop
+      : ["avantBoum", "longTerme", "complet", "oneShot"].map((k) => picks[k]).filter(Boolean));
+    for (const p of list) {
       any = true;
-      const meta = PICK_META[key];
+      const meta = metaForCategory(p.category);
       const card = el("div", `pick-card ${meta.cls}`);
 
       // En-tête : pastille profil + gros score
@@ -587,7 +595,7 @@
       card.appendChild(el("div", `pick-verdict ${p.verdict.cls || ""}`, `${p.verdict.emoji} ${p.verdict.label}`));
 
       // Badge « avant le boum » : où en est le mouvement
-      if (key === "avantBoum" && p.early) {
+      if (p.early) {
         const e = p.early;
         const tightTxt = e.tight != null ? ` · base resserrée (${e.tight}%)` : "";
         card.appendChild(el("div", "pick-early",
