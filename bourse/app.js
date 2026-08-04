@@ -473,6 +473,37 @@
     host.classList.remove("hidden");
   }
 
+  /* ───────────── Actualité des marchés (macro) ───────────── */
+  function newsAge(d) {
+    if (d == null) return "";
+    if (d < 1) return "aujourd'hui";
+    if (d < 2) return "hier";
+    return `il y a ${Math.round(d)} j`;
+  }
+  function renderMarketNews(items) {
+    if (!Array.isArray(items) || !items.length) return;
+    const body = $("marketNewsBody");
+    body.innerHTML = "";
+    $("marketNewsHint").textContent = `${items.length} titres`;
+    for (const n of items) {
+      const tone = n.tone > 0.5 ? ["news-pos", "positif"] : n.tone < -0.5 ? ["news-neg", "négatif"] : ["news-neu", "neutre"];
+      const row = el("div", "news-item");
+      row.appendChild(el("span", `news-tag ${tone[0]}`, tone[1]));
+      const txt = el("div", "news-txt");
+      if (n.url) {
+        const a = document.createElement("a");
+        a.href = n.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = n.headline;
+        txt.appendChild(a);
+      } else {
+        txt.appendChild(el("span", null, n.headline));
+      }
+      txt.appendChild(el("span", "news-date", newsAge(n.daysAgo)));
+      row.appendChild(txt);
+      body.appendChild(row);
+    }
+    $("marketNewsPanel").classList.remove("hidden");
+  }
+
   /* ───────────── Picks du jour ───────────── */
 
   const PICK_META = {
@@ -547,6 +578,23 @@
         card.appendChild(plain);
       } else if (p.note) {
         card.appendChild(el("div", "pick-plain", p.note));
+      }
+
+      // Dernières news sur l'action (ce qui bouge en ce moment)
+      if (Array.isArray(p.news) && p.news.length) {
+        const nw = el("div", "pick-news");
+        nw.appendChild(el("span", "pick-news-lbl", "📰 Dernières news"));
+        for (const n of p.news) {
+          const line = el("div", "pick-news-line");
+          if (n.url) {
+            const a = document.createElement("a");
+            a.href = n.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = n.headline;
+            line.appendChild(a);
+          } else line.appendChild(el("span", null, n.headline));
+          line.appendChild(el("span", "news-date", " · " + newsAge(n.daysAgo)));
+          nw.appendChild(line);
+        }
+        card.appendChild(nw);
       }
 
       // Piliers en barres labellisées
@@ -990,6 +1038,7 @@
       dataGeneratedAt = data.generatedAt || null;
       renderTable();
       if (data.regime) renderRegime(data.regime);
+      if (data.marketNews) renderMarketNews(data.marketNews);
       if (data.picks) renderPicks(data.picks);
 
       const rankHint = $("rankHint");
