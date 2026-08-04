@@ -636,6 +636,7 @@ function selectPicks(results) {
     redFlags: r.redFlags || [],
     news: [...(r.news || [])].sort((a, b) => (a.daysAgo || 0) - (b.daysAgo || 0)).slice(0, 2)
       .map((n) => ({ headline: n.headline, daysAgo: Math.round(n.daysAgo || 0), url: n.url })),
+    newsDigest: Engine.newsDigest(r.news), // résumé écrit de l'actualité de l'action
   });
 
   const best = (arr, keyFn) => arr.reduce((a, b) => (keyFn(b) > keyFn(a) ? b : a));
@@ -823,8 +824,12 @@ async function main() {
 
   // Actualité des marchés globaux (macro)
   let marketNews = [];
-  try { marketNews = await fetchMarketNews(); console.log(`  ${marketNews.length} titres d'actualité marché récupérés.`); }
-  catch (e) { console.error(`Actualité marché indisponible (${e.message}).`); }
+  let marketNewsDigest = null;
+  try {
+    marketNews = await fetchMarketNews();
+    marketNewsDigest = Engine.newsDigest(marketNews);
+    console.log(`  ${marketNews.length} titres d'actualité marché récupérés.`);
+  } catch (e) { console.error(`Actualité marché indisponible (${e.message}).`); }
 
   /* Étape 1 : scan du marché */
   let scanCloses = new Map();
@@ -903,7 +908,7 @@ async function main() {
   fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.writeFileSync(
     path.join(DATA_DIR, "latest.json"),
-    JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, failed, regime, marketNews, picks, results }, null, 1)
+    JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, failed, regime, marketNews, marketNewsDigest, picks, results }, null, 1)
   );
 
   // Index du moteur de recherche : tout le marché scanné (technique + momentum)

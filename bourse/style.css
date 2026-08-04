@@ -572,6 +572,10 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); 
 .news-txt a:hover { text-decoration: underline; }
 .news-date { color: var(--muted); font-size: 11px; }
 
+/* Résumé écrit de l'actualité */
+.news-digest { font-size: 13px; line-height: 1.5; color: var(--ink); background: color-mix(in srgb, var(--accent) 7%, transparent); border-radius: 8px; padding: 8px 11px; margin-bottom: 10px; }
+.pick-news-digest { font-size: 12px; line-height: 1.45; color: var(--ink); margin-bottom: 6px; font-weight: 500; }
+
 /* News sur les cartes de picks */
 .pick-news { margin: 8px 0 2px; padding: 8px 10px; border-radius: 8px; background: color-mix(in srgb, var(--accent) 5%, transparent); }
 .pick-news-lbl { display: block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 4px; }
