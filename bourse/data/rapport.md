@@ -1,14 +1,14 @@
 # ◆ Oracle Bourse — screener quotidien du marché US
 
-Généré le **2026-08-04 23:22 UTC**
+Généré le **2026-08-04 23:36 UTC**
 
 **5403** actions cotées répertoriées → **5275** scannées (technique + momentum) → **136** analysées en profondeur (+ fondamentaux/news)
 
 > ⚠️ Analyse statistique automatique — **pas un conseil financier**. Aucune garantie.
 
-## 🎯 Picks du jour
+## 🌊 5 « avant la vague » du jour
 
-### 🌱 Avant la vague — ATLO (Ames National Corporation) · 81/100
+### 🌊 Avant la vague — ATLO (Ames National Corporation) · 81/100
 **Pourquoi cette action :** Son chiffre d'affaires progresse vite (+18 %/an), ses bénéfices sont en forte hausse (+32 %/an). Elle a déjà pris +10 % en 3 mois, elle est au plus haut de l'année.
 
 *Ressort comprimé : base resserrée, proche d'une cassure, cours pas encore envolé.* — volatilité 22%, confiance 100%.
@@ -17,32 +17,41 @@ Généré le **2026-08-04 23:22 UTC**
 - ▲ Prix vs MM50/MM200 — au-dessus des deux moyennes — structure haussière
 - ▲ Tendance 60 j : +2.7 %/mois — tendance haussière
 
-### 🏛️ Long terme — VCTR (Victory Capital Holdings, Inc.) · 83/100
-**Pourquoi cette action :** Son chiffre d'affaires progresse vite (+77 %/an), ses bénéfices sont en forte hausse (+39 %/an). Elle a déjà pris +31 % en 3 mois.
+### 🌊 Avant la vague — DDI (DoubleDown Interactive Co., Ltd.) · 71/100
+**Pourquoi cette action :** Son chiffre d'affaires progresse vite (+13 %/an), ses bénéfices sont en forte hausse (+48 %/an). Elle a déjà pris +9 % en 3 mois, elle est au plus haut de l'année.
 
-*À garder — fondamentaux solides, faible volatilité.* — volatilité 33%, confiance 100%.
-- ▲ RSI 14 j : 67 — dynamique haussière saine
+*Ressort comprimé : base resserrée, proche d'une cassure, cours pas encore envolé.* — volatilité 23%, confiance 100%.
 - ▲ MACD : positif, en hausse — accélération haussière
 - ▲ Prix vs MM50/MM200 — au-dessus des deux moyennes — structure haussière
-- ▲ Tendance 60 j : +6.3 %/mois — tendance haussière
+- ▲ Cassure : au contact du plus-haut 52 sem. — les cassures de plus-hauts attirent les acheteurs
+- ▲ Perf 3 mois : +9.1 % (vol. 23 %) — volatilité modérée
 
-### ⭐ Le plus complet — FCBC (First Community Bankshares, Inc.) · 82/100
-**Pourquoi cette action :** Son chiffre d'affaires progresse vite (+37 %/an), ses bénéfices sont en forte hausse (+78 %/an). Elle a déjà pris +16 % en 3 mois, elle est au plus haut de l'année.
+### 🌊 Avant la vague — RS (Reliance, Inc.) · 75/100
+**Pourquoi cette action :** Son chiffre d'affaires progresse vite (+27 %/an), ses bénéfices sont en forte hausse (+42 %/an). Elle a déjà pris +14 % en 3 mois, elle est au plus haut de l'année.
 
-*Le meilleur équilibre technique + fondamental + momentum.* — volatilité 25%, confiance 100%.
-- ▲ RSI 14 j : 70 — dynamique haussière saine
+*Ressort comprimé : base resserrée, proche d'une cassure, cours pas encore envolé.* — volatilité 27%, confiance 100%.
+- ▲ RSI 14 j : 63 — dynamique haussière saine
+- ▲ MACD : positif, en hausse — accélération haussière
+- ▲ Prix vs MM50/MM200 — au-dessus des deux moyennes — structure haussière
+- ▲ Tendance 60 j : +2.9 %/mois — tendance haussière
+
+### 🌊 Avant la vague — ROST (Ross Stores, Inc.) · 75/100
+**Pourquoi cette action :** Son chiffre d'affaires progresse vite (+21 %/an), ses bénéfices sont en forte hausse (+37 %/an). Elle a déjà pris +11 % en 3 mois, elle est au plus haut de l'année.
+
+*Ressort comprimé : base resserrée, proche d'une cassure, cours pas encore envolé.* — volatilité 34%, confiance 100%.
+- ▲ RSI 14 j : 68 — dynamique haussière saine
+- ▲ MACD : positif, en baisse — haussier mais s'essouffle
+- ▲ Prix vs MM50/MM200 — au-dessus des deux moyennes — structure haussière
+- ▲ Tendance 60 j : +3.3 %/mois — tendance haussière
+
+### 🌊 Avant la vague — PBAM (Private Bancorp of America, Inc.) · 72/100
+**Pourquoi cette action :** Son chiffre d'affaires progresse vite (+14 %/an), ses bénéfices sont en forte hausse (+28 %/an). Elle a déjà pris +15 % en 3 mois, elle est au plus haut de l'année.
+
+*Ressort comprimé : base resserrée, proche d'une cassure, cours pas encore envolé.* — volatilité 16%, confiance 100%.
 - ▲ MACD : positif, en hausse — accélération haussière
 - ▲ Prix vs MM50/MM200 — au-dessus des deux moyennes — structure haussière
 - ▲ Tendance 60 j : +4.7 %/mois — tendance haussière
-
-### 🚀 One shot — TRAX (First Tracks Biotherapeutics, Inc.) · 72/100
-**Pourquoi cette action :** Elle a déjà pris +124 % en 3 mois, sa tendance de fond est haussière, et le mouvement s'accélère. ⚠️ Mais elle bouge beaucoup (volatilité 154 %) : petite somme et sortie prévue.
-
-*⚠️ Déjà bien monté — pari sur la continuation, pas « avant la vague ». Petite taille + stop.* — volatilité 154%, confiance 100%.
-- ▲ MACD : positif, en baisse — haussier mais s'essouffle
-- ▲ Prix vs MM50 — au-dessus des deux moyennes — structure haussière
-- ▲ Tendance 60 j : +43.2 %/mois — tendance haussière forte
-- ▲ Momentum en accélération — le dernier mois surperforme le rythme trimestriel
+- ▲ Cassure : au contact du plus-haut 52 sem. — les cassures de plus-hauts attirent les acheteurs
 
 
 ## Classement complet
@@ -53,7 +62,7 @@ Généré le **2026-08-04 23:22 UTC**
 | 2 | **FCBC** (First Community Bankshares, Inc.) | **82** | 🚀 Fort potentiel | 82 | 89 | 77 | 88 | 100 % | 🔍 scan marché |
 | 3 | **ATLO** (Ames National Corporation) | **81** | 🚀 Fort potentiel | 81 | 86 | 73 | 88 | 100 % | 🔍 scan marché |
 | 4 | **IMAX** (IMAX Corporation) | **79** | 🚀 Explosif (risqué) | 79 | 92 | 74 | 76 | 100 % | 🔍 scan marché |
-| 5 | **PBF** (PBF Energy Inc.) | **79** | 🚀 Explosif (risqué) | 81 | 94 | 66 | 81 | 100 % | 🔍 scan marché |
+| 5 | **PBF** (PBF Energy Inc.) | **78** | 🚀 Explosif (risqué) | 81 | 94 | 66 | 79 | 100 % | 🔍 scan marché |
 | 6 | **CSW** (CSW Industrials, Inc.) | **78** | 🚀 Explosif (risqué) | 83 | 89 | 69 | 74 | 100 % | 🔍 scan marché |
 | 7 | **CDNA** (CareDx, Inc.) | **78** | 🚀 Explosif (risqué) | 81 | 94 | 74 | 64 | 100 % | 🔍 scan marché |
 | 8 | **MGA** (Magna International Inc.) | **78** | 🚀 Fort potentiel | 85 | 84 | 64 | 81 | 100 % | 🔍 scan marché |
@@ -64,8 +73,8 @@ Généré le **2026-08-04 23:22 UTC**
 | 13 | **AAMI** (Acadian Asset Management Inc.) | **76** | 🚀 Fort potentiel | 80 | 90 | 73 | 64 | 100 % | 🔍 scan marché |
 | 14 | **OFG** (OFG Bancorp) | **76** | 🚀 Fort potentiel | 85 | 87 | 71 | 63 | 100 % | 🔍 scan marché |
 | 15 | **WT** (WisdomTree, Inc.) | **76** | 🚀 Fort potentiel | 78 | 92 | 79 | 58 | 100 % | 🔍 scan marché |
-| 16 | **NWBI** (Northwest Bancshares, Inc.) | **76** | 🚀 Fort potentiel | 83 | 86 | 70 | 66 | 100 % | 🔍 scan marché |
-| 17 | **BMY** (Bristol-Myers Squibb Company) | **76** | 🚀 Fort potentiel | 79 | 90 | 76 | 62 | 100 % | 🔍 scan marché |
+| 16 | **BMY** (Bristol-Myers Squibb Company) | **76** | 🚀 Fort potentiel | 79 | 90 | 76 | 63 | 100 % | 🔍 scan marché |
+| 17 | **NWBI** (Northwest Bancshares, Inc.) | **76** | 🚀 Fort potentiel | 83 | 86 | 70 | 66 | 100 % | 🔍 scan marché |
 | 18 | **KNSA** (Kiniksa Pharmaceuticals International, p) | **76** | 🚀 Explosif (risqué) | 79 | 91 | 76 | 60 | 100 % | 🔍 scan marché |
 | 19 | **EDRY** (EuroDry Ltd.) | **76** | 🚀 Explosif (risqué) | 82 | 89 | 64 | 72 | 100 % | 🔍 scan marché |
 | 20 | **V** (Visa Inc.) | **76** | 🚀 Fort potentiel | 84 | 80 | 74 | 61 | 100 % | ⭐ favori |
@@ -82,30 +91,30 @@ Généré le **2026-08-04 23:22 UTC**
 | 31 | **AVGO** (Broadcom Inc.) | **75** | 📈 Configuration haussière | 67 | 74 | 85 | 75 | 100 % | ⭐ favori |
 | 32 | **HNVR** (Hanover Bancorp, Inc.) | **75** | 📈 Configuration haussière | 80 | 91 | 69 | 63 | 100 % | 🔍 scan marché |
 | 33 | **CNXN** (PC Connection, Inc.) | **75** | 📈 Configuration haussière | 81 | 92 | 62 | 70 | 100 % | 🔍 scan marché |
-| 34 | **NUE** (Nucor Corporation) | **75** | 📈 Configuration haussière | 77 | 94 | 66 | 70 | 100 % | 🔍 scan marché |
+| 34 | **NUE** (Nucor Corporation) | **75** | 📈 Configuration haussière | 77 | 94 | 66 | 71 | 100 % | 🔍 scan marché |
 | 35 | **KFY** (Korn Ferry) | **75** | 📈 Configuration haussière | 80 | 90 | 68 | 62 | 100 % | 🔍 scan marché |
-| 36 | **MA** (Mastercard Incorporated) | **75** | 📈 Configuration haussière | 77 | 79 | 74 | 67 | 100 % | ⭐ favori |
-| 37 | **WASH** (Washington Trust Bancorp, Inc.) | **74** | 📈 Configuration haussière | 86 | 83 | 63 | 65 | 100 % | 🔍 scan marché |
-| 38 | **JPM** (JPMorgan Chase & Co.) | **74** | 📈 Configuration haussière | 78 | 83 | 75 | 58 | 100 % | ⭐ favori |
-| 39 | **WSFS** (WSFS Financial Corporation) | **74** | 📈 Configuration haussière | 84 | 85 | 70 | 54 | 100 % | 🔍 scan marché |
-| 40 | **ETON** (Eton Pharmaceuticals, Inc.) | **74** | 📈 Configuration haussière | 79 | 89 | 63 | 71 | 100 % | ⭐ favori |
-| 41 | **FTK** (Flotek Industries, Inc.) | **74** | 📈 Configuration haussière | 86 | 82 | 56 | 74 | 100 % | 🔍 scan marché |
-| 42 | **SPB** (Spectrum Brands Holdings, Inc.) | **74** | 📈 Configuration haussière | 84 | 88 | 68 | 55 | 100 % | 🔍 scan marché |
-| 43 | **ACNB** (ACNB Corporation) | **74** | 📈 Configuration haussière | 84 | 84 | 68 | 57 | 100 % | 🔍 scan marché |
-| 44 | **FMAO** (Farmers & Merchants Bancorp, Inc.) | **74** | 📈 Configuration haussière | 84 | 86 | 72 | 50 | 100 % | 🔍 scan marché |
-| 45 | **GKOS** (Glaukos Corporation) | **74** | 📈 Configuration haussière | 84 | 88 | 54 | 74 | 100 % | 🔍 scan marché |
+| 36 | **MA** (Mastercard Incorporated) | **74** | 📈 Configuration haussière | 77 | 79 | 74 | 67 | 100 % | ⭐ favori |
+| 37 | **PLTR** (Palantir Technologies Inc.) | **74** | 📈 Configuration haussière | 64 | 75 | 81 | 82 | 100 % | ⭐ favori |
+| 38 | **WASH** (Washington Trust Bancorp, Inc.) | **74** | 📈 Configuration haussière | 86 | 83 | 63 | 65 | 100 % | 🔍 scan marché |
+| 39 | **JPM** (JPMorgan Chase & Co.) | **74** | 📈 Configuration haussière | 78 | 83 | 75 | 58 | 100 % | ⭐ favori |
+| 40 | **WSFS** (WSFS Financial Corporation) | **74** | 📈 Configuration haussière | 84 | 85 | 70 | 55 | 100 % | 🔍 scan marché |
+| 41 | **ETON** (Eton Pharmaceuticals, Inc.) | **74** | 📈 Configuration haussière | 79 | 89 | 63 | 71 | 100 % | ⭐ favori |
+| 42 | **FTK** (Flotek Industries, Inc.) | **74** | 📈 Configuration haussière | 86 | 82 | 56 | 74 | 100 % | 🔍 scan marché |
+| 43 | **SPB** (Spectrum Brands Holdings, Inc.) | **74** | 📈 Configuration haussière | 84 | 88 | 68 | 55 | 100 % | 🔍 scan marché |
+| 44 | **ACNB** (ACNB Corporation) | **74** | 📈 Configuration haussière | 84 | 84 | 68 | 57 | 100 % | 🔍 scan marché |
+| 45 | **FMAO** (Farmers & Merchants Bancorp, Inc.) | **74** | 📈 Configuration haussière | 84 | 86 | 72 | 50 | 100 % | 🔍 scan marché |
 | 46 | **PBI** (Pitney Bowes Inc.) | **74** | 📈 Configuration haussière | 78 | 89 | 71 | 60 | 100 % | 🔍 scan marché |
-| 47 | **PLTR** (Palantir Technologies Inc.) | **74** | 📈 Configuration haussière | 64 | 75 | 81 | 79 | 100 % | ⭐ favori |
+| 47 | **GKOS** (Glaukos Corporation) | **74** | 📈 Configuration haussière | 84 | 88 | 54 | 74 | 100 % | 🔍 scan marché |
 | 48 | **AMZN** (Amazon.com, Inc.) | **74** | 📈 Configuration haussière | 76 | 73 | 71 | 74 | 100 % | ⭐ favori |
 | 49 | **MSBI** (Midland States Bancorp, Inc.) | **74** | 📈 Configuration haussière | 83 | 88 | 70 | 53 | 100 % | 🔍 scan marché |
 | 50 | **QUAD** (Quad/Graphics, Inc.) | **74** | 📈 Configuration haussière | 80 | 94 | 59 | 68 | 100 % | 🔍 scan marché |
 | 51 | **LCNB** (LCNB Corp.) | **73** | 📈 Configuration haussière | 84 | 87 | 67 | 54 | 100 % | 🔍 scan marché |
 | 52 | **OII** (Oceaneering International, Inc.) | **73** | 📈 Configuration haussière | 83 | 94 | 64 | 54 | 100 % | 🔍 scan marché |
 | 53 | **NVDA** (NVIDIA Corporation) | **73** | 📈 Configuration haussière | 70 | 77 | 86 | 57 | 100 % | ⭐ favori |
-| 54 | **MSFT** (Microsoft Corporation) | **73** | 📈 Configuration haussière | 66 | 85 | 76 | 71 | 100 % | ⭐ favori |
-| 55 | **GPN** (Global Payments Inc.) | **73** | 📈 Configuration haussière | 84 | 87 | 65 | 54 | 100 % | 🔍 scan marché |
-| 56 | **ECPG** (Encore Capital Group, Inc.) | **73** | 📈 Configuration haussière | 81 | 85 | 74 | 49 | 100 % | 🔍 scan marché |
-| 57 | **IVZ** (Invesco Ltd.) | **73** | 📈 Configuration haussière | 81 | 88 | 65 | 58 | 100 % | 🔍 scan marché |
+| 54 | **GPN** (Global Payments Inc.) | **73** | 📈 Configuration haussière | 84 | 87 | 65 | 54 | 100 % | 🔍 scan marché |
+| 55 | **ECPG** (Encore Capital Group, Inc.) | **73** | 📈 Configuration haussière | 81 | 85 | 74 | 49 | 100 % | 🔍 scan marché |
+| 56 | **IVZ** (Invesco Ltd.) | **73** | 📈 Configuration haussière | 81 | 88 | 65 | 58 | 100 % | 🔍 scan marché |
+| 57 | **MSFT** (Microsoft Corporation) | **73** | 📈 Configuration haussière | 66 | 85 | 76 | 69 | 100 % | ⭐ favori |
 | 58 | **GIC** (Global Industrial Company) | **73** | 📈 Configuration haussière | 80 | 90 | 70 | 50 | 100 % | 🔍 scan marché |
 | 59 | **ARW** (Arrow Electronics, Inc.) | **72** | 📈 Configuration haussière | 75 | 92 | 67 | 62 | 100 % | 🔍 scan marché |
 | 60 | **BOTJ** (Bank of the James Financial Group, Inc.) | **72** | 📈 Configuration haussière | 71 | 87 | 72 | 64 | 100 % | 🔍 scan marché |
@@ -114,20 +123,20 @@ Généré le **2026-08-04 23:22 UTC**
 | 63 | **CCBG** (Capital City Bank Group, Inc.) | **72** | 📈 Configuration haussière | 84 | 86 | 58 | 61 | 100 % | 🔍 scan marché |
 | 64 | **HPQ** (HP Inc.) | **72** | 📈 Configuration haussière | 82 | 92 | 56 | 62 | 100 % | 🔍 scan marché |
 | 65 | **ANIK** (Anika Therapeutics, Inc.) | **72** | 📈 Configuration haussière | 80 | 94 | 55 | 65 | 100 % | 🔍 scan marché |
-| 66 | **PBAM** (Private Bancorp of America, Inc.) | **72** | 📈 Configuration haussière | 75 | 93 | 71 | 50 | 100 % | 🔍 scan marché |
-| 67 | **ABNB** (Airbnb, Inc.) | **71** | 📈 Configuration haussière | 78 | 67 | 69 | 67 | 100 % | ⭐ favori |
+| 66 | **ABNB** (Airbnb, Inc.) | **72** | 📈 Configuration haussière | 78 | 67 | 69 | 68 | 100 % | ⭐ favori |
+| 67 | **PBAM** (Private Bancorp of America, Inc.) | **72** | 📈 Configuration haussière | 75 | 93 | 71 | 50 | 100 % | 🔍 scan marché |
 | 68 | **XOM** (ExxonMobil Holdings Corporation) | **71** | 📈 Configuration haussière | 68 | 73 | 73 | 73 | 100 % | ⭐ favori |
-| 69 | **HST** (Host Hotels & Resorts, Inc.) | **71** | 📈 Configuration haussière | 78 | 86 | 66 | 57 | 100 % | 🔍 scan marché |
-| 70 | **AMD** (Advanced Micro Devices, Inc.) | **71** | 📈 Configuration haussière | 69 | 65 | 75 | 75 | 100 % | ⭐ favori |
-| 71 | **DAC** (Danaos Corporation) | **71** | 📈 Configuration haussière | 75 | 91 | 72 | 50 | 100 % | 🔍 scan marché |
-| 72 | **CRWD** (CrowdStrike Holdings, Inc.) | **71** | 📈 Configuration haussière | 86 | 76 | 53 | 69 | 100 % | ⭐ favori |
-| 73 | **PARR** (Par Pacific Holdings, Inc.) | **71** | 📈 Configuration haussière | 78 | 92 | 58 | 61 | 100 % | 🔍 scan marché |
-| 74 | **PANW** (Palo Alto Networks, Inc.) | **71** | 📈 Configuration haussière | 80 | 72 | 57 | 76 | 100 % | ⭐ favori |
-| 75 | **BURL** (Burlington Stores, Inc.) | **71** | 📈 Configuration haussière | 80 | 88 | 61 | 55 | 100 % | 🔍 scan marché |
-| 76 | **DDI** (DoubleDown Interactive Co., Ltd.) | **71** | 📈 Configuration haussière | 68 | 85 | 80 | 50 | 100 % | 🔍 scan marché |
-| 77 | **CBK** (Commercial Bancgroup, Inc.) | **70** | 📈 Configuration haussière | 85 | 83 | 61 | 50 | 100 % | 🔍 scan marché |
-| 78 | **GOOGL** (Alphabet Inc.) | **70** | 📈 Configuration haussière | 70 | 60 | 82 | 60 | 100 % | ⭐ favori |
-| 79 | **NET** (Cloudflare, Inc.) | **70** | 📈 Configuration haussière | 81 | 90 | 50 | 66 | 100 % | 🔍 scan marché |
+| 69 | **AMD** (Advanced Micro Devices, Inc.) | **71** | 📈 Configuration haussière | 69 | 65 | 75 | 75 | 100 % | ⭐ favori |
+| 70 | **DAC** (Danaos Corporation) | **71** | 📈 Configuration haussière | 75 | 91 | 72 | 50 | 100 % | 🔍 scan marché |
+| 71 | **CRWD** (CrowdStrike Holdings, Inc.) | **71** | 📈 Configuration haussière | 86 | 76 | 53 | 69 | 100 % | ⭐ favori |
+| 72 | **PARR** (Par Pacific Holdings, Inc.) | **71** | 📈 Configuration haussière | 78 | 92 | 58 | 61 | 100 % | 🔍 scan marché |
+| 73 | **PANW** (Palo Alto Networks, Inc.) | **71** | 📈 Configuration haussière | 80 | 72 | 57 | 76 | 100 % | ⭐ favori |
+| 74 | **BURL** (Burlington Stores, Inc.) | **71** | 📈 Configuration haussière | 80 | 88 | 61 | 55 | 100 % | 🔍 scan marché |
+| 75 | **DDI** (DoubleDown Interactive Co., Ltd.) | **71** | 📈 Configuration haussière | 68 | 85 | 80 | 50 | 100 % | 🔍 scan marché |
+| 76 | **CBK** (Commercial Bancgroup, Inc.) | **70** | 📈 Configuration haussière | 85 | 83 | 61 | 50 | 100 % | 🔍 scan marché |
+| 77 | **GOOGL** (Alphabet Inc.) | **70** | 📈 Configuration haussière | 70 | 60 | 82 | 60 | 100 % | ⭐ favori |
+| 78 | **NET** (Cloudflare, Inc.) | **70** | 📈 Configuration haussière | 81 | 90 | 50 | 66 | 100 % | 🔍 scan marché |
+| 79 | **HST** (Host Hotels & Resorts, Inc.) | **70** | 📈 Configuration haussière | 78 | 86 | 66 | 50 | 100 % | 🔍 scan marché |
 | 80 | **PAG** (Penske Automotive Group, Inc.) | **70** | 📈 Configuration haussière | 80 | 92 | 48 | 68 | 100 % | 🔍 scan marché |
 | 81 | **BLFS** (BioLife Solutions, Inc.) | **70** | 📈 Configuration haussière | 86 | 83 | 54 | 55 | 100 % | 🔍 scan marché |
 | 82 | **GSAT** (Globalstar, Inc.) | **70** | 📈 Configuration haussière | 75 | 81 | 59 | 67 | 100 % | 🔍 scan marché |
@@ -147,7 +156,7 @@ Généré le **2026-08-04 23:22 UTC**
 | 96 | **CRSR** (Corsair Gaming, Inc.) | **68** | 📈 Configuration haussière | 81 | 90 | 50 | 58 | 100 % | 🔍 scan marché |
 | 97 | **XRAY** (DENTSPLY SIRONA Inc.) | **68** | 📈 Configuration haussière | 84 | 87 | 51 | 53 | 100 % | 🔍 scan marché |
 | 98 | **MMED** (MiniMed Group, Inc.) | **68** | 📈 Configuration haussière | 82 | 89 | 54 | 50 | 100 % | 🔍 scan marché |
-| 99 | **TGT** (Target Corporation) | **68** | 📈 Configuration haussière | 80 | 91 | 52 | 56 | 100 % | 🔍 scan marché |
+| 99 | **TGT** (Target Corporation) | **68** | 📈 Configuration haussière | 80 | 91 | 52 | 57 | 100 % | 🔍 scan marché |
 | 100 | **NDLS** (Noodles & Company) | **68** | 📈 Configuration haussière | 82 | 91 | 39 | 69 | 100 % | 🔍 scan marché |
 | 101 | **PKOH** (Park-Ohio Holdings Corp.) | **68** | 📈 Configuration haussière | 85 | 83 | 53 | 50 | 100 % | 🔍 scan marché |
 | 102 | **PCRX** (Pacira BioSciences, Inc.) | **67** | 📈 Configuration haussière | 86 | 87 | 46 | 51 | 100 % | 🔍 scan marché |
@@ -183,8 +192,8 @@ Généré le **2026-08-04 23:22 UTC**
 | 132 | **NVO** (Novo Nordisk A/S) | **52** | 😐 Neutre | 39 | 28 | 73 | 59 | 100 % | ⭐ favori |
 | 133 | **WMT** (Walmart Inc.) | **50** | 😐 Neutre | 51 | 41 | 53 | 50 | 100 % | ⭐ favori |
 | 134 | **MSTR** (Strategy Inc) | **47** | 😐 Neutre | 47 | 39 | 45 | 55 | 100 % | ⭐ favori |
-| 135 | **TSLA** (Tesla, Inc.) | **45** | 😐 Neutre | 38 | 23 | 52 | 64 | 100 % | ⭐ favori |
-| 136 | **COIN** (Coinbase Global, Inc.) | **42** | 🌧️ Fragile | 32 | 26 | 46 | 64 | 100 % | ⭐ favori |
+| 135 | **TSLA** (Tesla, Inc.) | **45** | 🌧️ Fragile | 38 | 23 | 52 | 62 | 100 % | ⭐ favori |
+| 136 | **COIN** (Coinbase Global, Inc.) | **42** | 🌧️ Fragile | 32 | 26 | 46 | 63 | 100 % | ⭐ favori |
 
 ## 🚀 Configurations les plus favorables du jour
 
@@ -220,7 +229,7 @@ Généré le **2026-08-04 23:22 UTC**
 - ▲ Momentum en accélération — le dernier mois surperforme le rythme trimestriel
 - ▲ Perf 3 mois : +45.5 % (vol. 56 %) — titre très volatil — potentiel ET risque élevés
 
-### PBF — PBF Energy Inc. · 79/100
+### PBF — PBF Energy Inc. · 78/100
 - ▲ RSI 14 j : 61 — dynamique haussière saine
 - ▲ MACD : positif, en baisse — haussier mais s'essouffle
 - ▲ Prix vs MM50/MM200 — au-dessus des deux moyennes — structure haussière
