@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AFA Suisse — Entraînement Intermédiaire en assurance</title>
+<meta name="description" content="Site d'entraînement aux premiers modules de l'examen AFA : industrie de l'assurance et droit de l'assurance.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#/">
+    <span class="brand-mark">AFA</span>
+    <span class="brand-txt">
+      <b>Intermédiaire en assurance</b>
+      <small>Entraînement — modules 1 &amp; 2</small>
+    </span>
+  </a>
+  <nav class="nav" id="nav">
+    <a href="#/" data-route="home">Accueil</a>
+    <a href="#/cours" data-route="cours">Cours</a>
+    <a href="#/quiz" data-route="quiz">Quiz</a>
+    <a href="#/examen" data-route="examen">Examen blanc</a>
+    <a href="#/flash" data-route="flash">Flashcards</a>
+    <a href="#/stats" data-route="stats">Progression</a>
+  </nav>
+  <button id="themeBtn" class="icon-btn" title="Changer de thème" aria-label="Changer de thème">🌗</button>
+  <button id="burger" class="icon-btn burger" aria-label="Menu">☰</button>
+</header>
+
+<main id="app" class="app"></main>
+
+<footer class="footer">
+  <p>Support d'entraînement non officiel, à but pédagogique. Les valeurs chiffrées (rentes, seuils, plafonds)
+     correspondent à l'année&nbsp;2025 et doivent être vérifiées pour l'année de votre examen.
+     Seuls les textes légaux publiés font foi.</p>
+</footer>
+
+<script src="js/data-module1.js"></script>
+<script src="js/data-module2.js"></script>
+<script src="js/data-glossaire.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -52,3 +52,11 @@ Le dossier [`bourse/`](bourse/) contient un autre projet : une **machine d'analy
 boursière multi-facteurs** (technique, fondamental, momentum, sentiment des news)
 qui classe les actions selon leur potentiel de hausse. Ouvre `bourse/index.html`
 ou consulte [`bourse/README.md`](bourse/README.md).
+
+## ◆ Bonus : Entraînement AFA Suisse
+
+Le dossier [`afa/`](afa/) contient un site de révision pour les **deux premiers modules
+de l'examen d'intermédiaire en assurance AFA** (industrie de l'assurance et droit de
+l'assurance) : fiches de cours, 118 questions commentées, examen blanc chronométré,
+flashcards et suivi de progression. Ouvre `afa/index.html` ou consulte
+[`afa/README.md`](afa/README.md).
