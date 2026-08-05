@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-05T08:11:15.379Z",
+ "generatedAt": "2026-08-05T08:24:04.994Z",
  "method": "Rendement réel de chaque top-pick depuis sa date de recommandation (clôture Yahoo), comparé au S&P 500 sur la même période. Point d'entrée = clôture du jour de reco.",
  "horizon": "2026-07-04 → aujourd'hui",
  "all": {
