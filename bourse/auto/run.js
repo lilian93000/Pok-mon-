@@ -871,7 +871,7 @@ async function main() {
     if (finalSet.size >= nFinalists + favorites.length) break;
     finalSet.add(c.sym);
   }
-  for (const c of earlyCandidates.slice(0, 70)) finalSet.add(c.sym); // ajoute les meilleurs démarrages (ressorts, tous secteurs)
+  for (const c of earlyCandidates.slice(0, 140)) finalSet.add(c.sym); // ajoute les meilleurs démarrages (ressorts, tous secteurs)
   const finalSyms = [...finalSet];
   console.log(`Étape 2 — analyse profonde de ${finalSyms.length} titres (${favorites.length} favoris + top scan + démarrages)…`);
 
