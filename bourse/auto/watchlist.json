@@ -8,7 +8,9 @@
     "OPHC", "ETON",
     "SNDK", "MU", "WDC", "MRVL", "VRT", "ARM", "QCOM", "AMAT",
     "LRCX", "KLAC", "ANET", "TSM", "ASML", "ALAB", "CRDO", "COHR",
-    "LITE", "MPWR", "ONTO", "NBIS"
+    "LITE", "MPWR", "ONTO", "NBIS",
+    "POET", "FN", "AAOI", "CIEN", "MTSI", "SMTC", "MOD", "NVT",
+    "CLS", "FLEX", "PWR", "GEV", "POWL", "BE", "PSTG", "CAMT"
   ],
   "finalists": 80,
   "minPrice": 2
