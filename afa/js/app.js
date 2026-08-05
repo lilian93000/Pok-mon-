@@ -12,6 +12,11 @@
   /* ---------- Réglages de l'examen blanc ---------- */
   const EXAM = { count: 40, minutes: 45, pass: 70 };
 
+  /* Longueur des séries de quiz. La banque compte plusieurs centaines de
+     questions : par défaut on tire une série courte plutôt que tout le module. */
+  const LENGTHS = [10, 20, 40, 0]; // 0 = toutes les questions
+  let quizLen = 20;
+
   /* =========================================================
      Utilitaires
      ========================================================= */
@@ -85,6 +90,21 @@
       try { localStorage.removeItem(KEY); } catch (e) {}
     }
   }.load();
+
+  /* Sélectionne n questions dans un lot, en donnant la priorité à celles
+     qui ont été ratées, puis à celles jamais vues. n <= 0 = tout le lot. */
+  function pickQuestions(pool, n) {
+    if (!n || n >= pool.length) return shuffle(pool);
+    const weak = [], unseen = [], known = [];
+    pool.forEach(q => {
+      const s = Store.stat(q.id);
+      if (s.last === false) weak.push(q);
+      else if (s.seen === 0) unseen.push(q);
+      else known.push(q);
+    });
+    const out = shuffle(weak).concat(shuffle(unseen), shuffle(known)).slice(0, n);
+    return shuffle(out);
+  }
 
   /* Questions ratées ou jamais réussies au dernier essai */
   function weakQuestions() {
@@ -341,6 +361,18 @@
     return `
       <h1>Quiz</h1>
       <p class="muted">Chaque réponse est commentée. Choisissez un module entier ou un chapitre précis.</p>
+
+      <div class="card" style="margin-bottom:1.6rem">
+        <div class="row" style="justify-content:space-between">
+          <div>
+            <b>Longueur de la série</b>
+            <div class="muted small">Les questions ratées puis les questions jamais vues sont tirées en priorité.</div>
+          </div>
+          <div class="chips" id="lenChips">
+            ${LENGTHS.map(n => `<button class="chip ${n === quizLen ? 'on' : ''}" data-len="${n}">${n || 'Tout'}</button>`).join('')}
+          </div>
+        </div>
+      </div>
 
       ${weak.length ? `
       <div class="card" style="margin-bottom:1.6rem">
@@ -632,6 +664,15 @@
         backHash: '#/examen'
       });
     }
+    else if (route[0] === 'quiz') {
+      document.querySelectorAll('#lenChips .chip').forEach(ch => {
+        ch.onclick = () => {
+          quizLen = +ch.dataset.len;
+          try { localStorage.setItem('afa_len', quizLen); } catch (e) {}
+          document.querySelectorAll('#lenChips .chip').forEach(x => x.classList.toggle('on', x === ch));
+        };
+      });
+    }
     else if (route[0] === 'flash') wireFlash();
     else if (route[0] === 'stats') {
       const b = document.getElementById('resetBtn');
@@ -780,7 +821,7 @@
     if (route[1] === 'erreurs') {
       const qs = weakQuestions();
       if (!qs.length) { location.hash = '#/quiz'; return true; }
-      startSession({ title: 'Reprise des erreurs', questions: shuffle(qs), backHash: '#/quiz' });
+      startSession({ title: 'Reprise des erreurs', questions: pickQuestions(qs, quizLen), backHash: '#/quiz' });
       return true;
     }
     const m = moduleById(route[1]);
@@ -789,11 +830,11 @@
       const c = chapterById(m, route[2]);
       if (!c) return false;
       const qs = m.questions.filter(q => q.chap === c.id).map(q => ({ ...q, mod: m.id }));
-      startSession({ title: m.code + ' · ' + c.title, questions: shuffle(qs), backHash: '#/quiz' });
+      startSession({ title: m.code + ' · ' + c.title, questions: pickQuestions(qs, quizLen), backHash: '#/quiz' });
     } else {
       startSession({
         title: m.code + ' · ' + m.title,
-        questions: shuffle(m.questions.map(q => ({ ...q, mod: m.id }))),
+        questions: pickQuestions(m.questions.map(q => ({ ...q, mod: m.id })), quizLen),
         backHash: '#/quiz'
       });
     }
@@ -840,6 +881,11 @@
   /* =========================================================
      Démarrage
      ========================================================= */
+  try {
+    const savedLen = localStorage.getItem('afa_len');
+    if (savedLen !== null && LENGTHS.includes(+savedLen)) quizLen = +savedLen;
+  } catch (e) { /* stockage indisponible */ }
+
   const themeBtn = document.getElementById('themeBtn');
   const savedTheme = (() => { try { return localStorage.getItem('afa_theme'); } catch (e) { return null; } })();
   if (savedTheme) document.documentElement.dataset.theme = savedTheme;
