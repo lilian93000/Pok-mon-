@@ -146,18 +146,11 @@
       remaining: opts.minutes ? opts.minutes * 60 : null,
       startedAt: Date.now()
     };
-    // On remplace l'entrée d'historique : le bouton « retour » ramène à la liste
-    // des quiz au lieu de relancer la série que l'on vient de quitter.
-    // replaceState échoue dans certains contextes embarqués : on retombe alors
-    // sur une navigation ordinaire, qui déclenche hashchange puis render().
-    if (location.hash !== '#/session') {
-      try {
-        history.replaceState(null, '', '#/session');
-      } catch (e) {
-        location.hash = '#/session';
-        return;
-      }
-    }
+    // On remplace l'entrée d'historique plutôt que d'en empiler une : le bouton
+    // « retour » ramène ainsi à la liste des quiz au lieu de relancer la série.
+    // L'opération est cosmétique et peut échouer en contexte embarqué.
+    currentRoute = '#/session';
+    try { history.replaceState(null, '', '#/session'); } catch (e) { /* contexte embarqué */ }
     render();
   }
 
@@ -731,7 +724,7 @@
         const back = session.backHash;
         stopTimer();
         session = null;
-        location.hash = back;
+        go(back);
       }
     };
 
@@ -820,16 +813,29 @@
   /* =========================================================
      Routeur
      ========================================================= */
+  /* Route courante, tenue en interne plutôt que lue dans l'URL.
+     Dans un document embarqué (about:srcdoc, blob:), les liens « #/quiz » se
+     résolvent contre l'adresse de la page hôte : les suivre ferait quitter
+     l'application. On intercepte donc les clics et on navigue nous-mêmes. */
+  let currentRoute = location.hash || '#/';
+
   function parseHash() {
-    const h = location.hash.replace(/^#\/?/, '');
+    const h = currentRoute.replace(/^#\/?/, '');
     return h ? h.split('/').filter(Boolean) : [];
+  }
+
+  function go(hash) {
+    currentRoute = hash;
+    // Mise à jour de l'URL au mieux : purement cosmétique, jamais bloquante.
+    try { if (location.hash !== hash) location.hash = hash; } catch (e) { /* contexte embarqué */ }
+    render();
   }
 
   function launchQuiz(route) {
     // #/quiz/erreurs | #/quiz/:mid | #/quiz/:mid/:cid
     if (route[1] === 'erreurs') {
       const qs = weakQuestions();
-      if (!qs.length) { location.hash = '#/quiz'; return true; }
+      if (!qs.length) { go('#/quiz'); return true; }
       startSession({ title: 'Reprise des erreurs', questions: pickQuestions(qs, quizLen), backHash: '#/quiz' });
       return true;
     }
@@ -925,6 +931,25 @@
     }
   });
 
-  window.addEventListener('hashchange', render);
+  // Tous les liens internes passent par le routeur : on ne laisse jamais le
+  // navigateur suivre un href « #/… », qui ferait sortir d'un document embarqué.
+  document.addEventListener('click', (e) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    if (!href || href === '#') return;
+    e.preventDefault();
+    go(href);
+  });
+
+  // Boutons précédent/suivant du navigateur, lorsque l'URL est utilisable.
+  window.addEventListener('hashchange', () => {
+    if (location.hash && location.hash !== currentRoute) {
+      currentRoute = location.hash;
+      render();
+    }
+  });
+
   render();
 })();
