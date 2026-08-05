@@ -10,7 +10,10 @@
     "LRCX", "KLAC", "ANET", "TSM", "ASML", "ALAB", "CRDO", "COHR",
     "LITE", "MPWR", "ONTO", "NBIS",
     "POET", "FN", "AAOI", "CIEN", "MTSI", "SMTC", "MOD", "NVT",
-    "CLS", "FLEX", "PWR", "GEV", "POWL", "BE", "PSTG", "CAMT"
+    "CLS", "FLEX", "PWR", "GEV", "POWL", "BE", "PSTG", "CAMT",
+    "VST", "CEG", "TLN", "NRG", "NEE", "SMR", "OKLO", "CCJ",
+    "LEU", "UEC", "BWXT", "NNE", "ETN", "HUBB",
+    "SYM", "TER", "ISRG", "ROK", "SERV", "RR", "CCXI"
   ],
   "finalists": 80,
   "minPrice": 2
