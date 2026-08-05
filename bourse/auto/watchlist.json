@@ -5,7 +5,10 @@
     "PLTR", "AVGO", "NFLX", "CRM", "ORCL", "SMCI", "COIN", "MSTR",
     "SHOP", "UBER", "ABNB", "SNOW", "CRWD", "PANW", "LLY", "NVO",
     "JPM", "V", "MA", "COST", "WMT", "XOM",
-    "OPHC", "ETON"
+    "OPHC", "ETON",
+    "SNDK", "MU", "WDC", "MRVL", "VRT", "ARM", "QCOM", "AMAT",
+    "LRCX", "KLAC", "ANET", "TSM", "ASML", "ALAB", "CRDO", "COHR",
+    "LITE", "MPWR", "ONTO", "NBIS"
   ],
   "finalists": 80,
   "minPrice": 2
