@@ -115,7 +115,10 @@ function preScore(closes) {
 /* ───────────── ÉTAPE 2 : analyse profonde ───────────── */
 
 async function yahooChart(symbol) {
-  const j = await get(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1y&interval=1d`);
+  // 5 ANS d'historique (+ événements de split) : indispensable pour voir le
+  // contexte long terme (déclin structurel, reverse splits) que 12 mois cachent.
+  // Les indicateurs (RSI, MACD, MM…) n'utilisent que la fin de série → inchangés.
+  const j = await get(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=5y&interval=1d&events=split`);
   const r = j?.chart?.result?.[0];
   if (!r) throw new Error(j?.chart?.error?.description || "réponse Yahoo vide");
   const q = r.indicators?.quote?.[0] || {};
@@ -128,7 +131,19 @@ async function yahooChart(symbol) {
     }
   }
   if (closes.length < 40) throw new Error(`historique trop court (${closes.length} points)`);
-  return { closes, volumes, name: r.meta?.longName || r.meta?.shortName || symbol };
+
+  // Contexte long terme
+  const high = closes.reduce((m, c) => (c > m ? c : m), 0);
+  const last = closes[closes.length - 1];
+  const distFromHigh = high > 0 ? (last / high - 1) * 100 : 0;   // 0 = au sommet 5 ans ; -80 = -80 %
+  const perfLT = closes[0] > 0 ? (last / closes[0] - 1) * 100 : null;
+  const splits = [];
+  const sp = r.events && r.events.splits;
+  if (sp) for (const k in sp) {
+    const s = sp[k];
+    if (s && s.denominator) splits.push({ date: s.date, ratio: s.numerator / s.denominator, label: `${s.numerator}:${s.denominator}` });
+  }
+  return { closes, volumes, name: r.meta?.longName || r.meta?.shortName || symbol, longTerm: { distFromHigh, perfLT, splits } };
 }
 
 /* Perfs de l'indice S&P 500 (^GSPC) — référence pour la force relative. */
@@ -307,6 +322,22 @@ async function deepAnalyze(symbol, ctx) {
   res.rs = rs ? { excess: Math.round(rs.excess), score: Math.round(rs.score) } : null; // force relative vs S&P 500
   res.trend = trend ? { passed: trend.passed, total: trend.total, pass: trend.pass, score: Math.round(trend.score) } : null;
   res.redFlags = Engine.detectRedFlags(news, res.name); // événements à risque (rachat, procès, dilution…)
+  // ── Drapeaux LONG TERME (l'angle mort corrigé) ──
+  // La machine ne voyait que 12 mois → aveugle aux déclins pluriannuels et aux
+  // regroupements d'actions. On lit désormais 5 ans pour les détecter.
+  const lt = prices.longTerm;
+  if (lt) {
+    const now = Date.now() / 1000;
+    const rev = (lt.splits || []).filter((s) => s.ratio < 0.95 && (now - s.date) < 4.2 * 365 * 86400);
+    if (rev.length) {
+      res.redFlags.push({ type: "Regroupement d'actions (reverse split) — signe de déclin", severity: "hard",
+        evidence: `${rev[0].label} en ${new Date(rev[0].date * 1000).getFullYear()}` });
+    }
+    if (lt.distFromHigh != null && lt.distFromHigh < -70) {
+      res.redFlags.push({ type: `En chute de ${Math.round(-lt.distFromHigh)} % sous son sommet des 5 ans`, severity: "warn", evidence: "rebond récent ≠ retournement confirmé" });
+    }
+    res.longTerm = { distFromHigh: Math.round(lt.distFromHigh), perfLT: lt.perfLT != null ? Math.round(lt.perfLT) : null, reverseSplit: rev.length > 0 };
+  }
   res.analysis = writtenAnalysis(res);       // analyse écrite (pourquoi investir, forces, risques…)
   return res;
 }

@@ -334,6 +334,7 @@
     if (ex.targetUpside != null) adv.push(`potentiel analystes ${ex.targetUpside >= 0 ? "+" : ""}${Math.round(ex.targetUpside)} %`);
     if (ex.shortPercent != null && ex.shortPercent >= 8) adv.push(`short ${Math.round(ex.shortPercent)} %`);
     if (ex.earningsInDays != null && ex.earningsInDays >= 0 && ex.earningsInDays <= 30) adv.push(`résultats dans ${ex.earningsInDays} j`);
+    if (r.longTerm && r.longTerm.distFromHigh != null) adv.push(`${r.longTerm.distFromHigh >= 0 ? "+" : ""}${r.longTerm.distFromHigh} % vs sommet 5 ans`);
     if (adv.length) meta.appendChild(el("div", "meta-line", "📊 " + adv.join(" · ")));
     meta.appendChild(el("div", "meta-line", `Confiance : ${r.confidence} % des critères couverts par des données`));
     if (dataGeneratedAt) {
