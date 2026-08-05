@@ -148,7 +148,16 @@
     };
     // On remplace l'entrée d'historique : le bouton « retour » ramène à la liste
     // des quiz au lieu de relancer la série que l'on vient de quitter.
-    if (location.hash !== '#/session') history.replaceState(null, '', '#/session');
+    // replaceState échoue dans certains contextes embarqués : on retombe alors
+    // sur une navigation ordinaire, qui déclenche hashchange puis render().
+    if (location.hash !== '#/session') {
+      try {
+        history.replaceState(null, '', '#/session');
+      } catch (e) {
+        location.hash = '#/session';
+        return;
+      }
+    }
     render();
   }
 
@@ -888,9 +897,12 @@
 
   const themeBtn = document.getElementById('themeBtn');
   const savedTheme = (() => { try { return localStorage.getItem('afa_theme'); } catch (e) { return null; } })();
-  if (savedTheme) document.documentElement.dataset.theme = savedTheme;
-  else if (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)
-    document.documentElement.dataset.theme = 'dark';
+  // Un thème déjà posé sur <html> par la page hôte est prioritaire : on ne l'écrase pas.
+  if (!document.documentElement.dataset.theme) {
+    if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+    else if (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)
+      document.documentElement.dataset.theme = 'dark';
+  }
 
   themeBtn.onclick = () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';

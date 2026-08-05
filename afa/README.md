@@ -86,3 +86,17 @@ Support pédagogique **non officiel**, sans lien avec l'AFA/VBV. Les valeurs chi
 (rentes AVS, seuils LPP, plafonds LAA, montants du pilier 3a) sont celles de **2025** et
 sont adaptées périodiquement : vérifie-les pour l'année de ton examen. En cas de doute,
 seuls les textes légaux publiés (LCA, LSA, CO, CC…) font foi.
+
+## 📦 Version en un seul fichier
+
+Pour héberger le site là où l'on ne peut déposer qu'un fichier (ou pour l'envoyer
+par courriel), regroupe tout — style et scripts compris — en une page autonome :
+
+```bash
+node build-single-file.js            # produit afa-site-complet.html (~430 Ko)
+node build-single-file.js /tmp/x.html  # ou vers le chemin de ton choix
+```
+
+Le fichier obtenu s'ouvre directement dans un navigateur, sans serveur et sans
+connexion internet. Le script reprend l'ordre de chargement déclaré dans
+`index.html` : ajoute-y tes nouveaux fichiers de données et ils suivront.
