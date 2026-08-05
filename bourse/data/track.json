@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-05T22:39:59.082Z",
+ "generatedAt": "2026-08-05T23:18:25.595Z",
  "method": "Rendement réel de chaque top-pick depuis sa date de recommandation (clôture Yahoo), comparé au S&P 500 sur la même période. Point d'entrée = clôture du jour de reco.",
  "horizon": "2026-07-04 → aujourd'hui",
  "all": {
@@ -1433,22 +1433,22 @@
   },
   {
    "date": "2026-08-05",
-   "symbol": "BKNG",
+   "symbol": "VCTR",
    "rank": 4,
    "score": 81,
-   "entry": 207.02,
-   "now": 207.02,
+   "entry": 99.97,
+   "now": 99.97,
    "ret": 0,
    "mktRet": 0,
    "alpha": 0
   },
   {
    "date": "2026-08-05",
-   "symbol": "VCTR",
+   "symbol": "BKNG",
    "rank": 5,
    "score": 81,
-   "entry": 99.97,
-   "now": 99.97,
+   "entry": 207.02,
+   "now": 207.02,
    "ret": 0,
    "mktRet": 0,
    "alpha": 0
