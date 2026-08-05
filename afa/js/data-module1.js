@@ -188,6 +188,17 @@
           </ul>`
         },
         {
+          h: "Les réformes récentes à connaître (2024–2026)",
+          html: `<p>Le programme d'examen suit l'actualité législative. Quatre dossiers dominent la période&nbsp;:</p>
+          <ul>
+            <li><b>13<sup>e</sup> rente AVS</b>&nbsp;— l'initiative acceptée en votation est mise en œuvre&nbsp;: un <b>supplément annuel</b> correspondant à <b>un douzième de la rente de vieillesse annuelle</b> est versé avec la rente de <b>décembre</b>, pour la <b>première fois en décembre 2026</b>. Le versement est <b>automatique</b> pour toute personne ayant droit à une rente de <b>vieillesse</b> en décembre&nbsp;; il est effectué par les caisses de compensation.</li>
+            <li><b>AVS 21</b>&nbsp;— acceptée le 25 septembre 2022, en vigueur depuis le <b>1<sup>er</sup> janvier 2024</b>. L'<b>âge de référence des femmes</b> passe de 64 à 65&nbsp;ans par étapes de trois mois dès le 1<sup>er</sup> janvier 2025. En <b>2026</b>, il s'établit à <b>64&nbsp;ans et 6&nbsp;mois</b> (femmes nées en 1962). La réforme a aussi flexibilisé la retraite entre 63 et 70&nbsp;ans.</li>
+            <li><b>Réforme LPP&nbsp;: rejetée</b>&nbsp;— le <b>22 septembre 2024</b>, le peuple a refusé la réforme par <b>67,1&nbsp;%</b> de non. Elle prévoyait notamment d'abaisser le taux de conversion minimal de 6,8&nbsp;% à 6&nbsp;%. Conséquence directe&nbsp;: le <b>taux de conversion minimal reste à 6,8&nbsp;%</b> et la déduction de coordination n'est pas modifiée.</li>
+            <li><b>EFAS</b> (financement uniforme des prestations)&nbsp;— modification de la <b>LAMal</b> acceptée le <b>24 novembre 2024</b> par <b>53,3&nbsp;%</b> des voix. Elle unifie le financement des prestations ambulatoires et stationnaires entre cantons et assureurs&nbsp;; sa mise en œuvre est échelonnée sur les années suivantes.</li>
+          </ul>
+          <p class="tip">Piège classique&nbsp;: on confond volontiers «&nbsp;réforme acceptée&nbsp;» et «&nbsp;réforme en vigueur&nbsp;». AVS&nbsp;21 est <b>en vigueur</b>, EFAS est <b>acceptée mais déployée progressivement</b>, la réforme LPP a été <b>refusée</b>.</p>`
+        },
+        {
           h: "Les autres assurances sociales",
           html: `<ul>
             <li><b>LAMal</b>&nbsp;: obligation de s'assurer dans les <b>3&nbsp;mois</b> suivant la prise de domicile ou la naissance (effet rétroactif). Franchise ordinaire adulte CHF 300.– à 2&nbsp;500.–, quote-part 10&nbsp;% (max. CHF 700.–/an adulte, 350.– enfant).</li>
@@ -204,7 +215,11 @@
         "AVS/AI/APG : 10,6 % du salaire, sans plafond, moitié employeur.",
         "Rente AVS 2026 : min. 1 260.–, max. 2 520.–, couple plafonné à 3 780.–.",
         "LPP : dès 17 ans risques, dès 25 ans épargne ; taux de conversion minimal 6,8 %.",
-        "LAA : ATNP dès 8 h/semaine, IJ 80 % dès le 3e jour, gain max 148 200.–."
+        "LAA : ATNP dès 8 h/semaine, IJ 80 % dès le 3e jour, gain max 148 200.–.",
+        "13e rente AVS : 1/12 de la rente annuelle, versée avec celle de décembre, dès décembre 2026.",
+        "AVS 21 en vigueur depuis 2024 ; âge de référence des femmes à 64 ans et 6 mois en 2026.",
+        "Réforme LPP refusée le 22.09.2024 (67,1 % de non) : le taux de conversion reste à 6,8 %.",
+        "EFAS accepté le 24.11.2024 (53,3 %) : financement uniforme des prestations LAMal."
       ]
     },
 

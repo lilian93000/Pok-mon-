@@ -8,7 +8,7 @@ assurance AFA** (Association pour la formation professionnelle en assurance / VB
 | **1** | Industrie de l'assurance | Risque et risk management, principes techniques et prime, trois piliers, branches, marché suisse, distribution et intermédiaires, réassurance, surveillance et solvabilité |
 | **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA |
 
-**16 chapitres de cours, 677 questions commentées (dont 64 de niveau avancé), 67 fiches de glossaire.**
+**16 chapitres de cours, 706 questions commentées (dont 64 de niveau avancé et 29 adossées à une source officielle citée), 67 fiches de glossaire.**
 
 Soit environ 35 à 40 questions par chapitre : de quoi refaire plusieurs séries sur un
 même sujet sans retomber sur les mêmes questions.
@@ -34,10 +34,12 @@ python3 -m http.server 8000
 - **Longueur de série réglable** (10, 20, 40 ou tout le lot). La sélection n'est pas
   purement aléatoire : les questions **ratées** sortent en premier, puis celles **jamais
   vues**, et enfin celles déjà acquises.
-- **Filtre de niveau** — « tous niveaux » ou « difficiles seulement ». Les questions
+- **Filtre de niveau** — « tous niveaux », « difficiles » ou « avec source officielle ». Les questions
   avancées (marquées `lvl: 'hard'`, signalées par un badge pendant le quiz) portent sur
   des calculs à plusieurs étapes, des combinaisons de délais et des pièges de
-  qualification juridique.
+  qualification juridique. Les questions **sourcées** (`lvl: 'src'`) affichent sous la
+  correction un lien vers la publication officielle qui les fonde — OFAS, OFSP, FINMA,
+  Fedlex, AFA/VBV.
 - **Examen blanc** — 40 questions tirées au hasard dans les deux modules, 45 minutes,
   seuil de réussite à 70 %. La correction n'apparaît qu'à la fin, comme au vrai examen.
 - **Réviser mes erreurs** — rejoue uniquement les questions ratées au dernier passage.
@@ -62,6 +64,7 @@ rien n'est envoyé sur un serveur.
 | `js/data-m1-extra1…4.js` | Banque de questions complémentaire du module 1 (2 chapitres par fichier) |
 | `js/data-m2-extra1…5.js` | Banque de questions complémentaire du module 2 |
 | `js/data-m1-hard.js`, `js/data-m2-hard.js` | Questions de niveau avancé (`lvl: 'hard'`) |
+| `js/data-sources.js` | Questions adossées à une source officielle (`lvl: 'src'`, champ `src`) |
 | `js/data-glossaire.js` | Notions du glossaire / flashcards |
 
 Les fichiers `*-extra*.js` ne contiennent que des questions : ils viennent s'ajouter au
@@ -101,8 +104,14 @@ plus que la formulation colle exactement à celle de l'examen.
 
 Ont été **vérifiés contre des sources officielles** : les délais et articles clés de la
 LCA révisée (art. 2a, 35a, 42, 46, ainsi que l'abrogation de l'ancien art. 12 et sa
-« fiction d'approbation ») et les montants 2026 des assurances sociales auprès de
-l'OFAS (rentes AVS, seuils LPP, pilier 3a, gain assuré LAA).
+« fiction d'approbation ») ; les montants 2026 des assurances sociales auprès de l'OFAS
+(rentes AVS, seuils LPP, pilier 3a, gain assuré LAA) ; et l'actualité 2024–2026 —
+13e rente AVS, calendrier AVS 21, rejet de la réforme LPP, acceptation d'EFAS, prime
+moyenne LAMal 2026, rapport de la FINMA sur le marché de l'assurance 2024.
+
+Les **29 questions marquées « source officielle »** citent chacune la publication qui
+les fonde, avec un lien cliquable dans la correction. Les faits ont été contrôlés en
+août 2026 ; les publications elles-mêmes peuvent évoluer.
 
 N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 677
 questions. Signale toute divergence — en cas de doute, seuls les textes légaux publiés

@@ -330,3 +330,6 @@ input:focus, select:focus, .btn:focus-visible, .choice:focus-visible, .chip:focu
   body { background: #fff; }
   .card { box-shadow: none; border: 0; }
 }
+
+.srcline { margin: .5rem 0 0 !important; font-size: .82rem; color: var(--ink-3); }
+.srcline a { color: var(--blue); }

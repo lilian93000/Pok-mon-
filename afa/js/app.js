@@ -18,9 +18,9 @@
   let quizLen = 20;
 
   /* Niveau : 'tous' ou 'hard' (questions marquées lvl:'hard'). */
-  const LEVELS = [['tous', 'Tous niveaux'], ['hard', 'Difficiles seulement']];
+  const LEVELS = [['tous', 'Tous niveaux'], ['hard', 'Difficiles'], ['src', 'Avec source officielle']];
   let quizLvl = 'tous';
-  const byLevel = (list) => quizLvl === 'hard' ? list.filter(q => q.lvl === 'hard') : list;
+  const byLevel = (list) => quizLvl === 'tous' ? list : list.filter(q => q.lvl === quizLvl);
 
   /* =========================================================
      Utilitaires
@@ -45,6 +45,13 @@
   const chapterById = (mod, cid) => mod && mod.chapters.find(c => c.id === cid);
   const allQuestions = () => MODULES.flatMap(m => m.questions.map(q => ({ ...q, mod: m.id })));
   const letters = 'ABCDE';
+
+  /* Ligne « source » affichée sous la correction, pour les questions
+     dont le fait a été contrôlé contre une publication officielle. */
+  function srcLine(q) {
+    if (!q.src) return '';
+    return `<p class="srcline">Source&nbsp;: <a href="${esc(q.src.u)}" target="_blank" rel="noopener noreferrer">${esc(q.src.t)}</a></p>`;
+  }
 
   function mmss(sec) {
     const m = Math.floor(sec / 60), s = sec % 60;
@@ -382,7 +389,7 @@
         <div class="row" style="justify-content:space-between;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line)">
           <div>
             <b>Niveau</b>
-            <div class="muted small">${allQuestions().filter(q => q.lvl === 'hard').length} questions difficiles : calculs à plusieurs étapes, cas pratiques et pièges.</div>
+            <div class="muted small">${allQuestions().filter(q => q.lvl === 'hard').length} questions difficiles (calculs, cas pratiques, pièges) et ${allQuestions().filter(q => q.lvl === 'src').length} questions adossées à une source officielle citée.</div>
           </div>
           <div class="chips" id="lvlChips">
             ${LEVELS.map(([v, lab]) => `<button class="chip ${v === quizLvl ? 'on' : ''}" data-lvl="${v}">${lab}</button>`).join('')}
@@ -486,6 +493,7 @@
         <div class="feedback ${ok ? 'good' : 'bad'}">
           <div class="verdict">${ok ? '✅ Correct' : '❌ Incorrect'} <span class="muted small">— réponse${q.answer.length > 1 ? 's' : ''} : ${good}</span></div>
           <p>${esc(q.explain)}</p>
+          ${srcLine(q)}
         </div>`;
     }
 
@@ -505,6 +513,7 @@
 
       <div class="card">
         ${q.lvl === 'hard' ? '<span class="tag amber" style="margin-bottom:.5rem;display:inline-block">Difficile</span>' : ''}
+        ${q.lvl === 'src' ? '<span class="tag blue" style="margin-bottom:.5rem;display:inline-block">Source officielle</span>' : ''}
         <div class="question">${esc(q.q)}</div>
         ${isMulti ? '<p class="small muted" style="margin-top:-.6rem">Plusieurs réponses possibles.</p>' : ''}
         <div class="choices" id="choices">${choices}</div>
@@ -563,6 +572,7 @@
               · Correct : <b>${r.q.answer.map(x => letters[x]).join(', ')}</b>
               <br>${r.q.answer.map(x => '<b>' + letters[x] + '.</b> ' + esc(r.q.choices[x])).join('<br>')}
               <br><span class="muted">${esc(r.q.explain)}</span>
+              ${srcLine(r.q)}
             </div>
           </div>`).join('')}
       </div>
