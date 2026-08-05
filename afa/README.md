@@ -1,14 +1,18 @@
 # AFA Suisse — entraînement 🛡️
 
-Site d'entraînement aux **deux premiers modules** de la formation d'**intermédiaire en
-assurance AFA** (Association pour la formation professionnelle en assurance / VBV) :
+Site d'entraînement à la formation d'**intermédiaire en assurance AFA** (Association
+pour la formation professionnelle en assurance / VBV) : les deux modules communs, plus
+un module entièrement consacré au **profil Non-Vie**.
 
 | Module | Titre | Contenu |
 |--------|-------|---------|
 | **1** | Industrie de l'assurance | Risque et risk management, principes techniques et prime, trois piliers, branches, marché suisse, distribution et intermédiaires, réassurance, surveillance et solvabilité |
 | **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA |
+| **3** | Assurances non-vie *(profil Non-Vie)* | Ménage, bâtiment et dommages naturels, véhicules à moteur, RC privée, RC d'entreprise, assurances de choses des entreprises et perte d'exploitation, protection juridique / cyber / cautionnement, souscription et traitement des sinistres |
 
-**16 chapitres de cours, 706 questions commentées (dont 64 de niveau avancé et 29 adossées à une source officielle citée), 67 fiches de glossaire.**
+**24 chapitres de cours, 911 questions commentées (dont 77 de niveau avancé et 33 adossées à une source officielle citée), 67 fiches de glossaire.**
+
+Le module 3 couvre le **profil Non-Vie** à lui seul, avec **205 questions**.
 
 Soit environ 35 à 40 questions par chapitre : de quoi refaire plusieurs séries sur un
 même sujet sans retomber sur les mêmes questions.
@@ -40,8 +44,9 @@ python3 -m http.server 8000
   qualification juridique. Les questions **sourcées** (`lvl: 'src'`) affichent sous la
   correction un lien vers la publication officielle qui les fonde — OFAS, OFSP, FINMA,
   Fedlex, AFA/VBV.
-- **Examen blanc** — 40 questions tirées au hasard dans les deux modules, 45 minutes,
-  seuil de réussite à 70 %. La correction n'apparaît qu'à la fin, comme au vrai examen.
+- **Examen blanc** — 40 questions, 45 minutes, seuil de réussite à 70 %. La correction
+  n'apparaît qu'à la fin, comme au vrai examen. Le **périmètre est réglable** : tous les
+  modules, ou un seul — pratique pour préparer le profil Non-Vie.
 - **Réviser mes erreurs** — rejoue uniquement les questions ratées au dernier passage.
 - **Flashcards & glossaire** — cartes recto/verso filtrables par thème, avec recherche.
 - **Progression** — taux de réussite par chapitre, historique des examens blancs,
@@ -61,6 +66,8 @@ rien n'est envoyé sur un serveur.
 | `js/app.js` | Routeur, moteur de quiz, examen, flashcards, statistiques |
 | `js/data-module1.js` | Cours et premières questions — Industrie de l'assurance |
 | `js/data-module2.js` | Cours et premières questions — Droit de l'assurance |
+| `js/data-module3.js` | Cours et premières questions — Assurances non-vie |
+| `js/data-m3-extra1…3.js` | Banque de questions complémentaire du module 3 |
 | `js/data-m1-extra1…4.js` | Banque de questions complémentaire du module 1 (2 chapitres par fichier) |
 | `js/data-m2-extra1…5.js` | Banque de questions complémentaire du module 2 |
 | `js/data-m1-hard.js`, `js/data-m2-hard.js` | Questions de niveau avancé (`lvl: 'hard'`) |
@@ -109,13 +116,18 @@ LCA révisée (art. 2a, 35a, 42, 46, ainsi que l'abrogation de l'ancien art. 12 
 13e rente AVS, calendrier AVS 21, rejet de la réforme LPP, acceptation d'EFAS, prime
 moyenne LAMal 2026, rapport de la FINMA sur le marché de l'assurance 2024.
 
-Les **29 questions marquées « source officielle »** citent chacune la publication qui
+Les **33 questions marquées « source officielle »** citent chacune la publication qui
 les fonde, avec un lien cliquable dans la correction. Les faits ont été contrôlés en
 août 2026 ; les publications elles-mêmes peuvent évoluer.
 
-N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 677
+N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 911
 questions. Signale toute divergence — en cas de doute, seuls les textes légaux publiés
 (LCA, LSA, CO, CC…) font foi.
+
+Le profil **Non-Vie** habilite à conclure exclusivement dans le domaine non-vie, à
+l'exclusion de l'assurance-maladie complémentaire, qui relève d'un profil distinct.
+L'épreuve écrite en ligne consacre 60 minutes à la partie non-vie, avec un traitement
+de cas guidé. Ce site n'entraîne **que l'écrit** : la partie orale n'est pas simulée.
 
 Support pédagogique **non officiel**, sans lien avec l'AFA/VBV. Les valeurs chiffrées
 (rentes AVS, seuils LPP, plafonds LAA, montants du pilier 3a) sont celles de **2026** (vérifiées auprès de l'OFAS) et
@@ -128,7 +140,7 @@ Pour héberger le site là où l'on ne peut déposer qu'un fichier (ou pour l'en
 par courriel), regroupe tout — style et scripts compris — en une page autonome :
 
 ```bash
-node build-single-file.js            # produit afa-site-complet.html (~430 Ko)
+node build-single-file.js            # produit afa-site-complet.html (~630 Ko)
 node build-single-file.js /tmp/x.html  # ou vers le chemin de ton choix
 ```
 

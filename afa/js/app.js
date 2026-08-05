@@ -22,6 +22,9 @@
   let quizLvl = 'tous';
   const byLevel = (list) => quizLvl === 'tous' ? list : list.filter(q => q.lvl === quizLvl);
 
+  /* Périmètre de l'examen blanc : tous les modules, ou un seul (profil). */
+  let examScope = 'all';
+
   /* =========================================================
      Utilitaires
      ========================================================= */
@@ -441,7 +444,12 @@
           <li>Les questions sans réponse à l'échéance du temps comptent comme fausses.</li>
           <li>Certaines questions attendent <b>plusieurs</b> réponses : elles sont signalées.</li>
         </ul>
-        <button class="btn primary" id="startExam">Démarrer l'examen</button>
+        <div class="row" style="margin:1.2rem 0 .2rem"><b>Périmètre</b></div>
+        <div class="chips" id="scopeChips">
+          <button class="chip ${examScope === 'all' ? 'on' : ''}" data-scope="all">Tous les modules</button>
+          ${MODULES.map(m => `<button class="chip ${examScope === m.id ? 'on' : ''}" data-scope="${m.id}">${esc(m.title)}</button>`).join('')}
+        </div>
+        <button class="btn primary" id="startExam" style="margin-top:1.2rem">Démarrer l'examen</button>
       </div>
 
       ${hist.length ? `
@@ -683,13 +691,24 @@
     else if (route[0] === 'session' && session && session.done) wireResults();
     else if (route[0] === 'examen') {
       const b = document.getElementById('startExam');
-      if (b) b.onclick = () => startSession({
-        title: 'Examen blanc',
-        questions: shuffle(allQuestions()).slice(0, EXAM.count),
-        isExam: true,
-        minutes: EXAM.minutes,
-        backHash: '#/examen'
+      document.querySelectorAll('#scopeChips .chip').forEach(ch => {
+        ch.onclick = () => {
+          examScope = ch.dataset.scope;
+          try { localStorage.setItem('afa_scope', examScope); } catch (e) {}
+          document.querySelectorAll('#scopeChips .chip').forEach(x => x.classList.toggle('on', x === ch));
+        };
       });
+      if (b) b.onclick = () => {
+        const mod = MODULES.find(m => m.id === examScope);
+        const pool = mod ? mod.questions.map(q => ({ ...q, mod: mod.id })) : allQuestions();
+        startSession({
+          title: mod ? 'Examen blanc · ' + mod.title : 'Examen blanc',
+          questions: shuffle(pool).slice(0, EXAM.count),
+          isExam: true,
+          minutes: EXAM.minutes,
+          backHash: '#/examen'
+        });
+      };
     }
     else if (route[0] === 'quiz') {
       document.querySelectorAll('#lenChips .chip').forEach(ch => {
@@ -936,6 +955,8 @@
     if (savedLen !== null && LENGTHS.includes(+savedLen)) quizLen = +savedLen;
     const savedLvl = localStorage.getItem('afa_lvl');
     if (savedLvl && LEVELS.some(l => l[0] === savedLvl)) quizLvl = savedLvl;
+    const savedScope = localStorage.getItem('afa_scope');
+    if (savedScope && (savedScope === 'all' || MODULES.some(m => m.id === savedScope))) examScope = savedScope;
   } catch (e) { /* stockage indisponible */ }
 
   const themeBtn = document.getElementById('themeBtn');

@@ -56,7 +56,7 @@ ou consulte [`bourse/README.md`](bourse/README.md).
 ## ◆ Bonus : Entraînement AFA Suisse
 
 Le dossier [`afa/`](afa/) contient un site de révision pour les **deux premiers modules
-de l'examen d'intermédiaire en assurance AFA** (industrie de l'assurance et droit de
-l'assurance) : fiches de cours, 706 questions commentées, dont 29 avec source officielle citée, examen blanc chronométré,
+de l'examen d'intermédiaire en assurance AFA**, plus un module dédié au **profil
+Non-Vie** : fiches de cours, 911 questions commentées, dont 33 avec source officielle citée, examen blanc chronométré,
 flashcards et suivi de progression. Ouvre `afa/index.html` ou consulte
 [`afa/README.md`](afa/README.md).
