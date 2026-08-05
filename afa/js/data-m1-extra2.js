@@ -59,19 +59,19 @@
       explain: "Lors du divorce ou de la retraite des deux conjoints, les revenus des années de mariage sont additionnés puis répartis par moitié sur chaque compte individuel." },
 
     { id: 'm1c3x09', chap: 'c3', type: 'single',
-      q: "Quel est le seuil d'entrée LPP en 2025 ?",
+      q: "Quel est le seuil d'entrée LPP en 2026 ?",
       choices: ["CHF 21 510.–", "CHF 22 680.–", "CHF 26 460.–", "CHF 88 200.–"],
       answer: [1],
       explain: "En dessous de CHF 22 680.– de salaire annuel auprès d'un employeur, le salarié n'est pas soumis à la LPP obligatoire. Ce seuil est adapté périodiquement." },
 
     { id: 'm1c3x10', chap: 'c3', type: 'single',
-      q: "Un salarié gagne CHF 80 000.–. Quel est son salaire coordonné LPP en 2025 ?",
+      q: "Un salarié gagne CHF 80 000.–. Quel est son salaire coordonné LPP en 2026 ?",
       choices: ["CHF 80 000.–", "CHF 53 540.–", "CHF 64 260.–", "CHF 26 460.–"],
       answer: [1],
       explain: "80 000 − 26 460 (déduction de coordination) = CHF 53 540.–. La déduction évite d'assurer deux fois la part de salaire déjà couverte par l'AVS." },
 
     { id: 'm1c3x11', chap: 'c3', type: 'single',
-      q: "Quel est le salaire annuel maximal assurable dans la LPP obligatoire en 2025 ?",
+      q: "Quel est le salaire annuel maximal assurable dans la LPP obligatoire en 2026 ?",
       choices: ["CHF 64 260.–", "CHF 88 200.–", "CHF 90 720.–", "CHF 148 200.–"],
       answer: [2],
       explain: "Le salaire LPP maximal est de CHF 90 720.– ; au-delà, la couverture relève de la prévoyance surobligatoire, librement organisée par la caisse." },
@@ -101,7 +101,7 @@
       explain: "Les cas de retrait sont limitativement énumérés par la loi ; s'y ajoutent l'invalidité et le versement dans les cinq ans précédant l'âge de référence." },
 
     { id: 'm1c3x16', chap: 'c3', type: 'single',
-      q: "Quel est le montant maximal déductible au pilier 3a en 2025 pour un salarié affilié à une caisse de pension ?",
+      q: "Quel est le montant maximal déductible au pilier 3a en 2026 pour un salarié affilié à une caisse de pension ?",
       choices: ["CHF 6 883.–", "CHF 7 056.–", "CHF 7 258.–", "CHF 36 288.–"],
       answer: [2],
       explain: "CHF 7 258.– pour les personnes affiliées à une caisse de pension. Sans 2e pilier, la limite est de 20 % du revenu, au maximum CHF 36 288.–." },

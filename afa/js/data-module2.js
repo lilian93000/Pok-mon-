@@ -130,7 +130,7 @@
             <li>La <b>proposition</b> émane en règle générale du client&nbsp;: c'est l'offre au sens du CO. Le proposant reste lié <b>14&nbsp;jours</b>, ou <b>4&nbsp;semaines</b> si un examen médical est nécessaire.</li>
             <li>Le contrat est conclu par l'<b>acceptation</b> de l'assureur, en général par l'envoi de la <b>police</b>.</li>
             <li>La <b>police</b> n'est <b>pas une condition de validité</b>&nbsp;: c'est un moyen de preuve du contrat.</li>
-            <li>Si la police diverge des conventions, le preneur doit en demander la rectification dans les <b>4&nbsp;semaines</b> dès la réception, faute de quoi la police est réputée acceptée (art. 12 LCA).</li>
+            <li>Si la police <b>diverge</b> de ce qui a été convenu, c'est l'accord réel des parties qui prime. La révision de 2022 a <b>abrogé l'ancien art. 12 LCA</b> et sa «&nbsp;<b>fiction d'approbation</b>&nbsp;»&nbsp;: le preneur qui ne réagit pas dans les quatre semaines n'est <b>plus</b> réputé accepter le contenu de la police. Il conserve le droit d'invoquer la divergence au-delà de ce délai.</li>
             <li>Une <b>couverture provisoire</b> peut être accordée avant la décision définitive.</li>
           </ul>`
         },
@@ -149,7 +149,7 @@
       keypoints: [
         "LCA révisée en vigueur depuis le 1.1.2022 ; le CO s'applique à titre subsidiaire.",
         "Proposition : le client reste lié 14 jours (4 semaines si examen médical).",
-        "La police prouve le contrat, elle n'en est pas une condition de validité ; rectification dans les 4 semaines.",
+        "La police prouve le contrat, elle n'en est pas une condition de validité ; la fiction d'approbation de l'ancien art. 12 LCA a été abrogée en 2022.",
         "Révocation : 14 jours, sauf couverture provisoire et contrats de moins d'un mois.",
         "Réticence : résiliation dans les 4 semaines dès la connaissance ; refus de prestation seulement s'il y a causalité."
       ]
@@ -510,7 +510,7 @@
       q: "Quelle est la fonction juridique de la police d'assurance ?",
       choices: ["Elle est une condition de validité du contrat", "Elle constitue un moyen de preuve du contrat", "Elle remplace les conditions générales", "Elle a valeur de papier-valeur négociable"],
       answer: [1],
-      explain: "Le contrat est valable dès l'accord des volontés ; la police ne fait que le constater. Si elle diverge des accords, le preneur doit en demander la rectification dans les 4 semaines." },
+      explain: "Le contrat est valable dès l'accord des volontés ; la police ne fait que le constater. Si elle diverge de ce qui a été convenu, c'est l'accord réel qui prime : depuis 2022, le silence du preneur ne vaut plus acceptation de la police." },
 
     { id: 'm2c3q6', chap: 'c3', type: 'single',
       q: "Quels faits le proposant doit-il déclarer lors de la conclusion ?",

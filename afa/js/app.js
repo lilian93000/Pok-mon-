@@ -17,6 +17,11 @@
   const LENGTHS = [10, 20, 40, 0]; // 0 = toutes les questions
   let quizLen = 20;
 
+  /* Niveau : 'tous' ou 'hard' (questions marquées lvl:'hard'). */
+  const LEVELS = [['tous', 'Tous niveaux'], ['hard', 'Difficiles seulement']];
+  let quizLvl = 'tous';
+  const byLevel = (list) => quizLvl === 'hard' ? list.filter(q => q.lvl === 'hard') : list;
+
   /* =========================================================
      Utilitaires
      ========================================================= */
@@ -374,6 +379,15 @@
             ${LENGTHS.map(n => `<button class="chip ${n === quizLen ? 'on' : ''}" data-len="${n}">${n || 'Tout'}</button>`).join('')}
           </div>
         </div>
+        <div class="row" style="justify-content:space-between;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line)">
+          <div>
+            <b>Niveau</b>
+            <div class="muted small">${allQuestions().filter(q => q.lvl === 'hard').length} questions difficiles : calculs à plusieurs étapes, cas pratiques et pièges.</div>
+          </div>
+          <div class="chips" id="lvlChips">
+            ${LEVELS.map(([v, lab]) => `<button class="chip ${v === quizLvl ? 'on' : ''}" data-lvl="${v}">${lab}</button>`).join('')}
+          </div>
+        </div>
       </div>
 
       ${weak.length ? `
@@ -387,11 +401,11 @@
       ${MODULES.map(m => `
         <h2 style="margin-top:1.8rem">${m.icon} ${esc(m.title)}</h2>
         <div class="row" style="margin-bottom:.8rem">
-          <a class="btn primary sm" href="#/quiz/${m.id}">Tout le module (${m.questions.length} questions)</a>
+          <a class="btn primary sm" href="#/quiz/${m.id}">Tout le module (${byLevel(m.questions).length} questions)</a>
         </div>
         <div class="chaplist">
           ${m.chapters.map((c, i) => {
-            const qs = m.questions.filter(q => q.chap === c.id);
+            const qs = byLevel(m.questions.filter(q => q.chap === c.id));
             const done = qs.filter(q => Store.stat(q.id).last === true).length;
             return `
             <a class="chapitem" href="#/quiz/${m.id}/${c.id}">
@@ -490,6 +504,7 @@
       <div class="progress-dots">${dots}</div>
 
       <div class="card">
+        ${q.lvl === 'hard' ? '<span class="tag amber" style="margin-bottom:.5rem;display:inline-block">Difficile</span>' : ''}
         <div class="question">${esc(q.q)}</div>
         ${isMulti ? '<p class="small muted" style="margin-top:-.6rem">Plusieurs réponses possibles.</p>' : ''}
         <div class="choices" id="choices">${choices}</div>
@@ -674,6 +689,13 @@
           document.querySelectorAll('#lenChips .chip').forEach(x => x.classList.toggle('on', x === ch));
         };
       });
+      document.querySelectorAll('#lvlChips .chip').forEach(ch => {
+        ch.onclick = () => {
+          quizLvl = ch.dataset.lvl;
+          try { localStorage.setItem('afa_lvl', quizLvl); } catch (e) {}
+          render();   // les effectifs par chapitre changent avec le niveau
+        };
+      });
     }
     else if (route[0] === 'flash') wireFlash();
     else if (route[0] === 'stats') {
@@ -844,12 +866,15 @@
     if (route[2]) {
       const c = chapterById(m, route[2]);
       if (!c) return false;
-      const qs = m.questions.filter(q => q.chap === c.id).map(q => ({ ...q, mod: m.id }));
+      const qs = byLevel(m.questions.filter(q => q.chap === c.id)).map(q => ({ ...q, mod: m.id }));
+      if (!qs.length) { go('#/quiz'); return true; }
       startSession({ title: m.code + ' · ' + c.title, questions: pickQuestions(qs, quizLen), backHash: '#/quiz' });
     } else {
+      const qs = byLevel(m.questions).map(q => ({ ...q, mod: m.id }));
+      if (!qs.length) { go('#/quiz'); return true; }
       startSession({
         title: m.code + ' · ' + m.title,
-        questions: pickQuestions(m.questions.map(q => ({ ...q, mod: m.id })), quizLen),
+        questions: pickQuestions(qs, quizLen),
         backHash: '#/quiz'
       });
     }
@@ -899,6 +924,8 @@
   try {
     const savedLen = localStorage.getItem('afa_len');
     if (savedLen !== null && LENGTHS.includes(+savedLen)) quizLen = +savedLen;
+    const savedLvl = localStorage.getItem('afa_lvl');
+    if (savedLvl && LEVELS.some(l => l[0] === savedLvl)) quizLvl = savedLvl;
   } catch (e) { /* stockage indisponible */ }
 
   const themeBtn = document.getElementById('themeBtn');

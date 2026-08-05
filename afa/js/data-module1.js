@@ -162,7 +162,7 @@
           html: `<p>Obligatoire pour <b>toute personne domiciliée ou exerçant une activité lucrative en Suisse</b>. Cotisation dès le 1<sup>er</sup> janvier suivant les 17&nbsp;ans pour les salariés, dès 20&nbsp;ans pour les personnes sans activité lucrative.</p>
           <ul>
             <li>Cotisation AVS/AI/APG&nbsp;: <b>10,6&nbsp;%</b> du salaire, partagée à parts égales employeur/employé (5,3&nbsp;% chacun). Sans plafond de salaire.</li>
-            <li>Rente de vieillesse (valeurs&nbsp;2025)&nbsp;: <b>minimale CHF 1&nbsp;260.–</b>, <b>maximale CHF 2&nbsp;520.–</b> par mois. Plafond pour un couple&nbsp;: <b>150&nbsp;%</b> de la rente maximale, soit CHF 3&nbsp;780.–.</li>
+            <li>Rente de vieillesse (valeurs&nbsp;2026)&nbsp;: <b>minimale CHF 1&nbsp;260.–</b>, <b>maximale CHF 2&nbsp;520.–</b> par mois. Plafond pour un couple&nbsp;: <b>150&nbsp;%</b> de la rente maximale, soit CHF 3&nbsp;780.–.</li>
             <li>La rente complète suppose une <b>durée de cotisation complète</b>&nbsp;; chaque année manquante réduit la rente d'env. 1/44<sup>e</sup>.</li>
             <li>Bonifications pour <b>tâches éducatives</b> et pour <b>tâches d'assistance</b>&nbsp;; <b>splitting</b> des revenus entre conjoints.</li>
             <li>Les <b>prestations complémentaires (PC)</b> interviennent lorsque la rente ne couvre pas le minimum vital.</li>
@@ -171,7 +171,7 @@
         {
           h: "2e pilier : LPP",
           html: `<p>Assujettissement obligatoire du salarié dès qu'il touche plus que le <b>seuil d'entrée</b> auprès d'un employeur et qu'il est déjà assuré à l'AVS&nbsp;: dès 17&nbsp;ans pour les <b>risques décès et invalidité</b>, dès 24&nbsp;ans (25&nbsp;ans révolus) pour l'<b>épargne vieillesse</b>.</p>
-          <p>Valeurs de référence&nbsp;2025&nbsp;:</p>
+          <p>Valeurs de référence&nbsp;2026&nbsp;:</p>
           <ul>
             <li>Seuil d'entrée&nbsp;: <b>CHF 22&nbsp;680.–</b></li>
             <li>Déduction de coordination&nbsp;: <b>CHF 26&nbsp;460.–</b></li>
@@ -183,7 +183,7 @@
         {
           h: "3e pilier",
           html: `<ul>
-            <li><b>Pilier 3a (lié)</b>&nbsp;: réservé aux personnes exerçant une activité lucrative, fiscalement déductible. Maximum&nbsp;2025&nbsp;: <b>CHF 7&nbsp;258.–</b> avec caisse de pension, <b>20&nbsp;% du revenu, au maximum CHF 36&nbsp;288.–</b> sans caisse de pension. Retrait anticipé seulement dans des cas légaux (logement, départ à l'étranger, indépendance, invalidité, rachat LPP), au plus tôt 5&nbsp;ans avant l'âge de référence.</li>
+            <li><b>Pilier 3a (lié)</b>&nbsp;: réservé aux personnes exerçant une activité lucrative, fiscalement déductible. Maximum&nbsp;2026&nbsp;: <b>CHF 7&nbsp;258.–</b> avec caisse de pension, <b>20&nbsp;% du revenu, au maximum CHF 36&nbsp;288.–</b> sans caisse de pension. Retrait anticipé seulement dans des cas légaux (logement, départ à l'étranger, indépendance, invalidité, rachat LPP), au plus tôt 5&nbsp;ans avant l'âge de référence.</li>
             <li><b>Pilier 3b (libre)</b>&nbsp;: épargne libre (assurance-vie, titres, immobilier), pas de déduction fiscale (sauf déductions cantonales limitées pour primes), liberté de désignation du bénéficiaire et de disposition.</li>
           </ul>`
         },
@@ -196,13 +196,13 @@
             <li><b>APG / maternité</b>&nbsp;: 80&nbsp;% du revenu, 14&nbsp;semaines pour la mère, 2&nbsp;semaines pour l'autre parent.</li>
             <li><b>Allocations familiales (LAFam)</b>&nbsp;: au moins CHF 200.–/mois par enfant et CHF 250.– pour un jeune en formation.</li>
           </ul>
-          <p class="tip">Valeurs indiquées à titre indicatif&nbsp;(2025)&nbsp;; elles sont adaptées périodiquement&nbsp;— vérifiez toujours les chiffres de l'année d'examen.</p>`
+          <p class="tip">Valeurs indiquées à titre indicatif&nbsp;(2026)&nbsp;; elles sont adaptées périodiquement&nbsp;— vérifiez toujours les chiffres de l'année d'examen.</p>`
         }
       ],
       keypoints: [
         "1er pilier = besoins vitaux, répartition ; 2e = niveau de vie, capitalisation ; 3e = individuel.",
         "AVS/AI/APG : 10,6 % du salaire, sans plafond, moitié employeur.",
-        "Rente AVS 2025 : min. 1 260.–, max. 2 520.–, couple plafonné à 3 780.–.",
+        "Rente AVS 2026 : min. 1 260.–, max. 2 520.–, couple plafonné à 3 780.–.",
         "LPP : dès 17 ans risques, dès 25 ans épargne ; taux de conversion minimal 6,8 %.",
         "LAA : ATNP dès 8 h/semaine, IJ 80 % dès le 3e jour, gain max 148 200.–."
       ]
@@ -588,7 +588,7 @@
       explain: "10,6 % au total (AVS 8,7 % + AI 1,4 % + APG 0,5 %), partagés par moitié entre employeur et employé, soit 5,3 % chacun, sans plafond de salaire." },
 
     { id: 'm1c3q4', chap: 'c3', type: 'single',
-      q: "En 2025, la rente AVS mensuelle maximale d'une personne seule s'élève à :",
+      q: "En 2026, la rente AVS mensuelle maximale d'une personne seule s'élève à :",
       choices: ["CHF 1 260.–", "CHF 2 450.–", "CHF 2 520.–", "CHF 3 780.–"],
       answer: [2],
       explain: "Rente minimale CHF 1 260.–, maximale CHF 2 520.–. Le plafond pour un couple correspond à 150 % de la rente maximale, soit CHF 3 780.–." },

@@ -57,6 +57,6 @@ ou consulte [`bourse/README.md`](bourse/README.md).
 
 Le dossier [`afa/`](afa/) contient un site de révision pour les **deux premiers modules
 de l'examen d'intermédiaire en assurance AFA** (industrie de l'assurance et droit de
-l'assurance) : fiches de cours, plus de 600 questions commentées, examen blanc chronométré,
+l'assurance) : fiches de cours, 677 questions commentées avec filtre de difficulté, examen blanc chronométré,
 flashcards et suivi de progression. Ouvre `afa/index.html` ou consulte
 [`afa/README.md`](afa/README.md).

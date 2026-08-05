@@ -26,7 +26,7 @@
     { t: "1er pilier", d: "AVS / AI / APG + prestations complémentaires. Couvre les besoins vitaux, financé par répartition, obligatoire.", cat: "Prévoyance", mod: 'm1' },
     { t: "2e pilier", d: "Prévoyance professionnelle (LPP) et LAA. Maintien du niveau de vie habituel, financé par capitalisation.", cat: "Prévoyance", mod: 'm1' },
     { t: "3e pilier", d: "Prévoyance individuelle : 3a lié (déductible, retrait restreint) et 3b libre.", cat: "Prévoyance", mod: 'm1' },
-    { t: "Déduction de coordination", d: "Montant déduit du salaire AVS pour obtenir le salaire coordonné assuré à la LPP (CHF 26 460.– en 2025).", cat: "Prévoyance", mod: 'm1' },
+    { t: "Déduction de coordination", d: "Montant déduit du salaire AVS pour obtenir le salaire coordonné assuré à la LPP (CHF 26 460.– en 2026).", cat: "Prévoyance", mod: 'm1' },
     { t: "Taux de conversion LPP", d: "6,8 % dans le régime obligatoire : un avoir de CHF 100 000.– donne une rente annuelle de CHF 6 800.–.", cat: "Prévoyance", mod: 'm1' },
     { t: "ATNP", d: "Accidents non professionnels : couverts par la LAA dès 8 heures de travail par semaine chez le même employeur.", cat: "Prévoyance", mod: 'm1' },
 
@@ -62,7 +62,7 @@
     // --- Droit / LCA ---
     { t: "Réticence", d: "Omission ou inexactitude sur un fait important lors de la conclusion. Résiliation dans les 4 semaines dès la connaissance ; refus de prestation seulement s'il y a lien de causalité (art. 4-6 LCA).", cat: "LCA", mod: 'm2' },
     { t: "Droit de révocation", d: "14 jours pour révoquer sa proposition ou son acceptation (art. 2a LCA). Exclu pour les couvertures provisoires et les contrats de moins d'un mois.", cat: "LCA", mod: 'm2' },
-    { t: "Police", d: "Document constatant le contrat. Moyen de preuve, pas condition de validité. Rectification à demander dans les 4 semaines.", cat: "LCA", mod: 'm2' },
+    { t: "Police", d: "Document constatant le contrat. Moyen de preuve, pas condition de validité. Depuis l'abrogation de l'ancien art. 12 LCA en 2022, le silence du preneur ne vaut plus acceptation d'une police divergente.", cat: "LCA", mod: 'm2' },
     { t: "Sommation (art. 20 LCA)", d: "Mise en demeure de payer la prime dans un délai de 14 jours ; à défaut, la couverture est suspendue.", cat: "LCA", mod: 'm2' },
     { t: "Résiliation ordinaire (art. 35a)", d: "Un contrat de plus de 3 ans peut être résilié pour la fin de la 3e année ou de chaque année suivante, préavis de 3 mois.", cat: "LCA", mod: 'm2' },
     { t: "Faute grave", d: "L'assureur peut réduire sa prestation dans la mesure répondant au degré de la faute (art. 14 al. 2 LCA). Le dessein exclut toute prestation.", cat: "LCA", mod: 'm2' },

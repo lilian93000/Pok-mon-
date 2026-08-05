@@ -47,10 +47,10 @@
       explain: "Elle protège le client durant l'examen de sa proposition. Elle ne peut pas être révoquée au sens de l'art. 2a LCA, précisément en raison de sa brièveté." },
 
     { id: 'm2c3x07', chap: 'c3', type: 'single',
-      q: "Le preneur reçoit une police divergeant des accords conclus. Que doit-il faire ?",
-      choices: ["Rien, la police est nulle", "En demander la rectification dans les quatre semaines dès la réception", "Résilier immédiatement", "Saisir la FINMA"],
+      q: "Le preneur reçoit une police qui diverge de ce qui avait été convenu et ne réagit pas pendant deux mois. Quelle est la situation depuis la révision de 2022 ?",
+      choices: ["La police est réputée acceptée après quatre semaines de silence", "L'accord réel des parties prime : le silence ne vaut plus acceptation de la police", "Le contrat est nul", "Le preneur doit saisir la FINMA dans les 30 jours"],
       answer: [1],
-      explain: "Art. 12 LCA. Passé ce délai, la police est réputée acceptée dans sa teneur : c'est un piège classique, d'où l'importance de la relire." },
+      explain: "L'ancien art. 12 LCA et sa « fiction d'approbation » ont été abrogés au 1.1.2022. Le preneur peut donc invoquer la divergence au-delà de quatre semaines ; c'est l'accord effectivement conclu qui fait foi, la police n'étant qu'un moyen de preuve." },
 
     { id: 'm2c3x08', chap: 'c3', type: 'single',
       q: "Sous quelle forme la révocation de l'art. 2a LCA doit-elle intervenir ?",
