@@ -511,6 +511,7 @@ const Engine = (() => {
     const ret = (d) => (closes.length > d ? (price / closes[closes.length - 1 - d] - 1) * 100 : null);
     const perf1 = ret(21);
     const perf3 = ret(63);
+    const perf6 = ret(126);   // 6 mois : pour ne PAS confondre « début de mouvement » et « déjà envolé »
     if (perf3 == null || perf1 == null) return null;
 
     const ma50 = last(sma(closes, Math.min(50, closes.length - 1)));
@@ -529,8 +530,8 @@ const Engine = (() => {
     const base = closes.slice(-40);
     const baseRange = (Math.max(...base) - Math.min(...base)) / mean(base) * 100;
 
-    // Filtres durs : ni déjà envolé, ni en chute
-    const alreadyMooned = perf3 > 30;
+    // Filtres durs : ni déjà envolé (3 MOIS ou 6 MOIS), ni en chute
+    const alreadyMooned = perf3 > 30 || (perf6 != null && perf6 > 55);
     const nearHigh = distHigh >= -12;                // proche de sa résistance
     const eligible = !alreadyMooned && perf3 >= -12 && nearHigh && price > 1;
 
@@ -550,7 +551,7 @@ const Engine = (() => {
 
     return {
       score: clamp(score, 0, 100), eligible,
-      perf1, perf3, distHigh, extMa50, tight, baseRange, alreadyMooned,
+      perf1, perf3, perf6, distHigh, extMa50, tight, baseRange, alreadyMooned,
     };
   }
 
