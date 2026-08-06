@@ -57,6 +57,6 @@ ou consulte [`bourse/README.md`](bourse/README.md).
 
 Le dossier [`afa/`](afa/) contient un site de révision pour les **deux premiers modules
 de l'examen d'intermédiaire en assurance AFA**, plus un module dédié au **profil
-Non-Vie** : fiches de cours, 985 questions commentées, dont 33 avec source officielle citée, examen blanc chronométré,
+Non-Vie** : fiches de cours, 1047 questions commentées, dont 33 avec source officielle citée, examen blanc chronométré,
 flashcards et suivi de progression. Ouvre `afa/index.html` ou consulte
 [`afa/README.md`](afa/README.md).

@@ -10,6 +10,7 @@
     code: 'Module 3',
     title: 'Assurances non-vie',
     subtitle: "Ménage, bâtiment, véhicules, responsabilité civile, entreprise et sinistres",
+    parcours: "Profil Non-Vie · plus tard dans le parcours",
     icon: '🏠',
     color: 'green',
     chapters: [],

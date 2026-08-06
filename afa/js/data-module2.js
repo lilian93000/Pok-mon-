@@ -8,6 +8,7 @@
     code: 'Module 2',
     title: "Droit de l'assurance",
     subtitle: "CO, LCA révisée, responsabilité civile, LSA, LPD et LBA",
+    parcours: "Lancement · Base",
     icon: '⚖️',
     color: 'violet',
     chapters: [],

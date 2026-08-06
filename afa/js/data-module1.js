@@ -8,6 +8,7 @@
     code: 'Module 1',
     title: "Industrie de l'assurance",
     subtitle: "Risque, principes techniques, marché suisse, acteurs et surveillance",
+    parcours: "Lancement · Base",
     icon: '🏛️',
     color: 'blue',
     chapters: [],

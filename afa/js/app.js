@@ -258,6 +258,7 @@
               <div class="micon">${m.icon}</div>
               <div>
                 <span class="tag ${m.color}">${esc(m.code)}</span>
+                ${m.parcours ? `<span class="tag">${esc(m.parcours)}</span>` : ''}
                 <h3 style="margin:.25rem 0 0">${esc(m.title)}</h3>
               </div>
             </div>
