@@ -18,7 +18,7 @@
   let quizLen = 20;
 
   /* Niveau : 'tous' ou 'hard' (questions marquées lvl:'hard'). */
-  const LEVELS = [['tous', 'Tous niveaux'], ['hard', 'Difficiles'], ['src', 'Avec source officielle']];
+  const LEVELS = [['tous', 'Tous niveaux'], ['hard', 'Difficiles'], ['cas', 'Mises en situation'], ['src', 'Avec source officielle']];
   let quizLvl = 'tous';
   const byLevel = (list) => quizLvl === 'tous' ? list : list.filter(q => q.lvl === quizLvl);
 
@@ -392,7 +392,7 @@
         <div class="row" style="justify-content:space-between;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line)">
           <div>
             <b>Niveau</b>
-            <div class="muted small">${allQuestions().filter(q => q.lvl === 'hard').length} questions difficiles (calculs, cas pratiques, pièges) et ${allQuestions().filter(q => q.lvl === 'src').length} questions adossées à une source officielle citée.</div>
+            <div class="muted small">${allQuestions().filter(q => q.lvl === 'hard').length} questions difficiles (calculs, cas pratiques, pièges) ${allQuestions().filter(q => q.lvl === 'cas').length} mises en situation et ${allQuestions().filter(q => q.lvl === 'src').length} questions adossées à une source officielle citée.</div>
           </div>
           <div class="chips" id="lvlChips">
             ${LEVELS.map(([v, lab]) => `<button class="chip ${v === quizLvl ? 'on' : ''}" data-lvl="${v}">${lab}</button>`).join('')}
@@ -522,6 +522,8 @@
       <div class="card">
         ${q.lvl === 'hard' ? '<span class="tag amber" style="margin-bottom:.5rem;display:inline-block">Difficile</span>' : ''}
         ${q.lvl === 'src' ? '<span class="tag blue" style="margin-bottom:.5rem;display:inline-block">Source officielle</span>' : ''}
+        ${q.lvl === 'cas' ? '<span class="tag green" style="margin-bottom:.5rem;display:inline-block">Mise en situation</span>' : ''}
+        ${q.ctx ? `<div class="ctxbox">${esc(q.ctx)}</div>` : ''}
         <div class="question">${esc(q.q)}</div>
         ${isMulti ? '<p class="small muted" style="margin-top:-.6rem">Plusieurs réponses possibles.</p>' : ''}
         <div class="choices" id="choices">${choices}</div>
@@ -574,6 +576,7 @@
       <div class="reviewlist">
         ${session.results.map((r, i) => `
           <div class="reviewitem ${r.ok ? 'ok' : 'ko'}">
+            ${r.q.ctx ? `<div class="a" style="margin-bottom:.4rem"><i>${esc(r.q.ctx)}</i></div>` : ''}
             <div class="q">${i + 1}. ${esc(r.q.q)}</div>
             <div class="a">
               Votre réponse : <b>${r.given.length ? r.given.map(x => letters[x]).join(', ') : '—'}</b>

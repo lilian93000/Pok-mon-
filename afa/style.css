@@ -333,3 +333,9 @@ input:focus, select:focus, .btn:focus-visible, .choice:focus-visible, .chip:focu
 
 .srcline { margin: .5rem 0 0 !important; font-size: .82rem; color: var(--ink-3); }
 .srcline a { color: var(--blue); }
+
+.ctxbox {
+  background: var(--bg-soft); border-left: 3px solid var(--green);
+  padding: .8rem 1rem; border-radius: 0 10px 10px 0; margin-bottom: 1rem;
+  font-size: .95rem; line-height: 1.6;
+}
