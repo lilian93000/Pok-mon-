@@ -10,7 +10,7 @@ un module entièrement consacré au **profil Non-Vie**.
 | **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA |
 | **3** | Assurances non-vie *(profil Non-Vie)* | Ménage, bâtiment et dommages naturels, véhicules à moteur, RC privée, RC d'entreprise, assurances de choses des entreprises et perte d'exploitation, protection juridique / cyber / cautionnement, souscription et traitement des sinistres |
 
-**24 chapitres de cours, 911 questions commentées (dont 77 de niveau avancé et 33 adossées à une source officielle citée), 67 fiches de glossaire.**
+**24 chapitres de cours, 985 questions commentées (dont 77 de niveau avancé, 74 mises en situation et 33 adossées à une source officielle citée), 67 fiches de glossaire.**
 
 Le module 3 couvre le **profil Non-Vie** à lui seul, avec **205 questions**.
 
@@ -38,12 +38,15 @@ python3 -m http.server 8000
 - **Longueur de série réglable** (10, 20, 40 ou tout le lot). La sélection n'est pas
   purement aléatoire : les questions **ratées** sortent en premier, puis celles **jamais
   vues**, et enfin celles déjà acquises.
-- **Filtre de niveau** — « tous niveaux », « difficiles » ou « avec source officielle ». Les questions
+- **Filtre de niveau** — « tous niveaux », « difficiles », « mises en situation » ou « avec source officielle ». Les questions
   avancées (marquées `lvl: 'hard'`, signalées par un badge pendant le quiz) portent sur
   des calculs à plusieurs étapes, des combinaisons de délais et des pièges de
   qualification juridique. Les questions **sourcées** (`lvl: 'src'`) affichent sous la
   correction un lien vers la publication officielle qui les fonde — OFAS, OFSP, FINMA,
-  Fedlex, AFA/VBV.
+  Fedlex, AFA/VBV. Les **mises en situation** (`lvl: 'cas'`, champ `ctx`) reprennent le
+  format de la plateforme officielle : chaque question porte **son propre énoncé**,
+  soit une situation à classer dans une catégorie, soit un « dans lesquelles de ces
+  situations… » dont chaque choix est lui-même un scénario.
 - **Examen blanc** — 40 questions, 45 minutes, seuil de réussite à 70 %. La correction
   n'apparaît qu'à la fin, comme au vrai examen. Le **périmètre est réglable** : tous les
   modules, ou un seul — pratique pour préparer le profil Non-Vie.
@@ -71,6 +74,7 @@ rien n'est envoyé sur un serveur.
 | `js/data-m1-extra1…4.js` | Banque de questions complémentaire du module 1 (2 chapitres par fichier) |
 | `js/data-m2-extra1…5.js` | Banque de questions complémentaire du module 2 |
 | `js/data-m1-hard.js`, `js/data-m2-hard.js` | Questions de niveau avancé (`lvl: 'hard'`) |
+| `js/data-cas1.js`, `js/data-cas2.js` | Mises en situation (`lvl: 'cas'`, champ `ctx`) |
 | `js/data-sources.js` | Questions adossées à une source officielle (`lvl: 'src'`, champ `src`) |
 | `js/data-glossaire.js` | Notions du glossaire / flashcards |
 
@@ -120,7 +124,7 @@ Les **33 questions marquées « source officielle »** citent chacune la publica
 les fonde, avec un lien cliquable dans la correction. Les faits ont été contrôlés en
 août 2026 ; les publications elles-mêmes peuvent évoluer.
 
-N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 911
+N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 985
 questions. Signale toute divergence — en cas de doute, seuls les textes légaux publiés
 (LCA, LSA, CO, CC…) font foi.
 

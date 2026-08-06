@@ -186,6 +186,33 @@
           </ul>`
         },
         {
+          h: "La divisibilité de la prime (art. 24 LCA)",
+          html: `<p>Depuis la révision de 2022, le principe d'<b>indivisibilité</b> de la prime est <b>abandonné</b>. La règle est désormais la <b>divisibilité</b>&nbsp;: si le contrat prend fin avant la fin de la période d'assurance, <b>la prime n'est due que jusqu'à la fin du contrat</b>. L'assuré récupère donc la part de prime <b>non utilisée</b>.</p>
+          <p>Deux exceptions&nbsp;: la prime de la période en cours reste due <b>en entier</b> à l'assureur lorsque</p>
+          <ol>
+            <li>le contrat devient <b>caduc par suite de la disparition du risque</b> (l'objet assuré est détruit, l'activité assurée cesse)&nbsp;;</li>
+            <li>le preneur <b>résilie à la suite d'un sinistre au cours de l'année qui suit la conclusion</b> du contrat.</li>
+          </ol>
+          <table class="tbl">
+            <tr><th>Situation</th><th>Part de prime non utilisée</th></tr>
+            <tr><td>Dommage <b>total</b> du véhicule, indemnisé, puis changement d'assureur</td><td><b>Non remboursée</b> — disparition du risque</td></tr>
+            <tr><td>Dommage <b>partiel</b>, résiliation par le preneur, contrat conclu <b>6&nbsp;mois</b> plus tôt</td><td><b>Non remboursée</b> — résiliation dans l'année suivant la conclusion</td></tr>
+            <tr><td>Dommage <b>partiel</b>, résiliation par le preneur, contrat conclu <b>3&nbsp;ans</b> plus tôt</td><td><b>Remboursée</b> — le principe de divisibilité s'applique</td></tr>
+            <tr><td>Cessation définitive de l'activité assurée en cours d'année</td><td><b>Non remboursée</b> — disparition du risque</td></tr>
+          </table>
+          <p class="tip">Le piège&nbsp;: on croit spontanément que «&nbsp;contrat terminé plus tôt = prime rendue&nbsp;». C'est vrai <b>sauf</b> disparition du risque et <b>sauf</b> résiliation après sinistre pendant la première année.</p>`
+        },
+        {
+          h: "Changement de propriétaire de la chose assurée (art. 54 LCA)",
+          html: `<p>Lorsque l'objet assuré <b>change de propriétaire</b>, les droits et obligations découlant du contrat <b>passent au nouveau propriétaire</b>. Trois délais s'articulent&nbsp;:</p>
+          <ul>
+            <li>Le <b>nouveau propriétaire</b> peut <b>refuser</b> le transfert, par écrit ou par tout moyen permettant la preuve par un texte, dans les <b>30&nbsp;jours</b> suivant le changement de propriétaire&nbsp;;</li>
+            <li>L'<b>entreprise d'assurance</b> peut <b>résilier</b> dans les <b>14&nbsp;jours</b> après avoir eu connaissance de l'identité du nouveau propriétaire&nbsp;; le contrat prend alors fin <b>au plus tôt 30&nbsp;jours</b> après la résiliation&nbsp;;</li>
+            <li>Si le changement entraîne une <b>aggravation du risque</b>, les règles sur l'aggravation (art. 28 ss) s'appliquent par analogie.</li>
+          </ul>
+          <p>Autrement dit&nbsp;: la vente n'éteint pas le contrat. Elle ouvre une fenêtre pendant laquelle l'acquéreur peut refuser et l'assureur peut se retirer.</p>`
+        },
+        {
           h: "Obligations en cours de contrat",
           html: `<ul>
             <li>Annoncer les <b>aggravations de risque</b>&nbsp;;</li>
@@ -202,7 +229,10 @@
         "Si l'assureur ne poursuit pas dans les 2 mois, il est réputé s'être départi du contrat.",
         "Résiliation ordinaire : fin de la 3e année ou de chaque année suivante, préavis 3 mois.",
         "Après sinistre indemnisé, les deux parties peuvent résilier (sauf assureur en maladie complémentaire).",
-        "Pas de sanction si la violation d'une obligation est sans faute ou sans influence sur le sinistre."
+        "Pas de sanction si la violation d'une obligation est sans faute ou sans influence sur le sinistre.",
+        "Divisibilité de la prime (art. 24) : la prime n'est due que jusqu'à la fin du contrat.",
+        "Sauf disparition du risque, ou résiliation après sinistre dans l'année suivant la conclusion : prime entière due.",
+        "Changement de propriétaire : l'acquéreur peut refuser dans les 30 jours, l'assureur résilier dans les 14 jours."
       ]
     },
 
