@@ -604,23 +604,23 @@
   "top": [
    {
     "symbol": "VCTR",
-    "score": 85
+    "score": 84
    },
    {
-    "symbol": "ANET",
+    "symbol": "PAYS",
     "score": 82
    },
    {
-    "symbol": "SIF",
-    "score": 82
-   },
-   {
-    "symbol": "APH",
+    "symbol": "EXPE",
     "score": 81
    },
    {
-    "symbol": "ATLO",
-    "score": 81
+    "symbol": "CIX",
+    "score": 80
+   },
+   {
+    "symbol": "BKNG",
+    "score": 80
    }
   ]
  }
