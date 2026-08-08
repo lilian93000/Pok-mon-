@@ -134,6 +134,13 @@ une grille.
 
 ## ⚠️ Provenance du contenu et limites
 
+Les questions sont écrites au gabarit de la **série zéro officielle** : énoncé formulé
+comme une vraie question, propositions de longueur et de registre comparables, bonne
+réponse dont la position varie et qui n'est jamais la plus longue — le piège qui permet
+de deviner sans savoir. Un contrôle automatique signale les écarts, et la reprise de la
+banque existante est en cours : **209 des 605 questions concernées** ont été réécrites à
+ce jour, le module 1 étant terminé pour l'essentiel.
+
 Les questions et les fiches ont, à une exception près, été **rédigées de A à Z pour ce
 site**, à partir de connaissances générales du droit suisse des assurances et du
 programme des deux premiers modules AFA. Elles ne proviennent d'aucun manuel ni
