@@ -265,12 +265,18 @@
       answer: [1],
       explain: "La cédante supporte la priorité de 2 millions ; le réassureur prend la tranche au-dessus, soit 5 − 2 = CHF 3 millions, dans la limite des 6 millions." },
 
-    { id: 'm1g29', chap: 'c7', type: 'single',
+    { id: 'm1g29', chap: 'c7', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "IA, réassurance, absence de lien contractuel",
       ctx: "L'assureur direct d'un client tombe en faillite. Le client apprend qu'une partie de son risque avait été réassurée et souhaite s'adresser directement au réassureur.",
-      q: "Le peut-il ?",
-      choices: ["Oui, à concurrence de la part cédée", "Non : il n'a aucun lien contractuel avec le réassureur", "Oui, avec l'accord de la FINMA", "Oui, si le montant dépasse CHF 100 000.–"],
+      q: "Peut-il agir directement contre le réassureur ?",
+      choices: [
+        "Oui, à concurrence de la part du risque qui a été cédée",
+        "Non, il n'a aucun lien contractuel avec le réassureur",
+        "Oui, moyennant l'autorisation préalable de la FINMA",
+        "Oui, dès lors que le sinistre dépasse CHF 100 000.–",
+      ],
       answer: [1],
-      explain: "La réassurance est un contrat entre assureurs. L'assuré est protégé par la fortune liée, non par un droit direct contre le réassureur." },
+      explain: "La réassurance est un contrat entre assureurs : l'assuré y est un tiers. Son seul débiteur reste l'assureur direct, qui doit la prestation intégrale même si son réassureur fait défaut." },
 
     /* --- Surveillance --- */
     { id: 'm1g30', chap: 'c8', type: 'single',

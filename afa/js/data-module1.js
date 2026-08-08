@@ -743,11 +743,17 @@
       answer: [1],
       explain: "L'ASA (Association Suisse d'Assurances) défend les intérêts de la branche. L'AFA/VBV s'occupe de la formation professionnelle, la FINMA de la surveillance." },
 
-    { id: 'm1c5q4', chap: 'c5', type: 'single',
-      q: "Le preneur d'assurance est :",
-      choices: ["Toujours la personne assurée", "Le cocontractant de l'assureur, débiteur de la prime", "Le bénéficiaire des prestations", "L'intermédiaire qui conclut le contrat"],
-      answer: [1],
-      explain: "Le preneur signe le contrat et doit la prime. L'assuré est la personne ou la chose exposée au risque, l'ayant droit celui qui touche la prestation : les trois rôles peuvent coïncider ou non." },
+    { id: 'm1c5q4', chap: 'c5', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "IA, notions élémentaires, rôles du contrat",
+      q: "Un employeur conclut une assurance d'indemnités journalières pour ses salariés, qui en toucheront eux-mêmes les prestations. Quel rôle l'employeur joue-t-il ?",
+      choices: [
+        "Celui de preneur d'assurance",
+        "Celui d'assuré",
+        "Celui d'ayant droit",
+        "Celui d'intermédiaire lié",
+      ],
+      answer: [0],
+      explain: "Le preneur est le cocontractant de l'assureur et le débiteur de la prime : c'est l'employeur. Les salariés sont les assurés, puisqu'ils portent le risque, et les ayants droit, puisqu'ils encaissent la prestation. C'est le schéma de l'assurance pour compte d'autrui." },
 
     { id: 'm1c5q5', chap: 'c5', type: 'single',
       q: "Environ combien de personnes le secteur de l'assurance emploie-t-il en Suisse ?",
@@ -756,11 +762,17 @@
       explain: "Environ 50 000 personnes, pour une contribution d'à peu près 4 % du PIB. Retenez l'ordre de grandeur plutôt que le chiffre exact." },
 
     /* --- c6 : distribution --- */
-    { id: 'm1c6q1', chap: 'c6', type: 'single',
-      q: "Un courtier en assurance agit :",
-      choices: ["Pour le compte de l'entreprise d'assurance", "Pour le compte du preneur d'assurance", "Pour le compte de la FINMA", "Sans mandat particulier"],
+    { id: 'm1c6q1', chap: 'c6', type: 'single', pts: 1, cx: 'Simple',
+      theme: "IA, intermédiation, courtier",
+      q: "Pour le compte de qui un courtier en assurance agit-il ?",
+      choices: [
+        "Pour le compte de l'entreprise d'assurance qu'il représente",
+        "Pour le compte du preneur d'assurance qui l'a mandaté",
+        "Pour le compte de la FINMA, dans un rôle de contrôle",
+        "Pour son propre compte, sans mandat de personne",
+      ],
       answer: [1],
-      explain: "Le courtier est un intermédiaire non lié : il est mandaté par le client et défend ses intérêts, même s'il est le plus souvent rémunéré par des courtages versés par l'assureur." },
+      explain: "Le courtier est le mandataire du client : il doit analyser ses besoins, comparer le marché et défendre ses intérêts. L'agent, à l'inverse, représente l'assureur — d'où l'obligation d'annoncer son statut dès le premier contact." },
 
     { id: 'm1c6q2', chap: 'c6', type: 'single',
       q: "Depuis la révision de la LSA entrée en vigueur en 2024, qui doit s'inscrire au registre de la FINMA ?",
@@ -823,17 +835,29 @@
       answer: [0, 1, 2, 4],
       explain: "La réassurance ne se substitue jamais à l'assureur direct dans la relation client : c'est un contrat interne entre porteurs de risques." },
 
-    { id: 'm1c7q5', chap: 'c7', type: 'single',
-      q: "Qu'est-ce qu'une captive ?",
-      choices: ["Un contrat de réassurance non proportionnelle", "Une société d'assurance créée par un groupe industriel pour porter ses propres risques", "Un fonds de garantie étatique", "Un intermédiaire exclusif"],
+    { id: 'm1c7q5', chap: 'c7', type: 'single', pts: 1, cx: 'Simple',
+      theme: "IA, réassurance, captive",
+      q: "Qu'est-ce qu'une captive d'assurance ?",
+      choices: [
+        "Une forme particulière de réassurance non proportionnelle",
+        "Une société d'assurance créée par un groupe pour porter ses propres risques",
+        "Un fonds de garantie institué par la Confédération",
+        "Un réseau d'intermédiaires liés à un assureur unique",
+      ],
       answer: [1],
-      explain: "La captive est un instrument de transfert alternatif du risque : le groupe conserve économiquement ses risques tout en accédant aux marchés de la réassurance." },
+      explain: "Le groupe devient son propre assureur, ce qui lui permet de conserver le bénéfice technique de ses bons risques et d'accéder directement au marché de la réassurance. La captive reste soumise à la surveillance du lieu où elle est domiciliée." },
 
-    { id: 'm1c7q6', chap: 'c7', type: 'single',
-      q: "La rétrocession désigne :",
-      choices: ["Le remboursement d'une prime au client", "La réassurance souscrite par un réassureur", "Le retour d'un risque vers l'assuré", "La commission versée à un courtier"],
+    { id: 'm1c7q6', chap: 'c7', type: 'single', pts: 1, cx: 'Simple',
+      theme: "IA, réassurance, rétrocession",
+      q: "Que désigne la rétrocession en réassurance ?",
+      choices: [
+        "Le remboursement d'une part de prime au preneur d'assurance",
+        "La couverture qu'un réassureur souscrit à son tour auprès d'un autre",
+        "Le retour d'une part de risque à la charge de l'assuré",
+        "La commission que l'assureur verse au courtier apporteur",
+      ],
       answer: [1],
-      explain: "Le réassureur se réassure à son tour : c'est la rétrocession, qui permet de disséminer les très grands risques dans le marché mondial." },
+      explain: "Le réassureur se comporte à son tour en cédante : la chaîne peut compter plusieurs niveaux. C'est ce qui permet de diluer mondialement les très grands risques, mais aussi ce qui crée un risque de crédit en cascade." },
 
     /* --- c8 : surveillance --- */
     { id: 'm1c8q1', chap: 'c8', type: 'multi',
@@ -872,11 +896,17 @@
       answer: [1],
       explain: "Les litiges contractuels relèvent de l'Ombudsman puis du juge civil. La FINMA intervient si un comportement révèle un abus systématique ou une violation du droit de la surveillance." },
 
-    { id: 'm1c8q7', chap: 'c8', type: 'single',
-      q: "Avant de commencer son activité, une entreprise d'assurance doit :",
-      choices: ["S'annoncer au registre du commerce uniquement", "Obtenir une autorisation de la FINMA sur la base d'un plan d'exploitation", "Obtenir l'accord de l'ASA", "Passer un examen auprès de l'AFA"],
+    { id: 'm1c8q7', chap: 'c8', type: 'single', pts: 1, cx: 'Simple',
+      theme: "IA, surveillance, autorisation",
+      q: "Que doit obtenir une entreprise d'assurance avant de commencer son activité ?",
+      choices: [
+        "Une simple inscription au registre du commerce",
+        "Une autorisation de la FINMA, délivrée sur la base d'un plan d'exploitation",
+        "L'accord préalable de l'Association Suisse d'Assurances",
+        "Une attestation de qualification délivrée par l'AFA / VBV",
+      ],
       answer: [1],
-      explain: "L'activité d'assurance est soumise à autorisation préalable. Le plan d'exploitation décrit les branches, l'organisation, les tarifs et la réassurance ; ses modifications essentielles doivent être annoncées." }
+      explain: "L'accès au marché est soumis à autorisation : la FINMA vérifie capital, organisation, bases techniques et honorabilité des dirigeants. L'inscription au registre du commerce ne suffit jamais." }
   ];
 
   window.AFA_MODULES = window.AFA_MODULES || [];
