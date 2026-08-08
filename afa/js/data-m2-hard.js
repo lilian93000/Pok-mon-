@@ -55,17 +55,29 @@
       explain: "La police n'a jamais été une condition de validité : elle constate le contrat. La révision a supprimé la fiction d'approbation, qui pénalisait le preneur peu attentif." },
 
     /* --------- c4 : vie du contrat --------- */
-    { id: 'm2c4h01', chap: 'c4', type: 'single',
-      q: "Prime échue le 1er avril, impayée. Sommation envoyée le 20 avril avec les mentions légales. Un sinistre survient le 8 mai. Le preneur paie le 15 mai. Quelle est l'issue ?",
-      choices: ["Le sinistre est couvert car la prime a été payée", "Le sinistre n'est pas couvert : la couverture était suspendue depuis le 5 mai et la reprise n'est pas rétroactive", "Le sinistre est couvert à 50 %", "Le contrat était déjà résilié"],
+    { id: 'm2c4h01', chap: 'c4', type: 'single', lvl: 'hard', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, suspension et sinistre",
+      q: "Prime échue le 1er avril et impayée, sommation régulière envoyée le 20 avril, sinistre le 8 mai, paiement le 15 mai. Quelle est l'issue ?",
+      choices: [
+        "Le sinistre est couvert, la prime ayant finalement été payée",
+        "Le sinistre n'est pas couvert : la couverture était suspendue depuis le 5 mai",
+        "Le sinistre est couvert à concurrence de la moitié de l'indemnité",
+        "Le contrat était déjà éteint au jour du sinistre",
+      ],
       answer: [1],
-      explain: "Le délai de 14 jours dès la sommation du 20 avril expire le 4 mai ; la couverture est suspendue dès le 5 mai. Le sinistre du 8 mai tombe dans cette période et le paiement du 15 mai ne rétablit la garantie que pour l'avenir." },
+      explain: "Les quatorze jours courent dès l'envoi du 20 avril, donc jusqu'au 4 mai : la suspension commence le 5 mai et le sinistre du 8 mai tombe dedans. Le paiement du 15 mai rétablit la couverture pour l'avenir seulement." },
 
-    { id: 'm2c4h02', chap: 'c4', type: 'single',
-      q: "Après l'expiration du délai de sommation, l'assureur reste inactif pendant trois mois. Quelle en est la conséquence ?",
-      choices: ["La couverture reprend automatiquement", "Il est censé s'être départi du contrat et renonce au paiement de la prime arriérée", "Il peut encore poursuivre pendant cinq ans", "Le contrat se renouvelle tacitement"],
+    { id: 'm2c4h02', chap: 'c4', type: 'single', lvl: 'hard', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, inaction de l'assureur",
+      q: "L'assureur reste inactif pendant trois mois après l'expiration du délai de sommation. Quelle en est la conséquence ?",
+      choices: [
+        "La couverture reprend automatiquement son plein effet",
+        "Il est censé s'être départi du contrat et renonce à la prime arriérée",
+        "Il conserve cinq ans pour agir en recouvrement",
+        "Le contrat se reconduit tacitement pour une nouvelle période",
+      ],
       answer: [1],
-      explain: "Art. 21 LCA : faute de poursuite dans les deux mois suivant l'expiration du délai de sommation, l'assureur est réputé s'être départi du contrat. Le contrat ne peut pas rester suspendu indéfiniment." },
+      explain: "Le délai de deux mois est un délai de péremption : passé ce terme, la présomption de départ joue et rien ne la renverse. L'assureur perd donc à la fois le contrat et sa créance." },
 
     { id: 'm2c4h03', chap: 'c4', type: 'single',
       q: "Un contrat d'assurance ménage est conclu le 1.1.2024 pour une durée de 5 ans. Quelle est la première échéance à laquelle le preneur peut le résilier ordinairement, et avec quel préavis ?",

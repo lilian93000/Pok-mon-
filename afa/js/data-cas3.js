@@ -375,12 +375,18 @@
       answer: [1],
       explain: "Le délai de quatorze jours dès le 15 mars expire le 29 mars ; la suspension court dès le 30 mars, avant la survenance du sinistre." },
 
-    { id: 'm2g10', chap: 'c4', type: 'single',
+    { id: 'm2g10', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, preuve de l'aggravation",
       ctx: "Un preneur transforme son garage en atelier de soudure sans en informer son assureur incendie. Un incendie se déclare précisément dans cet atelier.",
       q: "Que devra établir l'assureur pour refuser sa prestation ?",
-      choices: ["Rien, l'omission suffit", "Une aggravation essentielle du risque, du fait du preneur, en lien avec le sinistre", "Une prétention frauduleuse", "Un dommage supérieur à CHF 50 000.–"],
+      choices: [
+        "Rien de particulier : l'omission d'annonce suffit à le libérer",
+        "Une aggravation essentielle du risque, imputable au preneur et liée au sinistre",
+        "L'existence d'une prétention frauduleuse de l'assuré",
+        "Un dommage dépassant le seuil de CHF 50 000.–",
+      ],
       answer: [1],
-      explain: "L'aggravation doit porter sur un fait ayant fait l'objet d'une question, résulter du fait du preneur, et présenter un rapport avec le sinistre survenu." },
+      explain: "Trois éléments cumulatifs, dont la preuve incombe à l'assureur : le caractère essentiel, le fait du preneur et le lien de causalité avec le sinistre. Sans ce lien, la prestation reste due malgré l'omission." },
 
     { id: 'm2g11', chap: 'c4', type: 'multi',
       ctx: "Vous conseillez des clients dont les contrats prennent fin en cours d'année.",
@@ -394,12 +400,18 @@
       answer: [1],
       explain: "Seule la deuxième : ni disparition du risque, ni résiliation dans l'année suivant la conclusion. Les deux exceptions de l'art. 24 LCA font perdre la prime dans les trois autres cas." },
 
-    { id: 'm2g12', chap: 'c4', type: 'single',
+    { id: 'm2g12', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, refus du transfert",
       ctx: "Monsieur Progin achète la maison de ses voisins le 15 mai. Le bâtiment est assuré auprès d'un assureur privé, contrat qu'il ne souhaite pas reprendre.",
-      q: "De quel délai dispose-t-il pour refuser le transfert ?",
-      choices: ["14 jours", "30 jours suivant le changement de propriétaire", "3 mois", "Il ne peut pas refuser"],
+      q: "De quel délai dispose-t-il pour refuser la reprise du contrat ?",
+      choices: [
+        "De 14 jours dès la conclusion de la vente",
+        "De 30 jours suivant le changement de propriétaire",
+        "De 3 mois dès la réception de la police",
+        "D'aucun : seul l'assureur peut mettre fin au contrat",
+      ],
       answer: [1],
-      explain: "Art. 54 LCA : l'acquéreur dispose de 30 jours pour refuser, l'assureur de 14 jours dès qu'il connaît son identité pour résilier." },
+      explain: "Le nouveau propriétaire n'a pas choisi cet assureur : la loi lui laisse trente jours pour s'en défaire. S'il ne dit rien, il devient preneur aux conditions existantes et doit la prime." },
 
     /* --- Sinistre et faute --- */
     { id: 'm2g13', chap: 'c5', type: 'single',

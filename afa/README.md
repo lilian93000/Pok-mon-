@@ -151,8 +151,8 @@ Les questions sont écrites au gabarit de la **série zéro officielle** : énon
 comme une vraie question, propositions de longueur et de registre comparables, bonne
 réponse dont la position varie et qui n'est jamais la plus longue — le piège qui permet
 de deviner sans savoir. Un contrôle automatique signale les écarts, et la reprise de la
-banque existante est en cours : **209 des 475 questions concernées** des modules 1 et 2 ont été réécrites à
-ce jour, le module 1 étant terminé pour l'essentiel.
+banque existante est en cours : **248 des 475 questions concernées** ont été réécrites à ce jour : le module 1 est
+propre à 90 %, le module 2 à 60 %.
 
 Les questions et les fiches ont, à une exception près, été **rédigées de A à Z pour ce
 site**, à partir de connaissances générales du droit suisse des assurances et du

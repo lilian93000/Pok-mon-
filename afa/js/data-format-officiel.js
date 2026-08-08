@@ -456,19 +456,17 @@
       answer: [2, 0, 1],
       explain: "Le sinistre partiel ouvre un droit de résiliation aux deux parties. L'adaptation de prime ne profite qu'au preneur, puisque c'est l'assureur qui l'a décidée. La réticence n'ouvre un droit qu'à l'assureur, seul lésé par l'information omise."
     }),
-    fo({
-      id: 'fo209', chap: 'c4', type: 'single', pts: 1, cx: 'Simple',
-      theme: 'Droit, LCA, contrats de longue durée',
-      q: "Un contrat d'assurance conclu pour une durée supérieure à trois ans peut être résilié…",
+    fo({ id: 'fo209', chap: 'c4', type: 'single', pts: 1, cx: 'Simple',
+      theme: "Droit, LCA, contrats de longue durée",
+      q: "Comment un contrat d'assurance conclu pour plus de trois ans peut-il être résilié ?",
       choices: [
-        "… pour la fin de la troisième année ou de chaque année suivante, moyennant un préavis de trois mois",
-        "… uniquement à son échéance finale",
-        "… à tout moment et avec effet immédiat",
-        "… seulement si l'assureur y consent"
+        "Pour la fin de la troisième année ou de chaque année suivante, avec trois mois de préavis",
+        "Uniquement à l'arrivée du terme convenu au contrat",
+        "À tout moment et avec effet immédiat, sans motif",
+        "Seulement si l'assureur donne son accord exprès",
       ],
       answer: [0],
-      explain: "L'art. 35a LCA rend impératif ce droit de sortie : au-delà de trois ans, le preneur — et l'assureur — peuvent mettre fin au contrat pour la fin de la troisième année ou de chaque année suivante, avec trois mois de préavis. Toute clause plus restrictive est nulle."
-    }),
+      explain: "Art. 35a LCA : nul ne reste enfermé plus de trois ans dans un contrat d'assurance. Le droit appartient aux deux parties et la disposition est impérative." }),
     fo({
       id: 'fo210', chap: 'c4', type: 'grid', pts: 2, cx: 'Moyenne',
       theme: 'Droit, LCA, prime',

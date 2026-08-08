@@ -12,54 +12,82 @@
 
   /* Catégories réutilisées pour les questions de classification « fin du contrat » */
   const FIN = [
-    "A : le contrat prend fin automatiquement",
-    "B : le preneur d'assurance peut résilier / l'acquéreur peut refuser",
-    "C : l'assureur peut résilier"
+    "Il prend fin automatiquement, sans intervention des parties",
+    "Le preneur peut résilier, ou l'acquéreur refuser le transfert",
+    "Seul l'assureur dispose d'un droit de résiliation"
   ];
   const CONSIGNE_FIN = "Dans certains cas, les contrats d'assurance prennent fin par eux-mêmes. Dans d'autres situations, le contrat est résilié par le preneur d'assurance ou par l'assureur.";
 
   /* ============ MODULE 2 : LCA – fin du contrat et prime ============ */
   add('m2', [
     /* ---- Classification : fin du contrat (une question par situation) ---- */
-    { id: 'm2f01', chap: 'c4', type: 'single',
+    { id: 'm2f01', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, fin du contrat",
       ctx: CONSIGNE_FIN + " — La famille Gruber vend sa maison. Celle-ci est assurée auprès d'un assureur privé.",
-      q: "Quelle fin pour le contrat ?", choices: FIN, answer: [1],
-      explain: "Les droits et obligations passent au nouveau propriétaire (art. 54 LCA). L'acquéreur peut refuser le transfert dans les 30 jours suivant le changement de propriétaire." },
+      q: "Quelle issue le contrat connaît-il dans cette situation ?",
+      choices: [
+        "Il prend fin automatiquement, sans intervention des parties",
+        "Le preneur peut résilier, ou l'acquéreur refuser le transfert",
+        "Seul l'assureur dispose d'un droit de résiliation",
+      ],
+      answer: [1],
+      explain: "L'initiative appartient ici au preneur ou à l'acquéreur : le contrat ne tombe pas de lui-même et l'assureur ne peut pas l'imposer. Sans réaction dans le délai, la couverture se poursuit." },
 
     { id: 'm2f02', chap: 'c4', type: 'single',
       ctx: CONSIGNE_FIN + " — Jean Aymard annonce un sinistre bagatelle à son assureur responsabilité civile, qui prend le cas en charge.",
-      q: "Quelle fin pour le contrat ?", choices: FIN, answer: [2],
+      q: "Quelle issue le contrat connaît-il dans cette situation ?", choices: FIN, answer: [2],
       explain: "Après un sinistre pour lequel une prestation a été versée, l'assureur dispose d'un droit de résiliation (art. 42 LCA) — droit qui lui est retiré en assurance-maladie complémentaire." },
 
     { id: 'm2f03', chap: 'c4', type: 'single',
       ctx: CONSIGNE_FIN + " — Le véhicule de Christian Simon subit un dommage total : il est détruit et mis à la casse.",
-      q: "Quelle fin pour le contrat ?", choices: FIN, answer: [0],
+      q: "Quelle issue le contrat connaît-il dans cette situation ?", choices: FIN, answer: [0],
       explain: "L'objet assuré n'existe plus : le risque disparaît et le contrat devient caduc de plein droit, sans qu'aucune résiliation soit nécessaire." },
 
-    { id: 'm2f04', chap: 'c4', type: 'single',
+    { id: 'm2f04', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, fin du contrat",
       ctx: CONSIGNE_FIN + " — L'assureur informe Pierre Blanc que sa prime d'assurance responsabilité civile automobile sera majorée l'an prochain.",
-      q: "Quelle fin pour le contrat ?", choices: FIN, answer: [1],
-      explain: "L'assureur qui use de son droit d'adapter le contrat ouvre au preneur un droit de résiliation pour la date d'entrée en vigueur de la modification (art. 35b LCA)." },
+      q: "Quelle issue le contrat connaît-il dans cette situation ?",
+      choices: [
+        "Il prend fin automatiquement, sans intervention des parties",
+        "Le preneur peut résilier, ou l'acquéreur refuser le transfert",
+        "Seul l'assureur dispose d'un droit de résiliation",
+      ],
+      answer: [1],
+      explain: "Le contrat survit à l'événement et passe à l'acquéreur : il faut une déclaration pour y mettre fin. C'est la logique de l'art. 54 LCA, qui protège la continuité de la couverture." },
 
-    { id: 'm2f05', chap: 'c4', type: 'single',
+    { id: 'm2f05', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, fin du contrat",
       ctx: CONSIGNE_FIN + " — Sophie Aebi a conclu son assurance ménage il y a quatre ans pour une durée de dix ans. Elle souhaite en sortir pour la prochaine échéance annuelle.",
-      q: "Quelle fin pour le contrat ?", choices: FIN, answer: [1],
-      explain: "L'art. 35a LCA permet de résilier un contrat de longue durée pour la fin de la 3e année ou de chaque année suivante, moyennant un préavis de trois mois." },
+      q: "Quelle issue le contrat connaît-il dans cette situation ?",
+      choices: [
+        "Il prend fin automatiquement, sans intervention des parties",
+        "Le preneur peut résilier, ou l'acquéreur refuser le transfert",
+        "Seul l'assureur dispose d'un droit de résiliation",
+      ],
+      answer: [1],
+      explain: "Ni extinction de plein droit, ni monopole de l'assureur : la loi confie le choix à celui qui subit le changement. Le silence vaut maintien du contrat." },
 
     { id: 'm2f06', chap: 'c4', type: 'single',
       ctx: CONSIGNE_FIN + " — L'entreprise d'assurance de Marc Duvoisin tombe en faillite.",
-      q: "Quelle fin pour le contrat ?", choices: FIN, answer: [0],
+      q: "Quelle issue le contrat connaît-il dans cette situation ?", choices: FIN, answer: [0],
       explain: "La faillite de l'assureur met fin au contrat de plein droit ; les prétentions des assurés sont couvertes en priorité par la fortune liée." },
 
     { id: 'm2f07', chap: 'c4', type: 'single',
       ctx: CONSIGNE_FIN + " — Après un dégât d'eau indemnisé chez Laura Steiner, l'assureur constate que le risque est devenu trop lourd pour lui.",
-      q: "Quelle fin pour le contrat ?", choices: FIN, answer: [2],
+      q: "Quelle issue le contrat connaît-il dans cette situation ?", choices: FIN, answer: [2],
       explain: "Le droit de résiliation après sinistre appartient aux deux parties ; c'est ici l'assureur qui l'exerce, dans le délai prévu par la loi et le contrat." },
 
-    { id: 'm2f08', chap: 'c4', type: 'single',
+    { id: 'm2f08', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, fin du contrat",
       ctx: CONSIGNE_FIN + " — Paul Renaud achète la voiture d'occasion de son voisin ; l'assurance casco du vendeur court encore neuf mois.",
-      q: "Quelle fin pour le contrat ?", choices: FIN, answer: [1],
-      explain: "Le contrat passe à l'acquéreur, qui dispose de 30 jours pour refuser le transfert. L'assureur peut de son côté résilier dans les 14 jours dès qu'il connaît l'identité du nouveau propriétaire." },
+      q: "Quelle issue le contrat connaît-il dans cette situation ?",
+      choices: [
+        "Il prend fin automatiquement, sans intervention des parties",
+        "Le preneur peut résilier, ou l'acquéreur refuser le transfert",
+        "Seul l'assureur dispose d'un droit de résiliation",
+      ],
+      answer: [1],
+      explain: "Le droit de mettre fin au contrat appartient au preneur ou à l'acquéreur, dans le délai légal. Passé celui-ci, la couverture continue aux conditions convenues." },
 
     /* ---- Sélection multiple sur situations : divisibilité de la prime ---- */
     { id: 'm2p01', chap: 'c4', type: 'multi',
@@ -74,33 +102,57 @@
       answer: [2],
       explain: "Seule la troisième : la résiliation après sinistre intervient au-delà de la première année, donc le principe de divisibilité s'applique. Les situations 1 et 4 relèvent de la disparition du risque (véhicule détruit, activité cessée) et la situation 2 d'une résiliation dans l'année suivant la conclusion : dans ces trois cas, la prime de la période en cours reste acquise à l'assureur." },
 
-    { id: 'm2p02', chap: 'c4', type: 'single',
+    { id: 'm2p02', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, divisibilité de la prime",
       ctx: "Le véhicule d'une cliente est déclaré épave après un accident. L'assureur verse l'indemnité de dommage total. Il reste sept mois de prime déjà payée sur la période d'assurance en cours.",
       q: "La cliente récupère-t-elle cette part de prime ?",
-      choices: ["Oui, la prime est divisible", "Non : le contrat devient caduc par disparition du risque, la prime entière reste due", "Oui, à concurrence de la moitié", "Cela dépend de la franchise"],
+      choices: [
+        "Oui, la prime étant divisible en toute hypothèse",
+        "Non : le risque a disparu, la prime entière reste acquise",
+        "Oui, mais à concurrence de la moitié seulement",
+        "Cela dépend du montant de la franchise convenue",
+      ],
       answer: [1],
-      explain: "C'est la première exception de l'art. 24 LCA : quand le contrat tombe parce que l'objet assuré a disparu, la prime de la période en cours reste acquise à l'assureur." },
+      explain: "La disparition du risque est l'une des deux exceptions à la divisibilité de l'art. 24 LCA. L'assureur garde la prime de la période en cours, alors qu'il la restituerait au prorata dans les autres cas de fin anticipée." },
 
-    { id: 'm2p03', chap: 'c4', type: 'single',
+    { id: 'm2p03', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, divisibilité de la prime",
       ctx: "Un client a conclu son assurance ménage il y a cinq mois. Un cambriolage est indemnisé, puis il résilie le contrat en invoquant son droit de résiliation après sinistre. Quatre mois de prime restent à courir.",
       q: "Que devient la prime non utilisée ?",
-      choices: ["Elle est remboursée au prorata", "Elle reste acquise à l'assureur : résiliation dans l'année suivant la conclusion", "Elle est remboursée de moitié", "Elle est reportée sur un nouveau contrat"],
+      choices: [
+        "Elle est remboursée au prorata de la période non courue",
+        "Elle reste acquise : la résiliation intervient dans l'année suivant la conclusion",
+        "Elle est remboursée à concurrence de la moitié",
+        "Elle est reportée sur le prochain contrat souscrit",
+      ],
       answer: [1],
-      explain: "Seconde exception de l'art. 24 LCA : le preneur qui résilie après sinistre pendant la première année ne récupère pas la prime de la période en cours." },
+      explain: "Seconde exception de l'art. 24 LCA : résilier durant la première année ne donne droit à aucune restitution. La règle évite qu'on souscrive pour quelques semaines avant de se dédire." },
 
-    { id: 'm2p04', chap: 'c4', type: 'single',
+    { id: 'm2p04', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, divisibilité de la prime",
       ctx: "Une entreprise assurée depuis huit ans subit un dommage partiel indemnisé. Elle résilie alors son contrat, alors que cinq mois de prime restent à courir sur la période en cours.",
       q: "Que devient cette part de prime ?",
-      choices: ["Elle reste acquise à l'assureur", "Elle est remboursée : le principe de divisibilité s'applique", "Elle est convertie en franchise", "Elle est perdue de moitié"],
+      choices: [
+        "Elle reste intégralement acquise à l'assureur",
+        "Elle est remboursée : le principe de divisibilité s'applique",
+        "Elle est convertie en réduction de franchise",
+        "Elle est perdue pour moitié, à titre de frais",
+      ],
       answer: [1],
-      explain: "Ni disparition du risque ni résiliation pendant la première année : aucune exception ne s'applique, la prime n'est due que jusqu'à la fin du contrat." },
+      explain: "Aucune des deux exceptions ne joue ici : on revient au principe de l'art. 24 LCA, la prime n'étant due que pour le temps réellement couvert. L'assureur restitue le prorata." },
 
-    { id: 'm2p05', chap: 'c4', type: 'single',
+    { id: 'm2p05', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, divisibilité de la prime",
       ctx: "Un artisan cesse définitivement son activité en juin et ses contrats d'assurance d'entreprise prennent fin à ce moment. Il avait payé la prime annuelle en janvier.",
-      q: "Peut-il exiger le remboursement des six mois restants ?",
-      choices: ["Oui, la prime est divisible", "Non : la cessation de l'activité fait disparaître le risque, la prime entière est due", "Oui, mais seulement pour les assurances de choses", "Oui, sur décision de la FINMA"],
+      q: "Peut-il exiger le remboursement des six mois de prime restants ?",
+      choices: [
+        "Oui, la prime étant divisible par principe",
+        "Non : la cessation de l'activité fait disparaître le risque",
+        "Oui, mais uniquement pour les assurances de choses",
+        "Oui, sur décision de l'autorité de surveillance",
+      ],
       answer: [1],
-      explain: "La disparition du risque est expressément visée par l'art. 24 LCA comme exception à la divisibilité : c'est le piège le plus fréquent de cet exercice." },
+      explain: "Plus d'activité, plus de risque à couvrir : on retombe sur l'exception à la divisibilité. Une résiliation ordinaire à l'échéance aurait, elle, donné droit au remboursement du prorata." },
 
     { id: 'm2p06', chap: 'c4', type: 'multi',
       ctx: "Vous devez expliquer à un client la règle de la prime depuis la révision de la LCA.",
@@ -116,19 +168,31 @@
       explain: "La divisibilité est le principe, mais elle connaît deux exceptions précises. Affirmer qu'il n'y en a aucune est l'erreur classique." },
 
     /* ---- Transfert de propriété : délais ---- */
-    { id: 'm2t01', chap: 'c4', type: 'single',
+    { id: 'm2t01', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, refus du transfert",
       ctx: "Madame Vaucher achète un immeuble le 1er mars. Le bâtiment est assuré auprès d'un assureur privé et elle ne souhaite pas conserver ce contrat.",
       q: "De quel délai dispose-t-elle pour refuser le transfert du contrat ?",
-      choices: ["14 jours", "30 jours suivant le changement de propriétaire", "3 mois", "Elle ne peut pas refuser"],
+      choices: [
+        "De 14 jours dès la connaissance du transfert",
+        "De 30 jours suivant le changement de propriétaire",
+        "De 3 mois dès l'inscription au registre",
+        "D'aucun : le transfert s'impose à l'acquéreur",
+      ],
       answer: [1],
-      explain: "Art. 54 LCA : le nouveau propriétaire peut refuser le transfert dans les 30 jours, par écrit ou par tout moyen permettant la preuve par un texte." },
+      explain: "Art. 54 LCA : l'acquéreur reprend le contrat de plein droit, mais peut le refuser dans les trente jours. À ne pas confondre avec les quatorze jours dont dispose l'assureur pour résilier de son côté." },
 
-    { id: 'm2t02', chap: 'c4', type: 'single',
+    { id: 'm2t02', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, résiliation par l'assureur",
       ctx: "Le même immeuble a changé de mains. L'assureur apprend l'identité de la nouvelle propriétaire et estime que le risque ne lui convient plus.",
       q: "De quel délai dispose-t-il pour résilier, et quand le contrat prend-il fin ?",
-      choices: ["30 jours, fin immédiate", "14 jours dès la connaissance de l'identité, le contrat prenant fin au plus tôt 30 jours après", "3 mois, fin à l'échéance annuelle", "Il ne peut pas résilier"],
+      choices: [
+        "30 jours pour résilier, avec effet immédiat",
+        "14 jours dès la connaissance de l'identité, le contrat finissant 30 jours plus tard au plus tôt",
+        "3 mois pour résilier, avec effet à l'échéance annuelle",
+        "Aucun : l'assureur ne peut pas résilier dans ce cas",
+      ],
       answer: [1],
-      explain: "Art. 54 LCA : 14 jours pour résilier, et un délai d'au moins 30 jours avant l'extinction, afin que le nouveau propriétaire ait le temps de se réassurer." },
+      explain: "L'assureur doit réagir vite une fois qu'il sait qui est le nouveau propriétaire, mais le contrat ne s'arrête pas du jour au lendemain : l'acquéreur garde trente jours pour se réassurer ailleurs." },
 
     { id: 'm2t03', chap: 'c4', type: 'single',
       ctx: "Un client vend sa voiture à un tiers et vous demande si son assurance casco s'arrête automatiquement le jour de la vente.",
@@ -137,12 +201,18 @@
       answer: [1],
       explain: "La vente n'éteint pas le contrat : elle ouvre une fenêtre pendant laquelle l'acquéreur peut refuser et l'assureur peut résilier." },
 
-    { id: 'm2t04', chap: 'c4', type: 'single',
+    { id: 'm2t04', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "Droit, LCA, changement de propriétaire",
       ctx: "Un immeuble locatif calme est vendu à un exploitant qui y installe un atelier de peinture industrielle. Le risque d'incendie s'en trouve nettement accru.",
       q: "Comment l'assureur peut-il réagir, au-delà de son droit de résiliation lié au changement de propriétaire ?",
-      choices: ["Il ne peut rien faire", "Les règles sur l'aggravation du risque s'appliquent par analogie", "Il doit doubler la somme d'assurance", "Il doit saisir la FINMA"],
+      choices: [
+        "Il ne dispose d'aucun autre moyen d'action",
+        "Les règles sur l'aggravation du risque s'appliquent par analogie",
+        "Il peut exiger le doublement de la somme d'assurance",
+        "Il doit soumettre le cas à l'autorité de surveillance",
+      ],
       answer: [1],
-      explain: "L'art. 54 LCA renvoie aux règles sur l'aggravation du risque : l'assureur peut adapter la prime ou se départir du contrat pour l'avenir." }
+      explain: "Un nouveau propriétaire peut changer profondément le risque — usage du bien, expérience, environnement. L'assureur peut alors adapter la prime ou se départir du contrat selon le régime de l'aggravation." }
   ]);
 
   /* ============ MODULE 3 : déclinaison non-vie ============ */

@@ -179,11 +179,17 @@
       answer: [1],
       explain: "L'art. 46 LCA porte le délai de deux à cinq ans dès le fait d'où naît l'obligation. C'est l'un des changements les plus favorables aux assurés." },
 
-    { id: 'm2s03', chap: 'c4', type: 'single', src: S.lcarev,
-      q: "À quelles conditions un contrat d'assurance de longue durée peut-il être résilié ordinairement ?",
-      choices: ["Jamais avant son échéance", "Pour la fin de la 3e année ou de chaque année suivante, avec un préavis de 3 mois", "En tout temps sans préavis", "Uniquement après un sinistre"],
+    { id: 'm2s03', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne', src: S.lcarev,
+      theme: "Droit, LCA, caractère impératif",
+      q: "Une police de sept ans stipule qu'aucune résiliation n'est possible avant l'échéance. Quelle est la valeur de cette clause ?",
+      choices: [
+        "Elle est valable, les parties étant libres de fixer la durée",
+        "Elle est nulle : le droit de résilier après trois ans est impératif",
+        "Elle n'est valable qu'envers les preneurs qui sont des entreprises",
+        "Elle est valable si le preneur l'a expressément contresignée",
+      ],
       answer: [1],
-      explain: "L'art. 35a LCA introduit ce droit de résiliation ordinaire, afin qu'un preneur ne reste pas lié indéfiniment par un contrat de longue durée." },
+      explain: "L'art. 35a LCA figure parmi les dispositions auxquelles on ne peut pas déroger : la clause tombe et la règle légale s'applique à sa place. La signature du preneur n'y change rien." },
 
     { id: 'm2s04', chap: 'c4', type: 'single', src: S.lcarev,
       q: "En assurance-maladie complémentaire, qui peut résilier le contrat après un sinistre ayant donné lieu à prestation ?",
