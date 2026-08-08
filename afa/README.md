@@ -1,23 +1,37 @@
 # AFA Suisse — entraînement 🛡️
 
 Site d'entraînement à la formation d'**intermédiaire en assurance AFA** (Association
-pour la formation professionnelle en assurance / VBV) : les deux modules communs, plus
-un module entièrement consacré au **profil Non-Vie**.
+pour la formation professionnelle en assurance / VBV), centré sur les Circles
+**Lancement** et **Base**.
 
 | Module | Titre | Contenu |
 |--------|-------|---------|
 | **1** | Industrie de l'assurance | Notions élémentaires, risque et risk management, principes techniques, prime et systèmes de financement, trois piliers, branches, marché suisse, affaires d'assurance et chaîne de valeur, distribution et intermédiaires, réassurance, surveillance et solvabilité |
 | **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA, conciliation et juridiction |
-| **3** | Assurances non-vie *(profil Non-Vie)* | Ménage, bâtiment et dommages naturels, véhicules à moteur, RC privée, RC d'entreprise, assurances de choses des entreprises et perte d'exploitation, protection juridique / cyber / cautionnement, souscription et traitement des sinistres |
 
-**27 chapitres de cours, 1152 questions commentées (dont 77 de niveau avancé, 142 mises en
-situation, 33 adossées à une source officielle citée et 74 au gabarit exact de l'examen —
+**19 chapitres de cours, 891 questions commentées (dont 64 de niveau avancé, 86 mises en
+situation, 29 adossées à une source officielle citée et 74 au gabarit exact de l'examen —
 dont les 27 questions de la série zéro publiée par l'AFA), 67 fiches de glossaire.**
 
-Le module 3 couvre le **profil Non-Vie** à lui seul, avec **261 questions**.
+Soit une cinquantaine de questions par chapitre : de quoi refaire plusieurs séries sur
+un même sujet sans retomber sur les mêmes questions.
 
-Soit environ 40 questions par chapitre : de quoi refaire plusieurs séries sur un
-même sujet sans retomber sur les mêmes questions.
+### 💤 Module Non-Vie en veille
+
+Un troisième module couvre le **profil Non-Vie** (ménage, bâtiment et dommages naturels,
+véhicules, RC privée et d'entreprise, choses des entreprises, protection juridique,
+souscription et sinistres) : 8 chapitres et 261 questions. Il **n'est pas chargé**, le
+parcours en cours portant sur Lancement et Base. Ses fichiers sont intacts — pour le
+réactiver, il suffit de remettre dans `index.html`, avant `js/app.js`, les cinq lignes
+signalées par le commentaire qui s'y trouve :
+
+```html
+<script src="js/data-module3.js"></script>
+<script src="js/data-m3-extra1.js"></script>
+<script src="js/data-m3-extra2.js"></script>
+<script src="js/data-m3-extra3.js"></script>
+<script src="js/data-cas1.js"></script>
+```
 
 ## ▶️ Utilisation
 
@@ -57,8 +71,8 @@ python3 -m http.server 8000
   catégorie — y compris la variante Vrai/Faux. Les touches `1`–`4` remplissent le
   tableau ligne après ligne.
 - **Examen blanc** — 40 questions, 45 minutes, seuil de réussite à 70 %. La correction
-  n'apparaît qu'à la fin, comme au vrai examen. Le **périmètre est réglable** : tous les
-  modules, ou un seul — pratique pour préparer le profil Non-Vie.
+  n'apparaît qu'à la fin, comme au vrai examen. Le **périmètre est réglable** : les deux
+  modules, ou un seul.
 - **Réviser mes erreurs** — rejoue uniquement les questions ratées au dernier passage.
 - **Flashcards & glossaire** — cartes recto/verso filtrables par thème, avec recherche.
 - **Progression** — taux de réussite par chapitre, historique des examens blancs,
@@ -78,12 +92,11 @@ rien n'est envoyé sur un serveur.
 | `js/app.js` | Routeur, moteur de quiz, examen, flashcards, statistiques |
 | `js/data-module1.js` | Cours et premières questions — Industrie de l'assurance |
 | `js/data-module2.js` | Cours et premières questions — Droit de l'assurance |
-| `js/data-module3.js` | Cours et premières questions — Assurances non-vie |
-| `js/data-m3-extra1…3.js` | Banque de questions complémentaire du module 3 |
+| `js/data-module3.js`, `js/data-m3-extra1…3.js`, `js/data-cas1.js` | Module Non-Vie — **en veille**, non chargés dans `index.html` |
 | `js/data-m1-extra1…4.js` | Banque de questions complémentaire du module 1 (2 chapitres par fichier) |
 | `js/data-m2-extra1…5.js` | Banque de questions complémentaire du module 2 |
 | `js/data-m1-hard.js`, `js/data-m2-hard.js` | Questions de niveau avancé (`lvl: 'hard'`) |
-| `js/data-cas1…3.js` | Mises en situation (`lvl: 'cas'`, champ `ctx`) — cas1 non-vie, cas2 format plateforme, cas3 Lancement &amp; Base |
+| `js/data-cas2…3.js` | Mises en situation (`lvl: 'cas'`, champ `ctx`) — cas2 format plateforme, cas3 Lancement &amp; Base |
 | `js/data-sources.js` | Questions adossées à une source officielle (`lvl: 'src'`, champ `src`) |
 | `js/data-plan-officiel.js` | Chapitres et sujets ajoutés pour coller au plan officiel des deux modules |
 | `js/data-nullserie.js` | Les 27 questions de la série zéro publiée par l'AFA |
@@ -138,7 +151,7 @@ Les questions sont écrites au gabarit de la **série zéro officielle** : énon
 comme une vraie question, propositions de longueur et de registre comparables, bonne
 réponse dont la position varie et qui n'est jamais la plus longue — le piège qui permet
 de deviner sans savoir. Un contrôle automatique signale les écarts, et la reprise de la
-banque existante est en cours : **209 des 605 questions concernées** ont été réécrites à
+banque existante est en cours : **209 des 475 questions concernées** des modules 1 et 2 ont été réécrites à
 ce jour, le module 1 étant terminé pour l'essentiel.
 
 Les questions et les fiches ont, à une exception près, été **rédigées de A à Z pour ce
@@ -163,7 +176,7 @@ Les **33 questions marquées « source officielle »** citent chacune la publica
 les fonde, avec un lien cliquable dans la correction. Les faits ont été contrôlés en
 août 2026 ; les publications elles-mêmes peuvent évoluer.
 
-N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 1152
+N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 891
 questions. Signale toute divergence — en cas de doute, seuls les textes légaux publiés
 (LCA, LSA, CO, CC…) font foi.
 
@@ -173,18 +186,15 @@ Le parcours AFA est organisé en **Circles** regroupés par thèmes (*Base*, *Ac
 clients*, *Conseiller et servir les clients*, *Préparation à l'examen*). Les cercles
 **Lancement** et **Base** correspondent à l'industrie de l'assurance et au droit de
 l'assurance, soit les **modules 1 et 2** de ce site — c'est là que se concentrent les
-mises en situation et les questions au format officiel. Le **module 3** prépare le
-profil Non-Vie, qui intervient plus loin dans le parcours.
+mises en situation et les questions au format officiel. Le module Non-Vie, qui
+intervient plus loin dans le parcours, est pour l'instant en veille.
 
 Le vocabulaire suit celui de l'examen lorsqu'il diverge des manuels : les questions
 officielles parlent ainsi de « système de la couverture des besoins » là où la
 littérature dit « répartition des dépenses ». Les deux appellations sont données côte
 à côte dans la fiche de cours.
 
-Le profil **Non-Vie** habilite à conclure exclusivement dans le domaine non-vie, à
-l'exclusion de l'assurance-maladie complémentaire, qui relève d'un profil distinct.
-L'épreuve écrite en ligne consacre 60 minutes à la partie non-vie, avec un traitement
-de cas guidé. Ce site n'entraîne **que l'écrit** : la partie orale n'est pas simulée.
+Ce site n'entraîne **que l'écrit** : la partie orale n'est pas simulée.
 
 Support pédagogique **non officiel**, sans lien avec l'AFA/VBV. Les valeurs chiffrées
 (rentes AVS, seuils LPP, plafonds LAA, montants du pilier 3a) sont celles de **2026** (vérifiées auprès de l'OFAS) et
@@ -197,7 +207,7 @@ Pour héberger le site là où l'on ne peut déposer qu'un fichier (ou pour l'en
 par courriel), regroupe tout — style et scripts compris — en une page autonome :
 
 ```bash
-node build-single-file.js            # produit afa-site-complet.html (~840 Ko)
+node build-single-file.js            # produit afa-site-complet.html (~720 Ko)
 node build-single-file.js /tmp/x.html  # ou vers le chemin de ton choix
 ```
 
