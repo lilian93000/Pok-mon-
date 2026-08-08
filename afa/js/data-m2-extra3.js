@@ -47,10 +47,10 @@
       explain: "La sanction de l'art. 40 LCA frappe l'ensemble de la prétention, y compris sa partie honnête, et l'assureur peut en outre résilier le contrat." },
 
     { id: 'm2c5x07', chap: 'c5', type: 'single',
-      q: "Quand la prestation de l'assureur devient-elle exigible ?",
-      choices: ["Immédiatement après l'annonce du sinistre", "Quatre semaines après réception des renseignements permettant de vérifier le bien-fondé de la prétention", "Après un an", "Après décision de l'Ombudsman"],
+      q: "Un assuré annonce son sinistre le 2 mai et transmet les justificatifs complets le 20 mai. À partir de quand peut-il exiger le paiement ?",
+      choices: ["Dès le 2 mai", "Quatre semaines après le 20 mai", "Quatre semaines après le 2 mai", "Dès le 20 mai"],
       answer: [1],
-      explain: "Art. 41 LCA. Le point de départ n'est pas l'annonce mais la réception des justificatifs, ce qui laisse à l'assureur le temps d'instruire le dossier." },
+      explain: "Art. 41 LCA : le délai de quatre semaines court dès la réception des renseignements permettant d'établir le bien-fondé de la prétention, soit le 20 mai, et non dès l'annonce du sinistre." },
 
     { id: 'm2c5x08', chap: 'c5', type: 'single',
       q: "Le délai de prescription de cinq ans de l'art. 46 LCA court dès :",

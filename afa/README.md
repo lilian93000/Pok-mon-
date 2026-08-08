@@ -6,15 +6,17 @@ un module entièrement consacré au **profil Non-Vie**.
 
 | Module | Titre | Contenu |
 |--------|-------|---------|
-| **1** | Industrie de l'assurance | Risque et risk management, principes techniques et prime, trois piliers, branches, marché suisse, distribution et intermédiaires, réassurance, surveillance et solvabilité |
-| **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA |
+| **1** | Industrie de l'assurance | Notions élémentaires, risque et risk management, principes techniques, prime et systèmes de financement, trois piliers, branches, marché suisse, affaires d'assurance et chaîne de valeur, distribution et intermédiaires, réassurance, surveillance et solvabilité |
+| **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA, conciliation et juridiction |
 | **3** | Assurances non-vie *(profil Non-Vie)* | Ménage, bâtiment et dommages naturels, véhicules à moteur, RC privée, RC d'entreprise, assurances de choses des entreprises et perte d'exploitation, protection juridique / cyber / cautionnement, souscription et traitement des sinistres |
 
-**24 chapitres de cours, 1047 questions commentées (dont 77 de niveau avancé, 136 mises en situation et 33 adossées à une source officielle citée), 67 fiches de glossaire.**
+**27 chapitres de cours, 1152 questions commentées (dont 77 de niveau avancé, 142 mises en
+situation, 33 adossées à une source officielle citée et 74 au gabarit exact de l'examen —
+dont les 27 questions de la série zéro publiée par l'AFA), 67 fiches de glossaire.**
 
-Le module 3 couvre le **profil Non-Vie** à lui seul, avec **205 questions**.
+Le module 3 couvre le **profil Non-Vie** à lui seul, avec **261 questions**.
 
-Soit environ 35 à 40 questions par chapitre : de quoi refaire plusieurs séries sur un
+Soit environ 40 questions par chapitre : de quoi refaire plusieurs séries sur un
 même sujet sans retomber sur les mêmes questions.
 
 ## ▶️ Utilisation
@@ -38,7 +40,7 @@ python3 -m http.server 8000
 - **Longueur de série réglable** (10, 20, 40 ou tout le lot). La sélection n'est pas
   purement aléatoire : les questions **ratées** sortent en premier, puis celles **jamais
   vues**, et enfin celles déjà acquises.
-- **Filtre de niveau** — « tous niveaux », « difficiles », « mises en situation » ou « avec source officielle ». Les questions
+- **Filtre de niveau** — « tous niveaux », « difficiles », « mises en situation », « avec source officielle » ou « format officiel ». Les questions
   avancées (marquées `lvl: 'hard'`, signalées par un badge pendant le quiz) portent sur
   des calculs à plusieurs étapes, des combinaisons de délais et des pièges de
   qualification juridique. Les questions **sourcées** (`lvl: 'src'`) affichent sous la
@@ -47,6 +49,13 @@ python3 -m http.server 8000
   format de la plateforme officielle : chaque question porte **son propre énoncé**,
   soit une situation à classer dans une catégorie, soit un « dans lesquelles de ces
   situations… » dont chaque choix est lui-même un scénario.
+- **Format officiel** (`lvl: 'off'`) — les questions calquées sur la série zéro publiée
+  par l'AFA : en-tête « Thème : module, sujet, sous-sujet », consigne « Cochez la bonne
+  réponse » / « Cochez les bonnes réponses », et barème affiché (1 point = complexité
+  simple, 2 points = moyenne). Elles introduisent le **tableau d'attribution**
+  (`type: 'grid'`) du vrai examen : une ligne par énoncé, une colonne à cocher par
+  catégorie — y compris la variante Vrai/Faux. Les touches `1`–`4` remplissent le
+  tableau ligne après ligne.
 - **Examen blanc** — 40 questions, 45 minutes, seuil de réussite à 70 %. La correction
   n'apparaît qu'à la fin, comme au vrai examen. Le **périmètre est réglable** : tous les
   modules, ou un seul — pratique pour préparer le profil Non-Vie.
@@ -76,6 +85,9 @@ rien n'est envoyé sur un serveur.
 | `js/data-m1-hard.js`, `js/data-m2-hard.js` | Questions de niveau avancé (`lvl: 'hard'`) |
 | `js/data-cas1…3.js` | Mises en situation (`lvl: 'cas'`, champ `ctx`) — cas1 non-vie, cas2 format plateforme, cas3 Lancement &amp; Base |
 | `js/data-sources.js` | Questions adossées à une source officielle (`lvl: 'src'`, champ `src`) |
+| `js/data-plan-officiel.js` | Chapitres et sujets ajoutés pour coller au plan officiel des deux modules |
+| `js/data-nullserie.js` | Les 27 questions de la série zéro publiée par l'AFA |
+| `js/data-format-officiel.js` | Questions rédigées au gabarit de la série zéro (`lvl: 'off'`, dont les grilles) |
 | `js/data-glossaire.js` | Notions du glossaire / flashcards |
 
 Les fichiers `*-extra*.js` ne contiennent que des questions : ils viennent s'ajouter au
@@ -101,17 +113,37 @@ Ajoute `lvl: 'hard'` pour classer la question parmi les questions difficiles :
 { id: 'm1c2h06', chap: 'c2', type: 'single', lvl: 'hard', /* … */ }
 ```
 
+Pour une question au gabarit officiel, ajoute l'en-tête et le barème, et — s'il s'agit
+d'un tableau d'attribution — remplace `choices` par `cols` / `rows`, `answer` donnant
+alors l'index de colonne de **chaque ligne** :
+
+```js
+{ id: 'fo130', chap: 'c4', type: 'grid', lvl: 'off', pts: 2, cx: 'Moyenne',
+  theme: 'IA, classification, dommage-somme',
+  q: "S'agit-il d'une assurance de dommages ou d'une assurance de sommes ?",
+  cols: ["Assurance de dommages", "Assurance de sommes"],
+  rows: ["Assurance ménage", "Assurance décès à capital fixe"],
+  answer: [0, 1],                               // ligne 0 → colonne 0, ligne 1 → colonne 1
+  explain: "…" }
+```
+
 `chap` doit correspondre à l'`id` d'un chapitre du même module, et `id` doit être
-unique dans tout le site. Cinq choix au maximum, pour rester compatible avec les
-raccourcis clavier.
+unique dans tout le site — de même que le couple énoncé + question. Huit choix au
+maximum (les touches `1`–`8` les sélectionnent), et quatre colonnes au maximum pour
+une grille.
 
 ## ⚠️ Provenance du contenu et limites
 
-Les questions et les fiches ont été **rédigées de A à Z pour ce site**, à partir de
-connaissances générales du droit suisse des assurances et du programme des deux
-premiers modules AFA. Elles ne proviennent **d'aucune banque de questions officielle**,
-d'aucun manuel et d'aucun examen réel : rien n'est copié, mais rien ne garantit non
-plus que la formulation colle exactement à celle de l'examen.
+Les questions et les fiches ont, à une exception près, été **rédigées de A à Z pour ce
+site**, à partir de connaissances générales du droit suisse des assurances et du
+programme des deux premiers modules AFA. Elles ne proviennent d'aucun manuel ni
+d'aucun examen réel.
+
+L'exception : les **27 questions de `data-nullserie.js`** reprennent la **série zéro
+publiée par l'AFA** (« Nullserie GFK »), que l'association diffuse précisément comme
+exemples de l'épreuve écrite — intitulés, propositions et barème d'origine, avec des
+commentaires rédigés pour ce site. Ce sont elles qui ont fixé le gabarit suivi par les
+`data-format-officiel.js`, et notamment le **tableau d'attribution**.
 
 Ont été **vérifiés contre des sources officielles** : les délais et articles clés de la
 LCA révisée (art. 2a, 35a, 42, 46, ainsi que l'abrogation de l'ancien art. 12 et sa
@@ -124,7 +156,7 @@ Les **33 questions marquées « source officielle »** citent chacune la publica
 les fonde, avec un lien cliquable dans la correction. Les faits ont été contrôlés en
 août 2026 ; les publications elles-mêmes peuvent évoluer.
 
-N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 1047
+N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 1152
 questions. Signale toute divergence — en cas de doute, seuls les textes légaux publiés
 (LCA, LSA, CO, CC…) font foi.
 
@@ -134,8 +166,13 @@ Le parcours AFA est organisé en **Circles** regroupés par thèmes (*Base*, *Ac
 clients*, *Conseiller et servir les clients*, *Préparation à l'examen*). Les cercles
 **Lancement** et **Base** correspondent à l'industrie de l'assurance et au droit de
 l'assurance, soit les **modules 1 et 2** de ce site — c'est là que se concentrent les
-mises en situation. Le **module 3** prépare le profil Non-Vie, qui intervient plus loin
-dans le parcours.
+mises en situation et les questions au format officiel. Le **module 3** prépare le
+profil Non-Vie, qui intervient plus loin dans le parcours.
+
+Le vocabulaire suit celui de l'examen lorsqu'il diverge des manuels : les questions
+officielles parlent ainsi de « système de la couverture des besoins » là où la
+littérature dit « répartition des dépenses ». Les deux appellations sont données côte
+à côte dans la fiche de cours.
 
 Le profil **Non-Vie** habilite à conclure exclusivement dans le domaine non-vie, à
 l'exclusion de l'assurance-maladie complémentaire, qui relève d'un profil distinct.
@@ -153,7 +190,7 @@ Pour héberger le site là où l'on ne peut déposer qu'un fichier (ou pour l'en
 par courriel), regroupe tout — style et scripts compris — en une page autonome :
 
 ```bash
-node build-single-file.js            # produit afa-site-complet.html (~630 Ko)
+node build-single-file.js            # produit afa-site-complet.html (~840 Ko)
 node build-single-file.js /tmp/x.html  # ou vers le chemin de ton choix
 ```
 

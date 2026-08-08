@@ -282,10 +282,10 @@
       explain: "La FINMA n'est pas une instance de recours pour les litiges contractuels : elle ne se prononce pas sur le bien-fondé d'une prestation refusée." },
 
     { id: 'm1c8x16', chap: 'c8', type: 'single',
-      q: "Comment la FINMA est-elle financée ?",
-      choices: ["Par le budget ordinaire de la Confédération", "Par les taxes et émoluments perçus auprès des assujettis", "Par une taxe sur les primes payées par les assurés", "Par des dons du secteur"],
+      q: "Pourquoi la FINMA ne figure-t-elle pas au budget ordinaire de la Confédération ?",
+      choices: ["Parce qu'elle est une société privée", "Parce qu'elle se finance par les taxes et émoluments prélevés auprès des assujettis, ce qui assure son indépendance", "Parce que les cantons la financent", "Parce qu'elle prélève une taxe sur chaque prime payée par les assurés"],
       answer: [1],
-      explain: "Ce mode de financement garantit son indépendance budgétaire ; elle n'est ni tributaire du Parlement ni subventionnée par l'impôt." },
+      explain: "Les assujettis eux-mêmes financent la surveillance. La FINMA n'est donc tributaire ni du Parlement pour son budget, ni de l'impôt : c'est une garantie d'indépendance, et non un statut privé." },
 
     { id: 'm1c8x17', chap: 'c8', type: 'single',
       q: "Les assurances complémentaires à l'assurance-maladie sont surveillées par :",

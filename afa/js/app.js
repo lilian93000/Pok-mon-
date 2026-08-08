@@ -18,7 +18,7 @@
   let quizLen = 20;
 
   /* Niveau : 'tous' ou 'hard' (questions marquées lvl:'hard'). */
-  const LEVELS = [['tous', 'Tous niveaux'], ['hard', 'Difficiles'], ['cas', 'Mises en situation'], ['src', 'Avec source officielle']];
+  const LEVELS = [['tous', 'Tous niveaux'], ['hard', 'Difficiles'], ['cas', 'Mises en situation'], ['src', 'Avec source officielle'], ['off', 'Format officiel']];
   let quizLvl = 'tous';
   const byLevel = (list) => quizLvl === 'tous' ? list : list.filter(q => q.lvl === quizLvl);
 
@@ -47,7 +47,14 @@
   const moduleById = (id) => MODULES.find(m => m.id === id);
   const chapterById = (mod, cid) => mod && mod.chapters.find(c => c.id === cid);
   const allQuestions = () => MODULES.flatMap(m => m.questions.map(q => ({ ...q, mod: m.id })));
-  const letters = 'ABCDE';
+  const letters = 'ABCDEFGH';
+
+  // Les questions « grille » (tableau d'attribution du vrai examen) encodent
+  // chaque case en un entier ligne × nb_colonnes + colonne, ce qui permet de
+  // réutiliser toute la mécanique de comparaison des réponses.
+  const isGrid = (q) => q.type === 'grid';
+  const expected = (q) => isGrid(q) ? q.answer.map((c, r) => r * q.cols.length + c) : q.answer;
+  const complete = (q, sel) => isGrid(q) ? sel.length === q.rows.length : sel.length > 0;
 
   /* Ligne « source » affichée sous la correction, pour les questions
      dont le fait a été contrôlé contre une publication officielle. */
@@ -472,6 +479,7 @@
     if (session.done) return viewResults();
 
     const q = session.questions[session.idx];
+    const grid = isGrid(q);
     const isMulti = q.type === 'multi';
     const n = session.questions.length;
 
@@ -481,26 +489,33 @@
       return '<i></i>';
     }).join('');
 
-    const choices = q.choices.map((c, i) => {
-      const sel = session.selected.includes(i);
-      let cls = 'choice';
-      if (session.revealed) {
-        if (q.answer.includes(i)) cls += ' ok';
-        else if (sel) cls += ' ko';
-      } else if (sel) cls += ' sel';
-      return `<button class="${cls}" data-i="${i}" data-multi="${isMulti ? 1 : 0}" ${session.revealed ? 'disabled' : ''}>
-                <span class="box">${sel || (session.revealed && q.answer.includes(i)) ? '✓' : ''}</span>
-                <span><b>${letters[i]}.</b> ${esc(c)}</span>
-              </button>`;
-    }).join('');
+    // Deux mises en forme : la liste de choix classique, et le tableau
+    // d'attribution du vrai examen (une colonne à cocher par ligne).
+    const body = grid ? gridTable(q, session.selected, session.revealed) : `
+      <div class="choices" id="choices">${q.choices.map((c, i) => {
+        const sel = session.selected.includes(i);
+        let cls = 'choice';
+        if (session.revealed) {
+          if (q.answer.includes(i)) cls += ' ok';
+          else if (sel) cls += ' ko';
+        } else if (sel) cls += ' sel';
+        return `<button class="${cls}" data-i="${i}" data-multi="${isMulti ? 1 : 0}" ${session.revealed ? 'disabled' : ''}>
+                  <span class="box">${sel || (session.revealed && q.answer.includes(i)) ? '✓' : ''}</span>
+                  <span><b>${letters[i]}.</b> ${esc(c)}</span>
+                </button>`;
+      }).join('')}</div>`;
 
     let feedback = '';
     if (session.revealed && !session.isExam) {
-      const ok = sameSet(session.selected, q.answer);
-      const good = q.answer.map(i => letters[i]).join(', ');
+      const exp = expected(q);
+      const ok = sameSet(session.selected, exp);
+      const good = grid
+        ? q.answer.map((c, r) => esc(q.rows[r]) + ' → <b>' + esc(q.cols[c]) + '</b>').join('<br>')
+        : q.answer.map(i => letters[i]).join(', ');
       feedback = `
         <div class="feedback ${ok ? 'good' : 'bad'}">
-          <div class="verdict">${ok ? '✅ Correct' : '❌ Incorrect'} <span class="muted small">— réponse${q.answer.length > 1 ? 's' : ''} : ${good}</span></div>
+          <div class="verdict">${ok ? '✅ Correct' : '❌ Incorrect'}${grid ? '' : ` <span class="muted small">— réponse${exp.length > 1 ? 's' : ''} : ${good}</span>`}</div>
+          ${grid ? `<p class="small">${good}</p>` : ''}
           <p>${esc(q.explain)}</p>
           ${srcLine(q)}
         </div>`;
@@ -524,19 +539,49 @@
         ${q.lvl === 'hard' ? '<span class="tag amber" style="margin-bottom:.5rem;display:inline-block">Difficile</span>' : ''}
         ${q.lvl === 'src' ? '<span class="tag blue" style="margin-bottom:.5rem;display:inline-block">Source officielle</span>' : ''}
         ${q.lvl === 'cas' ? '<span class="tag green" style="margin-bottom:.5rem;display:inline-block">Mise en situation</span>' : ''}
+        ${q.lvl === 'off' ? '<span class="tag blue" style="margin-bottom:.5rem;display:inline-block">Format officiel</span>' : ''}
+        ${q.theme ? `<div class="qtheme">Thème&nbsp;: ${esc(q.theme)}</div>` : ''}
         ${q.ctx ? `<div class="ctxbox">${esc(q.ctx)}</div>` : ''}
         <div class="question">${esc(q.q)}</div>
-        ${isMulti ? '<p class="small muted" style="margin-top:-.6rem">Plusieurs réponses possibles.</p>' : ''}
-        <div class="choices" id="choices">${choices}</div>
+        <p class="hintline"><span class="i">i</span> ${grid
+            ? 'Cochez les bonnes réponses (une par ligne).'
+            : isMulti ? 'Cochez les bonnes réponses.' : 'Cochez la bonne réponse.'}</p>
+        ${body}
+        ${q.pts ? `<p class="qpoints">Points&nbsp;: ${q.pts} / Complexité&nbsp;: ${esc(q.cx || (q.pts > 1 ? 'Moyenne' : 'Simple'))}</p>` : ''}
         ${feedback}
         <div class="row" style="margin-top:1.3rem">
           <span class="spacer"></span>
           ${session.revealed
             ? `<button class="btn primary" id="nextBtn">${last ? 'Voir le résultat' : 'Question suivante →'}</button>`
-            : `<button class="btn primary" id="validateBtn" ${session.selected.length ? '' : 'disabled'}>Valider</button>`}
+            : `<button class="btn primary" id="validateBtn" ${complete(q, session.selected) ? '' : 'disabled'}>Valider</button>`}
         </div>
       </div>
     `;
+  }
+
+  // Tableau d'attribution : une ligne par énoncé, une colonne cochable par catégorie.
+  function gridTable(q, selected, revealed) {
+    const nc = q.cols.length;
+    const head = q.cols.map(c => `<th>${esc(c)}</th>`).join('');
+    const rows = q.rows.map((label, r) => {
+      const cells = q.cols.map((_, c) => {
+        const id = r * nc + c;
+        const sel = selected.includes(id);
+        const good = q.answer[r] === c;
+        let cls = 'gcell';
+        if (revealed) {
+          if (good) cls += ' ok';
+          else if (sel) cls += ' ko';
+        } else if (sel) cls += ' sel';
+        return `<td><button class="${cls}" data-cell="${id}" ${revealed ? 'disabled' : ''}
+                  aria-label="${esc(q.cols[c])}">${sel || (revealed && good) ? '✓' : ''}</button></td>`;
+      }).join('');
+      return `<tr><th scope="row">${esc(label)}</th>${cells}</tr>`;
+    }).join('');
+    return `<div class="gridwrap"><table class="gridq" id="choices">
+        <thead><tr><td></td>${head}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>`;
   }
 
   function viewResults() {
@@ -580,9 +625,16 @@
             ${r.q.ctx ? `<div class="a" style="margin-bottom:.4rem"><i>${esc(r.q.ctx)}</i></div>` : ''}
             <div class="q">${i + 1}. ${esc(r.q.q)}</div>
             <div class="a">
-              Votre réponse : <b>${r.given.length ? r.given.map(x => letters[x]).join(', ') : '—'}</b>
-              · Correct : <b>${r.q.answer.map(x => letters[x]).join(', ')}</b>
-              <br>${r.q.answer.map(x => '<b>' + letters[x] + '.</b> ' + esc(r.q.choices[x])).join('<br>')}
+              ${isGrid(r.q)
+                ? r.q.answer.map((c, row) => {
+                    const given = r.given.find(x => Math.floor(x / r.q.cols.length) === row);
+                    const gc = given === undefined ? null : given % r.q.cols.length;
+                    return esc(r.q.rows[row]) + ' → <b>' + esc(r.q.cols[c]) + '</b>'
+                      + (gc === c ? '' : ' <span class="muted">(votre réponse : ' + (gc === null ? '—' : esc(r.q.cols[gc])) + ')</span>');
+                  }).join('<br>')
+                : `Votre réponse : <b>${r.given.length ? r.given.map(x => letters[x]).join(', ') : '—'}</b>
+                   · Correct : <b>${r.q.answer.map(x => letters[x]).join(', ')}</b>
+                   <br>${r.q.answer.map(x => '<b>' + letters[x] + '.</b> ' + esc(r.q.choices[x])).join('<br>')}`}
               <br><span class="muted">${esc(r.q.explain)}</span>
               ${srcLine(r.q)}
             </div>
@@ -759,11 +811,22 @@
           render();
         };
       });
+      box.querySelectorAll('.gcell').forEach(btn => {
+        btn.onclick = () => {
+          if (session.revealed) return;
+          const id = +btn.dataset.cell;
+          const row = Math.floor(id / q.cols.length);
+          // une seule case cochée par ligne : la nouvelle remplace l'ancienne
+          session.selected = session.selected.filter(x => Math.floor(x / q.cols.length) !== row);
+          session.selected.push(id);
+          render();
+        };
+      });
     }
 
     const v = document.getElementById('validateBtn');
     if (v) v.onclick = () => {
-      const ok = sameSet(session.selected, q.answer);
+      const ok = sameSet(session.selected, expected(q));
       session.results.push({ q, given: session.selected.slice(), ok });
       Store.recordAnswer(q.id, ok);
       if (session.isExam) nextQuestion();
@@ -984,8 +1047,18 @@
   document.addEventListener('keydown', (e) => {
     if (!session || session.done || parseHash()[0] !== 'session') return;
     if (e.target.matches('input, textarea')) return;
-    if (e.key >= '1' && e.key <= '5') {
-      const b = document.querySelector('.choice[data-i="' + (+e.key - 1) + '"]');
+    if (e.key >= '1' && e.key <= '8') {
+      const q = session.questions[session.idx];
+      let b;
+      if (isGrid(q)) {
+        // la touche choisit la colonne, sur la première ligne encore vide
+        const done = session.selected.map(x => Math.floor(x / q.cols.length));
+        const row = q.rows.findIndex((_, r) => !done.includes(r));
+        if (row !== -1 && +e.key <= q.cols.length)
+          b = document.querySelector('.gcell[data-cell="' + (row * q.cols.length + (+e.key - 1)) + '"]');
+      } else {
+        b = document.querySelector('.choice[data-i="' + (+e.key - 1) + '"]');
+      }
       if (b && !b.disabled) b.click();
     } else if (e.key === 'Enter') {
       const b = document.getElementById('nextBtn') || document.getElementById('validateBtn');

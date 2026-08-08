@@ -234,10 +234,10 @@
       explain: "Contrairement au RGPD européen, la loi suisse vise la personne physique responsable de la violation, non l'entreprise via un pourcentage du chiffre d'affaires." },
 
     { id: 'm2c8x13', chap: 'c8', type: 'single',
-      q: "Quelles activités d'assurance sont soumises à la LBA ?",
-      choices: ["L'assurance ménage", "L'assurance-vie directe et la distribution de parts de placements collectifs", "La RC véhicule", "La protection juridique"],
+      q: "Pourquoi les assurances de choses échappent-elles à la LBA, alors que l'assurance-vie y est soumise ?",
+      choices: ["Parce que leurs primes sont plus faibles", "Parce qu'elles ne comportent pas de composante de placement permettant d'y faire transiter des fonds", "Parce qu'elles ne sont pas surveillées par la FINMA", "Parce qu'elles ne concernent que des particuliers"],
       answer: [1],
-      explain: "Seules les opérations à composante financière permettent de blanchir des fonds : les assurances dommages n'y prêtent pas et échappent à la LBA." },
+      explain: "La LBA vise les intermédiaires financiers. Une police ménage rembourse un dommage et ne permet pas de placer de l'argent ; une assurance-vie à composante d'épargne, si — d'où son assujettissement." },
 
     { id: 'm2c8x14', chap: 'c8', type: 'multi',
       q: "Quelles obligations de diligence la LBA impose-t-elle ?",

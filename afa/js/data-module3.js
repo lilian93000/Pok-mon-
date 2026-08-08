@@ -622,10 +622,10 @@
       explain: "Le taux de conversion relève de la prévoyance professionnelle : il n'a aucune incidence sur un contrat de responsabilité civile." },
 
     { id: 'm3c5q07', chap: 'c5', type: 'single',
-      q: "Une assurance D&O protège :",
-      choices: ["L'entreprise contre ses clients", "Les administrateurs et directeurs contre les prétentions liées à leurs décisions de gestion", "Les employés contre le licenciement", "Les actionnaires contre la baisse du cours"],
+      q: "Un administrateur est recherché personnellement pour une décision de gestion ayant causé un dommage à la société. Quelle couverture entre en jeu ?",
+      choices: ["La RC d'entreprise", "L'assurance D&O", "L'assurance de protection juridique de l'entreprise", "L'assurance perte d'exploitation"],
       answer: [1],
-      explain: "La responsabilité des organes est personnelle et peut porter sur des montants considérables : la D&O couvre ce risque spécifique." },
+      explain: "La responsabilité des organes est personnelle et vise leur patrimoine propre : la RC d'entreprise couvre la société, pas ses dirigeants. C'est la D&O qui prend en charge ce risque." },
 
     /* ---------- c6 : choses entreprises ---------- */
     { id: 'm3c6q01', chap: 'c6', type: 'single',
