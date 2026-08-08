@@ -11,11 +11,17 @@
 
   add('m1', [
     /* --------- c1 : risque --------- */
-    { id: 'm1c1h01', chap: 'c1', type: 'single',
-      q: "Un assureur constate que sa sinistralité réelle s'écarte fortement de ses statistiques alors que son portefeuille compte 400 contrats hétérogènes. Quelle explication est la plus pertinente ?",
-      choices: ["La loi des grands nombres ne joue pas : effectif trop faible et risques non homogènes", "Le droit de timbre a augmenté", "Les assurés ont commis une prétention frauduleuse", "La réassurance non proportionnelle est mal structurée"],
+    { id: 'm1c1h01', chap: 'c1', type: 'single', lvl: 'hard', pts: 2, cx: 'Moyenne',
+      theme: "IA, principes techniques, loi des grands nombres",
+      q: "Un assureur constate que sa sinistralité réelle s'écarte fortement de ses statistiques, sur un portefeuille de 400 contrats hétérogènes. Quelle explication est la plus pertinente ?",
+      choices: [
+        "L'effectif est trop faible et les risques trop disparates pour que la loi des grands nombres joue",
+        "L'augmentation du droit de timbre a renchéri les primes encaissées",
+        "Les assurés ont, dans leur majorité, présenté des prétentions frauduleuses",
+        "Le programme de réassurance non proportionnelle est mal structuré",
+      ],
       answer: [0],
-      explain: "La loi des grands nombres suppose un effectif important ET des risques comparables. Avec 400 contrats hétérogènes, les deux conditions manquent : l'écart-type reste élevé et le résultat devient imprévisible." },
+      explain: "Il faut à la fois du nombre et de l'homogénéité pour que le réel converge vers la théorie. Quatre cents risques disparates ne forment pas une communauté exploitable statistiquement — la réassurance n'y changerait rien, elle protège le résultat mais ne rend pas le risque calculable." },
 
     { id: 'm1c1h02', chap: 'c1', type: 'multi',
       q: "Une entreprise veut couvrir le risque de perte de son principal client, qui représente 60 % de son chiffre d'affaires. Quels obstacles à l'assurabilité se posent ?",
@@ -23,17 +29,29 @@
       answer: [0, 1, 2],
       explain: "La perte d'un client relève de l'aléa commercial ordinaire, dépend de la qualité des prestations de l'entreprise et échappe à toute statistique fiable. Rien d'illicite ici, et ce n'est pas une question de fréquence." },
 
-    { id: 'm1c1h03', chap: 'c1', type: 'single',
-      q: "Dans une matrice des risques, un risque est positionné en « faible fréquence / très forte intensité », mais son sinistre maximal possible dépasse les fonds propres de l'assureur pressenti. La solution la plus adaptée est :",
-      choices: ["Renoncer à toute couverture", "Souscrire la couverture en la faisant adosser à un programme de réassurance non proportionnelle", "Augmenter la franchise jusqu'au SMP", "Traiter le risque en assurance de sommes"],
+    { id: 'm1c1h03', chap: 'c1', type: 'single', lvl: 'hard', pts: 2, cx: 'Moyenne',
+      theme: "IA, gestion des risques, capacité de souscription",
+      q: "Un risque se situe en faible fréquence et très forte intensité, mais son sinistre maximal possible dépasse les fonds propres de l'assureur pressenti. Quelle est la solution la plus adaptée ?",
+      choices: [
+        "Renoncer purement et simplement à toute couverture",
+        "Souscrire en adossant le risque à un programme de réassurance non proportionnelle",
+        "Porter la franchise au niveau du sinistre maximal possible",
+        "Traiter le risque en assurance de sommes plutôt qu'en assurance de dommages",
+      ],
       answer: [1],
-      explain: "C'est exactement la fonction de capacité de la réassurance : elle permet d'accepter un risque dont l'engagement excède ce que l'assureur peut porter seul, en écrêtant la tranche haute." },
+      explain: "Le profil — rare mais potentiellement ruineux — est exactement celui que l'assurance doit prendre, à condition que la pointe soit cédée. Un excess of loss plafonne l'engagement net de l'assureur ; une franchise au niveau du SMP viderait la garantie de tout contenu." },
 
-    { id: 'm1c1h04', chap: 'c1', type: 'single',
-      q: "Quelle affirmation distingue correctement risque de cumul et risque de masse ?",
-      choices: ["Ils désignent la même réalité", "Le risque de masse tient au grand nombre de contrats semblables ; le risque de cumul tient à leur exposition simultanée à un même événement", "Le risque de cumul concerne les personnes, le risque de masse les choses", "Le risque de masse est inassurable"],
+    { id: 'm1c1h04', chap: 'c1', type: 'single', lvl: 'hard', pts: 2, cx: 'Moyenne',
+      theme: "IA, risque, cumul et masse",
+      q: "Qu'est-ce qui distingue correctement le risque de cumul du risque de masse ?",
+      choices: [
+        "Les deux notions recouvrent en réalité la même situation",
+        "Le cumul tient à l'exposition simultanée à un même événement, la masse au grand nombre de contrats semblables",
+        "Le cumul concerne les personnes, la masse concerne les choses",
+        "Le risque de masse est par nature inassurable en assurance privée",
+      ],
       answer: [1],
-      explain: "Un portefeuille peut être de masse sans cumul (RC privée dispersée) ou de masse ET cumulatif (assurance grêle concentrée sur une région). Le cumul détruit la compensation dans l'espace, pas le nombre." },
+      explain: "La masse est une force : elle fait fonctionner la statistique. Le cumul est un danger : il détruit l'indépendance des risques. Un portefeuille ménage est un risque de masse ; il devient un risque de cumul le jour d'une tempête régionale." },
 
     /* --------- c2 : technique --------- */
     { id: 'm1c2h01', chap: 'c2', type: 'single',
@@ -60,11 +78,17 @@
       answer: [0, 1, 2],
       explain: "Le droit de timbre est un pourcentage : il suit la prime sans « augmenter ». Et le combined ratio se dégrade, puisque le dénominateur (primes) baisse pendant que la sinistralité monte." },
 
-    { id: 'm1c2h05', chap: 'c2', type: 'single',
+    { id: 'm1c2h05', chap: 'c2', type: 'single', lvl: 'hard', pts: 2, cx: 'Moyenne',
+      theme: "IA, assurance-vie, prime constante",
       q: "Pourquoi la prime d'une assurance décès à prime constante dépasse-t-elle, les premières années, la prime de risque de l'année ?",
-      choices: ["Pour financer le droit de timbre", "Parce que l'excédent constitue la réserve mathématique qui financera les années où le risque de décès sera plus élevé", "Parce que la loi l'impose", "Parce que les frais d'acquisition sont annuels"],
+      choices: [
+        "Parce qu'il faut d'abord amortir le droit de timbre du contrat",
+        "Parce que l'excédent alimente la réserve qui financera les années à risque élevé",
+        "Parce que la loi impose un versement minimal les premières années",
+        "Parce que les frais d'acquisition sont répartis sur les seules premières primes",
+      ],
       answer: [1],
-      explain: "La mortalité croît avec l'âge. Le trop-perçu initial est capitalisé en réserve mathématique et comble le déficit des dernières années : c'est la compensation dans le temps au niveau du contrat." },
+      explain: "Le coût réel du risque croît avec l'âge, mais la prime reste plate : le trop-perçu du début constitue la réserve mathématique, qui comblera le déficit des dernières années. C'est aussi ce qui donne au contrat sa valeur de rachat." },
 
     /* --------- c3 : trois piliers --------- */
     { id: 'm1c3h01', chap: 'c3', type: 'single',
@@ -110,11 +134,17 @@
       answer: [0, 1, 2, 4],
       explain: "La valeur d'affection n'est pas assurable et ne concerne de toute façon pas une assurance de sommes. Les trois autres couvertures se complètent : le bien, le résultat et la responsabilité envers les tiers." },
 
-    { id: 'm1c4h02', chap: 'c4', type: 'single',
-      q: "Un assuré perçoit un capital de son assurance-accidents de sommes et obtient aussi des dommages-intérêts du responsable. L'assureur de sommes peut-il exercer un recours ?",
-      choices: ["Oui, à concurrence de sa prestation", "Non : la subrogation suppose le principe indemnitaire, absent en assurance de sommes", "Oui, pour la moitié", "Seulement si le dommage dépasse le capital versé"],
+    { id: 'm1c4h02', chap: 'c4', type: 'single', lvl: 'hard', pts: 2, cx: 'Moyenne',
+      theme: "IA, classification, subrogation",
+      q: "Un assuré perçoit le capital d'une assurance-accidents de sommes, puis obtient des dommages-intérêts du responsable. L'assureur de sommes peut-il exercer un recours ?",
+      choices: [
+        "Oui, à concurrence de la prestation qu'il a versée",
+        "Non, la subrogation suppose le principe indemnitaire, absent ici",
+        "Oui, mais pour la moitié seulement du capital versé",
+        "Oui, uniquement si le dommage dépasse le capital versé",
+      ],
       answer: [1],
-      explain: "L'assurance de sommes verse un montant convenu sans égard au dommage : il n'y a ni surindemnisation au sens juridique, ni subrogation. Le cumul est licite et voulu." },
+      explain: "La subrogation existe pour empêcher un cumul enrichissant, ce que seule l'assurance de dommages redoute. En assurance de sommes, le capital est dû par contrat et se cumule librement avec l'indemnisation du responsable." },
 
     { id: 'm1c4h03', chap: 'c4', type: 'single',
       q: "Un véhicule en leasing est détruit dans une collision dont le conducteur est responsable. Quelle couverture intervient pour le véhicule lui-même ?",
@@ -122,11 +152,17 @@
       answer: [2],
       explain: "La RC ne couvre jamais le véhicule de l'assuré, et la casco partielle exclut la collision dont on est responsable. Seule la casco complète répond, ce qui explique qu'elle soit exigée en leasing." },
 
-    { id: 'm1c4h04', chap: 'c4', type: 'single',
-      q: "Quelle combinaison décrit correctement l'assurance-maladie en Suisse ?",
-      choices: ["Base et complémentaires relèvent toutes deux de la LAMal", "La base relève de la LAMal (droit public, OFSP) et les complémentaires de la LCA (droit privé, FINMA)", "La base relève de la LCA et les complémentaires de la LAMal", "Les deux relèvent de la LCA et de la FINMA"],
+    { id: 'm1c4h04', chap: 'c4', type: 'single', lvl: 'hard', pts: 2, cx: 'Moyenne',
+      theme: "IA, branches, assurance-maladie",
+      q: "Quelle description de l'assurance-maladie suisse est correcte ?",
+      choices: [
+        "La base et les complémentaires relèvent toutes deux de la LAMal",
+        "La base relève de la LAMal, les complémentaires de la LCA",
+        "La base relève de la LCA, les complémentaires de la LAMal",
+        "Les deux relèvent de la LCA, sous surveillance de l'OFSP",
+      ],
       answer: [1],
-      explain: "Cette double nature explique tout le reste : obligation d'admission et absence de sélection dans la base, sélection des risques et réticence possibles dans les complémentaires." },
+      explain: "Deux régimes coexistent chez le même assureur : la base est une assurance sociale, avec obligation d'admettre tout candidat et surveillance de l'OFSP ; les complémentaires sont des contrats privés soumis à la LCA et surveillés par la FINMA." },
 
     /* --------- c5 : marché --------- */
     { id: 'm1c5h01', chap: 'c5', type: 'single',
