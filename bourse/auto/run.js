@@ -947,6 +947,72 @@ async function main() {
     process.exit(1);
   }
 
+  /* ───────────── ÉTAPE 2b : passe MOATS large ─────────────
+     On ne se contente plus des 541 finalistes : on cherche les avantages
+     concurrentiels durables (moats) sur TOUT le marché non encore envolé.
+     Pré-filtre gratuit (prix, pas déjà explosé, structure saine) → on récupère
+     UNIQUEMENT les fondamentaux (pas les news, la partie lente) → on calcule le
+     moat de chacun → on promeut les meilleurs en analyse complète. */
+  const wideMoats = [];
+  const nMoatScan = cfg.moatScanMax || 0;
+  if (ysession && nMoatScan > 0 && scanCloses.size) {
+    const ret = (c, n) => (c.length > n ? (c[c.length - 1] / c[c.length - 1 - n] - 1) * 100 : null);
+    const already = new Set(results.map((r) => r.symbol));
+    const moatPool = [];
+    for (const [sym, closes] of scanCloses) {
+      if (already.has(sym)) continue;
+      const price = closes[closes.length - 1];
+      if (price < 6) continue;                          // liquidité/qualité minimale
+      const p6 = ret(closes, 126);
+      if (p6 != null && p6 > 45) continue;              // écarte ce qui a DÉJÀ explosé
+      const t = Engine.scoreTechnical(closes, null).score;
+      if (t == null || t < 40) continue;                // structure au moins correcte
+      moatPool.push({ sym, closes, price, p6, t });
+    }
+    moatPool.sort((a, b) => b.t - a.t);                 // on sonde d'abord les plus sains
+    const cand = moatPool.slice(0, nMoatScan);
+    console.log(`Étape 2b — passe MOATS large : ${cand.length} titres non-envolés sondés (fondamentaux)…`);
+    let done2 = 0;
+    await pool(cand, 5, async (it) => {
+      let qs = null;
+      try { qs = await Fundamentals.fetchQuoteSummary(it.sym, ysession); } catch { qs = null; }
+      await sleep(150);
+      if (++done2 % 250 === 0) console.log(`  … moats ${done2}/${cand.length} (${wideMoats.length} trouvés)`);
+      if (!qs || !qs.fundamentals) return null;
+      const sector = (qs.profile && qs.profile.sector) || "";
+      const industry = (qs.profile && qs.profile.industry) || "";
+      const moat = Engine.moatScore(qs.fundamentals, `${sector} ${industry}`);
+      if (moat == null || moat < 68) return null;
+      const c = it.closes, win = c.slice(-252);
+      const hi52 = win.length ? Math.max(...win) : null;
+      const d52 = hi52 ? Math.round((c[c.length - 1] / hi52 - 1) * 100) : null;
+      wideMoats.push({
+        symbol: it.sym, name: names.get(it.sym) || it.sym, price: Math.round(it.price * 100) / 100,
+        moat: Math.round(moat), sector: sector || null, industry: industry || null,
+        marketCap: (qs.profile && qs.profile.marketCap) || null,
+        fundamentals: qs.fundamentals,
+        perf6: it.p6 != null ? Math.round(it.p6) : null, dist52: d52,
+      });
+      return null;
+    });
+    wideMoats.sort((a, b) => b.moat - a.moat);
+    console.log(`  Passe MOATS terminée : ${wideMoats.length} moats (≥68) sur ${cand.length} sondés.`);
+
+    // Promotion : analyse complète des meilleurs moats larges (données riches + site).
+    const promote = wideMoats
+      .filter((m) => (m.dist52 == null || m.dist52 <= -3))   // encore de la marge sous le sommet
+      .slice(0, 18).map((m) => m.symbol).filter((s) => !already.has(s));
+    if (promote.length) {
+      console.log(`  Promotion en analyse complète : ${promote.join(", ")}`);
+      const promoted = await pool(promote, 3, async (sym) => {
+        const r = await deepAnalyze(sym, ctx);
+        await sleep(250);
+        return r;
+      });
+      for (const r of promoted) if (r && !r.__error) results.push(r);
+    }
+  }
+
   results.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
   const generatedAt = new Date().toISOString();
   const meta = { generatedAt, universe: universe.length, scanned: scanCloses.size, failed };
@@ -955,7 +1021,7 @@ async function main() {
   fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.writeFileSync(
     path.join(DATA_DIR, "latest.json"),
-    JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, failed, regime, marketNews, marketNewsDigest, picks, results }, null, 1)
+    JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, moatScanned: wideMoats.length, failed, regime, marketNews, marketNewsDigest, picks, wideMoats: wideMoats.slice(0, 80), results }, null, 1)
   );
 
   // Index du moteur de recherche : tout le marché scanné (technique + momentum)

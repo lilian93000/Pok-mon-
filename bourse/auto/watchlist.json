@@ -16,5 +16,6 @@
     "SYM", "TER", "ISRG", "ROK", "SERV", "RR", "CCXI"
   ],
   "finalists": 380,
+  "moatScanMax": 4000,
   "minPrice": 2
 }
