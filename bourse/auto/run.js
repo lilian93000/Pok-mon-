@@ -743,11 +743,30 @@ function selectPicks(results) {
   };
   const packedWave = waveTop.map(packWave);
 
+  // ═══ 🎇 PÉTARDS EXPLOSIFS ═══ (momentum fort + très volatils, gros risque)
+  // On garde les garde-fous : pas de reverse split (hard), pas de couteau qui tombe.
+  const notKnife = (r) => !(r.longTerm && r.longTerm.distFromHigh != null && r.longTerm.distFromHigh < -40);
+  const explosifPool = pickable.filter((r) => !hardFlag(r) && (pil(r, "momentum") || 0) >= 78 && vol(r) >= 45 && notKnife(r));
+  const explosifKey = (r) => 0.45 * (pil(r, "momentum") || 0) + 0.30 * Math.min(vol(r), 120) + 0.25 * r.score;
+  const explosifs = explosifPool.sort((a, b) => explosifKey(b) - explosifKey(a)).slice(0, 5)
+    .map((r) => pack(r, "Pétard explosif", "Momentum fort + très volatil : gros potentiel ET gros risque. Petite somme + stop."));
+
+  // ═══ 🏰 MOATS ═══ (leaders à avantage concurrentiel durable)
+  const moatOf = (r) => Engine.moatScore(r.fundamentals);
+  const moats = pickable
+    .filter((r) => r.fundamentals && moatOf(r) != null && tradable(r) && !hardFlag(r) && (r.fundamentals.pe == null || r.fundamentals.pe < 60))
+    .map((r) => ({ r, m: moatOf(r) }))
+    .sort((a, b) => b.m - a.m)
+    .slice(0, 6)
+    .map(({ r, m }) => { const p = pack(r, "Moat (leader)", "Avantage concurrentiel : marges élevées, très rentable, peu endettée — dur à copier."); p.moat = Math.round(m); return p; });
+
   const out = {
-    top5: packedWave,          // 🎯 les 5 « avant la vague » du jour (ce que tu veux)
+    top5: packedWave,          // 🎯 les 5 « avant la vague » du jour
     avantBoumTop: packedWave,  // alias
     avantBoum: avantBoum ? packedWave[0] : null,
-    longTerme: null, complet: null, oneShot: null, // désactivés : uniquement « avant la vague »
+    explosifs,                 // 🎇 pétards explosifs
+    moats,                     // 🏰 leaders / moats
+    longTerme: null, complet: null, oneShot: null,
   };
   return out;
 }
