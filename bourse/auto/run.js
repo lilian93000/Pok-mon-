@@ -752,7 +752,7 @@ function selectPicks(results) {
     .map((r) => pack(r, "Pétard explosif", "Momentum fort + très volatil : gros potentiel ET gros risque. Petite somme + stop."));
 
   // ═══ 🏰 MOATS ═══ (leaders à avantage concurrentiel durable)
-  const moatOf = (r) => Engine.moatScore(r.fundamentals);
+  const moatOf = (r) => Engine.moatScore(r.fundamentals, `${(r.profile && r.profile.sector) || ""} ${(r.profile && r.profile.industry) || ""}`);
   const moats = pickable
     .filter((r) => r.fundamentals && moatOf(r) != null && tradable(r) && !hardFlag(r) && (r.fundamentals.pe == null || r.fundamentals.pe < 60))
     .map((r) => ({ r, m: moatOf(r) }))

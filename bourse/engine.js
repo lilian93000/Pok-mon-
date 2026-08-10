@@ -564,7 +564,11 @@ const Engine = (() => {
        · faible dette            → indépendance / solidité
        · croissance régulière    → l'avantage se traduit en chiffre d'affaires
      Un score élevé = leader difficile à copier. f = mêmes champs que scoreFundamental. */
-  function moatScore(f) {
+  // Secteurs CYCLIQUES : leurs marges élevées viennent d'un cycle (matières
+  // premières, énergie, transport maritime), PAS d'un avantage durable → un
+  // « moat » n'y est jamais fiable. On les pénalise fortement.
+  const CYCLICAL_RE = /Energy|Basic Materials|\bOil\b|\bGas\b|Coal|Mining|Metals?|Mineral|Marine Shipping|Steel|Silver|Gold|Copper|Aluminum|Uranium|Fertilizer|Chemicals/i;
+  function moatScore(f, sectorLabel) {
     if (!f) return null;
     const parts = [];
     if (f.grossMargin != null) parts.push([ramp(f.grossMargin, [[20, 20], [40, 50], [55, 72], [70, 90], [80, 96]]), 2.2]);
@@ -576,7 +580,9 @@ const Engine = (() => {
     if (f.revenueGrowth != null) parts.push([ramp(f.revenueGrowth, [[0, 35], [8, 58], [20, 80], [40, 92]]), 1]);
     if (parts.length < 3) return null;   // besoin d'assez de données pour juger un moat
     const totW = parts.reduce((s, [, w]) => s + w, 0);
-    return clamp(parts.reduce((s, [v, w]) => s + v * w, 0) / totW, 0, 100);
+    let score = clamp(parts.reduce((s, [v, w]) => s + v * w, 0) / totW, 0, 100);
+    if (sectorLabel && CYCLICAL_RE.test(sectorLabel)) score *= 0.5; // faux moat cyclique → écrasé
+    return score;
   }
 
   /* ───────────── Détecteur de DRAPEAUX ROUGES (événements de société) ─────
