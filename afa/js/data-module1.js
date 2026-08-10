@@ -45,19 +45,27 @@
         },
         {
           h: "Le processus de gestion des risques (risk management)",
-          html: `<ol>
-            <li><b>Identification</b> des risques (inventaire, analyse des processus).</li>
-            <li><b>Analyse / évaluation</b>&nbsp;: fréquence × intensité, matrice des risques.</li>
-            <li><b>Traitement</b>, selon quatre stratégies&nbsp;:
+          html: `<p>La gestion des risques est une notion à <b>deux significations</b>&nbsp;:</p>
+          <ul>
+            <li><b>Au sens large</b>&nbsp;: la <b>méthode</b> par laquelle on cherche à reconnaître et à évaluer systématiquement les dangers qui menacent la réalisation d'un objectif, afin de pouvoir <b>décider consciemment</b> des mesures de protection à prendre, et de les <b>surveiller</b>.</li>
+            <li><b>Au sens étroit</b>&nbsp;: la <b>décision</b> de prendre certaines mesures de protection — les <b>quatre moyens de la maîtrise des risques</b>.</li>
+          </ul>
+          <p>Comme procédure, elle se déroule en <b>cinq phases</b>&nbsp;:</p>
+          <ol>
+            <li><b>Clarifier les objectifs</b>&nbsp;: qu'est-ce qui doit être vraiment atteint&nbsp;? Les objectifs sont-ils suffisamment concrets&nbsp;?</li>
+            <li><b>Reconnaître les dangers</b>&nbsp;: qu'est-ce qui pourrait empêcher la réalisation de l'objectif&nbsp;?</li>
+            <li><b>Évaluer les dangers</b>&nbsp;: quelle est la <b>portée</b> du danger (bagatelle, risque moyen, gros risque, risque catastrophe) et quelle est sa <b>probabilité de survenance</b>&nbsp;?</li>
+            <li><b>Décider des mesures de protection</b> à prendre, selon les quatre moyens&nbsp;:
               <ul>
                 <li><b>Éviter</b> le risque (renoncer à l'activité)&nbsp;;</li>
-                <li><b>Réduire / prévenir</b> (sprinkler, formation, alarme, mesures de protection)&nbsp;;</li>
-                <li><b>Transférer</b> (assurance, contrat, sous-traitance)&nbsp;;</li>
-                <li><b>Assumer / supporter</b> soi-même (franchise, auto-assurance, provisions).</li>
+                <li><b>Réduire / limiter</b> (sprinkler, formation, alarme, mesures de protection)&nbsp;;</li>
+                <li><b>Répercuter</b> le risque — c'est-à-dire le transférer (assurance, contrat, sous-traitance)&nbsp;;</li>
+                <li><b>Prendre en charge</b> soi-même (franchise, auto-assurance, provisions).</li>
               </ul>
             </li>
-            <li><b>Contrôle et suivi</b>&nbsp;: le processus est un cycle, il se répète.</li>
+            <li><b>Surveiller</b>&nbsp;: reconnaître ce qui change avec le temps. Le processus est un <b>cycle</b>, il se répète.</li>
           </ol>
+          <p class="tip">Piège classique&nbsp;: on oublie la <b>première</b> phase. Un risque ne se définit que par rapport à un <b>objectif</b>&nbsp;— sans objectif clarifié, il n'y a rien à protéger. Et attention au vocabulaire de l'examen&nbsp;: on dit <b>répercuter</b> et <b>prendre en charge</b> là où le langage courant dit «&nbsp;transférer&nbsp;» et «&nbsp;assumer&nbsp;».</p>
           <p class="tip">Règle pratique&nbsp;: on <b>assure</b> les risques rares mais lourds (faible fréquence, forte intensité). Les risques fréquents mais légers se <b>préviennent</b> ou s'<b>assument</b> (franchise).</p>`
         },
         {
@@ -76,7 +84,10 @@
       keypoints: [
         "Risque = probabilité + ampleur + aléa.",
         "Seul le risque PUR est assurable ; le risque spéculatif ne l'est pas.",
-        "4 stratégies de traitement : éviter, réduire, transférer, assumer.",
+        "Gestion des risques : au sens large une méthode, au sens étroit la décision de prendre des mesures.",
+        "5 phases : clarifier les objectifs, reconnaître, évaluer, décider, surveiller.",
+        "4 moyens de maîtrise : éviter, réduire/limiter, répercuter, prendre en charge.",
+        "Portée d'un danger : bagatelle, risque moyen, gros risque, risque catastrophe.",
         "Assurabilité : aléatoire, mesurable, homogène, indépendant, supportable, licite.",
         "Le dessein (acte intentionnel) n'est jamais assurable."
       ]
