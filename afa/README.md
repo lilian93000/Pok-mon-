@@ -9,8 +9,8 @@ pour la formation professionnelle en assurance / VBV), centré sur les Circles
 | **1** | Industrie de l'assurance | Notions élémentaires, risque et risk management, principes techniques, prime et systèmes de financement, trois piliers, branches, marché suisse, affaires d'assurance et chaîne de valeur, distribution et intermédiaires, réassurance, surveillance et solvabilité |
 | **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA, conciliation et juridiction |
 
-**19 chapitres de cours, 913 questions commentées (dont 64 de niveau avancé, 86 mises en
-situation, 29 adossées à une source officielle citée et 96 au gabarit exact de l'examen —
+**19 chapitres de cours, 934 questions commentées (dont 64 de niveau avancé, 86 mises en
+situation, 29 adossées à une source officielle citée et 117 au gabarit exact de l'examen —
 dont les 27 questions de la série zéro publiée par l'AFA), 67 fiches de glossaire.**
 
 Soit une cinquantaine de questions par chapitre : de quoi refaire plusieurs séries sur
@@ -101,7 +101,8 @@ rien n'est envoyé sur un serveur.
 | `js/data-plan-officiel.js` | Chapitres et sujets ajoutés pour coller au plan officiel des deux modules |
 | `js/data-nullserie.js` | Les 27 questions de la série zéro publiée par l'AFA |
 | `js/data-format-officiel.js` | Questions rédigées au gabarit de la série zéro (`lvl: 'off'`, dont les grilles) |
-| `js/data-cours-officiel.js` | Blocs repris du support de cours officiel : 14 caractéristiques, risques actuariels, communauté de risques |
+| `js/data-cours-officiel.js` | Support officiel (1) : 14 caractéristiques, risques actuariels, communauté de risques |
+| `js/data-cours-officiel2.js` | Support officiel (2) : chaîne de la prime, ayants droit, canaux de vente, réassurance, intermédiaires |
 | `js/data-glossaire.js` | Notions du glossaire / flashcards |
 
 Les fichiers `*-extra*.js` ne contiennent que des questions : ils viennent s'ajouter au
@@ -169,10 +170,16 @@ commentaires rédigés pour ce site. Ce sont elles qui ont fixé le gabarit suiv
 Le **support de cours officiel** (myVBV Lernmedien) a servi de référence pour trois
 blocs repris tels quels dans leur structure et leur vocabulaire : les **14 caractéristiques
 de l'assurance**, les **risques actuariels** avec leur limitation primaire et secondaire, et
-le passage **de l'aide mutuelle à la communauté de risques**. Le processus de gestion des
+le passage **de l'aide mutuelle à la communauté de risques**, la **chaîne de la prime** en cinq
+niveaux, les **groupes d'ayants droit**, les **canaux de vente**, la taxonomie de la
+**réassurance** et le statut des **intermédiaires**. Le processus de gestion des
 risques a été corrigé pour suivre les **cinq phases** officielles — la clarification des
 objectifs manquait — et les quatre moyens de maîtrise portent désormais leurs noms
-officiels : éviter, réduire/limiter, **répercuter**, **prendre en charge**.
+officiels : éviter, réduire/limiter, **répercuter**, **prendre en charge**. Les **systèmes de
+financement** ont également été repris : contrairement à ce qui figurait ici, « répartition »
+et « couverture des besoins » ne sont **pas** synonymes — la première affecte les primes
+immédiatement aux prestations (AVS), la seconde les calcule d'avance et constitue une
+réserve technique (assurance privée).
 
 Ont été **vérifiés contre des sources officielles** : les délais et articles clés de la
 LCA révisée (art. 2a, 35a, 42, 46, ainsi que l'abrogation de l'ancien art. 12 et sa
@@ -185,7 +192,7 @@ Les **33 questions marquées « source officielle »** citent chacune la publica
 les fonde, avec un lien cliquable dans la correction. Les faits ont été contrôlés en
 août 2026 ; les publications elles-mêmes peuvent évoluer.
 
-N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 913
+N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 934
 questions. Signale toute divergence — en cas de doute, seuls les textes légaux publiés
 (LCA, LSA, CO, CC…) font foi.
 
@@ -216,7 +223,7 @@ Pour héberger le site là où l'on ne peut déposer qu'un fichier (ou pour l'en
 par courriel), regroupe tout — style et scripts compris — en une page autonome :
 
 ```bash
-node build-single-file.js            # produit afa-site-complet.html (~760 Ko)
+node build-single-file.js            # produit afa-site-complet.html (~810 Ko)
 node build-single-file.js /tmp/x.html  # ou vers le chemin de ton choix
 ```
 

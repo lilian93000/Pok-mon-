@@ -32,33 +32,36 @@
   const c2 = m1.chapters.find(c => c.id === 'c2');
   if (c2) {
     c2.sections.push({
-      h: "Les systèmes de financement",
-      html: `<p>Une assurance peut financer ses prestations de trois manières. La distinction est un classique de l'examen&nbsp;:</p>
+      h: "Les systèmes de financement (systèmes de couverture)",
+      html: `<p>Les systèmes de financement permettent à l'assureur de <b>disposer en tout temps</b> des moyens nécessaires à la couverture des sinistres. Le support officiel en distingue <b>trois</b>&nbsp;:</p>
       <table class="tbl">
-        <tr><th>Procédé</th><th>Principe</th><th>Où il s'applique</th></tr>
+        <tr><th>Système</th><th>Principe</th><th>Où il s'applique</th></tr>
         <tr>
-          <td><b>Répartition des dépenses</b><br><span class="muted small">appelé <b>système de la couverture des besoins</b> dans les questions officielles</span></td>
-          <td>Les cotisations encaissées pendant une période financent <b>directement</b> les prestations versées pendant cette même période. Rien n'est mis de côté pour l'avenir.</td>
-          <td><b>AVS / AI / APG</b>, assurance-chômage, allocations familiales&nbsp;; en <b>LAA</b>, les soins, les indemnités journalières et les autres charges à court terme.</td>
+          <td><b>1. Répartition</b></td>
+          <td>Les recettes des primes sont <b>immédiatement affectées</b> au paiement des prestations. L'adaptation annuelle des primes rend en théorie superflue la constitution de réserves&nbsp;— en pratique, on en constitue quand même par sécurité.</td>
+          <td>Surtout les <b>assurances obligatoires</b> et les très gros portefeuilles. Principal exemple suisse&nbsp;: l'<b>AVS/AI</b> et son fonds de compensation.</td>
         </tr>
         <tr>
-          <td><b>Capitalisation</b></td>
-          <td>Les cotisations sont <b>accumulées et placées</b>&nbsp;; l'avoir constitué finance plus tard les prestations de la <b>même</b> personne.</td>
-          <td><b>LPP</b>, pilier 3a et 3b, assurance-vie privée.</td>
+          <td><b>2. Capitalisation</b></td>
+          <td>Les primes versées constituent une <b>forme d'épargne individuelle</b>. L'assureur constitue la <b>réserve mathématique</b> de l'assuré à partir de ses primes, du produit de l'intérêt technique et de la participation aux excédents. Le <b>capital de couverture</b> sert à payer les prestations.</td>
+          <td>Les assurances de <b>longue durée</b>&nbsp;: la <b>prévoyance professionnelle</b> (2<sup>e</sup> pilier) et la <b>prime d'épargne des assurances vie mixtes</b>.</td>
         </tr>
         <tr>
-          <td><b>Répartition des capitaux de couverture</b><br><span class="muted small">le <b>système de répartition</b> au sens strict</span></td>
-          <td>Lorsqu'une rente est <b>fixée</b>, le capital nécessaire à son service futur est <b>constitué immédiatement</b> et financé par les cotisations de la période en cours.</td>
-          <td><b>LAA</b> pour les rentes d'invalidité et de survivants.</td>
+          <td><b>3. Couverture des besoins</b></td>
+          <td>Le financement est assuré par le <b>calcul préalable</b> des primes. Une partie alimente la <b>réserve technique</b>, le reste paie les <b>prestations courantes</b>. L'assureur constitue en outre des <b>provisions</b> pour les sinistres déclarés dans l'année mais réglés plus tard.</td>
+          <td>Les <b>assurances privées</b>, à l'exception de la prévoyance professionnelle et de la part d'épargne de l'assurance vie mixte. <b>Très répandu en Suisse.</b></td>
         </tr>
       </table>
-      <p class="tip">Moyen mnémotechnique&nbsp;: l'AVS <b>dépense ce qu'elle encaisse</b>, la LPP <b>épargne pour chacun</b>, et la LAA <b>met de côté d'un coup</b> le capital de chaque rente qu'elle accorde.</p>`
+      <p>Le système de la couverture des besoins convient aux assurances à <b>primes constantes</b>, dont les <b>risques s'évaluent facilement</b> et dont les contrats ne courent pas sur de longues durées (<b>1 à 5 ans</b>). Les primes restent en principe les mêmes pendant toute la durée du contrat.</p>
+      <p>Dans tous les cas, l'assureur répercute la somme des primes nécessaires sur l'ensemble de ses clients. La répartition se fait selon la méthode de la <b>prime moyenne</b> ou celle de la <b>prime individuelle</b>&nbsp;: plus grande est la liberté du client de changer d'assureur, plus la prime individuelle s'impose&nbsp;— sinon les bons risques s'en vont.</p>
+      <p class="tip">Piège de vocabulaire&nbsp;: <b>répartition</b> et <b>couverture des besoins</b> ne sont <b>pas</b> synonymes. La répartition affecte les primes <b>immédiatement</b> aux prestations, sans calcul préalable&nbsp;— c'est l'AVS. La couverture des besoins <b>calcule la prime à l'avance</b> et constitue des réserves techniques&nbsp;— c'est le régime de la quasi-totalité de l'assurance privée non-vie.</p>`
     });
     c2.keypoints.push(
-      "Répartition des dépenses : les cotisations financent les prestations de la même période (AVS).",
-      "Capitalisation : chacun constitue son propre avoir (LPP, 3e pilier, vie).",
-      "Répartition des capitaux de couverture : le capital d'une rente est constitué dès sa fixation (rentes LAA).",
-      "Vocabulaire de l'examen : « couverture des besoins » = répartition des dépenses ; « système de répartition » = la solidarité actifs/rentiers de l'AVS."
+      "Trois systèmes de financement : répartition, capitalisation, couverture des besoins.",
+      "Répartition : les primes paient immédiatement les prestations (AVS/AI, fonds de compensation).",
+      "Capitalisation : épargne individuelle et réserve mathématique (LPP, part épargne de la vie mixte).",
+      "Couverture des besoins : primes calculées d'avance, réserve technique et provisions — le régime de l'assurance privée, contrats de 1 à 5 ans.",
+      "Répartition des primes sur les clients : méthode de la prime moyenne ou de la prime individuelle."
     );
   }
 

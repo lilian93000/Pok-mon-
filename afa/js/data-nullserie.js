@@ -82,7 +82,7 @@
         "Faiblesse : sensible à la hausse du taux de la rente de vieillesse"
       ],
       answer: [1, 2, 0],
-      explain: "Couverture des besoins : les primes de l'année couvrent les dépenses de l'année — cela suppose des charges régulières et prévisibles. Capitalisation : chacun épargne son propre capital, qui lui reste acquis. Répartition : les actifs financent les rentiers, donc l'équilibre se dégrade dès que le rapport rentiers/actifs se détériore."
+      explain: "Couverture des besoins : la prime est calculée à l'avance et alimente une réserve technique — cela suppose des risques faciles à évaluer et des contrats courts, d'où l'usage en assurance privée. Capitalisation : chacun épargne son propre capital, qui lui reste acquis. Répartition : les primes encaissées paient immédiatement les prestations, si bien que l'équilibre se dégrade dès que le rapport rentiers/actifs se détériore."
     }),
     off({
       id: 'ns277', chap: 'c4', type: 'grid', pts: 2, cx: 'Moyenne',
