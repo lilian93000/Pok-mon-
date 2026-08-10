@@ -555,6 +555,30 @@ const Engine = (() => {
     };
   }
 
+  /* ───────────── Score de MOAT (avantage concurrentiel durable) ─────────
+     Mesure ce qui « démarque » une entreprise de ses concurrents :
+       · marge brute élevée      → pouvoir de fixation des prix (pricing power)
+       · marge d'exploitation    → efficacité supérieure
+       · ROE élevé               → capital très bien rémunéré
+       · bénéfices adossés au cash → qualité réelle, pas comptable
+       · faible dette            → indépendance / solidité
+       · croissance régulière    → l'avantage se traduit en chiffre d'affaires
+     Un score élevé = leader difficile à copier. f = mêmes champs que scoreFundamental. */
+  function moatScore(f) {
+    if (!f) return null;
+    const parts = [];
+    if (f.grossMargin != null) parts.push([ramp(f.grossMargin, [[20, 20], [40, 50], [55, 72], [70, 90], [80, 96]]), 2.2]);
+    if (f.operatingMargin != null) parts.push([ramp(f.operatingMargin, [[0, 15], [10, 48], [20, 74], [35, 92]]), 2]);
+    if (f.roe != null) parts.push([ramp(f.roe, [[0, 15], [10, 45], [20, 75], [35, 92]]), 1.5]);
+    if (f.netMargin != null) parts.push([ramp(f.netMargin, [[0, 20], [8, 50], [18, 78], [30, 94]]), 1]);
+    if (f.cashConversion != null) parts.push([ramp(f.cashConversion, [[0, 20], [0.6, 60], [1, 88], [1.5, 94]]), 1.5]);
+    if (f.debtToEquity != null) parts.push([ramp(f.debtToEquity, [[0, 92], [0.5, 78], [1.5, 48], [3, 22]]), 1]);
+    if (f.revenueGrowth != null) parts.push([ramp(f.revenueGrowth, [[0, 35], [8, 58], [20, 80], [40, 92]]), 1]);
+    if (parts.length < 3) return null;   // besoin d'assez de données pour juger un moat
+    const totW = parts.reduce((s, [, w]) => s + w, 0);
+    return clamp(parts.reduce((s, [v, w]) => s + v * w, 0) / totW, 0, 100);
+  }
+
   /* ───────────── Détecteur de DRAPEAUX ROUGES (événements de société) ─────
      La machine lit des chiffres et des cours, PAS le contexte. Or certains
      événements (rachat/retrait de cote, faillite, fraude, dilution, procès)
@@ -678,7 +702,7 @@ const Engine = (() => {
   }
 
   return {
-    analyze, verdict, composite, WEIGHTS, earlySetup, relStrength, trendTemplate, detectRedFlags, newsDigest,
+    analyze, verdict, composite, WEIGHTS, earlySetup, relStrength, trendTemplate, detectRedFlags, newsDigest, moatScore,
     scoreTechnical, scoreMomentum, scoreFundamental, scoreSentiment, scoreHeadline,
     rsi, macd, sma, ema, trendSlope, annualVol, periodReturn, bollingerPos, volumeSurge,
     clamp, ramp,

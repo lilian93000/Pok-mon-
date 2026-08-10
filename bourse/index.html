@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oracle Bourse — Machine d'analyse multi-facteurs</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>◆</text></svg>">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
   <header class="topbar">
@@ -44,6 +44,24 @@
         <p class="section-sub">5 ressorts comprimés repérés par la machine parmi des milliers d'actions : base resserrée, proches d'une cassure, cours <strong>pas encore envolé</strong>. Le but : entrer avant le mouvement, pas après. Clique une carte pour tout voir.</p>
       </div>
       <div class="picks-grid" id="picksGrid"></div>
+    </section>
+
+    <!-- ═══════════ 🎇 PÉTARDS EXPLOSIFS ═══════════ -->
+    <section class="picks hidden" id="explosifsSection">
+      <div class="section-head">
+        <h2>🎇 Pétards explosifs</h2>
+        <p class="section-sub">Momentum fort + forte volatilité : <strong>gros potentiel ET gros risque</strong>. Ça bouge <em>déjà</em> fort (ce n'est PAS « avant la vague »). Petites sommes + stop obligatoire.</p>
+      </div>
+      <div class="picks-grid" id="explosifsGrid"></div>
+    </section>
+
+    <!-- ═══════════ 🏰 MOATS (LEADERS) ═══════════ -->
+    <section class="picks hidden" id="moatsSection">
+      <div class="section-head">
+        <h2>🏰 Moats — leaders à avantage durable</h2>
+        <p class="section-sub">Entreprises qui <strong>dominent leur niche</strong> : marges élevées (pricing power), très rentables, peu endettées — difficiles à copier. Approche <strong>qualité / long terme</strong>.</p>
+      </div>
+      <div class="picks-grid" id="moatsGrid"></div>
     </section>
 
     <!-- ═══════════ MOTEUR DE RECHERCHE ═══════════ -->
@@ -288,8 +306,8 @@
 
   <div class="tooltip hidden" id="tooltip"></div>
 
-  <script src="engine.js?v=4"></script>
-  <script src="providers.js?v=4"></script>
-  <script src="app.js?v=4"></script>
+  <script src="engine.js?v=5"></script>
+  <script src="providers.js?v=5"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

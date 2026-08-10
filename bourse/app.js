@@ -700,6 +700,67 @@
     if (any) $("picksSection").classList.remove("hidden");
   }
 
+  /* ───────────── Grilles thématiques (explosifs / moats) ───────────── */
+  function renderThemeGrid(list, gridId, sectionId, meta) {
+    if (!Array.isArray(list) || !list.length) return;
+    const grid = $(gridId);
+    if (!grid) return;
+    grid.innerHTML = "";
+    for (const p of list) {
+      const card = el("div", `pick-card ${meta.cls}`);
+      const head = el("div", "pick-head");
+      head.appendChild(el("span", "pick-cat", `${meta.emoji} ${p.category}`));
+      const sw = el("div", "pick-score-wrap");
+      sw.appendChild(el("span", "pick-score", String(p.score)));
+      sw.appendChild(el("span", "pick-score-max", "/100"));
+      head.appendChild(sw);
+      card.appendChild(head);
+
+      const tick = el("div", "pick-ticker");
+      tick.appendChild(el("strong", null, p.symbol));
+      if (p.name && p.name !== p.symbol) tick.appendChild(el("span", "pick-name", p.name));
+      card.appendChild(tick);
+      if (p.verdict) card.appendChild(el("div", `pick-verdict ${p.verdict.cls || ""}`, `${p.verdict.emoji} ${p.verdict.label}`));
+
+      const statTxt = meta.stat ? meta.stat(p) : "";
+      if (statTxt) card.appendChild(el("div", "pick-early", statTxt));
+
+      if (p.plain) {
+        const pl = el("div", "pick-plain");
+        pl.appendChild(el("span", "pick-plain-lbl", "Pourquoi elle"));
+        pl.appendChild(el("p", null, p.plain));
+        card.appendChild(pl);
+      }
+      const bars = el("div", "pick-pillars");
+      bars.appendChild(pickPillar("Technique", p.technical));
+      bars.appendChild(pickPillar("Momentum", p.momentum));
+      bars.appendChild(pickPillar("Fondamental", p.fundamental));
+      bars.appendChild(pickPillar("Sentiment", p.sentiment));
+      card.appendChild(bars);
+
+      if (p.liquidity) {
+        const lq = p.liquidity;
+        const cls = lq.level === "insuffisante" ? "pick-liq-warn" : lq.level === "limitée" ? "pick-liq-mid" : "pick-liq-ok";
+        const ico = lq.level === "insuffisante" ? "⚠️" : lq.level === "limitée" ? "🟡" : "💧";
+        card.appendChild(el("div", cls, `${ico} ${lq.label}`));
+      }
+      if (Array.isArray(p.redFlags)) for (const f of p.redFlags) {
+        card.appendChild(el("div", f.severity === "hard" ? "pick-flag-hard" : "pick-flag-warn", `🚩 ${f.type}`));
+      }
+      const foot = el("div", "pick-foot");
+      foot.appendChild(el("span", null, p.price != null ? `${p.price.toFixed(2)} $ · vol ${p.volatility} %` : `vol ${p.volatility} %`));
+      const r = results.find((x) => x.symbol === p.symbol);
+      if (r) {
+        foot.appendChild(el("span", "pick-open", "Détail →"));
+        card.classList.add("clickable");
+        card.onclick = () => showDetail(r);
+      }
+      card.appendChild(foot);
+      grid.appendChild(card);
+    }
+    $(sectionId).classList.remove("hidden");
+  }
+
   /* ───────────── Moteur de recherche ─────────────
      Cherche dans l'index de marché (data/market.json, ~5 000 actions
      scannées) chargé à la volée. Si l'action fait partie du top analysé
@@ -1085,7 +1146,13 @@
       renderTable();
       if (data.regime) renderRegime(data.regime);
       if (data.marketNews) renderMarketNews(data.marketNews, data.marketNewsDigest);
-      if (data.picks) renderPicks(data.picks);
+      if (data.picks) {
+        renderPicks(data.picks);
+        renderThemeGrid(data.picks.explosifs, "explosifsGrid", "explosifsSection",
+          { emoji: "🎇", cls: "pick-os", stat: (p) => `⚡ volatilité ${p.volatility} % — gros risque / gros gain` });
+        renderThemeGrid(data.picks.moats, "moatsGrid", "moatsSection",
+          { emoji: "🏰", cls: "pick-lt", stat: (p) => (p.moat != null ? `🏰 score moat ${p.moat}/100 — avantage concurrentiel` : "") });
+      }
 
       const rankHint = $("rankHint");
       if (rankHint) rankHint.textContent = `${data.results.length} actions`;
