@@ -9,13 +9,27 @@ pour la formation professionnelle en assurance / VBV), centré sur les Circles
 | **1** | Industrie de l'assurance | Notions élémentaires, risque et risk management, principes techniques, prime et systèmes de financement, trois piliers, branches, marché suisse, affaires d'assurance et chaîne de valeur, distribution et intermédiaires, réassurance, surveillance et solvabilité |
 | **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA, conciliation et juridiction |
 
-**19 chapitres de cours, 999 questions commentées (dont 64 de niveau avancé, 86 mises en
-situation, 29 adossées à une source officielle citée et 182 au gabarit exact de l'examen —
-dont les 27 questions de la série zéro publiée par l'AFA et 75 tableaux d'attribution),
-67 fiches de glossaire.**
+**19 chapitres de cours et 182 questions, toutes au gabarit de l'examen** — dont les
+**27 questions de la série zéro** publiée par l'AFA et **75 tableaux d'attribution**.
 
-Soit une cinquantaine de questions par chapitre : de quoi refaire plusieurs séries sur
-un même sujet sans retomber sur les mêmes questions.
+### 🎯 Banque restreinte au format officiel
+
+Le site ne sert plus que les questions marquées `lvl: 'off'` : celles de la série zéro
+officielle, et celles rédigées sur le même modèle à partir du support de cours myVBV.
+Les **817 autres questions ne sont pas supprimées** — leurs fichiers restent chargés et
+intacts, elles sont seulement écartées de la banque active par `js/data-filtre-officiel.js`.
+
+Pour rétablir l'intégralité de la banque, retirer une seule ligne d'`index.html` :
+
+```html
+<script src="js/data-filtre-officiel.js"></script>
+```
+
+Le sélecteur de niveau disparaît tant que toutes les questions relèvent du même niveau,
+et réapparaît de lui-même dès que le filtre est levé.
+
+Les chapitres les mieux fournis sont ceux que le support officiel détaille le plus :
+principes techniques (26 questions) et LSA/LPD/LBA (27).
 
 ### 💤 Module Non-Vie en veille
 
@@ -105,6 +119,7 @@ rien n'est envoyé sur un serveur.
 | `js/data-cours-officiel.js` | Support officiel (1) : 14 caractéristiques, risques actuariels, communauté de risques |
 | `js/data-cours-officiel2.js` | Support officiel (2) : chaîne de la prime, ayants droit, canaux de vente, réassurance, intermédiaires |
 | `js/data-questions-cours.js` | Questions tirées du support officiel : classification, surveillance, sources du droit, formation et fin du contrat, voies de droit, responsabilité |
+| `js/data-filtre-officiel.js` | Restreint la banque active aux seules questions au gabarit de l'examen |
 | `js/data-glossaire.js` | Notions du glossaire / flashcards |
 
 Les fichiers `*-extra*.js` ne contiennent que des questions : ils viennent s'ajouter au
@@ -194,8 +209,7 @@ Les **33 questions marquées « source officielle »** citent chacune la publica
 les fonde, avec un lien cliquable dans la correction. Les faits ont été contrôlés en
 août 2026 ; les publications elles-mêmes peuvent évoluer.
 
-N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 999
-questions. Signale toute divergence — en cas de doute, seuls les textes légaux publiés
+N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les questions. Signale toute divergence — en cas de doute, seuls les textes légaux publiés
 (LCA, LSA, CO, CC…) font foi.
 
 ## 🎯 Repères par rapport au parcours officiel

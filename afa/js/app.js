@@ -19,6 +19,14 @@
 
   /* Niveau : 'tous' ou 'hard' (questions marquées lvl:'hard'). */
   const LEVELS = [['tous', 'Tous niveaux'], ['hard', 'Difficiles'], ['cas', 'Mises en situation'], ['src', 'Avec source officielle'], ['off', 'Format officiel']];
+  // On n'affiche que les niveaux réellement représentés dans la banque : si un
+  // filtre écarte tout un niveau, sa pastille disparaît au lieu de servir une
+  // série vide. « Tous niveaux » ne subsiste que s'il y a un choix à faire.
+  const levelsDispo = () => {
+    const présents = new Set(MODULES.flatMap(m => m.questions).map(q => q.lvl).filter(Boolean));
+    const utiles = LEVELS.filter(([v]) => v !== 'tous' && présents.has(v));
+    return utiles.length > 1 ? [LEVELS[0]].concat(utiles) : [];
+  };
   let quizLvl = 'tous';
   const byLevel = (list) => quizLvl === 'tous' ? list : list.filter(q => q.lvl === quizLvl);
 
@@ -397,15 +405,16 @@
             ${LENGTHS.map(n => `<button class="chip ${n === quizLen ? 'on' : ''}" data-len="${n}">${n || 'Tout'}</button>`).join('')}
           </div>
         </div>
+        ${levelsDispo().length ? `
         <div class="row" style="justify-content:space-between;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line)">
           <div>
             <b>Niveau</b>
-            <div class="muted small">${allQuestions().filter(q => q.lvl === 'hard').length} questions difficiles (calculs, cas pratiques, pièges) ${allQuestions().filter(q => q.lvl === 'cas').length} mises en situation et ${allQuestions().filter(q => q.lvl === 'src').length} questions adossées à une source officielle citée.</div>
+            <div class="muted small">${allQuestions().filter(q => q.lvl === 'hard').length} questions difficiles (calculs, cas pratiques, pièges), ${allQuestions().filter(q => q.lvl === 'cas').length} mises en situation, ${allQuestions().filter(q => q.lvl === 'src').length} adossées à une source officielle citée et ${allQuestions().filter(q => q.lvl === 'off').length} au gabarit de l'examen.</div>
           </div>
           <div class="chips" id="lvlChips">
-            ${LEVELS.map(([v, lab]) => `<button class="chip ${v === quizLvl ? 'on' : ''}" data-lvl="${v}">${lab}</button>`).join('')}
+            ${levelsDispo().map(([v, lab]) => `<button class="chip ${v === quizLvl ? 'on' : ''}" data-lvl="${v}">${lab}</button>`).join('')}
           </div>
-        </div>
+        </div>` : ''}
       </div>
 
       ${weak.length ? `
