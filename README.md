@@ -57,7 +57,7 @@ ou consulte [`bourse/README.md`](bourse/README.md).
 
 Le dossier [`afa/`](afa/) contient un site de révision pour les **deux premiers modules
 de l'examen d'intermédiaire en assurance AFA** (Circles Lancement et Base) : fiches de
-cours, 934 questions commentées — dont les 27 de la série zéro publiée par l'AFA et 74
+cours, 999 questions commentées — dont les 27 de la série zéro publiée par l'AFA et 74
 au gabarit exact de l'épreuve écrite, tableaux d'attribution compris —, examen blanc
 chronométré, flashcards et suivi de progression. Un module Non-Vie existe mais est
 laissé en veille. Ouvre `afa/index.html` ou consulte [`afa/README.md`](afa/README.md).

@@ -9,9 +9,10 @@ pour la formation professionnelle en assurance / VBV), centré sur les Circles
 | **1** | Industrie de l'assurance | Notions élémentaires, risque et risk management, principes techniques, prime et systèmes de financement, trois piliers, branches, marché suisse, affaires d'assurance et chaîne de valeur, distribution et intermédiaires, réassurance, surveillance et solvabilité |
 | **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA, conciliation et juridiction |
 
-**19 chapitres de cours, 934 questions commentées (dont 64 de niveau avancé, 86 mises en
-situation, 29 adossées à une source officielle citée et 117 au gabarit exact de l'examen —
-dont les 27 questions de la série zéro publiée par l'AFA), 67 fiches de glossaire.**
+**19 chapitres de cours, 999 questions commentées (dont 64 de niveau avancé, 86 mises en
+situation, 29 adossées à une source officielle citée et 182 au gabarit exact de l'examen —
+dont les 27 questions de la série zéro publiée par l'AFA et 75 tableaux d'attribution),
+67 fiches de glossaire.**
 
 Soit une cinquantaine de questions par chapitre : de quoi refaire plusieurs séries sur
 un même sujet sans retomber sur les mêmes questions.
@@ -103,6 +104,7 @@ rien n'est envoyé sur un serveur.
 | `js/data-format-officiel.js` | Questions rédigées au gabarit de la série zéro (`lvl: 'off'`, dont les grilles) |
 | `js/data-cours-officiel.js` | Support officiel (1) : 14 caractéristiques, risques actuariels, communauté de risques |
 | `js/data-cours-officiel2.js` | Support officiel (2) : chaîne de la prime, ayants droit, canaux de vente, réassurance, intermédiaires |
+| `js/data-questions-cours.js` | Questions tirées du support officiel : classification, surveillance, sources du droit, formation et fin du contrat, voies de droit, responsabilité |
 | `js/data-glossaire.js` | Notions du glossaire / flashcards |
 
 Les fichiers `*-extra*.js` ne contiennent que des questions : ils viennent s'ajouter au
@@ -192,7 +194,7 @@ Les **33 questions marquées « source officielle »** citent chacune la publica
 les fonde, avec un lien cliquable dans la correction. Les faits ont été contrôlés en
 août 2026 ; les publications elles-mêmes peuvent évoluer.
 
-N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 934
+N'ont **pas** été vérifiés un par un : chaque numéro d'article cité dans les 999
 questions. Signale toute divergence — en cas de doute, seuls les textes légaux publiés
 (LCA, LSA, CO, CC…) font foi.
 
@@ -223,7 +225,7 @@ Pour héberger le site là où l'on ne peut déposer qu'un fichier (ou pour l'en
 par courriel), regroupe tout — style et scripts compris — en une page autonome :
 
 ```bash
-node build-single-file.js            # produit afa-site-complet.html (~810 Ko)
+node build-single-file.js            # produit afa-site-complet.html (~860 Ko)
 node build-single-file.js /tmp/x.html  # ou vers le chemin de ton choix
 ```
 
