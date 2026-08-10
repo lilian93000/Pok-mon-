@@ -12426,6 +12426,791 @@ input:focus, select:focus, .btn:focus-visible, .choice:focus-visible, .chip:focu
   );
 })();
 
+/* ===== js/data-questions-cours3.js ===== */
+/* =============================================================
+   AFA – Questions au gabarit officiel (3e lot)
+
+   Achève l'exploitation du support de cours myVBV transmis :
+   les caractéristiques essentielles encore inutilisées, les
+   chiffres du marché, les formes de conseil et les segments,
+   les fonds prévus par la LSA, et les points de détail du
+   contrat qui n'avaient pas encore donné lieu à question.
+   ============================================================= */
+(function () {
+  const M = window.AFA_MODULES || [];
+  const m1 = M.find(x => x.id === 'm1');
+  const m2 = M.find(x => x.id === 'm2');
+  if (!m1 || !m2) return;
+  const q = (o) => Object.assign({ lvl: 'off' }, o);
+  const VF = ['Vrai', 'Faux'];
+
+  /* ═══════ Les 14 caractéristiques, suite ═══════ */
+  m1.questions.push(
+    q({
+      id: 'of3201', chap: 'c2', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: "IA, caractéristiques de l'assurance, communauté et prime",
+      q: "Communauté, prime, hasard : à quelle caractéristique essentielle chaque énoncé renvoie-t-il ?",
+      cols: ['Communauté des assurés', 'Prime', 'Hasard'],
+      rows: [
+        "Les assurés forment une communauté de risques dont l'entreprise assume l'organisation",
+        "Le prix à payer pour la protection d'assurance",
+        "La loi des grands nombres se fonde sur des cas indépendants de la volonté de l'assuré",
+      ],
+      answer: [0, 1, 2],
+      explain: "Trois des quatorze caractéristiques essentielles. Le hasard va de pair avec l'exigence d'une communauté aussi homogène que possible : sans cas fortuits et sans homogénéité, la statistique ne dit plus rien."
+    }),
+    q({
+      id: 'of3202', chap: 'c2', type: 'multi', pts: 2, cx: 'Moyenne',
+      theme: "IA, caractéristiques de l'assurance, ce que l'assuré obtient",
+      q: "Quelles caractéristiques décrivent ce que l'assuré obtient de l'assurance ?",
+      choices: [
+        "Un droit à la prestation, et non une aide discrétionnaire",
+        "Une protection et une sécurité qui lui rendent de la liberté financière",
+        "La couverture du besoin pécuniaire né de l'événement assuré",
+        "L'interdiction de s'enrichir aux dépens des autres assurés",
+        "La garantie que l'entreprise dégagera un bénéfice",
+      ],
+      answer: [0, 1, 2, 3],
+      explain: "Les quatorze caractéristiques se lisent en trois blocs : ce que l'assuré obtient, ce que l'assurance calcule, ce que l'entreprise doit respecter. Le bénéfice relève du troisième bloc — l'exploitation économique — et concerne l'entreprise, pas l'assuré."
+    }),
+    q({
+      id: 'of3203', chap: 'c2', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: "IA, caractéristiques de l'assurance, fraude",
+      q: "À quelle caractéristique essentielle la fraude à l'assurance porte-t-elle atteinte ?",
+      choices: [
+        "À l'interdiction de l'enrichissement illégitime",
+        "À la conformité à un plan d'exploitation",
+        "À l'estimation préalable de la prime",
+        "À l'équipe pour la sécurité",
+      ],
+      answer: [0],
+      explain: "Le fraudeur s'enrichit aux dépens des autres membres de la communauté : ce n'est pas l'assureur seul qui est lésé, c'est la mutualité. Le support qualifie expressément la fraude de grave violation de ce principe."
+    }),
+    q({
+      id: 'of3204', chap: 'c2', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'IA, risques actuariels, limitation primaire',
+      q: "Ces mesures de limitation primaire jouent-elles sur la taille, l'homogénéité ou le partage du risque ?",
+      cols: ['Taille du portefeuille', 'Homogénéité', 'Partage du risque'],
+      rows: [
+        "Constituer de très grands portefeuilles",
+        "Écarter à la souscription les risques indésirables",
+        "Faire participer l'assuré par une franchise ou une quote-part",
+        "Souscrire le risque à plusieurs assureurs, en coassurance",
+      ],
+      answer: [0, 1, 2, 2],
+      explain: "La limitation primaire agit sur la composition même du portefeuille. La coassurance en fait partie : plusieurs assureurs se partagent le risque dès la souscription, chacun envers le preneur — à la différence de la réassurance, qui relève de la limitation secondaire."
+    })
+  );
+
+  /* ═══════ Chiffres et poids économique ═══════ */
+  m1.questions.push(
+    q({
+      id: 'of3501', chap: 'c5', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'IA, marché suisse, ordres de grandeur',
+      q: "Quel ordre de grandeur correspond à chacune de ces données du marché suisse ?",
+      cols: ['Environ 50 000', 'Environ 140 milliards', 'Environ 80 milliards'],
+      rows: [
+        "Nombre de collaborateurs employés en Suisse",
+        "Primes brutes comptabilisées, en francs",
+        "Paiements pour cas d'assurance, en francs",
+      ],
+      answer: [0, 1, 2],
+      explain: "Ces chiffres évoluent d'une année à l'autre : ce sont les ordres de grandeur qu'il faut retenir, pas les décimales. Ils situent l'assurance parmi les tout premiers employeurs et contribuables du pays."
+    }),
+    q({
+      id: 'of3502', chap: 'c5', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'IA, marché suisse, rôle de bailleur',
+      q: "À quel titre l'industrie de l'assurance pèse-t-elle sur le marché immobilier suisse ?",
+      choices: [
+        "Elle acquiert terrains, logements et locaux commerciaux, et prête sur hypothèque",
+        "Elle fixe les loyers de référence utilisés par les cantons",
+        "Elle assure obligatoirement tous les immeubles construits en Suisse",
+        "Elle finance directement la construction de logements d'utilité publique",
+      ],
+      answer: [0],
+      explain: "Les primes encaissées d'avance doivent être placées : l'immobilier en absorbe une part importante. L'assureur y est à la fois propriétaire, bailleur et prêteur hypothécaire."
+    }),
+    q({
+      id: 'of3503', chap: 'c5', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'IA, marché suisse, fonds étrangers',
+      q: "Comment l'industrie suisse de l'assurance génère-t-elle des fonds en provenance de l'étranger ?",
+      choices: [
+        "Par la rétrocession à la maison mère des gains réalisés par les filiales étrangères",
+        "Par la vente de polices suisses à des clients domiciliés hors de Suisse",
+        "Par les subventions versées par les organisations internationales",
+        "Par l'exonération fiscale accordée aux réassureurs étrangers",
+      ],
+      answer: [0],
+      explain: "Plusieurs grands groupes suisses réalisent la majeure partie de leur chiffre d'affaires hors de Suisse. Les bénéfices remontés au siège constituent un apport net pour l'économie nationale."
+    })
+  );
+
+  /* ═══════ Conseil, segments, prestation financière intégrée ═══════ */
+  m1.questions.push(
+    q({
+      id: 'of3601', chap: 'c6', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'IA, intermédiation, formes de conseil',
+      q: "Ces démarches relèvent-elles du conseil global, du conseil partiel ou de la prestation financière intégrée ?",
+      cols: ['Conseil global', 'Conseil partiel', 'Prestation financière intégrée'],
+      rows: [
+        "Passer en revue l'ensemble de la situation d'assurance du client",
+        "Traiter uniquement la couverture véhicule que le client vient demander",
+        "Analyser les besoins du client tant en assurance que dans le domaine financier",
+      ],
+      answer: [0, 1, 2],
+      explain: "Le conseil global gagne en importance, et la prestation financière intégrée en est le prolongement : elle sort du seul champ de l'assurance pour embrasser la situation financière. Le conseil partiel reste légitime, mais il expose à laisser des lacunes."
+    }),
+    q({
+      id: 'of3602', chap: 'c6', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'IA, distribution, segments de marché',
+      q: "Pourquoi les assureurs divisent-ils leur marché en segments ?",
+      choices: [
+        "Pour offrir à chacun des paquets d'assurances qui lui sont spécifiques",
+        "Pour appliquer une prime identique à l'intérieur de chaque segment",
+        "Pour se répartir géographiquement la clientèle entre concurrents",
+        "Pour satisfaire une exigence de l'autorité de surveillance",
+      ],
+      answer: [0],
+      explain: "Les besoins d'un jeune locataire, d'une famille propriétaire et d'une PME n'ont rien de commun. La segmentation permet de construire des offres cohérentes, sans que la prime soit pour autant uniforme à l'intérieur d'un segment."
+    }),
+    q({
+      id: 'of3603', chap: 'c6', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'IA, intermédiation, efficacité et efficience',
+      q: "Ces situations traduisent-elles un défaut d'efficacité ou un défaut d'efficience ?",
+      cols: ["Défaut d'efficacité", "Défaut d'efficience"],
+      rows: [
+        "Un conseil excellent, mais qui ne débouche sur aucune conclusion",
+        "Une affaire conclue au prix d'un nombre de visites hors de proportion avec sa prime",
+        "Une couverture placée qui n'apporte au client aucune protection notable",
+      ],
+      answer: [0, 1, 0],
+      explain: "L'efficacité, c'est atteindre l'objectif ; l'efficience, c'est l'atteindre à un coût raisonnable. Un conseil qui ne conclut pas, ou qui conclut sur du vide, manque sa cible ; multiplier les contacts sur un petit potentiel coûte trop cher."
+    }),
+    q({
+      id: 'of3604', chap: 'c6', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'IA, intermédiation, documentation du conseil',
+      q: "Pourquoi recommande-t-on à l'intermédiaire de confirmer par écrit ses doutes lorsque le client passe outre ses recommandations ?",
+      choices: [
+        "Pour disposer d'une preuve que le devoir d'avertir a été rempli",
+        "Pour obliger le client à revenir sur sa décision",
+        "Pour transférer la responsabilité à l'entreprise d'assurance",
+        "Pour satisfaire une exigence de forme imposée par la LCA",
+      ],
+      answer: [0],
+      explain: "Le devoir d'avertir est rempli dès l'avertissement oral, mais rien ne le prouve. L'écrit protège l'intermédiaire le jour où le risque écarté se réalise et où le client conteste avoir été prévenu."
+    })
+  );
+
+  /* ═══════ LSA : fonds, branches particulières, transfrontalier ═══════ */
+  m2.questions.push(
+    q({
+      id: 'of3801', chap: 'c8', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LSA, fonds prévus par la loi',
+      q: "À quoi chacun de ces fonds est-il destiné ?",
+      cols: ['Fonds de garantie', "Fonds d'organisation", 'Fonds de sûreté'],
+      rows: [
+        "Garantir les engagements pris envers les assurés",
+        "Financer la constitution et le développement de l'entreprise",
+        "Répondre des engagements propres aux assurances vie",
+      ],
+      answer: [0, 1, 2],
+      explain: "Trois fonds distincts, qu'on confond volontiers. Seul le fonds d'organisation sert l'entreprise elle-même ; les deux autres protègent les assurés, dont le fonds de sûreté réservé à la branche vie."
+    }),
+    q({
+      id: 'of3802', chap: 'c8', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LSA, obligation de caution',
+      q: "Quelles entreprises doivent déposer une caution pour exercer en Suisse ?",
+      choices: [
+        "Les entreprises d'assurance extérieures à l'Union européenne",
+        "Toutes les entreprises d'assurance étrangères sans exception",
+        "Les entreprises suisses qui souhaitent opérer à l'étranger",
+        "Les entreprises de réassurance, quelle que soit leur origine",
+      ],
+      answer: [0],
+      explain: "La caution est un montant d'argent déposé en garantie, exigé des assureurs hors UE qui veulent opérer en Suisse. Elle compense l'absence de régime de surveillance équivalent reconnu."
+    }),
+    q({
+      id: 'of3803', chap: 'c8', type: 'multi', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LSA, domaines particuliers',
+      q: "Quels domaines la LSA traite-t-elle par des règles particulières ?",
+      choices: [
+        "Certaines branches d'assurance soumises à conditions particulières",
+        "Les assurances vie qualifiées",
+        "Les transactions d'assurance transfrontalières",
+        "Les mesures en cas de risque d'insolvabilité et de liquidation",
+        "Le contenu obligatoire des conditions générales d'assurance",
+      ],
+      answer: [0, 1, 2, 3],
+      explain: "La LSA encadre l'entreprise et son activité. Le contenu du contrat — donc des CGA — relève de la LCA et de la liberté contractuelle, sous réserve des dispositions impératives."
+    }),
+    q({
+      id: 'of3804', chap: 'c8', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LSA, ce que la surveillance protège',
+      q: "La surveillance des assurances : ces affirmations sont-elles vraies ou fausses ?",
+      cols: VF,
+      rows: [
+        "Elle vise à protéger les assurés contre l'insolvabilité et contre les abus.",
+        "Elle repose sur la LSA et sur l'ordonnance sur la surveillance.",
+        "Elle garantit aux entreprises un niveau minimal de rentabilité.",
+        "Elle s'exerce sur les entreprises comme sur les intermédiaires.",
+      ],
+      answer: [0, 0, 1, 0],
+      explain: "L'art. 1 al. 2 LSA place la protection des assurés au centre. La rentabilité n'est un objectif que dans la mesure où elle conditionne la solvabilité : la surveillance ne garantit aucun résultat d'exploitation."
+    })
+  );
+
+  /* ═══════ Contrat : détails non encore exploités ═══════ */
+  m2.questions.push(
+    q({
+      id: 'of3c01', chap: 'c3', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, contrat, conditions applicables',
+      q: "À quel niveau de conditions chaque description correspond-elle ?",
+      cols: ['Conditions générales', 'Conditions particulières ou spéciales', 'Conditions individuelles'],
+      rows: [
+        "Le texte préformulé applicable à tous les contrats de la branche",
+        "Les dispositions valables dans certains cas ou pour un groupe de clients",
+        "Le formulaire établi pour un client déterminé",
+      ],
+      answer: [0, 1, 2],
+      explain: "Trois niveaux, du plus général au plus particulier — et c'est dans cet ordre inverse qu'il faut les lire : la règle spéciale prime la règle générale, donc on commence par le plus précis."
+    }),
+    q({
+      id: 'of3c02', chap: 'c3', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, couverture provisoire',
+      ctx: "Un client signe une proposition d'assurance véhicule le lundi. L'assureur lui accorde une couverture provisoire le jour même, et n'acceptera formellement la proposition que le vendredi suivant.",
+      q: "À partir de quand le véhicule est-il couvert ?",
+      choices: [
+        "Dès le lundi, l'assureur ayant accepté de couvrir le risque",
+        "Dès le vendredi, date de l'acceptation formelle",
+        "Dès l'établissement de la police d'assurance",
+        "Dès le paiement de la première prime",
+      ],
+      answer: [0],
+      explain: "La couverture provisoire comble précisément le vide entre la proposition et la décision : la protection commence avec l'acceptation de l'assureur de couvrir le risque, sans attendre la conclusion définitive."
+    }),
+    q({
+      id: 'of3c03', chap: 'c4', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, réticence et ses effets',
+      ctx: "Un preneur a tu, lors de la conclusion, un fait important sur lequel l'assureur l'avait interrogé. L'assureur le découvre et résilie dans le délai légal.",
+      q: "Ces conséquences sont-elles exactes ou inexactes ?",
+      cols: ['Exacte', 'Inexacte'],
+      rows: [
+        "Le contrat est annulé avec effet immédiat.",
+        "Le preneur doit la prime jusqu'à la dissolution du contrat.",
+        "Le preneur perd toute prétention, même pour un sinistre sans lien avec le fait tu.",
+        "L'assureur disposait de quatre semaines dès la connaissance de la réticence.",
+      ],
+      answer: [0, 0, 1, 0],
+      explain: "L'effet immédiat et le maintien de la prime jusqu'à la dissolution sont exacts, comme le délai de quatre semaines. Mais la perte de la prestation suppose un lien de causalité entre le fait tu et le sinistre : sans ce lien, la couverture reste due."
+    }),
+    q({
+      id: 'of3c04', chap: 'c4', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, aggravation annoncée',
+      ctx: "Un preneur annonce par écrit à son assureur une aggravation essentielle du risque survenue sans son fait. L'assureur ne réagit pas.",
+      q: "Quelle est la situation à l'expiration du délai légal ?",
+      choices: [
+        "L'assurance continue de s'appliquer avec la modification du risque",
+        "Le contrat est résilié de plein droit",
+        "La couverture est suspendue jusqu'à décision de l'assureur",
+        "Le preneur doit renouveler son annonce tous les quatorze jours",
+      ],
+      answer: [0],
+      explain: "Le preneur a fait ce qu'il devait : il a annoncé. L'assureur disposait de quatorze jours pour se départir du contrat ; passé ce délai sans réaction, il est réputé accepter le risque tel qu'il est devenu."
+    }),
+    q({
+      id: 'of3c05', chap: 'c4', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, cas de résolution par l\'assureur',
+      q: "Dans quels cas l'assureur peut-il mettre fin au contrat avec effet immédiat ?",
+      cols: ['Effet immédiat', 'Effet différé'],
+      rows: [
+        "Résolution pour violation fautive de l'obligation de déclarer le sinistre",
+        "Résolution en cas de fraude à l'assurance",
+        "Résiliation après un dommage partiel indemnisé",
+        "Résiliation en cas de changement de main",
+      ],
+      answer: [0, 0, 1, 1],
+      explain: "La faute de l'assuré justifie la rupture immédiate. En revanche le sinistre partiel laisse quatorze jours, et le changement de propriétaire au moins trente : dans ces deux cas, personne n'a mal agi, on laisse le temps de se réassurer."
+    })
+  );
+
+  /* ═══════ Responsabilité : compléments ═══════ */
+  m2.questions.push(
+    q({
+      id: 'of3d01', chap: 'c7', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, RC, assurance RC professionnelle',
+      q: "Que doit couvrir l'assurance responsabilité civile professionnelle exigée de l'intermédiaire ?",
+      choices: [
+        "La responsabilité née d'une violation du devoir de diligence professionnelle",
+        "Les dommages que l'intermédiaire subit dans son propre patrimoine",
+        "Les amendes prononcées par l'autorité de surveillance",
+        "Le manque à gagner résultant de la perte d'un mandat",
+      ],
+      answer: [0],
+      explain: "C'est une assurance de patrimoine tournée vers le client : elle répond des prétentions élevées contre l'intermédiaire pour un conseil fautif. Une amende, sanction personnelle, n'est jamais assurable."
+    }),
+    q({
+      id: 'of3d02', chap: 'c7', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, RC, prévention',
+      q: "Ces mesures de prévention agissent-elles sur la compétence, sur la relation client ou sur l'organisation ?",
+      cols: ['Compétence', 'Relation client', 'Organisation'],
+      rows: [
+        "Acquérir et maintenir ses compétences professionnelles",
+        "Établir et entretenir des relations solides avec la clientèle",
+        "Documenter les contacts et surveiller les processus",
+        "Gérer correctement les erreurs et les omissions",
+      ],
+      answer: [0, 1, 2, 2],
+      explain: "La prévention de la responsabilité ne se réduit pas à souscrire une RC professionnelle. Savoir, soigner la relation, et tracer ce qui a été dit : c'est la documentation qui sauve le jour où la parole de chacun s'oppose."
+    }),
+    q({
+      id: 'of3d03', chap: 'c7', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, RC, accord de collaboration',
+      q: "Quel est l'objet de l'accord de collaboration passé entre un courtier et un assureur ?",
+      choices: [
+        "Régler la rémunération du courtier et la division du travail entre eux",
+        "Obliger le courtier à défendre les intérêts de l'assureur",
+        "Transférer à l'assureur la responsabilité des conseils du courtier",
+        "Fixer les primes que le courtier pourra proposer à ses clients",
+      ],
+      answer: [0],
+      explain: "C'est un contrat innommé, comme le contrat de courtage lui-même. Il organise la collaboration pour les affaires transmises — jamais un devoir d'agir dans l'intérêt de l'assureur, qui contredirait l'indépendance du courtier."
+    })
+  );
+})();
+
+/* ===== js/data-questions-droit.js ===== */
+/* =============================================================
+   AFA – Droit de l'assurance : lot dédié, gabarit officiel
+
+   Renforce le module 2, en visant d'abord ses chapitres les plus
+   maigres : le contrat selon le CO, la sous-assurance et la
+   subrogation, les bases du droit suisse.
+
+   Note de provenance : le support de cours transmis couvre la
+   LCA, la LSA, la formation du contrat et la responsabilité des
+   intermédiaires. Il ne traite ni le CO en détail, ni la
+   sous-assurance et la subrogation — les questions de ces
+   chapitres s'appuient donc sur les textes légaux (CO, CC, LCA)
+   plutôt que sur le support.
+   ============================================================= */
+(function () {
+  const M = window.AFA_MODULES || [];
+  const m2 = M.find(x => x.id === 'm2');
+  if (!m2) return;
+  const q = (o) => Object.assign({ lvl: 'off' }, o);
+  const VF = ['Vrai', 'Faux'];
+
+  m2.questions.push(
+
+    /* ═══════ c2 — LE CONTRAT SELON LE CO ═══════ */
+    q({
+      id: 'dr201', chap: 'c2', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, CO, conditions de validité',
+      q: "Ces conditions sont-elles nécessaires à la validité de tout contrat ?",
+      cols: ['Nécessaire', 'Non nécessaire'],
+      rows: [
+        "Un échange de manifestations de volonté réciproques et concordantes",
+        "L'exercice des droits civils des deux parties",
+        "Un objet licite, possible et déterminable",
+        "La forme écrite du contrat",
+      ],
+      answer: [0, 0, 0, 1],
+      explain: "Accord, capacité et objet licite suffisent. L'art. 11 CO pose la liberté de la forme : l'écrit n'est exigé que si la loi le prévoit ou si les parties se le sont imposé — auquel cas il devient condition de validité."
+    }),
+    q({
+      id: 'dr202', chap: 'c2', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, CO, vices du consentement',
+      q: "De quel vice du consentement s'agit-il dans chacun de ces cas ?",
+      cols: ['Erreur essentielle', 'Dol', 'Crainte fondée'],
+      rows: [
+        "Une partie se trompe sur l'identité de son cocontractant, déterminante pour elle",
+        "Une partie est amenée à contracter par une tromperie intentionnelle de l'autre",
+        "Une partie contracte sous l'empire d'une menace illicite",
+      ],
+      answer: [0, 1, 2],
+      explain: "Trois vices, un même délai : un an pour invalider, dès la découverte de l'erreur ou du dol, dès la cessation de la crainte. Passé ce délai sans réaction, le contrat est réputé ratifié."
+    }),
+    q({
+      id: 'dr203', chap: 'c2', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, CO, offre et acceptation',
+      ctx: "Un assureur adresse à un client une offre écrite valable jusqu'au 30 avril. Le 15 avril, il souhaite se rétracter parce qu'il juge le risque moins attrayant qu'il ne le croyait.",
+      q: "Le peut-il ?",
+      choices: [
+        "Non : ayant fixé un délai, il reste lié jusqu'à son expiration",
+        "Oui, tant que le client n'a pas encore accepté",
+        "Oui, moyennant le versement d'une indemnité au client",
+        "Non, l'offre étant devenue un contrat dès son envoi",
+      ],
+      answer: [0],
+      explain: "Fixer un délai, c'est s'engager à le tenir : l'auteur de l'offre ne peut pas se dédire entre-temps. L'offre n'est pas encore un contrat pour autant — il faudra l'acceptation du client pour qu'il se forme."
+    }),
+    q({
+      id: 'dr204', chap: 'c2', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, CO, qualification du contrat d\'assurance',
+      q: "Comment le contrat d'assurance se qualifie-t-il selon chacun de ces critères ?",
+      cols: ['Synallagmatique', 'Onéreux', 'De durée'],
+      rows: [
+        "Chaque partie s'oblige envers l'autre",
+        "Chaque partie fournit une contrepartie",
+        "L'exécution se déploie de façon continue dans le temps",
+      ],
+      answer: [0, 1, 2],
+      explain: "Il est en outre aléatoire : la prestation de l'assureur dépend d'un événement incertain. C'est parce qu'il est un contrat de durée qu'il se termine par résiliation pour l'avenir, et non par annulation rétroactive."
+    }),
+    q({
+      id: 'dr205', chap: 'c2', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, CO, clause insolite',
+      ctx: "Les conditions générales d'une assurance ménage contiennent, au milieu d'un paragraphe sur les obligations administratives, une clause excluant tout dommage survenu la nuit en l'absence des occupants.",
+      q: "Quel sort une telle clause connaît-elle ?",
+      choices: [
+        "Elle est écartée : le client ne pouvait pas s'y attendre et elle n'a pas été mise en évidence",
+        "Elle est valable, le client ayant accepté l'ensemble des conditions générales",
+        "Elle est valable si l'assureur prouve que le client a lu les conditions",
+        "Elle est nulle et entraîne la nullité de tout le contrat",
+      ],
+      answer: [0],
+      explain: "La règle de la clause insolite écarte ce qui est étranger à l'attente légitime du client et se trouve noyé dans le texte. La mettre en évidence — encadré, caractères gras — l'aurait sauvée ; seule la clause tombe, pas le contrat."
+    }),
+    q({
+      id: 'dr206', chap: 'c2', type: 'single', pts: 1, cx: 'Simple',
+      theme: 'Droit, CO, interprétation des conditions',
+      q: "Comment interprète-t-on une clause de conditions générales dont le sens est douteux ?",
+      choices: [
+        "Contre celui qui l'a rédigée",
+        "En faveur de celui qui l'a rédigée",
+        "En recherchant un compromis entre les deux lectures",
+        "En appliquant systématiquement la solution la moins coûteuse",
+      ],
+      answer: [0],
+      explain: "In dubio contra stipulatorem : qui rédige supporte le risque de ses ambiguïtés. La règle profite au preneur, qui n'a pas participé à la rédaction et n'a pu qu'adhérer."
+    }),
+    q({
+      id: 'dr207', chap: 'c2', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, CO, demeure et intérêts',
+      q: "La demeure du débiteur : ces affirmations sont-elles vraies ou fausses ?",
+      cols: VF,
+      rows: [
+        "Elle suppose en principe une interpellation du créancier.",
+        "Un terme convenu rend l'interpellation superflue.",
+        "L'intérêt moratoire légal s'élève à 5 % l'an.",
+        "L'intérêt moratoire exclut toute réparation d'un dommage supplémentaire.",
+      ],
+      answer: [0, 0, 0, 1],
+      explain: "Art. 102 et 104 CO. L'intérêt moratoire est un minimum forfaitaire : le créancier qui prouve un dommage plus important peut en réclamer réparation en sus."
+    }),
+    q({
+      id: 'dr208', chap: 'c2', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, CO, représentation',
+      ctx: "Un collaborateur a quitté une agence il y a trois mois, mais il détient encore une procuration que son ancien employeur n'a pas révoquée. Il conclut un contrat au nom de l'agence avec un client de bonne foi.",
+      q: "Quelle est la situation de l'agence ?",
+      choices: [
+        "Elle est liée : elle a laissé subsister l'apparence de pouvoirs",
+        "Elle n'est pas liée, les pouvoirs ayant pris fin avec le contrat de travail",
+        "Elle n'est liée que si elle ratifie expressément l'acte",
+        "Elle est liée pour moitié seulement, le tiers devant vérifier les pouvoirs",
+      ],
+      answer: [0],
+      explain: "La protection du tiers de bonne foi l'emporte sur l'absence de pouvoirs réels. D'où la règle pratique : retirer les procurations le jour même du départ, et informer les partenaires quand c'est nécessaire."
+    }),
+    q({
+      id: 'dr209', chap: 'c2', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, CO, prescription',
+      q: "Quel délai de prescription s'applique à chacune de ces créances ?",
+      cols: ['3 ans', '5 ans', '10 ans'],
+      rows: [
+        "Prétention en dommages-intérêts pour acte illicite, dès la connaissance du dommage",
+        "Créance découlant d'un contrat d'assurance",
+        "Créance contractuelle ordinaire, à défaut de règle spéciale",
+      ],
+      answer: [0, 1, 2],
+      explain: "Trois régimes à ne pas mélanger. La prescription de cinq ans de l'art. 46 LCA a remplacé l'ancien délai de deux ans lors de la révision entrée en vigueur en 2022 ; elle est semi-impérative."
+    }),
+    q({
+      id: 'dr210', chap: 'c2', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, CO, forme réservée',
+      q: "Quelle portée a une clause du contrat exigeant que toute modification soit faite par écrit ?",
+      choices: [
+        "La forme écrite devient une condition de validité des modifications",
+        "La clause est nulle, les parties ne pouvant pas s'imposer une forme",
+        "La clause n'a qu'une valeur indicative en matière de preuve",
+        "La clause ne lie que la partie qui l'a rédigée",
+      ],
+      answer: [0],
+      explain: "Art. 16 CO : les parties peuvent réserver une forme que la loi n'exige pas, et elle est alors présumée condition de validité. En assurance, cela donne l'avenant écrit pour toute modification de la police."
+    }),
+
+    /* ═══════ c6 — SOUS-ASSURANCE, SURASSURANCE, SUBROGATION ═══════ */
+    q({
+      id: 'dr601', chap: 'c6', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, qualification du rapport somme/valeur',
+      q: "Comment qualifier chacun de ces rapports entre somme assurée et valeur d'assurance ?",
+      cols: ['Sous-assurance', 'Surassurance', 'Assurance à la valeur totale'],
+      rows: [
+        "Somme CHF 40 000 pour une valeur de CHF 80 000",
+        "Somme CHF 120 000 pour une valeur de CHF 80 000",
+        "Somme CHF 80 000 pour une valeur de CHF 80 000",
+      ],
+      answer: [0, 1, 2],
+      explain: "Seule la sous-assurance a une conséquence défavorable pour l'assuré : la règle proportionnelle réduit l'indemnité. La surassurance ne rapporte rien — l'excédent de prime est payé pour rien, l'indemnité restant plafonnée au dommage réel."
+    }),
+    q({
+      id: 'dr602', chap: 'c6', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, règle proportionnelle',
+      ctx: "L'inventaire du ménage de Madame Perret vaut CHF 150 000.–. Sa police porte sur une somme d'assurance de CHF 100 000.–. Un cambriolage lui cause un dommage de CHF 30 000.–.",
+      q: "Quelle indemnité l'assureur doit-il, sans franchise ?",
+      choices: ["CHF 20 000.–", "CHF 30 000.–", "CHF 100 000.–", "CHF 10 000.–"],
+      answer: [0],
+      explain: "Le rapport est de 100 000 / 150 000, soit deux tiers : 30 000 × 2/3 = CHF 20 000.–. L'assurée supporte elle-même le tiers restant, en contrepartie de la prime réduite qu'elle a acquittée."
+    }),
+    q({
+      id: 'dr603', chap: 'c6', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, surassurance',
+      ctx: "Un assuré a fait porter sa police ménage sur CHF 200 000.– alors que son inventaire vaut CHF 120 000.–. Un incendie détruit l'ensemble.",
+      q: "Quelle indemnité reçoit-il ?",
+      choices: [
+        "CHF 120 000.–, l'excédent de somme restant sans effet",
+        "CHF 200 000.–, conformément à la somme convenue",
+        "CHF 160 000.–, soit la moyenne des deux montants",
+        "Rien : la surassurance annule la couverture",
+      ],
+      answer: [0],
+      explain: "Le principe indemnitaire plafonne l'indemnité au dommage effectif : on ne s'enrichit pas par l'assurance. L'assuré a payé pendant des années une prime calculée sur 200 000 sans rien obtenir en plus — d'où l'intérêt de réviser la somme assurée."
+    }),
+    q({
+      id: 'dr604', chap: 'c6', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, subrogation',
+      q: "Ce que la subrogation transfère, et jusqu'où : vrai ou faux ?",
+      cols: VF,
+      rows: [
+        "L'assureur qui indemnise reprend les droits de l'assuré contre le tiers responsable.",
+        "Elle est limitée au montant de l'indemnité effectivement versée.",
+        "Elle s'applique aussi bien en assurance de sommes qu'en assurance de dommages.",
+        "L'assuré ne doit rien faire qui compromette le recours de son assureur.",
+      ],
+      answer: [0, 0, 1, 0],
+      explain: "La subrogation empêche l'assuré de cumuler indemnité et dommages-intérêts : elle est donc propre à l'assurance de dommages. En assurance de sommes, le capital convenu se cumule librement avec toute autre prestation."
+    }),
+    q({
+      id: 'dr605', chap: 'c6', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, quittance pour solde',
+      ctx: "Un automobiliste endommage le mur d'un client. L'assureur de choses du client l'indemnise. Peu après, le client signe avec le responsable une quittance pour solde de tout compte contre un dédommagement symbolique.",
+      q: "Quelle est la conséquence pour l'assureur ?",
+      choices: [
+        "L'assuré a compromis le recours et engage sa responsabilité envers son assureur",
+        "L'assureur conserve intact son recours, la quittance ne lui étant pas opposable",
+        "L'assureur doit récupérer son indemnité auprès du client uniquement",
+        "La quittance est nulle de plein droit",
+      ],
+      answer: [0],
+      explain: "L'assuré subrogé n'est plus titulaire de la créance : en transigeant, il dispose d'un droit qui ne lui appartient plus. L'assureur peut lui réclamer le préjudice que cette renonciation lui cause."
+    }),
+    q({
+      id: 'dr606', chap: 'c6', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, double assurance',
+      q: "Comment traite-t-on le cumul de couvertures selon le type d'assurance ?",
+      cols: ["Chaque assureur paie l'intégralité", 'Les assureurs se répartissent le dommage'],
+      rows: [
+        "Deux assurances de sommes couvrant le même décès",
+        "Deux assurances de choses couvrant le même inventaire",
+      ],
+      answer: [0, 1],
+      explain: "En assurance de sommes, le besoin pécuniaire ne joue aucun rôle : les deux capitaux sont dus. En assurance de dommages, l'interdiction de l'enrichissement impose que le dommage ne soit indemnisé qu'une fois, les assureurs contribuant proportionnellement."
+    }),
+    q({
+      id: 'dr607', chap: 'c6', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, valeur à neuf et valeur vénale',
+      q: "Qu'est-ce qui distingue une indemnisation à la valeur à neuf d'une indemnisation à la valeur vénale ?",
+      choices: [
+        "La valeur à neuf ignore la vétusté, la valeur vénale en tient compte",
+        "La valeur à neuf s'applique aux entreprises, la valeur vénale aux particuliers",
+        "La valeur à neuf est imposée par la loi, la valeur vénale est contractuelle",
+        "La valeur à neuf concerne les bâtiments, la valeur vénale les inventaires",
+      ],
+      answer: [0],
+      explain: "Le principe indemnitaire commande la valeur vénale — ce que valait le bien juste avant le sinistre. La garantie valeur à neuf est une extension contractuelle, en général limitée aux premières années de vie du bien."
+    }),
+    q({
+      id: 'dr608', chap: 'c6', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, effet de la sous-assurance sur un sinistre total',
+      ctx: "Un entrepreneur assure son stock pour CHF 60 000.– alors qu'il vaut CHF 100 000.–. Un incendie détruit l'intégralité du stock.",
+      q: "Quelle indemnité reçoit-il ?",
+      choices: [
+        "CHF 60 000.–, la somme d'assurance plafonnant la prestation",
+        "CHF 100 000.–, le dommage étant total",
+        "CHF 36 000.–, après application de la règle proportionnelle",
+        "CHF 80 000.–, soit la moyenne des deux montants",
+      ],
+      answer: [0],
+      explain: "En cas de sinistre total, la règle proportionnelle ne change rien : l'indemnité bute de toute façon sur la somme d'assurance. C'est sur les sinistres partiels que la sous-assurance se fait vraiment sentir."
+    }),
+
+    /* ═══════ c1 — BASES DU DROIT ═══════ */
+    q({
+      id: 'dr101', chap: 'c1', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, CC, capacité',
+      q: "Ces personnes peuvent-elles s'obliger valablement par leurs propres actes ?",
+      cols: ['Oui', 'Non'],
+      rows: [
+        "Une personne majeure et capable de discernement",
+        "Un enfant de dix ans",
+        "Une personne majeure durablement privée de discernement",
+        "Un mineur de seize ans capable de discernement, avec l'accord de son représentant",
+      ],
+      answer: [0, 1, 1, 0],
+      explain: "L'exercice des droits civils suppose majorité et discernement. Le mineur capable de discernement conclut un contrat boiteux : il devient pleinement valable si le représentant légal le ratifie, et tombe s'il le refuse."
+    }),
+    q({
+      id: 'dr102', chap: 'c1', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, sources, hiérarchie des normes',
+      q: "Classez ces textes du plus général au plus spécial en matière de contrat d'assurance.",
+      cols: ['Le plus général', 'Intermédiaire', 'Le plus spécial'],
+      rows: [
+        "Le code civil suisse",
+        "Le code des obligations",
+        "La loi sur le contrat d'assurance",
+      ],
+      answer: [0, 1, 2],
+      explain: "La loi spéciale prime la loi générale : on applique la LCA d'abord, le CO pour ce qu'elle ne règle pas, et le CC pour les questions de fond du droit privé — capacité, bonne foi, exercice des droits."
+    }),
+    q({
+      id: 'dr103', chap: 'c1', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, sources, norme semi-impérative',
+      q: "Qu'est-ce qu'une norme semi-impérative de la LCA ?",
+      choices: [
+        "Une norme à laquelle on ne peut déroger qu'en faveur du preneur ou de l'ayant droit",
+        "Une norme qui ne s'applique qu'à la moitié des branches d'assurance",
+        "Une norme dont le juge peut écarter l'application selon les circonstances",
+        "Une norme qui n'entre en vigueur qu'après un délai transitoire",
+      ],
+      answer: [0],
+      explain: "La loi fixe un plancher de protection : le contrat peut faire mieux pour le client, jamais moins bien. Une clause plus défavorable est nulle, et la règle légale s'applique à sa place."
+    }),
+    q({
+      id: 'dr104', chap: 'c1', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, sources, public et privé',
+      q: "Ces rapports relèvent-ils du droit public ou du droit privé ?",
+      cols: ['Droit public', 'Droit privé'],
+      rows: [
+        "La FINMA retire son agrément à une entreprise d'assurance",
+        "Un preneur réclame une indemnité à son assureur ménage",
+        "Une caisse de compensation rend une décision sur une rente AVS",
+        "Un courtier facture ses honoraires à son client",
+      ],
+      answer: [0, 1, 0, 1],
+      explain: "Le critère est le rapport réglé : subordination à l'État, ou égalité entre particuliers. C'est lui qui commande la voie de droit — recours administratif d'un côté, action civile de l'autre."
+    }),
+
+    /* ═══════ c5 — SINISTRE ET PRESTATIONS ═══════ */
+    q({
+      id: 'dr501', chap: 'c5', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, faute et prestation',
+      ctx: "Quatre assurés déclarent un sinistre. Le premier a mis le feu volontairement ; le deuxième a laissé une bougie allumée en quittant son domicile pour la nuit ; le troisième a oublié de fermer une fenêtre au premier étage ; le quatrième, preneur d'assurance, a confié ses clés à un inconnu.",
+      q: "Quelle prestation l'assureur doit-il dans chaque cas ?",
+      cols: ['Aucune', 'Réduite', 'Pleine'],
+      rows: [
+        "L'incendie allumé volontairement",
+        "La bougie laissée allumée toute la nuit",
+        "La fenêtre du premier étage restée ouverte",
+        "Les clés confiées à un inconnu par le preneur",
+      ],
+      answer: [0, 1, 2, 1],
+      explain: "Art. 14 LCA. L'intention exclut la couverture ; la faute grave — du preneur comme de l'assuré — permet une réduction proportionnée ; la faute légère reste sans effet. Une fenêtre oubliée à l'étage relève de l'inattention ordinaire."
+    }),
+    q({
+      id: 'dr502', chap: 'c5', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, frais de sauvetage',
+      q: "Qui supporte les frais engagés par l'assuré pour limiter le dommage ?",
+      choices: [
+        "L'assureur, dès lors que les mesures étaient commandées par les circonstances",
+        "L'assuré, ces frais étant la contrepartie de son obligation",
+        "Les deux parties, par moitié",
+        "L'assureur, mais seulement si le sinistre s'avère finalement couvert à 100 %",
+      ],
+      answer: [0],
+      explain: "Il serait absurde d'imposer une obligation de sauvetage sans en financer l'exécution : l'assuré qui agit dans l'intérêt de l'assureur ne doit pas y être de sa poche. Ces frais s'ajoutent à l'indemnité."
+    }),
+    q({
+      id: 'dr503', chap: 'c5', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, prétention frauduleuse',
+      q: "La prétention frauduleuse : ces affirmations sont-elles vraies ou fausses ?",
+      cols: VF,
+      rows: [
+        "Elle libère l'assureur de son obligation envers l'ayant droit.",
+        "Elle permet à l'assureur de résoudre le contrat avec effet immédiat.",
+        "Elle n'a d'effet que si le montant surévalué dépasse un seuil légal.",
+        "La prime de la période restante doit être remboursée au preneur.",
+      ],
+      answer: [0, 0, 1, 0],
+      explain: "Aucun seuil : c'est la tromperie qui compte, pas son ampleur. Gonfler la liste des objets volés suffit à tout perdre — mais l'assureur, cessant de porter le risque, restitue la prime de la période restante."
+    }),
+    q({
+      id: 'dr504', chap: 'c5', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, LCA, expertise en cas de désaccord',
+      q: "Que prévoient en général les conditions générales lorsque assureur et assuré ne s'entendent pas sur le montant du dommage ?",
+      choices: [
+        "Une procédure d'expertise, chaque partie désignant un expert",
+        "L'application automatique du montant proposé par l'assureur",
+        "La saisine obligatoire du Tribunal fédéral",
+        "La suspension du contrat jusqu'à l'accord des parties",
+      ],
+      answer: [0],
+      explain: "L'expertise porte sur le chiffrage, non sur le principe de la couverture : les experts constatent, ils ne tranchent pas le droit. Un désaccord sur la couverture elle-même reste une question juridique, pour l'ombudsman ou le juge."
+    }),
+
+    /* ═══════ c7 — RESPONSABILITÉ CIVILE ═══════ */
+    q({
+      id: 'dr701', chap: 'c7', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, RC, conditions de la responsabilité',
+      ctx: "Un cycliste renverse un piéton en grillant un feu rouge. Le piéton se blesse et son téléphone est détruit.",
+      q: "Ces conditions de la responsabilité de l'art. 41 CO sont-elles réunies ?",
+      cols: ['Réunie', 'Non réunie'],
+      rows: [
+        "Un dommage",
+        "Un acte illicite",
+        "Un lien de causalité adéquate",
+        "Une plainte pénale déposée par la victime",
+      ],
+      answer: [0, 0, 0, 1],
+      explain: "Dommage, illicéité, causalité et faute suffisent : ce sont les quatre conditions cumulatives. La procédure pénale est indépendante — on peut être civilement responsable sans qu'aucune plainte n'ait été déposée."
+    }),
+    q({
+      id: 'dr702', chap: 'c7', type: 'grid', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, RC, types de responsabilité',
+      q: "Sur quel fondement chacune de ces responsabilités repose-t-elle ?",
+      cols: ['Faute prouvée', 'Faute présumée', 'Sans faute'],
+      rows: [
+        "Responsabilité générale de l'art. 41 CO",
+        "Responsabilité du détenteur d'animal (art. 56 CO)",
+        "Responsabilité du détenteur de véhicule automobile (LCR)",
+      ],
+      answer: [0, 1, 2],
+      explain: "Trois degrés. Le détenteur d'animal peut se libérer en prouvant qu'il a pris tous les soins commandés — c'est une faute présumée. Le détenteur de véhicule répond du seul fait de sa position : responsabilité causale aggravée."
+    }),
+    q({
+      id: 'dr703', chap: 'c7', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, RC, réduction pour faute concomitante',
+      ctx: "Un client glisse sur le sol mouillé d'une agence dépourvue de signalisation. Le dommage s'élève à CHF 8 000.–. Le juge retient une faute concomitante de 25 % : la victime courait dans le couloir.",
+      q: "Quel montant l'exploitant doit-il réparer ?",
+      choices: ["CHF 6 000.–", "CHF 8 000.–", "CHF 2 000.–", "Rien, la faute de la victime étant décisive"],
+      answer: [0],
+      explain: "8 000 × 75 % = CHF 6 000.–. La faute concomitante réduit sans supprimer, sauf lorsqu'elle est si lourde qu'elle rompt le lien de causalité adéquate — ce qui n'est pas le cas d'une simple imprudence."
+    }),
+    q({
+      id: 'dr704', chap: 'c7', type: 'single', pts: 2, cx: 'Moyenne',
+      theme: 'Droit, RC, responsabilité de l\'employeur',
+      q: "À quelle condition l'employeur peut-il se libérer de sa responsabilité pour le dommage causé par son travailleur (art. 55 CO) ?",
+      choices: [
+        "En prouvant qu'il a pris tous les soins commandés par les circonstances pour éviter le dommage",
+        "En établissant que le travailleur a agi contre ses instructions",
+        "En démontrant que le travailleur est solvable",
+        "Il ne peut jamais s'en libérer",
+      ],
+      answer: [0],
+      explain: "C'est une responsabilité causale simple, avec preuve libératoire : choix, instruction et surveillance du personnel. À distinguer de l'art. 101 CO, qui rend le débiteur contractuel responsable de son auxiliaire sans échappatoire."
+    })
+  );
+})();
+
 /* ===== js/data-filtre-officiel.js ===== */
 /* =============================================================
    AFA – Filtre « questions officielles uniquement »

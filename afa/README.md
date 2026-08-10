@@ -9,8 +9,9 @@ pour la formation professionnelle en assurance / VBV), centré sur les Circles
 | **1** | Industrie de l'assurance | Notions élémentaires, risque et risk management, principes techniques, prime et systèmes de financement, trois piliers, branches, marché suisse, affaires d'assurance et chaîne de valeur, distribution et intermédiaires, réassurance, surveillance et solvabilité |
 | **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA, conciliation et juridiction |
 
-**19 chapitres de cours et 231 questions, toutes au gabarit de l'examen** — dont les
-**27 questions de la série zéro** publiée par l'AFA et **103 tableaux d'attribution**.
+**19 chapitres de cours et 284 questions, toutes au gabarit de l'examen** — dont les
+**27 questions de la série zéro** publiée par l'AFA et **129 tableaux d'attribution**.
+Le droit de l'assurance en compte **150**, l'industrie de l'assurance **134**.
 
 ### 🎯 Banque restreinte au format officiel
 
@@ -29,8 +30,8 @@ Le sélecteur de niveau disparaît tant que toutes les questions relèvent du m�
 et réapparaît de lui-même dès que le filtre est levé.
 
 Les chapitres les mieux fournis sont ceux que le support officiel détaille le plus :
-principes techniques (32 questions), LSA/LPD/LBA (27), LCA II — Vie du contrat (19) et
-intermédiation (19).
+principes techniques (36 questions), LSA/LPD/LBA (31), intermédiation (23) et LCA II —
+Vie du contrat (22).
 
 ### 💤 Module Non-Vie en veille
 
@@ -121,6 +122,8 @@ rien n'est envoyé sur un serveur.
 | `js/data-cours-officiel2.js` | Support officiel (2) : chaîne de la prime, ayants droit, canaux de vente, réassurance, intermédiaires |
 | `js/data-questions-cours.js` | Questions du support officiel (1) : classification, surveillance, sources du droit, formation et fin du contrat, voies de droit, responsabilité |
 | `js/data-questions-cours2.js` | Questions du support officiel (2) : notions élémentaires, affaires d'assurance, marché suisse, réassurance, sinistre |
+| `js/data-questions-cours3.js` | Questions du support officiel (3) : caractéristiques restantes, chiffres du marché, formes de conseil, fonds LSA |
+| `js/data-questions-droit.js` | Lot dédié au droit : CO, sous-assurance et subrogation, bases du droit, sinistre, responsabilité civile |
 | `js/data-filtre-officiel.js` | Restreint la banque active aux seules questions au gabarit de l'examen |
 | `js/data-glossaire.js` | Notions du glossaire / flashcards |
 
