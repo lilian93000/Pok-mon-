@@ -1,14 +1,14 @@
 {
- "generatedAt": "2026-08-10T20:10:59.443Z",
+ "generatedAt": "2026-08-10T22:18:36.686Z",
  "method": "Rendement réel de chaque top-pick depuis sa date de recommandation (clôture Yahoo), comparé au S&P 500 sur la même période. Point d'entrée = clôture du jour de reco.",
  "horizon": "2026-07-04 → aujourd'hui",
  "all": {
   "n": 130,
-  "avgRet": 0.6,
+  "avgRet": 0.7,
   "medRet": 0,
   "winPct": 49,
   "beatMktPct": 26,
-  "avgAlpha": -2.4
+  "avgAlpha": -2.3
  },
  "top1": {
   "n": 26,
@@ -25,10 +25,10 @@
    "rank": 3,
    "score": 80,
    "entry": 6,
-   "now": 8.88,
-   "ret": 48,
+   "now": 8.92,
+   "ret": 48.7,
    "mktRet": 3.2,
-   "alpha": 44.8
+   "alpha": 45.5
   },
   {
    "date": "2026-07-14",
@@ -36,10 +36,10 @@
    "rank": 3,
    "score": 79,
    "entry": 6,
-   "now": 8.88,
-   "ret": 48,
+   "now": 8.92,
+   "ret": 48.7,
    "mktRet": 2.8,
-   "alpha": 45.2
+   "alpha": 45.9
   },
   {
    "date": "2026-07-16",
@@ -47,10 +47,10 @@
    "rank": 4,
    "score": 80,
    "entry": 6.01,
-   "now": 8.88,
-   "ret": 47.8,
+   "now": 8.92,
+   "ret": 48.4,
    "mktRet": 2.9,
-   "alpha": 44.8
+   "alpha": 45.5
   },
   {
    "date": "2026-07-15",
@@ -58,10 +58,10 @@
    "rank": 3,
    "score": 80,
    "entry": 6.03,
-   "now": 8.88,
-   "ret": 47.3,
+   "now": 8.92,
+   "ret": 47.9,
    "mktRet": 2.4,
-   "alpha": 44.9
+   "alpha": 45.5
   },
   {
    "date": "2026-08-05",
@@ -205,10 +205,10 @@
    "rank": 2,
    "score": 83,
    "entry": 46.76,
-   "now": 50.51,
-   "ret": 8,
+   "now": 50.54,
+   "ret": 8.1,
    "mktRet": 3.3,
-   "alpha": 4.7
+   "alpha": 4.8
   },
   {
    "date": "2026-07-07",
@@ -238,10 +238,10 @@
    "rank": 5,
    "score": 80,
    "entry": 136.63,
-   "now": 142.56,
-   "ret": 4.3,
+   "now": 142.69,
+   "ret": 4.4,
    "mktRet": 3.3,
-   "alpha": 1
+   "alpha": 1.1
   },
   {
    "date": "2026-07-08",
@@ -271,7 +271,7 @@
    "rank": 3,
    "score": 83,
    "entry": 47.4,
-   "now": 50.51,
+   "now": 50.54,
    "ret": 6.6,
    "mktRet": 3.6,
    "alpha": 3
@@ -326,10 +326,10 @@
    "rank": 3,
    "score": 85,
    "entry": 46.59,
-   "now": 50.51,
-   "ret": 8.4,
+   "now": 50.54,
+   "ret": 8.5,
    "mktRet": 2.8,
-   "alpha": 5.6
+   "alpha": 5.7
   },
   {
    "date": "2026-07-09",
@@ -392,8 +392,8 @@
    "rank": 4,
    "score": 83,
    "entry": 47.56,
-   "now": 50.51,
-   "ret": 6.2,
+   "now": 50.54,
+   "ret": 6.3,
    "mktRet": 2.3,
    "alpha": 3.9
   },
@@ -403,10 +403,10 @@
    "rank": 5,
    "score": 83,
    "entry": 33.04,
-   "now": 30.03,
+   "now": 30.04,
    "ret": -9.1,
    "mktRet": 2.3,
-   "alpha": -11.5
+   "alpha": -11.4
   },
   {
    "date": "2026-07-11",
@@ -414,8 +414,8 @@
    "rank": 1,
    "score": 85,
    "entry": 47.77,
-   "now": 50.51,
-   "ret": 5.7,
+   "now": 50.54,
+   "ret": 5.8,
    "mktRet": 3.2,
    "alpha": 2.6
   },
@@ -458,10 +458,10 @@
    "rank": 5,
    "score": 83,
    "entry": 34.77,
-   "now": 32.21,
+   "now": 32.2,
    "ret": -7.4,
    "mktRet": 3.2,
-   "alpha": -10.5
+   "alpha": -10.6
   },
   {
    "date": "2026-07-13",
@@ -469,10 +469,10 @@
    "rank": 1,
    "score": 87,
    "entry": 25.11,
-   "now": 24.9,
-   "ret": -0.8,
+   "now": 24.84,
+   "ret": -1.1,
    "mktRet": 3.2,
-   "alpha": -4
+   "alpha": -4.2
   },
   {
    "date": "2026-07-13",
@@ -491,10 +491,10 @@
    "rank": 3,
    "score": 80,
    "entry": 6,
-   "now": 8.88,
-   "ret": 48,
+   "now": 8.92,
+   "ret": 48.7,
    "mktRet": 3.2,
-   "alpha": 44.8
+   "alpha": 45.5
   },
   {
    "date": "2026-07-13",
@@ -502,10 +502,10 @@
    "rank": 4,
    "score": 78,
    "entry": 10.49,
-   "now": 10.45,
+   "now": 10.46,
    "ret": -0.3,
    "mktRet": 3.2,
-   "alpha": -3.5
+   "alpha": -3.4
   },
   {
    "date": "2026-07-13",
@@ -524,10 +524,10 @@
    "rank": 1,
    "score": 85,
    "entry": 24.45,
-   "now": 24.9,
-   "ret": 1.8,
+   "now": 24.84,
+   "ret": 1.6,
    "mktRet": 2.8,
-   "alpha": -0.9
+   "alpha": -1.2
   },
   {
    "date": "2026-07-14",
@@ -546,10 +546,10 @@
    "rank": 3,
    "score": 79,
    "entry": 6,
-   "now": 8.88,
-   "ret": 48,
+   "now": 8.92,
+   "ret": 48.7,
    "mktRet": 2.8,
-   "alpha": 45.2
+   "alpha": 45.9
   },
   {
    "date": "2026-07-14",
@@ -568,10 +568,10 @@
    "rank": 5,
    "score": 79,
    "entry": 10.57,
-   "now": 10.45,
-   "ret": -1.1,
+   "now": 10.46,
+   "ret": -1,
    "mktRet": 2.8,
-   "alpha": -3.9
+   "alpha": -3.8
   },
   {
    "date": "2026-07-15",
@@ -579,10 +579,10 @@
    "rank": 1,
    "score": 85,
    "entry": 22.51,
-   "now": 24.9,
-   "ret": 10.6,
+   "now": 24.84,
+   "ret": 10.4,
    "mktRet": 2.4,
-   "alpha": 8.2
+   "alpha": 8
   },
   {
    "date": "2026-07-15",
@@ -601,10 +601,10 @@
    "rank": 3,
    "score": 80,
    "entry": 6.03,
-   "now": 8.88,
-   "ret": 47.3,
+   "now": 8.92,
+   "ret": 47.9,
    "mktRet": 2.4,
-   "alpha": 44.9
+   "alpha": 45.5
   },
   {
    "date": "2026-07-15",
@@ -612,7 +612,7 @@
    "rank": 4,
    "score": 78,
    "entry": 10.66,
-   "now": 10.45,
+   "now": 10.46,
    "ret": -1.9,
    "mktRet": 2.4,
    "alpha": -4.3
@@ -623,10 +623,10 @@
    "rank": 5,
    "score": 78,
    "entry": 355.14,
-   "now": 361.27,
+   "now": 361.32,
    "ret": 1.7,
    "mktRet": 2.4,
-   "alpha": -0.7
+   "alpha": -0.6
   },
   {
    "date": "2026-07-16",
@@ -634,10 +634,10 @@
    "rank": 1,
    "score": 80,
    "entry": 43.69,
-   "now": 42.24,
+   "now": 42.23,
    "ret": -3.3,
    "mktRet": 2.9,
-   "alpha": -6.2
+   "alpha": -6.3
   },
   {
    "date": "2026-07-16",
@@ -667,10 +667,10 @@
    "rank": 4,
    "score": 80,
    "entry": 6.01,
-   "now": 8.88,
-   "ret": 47.8,
+   "now": 8.92,
+   "ret": 48.4,
    "mktRet": 2.9,
-   "alpha": 44.8
+   "alpha": 45.5
   },
   {
    "date": "2026-07-16",
@@ -733,7 +733,7 @@
    "rank": 5,
    "score": 79,
    "entry": 42.48,
-   "now": 42.24,
+   "now": 42.23,
    "ret": -0.6,
    "mktRet": 4,
    "alpha": -4.5
@@ -832,7 +832,7 @@
    "rank": 4,
    "score": 78,
    "entry": 158.89,
-   "now": 159.38,
+   "now": 159.43,
    "ret": 0.3,
    "mktRet": 3.2,
    "alpha": -2.9
@@ -854,10 +854,10 @@
    "rank": 1,
    "score": 84,
    "entry": 26.16,
-   "now": 21.63,
-   "ret": -17.3,
+   "now": 21.8,
+   "ret": -16.7,
    "mktRet": 3.4,
-   "alpha": -20.7
+   "alpha": -20.1
   },
   {
    "date": "2026-07-22",
@@ -920,10 +920,10 @@
    "rank": 2,
    "score": 82,
    "entry": 24.93,
-   "now": 21.63,
-   "ret": -13.2,
+   "now": 21.8,
+   "ret": -12.6,
    "mktRet": 4.7,
-   "alpha": -17.9
+   "alpha": -17.2
   },
   {
    "date": "2026-07-23",
@@ -942,10 +942,10 @@
    "rank": 4,
    "score": 80,
    "entry": 49.06,
-   "now": 51.37,
-   "ret": 4.7,
+   "now": 51.27,
+   "ret": 4.5,
    "mktRet": 4.7,
-   "alpha": 0
+   "alpha": -0.1
   },
   {
    "date": "2026-07-23",
@@ -975,10 +975,10 @@
    "rank": 2,
    "score": 80,
    "entry": 25.99,
-   "now": 21.63,
-   "ret": -16.8,
+   "now": 21.8,
+   "ret": -16.1,
    "mktRet": 4.6,
-   "alpha": -21.4
+   "alpha": -20.7
   },
   {
    "date": "2026-07-24",
@@ -997,10 +997,10 @@
    "rank": 4,
    "score": 79,
    "entry": 117.88,
-   "now": 120.28,
-   "ret": 2,
+   "now": 120.31,
+   "ret": 2.1,
    "mktRet": 4.6,
-   "alpha": -2.6
+   "alpha": -2.5
   },
   {
    "date": "2026-07-24",
@@ -1030,10 +1030,10 @@
    "rank": 2,
    "score": 80,
    "entry": 26.15,
-   "now": 21.63,
-   "ret": -17.3,
+   "now": 21.8,
+   "ret": -16.6,
    "mktRet": 4.6,
-   "alpha": -21.9
+   "alpha": -21.2
   },
   {
    "date": "2026-07-27",
@@ -1085,10 +1085,10 @@
    "rank": 2,
    "score": 80,
    "entry": 26.65,
-   "now": 21.63,
-   "ret": -18.8,
+   "now": 21.8,
+   "ret": -18.2,
    "mktRet": 4.4,
-   "alpha": -23.2
+   "alpha": -22.6
   },
   {
    "date": "2026-07-28",
@@ -1151,10 +1151,10 @@
    "rank": 3,
    "score": 80,
    "entry": 26.76,
-   "now": 21.63,
-   "ret": -19.2,
+   "now": 21.8,
+   "ret": -18.5,
    "mktRet": 6,
-   "alpha": -25.1
+   "alpha": -24.5
   },
   {
    "date": "2026-07-29",
@@ -1195,7 +1195,7 @@
    "rank": 2,
    "score": 79,
    "entry": 92.44,
-   "now": 85.2,
+   "now": 85.22,
    "ret": -7.8,
    "mktRet": 4.2,
    "alpha": -12.1
@@ -1206,7 +1206,7 @@
    "rank": 3,
    "score": 78,
    "entry": 95.21,
-   "now": 90.39,
+   "now": 90.4,
    "ret": -5.1,
    "mktRet": 4.2,
    "alpha": -9.3
@@ -1217,7 +1217,7 @@
    "rank": 4,
    "score": 78,
    "entry": 366.27,
-   "now": 361.27,
+   "now": 361.32,
    "ret": -1.4,
    "mktRet": 4.2,
    "alpha": -5.6
@@ -1228,10 +1228,10 @@
    "rank": 5,
    "score": 78,
    "entry": 390.12,
-   "now": 401.26,
-   "ret": 2.9,
+   "now": 400.88,
+   "ret": 2.8,
    "mktRet": 4.2,
-   "alpha": -1.4
+   "alpha": -1.5
   },
   {
    "date": "2026-07-31",
@@ -1239,10 +1239,10 @@
    "rank": 1,
    "score": 81,
    "entry": 91.47,
-   "now": 85.2,
-   "ret": -6.9,
+   "now": 85.22,
+   "ret": -6.8,
    "mktRet": 3.5,
-   "alpha": -10.4
+   "alpha": -10.3
   },
   {
    "date": "2026-07-31",
@@ -1250,10 +1250,10 @@
    "rank": 2,
    "score": 80,
    "entry": 86.49,
-   "now": 90.68,
-   "ret": 4.8,
+   "now": 90.72,
+   "ret": 4.9,
    "mktRet": 3.5,
-   "alpha": 1.3
+   "alpha": 1.4
   },
   {
    "date": "2026-07-31",
@@ -1283,8 +1283,8 @@
    "rank": 5,
    "score": 78,
    "entry": 45.61,
-   "now": 45.67,
-   "ret": 0.1,
+   "now": 45.68,
+   "ret": 0.2,
    "mktRet": 3.5,
    "alpha": -3.4
   },
@@ -1316,7 +1316,7 @@
    "rank": 3,
    "score": 79,
    "entry": 380.89,
-   "now": 363.26,
+   "now": 363.39,
    "ret": -4.6,
    "mktRet": 2,
    "alpha": -6.6
@@ -1327,7 +1327,7 @@
    "rank": 4,
    "score": 78,
    "entry": 67.91,
-   "now": 66.3,
+   "now": 66.29,
    "ret": -2.4,
    "mktRet": 2,
    "alpha": -4.4
@@ -1338,7 +1338,7 @@
    "rank": 5,
    "score": 78,
    "entry": 46.09,
-   "now": 45.67,
+   "now": 45.68,
    "ret": -0.9,
    "mktRet": 2,
    "alpha": -2.9
@@ -1382,10 +1382,10 @@
    "rank": 4,
    "score": 79,
    "entry": 51.26,
-   "now": 51.25,
-   "ret": 0,
+   "now": 51.21,
+   "ret": -0.1,
    "mktRet": 0.2,
-   "alpha": -0.2
+   "alpha": -0.3
   },
   {
    "date": "2026-08-04",
@@ -1393,7 +1393,7 @@
    "rank": 5,
    "score": 78,
    "entry": 65.89,
-   "now": 66.3,
+   "now": 66.29,
    "ret": 0.6,
    "mktRet": 0.2,
    "alpha": 0.4
@@ -1415,7 +1415,7 @@
    "rank": 2,
    "score": 83,
    "entry": 197.31,
-   "now": 191.64,
+   "now": 191.52,
    "ret": -2.9,
    "mktRet": 0.4,
    "alpha": -3.3
@@ -1426,7 +1426,7 @@
    "rank": 3,
    "score": 81,
    "entry": 172.24,
-   "now": 167.71,
+   "now": 167.7,
    "ret": -2.6,
    "mktRet": 0.4,
    "alpha": -3
@@ -1492,10 +1492,10 @@
    "rank": 4,
    "score": 80,
    "entry": 30.09,
-   "now": 30.5,
-   "ret": 1.4,
+   "now": 30.28,
+   "ret": 0.6,
    "mktRet": -0.1,
-   "alpha": 1.4
+   "alpha": 0.7
   },
   {
    "date": "2026-08-07",
@@ -1546,19 +1546,19 @@
    "symbol": "CIX",
    "rank": 4,
    "score": 80,
-   "entry": 30.5,
-   "now": 30.5,
+   "entry": 30.28,
+   "now": 30.28,
    "ret": 0,
    "mktRet": 0,
    "alpha": 0
   },
   {
    "date": "2026-08-10",
-   "symbol": "HQY",
+   "symbol": "HALO",
    "rank": 5,
    "score": 80,
-   "entry": 106.79,
-   "now": 106.79,
+   "entry": 102.62,
+   "now": 102.62,
    "ret": 0,
    "mktRet": 0,
    "alpha": 0
