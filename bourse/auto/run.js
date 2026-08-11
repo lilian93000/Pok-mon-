@@ -957,10 +957,15 @@ async function main() {
   const nMoatScan = cfg.moatScanMax || 0;
   if (ysession && nMoatScan > 0 && scanCloses.size) {
     const ret = (c, n) => (c.length > n ? (c[c.length - 1] / c[c.length - 1 - n] - 1) * 100 : null);
+    // Fonds fermés / véhicules d'investissement : « marges » comptables absurdes
+    // (marge nette > 100 %, marge brute 100 %) → faux moats. On les écarte par le nom.
+    const FUND_NAME = /\b(Fund|Trust|ETF|Portfolio|Income|Municipal|Bond|Closed[- ]?End|Index)\b/i;
     const already = new Set(results.map((r) => r.symbol));
     const moatPool = [];
     for (const [sym, closes] of scanCloses) {
       if (already.has(sym)) continue;
+      const nm = names.get(sym) || "";
+      if (FUND_NAME.test(nm)) continue;                 // pas un fonds
       const price = closes[closes.length - 1];
       if (price < 6) continue;                          // liquidité/qualité minimale
       const p6 = ret(closes, 126);
@@ -979,9 +984,14 @@ async function main() {
       await sleep(150);
       if (++done2 % 250 === 0) console.log(`  … moats ${done2}/${cand.length} (${wideMoats.length} trouvés)`);
       if (!qs || !qs.fundamentals) return null;
+      const f = qs.fundamentals;
+      // Garde-fou anti-fonds : une vraie entreprise a une marge nette < 80 % et
+      // convertit ses bénéfices en cash. Au-delà, c'est un fonds/holding (faux moat).
+      if (f.netMargin != null && f.netMargin > 80) return null;
+      if (f.grossMargin === 100 && f.cashConversion == null && f.fcfPositive == null) return null;
       const sector = (qs.profile && qs.profile.sector) || "";
       const industry = (qs.profile && qs.profile.industry) || "";
-      const moat = Engine.moatScore(qs.fundamentals, `${sector} ${industry}`);
+      const moat = Engine.moatScore(f, `${sector} ${industry}`);
       if (moat == null || moat < 68) return null;
       const c = it.closes, win = c.slice(-252);
       const hi52 = win.length ? Math.max(...win) : null;
