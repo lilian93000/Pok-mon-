@@ -124,5 +124,17 @@ en a pas.
 ## Garde-fous
 
 - Jamais plus de 3 picks par jour, jamais de « pick du jour » forcé.
+- **NE PLUS fader un value bet ancré-marché sur un récit de « jeune
+  surgeante sous-estimée » quand les DEUX fiches sont fraîches.** Ce
+  reflexe datait de l'époque où l'Elo tournait sur des données d'avril et
+  ignorait vraiment le momentum. Désormais l'ingestion est quotidienne : le
+  modèle CONNAÎT déjà la forme récente (série de victoires incluse), et
+  l'ancrage marché tempère déjà sa surconfiance. Le fader en plus = double
+  comptage. Exemples réels où ce fade m'a fait tort : Liutova (Memphis,
+  faille évitée de justesse) puis surtout **Bencic vs Eala (Toronto QF
+  10/08) : j'ai décliné Bencic @1.80 sur le momentum d'Eala — Bencic a
+  gagné 6-4 6-0.** Règle : sur fiches fraîches, on fait confiance au signal
+  ancré-marché ; on n'écarte que sur une info DURE et vérifiée (blessure,
+  abandon récent, match déjà joué), pas sur une narration de dynamique.
 - Toujours rappeler : mise Kelly fractionné, bankroll dédiée, aucun
   gain garanti. Jeu responsable : joueurs-info-service.fr / 09 74 75 13 13.
