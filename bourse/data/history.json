@@ -648,5 +648,30 @@
     "score": 80
    }
   ]
+ },
+ {
+  "date": "2026-08-11",
+  "top": [
+   {
+    "symbol": "PAYS",
+    "score": 82
+   },
+   {
+    "symbol": "VCTR",
+    "score": 81
+   },
+   {
+    "symbol": "CIX",
+    "score": 81
+   },
+   {
+    "symbol": "ATLO",
+    "score": 81
+   },
+   {
+    "symbol": "EXPE",
+    "score": 81
+   }
+  ]
  }
 ]
