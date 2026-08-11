@@ -7,11 +7,11 @@ pour la formation professionnelle en assurance / VBV), centré sur les Circles
 | Module | Titre | Contenu |
 |--------|-------|---------|
 | **1** | Industrie de l'assurance | Notions élémentaires, risque et risk management, principes techniques, prime et systèmes de financement, trois piliers, branches, marché suisse, affaires d'assurance et chaîne de valeur, distribution et intermédiaires, réassurance, surveillance et solvabilité |
-| **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA, conciliation et juridiction |
+| **2** | Droit de l'assurance | Bases du droit suisse, contrat selon le CO, LCA révisée (conclusion, vie du contrat, sinistre), sous/sur/double assurance et subrogation, responsabilité civile, LSA / LPD / LBA / LPCC, conciliation et juridiction |
 
-**19 chapitres de cours et 343 questions, toutes au gabarit de l'examen** — dont les
-**27 questions de la série zéro** publiée par l'AFA et **161 tableaux d'attribution**.
-Le droit de l'assurance en compte **186**, l'industrie de l'assurance **134**.
+**19 chapitres de cours et 357 questions, toutes au gabarit de l'examen** — dont les
+**27 questions de la série zéro** publiée par l'AFA et **166 tableaux d'attribution**.
+Le droit de l'assurance en compte **223**, l'industrie de l'assurance **134**.
 
 ### 🎯 Banque restreinte au format officiel
 
@@ -29,9 +29,9 @@ Pour rétablir l'intégralité de la banque, retirer une seule ligne d'`index.ht
 Le sélecteur de niveau disparaît tant que toutes les questions relèvent du même niveau,
 et réapparaît de lui-même dès que le filtre est levé.
 
-Les chapitres les mieux fournis sont ceux qui pèsent le plus à l'examen : LSA/LPD/LBA
-(38 questions), principes techniques (36), LCA II — Vie du contrat (28), LCA I —
-Conclusion (26), intermédiation (23) et responsabilité civile (22).
+Les chapitres les mieux fournis sont ceux qui pèsent le plus à l'examen : LSA, LPD,
+LBA et LPCC (75 questions), principes techniques (36), LCA II — Vie du contrat (28),
+LCA I — Conclusion (26), intermédiation (23) et responsabilité civile (22).
 
 ### 💤 Module Non-Vie en veille
 
@@ -126,6 +126,7 @@ rien n'est envoyé sur un serveur.
 | `js/data-questions-droit.js` | Droit (1) : CO, sous-assurance et subrogation, bases du droit, sinistre, responsabilité civile |
 | `js/data-questions-droit2.js` | Droit (2) : LCA article par article, LPD et LBA, causalité et solidarité, voies de droit |
 | `js/data-questions-lpd-lba.js` | Droit (3) : protection des données et blanchiment — notions, principes, obligations, art. 305ter CP, autorégulation ASA, sanctions |
+| `js/data-questions-lpcc.js` | Droit (4) : placements collectifs de capitaux — notion, formes ouvertes et fermées, autorisations, assurance-vie liée à des fonds, fonds étrangers |
 | `js/data-filtre-officiel.js` | Restreint la banque active aux seules questions au gabarit de l'examen |
 | `js/data-glossaire.js` | Notions du glossaire / flashcards |
 
