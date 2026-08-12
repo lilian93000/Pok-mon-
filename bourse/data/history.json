@@ -673,5 +673,30 @@
     "score": 81
    }
   ]
+ },
+ {
+  "date": "2026-08-12",
+  "top": [
+   {
+    "symbol": "PAYS",
+    "score": 80
+   },
+   {
+    "symbol": "CIX",
+    "score": 80
+   },
+   {
+    "symbol": "ATLO",
+    "score": 80
+   },
+   {
+    "symbol": "EXPE",
+    "score": 80
+   },
+   {
+    "symbol": "ANET",
+    "score": 80
+   }
+  ]
  }
 ]

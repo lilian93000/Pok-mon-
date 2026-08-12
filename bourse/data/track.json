@@ -1,22 +1,22 @@
 {
- "generatedAt": "2026-08-11T22:23:41.770Z",
+ "generatedAt": "2026-08-12T22:23:49.210Z",
  "method": "Rendement réel de chaque top-pick depuis sa date de recommandation (clôture Yahoo), comparé au S&P 500 sur la même période. Point d'entrée = clôture du jour de reco.",
  "horizon": "2026-07-04 → aujourd'hui",
  "all": {
-  "n": 135,
-  "avgRet": 0.8,
-  "medRet": 0.3,
-  "winPct": 54,
-  "beatMktPct": 32,
-  "avgAlpha": -1.8
+  "n": 140,
+  "avgRet": 1.3,
+  "medRet": 1.3,
+  "winPct": 61,
+  "beatMktPct": 33,
+  "avgAlpha": -1.5
  },
  "top1": {
-  "n": 27,
-  "avgRet": 1.3,
-  "medRet": 0.8,
-  "winPct": 59,
-  "beatMktPct": 22,
-  "avgAlpha": -1.3
+  "n": 28,
+  "avgRet": 1.6,
+  "medRet": 1.3,
+  "winPct": 64,
+  "beatMktPct": 25,
+  "avgAlpha": -1.2
  },
  "best": [
   {
@@ -25,10 +25,10 @@
    "rank": 3,
    "score": 80,
    "entry": 6,
-   "now": 9.2,
-   "ret": 53.3,
-   "mktRet": 2.8,
-   "alpha": 50.5
+   "now": 8.95,
+   "ret": 49.2,
+   "mktRet": 3.1,
+   "alpha": 46.1
   },
   {
    "date": "2026-07-14",
@@ -36,10 +36,10 @@
    "rank": 3,
    "score": 79,
    "entry": 6,
-   "now": 9.2,
-   "ret": 53.3,
-   "mktRet": 2.4,
-   "alpha": 50.9
+   "now": 8.95,
+   "ret": 49.2,
+   "mktRet": 2.7,
+   "alpha": 46.5
   },
   {
    "date": "2026-07-16",
@@ -47,10 +47,10 @@
    "rank": 4,
    "score": 80,
    "entry": 6.01,
-   "now": 9.2,
-   "ret": 53.1,
-   "mktRet": 2.6,
-   "alpha": 50.5
+   "now": 8.95,
+   "ret": 48.9,
+   "mktRet": 2.9,
+   "alpha": 46.1
   },
   {
    "date": "2026-07-15",
@@ -58,10 +58,10 @@
    "rank": 3,
    "score": 80,
    "entry": 6.03,
-   "now": 9.2,
-   "ret": 52.6,
-   "mktRet": 2.1,
-   "alpha": 50.5
+   "now": 8.95,
+   "ret": 48.4,
+   "mktRet": 2.3,
+   "alpha": 46.1
   },
   {
    "date": "2026-08-05",
@@ -69,10 +69,10 @@
    "rank": 1,
    "score": 83,
    "entry": 9.59,
-   "now": 12.63,
-   "ret": 31.7,
-   "mktRet": 0.1,
-   "alpha": 31.6
+   "now": 12.8,
+   "ret": 33.5,
+   "mktRet": 0.3,
+   "alpha": 33.1
   }
  ],
  "worst": [
@@ -82,21 +82,10 @@
    "rank": 3,
    "score": 80,
    "entry": 442.53,
-   "now": 310,
-   "ret": -29.9,
-   "mktRet": 2.6,
-   "alpha": -32.5
-  },
-  {
-   "date": "2026-07-21",
-   "symbol": "DAVE",
-   "rank": 5,
-   "score": 78,
-   "entry": 438.9,
-   "now": 310,
-   "ret": -29.4,
+   "now": 316.19,
+   "ret": -28.5,
    "mktRet": 2.9,
-   "alpha": -32.3
+   "alpha": -31.4
   },
   {
    "date": "2026-07-15",
@@ -104,21 +93,10 @@
    "rank": 2,
    "score": 80,
    "entry": 438.19,
-   "now": 310,
-   "ret": -29.3,
-   "mktRet": 2.1,
-   "alpha": -31.3
-  },
-  {
-   "date": "2026-07-14",
-   "symbol": "DAVE",
-   "rank": 2,
-   "score": 80,
-   "entry": 417,
-   "now": 310,
-   "ret": -25.7,
-   "mktRet": 2.4,
-   "alpha": -28.1
+   "now": 316.19,
+   "ret": -27.8,
+   "mktRet": 2.3,
+   "alpha": -30.2
   },
   {
    "date": "2026-07-29",
@@ -126,10 +104,32 @@
    "rank": 3,
    "score": 80,
    "entry": 26.76,
-   "now": 20.85,
-   "ret": -22.1,
-   "mktRet": 5.6,
-   "alpha": -27.7
+   "now": 19.78,
+   "ret": -26.1,
+   "mktRet": 5.9,
+   "alpha": -32
+  },
+  {
+   "date": "2026-07-28",
+   "symbol": "SIF",
+   "rank": 2,
+   "score": 80,
+   "entry": 26.65,
+   "now": 19.78,
+   "ret": -25.8,
+   "mktRet": 4.3,
+   "alpha": -30.1
+  },
+  {
+   "date": "2026-07-27",
+   "symbol": "SIF",
+   "rank": 2,
+   "score": 80,
+   "entry": 26.15,
+   "now": 19.78,
+   "ret": -24.4,
+   "mktRet": 4.5,
+   "alpha": -28.9
   }
  ],
  "picks": [
@@ -139,10 +139,10 @@
    "rank": 1,
    "score": 87,
    "entry": 22.5,
-   "now": 21.38,
-   "ret": -5,
-   "mktRet": 2.5,
-   "alpha": -7.5
+   "now": 20.61,
+   "ret": -8.4,
+   "mktRet": 2.8,
+   "alpha": -11.2
   },
   {
    "date": "2026-07-04",
@@ -150,10 +150,10 @@
    "rank": 2,
    "score": 85,
    "entry": 5.49,
-   "now": 5.92,
-   "ret": 7.8,
-   "mktRet": 2.5,
-   "alpha": 5.3
+   "now": 5.84,
+   "ret": 6.4,
+   "mktRet": 2.8,
+   "alpha": 3.6
   },
   {
    "date": "2026-07-04",
@@ -161,21 +161,21 @@
    "rank": 3,
    "score": 84,
    "entry": 86.55,
-   "now": 89.24,
-   "ret": 3.1,
-   "mktRet": 2.5,
-   "alpha": 0.6
+   "now": 87.25,
+   "ret": 0.8,
+   "mktRet": 2.8,
+   "alpha": -2
   },
   {
    "date": "2026-07-04",
    "symbol": "NSA",
    "rank": 4,
    "score": 84,
-   "entry": 44.5,
-   "now": 44.5,
+   "entry": 43.41,
+   "now": 43.41,
    "ret": 0,
-   "mktRet": 2.5,
-   "alpha": -2.5
+   "mktRet": 2.8,
+   "alpha": -2.8
   },
   {
    "date": "2026-07-04",
@@ -183,10 +183,10 @@
    "rank": 5,
    "score": 84,
    "entry": 39.91,
-   "now": 38.17,
-   "ret": -4.4,
-   "mktRet": 2.5,
-   "alpha": -6.9
+   "now": 38.38,
+   "ret": -3.8,
+   "mktRet": 2.8,
+   "alpha": -6.6
   },
   {
    "date": "2026-07-07",
@@ -194,10 +194,10 @@
    "rank": 1,
    "score": 83,
    "entry": 19.74,
-   "now": 19.99,
-   "ret": 1.3,
-   "mktRet": 3,
-   "alpha": -1.7
+   "now": 20.07,
+   "ret": 1.7,
+   "mktRet": 3.3,
+   "alpha": -1.6
   },
   {
    "date": "2026-07-07",
@@ -205,10 +205,10 @@
    "rank": 2,
    "score": 83,
    "entry": 46.76,
-   "now": 46.01,
-   "ret": -1.6,
-   "mktRet": 3,
-   "alpha": -4.6
+   "now": 45.34,
+   "ret": -3,
+   "mktRet": 3.3,
+   "alpha": -6.3
   },
   {
    "date": "2026-07-07",
@@ -216,10 +216,10 @@
    "rank": 3,
    "score": 82,
    "entry": 86.97,
-   "now": 89.24,
-   "ret": 2.6,
-   "mktRet": 3,
-   "alpha": -0.4
+   "now": 87.25,
+   "ret": 0.3,
+   "mktRet": 3.3,
+   "alpha": -2.9
   },
   {
    "date": "2026-07-07",
@@ -227,10 +227,10 @@
    "rank": 4,
    "score": 82,
    "entry": 75.89,
-   "now": 77.04,
-   "ret": 1.5,
-   "mktRet": 3,
-   "alpha": -1.5
+   "now": 77.43,
+   "ret": 2,
+   "mktRet": 3.3,
+   "alpha": -1.2
   },
   {
    "date": "2026-07-07",
@@ -238,10 +238,10 @@
    "rank": 5,
    "score": 80,
    "entry": 136.63,
-   "now": 145.45,
-   "ret": 6.5,
-   "mktRet": 3,
-   "alpha": 3.5
+   "now": 148.16,
+   "ret": 8.4,
+   "mktRet": 3.3,
+   "alpha": 5.2
   },
   {
    "date": "2026-07-08",
@@ -249,21 +249,21 @@
    "rank": 1,
    "score": 87,
    "entry": 19.63,
-   "now": 19.99,
-   "ret": 1.8,
-   "mktRet": 3.3,
-   "alpha": -1.4
+   "now": 20.07,
+   "ret": 2.2,
+   "mktRet": 3.6,
+   "alpha": -1.3
   },
   {
    "date": "2026-07-08",
    "symbol": "NSA",
    "rank": 2,
    "score": 83,
-   "entry": 44.5,
-   "now": 44.5,
+   "entry": 43.41,
+   "now": 43.41,
    "ret": 0,
-   "mktRet": 3.3,
-   "alpha": -3.3
+   "mktRet": 3.6,
+   "alpha": -3.6
   },
   {
    "date": "2026-07-08",
@@ -271,10 +271,10 @@
    "rank": 3,
    "score": 83,
    "entry": 47.4,
-   "now": 46.01,
-   "ret": -2.9,
-   "mktRet": 3.3,
-   "alpha": -6.2
+   "now": 45.34,
+   "ret": -4.3,
+   "mktRet": 3.6,
+   "alpha": -7.9
   },
   {
    "date": "2026-07-08",
@@ -282,10 +282,10 @@
    "rank": 4,
    "score": 83,
    "entry": 46.3,
-   "now": 44.31,
-   "ret": -4.3,
-   "mktRet": 3.3,
-   "alpha": -7.6
+   "now": 43.56,
+   "ret": -5.9,
+   "mktRet": 3.6,
+   "alpha": -9.5
   },
   {
    "date": "2026-07-08",
@@ -293,10 +293,10 @@
    "rank": 5,
    "score": 82,
    "entry": 39.2,
-   "now": 38.17,
-   "ret": -2.6,
-   "mktRet": 3.3,
-   "alpha": -5.9
+   "now": 38.38,
+   "ret": -2.1,
+   "mktRet": 3.6,
+   "alpha": -5.6
   },
   {
    "date": "2026-07-09",
@@ -304,10 +304,10 @@
    "rank": 1,
    "score": 85,
    "entry": 20.75,
-   "now": 19.99,
-   "ret": -3.7,
-   "mktRet": 2.4,
-   "alpha": -6.1
+   "now": 20.07,
+   "ret": -3.3,
+   "mktRet": 2.7,
+   "alpha": -6
   },
   {
    "date": "2026-07-09",
@@ -315,10 +315,10 @@
    "rank": 2,
    "score": 85,
    "entry": 70.29,
-   "now": 59.93,
-   "ret": -14.7,
-   "mktRet": 2.4,
-   "alpha": -17.2
+   "now": 71.13,
+   "ret": 1.2,
+   "mktRet": 2.7,
+   "alpha": -1.5
   },
   {
    "date": "2026-07-09",
@@ -326,10 +326,10 @@
    "rank": 3,
    "score": 85,
    "entry": 46.59,
-   "now": 46.01,
-   "ret": -1.2,
-   "mktRet": 2.4,
-   "alpha": -3.7
+   "now": 45.34,
+   "ret": -2.7,
+   "mktRet": 2.7,
+   "alpha": -5.4
   },
   {
    "date": "2026-07-09",
@@ -337,10 +337,10 @@
    "rank": 4,
    "score": 82,
    "entry": 48.35,
-   "now": 44.31,
-   "ret": -8.4,
-   "mktRet": 2.4,
-   "alpha": -10.8
+   "now": 43.56,
+   "ret": -9.9,
+   "mktRet": 2.7,
+   "alpha": -12.6
   },
   {
    "date": "2026-07-09",
@@ -348,10 +348,10 @@
    "rank": 5,
    "score": 81,
    "entry": 40.46,
-   "now": 38.17,
-   "ret": -5.7,
-   "mktRet": 2.4,
-   "alpha": -8.1
+   "now": 38.38,
+   "ret": -5.1,
+   "mktRet": 2.7,
+   "alpha": -7.9
   },
   {
    "date": "2026-07-10",
@@ -359,10 +359,10 @@
    "rank": 1,
    "score": 86,
    "entry": 20,
-   "now": 19.99,
-   "ret": -0.1,
-   "mktRet": 2,
-   "alpha": -2.1
+   "now": 20.07,
+   "ret": 0.3,
+   "mktRet": 2.3,
+   "alpha": -2
   },
   {
    "date": "2026-07-10",
@@ -370,10 +370,10 @@
    "rank": 2,
    "score": 83,
    "entry": 5.58,
-   "now": 5.92,
-   "ret": 6.1,
-   "mktRet": 2,
-   "alpha": 4.1
+   "now": 5.84,
+   "ret": 4.7,
+   "mktRet": 2.3,
+   "alpha": 2.4
   },
   {
    "date": "2026-07-10",
@@ -381,10 +381,10 @@
    "rank": 3,
    "score": 83,
    "entry": 40.5,
-   "now": 38.17,
-   "ret": -5.8,
-   "mktRet": 2,
-   "alpha": -7.8
+   "now": 38.38,
+   "ret": -5.2,
+   "mktRet": 2.3,
+   "alpha": -7.5
   },
   {
    "date": "2026-07-10",
@@ -392,10 +392,10 @@
    "rank": 4,
    "score": 83,
    "entry": 47.56,
-   "now": 46.01,
-   "ret": -3.3,
-   "mktRet": 2,
-   "alpha": -5.3
+   "now": 45.34,
+   "ret": -4.7,
+   "mktRet": 2.3,
+   "alpha": -7
   },
   {
    "date": "2026-07-10",
@@ -403,10 +403,10 @@
    "rank": 5,
    "score": 83,
    "entry": 33.04,
-   "now": 29.92,
-   "ret": -9.4,
-   "mktRet": 2,
-   "alpha": -11.5
+   "now": 30.03,
+   "ret": -9.1,
+   "mktRet": 2.3,
+   "alpha": -11.4
   },
   {
    "date": "2026-07-11",
@@ -414,10 +414,10 @@
    "rank": 1,
    "score": 85,
    "entry": 47.77,
-   "now": 46.01,
-   "ret": -3.7,
-   "mktRet": 2.8,
-   "alpha": -6.5
+   "now": 45.34,
+   "ret": -5.1,
+   "mktRet": 3.1,
+   "alpha": -8.2
   },
   {
    "date": "2026-07-11",
@@ -425,10 +425,10 @@
    "rank": 2,
    "score": 84,
    "entry": 18.73,
-   "now": 19.99,
-   "ret": 6.7,
-   "mktRet": 2.8,
-   "alpha": 3.9
+   "now": 20.07,
+   "ret": 7.2,
+   "mktRet": 3.1,
+   "alpha": 4.1
   },
   {
    "date": "2026-07-11",
@@ -436,10 +436,10 @@
    "rank": 3,
    "score": 84,
    "entry": 5.5,
-   "now": 5.92,
-   "ret": 7.6,
-   "mktRet": 2.8,
-   "alpha": 4.8
+   "now": 5.84,
+   "ret": 6.2,
+   "mktRet": 3.1,
+   "alpha": 3.1
   },
   {
    "date": "2026-07-11",
@@ -447,10 +447,10 @@
    "rank": 4,
    "score": 83,
    "entry": 9.47,
-   "now": 10.22,
-   "ret": 7.9,
-   "mktRet": 2.8,
-   "alpha": 5.1
+   "now": 10.54,
+   "ret": 11.3,
+   "mktRet": 3.1,
+   "alpha": 8.2
   },
   {
    "date": "2026-07-11",
@@ -458,10 +458,10 @@
    "rank": 5,
    "score": 83,
    "entry": 34.77,
-   "now": 32.3,
-   "ret": -7.1,
-   "mktRet": 2.8,
-   "alpha": -9.9
+   "now": 31.8,
+   "ret": -8.5,
+   "mktRet": 3.1,
+   "alpha": -11.6
   },
   {
    "date": "2026-07-13",
@@ -469,10 +469,10 @@
    "rank": 1,
    "score": 87,
    "entry": 25.11,
-   "now": 25.02,
-   "ret": -0.4,
-   "mktRet": 2.8,
-   "alpha": -3.2
+   "now": 24.48,
+   "ret": -2.5,
+   "mktRet": 3.1,
+   "alpha": -5.6
   },
   {
    "date": "2026-07-13",
@@ -480,10 +480,10 @@
    "rank": 2,
    "score": 81,
    "entry": 389.56,
-   "now": 310,
-   "ret": -20.4,
-   "mktRet": 2.8,
-   "alpha": -23.3
+   "now": 316.19,
+   "ret": -18.8,
+   "mktRet": 3.1,
+   "alpha": -21.9
   },
   {
    "date": "2026-07-13",
@@ -491,10 +491,10 @@
    "rank": 3,
    "score": 80,
    "entry": 6,
-   "now": 9.2,
-   "ret": 53.3,
-   "mktRet": 2.8,
-   "alpha": 50.5
+   "now": 8.95,
+   "ret": 49.2,
+   "mktRet": 3.1,
+   "alpha": 46.1
   },
   {
    "date": "2026-07-13",
@@ -502,10 +502,10 @@
    "rank": 4,
    "score": 78,
    "entry": 10.49,
-   "now": 10.44,
-   "ret": -0.5,
-   "mktRet": 2.8,
-   "alpha": -3.3
+   "now": 10.81,
+   "ret": 3.1,
+   "mktRet": 3.1,
+   "alpha": -0.1
   },
   {
    "date": "2026-07-13",
@@ -513,10 +513,10 @@
    "rank": 5,
    "score": 78,
    "entry": 64.67,
-   "now": 55.08,
-   "ret": -14.8,
-   "mktRet": 2.8,
-   "alpha": -17.7
+   "now": 57.09,
+   "ret": -11.7,
+   "mktRet": 3.1,
+   "alpha": -14.8
   },
   {
    "date": "2026-07-14",
@@ -524,10 +524,10 @@
    "rank": 1,
    "score": 85,
    "entry": 24.45,
-   "now": 25.02,
-   "ret": 2.3,
-   "mktRet": 2.4,
-   "alpha": -0.1
+   "now": 24.48,
+   "ret": 0.1,
+   "mktRet": 2.7,
+   "alpha": -2.6
   },
   {
    "date": "2026-07-14",
@@ -535,10 +535,10 @@
    "rank": 2,
    "score": 80,
    "entry": 417,
-   "now": 310,
-   "ret": -25.7,
-   "mktRet": 2.4,
-   "alpha": -28.1
+   "now": 316.19,
+   "ret": -24.2,
+   "mktRet": 2.7,
+   "alpha": -26.9
   },
   {
    "date": "2026-07-14",
@@ -546,10 +546,10 @@
    "rank": 3,
    "score": 79,
    "entry": 6,
-   "now": 9.2,
-   "ret": 53.3,
-   "mktRet": 2.4,
-   "alpha": 50.9
+   "now": 8.95,
+   "ret": 49.2,
+   "mktRet": 2.7,
+   "alpha": 46.5
   },
   {
    "date": "2026-07-14",
@@ -557,10 +557,10 @@
    "rank": 4,
    "score": 79,
    "entry": 58.81,
-   "now": 57.12,
-   "ret": -2.9,
-   "mktRet": 2.4,
-   "alpha": -5.3
+   "now": 57.6,
+   "ret": -2.1,
+   "mktRet": 2.7,
+   "alpha": -4.8
   },
   {
    "date": "2026-07-14",
@@ -568,10 +568,10 @@
    "rank": 5,
    "score": 79,
    "entry": 10.57,
-   "now": 10.44,
-   "ret": -1.2,
-   "mktRet": 2.4,
-   "alpha": -3.7
+   "now": 10.81,
+   "ret": 2.3,
+   "mktRet": 2.7,
+   "alpha": -0.4
   },
   {
    "date": "2026-07-15",
@@ -579,10 +579,10 @@
    "rank": 1,
    "score": 85,
    "entry": 22.51,
-   "now": 25.02,
-   "ret": 11.2,
-   "mktRet": 2.1,
-   "alpha": 9.1
+   "now": 24.48,
+   "ret": 8.8,
+   "mktRet": 2.3,
+   "alpha": 6.4
   },
   {
    "date": "2026-07-15",
@@ -590,10 +590,10 @@
    "rank": 2,
    "score": 80,
    "entry": 438.19,
-   "now": 310,
-   "ret": -29.3,
-   "mktRet": 2.1,
-   "alpha": -31.3
+   "now": 316.19,
+   "ret": -27.8,
+   "mktRet": 2.3,
+   "alpha": -30.2
   },
   {
    "date": "2026-07-15",
@@ -601,10 +601,10 @@
    "rank": 3,
    "score": 80,
    "entry": 6.03,
-   "now": 9.2,
-   "ret": 52.6,
-   "mktRet": 2.1,
-   "alpha": 50.5
+   "now": 8.95,
+   "ret": 48.4,
+   "mktRet": 2.3,
+   "alpha": 46.1
   },
   {
    "date": "2026-07-15",
@@ -612,10 +612,10 @@
    "rank": 4,
    "score": 78,
    "entry": 10.66,
-   "now": 10.44,
-   "ret": -2.1,
-   "mktRet": 2.1,
-   "alpha": -4.1
+   "now": 10.81,
+   "ret": 1.4,
+   "mktRet": 2.3,
+   "alpha": -0.9
   },
   {
    "date": "2026-07-15",
@@ -623,10 +623,10 @@
    "rank": 5,
    "score": 78,
    "entry": 355.14,
-   "now": 362.82,
-   "ret": 2.2,
-   "mktRet": 2.1,
-   "alpha": 0.1
+   "now": 359.42,
+   "ret": 1.2,
+   "mktRet": 2.3,
+   "alpha": -1.1
   },
   {
    "date": "2026-07-16",
@@ -634,10 +634,10 @@
    "rank": 1,
    "score": 80,
    "entry": 43.69,
-   "now": 42.78,
+   "now": 42.76,
    "ret": -2.1,
-   "mktRet": 2.6,
-   "alpha": -4.7
+   "mktRet": 2.9,
+   "alpha": -5
   },
   {
    "date": "2026-07-16",
@@ -645,9 +645,9 @@
    "rank": 2,
    "score": 80,
    "entry": 76.98,
-   "now": 78.09,
-   "ret": 1.4,
-   "mktRet": 2.6,
+   "now": 78.31,
+   "ret": 1.7,
+   "mktRet": 2.9,
    "alpha": -1.1
   },
   {
@@ -656,10 +656,10 @@
    "rank": 3,
    "score": 80,
    "entry": 442.53,
-   "now": 310,
-   "ret": -29.9,
-   "mktRet": 2.6,
-   "alpha": -32.5
+   "now": 316.19,
+   "ret": -28.5,
+   "mktRet": 2.9,
+   "alpha": -31.4
   },
   {
    "date": "2026-07-16",
@@ -667,10 +667,10 @@
    "rank": 4,
    "score": 80,
    "entry": 6.01,
-   "now": 9.2,
-   "ret": 53.1,
-   "mktRet": 2.6,
-   "alpha": 50.5
+   "now": 8.95,
+   "ret": 48.9,
+   "mktRet": 2.9,
+   "alpha": 46.1
   },
   {
    "date": "2026-07-16",
@@ -678,10 +678,10 @@
    "rank": 5,
    "score": 79,
    "entry": 61.62,
-   "now": 57.12,
-   "ret": -7.3,
-   "mktRet": 2.6,
-   "alpha": -9.9
+   "now": 57.6,
+   "ret": -6.5,
+   "mktRet": 2.9,
+   "alpha": -9.4
   },
   {
    "date": "2026-07-17",
@@ -689,10 +689,10 @@
    "rank": 1,
    "score": 85,
    "entry": 33.93,
-   "now": 34.2,
-   "ret": 0.8,
-   "mktRet": 3.6,
-   "alpha": -2.8
+   "now": 34.38,
+   "ret": 1.3,
+   "mktRet": 3.9,
+   "alpha": -2.6
   },
   {
    "date": "2026-07-17",
@@ -700,10 +700,10 @@
    "rank": 2,
    "score": 80,
    "entry": 61.35,
-   "now": 62.19,
-   "ret": 1.4,
-   "mktRet": 3.6,
-   "alpha": -2.3
+   "now": 63.15,
+   "ret": 2.9,
+   "mktRet": 3.9,
+   "alpha": -1
   },
   {
    "date": "2026-07-17",
@@ -711,10 +711,10 @@
    "rank": 3,
    "score": 79,
    "entry": 79.84,
-   "now": 81.11,
+   "now": 81.14,
    "ret": 1.6,
-   "mktRet": 3.6,
-   "alpha": -2
+   "mktRet": 3.9,
+   "alpha": -2.3
   },
   {
    "date": "2026-07-17",
@@ -722,10 +722,10 @@
    "rank": 4,
    "score": 79,
    "entry": 31.68,
-   "now": 32.99,
-   "ret": 4.1,
-   "mktRet": 3.6,
-   "alpha": 0.5
+   "now": 33.5,
+   "ret": 5.7,
+   "mktRet": 3.9,
+   "alpha": 1.8
   },
   {
    "date": "2026-07-17",
@@ -733,10 +733,10 @@
    "rank": 5,
    "score": 79,
    "entry": 42.48,
-   "now": 42.78,
+   "now": 42.76,
    "ret": 0.7,
-   "mktRet": 3.6,
-   "alpha": -2.9
+   "mktRet": 3.9,
+   "alpha": -3.2
   },
   {
    "date": "2026-07-18",
@@ -744,10 +744,10 @@
    "rank": 1,
    "score": 82,
    "entry": 61.2,
-   "now": 62.19,
-   "ret": 1.6,
-   "mktRet": 3.8,
-   "alpha": -2.2
+   "now": 63.15,
+   "ret": 3.2,
+   "mktRet": 4.1,
+   "alpha": -0.9
   },
   {
    "date": "2026-07-18",
@@ -755,10 +755,10 @@
    "rank": 2,
    "score": 79,
    "entry": 78.92,
-   "now": 81.11,
+   "now": 81.14,
    "ret": 2.8,
-   "mktRet": 3.8,
-   "alpha": -1.1
+   "mktRet": 4.1,
+   "alpha": -1.3
   },
   {
    "date": "2026-07-18",
@@ -766,10 +766,10 @@
    "rank": 3,
    "score": 78,
    "entry": 41.07,
-   "now": 42.05,
-   "ret": 2.4,
-   "mktRet": 3.8,
-   "alpha": -1.4
+   "now": 41.58,
+   "ret": 1.2,
+   "mktRet": 4.1,
+   "alpha": -2.9
   },
   {
    "date": "2026-07-18",
@@ -779,8 +779,8 @@
    "entry": 59.62,
    "now": 67.99,
    "ret": 14,
-   "mktRet": 3.8,
-   "alpha": 10.2
+   "mktRet": 4.1,
+   "alpha": 9.9
   },
   {
    "date": "2026-07-18",
@@ -788,10 +788,10 @@
    "rank": 5,
    "score": 78,
    "entry": 31.77,
-   "now": 32.99,
-   "ret": 3.8,
-   "mktRet": 3.8,
-   "alpha": 0
+   "now": 33.5,
+   "ret": 5.4,
+   "mktRet": 4.1,
+   "alpha": 1.3
   },
   {
    "date": "2026-07-21",
@@ -799,10 +799,10 @@
    "rank": 1,
    "score": 85,
    "entry": 34.59,
-   "now": 34.2,
-   "ret": -1.1,
-   "mktRet": 2.9,
-   "alpha": -4
+   "now": 34.38,
+   "ret": -0.6,
+   "mktRet": 3.2,
+   "alpha": -3.8
   },
   {
    "date": "2026-07-21",
@@ -810,10 +810,10 @@
    "rank": 2,
    "score": 81,
    "entry": 61.43,
-   "now": 62.19,
-   "ret": 1.2,
-   "mktRet": 2.9,
-   "alpha": -1.7
+   "now": 63.15,
+   "ret": 2.8,
+   "mktRet": 3.2,
+   "alpha": -0.4
   },
   {
    "date": "2026-07-21",
@@ -821,9 +821,9 @@
    "rank": 3,
    "score": 79,
    "entry": 35.67,
-   "now": 34,
-   "ret": -4.7,
-   "mktRet": 2.9,
+   "now": 34.08,
+   "ret": -4.5,
+   "mktRet": 3.2,
    "alpha": -7.6
   },
   {
@@ -832,21 +832,21 @@
    "rank": 4,
    "score": 78,
    "entry": 158.89,
-   "now": 160.32,
-   "ret": 0.9,
-   "mktRet": 2.9,
-   "alpha": -2
+   "now": 162.93,
+   "ret": 2.5,
+   "mktRet": 3.2,
+   "alpha": -0.6
   },
   {
    "date": "2026-07-21",
    "symbol": "DAVE",
    "rank": 5,
    "score": 78,
-   "entry": 438.9,
-   "now": 310,
-   "ret": -29.4,
-   "mktRet": 2.9,
-   "alpha": -32.3
+   "entry": 408.59,
+   "now": 316.19,
+   "ret": -22.6,
+   "mktRet": 3.2,
+   "alpha": -25.8
   },
   {
    "date": "2026-07-22",
@@ -854,10 +854,10 @@
    "rank": 1,
    "score": 84,
    "entry": 26.16,
-   "now": 20.85,
-   "ret": -20.3,
-   "mktRet": 3.1,
-   "alpha": -23.4
+   "now": 19.78,
+   "ret": -24.4,
+   "mktRet": 3.3,
+   "alpha": -27.7
   },
   {
    "date": "2026-07-22",
@@ -865,10 +865,10 @@
    "rank": 2,
    "score": 84,
    "entry": 46.91,
-   "now": 48.56,
-   "ret": 3.5,
-   "mktRet": 3.1,
-   "alpha": 0.5
+   "now": 49.01,
+   "ret": 4.5,
+   "mktRet": 3.3,
+   "alpha": 1.1
   },
   {
    "date": "2026-07-22",
@@ -876,32 +876,32 @@
    "rank": 3,
    "score": 81,
    "entry": 61.01,
-   "now": 62.19,
-   "ret": 1.9,
-   "mktRet": 3.1,
-   "alpha": -1.1
+   "now": 63.15,
+   "ret": 3.5,
+   "mktRet": 3.3,
+   "alpha": 0.2
   },
   {
    "date": "2026-07-22",
    "symbol": "WSBC",
    "rank": 4,
    "score": 81,
-   "entry": 40.91,
-   "now": 42.19,
-   "ret": 3.1,
-   "mktRet": 3.1,
-   "alpha": 0.1
+   "entry": 40.08,
+   "now": 42.39,
+   "ret": 5.8,
+   "mktRet": 3.3,
+   "alpha": 2.4
   },
   {
    "date": "2026-07-22",
    "symbol": "KARO",
    "rank": 5,
    "score": 80,
-   "entry": 62.47,
-   "now": 62.6,
-   "ret": 0.2,
-   "mktRet": 3.1,
-   "alpha": -2.8
+   "entry": 61.19,
+   "now": 62.79,
+   "ret": 2.6,
+   "mktRet": 3.3,
+   "alpha": -0.7
   },
   {
    "date": "2026-07-23",
@@ -909,10 +909,10 @@
    "rank": 1,
    "score": 84,
    "entry": 47.26,
-   "now": 48.56,
-   "ret": 2.8,
-   "mktRet": 4.3,
-   "alpha": -1.6
+   "now": 49.01,
+   "ret": 3.7,
+   "mktRet": 4.6,
+   "alpha": -0.9
   },
   {
    "date": "2026-07-23",
@@ -920,10 +920,10 @@
    "rank": 2,
    "score": 82,
    "entry": 24.93,
-   "now": 20.85,
-   "ret": -16.4,
-   "mktRet": 4.3,
-   "alpha": -20.7
+   "now": 19.78,
+   "ret": -20.7,
+   "mktRet": 4.6,
+   "alpha": -25.2
   },
   {
    "date": "2026-07-23",
@@ -931,10 +931,10 @@
    "rank": 3,
    "score": 81,
    "entry": 62.86,
-   "now": 64.42,
-   "ret": 2.5,
-   "mktRet": 4.3,
-   "alpha": -1.8
+   "now": 64.52,
+   "ret": 2.6,
+   "mktRet": 4.6,
+   "alpha": -2
   },
   {
    "date": "2026-07-23",
@@ -942,10 +942,10 @@
    "rank": 4,
    "score": 80,
    "entry": 49.06,
-   "now": 51.94,
-   "ret": 5.9,
-   "mktRet": 4.3,
-   "alpha": 1.6
+   "now": 52.53,
+   "ret": 7.1,
+   "mktRet": 4.6,
+   "alpha": 2.5
   },
   {
    "date": "2026-07-23",
@@ -953,10 +953,10 @@
    "rank": 5,
    "score": 79,
    "entry": 349.9,
-   "now": 362.04,
-   "ret": 3.5,
-   "mktRet": 4.3,
-   "alpha": -0.8
+   "now": 365.18,
+   "ret": 4.4,
+   "mktRet": 4.6,
+   "alpha": -0.2
   },
   {
    "date": "2026-07-24",
@@ -964,10 +964,10 @@
    "rank": 1,
    "score": 81,
    "entry": 48.48,
-   "now": 48.56,
-   "ret": 0.2,
-   "mktRet": 4.3,
-   "alpha": -4.1
+   "now": 49.01,
+   "ret": 1.1,
+   "mktRet": 4.5,
+   "alpha": -3.4
   },
   {
    "date": "2026-07-24",
@@ -975,10 +975,10 @@
    "rank": 2,
    "score": 80,
    "entry": 25.99,
-   "now": 20.85,
-   "ret": -19.8,
-   "mktRet": 4.3,
-   "alpha": -24
+   "now": 19.78,
+   "ret": -23.9,
+   "mktRet": 4.5,
+   "alpha": -28.4
   },
   {
    "date": "2026-07-24",
@@ -986,9 +986,9 @@
    "rank": 3,
    "score": 80,
    "entry": 63.34,
-   "now": 62.6,
-   "ret": -1.2,
-   "mktRet": 4.3,
+   "now": 62.79,
+   "ret": -0.9,
+   "mktRet": 4.5,
    "alpha": -5.4
   },
   {
@@ -997,10 +997,10 @@
    "rank": 4,
    "score": 79,
    "entry": 117.88,
-   "now": 120.01,
-   "ret": 1.8,
-   "mktRet": 4.3,
-   "alpha": -2.5
+   "now": 120.71,
+   "ret": 2.4,
+   "mktRet": 4.5,
+   "alpha": -2.1
   },
   {
    "date": "2026-07-24",
@@ -1008,10 +1008,10 @@
    "rank": 5,
    "score": 78,
    "entry": 81.93,
-   "now": 102.62,
-   "ret": 25.3,
-   "mktRet": 4.3,
-   "alpha": 21
+   "now": 101.79,
+   "ret": 24.2,
+   "mktRet": 4.5,
+   "alpha": 19.7
   },
   {
    "date": "2026-07-27",
@@ -1019,10 +1019,10 @@
    "rank": 1,
    "score": 82,
    "entry": 48.17,
-   "now": 48.56,
-   "ret": 0.8,
-   "mktRet": 4.2,
-   "alpha": -3.4
+   "now": 49.01,
+   "ret": 1.7,
+   "mktRet": 4.5,
+   "alpha": -2.8
   },
   {
    "date": "2026-07-27",
@@ -1030,10 +1030,10 @@
    "rank": 2,
    "score": 80,
    "entry": 26.15,
-   "now": 20.85,
-   "ret": -20.3,
-   "mktRet": 4.2,
-   "alpha": -24.5
+   "now": 19.78,
+   "ret": -24.4,
+   "mktRet": 4.5,
+   "alpha": -28.9
   },
   {
    "date": "2026-07-27",
@@ -1041,10 +1041,10 @@
    "rank": 3,
    "score": 80,
    "entry": 49.01,
-   "now": 50.01,
-   "ret": 2,
-   "mktRet": 4.2,
-   "alpha": -2.2
+   "now": 50.72,
+   "ret": 3.5,
+   "mktRet": 4.5,
+   "alpha": -1
   },
   {
    "date": "2026-07-27",
@@ -1052,10 +1052,10 @@
    "rank": 4,
    "score": 80,
    "entry": 99.67,
-   "now": 113.65,
-   "ret": 14,
-   "mktRet": 4.2,
-   "alpha": 9.8
+   "now": 116.23,
+   "ret": 16.6,
+   "mktRet": 4.5,
+   "alpha": 12.1
   },
   {
    "date": "2026-07-27",
@@ -1063,10 +1063,10 @@
    "rank": 5,
    "score": 80,
    "entry": 63.49,
-   "now": 62.6,
-   "ret": -1.4,
-   "mktRet": 4.2,
-   "alpha": -5.7
+   "now": 62.79,
+   "ret": -1.1,
+   "mktRet": 4.5,
+   "alpha": -5.6
   },
   {
    "date": "2026-07-28",
@@ -1074,10 +1074,10 @@
    "rank": 1,
    "score": 82,
    "entry": 48.41,
-   "now": 48.56,
-   "ret": 0.3,
-   "mktRet": 4,
-   "alpha": -3.7
+   "now": 49.01,
+   "ret": 1.2,
+   "mktRet": 4.3,
+   "alpha": -3.1
   },
   {
    "date": "2026-07-28",
@@ -1085,10 +1085,10 @@
    "rank": 2,
    "score": 80,
    "entry": 26.65,
-   "now": 20.85,
-   "ret": -21.8,
-   "mktRet": 4,
-   "alpha": -25.8
+   "now": 19.78,
+   "ret": -25.8,
+   "mktRet": 4.3,
+   "alpha": -30.1
   },
   {
    "date": "2026-07-28",
@@ -1096,10 +1096,10 @@
    "rank": 3,
    "score": 80,
    "entry": 28.02,
-   "now": 29.11,
-   "ret": 3.9,
-   "mktRet": 4,
-   "alpha": -0.1
+   "now": 29.52,
+   "ret": 5.4,
+   "mktRet": 4.3,
+   "alpha": 1
   },
   {
    "date": "2026-07-28",
@@ -1107,10 +1107,10 @@
    "rank": 4,
    "score": 80,
    "entry": 100.47,
-   "now": 113.65,
-   "ret": 13.1,
-   "mktRet": 4,
-   "alpha": 9.1
+   "now": 116.23,
+   "ret": 15.7,
+   "mktRet": 4.3,
+   "alpha": 11.4
   },
   {
    "date": "2026-07-28",
@@ -1118,10 +1118,10 @@
    "rank": 5,
    "score": 80,
    "entry": 81.99,
-   "now": 82.18,
-   "ret": 0.2,
-   "mktRet": 4,
-   "alpha": -3.8
+   "now": 83.17,
+   "ret": 1.4,
+   "mktRet": 4.3,
+   "alpha": -2.9
   },
   {
    "date": "2026-07-29",
@@ -1129,10 +1129,10 @@
    "rank": 1,
    "score": 81,
    "entry": 22.14,
-   "now": 20.62,
-   "ret": -6.9,
-   "mktRet": 5.6,
-   "alpha": -12.5
+   "now": 20.96,
+   "ret": -5.3,
+   "mktRet": 5.9,
+   "alpha": -11.2
   },
   {
    "date": "2026-07-29",
@@ -1140,10 +1140,10 @@
    "rank": 2,
    "score": 81,
    "entry": 81.84,
-   "now": 82.18,
-   "ret": 0.4,
-   "mktRet": 5.6,
-   "alpha": -5.2
+   "now": 83.17,
+   "ret": 1.6,
+   "mktRet": 5.9,
+   "alpha": -4.3
   },
   {
    "date": "2026-07-29",
@@ -1151,10 +1151,10 @@
    "rank": 3,
    "score": 80,
    "entry": 26.76,
-   "now": 20.85,
-   "ret": -22.1,
-   "mktRet": 5.6,
-   "alpha": -27.7
+   "now": 19.78,
+   "ret": -26.1,
+   "mktRet": 5.9,
+   "alpha": -32
   },
   {
    "date": "2026-07-29",
@@ -1162,10 +1162,10 @@
    "rank": 4,
    "score": 80,
    "entry": 97.46,
-   "now": 113.65,
-   "ret": 16.6,
-   "mktRet": 5.6,
-   "alpha": 11
+   "now": 116.23,
+   "ret": 19.3,
+   "mktRet": 5.9,
+   "alpha": 13.3
   },
   {
    "date": "2026-07-29",
@@ -1173,9 +1173,9 @@
    "rank": 5,
    "score": 80,
    "entry": 64.46,
-   "now": 62.6,
-   "ret": -2.9,
-   "mktRet": 5.6,
+   "now": 62.79,
+   "ret": -2.6,
+   "mktRet": 5.9,
    "alpha": -8.5
   },
   {
@@ -1184,10 +1184,10 @@
    "rank": 1,
    "score": 81,
    "entry": 47.63,
-   "now": 48.56,
-   "ret": 2,
-   "mktRet": 3.9,
-   "alpha": -2
+   "now": 49.01,
+   "ret": 2.9,
+   "mktRet": 4.2,
+   "alpha": -1.3
   },
   {
    "date": "2026-07-30",
@@ -1195,10 +1195,10 @@
    "rank": 2,
    "score": 79,
    "entry": 92.44,
-   "now": 85.55,
-   "ret": -7.5,
-   "mktRet": 3.9,
-   "alpha": -11.4
+   "now": 87.93,
+   "ret": -4.9,
+   "mktRet": 4.2,
+   "alpha": -9.1
   },
   {
    "date": "2026-07-30",
@@ -1206,10 +1206,10 @@
    "rank": 3,
    "score": 78,
    "entry": 95.21,
-   "now": 89.06,
-   "ret": -6.5,
-   "mktRet": 3.9,
-   "alpha": -10.4
+   "now": 92.38,
+   "ret": -3,
+   "mktRet": 4.2,
+   "alpha": -7.2
   },
   {
    "date": "2026-07-30",
@@ -1217,10 +1217,10 @@
    "rank": 4,
    "score": 78,
    "entry": 366.27,
-   "now": 362.82,
-   "ret": -0.9,
-   "mktRet": 3.9,
-   "alpha": -4.8
+   "now": 359.42,
+   "ret": -1.9,
+   "mktRet": 4.2,
+   "alpha": -6
   },
   {
    "date": "2026-07-30",
@@ -1228,10 +1228,10 @@
    "rank": 5,
    "score": 78,
    "entry": 390.12,
-   "now": 406.16,
-   "ret": 4.1,
-   "mktRet": 3.9,
-   "alpha": 0.2
+   "now": 409.68,
+   "ret": 5,
+   "mktRet": 4.2,
+   "alpha": 0.8
   },
   {
    "date": "2026-07-31",
@@ -1239,10 +1239,10 @@
    "rank": 1,
    "score": 81,
    "entry": 91.47,
-   "now": 85.55,
-   "ret": -6.5,
-   "mktRet": 3.2,
-   "alpha": -9.7
+   "now": 87.93,
+   "ret": -3.9,
+   "mktRet": 3.5,
+   "alpha": -7.3
   },
   {
    "date": "2026-07-31",
@@ -1250,21 +1250,21 @@
    "rank": 2,
    "score": 80,
    "entry": 86.49,
-   "now": 91.55,
-   "ret": 5.9,
-   "mktRet": 3.2,
-   "alpha": 2.7
+   "now": 92.19,
+   "ret": 6.6,
+   "mktRet": 3.5,
+   "alpha": 3.1
   },
   {
    "date": "2026-07-31",
    "symbol": "NMIH",
    "rank": 3,
    "score": 80,
-   "entry": 44.3,
-   "now": 44.4,
-   "ret": 0.2,
-   "mktRet": 3.2,
-   "alpha": -3
+   "entry": 44.58,
+   "now": 44.88,
+   "ret": 0.7,
+   "mktRet": 3.5,
+   "alpha": -2.8
   },
   {
    "date": "2026-07-31",
@@ -1272,21 +1272,21 @@
    "rank": 4,
    "score": 79,
    "entry": 83.45,
-   "now": 89.53,
-   "ret": 7.3,
-   "mktRet": 3.2,
-   "alpha": 4.1
+   "now": 90.8,
+   "ret": 8.8,
+   "mktRet": 3.5,
+   "alpha": 5.4
   },
   {
    "date": "2026-07-31",
    "symbol": "LNC",
    "rank": 5,
    "score": 78,
-   "entry": 45.61,
-   "now": 44.43,
-   "ret": -2.6,
-   "mktRet": 3.2,
-   "alpha": -5.8
+   "entry": 46.09,
+   "now": 44.1,
+   "ret": -4.3,
+   "mktRet": 3.5,
+   "alpha": -7.8
   },
   {
    "date": "2026-08-03",
@@ -1294,10 +1294,10 @@
    "rank": 1,
    "score": 80,
    "entry": 103.77,
-   "now": 113.65,
-   "ret": 9.5,
-   "mktRet": 1.7,
-   "alpha": 7.8
+   "now": 116.23,
+   "ret": 12,
+   "mktRet": 1.9,
+   "alpha": 10.1
   },
   {
    "date": "2026-08-03",
@@ -1305,10 +1305,10 @@
    "rank": 2,
    "score": 80,
    "entry": 44.58,
-   "now": 44.4,
-   "ret": -0.4,
-   "mktRet": 1.7,
-   "alpha": -2.1
+   "now": 44.88,
+   "ret": 0.7,
+   "mktRet": 1.9,
+   "alpha": -1.3
   },
   {
    "date": "2026-08-03",
@@ -1316,10 +1316,10 @@
    "rank": 3,
    "score": 79,
    "entry": 380.89,
-   "now": 359.07,
-   "ret": -5.7,
-   "mktRet": 1.7,
-   "alpha": -7.4
+   "now": 362.4,
+   "ret": -4.9,
+   "mktRet": 1.9,
+   "alpha": -6.8
   },
   {
    "date": "2026-08-03",
@@ -1327,10 +1327,10 @@
    "rank": 4,
    "score": 78,
    "entry": 67.91,
-   "now": 69.35,
-   "ret": 2.1,
-   "mktRet": 1.7,
-   "alpha": 0.4
+   "now": 70.34,
+   "ret": 3.6,
+   "mktRet": 1.9,
+   "alpha": 1.6
   },
   {
    "date": "2026-08-03",
@@ -1338,10 +1338,10 @@
    "rank": 5,
    "score": 78,
    "entry": 46.09,
-   "now": 44.43,
-   "ret": -3.6,
-   "mktRet": 1.7,
-   "alpha": -5.3
+   "now": 44.1,
+   "ret": -4.3,
+   "mktRet": 1.9,
+   "alpha": -6.3
   },
   {
    "date": "2026-08-04",
@@ -1349,10 +1349,10 @@
    "rank": 1,
    "score": 83,
    "entry": 102.62,
-   "now": 113.65,
-   "ret": 10.7,
-   "mktRet": -0.1,
-   "alpha": 10.9
+   "now": 116.23,
+   "ret": 13.3,
+   "mktRet": 0.2,
+   "alpha": 13.1
   },
   {
    "date": "2026-08-04",
@@ -1360,10 +1360,10 @@
    "rank": 2,
    "score": 82,
    "entry": 48.96,
-   "now": 48.56,
-   "ret": -0.8,
-   "mktRet": -0.1,
-   "alpha": -0.7
+   "now": 49.01,
+   "ret": 0.1,
+   "mktRet": 0.2,
+   "alpha": -0.1
   },
   {
    "date": "2026-08-04",
@@ -1371,9 +1371,9 @@
    "rank": 3,
    "score": 81,
    "entry": 31.13,
-   "now": 31.59,
-   "ret": 1.5,
-   "mktRet": -0.1,
+   "now": 31.67,
+   "ret": 1.7,
+   "mktRet": 0.2,
    "alpha": 1.6
   },
   {
@@ -1382,10 +1382,10 @@
    "rank": 4,
    "score": 79,
    "entry": 51.26,
-   "now": 50.59,
-   "ret": -1.3,
-   "mktRet": -0.1,
-   "alpha": -1.2
+   "now": 51.32,
+   "ret": 0.1,
+   "mktRet": 0.2,
+   "alpha": 0
   },
   {
    "date": "2026-08-04",
@@ -1393,10 +1393,10 @@
    "rank": 5,
    "score": 78,
    "entry": 65.89,
-   "now": 69.35,
-   "ret": 5.3,
-   "mktRet": -0.1,
-   "alpha": 5.4
+   "now": 70.34,
+   "ret": 6.8,
+   "mktRet": 0.2,
+   "alpha": 6.6
   },
   {
    "date": "2026-08-05",
@@ -1404,10 +1404,10 @@
    "rank": 1,
    "score": 83,
    "entry": 9.59,
-   "now": 12.63,
-   "ret": 31.7,
-   "mktRet": 0.1,
-   "alpha": 31.6
+   "now": 12.8,
+   "ret": 33.5,
+   "mktRet": 0.3,
+   "alpha": 33.1
   },
   {
    "date": "2026-08-05",
@@ -1415,10 +1415,10 @@
    "rank": 2,
    "score": 83,
    "entry": 197.31,
-   "now": 197.85,
-   "ret": 0.3,
-   "mktRet": 0.1,
-   "alpha": 0.2
+   "now": 210.5,
+   "ret": 6.7,
+   "mktRet": 0.3,
+   "alpha": 6.4
   },
   {
    "date": "2026-08-05",
@@ -1426,10 +1426,10 @@
    "rank": 3,
    "score": 81,
    "entry": 172.24,
-   "now": 167.23,
-   "ret": -2.9,
-   "mktRet": 0.1,
-   "alpha": -3
+   "now": 169.96,
+   "ret": -1.3,
+   "mktRet": 0.3,
+   "alpha": -1.6
   },
   {
    "date": "2026-08-05",
@@ -1437,10 +1437,10 @@
    "rank": 4,
    "score": 81,
    "entry": 99.97,
-   "now": 113.65,
-   "ret": 13.7,
-   "mktRet": 0.1,
-   "alpha": 13.6
+   "now": 116.23,
+   "ret": 16.3,
+   "mktRet": 0.3,
+   "alpha": 15.9
   },
   {
    "date": "2026-08-05",
@@ -1448,10 +1448,10 @@
    "rank": 5,
    "score": 81,
    "entry": 207.02,
-   "now": 212.87,
-   "ret": 2.8,
-   "mktRet": 0.1,
-   "alpha": 2.8
+   "now": 212.26,
+   "ret": 2.5,
+   "mktRet": 0.3,
+   "alpha": 2.2
   },
   {
    "date": "2026-08-07",
@@ -1459,10 +1459,10 @@
    "rank": 1,
    "score": 84,
    "entry": 108.16,
-   "now": 113.65,
-   "ret": 5.1,
-   "mktRet": -0.4,
-   "alpha": 5.5
+   "now": 116.23,
+   "ret": 7.5,
+   "mktRet": -0.1,
+   "alpha": 7.6
   },
   {
    "date": "2026-08-07",
@@ -1470,10 +1470,10 @@
    "rank": 2,
    "score": 82,
    "entry": 12.48,
-   "now": 12.63,
-   "ret": 1.2,
-   "mktRet": -0.4,
-   "alpha": 1.6
+   "now": 12.8,
+   "ret": 2.6,
+   "mktRet": -0.1,
+   "alpha": 2.7
   },
   {
    "date": "2026-08-07",
@@ -1481,10 +1481,10 @@
    "rank": 3,
    "score": 81,
    "entry": 310.68,
-   "now": 321.07,
-   "ret": 3.3,
-   "mktRet": -0.4,
-   "alpha": 3.7
+   "now": 325.57,
+   "ret": 4.8,
+   "mktRet": -0.1,
+   "alpha": 4.9
   },
   {
    "date": "2026-08-07",
@@ -1492,10 +1492,10 @@
    "rank": 4,
    "score": 80,
    "entry": 30.09,
-   "now": 31.48,
-   "ret": 4.6,
-   "mktRet": -0.4,
-   "alpha": 5
+   "now": 31.32,
+   "ret": 4.1,
+   "mktRet": -0.1,
+   "alpha": 4.2
   },
   {
    "date": "2026-08-07",
@@ -1503,10 +1503,10 @@
    "rank": 5,
    "score": 80,
    "entry": 214.42,
-   "now": 212.87,
-   "ret": -0.7,
-   "mktRet": -0.4,
-   "alpha": -0.3
+   "now": 212.26,
+   "ret": -1,
+   "mktRet": -0.1,
+   "alpha": -0.9
   },
   {
    "date": "2026-08-10",
@@ -1514,10 +1514,10 @@
    "rank": 1,
    "score": 81,
    "entry": 111.44,
-   "now": 113.65,
-   "ret": 2,
-   "mktRet": -0.3,
-   "alpha": 2.3
+   "now": 116.23,
+   "ret": 4.3,
+   "mktRet": -0.1,
+   "alpha": 4.4
   },
   {
    "date": "2026-08-10",
@@ -1525,10 +1525,10 @@
    "rank": 2,
    "score": 81,
    "entry": 12.53,
-   "now": 12.63,
-   "ret": 0.8,
-   "mktRet": -0.3,
-   "alpha": 1.1
+   "now": 12.8,
+   "ret": 2.2,
+   "mktRet": -0.1,
+   "alpha": 2.2
   },
   {
    "date": "2026-08-10",
@@ -1536,10 +1536,10 @@
    "rank": 3,
    "score": 80,
    "entry": 314.01,
-   "now": 321.07,
-   "ret": 2.2,
-   "mktRet": -0.3,
-   "alpha": 2.6
+   "now": 325.57,
+   "ret": 3.7,
+   "mktRet": -0.1,
+   "alpha": 3.7
   },
   {
    "date": "2026-08-10",
@@ -1547,10 +1547,10 @@
    "rank": 4,
    "score": 80,
    "entry": 30.28,
-   "now": 31.48,
-   "ret": 4,
-   "mktRet": -0.3,
-   "alpha": 4.3
+   "now": 31.32,
+   "ret": 3.4,
+   "mktRet": -0.1,
+   "alpha": 3.5
   },
   {
    "date": "2026-08-10",
@@ -1558,10 +1558,10 @@
    "rank": 5,
    "score": 80,
    "entry": 102.62,
-   "now": 102.62,
-   "ret": 0,
-   "mktRet": -0.3,
-   "alpha": 0.3
+   "now": 101.79,
+   "ret": -0.8,
+   "mktRet": -0.1,
+   "alpha": -0.7
   },
   {
    "date": "2026-08-11",
@@ -1569,10 +1569,10 @@
    "rank": 1,
    "score": 82,
    "entry": 12.63,
-   "now": 12.63,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
+   "now": 12.8,
+   "ret": 1.3,
+   "mktRet": 0.3,
+   "alpha": 1.1
   },
   {
    "date": "2026-08-11",
@@ -1580,10 +1580,10 @@
    "rank": 2,
    "score": 81,
    "entry": 113.65,
-   "now": 113.65,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
+   "now": 116.23,
+   "ret": 2.3,
+   "mktRet": 0.3,
+   "alpha": 2
   },
   {
    "date": "2026-08-11",
@@ -1591,10 +1591,10 @@
    "rank": 3,
    "score": 81,
    "entry": 31.48,
-   "now": 31.48,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
+   "now": 31.32,
+   "ret": -0.5,
+   "mktRet": 0.3,
+   "alpha": -0.8
   },
   {
    "date": "2026-08-11",
@@ -1602,9 +1602,9 @@
    "rank": 4,
    "score": 81,
    "entry": 31.59,
-   "now": 31.59,
-   "ret": 0,
-   "mktRet": 0,
+   "now": 31.67,
+   "ret": 0.3,
+   "mktRet": 0.3,
    "alpha": 0
   },
   {
@@ -1613,7 +1613,62 @@
    "rank": 5,
    "score": 81,
    "entry": 321.07,
-   "now": 321.07,
+   "now": 325.57,
+   "ret": 1.4,
+   "mktRet": 0.3,
+   "alpha": 1.1
+  },
+  {
+   "date": "2026-08-12",
+   "symbol": "PAYS",
+   "rank": 1,
+   "score": 80,
+   "entry": 12.8,
+   "now": 12.8,
+   "ret": 0,
+   "mktRet": 0,
+   "alpha": 0
+  },
+  {
+   "date": "2026-08-12",
+   "symbol": "CIX",
+   "rank": 2,
+   "score": 80,
+   "entry": 31.32,
+   "now": 31.32,
+   "ret": 0,
+   "mktRet": 0,
+   "alpha": 0
+  },
+  {
+   "date": "2026-08-12",
+   "symbol": "ATLO",
+   "rank": 3,
+   "score": 80,
+   "entry": 31.67,
+   "now": 31.67,
+   "ret": 0,
+   "mktRet": 0,
+   "alpha": 0
+  },
+  {
+   "date": "2026-08-12",
+   "symbol": "EXPE",
+   "rank": 4,
+   "score": 80,
+   "entry": 325.57,
+   "now": 325.57,
+   "ret": 0,
+   "mktRet": 0,
+   "alpha": 0
+  },
+  {
+   "date": "2026-08-12",
+   "symbol": "ANET",
+   "rank": 5,
+   "score": 80,
+   "entry": 210.5,
+   "now": 210.5,
    "ret": 0,
    "mktRet": 0,
    "alpha": 0
