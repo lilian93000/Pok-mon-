@@ -1,45 +1,45 @@
 {
- "generatedAt": "2026-08-10T21:07:54.341Z",
+ "generatedAt": "2026-08-12T20:03:49.254Z",
  "method": "Rendement réel de chaque top-pick depuis sa date de recommandation (clôture Yahoo), comparé au S&P 500 sur la même période. Point d'entrée = clôture du jour de reco.",
  "horizon": "2026-08-10 → aujourd'hui",
  "all": {
-  "n": 5,
-  "avgRet": 0,
+  "n": 10,
+  "avgRet": 1.4,
   "medRet": 0,
-  "winPct": 0,
-  "beatMktPct": 0,
-  "avgAlpha": 0
+  "winPct": 40,
+  "beatMktPct": 40,
+  "avgAlpha": 1.4
  },
  "top1": {
-  "n": 1,
-  "avgRet": 0,
-  "medRet": 0,
-  "winPct": 0,
-  "beatMktPct": 0,
-  "avgAlpha": 0
+  "n": 2,
+  "avgRet": 2.2,
+  "medRet": 2.2,
+  "winPct": 50,
+  "beatMktPct": 50,
+  "avgAlpha": 2.2
  },
  "best": [
+  {
+   "date": "2026-08-10",
+   "symbol": "CIX",
+   "rank": 5,
+   "score": 80,
+   "entry": 30.28,
+   "now": 31.78,
+   "ret": 5,
+   "mktRet": -0.1,
+   "alpha": 5
+  },
   {
    "date": "2026-08-10",
    "symbol": "VCTR",
    "rank": 1,
    "score": 82,
    "entry": 111.44,
-   "now": 111.44,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
-  },
-  {
-   "date": "2026-08-10",
-   "symbol": "PAYS",
-   "rank": 2,
-   "score": 81,
-   "entry": 12.53,
-   "now": 12.53,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
+   "now": 116.23,
+   "ret": 4.3,
+   "mktRet": -0.1,
+   "alpha": 4.4
   },
   {
    "date": "2026-08-10",
@@ -47,29 +47,29 @@
    "rank": 3,
    "score": 81,
    "entry": 314.01,
-   "now": 314.01,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
+   "now": 325.57,
+   "ret": 3.7,
+   "mktRet": -0.1,
+   "alpha": 3.7
   },
   {
    "date": "2026-08-10",
-   "symbol": "HQY",
-   "rank": 4,
-   "score": 80,
-   "entry": 106.79,
-   "now": 106.79,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
+   "symbol": "PAYS",
+   "rank": 2,
+   "score": 81,
+   "entry": 12.53,
+   "now": 12.8,
+   "ret": 2.2,
+   "mktRet": -0.1,
+   "alpha": 2.2
   },
   {
-   "date": "2026-08-10",
+   "date": "2026-08-12",
    "symbol": "CIX",
-   "rank": 5,
-   "score": 80,
-   "entry": 30.28,
-   "now": 30.28,
+   "rank": 1,
+   "score": 81,
+   "entry": 31.78,
+   "now": 31.78,
    "ret": 0,
    "mktRet": 0,
    "alpha": 0
@@ -78,55 +78,55 @@
  "worst": [
   {
    "date": "2026-08-10",
-   "symbol": "CIX",
-   "rank": 5,
-   "score": 80,
-   "entry": 30.28,
-   "now": 30.28,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
-  },
-  {
-   "date": "2026-08-10",
    "symbol": "HQY",
    "rank": 4,
    "score": 80,
    "entry": 106.79,
-   "now": 106.79,
+   "now": 105.5,
+   "ret": -1.2,
+   "mktRet": -0.1,
+   "alpha": -1.1
+  },
+  {
+   "date": "2026-08-12",
+   "symbol": "PBYI",
+   "rank": 5,
+   "score": 80,
+   "entry": 8.9,
+   "now": 8.9,
    "ret": 0,
    "mktRet": 0,
    "alpha": 0
   },
   {
-   "date": "2026-08-10",
+   "date": "2026-08-12",
+   "symbol": "PAYS",
+   "rank": 4,
+   "score": 80,
+   "entry": 12.8,
+   "now": 12.8,
+   "ret": 0,
+   "mktRet": 0,
+   "alpha": 0
+  },
+  {
+   "date": "2026-08-12",
    "symbol": "EXPE",
    "rank": 3,
    "score": 81,
-   "entry": 314.01,
-   "now": 314.01,
+   "entry": 325.57,
+   "now": 325.57,
    "ret": 0,
    "mktRet": 0,
    "alpha": 0
   },
   {
-   "date": "2026-08-10",
-   "symbol": "PAYS",
+   "date": "2026-08-12",
+   "symbol": "ATLO",
    "rank": 2,
    "score": 81,
-   "entry": 12.53,
-   "now": 12.53,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
-  },
-  {
-   "date": "2026-08-10",
-   "symbol": "VCTR",
-   "rank": 1,
-   "score": 82,
-   "entry": 111.44,
-   "now": 111.44,
+   "entry": 31.67,
+   "now": 31.67,
    "ret": 0,
    "mktRet": 0,
    "alpha": 0
@@ -139,10 +139,10 @@
    "rank": 1,
    "score": 82,
    "entry": 111.44,
-   "now": 111.44,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
+   "now": 116.23,
+   "ret": 4.3,
+   "mktRet": -0.1,
+   "alpha": 4.4
   },
   {
    "date": "2026-08-10",
@@ -150,10 +150,10 @@
    "rank": 2,
    "score": 81,
    "entry": 12.53,
-   "now": 12.53,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
+   "now": 12.8,
+   "ret": 2.2,
+   "mktRet": -0.1,
+   "alpha": 2.2
   },
   {
    "date": "2026-08-10",
@@ -161,10 +161,10 @@
    "rank": 3,
    "score": 81,
    "entry": 314.01,
-   "now": 314.01,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
+   "now": 325.57,
+   "ret": 3.7,
+   "mktRet": -0.1,
+   "alpha": 3.7
   },
   {
    "date": "2026-08-10",
@@ -172,10 +172,10 @@
    "rank": 4,
    "score": 80,
    "entry": 106.79,
-   "now": 106.79,
-   "ret": 0,
-   "mktRet": 0,
-   "alpha": 0
+   "now": 105.5,
+   "ret": -1.2,
+   "mktRet": -0.1,
+   "alpha": -1.1
   },
   {
    "date": "2026-08-10",
@@ -183,7 +183,62 @@
    "rank": 5,
    "score": 80,
    "entry": 30.28,
-   "now": 30.28,
+   "now": 31.78,
+   "ret": 5,
+   "mktRet": -0.1,
+   "alpha": 5
+  },
+  {
+   "date": "2026-08-12",
+   "symbol": "CIX",
+   "rank": 1,
+   "score": 81,
+   "entry": 31.78,
+   "now": 31.78,
+   "ret": 0,
+   "mktRet": 0,
+   "alpha": 0
+  },
+  {
+   "date": "2026-08-12",
+   "symbol": "ATLO",
+   "rank": 2,
+   "score": 81,
+   "entry": 31.67,
+   "now": 31.67,
+   "ret": 0,
+   "mktRet": 0,
+   "alpha": 0
+  },
+  {
+   "date": "2026-08-12",
+   "symbol": "EXPE",
+   "rank": 3,
+   "score": 81,
+   "entry": 325.57,
+   "now": 325.57,
+   "ret": 0,
+   "mktRet": 0,
+   "alpha": 0
+  },
+  {
+   "date": "2026-08-12",
+   "symbol": "PAYS",
+   "rank": 4,
+   "score": 80,
+   "entry": 12.8,
+   "now": 12.8,
+   "ret": 0,
+   "mktRet": 0,
+   "alpha": 0
+  },
+  {
+   "date": "2026-08-12",
+   "symbol": "PBYI",
+   "rank": 5,
+   "score": 80,
+   "entry": 8.9,
+   "now": 8.9,
    "ret": 0,
    "mktRet": 0,
    "alpha": 0
