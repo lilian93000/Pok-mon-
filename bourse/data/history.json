@@ -703,23 +703,23 @@
   "date": "2026-08-13",
   "top": [
    {
-    "symbol": "HRMY",
-    "score": 81
+    "symbol": "CIX",
+    "score": 80
+   },
+   {
+    "symbol": "HQY",
+    "score": 80
    },
    {
     "symbol": "ATLO",
-    "score": 81
-   },
-   {
-    "symbol": "HRB",
     "score": 80
    },
    {
-    "symbol": "CHMG",
+    "symbol": "GLBE",
     "score": 80
    },
    {
-    "symbol": "INSW",
+    "symbol": "AYA",
     "score": 80
    }
   ]
