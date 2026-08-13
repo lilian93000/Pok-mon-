@@ -704,6 +704,19 @@ function selectPicks(results) {
   const liquidPool = scored.filter((r) => tradable(r) && !hardFlag(r));
   const pickable = liquidPool.length >= 4 ? liquidPool : scored.filter((r) => !hardFlag(r));
 
+  // ── Garde-fous partagés (leçons du terrain) ─────────────────────────
+  // Fonds fermés : « marges » comptables absurdes → faux signaux (moats, etc.).
+  const FUND_NAME = /\b(Fund|Trust|ETF|Portfolio|Income|Municipal|Bond|Closed[- ]?End|Index)\b/i;
+  const notFund = (r) => !FUND_NAME.test(r.name || "");
+  // Cycliques lourds (mines, métaux précieux) : l'utilisateur n'en veut pas dans
+  // les explosifs, et ils faussent les moats (fausse rentabilité de haut de cycle).
+  const secInd = (r) => `${(r.profile && r.profile.sector) || ""} ${(r.profile && r.profile.industry) || ""}`;
+  const CYCLICAL_MINE = /Mining|Metals?|Gold|Silver|Copper|Uranium|Coal|Precious/i;
+  const CYCLICAL_MOAT = /Energy|Basic Materials|\bOil\b|\bGas\b|Coal|Mining|Metals?|Marine Shipping|Steel|Silver|Gold|Copper|Uranium|Semiconductor|Memory/i;
+  const perf6 = (r) => { const c = r.closes || []; return c.length > 126 ? (c[c.length - 1] / c[c.length - 1 - 126] - 1) * 100 : null; };
+  const aboveMa50 = (r) => { const c = r.closes || []; if (c.length < 50) return true; const m = c.slice(-50).reduce((a, b) => a + b, 0) / 50; return c[c.length - 1] > m; };
+  const revGrowth = (r) => (r.fundamentals ? r.fundamentals.revenueGrowth : null);
+
   // ═══ 🌊 AVANT LA VAGUE (priorité n°1) ═══
   // Ce que tu veux : prendre la vague AVANT qu'elle se forme. On sélectionne
   // donc d'abord les « ressorts comprimés » — base resserrée, proche cassure,
@@ -719,7 +732,7 @@ function selectPicks(results) {
   // Vivier strict : ressorts comprimés, pas encore envolés (perf 3 mois ≤ 20 %).
   const waveStrict = pickable.filter((r) => {
     const es = earlyMap.get(r.symbol);
-    return es && es.eligible && es.perf3 <= 20 && es.score >= 55;
+    return es && notFund(r) && es.eligible && es.perf3 <= 20 && es.score >= 55;
   });
   // Repli élargi si moins de 5 : on garde l'esprit « avant la vague » (jamais
   // déjà envolé), avec des critères un peu plus souples, pour toujours en sortir 5.
@@ -727,7 +740,7 @@ function selectPicks(results) {
   const waveRelaxed = pickable.filter((r) => {
     if (haveW.has(r.symbol)) return false;
     const es = earlyMap.get(r.symbol);
-    return es && es.eligible && !es.alreadyMooned && es.perf3 <= 30 && es.score >= 45;
+    return es && notFund(r) && es.eligible && !es.alreadyMooned && es.perf3 <= 30 && es.score >= 45;
   });
   const waveTop = [...waveStrict, ...waveRelaxed]
     .sort((a, b) => waveKey(b) - waveKey(a))
@@ -744,17 +757,40 @@ function selectPicks(results) {
   const packedWave = waveTop.map(packWave);
 
   // ═══ 🎇 PÉTARDS EXPLOSIFS ═══ (momentum fort + très volatils, gros risque)
-  // On garde les garde-fous : pas de reverse split (hard), pas de couteau qui tombe.
+  // Garde-fous durcis (leçons ZTG/BUUU/AYA/PGEN) :
+  //  • liquide pour de vrai (≥ 3 M$/j) → pas de micro-pump manipulable
+  //  • en tendance (au-dessus de la MM50) → pas un couteau qui tombe
+  //  • PAS déjà en parabole épuisée (perf 6 mois ≤ 85 %)
+  //  • volatilité plafonnée (≤ 125) → au-delà = piège, pas un pétard
+  //  • ni fonds, ni mine/métaux précieux
   const notKnife = (r) => !(r.longTerm && r.longTerm.distFromHigh != null && r.longTerm.distFromHigh < -40);
-  const explosifPool = pickable.filter((r) => !hardFlag(r) && (pil(r, "momentum") || 0) >= 78 && vol(r) >= 45 && notKnife(r));
-  const explosifKey = (r) => 0.45 * (pil(r, "momentum") || 0) + 0.30 * Math.min(vol(r), 120) + 0.25 * r.score;
+  const notParabolic = (r) => { const p = perf6(r); return p == null || p <= 85; };
+  const explosiveLiquid = (r) => { const dv = liq(r); return dv != null && dv >= 3e6; };
+  const explosifPool = pickable.filter((r) =>
+    !hardFlag(r) && notFund(r) && !CYCLICAL_MINE.test(secInd(r)) &&
+    (pil(r, "momentum") || 0) >= 80 && vol(r) >= 45 && vol(r) <= 125 &&
+    explosiveLiquid(r) && aboveMa50(r) && notKnife(r) && notParabolic(r));
+  const explosifKey = (r) => 0.40 * (pil(r, "momentum") || 0) + 0.25 * Math.min(vol(r), 110)
+    + 0.20 * r.score + 0.15 * Math.min(Math.max(revGrowth(r) || 0, 0), 80); // la croissance réelle départage
   const explosifs = explosifPool.sort((a, b) => explosifKey(b) - explosifKey(a)).slice(0, 5)
     .map((r) => pack(r, "Pétard explosif", "Momentum fort + très volatil : gros potentiel ET gros risque. Petite somme + stop."));
 
   // ═══ 🏰 MOATS ═══ (leaders à avantage concurrentiel durable)
-  const moatOf = (r) => Engine.moatScore(r.fundamentals, `${(r.profile && r.profile.sector) || ""} ${(r.profile && r.profile.industry) || ""}`);
+  const moatOf = (r) => Engine.moatScore(r.fundamentals, secInd(r));
+  // Vrai moat : on écarte les faux positifs
+  //  • fonds/holdings (marge nette > 80 % = artefact comptable)
+  //  • cycliques (mines, énergie, mémoire… fausse rentabilité de haut de cycle)
+  //  • biotech "ramp" (CA ×2+ ponctuel, pas durable) ou endormie (CA < 3 %)
+  const realMoat = (r) => {
+    const f = r.fundamentals; if (!f) return false;
+    if (f.netMargin != null && f.netMargin > 80) return false;
+    if (CYCLICAL_MOAT.test(secInd(r))) return false;
+    if (f.revenueGrowth != null && (f.revenueGrowth < 3 || f.revenueGrowth > 150)) return false;
+    return true;
+  };
   const moats = pickable
-    .filter((r) => r.fundamentals && moatOf(r) != null && tradable(r) && !hardFlag(r) && (r.fundamentals.pe == null || r.fundamentals.pe < 60))
+    .filter((r) => r.fundamentals && moatOf(r) != null && moatOf(r) >= 78 && tradable(r) && !hardFlag(r)
+      && notFund(r) && realMoat(r) && (r.fundamentals.pe == null || r.fundamentals.pe < 60))
     .map((r) => ({ r, m: moatOf(r) }))
     .sort((a, b) => b.m - a.m)
     .slice(0, 6)
@@ -1059,4 +1095,8 @@ async function main() {
   console.log(`Top 5 : ${results.slice(0, 5).map((r) => `${r.symbol} (${Math.round(r.score)})`).join(", ")}`);
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+if (require.main === module) {
+  main().catch((e) => { console.error(e); process.exit(1); });
+}
+
+module.exports = { selectPicks };
