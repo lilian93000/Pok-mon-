@@ -704,6 +704,19 @@ function selectPicks(results) {
   const liquidPool = scored.filter((r) => tradable(r) && !hardFlag(r));
   const pickable = liquidPool.length >= 4 ? liquidPool : scored.filter((r) => !hardFlag(r));
 
+  // ── Garde-fous partagés (leçons du terrain) ─────────────────────────
+  // Fonds fermés : « marges » comptables absurdes → faux signaux (moats, etc.).
+  const FUND_NAME = /\b(Fund|Trust|ETF|Portfolio|Income|Municipal|Bond|Closed[- ]?End|Index)\b/i;
+  const notFund = (r) => !FUND_NAME.test(r.name || "");
+  // Cycliques lourds (mines, métaux précieux) : l'utilisateur n'en veut pas dans
+  // les explosifs, et ils faussent les moats (fausse rentabilité de haut de cycle).
+  const secInd = (r) => `${(r.profile && r.profile.sector) || ""} ${(r.profile && r.profile.industry) || ""}`;
+  const CYCLICAL_MINE = /Mining|Metals?|Gold|Silver|Copper|Uranium|Coal|Precious/i;
+  const CYCLICAL_MOAT = /Energy|Basic Materials|\bOil\b|\bGas\b|Coal|Mining|Metals?|Marine Shipping|Steel|Silver|Gold|Copper|Uranium|Semiconductor|Memory/i;
+  const perf6 = (r) => { const c = r.closes || []; return c.length > 126 ? (c[c.length - 1] / c[c.length - 1 - 126] - 1) * 100 : null; };
+  const aboveMa50 = (r) => { const c = r.closes || []; if (c.length < 50) return true; const m = c.slice(-50).reduce((a, b) => a + b, 0) / 50; return c[c.length - 1] > m; };
+  const revGrowth = (r) => (r.fundamentals ? r.fundamentals.revenueGrowth : null);
+
   // ═══ 🌊 AVANT LA VAGUE (priorité n°1) ═══
   // Ce que tu veux : prendre la vague AVANT qu'elle se forme. On sélectionne
   // donc d'abord les « ressorts comprimés » — base resserrée, proche cassure,
@@ -719,7 +732,7 @@ function selectPicks(results) {
   // Vivier strict : ressorts comprimés, pas encore envolés (perf 3 mois ≤ 20 %).
   const waveStrict = pickable.filter((r) => {
     const es = earlyMap.get(r.symbol);
-    return es && es.eligible && es.perf3 <= 20 && es.score >= 55;
+    return es && notFund(r) && es.eligible && es.perf3 <= 20 && es.score >= 55;
   });
   // Repli élargi si moins de 5 : on garde l'esprit « avant la vague » (jamais
   // déjà envolé), avec des critères un peu plus souples, pour toujours en sortir 5.
@@ -727,7 +740,7 @@ function selectPicks(results) {
   const waveRelaxed = pickable.filter((r) => {
     if (haveW.has(r.symbol)) return false;
     const es = earlyMap.get(r.symbol);
-    return es && es.eligible && !es.alreadyMooned && es.perf3 <= 30 && es.score >= 45;
+    return es && notFund(r) && es.eligible && !es.alreadyMooned && es.perf3 <= 30 && es.score >= 45;
   });
   const waveTop = [...waveStrict, ...waveRelaxed]
     .sort((a, b) => waveKey(b) - waveKey(a))
@@ -744,17 +757,40 @@ function selectPicks(results) {
   const packedWave = waveTop.map(packWave);
 
   // ═══ 🎇 PÉTARDS EXPLOSIFS ═══ (momentum fort + très volatils, gros risque)
-  // On garde les garde-fous : pas de reverse split (hard), pas de couteau qui tombe.
+  // Garde-fous durcis (leçons ZTG/BUUU/AYA/PGEN) :
+  //  • liquide pour de vrai (≥ 3 M$/j) → pas de micro-pump manipulable
+  //  • en tendance (au-dessus de la MM50) → pas un couteau qui tombe
+  //  • PAS déjà en parabole épuisée (perf 6 mois ≤ 85 %)
+  //  • volatilité plafonnée (≤ 125) → au-delà = piège, pas un pétard
+  //  • ni fonds, ni mine/métaux précieux
   const notKnife = (r) => !(r.longTerm && r.longTerm.distFromHigh != null && r.longTerm.distFromHigh < -40);
-  const explosifPool = pickable.filter((r) => !hardFlag(r) && (pil(r, "momentum") || 0) >= 78 && vol(r) >= 45 && notKnife(r));
-  const explosifKey = (r) => 0.45 * (pil(r, "momentum") || 0) + 0.30 * Math.min(vol(r), 120) + 0.25 * r.score;
+  const notParabolic = (r) => { const p = perf6(r); return p == null || p <= 85; };
+  const explosiveLiquid = (r) => { const dv = liq(r); return dv != null && dv >= 3e6; };
+  const explosifPool = pickable.filter((r) =>
+    !hardFlag(r) && notFund(r) && !CYCLICAL_MINE.test(secInd(r)) &&
+    (pil(r, "momentum") || 0) >= 80 && vol(r) >= 45 && vol(r) <= 125 &&
+    explosiveLiquid(r) && aboveMa50(r) && notKnife(r) && notParabolic(r));
+  const explosifKey = (r) => 0.40 * (pil(r, "momentum") || 0) + 0.25 * Math.min(vol(r), 110)
+    + 0.20 * r.score + 0.15 * Math.min(Math.max(revGrowth(r) || 0, 0), 80); // la croissance réelle départage
   const explosifs = explosifPool.sort((a, b) => explosifKey(b) - explosifKey(a)).slice(0, 5)
     .map((r) => pack(r, "Pétard explosif", "Momentum fort + très volatil : gros potentiel ET gros risque. Petite somme + stop."));
 
   // ═══ 🏰 MOATS ═══ (leaders à avantage concurrentiel durable)
-  const moatOf = (r) => Engine.moatScore(r.fundamentals, `${(r.profile && r.profile.sector) || ""} ${(r.profile && r.profile.industry) || ""}`);
+  const moatOf = (r) => Engine.moatScore(r.fundamentals, secInd(r));
+  // Vrai moat : on écarte les faux positifs
+  //  • fonds/holdings (marge nette > 80 % = artefact comptable)
+  //  • cycliques (mines, énergie, mémoire… fausse rentabilité de haut de cycle)
+  //  • biotech "ramp" (CA ×2+ ponctuel, pas durable) ou endormie (CA < 3 %)
+  const realMoat = (r) => {
+    const f = r.fundamentals; if (!f) return false;
+    if (f.netMargin != null && f.netMargin > 80) return false;
+    if (CYCLICAL_MOAT.test(secInd(r))) return false;
+    if (f.revenueGrowth != null && (f.revenueGrowth < 3 || f.revenueGrowth > 150)) return false;
+    return true;
+  };
   const moats = pickable
-    .filter((r) => r.fundamentals && moatOf(r) != null && tradable(r) && !hardFlag(r) && (r.fundamentals.pe == null || r.fundamentals.pe < 60))
+    .filter((r) => r.fundamentals && moatOf(r) != null && moatOf(r) >= 78 && tradable(r) && !hardFlag(r)
+      && notFund(r) && realMoat(r) && (r.fundamentals.pe == null || r.fundamentals.pe < 60))
     .map((r) => ({ r, m: moatOf(r) }))
     .sort((a, b) => b.m - a.m)
     .slice(0, 6)
@@ -947,6 +983,82 @@ async function main() {
     process.exit(1);
   }
 
+  /* ───────────── ÉTAPE 2b : passe MOATS large ─────────────
+     On ne se contente plus des 541 finalistes : on cherche les avantages
+     concurrentiels durables (moats) sur TOUT le marché non encore envolé.
+     Pré-filtre gratuit (prix, pas déjà explosé, structure saine) → on récupère
+     UNIQUEMENT les fondamentaux (pas les news, la partie lente) → on calcule le
+     moat de chacun → on promeut les meilleurs en analyse complète. */
+  const wideMoats = [];
+  const nMoatScan = cfg.moatScanMax || 0;
+  if (ysession && nMoatScan > 0 && scanCloses.size) {
+    const ret = (c, n) => (c.length > n ? (c[c.length - 1] / c[c.length - 1 - n] - 1) * 100 : null);
+    // Fonds fermés / véhicules d'investissement : « marges » comptables absurdes
+    // (marge nette > 100 %, marge brute 100 %) → faux moats. On les écarte par le nom.
+    const FUND_NAME = /\b(Fund|Trust|ETF|Portfolio|Income|Municipal|Bond|Closed[- ]?End|Index)\b/i;
+    const already = new Set(results.map((r) => r.symbol));
+    const moatPool = [];
+    for (const [sym, closes] of scanCloses) {
+      if (already.has(sym)) continue;
+      const nm = names.get(sym) || "";
+      if (FUND_NAME.test(nm)) continue;                 // pas un fonds
+      const price = closes[closes.length - 1];
+      if (price < 6) continue;                          // liquidité/qualité minimale
+      const p6 = ret(closes, 126);
+      if (p6 != null && p6 > 45) continue;              // écarte ce qui a DÉJÀ explosé
+      const t = Engine.scoreTechnical(closes, null).score;
+      if (t == null || t < 40) continue;                // structure au moins correcte
+      moatPool.push({ sym, closes, price, p6, t });
+    }
+    moatPool.sort((a, b) => b.t - a.t);                 // on sonde d'abord les plus sains
+    const cand = moatPool.slice(0, nMoatScan);
+    console.log(`Étape 2b — passe MOATS large : ${cand.length} titres non-envolés sondés (fondamentaux)…`);
+    let done2 = 0;
+    await pool(cand, 5, async (it) => {
+      let qs = null;
+      try { qs = await Fundamentals.fetchQuoteSummary(it.sym, ysession); } catch { qs = null; }
+      await sleep(150);
+      if (++done2 % 250 === 0) console.log(`  … moats ${done2}/${cand.length} (${wideMoats.length} trouvés)`);
+      if (!qs || !qs.fundamentals) return null;
+      const f = qs.fundamentals;
+      // Garde-fou anti-fonds : une vraie entreprise a une marge nette < 80 % et
+      // convertit ses bénéfices en cash. Au-delà, c'est un fonds/holding (faux moat).
+      if (f.netMargin != null && f.netMargin > 80) return null;
+      if (f.grossMargin === 100 && f.cashConversion == null && f.fcfPositive == null) return null;
+      const sector = (qs.profile && qs.profile.sector) || "";
+      const industry = (qs.profile && qs.profile.industry) || "";
+      const moat = Engine.moatScore(f, `${sector} ${industry}`);
+      if (moat == null || moat < 68) return null;
+      const c = it.closes, win = c.slice(-252);
+      const hi52 = win.length ? Math.max(...win) : null;
+      const d52 = hi52 ? Math.round((c[c.length - 1] / hi52 - 1) * 100) : null;
+      wideMoats.push({
+        symbol: it.sym, name: names.get(it.sym) || it.sym, price: Math.round(it.price * 100) / 100,
+        moat: Math.round(moat), sector: sector || null, industry: industry || null,
+        marketCap: (qs.profile && qs.profile.marketCap) || null,
+        fundamentals: qs.fundamentals,
+        perf6: it.p6 != null ? Math.round(it.p6) : null, dist52: d52,
+      });
+      return null;
+    });
+    wideMoats.sort((a, b) => b.moat - a.moat);
+    console.log(`  Passe MOATS terminée : ${wideMoats.length} moats (≥68) sur ${cand.length} sondés.`);
+
+    // Promotion : analyse complète des meilleurs moats larges (données riches + site).
+    const promote = wideMoats
+      .filter((m) => (m.dist52 == null || m.dist52 <= -3))   // encore de la marge sous le sommet
+      .slice(0, 18).map((m) => m.symbol).filter((s) => !already.has(s));
+    if (promote.length) {
+      console.log(`  Promotion en analyse complète : ${promote.join(", ")}`);
+      const promoted = await pool(promote, 3, async (sym) => {
+        const r = await deepAnalyze(sym, ctx);
+        await sleep(250);
+        return r;
+      });
+      for (const r of promoted) if (r && !r.__error) results.push(r);
+    }
+  }
+
   results.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
   const generatedAt = new Date().toISOString();
   const meta = { generatedAt, universe: universe.length, scanned: scanCloses.size, failed };
@@ -955,7 +1067,7 @@ async function main() {
   fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.writeFileSync(
     path.join(DATA_DIR, "latest.json"),
-    JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, failed, regime, marketNews, marketNewsDigest, picks, results }, null, 1)
+    JSON.stringify({ generatedAt, auto: true, universe: universe.length, scanned: scanCloses.size, moatScanned: wideMoats.length, failed, regime, marketNews, marketNewsDigest, picks, wideMoats: wideMoats.slice(0, 80), results }, null, 1)
   );
 
   // Index du moteur de recherche : tout le marché scanné (technique + momentum)
@@ -983,4 +1095,8 @@ async function main() {
   console.log(`Top 5 : ${results.slice(0, 5).map((r) => `${r.symbol} (${Math.round(r.score)})`).join(", ")}`);
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+if (require.main === module) {
+  main().catch((e) => { console.error(e); process.exit(1); });
+}
+
+module.exports = { selectPicks };
