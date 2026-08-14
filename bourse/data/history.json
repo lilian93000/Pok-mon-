@@ -723,5 +723,30 @@
     "score": 80
    }
   ]
+ },
+ {
+  "date": "2026-08-14",
+  "top": [
+   {
+    "symbol": "GLBE",
+    "score": 82
+   },
+   {
+    "symbol": "CIX",
+    "score": 81
+   },
+   {
+    "symbol": "HRMY",
+    "score": 80
+   },
+   {
+    "symbol": "INSW",
+    "score": 80
+   },
+   {
+    "symbol": "MPC",
+    "score": 79
+   }
+  ]
  }
 ]
