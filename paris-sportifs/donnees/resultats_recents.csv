@@ -241,7 +241,6 @@ date,gagnante,perdante,surface,tournoi,source
 20260816,Mirra Andreeva,Oleksandra Oliynykova,dur,Cincinnati WTA,websearch
 20260816,Sloane Stephens,Anastasia Potapova,dur,Cincinnati WTA,websearch
 20260817,Iga Swiatek,Maria Sakkari,dur,Cincinnati WTA,websearch
-20260817,Emma Navarro,Jessica Pegula,dur,Cincinnati WTA,websearch
 20260817,Sorana Cirstea,Anna Kalinskaya,dur,Cincinnati WTA,websearch
 20260818,Elena Rybakina,Magdalena Frech,dur,Cincinnati WTA,websearch
 20260818,Mirra Andreeva,Janice Tjen,dur,Cincinnati WTA,websearch
@@ -255,3 +254,6 @@ date,gagnante,perdante,surface,tournoi,source
 20260818,Aryna Sabalenka,Xinyu Wang,dur,Cincinnati WTA,websearch
 20260819,Elena Rybakina,Diana Shnaider,dur,Cincinnati WTA,websearch
 20260819,Marta Kostyuk,Mirra Andreeva,dur,Cincinnati WTA,websearch
+20260817,Jessica Pegula,Emma Navarro,dur,Cincinnati WTA,websearch
+20260819,Amanda Anisimova,Linda Noskova,dur,Cincinnati WTA,websearch
+20260820,Jessica Pegula,Amanda Anisimova,dur,Cincinnati WTA,websearch
