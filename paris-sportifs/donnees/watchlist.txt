@@ -1,5 +1,7 @@
 Akasha Urhobo
+Alevtina Ibragimova
 Alexandra Eala
+Alexandra Shubladze
 Aliaksandra Sasnovich
 Alice Tubello
 Alina Charaeva
@@ -8,21 +10,28 @@ Aliona Falei
 Alycia Parks
 Amanda Anisimova
 Anastasia Zakharova
+Andrea Lazaro Garcia
+Angela Fita Boluda
 Ann Li
 Anna Blinkova
 Anna Bondar
+Anna Siskova
 Annika Penickova
+Anouk Koevermans
 Aoi Ito
 Arantxa Rus
 Aryna Sabalenka
+Ashlyn Krueger
 Astra Sharma
 Barbora Krejcikova
 Belinda Bencic
 Bianca Andreescu
 Carol Young Suh Lee
 Caroline Dolehide
+Carson Branstine
 Caty Mcnally
 Claire Liu
+Clara Burel
 Clara Tauson
 Coco Gauff
 Cristina Bucsa
@@ -32,11 +41,15 @@ Darja Semenistaja
 Darja Vidmanova
 Darya Astakhova
 Dayana Yastremska
+Despina Papamichail
 Diana Shnaider
 Diane Parry
 Dominika Salkova
 Donna Vekic
 Ekaterina Alexandrova
+Ekaterina Ovcharenko
+Ekaterine Gorgodze
+Elena Pridankina
 Elena Rybakina
 Elina Svitolina
 Elise Mertens
@@ -48,9 +61,13 @@ Elvina Kalieva
 Emerson Jones
 Emiliana Arango
 Emma Navarro
+En Shuo Liang
 Eva Lys
 Eva Vedder
+Fangran Tian
+Fiona Crawley
 Francesca Jones
+Francisca Jorge
 Gabriela Andrea Knutson
 Guiomar Maristany Zuleta De Reales
 Hanne Vandewinkel
@@ -58,11 +75,14 @@ Hanyu Guo
 Harmony Tan
 Harriet Dart
 Hayu Kinoshita
+Heather Watson
 Himeno Sakatsume
 Iga Swiatek
+Iryna Shymanovich
 Iva Jovic
 Janae Preston
 Janice Tjen
+Jeline Vandromme
 Jennifer Ruggeri
 Jessica Pegula
 Joanna Garland
@@ -71,6 +91,7 @@ Jordyn Hazelitt
 Julia Avdeeva
 Julia Grabher
 Julia Riera
+Julieta Pareja
 Justina Mikulskyte
 Kajsa Rinaldo Persson
 Katarzyna Kawa
@@ -91,17 +112,24 @@ Leolia Jeanjean
 Leyre Romero Gormaz
 Lilli Tagger
 Lin Zhu
+Linda Fruhvirtova
+Linda Klimovicova
 Liudmila Samsonova
+Lizette Cabrera
 Lola Radivojevic
+Lucia Bronzetti
 Lucie Havlickova
 Lucrezia Stefanini
 Maddison Inglis
+Madison Brengle
 Magda Linette
 Magdalena Frech
+Mai Hontama
 Mananchaya Sawangkaew
 Maria Lourdes Carle
 Maria Sakkari
 Maria Timofeeva
+Mariam Bolkvadze
 Marie Bouzkova
 Marina Bassols Ribera
 Marta Kostyuk
@@ -109,6 +137,7 @@ Martyna Kubka
 Mary Stoiana
 Maya Joint
 Mia Pohankova
+Mia Ristic
 Mona Barthel
 Moyuka Uchijima
 Nadia Podoroska
@@ -118,12 +147,14 @@ Nikola Bartunkova
 Noma Noha Akugue
 Nuria Brancaccio
 Oksana Selekhmeteva
+Oleksandra Oliynykova
 Panna Udvardy
 Petra Marcinko
 Polina Iatcenko
 Polina Kudermetova
 Polona Hercog
 Priscilla Hon
+Qinwen Zheng
 Rebecca Marino
 Rebecca Sramkova
 Renata Zarazua
@@ -143,6 +174,8 @@ Tatiana Prozorova
 Taylah Preston
 Taylor Townsend
 Teodora Kostovic
+Tereza Valentova
+Tyra Caterina Grant
 Varvara Lepchenko
 Vendula Valdmannova
 Veronika Erjavec
@@ -153,5 +186,6 @@ Weronika Falkowska
 Whitney Osuigwe
 Yeon Woo Ku
 Yue Yuan
+Yuliia Starodubtseva
 Zeynep Sonmez
 Zuzanna Pawlikowska
