@@ -15,6 +15,7 @@ Angela Fita Boluda
 Ann Li
 Anna Blinkova
 Anna Bondar
+Anna Kalinskaya
 Anna Siskova
 Annika Penickova
 Anouk Koevermans
@@ -24,6 +25,7 @@ Aryna Sabalenka
 Ashlyn Krueger
 Astra Sharma
 Barbora Krejcikova
+Beatriz Haddad Maia
 Belinda Bencic
 Bianca Andreescu
 Capucine Jauffret
@@ -62,6 +64,7 @@ Elvina Kalieva
 Emerson Jones
 Emiliana Arango
 Emma Navarro
+Emma Raducanu
 En Shuo Liang
 Eva Lys
 Eva Vedder
@@ -83,6 +86,8 @@ Iryna Shymanovich
 Iva Jovic
 Janae Preston
 Janice Tjen
+Jasmine Paolini
+Jelena Ostapenko
 Jeline Vandromme
 Jennifer Ruggeri
 Jessica Pegula
@@ -95,8 +100,10 @@ Julia Riera
 Julieta Pareja
 Justina Mikulskyte
 Kajsa Rinaldo Persson
+Karolina Muchova
 Katarzyna Kawa
 Katherine Sebov
+Katie Boulter
 Katie Swan
 Katie Volynets
 Katrina Scott
@@ -110,11 +117,13 @@ Kylie Collins
 Lanlana Tararudee
 Laura Samson
 Leolia Jeanjean
+Leylah Fernandez
 Leyre Romero Gormaz
 Lilli Tagger
 Lin Zhu
 Linda Fruhvirtova
 Linda Klimovicova
+Linda Noskova
 Liudmila Samsonova
 Lizette Cabrera
 Lola Radivojevic
@@ -123,6 +132,7 @@ Lucie Havlickova
 Lucrezia Stefanini
 Maddison Inglis
 Madison Brengle
+Madison Keys
 Magda Linette
 Magdalena Frech
 Mai Hontama
@@ -140,6 +150,7 @@ Mary Stoiana
 Maya Joint
 Mia Pohankova
 Mia Ristic
+Mirra Andreeva
 Mona Barthel
 Moyuka Uchijima
 Nadia Podoroska
@@ -151,7 +162,9 @@ Nuria Brancaccio
 Oksana Selekhmeteva
 Oleksandra Oliynykova
 Panna Udvardy
+Paula Badosa
 Petra Marcinko
+Peyton Stearns
 Polina Iatcenko
 Polina Kudermetova
 Polona Hercog
@@ -166,6 +179,7 @@ Shuai Zhang
 Sinja Kraus
 Sloane Stephens
 Sofia Costoulas
+Sofia Kenin
 Solana Sierra
 Sorana Cirstea
 Storm Hunter
@@ -183,6 +197,7 @@ Vendula Valdmannova
 Veronika Erjavec
 Veronika Podrez
 Victoria Jimenez Kasintseva
+Victoria Mboko
 Viktoria Hruncakova
 Weronika Falkowska
 Whitney Osuigwe
