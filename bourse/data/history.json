@@ -1003,24 +1003,24 @@
   "date": "2026-09-01",
   "top": [
    {
-    "symbol": "HNGE",
-    "score": 81
-   },
-   {
-    "symbol": "VEEV",
-    "score": 81
-   },
-   {
-    "symbol": "RELY",
-    "score": 81
-   },
-   {
     "symbol": "PR",
+    "score": 82
+   },
+   {
+    "symbol": "HRMY",
     "score": 80
    },
    {
-    "symbol": "OKTA",
-    "score": 79
+    "symbol": "LPG",
+    "score": 80
+   },
+   {
+    "symbol": "COP",
+    "score": 80
+   },
+   {
+    "symbol": "SM",
+    "score": 80
    }
   ]
  }
