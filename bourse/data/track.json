@@ -1,14 +1,14 @@
 {
- "generatedAt": "2026-09-04T23:18:58.653Z",
+ "generatedAt": "2026-09-07T23:46:57.544Z",
  "method": "Rendement réel de chaque top-pick depuis sa date de recommandation (clôture Yahoo), comparé au S&P 500 sur la même période. Point d'entrée = clôture du jour de reco.",
  "horizon": "2026-07-04 → aujourd'hui",
  "all": {
   "n": 220,
-  "avgRet": 2.8,
+  "avgRet": 3,
   "medRet": 2.2,
   "winPct": 61,
   "beatMktPct": 49,
-  "avgAlpha": 1.2
+  "avgAlpha": 1.5
  },
  "top1": {
   "n": 44,
@@ -77,17 +77,6 @@
  ],
  "worst": [
   {
-   "date": "2026-08-05",
-   "symbol": "APH",
-   "rank": 3,
-   "score": 81,
-   "entry": 172.24,
-   "now": 82.78,
-   "ret": -51.9,
-   "mktRet": -0.1,
-   "alpha": -51.9
-  },
-  {
    "date": "2026-07-29",
    "symbol": "SIF",
    "rank": 3,
@@ -130,6 +119,17 @@
    "ret": -18.4,
    "mktRet": 2.9,
    "alpha": -21.3
+  },
+  {
+   "date": "2026-07-24",
+   "symbol": "SIF",
+   "rank": 2,
+   "score": 80,
+   "entry": 25.99,
+   "now": 21.35,
+   "ret": -17.9,
+   "mktRet": 4.1,
+   "alpha": -22
   }
  ],
  "picks": [
@@ -1425,11 +1425,11 @@
    "symbol": "APH",
    "rank": 3,
    "score": 81,
-   "entry": 172.24,
+   "entry": 86.12,
    "now": 82.78,
-   "ret": -51.9,
+   "ret": -3.9,
    "mktRet": -0.1,
-   "alpha": -51.9
+   "alpha": -3.8
   },
   {
    "date": "2026-08-05",
