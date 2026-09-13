@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-06T09:55:04.628Z",
+ "generatedAt": "2026-09-13T10:48:41.436Z",
  "scope": "Signaux de prix uniquement (technique + momentum + force relative + trend + retour à la moyenne). Fondamentaux/news non backtestables (pas d'historique).",
  "universeSize": 131,
  "years": 4.9,
@@ -7,459 +7,459 @@
  "rebalance": "≈ mensuel",
  "horizon": "≈ 1 mois",
  "costPerRebalancePct": 0.1,
- "annReturnMarket": 12.3,
- "marketMaxDrawdownPct": 21.2,
- "finalMarket": 177,
- "annReturnStrategy": 12.6,
- "hitRatePct": 58,
- "maxDrawdownPct": 20.2,
- "sharpe": 0.84,
- "finalStrategy": 180,
+ "annReturnMarket": 11.6,
+ "marketMaxDrawdownPct": 22.7,
+ "finalMarket": 172,
+ "annReturnStrategy": 11.7,
+ "hitRatePct": 51,
+ "maxDrawdownPct": 21.8,
+ "sharpe": 0.74,
+ "finalStrategy": 173,
  "quintileMonthlyReturnsPct": [
-  1.2,
-  1.5,
-  1.13,
-  0.95,
-  1.28
+  1.15,
+  1.25,
+  0.84,
+  1.24,
+  1.35
  ],
- "topMinusBottomMonthlyPct": -0.07,
+ "topMinusBottomMonthlyPct": -0.2,
  "monotonic": false,
  "strategies": [
   {
    "key": "composite",
    "label": "Modèle complet (tech+mom+RS)",
-   "annReturn": 12.6,
-   "vsMarket": 0.3,
-   "hitRatePct": 58,
-   "spreadMonthlyPct": -0.17,
-   "maxDrawdownPct": 20.2,
-   "sharpe": 0.84,
-   "final": 180
+   "annReturn": 11.7,
+   "vsMarket": 0.1,
+   "hitRatePct": 51,
+   "spreadMonthlyPct": -0.3,
+   "maxDrawdownPct": 21.8,
+   "sharpe": 0.74,
+   "final": 173
   },
   {
    "key": "momentum",
    "label": "Momentum seul",
-   "annReturn": 10.9,
-   "vsMarket": -1.4,
-   "hitRatePct": 51,
-   "spreadMonthlyPct": -0.18,
-   "maxDrawdownPct": 18.9,
-   "sharpe": 0.76,
-   "final": 167
+   "annReturn": 11.9,
+   "vsMarket": 0.3,
+   "hitRatePct": 49,
+   "spreadMonthlyPct": -0.13,
+   "maxDrawdownPct": 21.7,
+   "sharpe": 0.77,
+   "final": 174
   },
   {
    "key": "technique",
    "label": "Technique seule",
-   "annReturn": 11.3,
-   "vsMarket": -1,
-   "hitRatePct": 53,
-   "spreadMonthlyPct": -0.27,
-   "maxDrawdownPct": 20.2,
-   "sharpe": 0.79,
-   "final": 170
+   "annReturn": 7.8,
+   "vsMarket": -3.8,
+   "hitRatePct": 49,
+   "spreadMonthlyPct": -0.5,
+   "maxDrawdownPct": 22.6,
+   "sharpe": 0.57,
+   "final": 145
   },
   {
    "key": "forceRel",
    "label": "Force relative seule",
-   "annReturn": 17.4,
-   "vsMarket": 5.1,
-   "hitRatePct": 58,
-   "spreadMonthlyPct": 0.07,
-   "maxDrawdownPct": 20.7,
-   "sharpe": 1.05,
-   "final": 221
+   "annReturn": 15.5,
+   "vsMarket": 3.9,
+   "hitRatePct": 51,
+   "spreadMonthlyPct": -0.11,
+   "maxDrawdownPct": 23,
+   "sharpe": 0.86,
+   "final": 204
   },
   {
    "key": "trend",
    "label": "Trend template seul",
-   "annReturn": 19.7,
-   "vsMarket": 7.4,
-   "hitRatePct": 59,
-   "spreadMonthlyPct": 0.55,
-   "maxDrawdownPct": 17,
-   "sharpe": 1.13,
-   "final": 243
+   "annReturn": 15.1,
+   "vsMarket": 3.5,
+   "hitRatePct": 49,
+   "spreadMonthlyPct": 0.25,
+   "maxDrawdownPct": 21.4,
+   "sharpe": 0.82,
+   "final": 201
   },
   {
    "key": "retourMoyenne",
    "label": "Retour à la moyenne (survendu)",
-   "annReturn": 13.2,
-   "vsMarket": 0.9,
-   "hitRatePct": 49,
-   "spreadMonthlyPct": -0.74,
-   "maxDrawdownPct": 23.7,
-   "sharpe": 0.82,
-   "final": 184
+   "annReturn": 15.8,
+   "vsMarket": 4.2,
+   "hitRatePct": 56,
+   "spreadMonthlyPct": -0.41,
+   "maxDrawdownPct": 14,
+   "sharpe": 0.92,
+   "final": 207
   },
   {
    "key": "prudent",
    "label": "Modèle complet + filtre marché (prudent)",
-   "annReturn": 13.5,
-   "vsMarket": 1.2,
+   "annReturn": 8.5,
+   "vsMarket": -3.1,
    "hitRatePct": null,
    "spreadMonthlyPct": null,
-   "maxDrawdownPct": 11.5,
+   "maxDrawdownPct": 19.1,
    "sharpe": null,
-   "final": 187,
+   "final": 150,
    "note": "Investi 75 % du temps (marché haussier), cash le reste."
   }
  ],
- "bestKey": "trend",
+ "bestKey": "retourMoyenne",
  "verdict": "edge",
  "curve": [
   {
-   "date": "2021-09-20",
-   "strat": 102.5,
-   "market": 103.7,
-   "prudent": 102.5
+   "date": "2021-09-24",
+   "strat": 103.2,
+   "market": 102.5,
+   "prudent": 103.2
   },
   {
-   "date": "2021-10-19",
-   "strat": 108.6,
-   "market": 107.6,
-   "prudent": 108.6
+   "date": "2021-10-25",
+   "strat": 106.1,
+   "market": 105.3,
+   "prudent": 106.1
   },
   {
-   "date": "2021-11-17",
-   "strat": 102,
-   "market": 106,
-   "prudent": 102
+   "date": "2021-11-23",
+   "strat": 107.6,
+   "market": 106.1,
+   "prudent": 107.6
   },
   {
-   "date": "2021-12-17",
-   "strat": 99.2,
-   "market": 104,
-   "prudent": 99.2
+   "date": "2021-12-23",
+   "strat": 98,
+   "market": 97.8,
+   "prudent": 98
   },
   {
-   "date": "2022-01-19",
-   "strat": 100.2,
-   "market": 100.5,
-   "prudent": 100.2
+   "date": "2022-01-25",
+   "strat": 97.6,
+   "market": 96.3,
+   "prudent": 98
   },
   {
-   "date": "2022-02-17",
-   "strat": 106.2,
-   "market": 102.4,
-   "prudent": 100.2
+   "date": "2022-02-24",
+   "strat": 108.3,
+   "market": 102,
+   "prudent": 98
   },
   {
-   "date": "2022-03-21",
-   "strat": 110.9,
-   "market": 102.3,
-   "prudent": 100.2
+   "date": "2022-03-25",
+   "strat": 102.9,
+   "market": 93.7,
+   "prudent": 93.1
   },
   {
-   "date": "2022-04-20",
-   "strat": 100.3,
-   "market": 89.5,
-   "prudent": 100.2
+   "date": "2022-04-26",
+   "strat": 100.9,
+   "market": 89.3,
+   "prudent": 93.1
   },
   {
-   "date": "2022-05-19",
-   "strat": 95.7,
-   "market": 86.4,
-   "prudent": 100.2
+   "date": "2022-05-25",
+   "strat": 93.9,
+   "market": 87.5,
+   "prudent": 93.1
   },
   {
-   "date": "2022-06-21",
-   "strat": 93.5,
-   "market": 91.8,
-   "prudent": 100.2
-  },
-  {
-   "date": "2022-07-21",
-   "strat": 97.3,
-   "market": 97,
-   "prudent": 100.2
-  },
-  {
-   "date": "2022-08-19",
-   "strat": 90.8,
-   "market": 88.5,
-   "prudent": 100.2
-  },
-  {
-   "date": "2022-09-20",
-   "strat": 88.5,
-   "market": 84.8,
-   "prudent": 100.2
-  },
-  {
-   "date": "2022-10-19",
-   "strat": 96.2,
-   "market": 90.6,
-   "prudent": 100.2
-  },
-  {
-   "date": "2022-11-17",
-   "strat": 93.5,
-   "market": 87.6,
-   "prudent": 100.2
-  },
-  {
-   "date": "2022-12-19",
-   "strat": 93.1,
-   "market": 91.2,
-   "prudent": 100.2
-  },
-  {
-   "date": "2023-01-20",
-   "strat": 90.5,
-   "market": 91.7,
-   "prudent": 97.4
-  },
-  {
-   "date": "2023-02-21",
-   "strat": 89.3,
+   "date": "2022-06-27",
+   "strat": 93.2,
    "market": 90.3,
-   "prudent": 96.1
+   "prudent": 93.1
   },
   {
-   "date": "2023-03-22",
-   "strat": 91.8,
-   "market": 94.9,
-   "prudent": 98.8
+   "date": "2022-07-27",
+   "strat": 97,
+   "market": 94.2,
+   "prudent": 93.1
   },
   {
-   "date": "2023-04-21",
-   "strat": 94.8,
-   "market": 96.2,
-   "prudent": 102.1
+   "date": "2022-08-25",
+   "strat": 84.7,
+   "market": 82,
+   "prudent": 93.1
   },
   {
-   "date": "2023-05-22",
-   "strat": 102.4,
-   "market": 100.6,
-   "prudent": 110.2
+   "date": "2022-09-26",
+   "strat": 89.6,
+   "market": 86.6,
+   "prudent": 93.1
   },
   {
-   "date": "2023-06-22",
-   "strat": 106.4,
-   "market": 104.5,
-   "prudent": 114.5
+   "date": "2022-10-25",
+   "strat": 94.5,
+   "market": 90.4,
+   "prudent": 93.1
   },
   {
-   "date": "2023-07-24",
-   "strat": 103,
-   "market": 100.7,
-   "prudent": 110.9
+   "date": "2022-11-23",
+   "strat": 92.1,
+   "market": 86.3,
+   "prudent": 93.1
   },
   {
-   "date": "2023-08-22",
-   "strat": 100.7,
-   "market": 99.4,
-   "prudent": 108.3
+   "date": "2022-12-23",
+   "strat": 94.4,
+   "market": 91.1,
+   "prudent": 93.1
   },
   {
-   "date": "2023-09-21",
-   "strat": 99.2,
-   "market": 96.9,
-   "prudent": 106.7
+   "date": "2023-01-26",
+   "strat": 89.6,
+   "market": 89.4,
+   "prudent": 88.3
   },
   {
-   "date": "2023-10-20",
-   "strat": 103.4,
-   "market": 104.4,
-   "prudent": 106.7
+   "date": "2023-02-27",
+   "strat": 88.2,
+   "market": 89.1,
+   "prudent": 87
   },
   {
-   "date": "2023-11-20",
-   "strat": 108,
-   "market": 107.8,
-   "prudent": 111.5
+   "date": "2023-03-28",
+   "strat": 90.3,
+   "market": 92.8,
+   "prudent": 89.1
   },
   {
-   "date": "2023-12-20",
-   "strat": 111.9,
-   "market": 111.6,
-   "prudent": 115.5
+   "date": "2023-04-27",
+   "strat": 92.3,
+   "market": 94.4,
+   "prudent": 91
   },
   {
-   "date": "2024-01-23",
-   "strat": 119.2,
-   "market": 116.7,
-   "prudent": 123.1
+   "date": "2023-05-26",
+   "strat": 97,
+   "market": 98.2,
+   "prudent": 95.6
   },
   {
-   "date": "2024-02-22",
-   "strat": 125.7,
-   "market": 120.1,
-   "prudent": 129.8
+   "date": "2023-06-28",
+   "strat": 101.5,
+   "market": 102.8,
+   "prudent": 100.1
   },
   {
-   "date": "2024-03-22",
-   "strat": 121.5,
-   "market": 116.4,
-   "prudent": 125.5
+   "date": "2023-07-28",
+   "strat": 95.7,
+   "market": 99.5,
+   "prudent": 94.4
   },
   {
-   "date": "2024-04-23",
-   "strat": 125.9,
-   "market": 121.8,
-   "prudent": 130
+   "date": "2023-08-28",
+   "strat": 94.5,
+   "market": 95.9,
+   "prudent": 93.2
   },
   {
-   "date": "2024-05-22",
-   "strat": 129.3,
-   "market": 125,
-   "prudent": 133.5
+   "date": "2023-09-27",
+   "strat": 90.2,
+   "market": 92.9,
+   "prudent": 88.9
   },
   {
-   "date": "2024-06-24",
-   "strat": 125.3,
-   "market": 124.5,
-   "prudent": 129.4
+   "date": "2023-10-26",
+   "strat": 97.6,
+   "market": 102.1,
+   "prudent": 88.9
   },
   {
-   "date": "2024-07-24",
-   "strat": 131.3,
-   "market": 127.8,
-   "prudent": 135.6
+   "date": "2023-11-27",
+   "strat": 105.3,
+   "market": 107.3,
+   "prudent": 96
   },
   {
-   "date": "2024-08-22",
-   "strat": 134.9,
-   "market": 131.2,
-   "prudent": 139.3
+   "date": "2023-12-27",
+   "strat": 108.7,
+   "market": 110.6,
+   "prudent": 99.1
   },
   {
-   "date": "2024-09-23",
-   "strat": 138.3,
-   "market": 134.3,
-   "prudent": 142.8
+   "date": "2024-01-29",
+   "strat": 114.6,
+   "market": 113.8,
+   "prudent": 104.5
   },
   {
-   "date": "2024-10-22",
-   "strat": 144.8,
-   "market": 135.8,
-   "prudent": 149.5
+   "date": "2024-02-28",
+   "strat": 117.9,
+   "market": 117.9,
+   "prudent": 107.5
   },
   {
-   "date": "2024-11-20",
-   "strat": 144.1,
-   "market": 136.1,
-   "prudent": 148.8
+   "date": "2024-03-28",
+   "strat": 116.7,
+   "market": 114.8,
+   "prudent": 106.3
   },
   {
-   "date": "2024-12-20",
-   "strat": 147.9,
+   "date": "2024-04-29",
+   "strat": 121.2,
+   "market": 118.2,
+   "prudent": 110.4
+  },
+  {
+   "date": "2024-05-29",
+   "strat": 124.2,
+   "market": 122.6,
+   "prudent": 113.2
+  },
+  {
+   "date": "2024-06-28",
+   "strat": 116.4,
+   "market": 122,
+   "prudent": 106.1
+  },
+  {
+   "date": "2024-07-30",
+   "strat": 118.6,
+   "market": 125.5,
+   "prudent": 108
+  },
+  {
+   "date": "2024-08-28",
+   "strat": 120.3,
+   "market": 128.8,
+   "prudent": 109.6
+  },
+  {
+   "date": "2024-09-27",
+   "strat": 121.8,
+   "market": 130.7,
+   "prudent": 111
+  },
+  {
+   "date": "2024-10-28",
+   "strat": 134.4,
+   "market": 135.2,
+   "prudent": 122.5
+  },
+  {
+   "date": "2024-11-26",
+   "strat": 130.1,
+   "market": 134,
+   "prudent": 118.6
+  },
+  {
+   "date": "2024-12-27",
+   "strat": 134.1,
+   "market": 136.3,
+   "prudent": 122.2
+  },
+  {
+   "date": "2025-01-30",
+   "strat": 129.1,
+   "market": 131.3,
+   "prudent": 117.7
+  },
+  {
+   "date": "2025-03-03",
+   "strat": 124.3,
+   "market": 126.4,
+   "prudent": 113.3
+  },
+  {
+   "date": "2025-04-01",
+   "strat": 120.4,
+   "market": 125.8,
+   "prudent": 113.3
+  },
+  {
+   "date": "2025-05-01",
+   "strat": 124.4,
+   "market": 133.2,
+   "prudent": 113.3
+  },
+  {
+   "date": "2025-06-02",
+   "strat": 127.1,
+   "market": 139.8,
+   "prudent": 115.7
+  },
+  {
+   "date": "2025-07-02",
+   "strat": 124.8,
    "market": 140,
-   "prudent": 152.7
+   "prudent": 113.6
   },
   {
-   "date": "2025-01-24",
-   "strat": 140.6,
-   "market": 136.7,
-   "prudent": 145.2
+   "date": "2025-08-01",
+   "strat": 124,
+   "market": 144,
+   "prudent": 112.8
   },
   {
-   "date": "2025-02-25",
-   "strat": 135.1,
-   "market": 131.1,
-   "prudent": 139.5
+   "date": "2025-09-02",
+   "strat": 133.3,
+   "market": 150.6,
+   "prudent": 121.4
   },
   {
-   "date": "2025-03-26",
-   "strat": 131.7,
-   "market": 126.8,
-   "prudent": 139.5
+   "date": "2025-10-01",
+   "strat": 140.2,
+   "market": 153.1,
+   "prudent": 127.7
   },
   {
-   "date": "2025-04-25",
+   "date": "2025-10-30",
+   "strat": 136.5,
+   "market": 152.9,
+   "prudent": 124.3
+  },
+  {
+   "date": "2025-12-01",
    "strat": 138.4,
-   "market": 135.9,
-   "prudent": 139.5
+   "market": 153.6,
+   "prudent": 126
   },
   {
-   "date": "2025-05-27",
-   "strat": 145.3,
-   "market": 140.9,
-   "prudent": 146.4
-  },
-  {
-   "date": "2025-06-26",
+   "date": "2025-12-31",
    "strat": 149.3,
-   "market": 146.6,
-   "prudent": 150.4
+   "market": 156.6,
+   "prudent": 135.9
   },
   {
-   "date": "2025-07-28",
-   "strat": 147.4,
-   "market": 148.4,
-   "prudent": 148.6
+   "date": "2026-02-02",
+   "strat": 152.8,
+   "market": 154.2,
+   "prudent": 139.2
   },
   {
-   "date": "2025-08-26",
-   "strat": 156.4,
-   "market": 151.6,
-   "prudent": 157.6
+   "date": "2026-03-04",
+   "strat": 151.6,
+   "market": 147.7,
+   "prudent": 138
   },
   {
-   "date": "2025-09-25",
-   "strat": 163.6,
-   "market": 155.9,
-   "prudent": 164.8
+   "date": "2026-04-02",
+   "strat": 159.6,
+   "market": 161.6,
+   "prudent": 138
   },
   {
-   "date": "2025-10-24",
-   "strat": 160.7,
-   "market": 153.9,
-   "prudent": 162
+   "date": "2026-05-04",
+   "strat": 178.3,
+   "market": 169.5,
+   "prudent": 154.2
   },
   {
-   "date": "2025-11-24",
-   "strat": 166.1,
-   "market": 159.1,
-   "prudent": 167.4
+   "date": "2026-06-03",
+   "strat": 175.5,
+   "market": 169.2,
+   "prudent": 151.8
   },
   {
-   "date": "2025-12-24",
-   "strat": 172.9,
-   "market": 160.1,
-   "prudent": 174.3
-  },
-  {
-   "date": "2026-01-27",
-   "strat": 180.8,
-   "market": 158.5,
-   "prudent": 182.3
-  },
-  {
-   "date": "2026-02-26",
-   "strat": 167.8,
-   "market": 146.2,
-   "prudent": 169.2
-  },
-  {
-   "date": "2026-03-27",
-   "strat": 162.6,
-   "market": 163.8,
-   "prudent": 169.2
-  },
-  {
-   "date": "2026-04-28",
-   "strat": 180.3,
+   "date": "2026-07-06",
+   "strat": 174.1,
    "market": 173.6,
-   "prudent": 187.6
+   "prudent": 150.6
   },
   {
-   "date": "2026-05-28",
-   "strat": 188.8,
-   "market": 170.7,
-   "prudent": 196.4
-  },
-  {
-   "date": "2026-06-29",
-   "strat": 172.9,
-   "market": 167.9,
-   "prudent": 179.8
-  },
-  {
-   "date": "2026-07-29",
-   "strat": 180,
-   "market": 177.4,
-   "prudent": 187.2
+   "date": "2026-08-04",
+   "strat": 173,
+   "market": 172.1,
+   "prudent": 149.6
   }
  ],
  "caveats": [
