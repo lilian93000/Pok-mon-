@@ -1228,11 +1228,11 @@
   "date": "2026-09-15",
   "top": [
    {
-    "symbol": "ITIC",
-    "score": 81
+    "symbol": "RDVT",
+    "score": 82
    },
    {
-    "symbol": "RDVT",
+    "symbol": "ITIC",
     "score": 81
    },
    {
@@ -1241,10 +1241,10 @@
    },
    {
     "symbol": "MTCH",
-    "score": 80
+    "score": 79
    },
    {
-    "symbol": "BWFG",
+    "symbol": "KGEI",
     "score": 79
    }
   ]
