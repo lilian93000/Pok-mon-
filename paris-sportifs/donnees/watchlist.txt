@@ -22,6 +22,7 @@ Ann Li
 Anna Blinkova
 Anna Bondar
 Anna Kalinskaya
+Anna Lena Friedsam
 Anna Siskova
 Annika Penickova
 Anouk Koevermans
@@ -41,11 +42,13 @@ Beatriz Haddad Maia
 Belinda Bencic
 Berfu Cengiz
 Bianca Andreescu
+Boyoung Jeong
 Cadence Brace
 Capucine Jauffret
 Carla Tomai
 Carlota Martinez Cirez
 Carol Young Suh Lee
+Carol Zhao
 Carole Monnet
 Carolina Alves
 Caroline Dolehide
@@ -67,6 +70,7 @@ Darya Astakhova
 Dayana Yastremska
 Deborah Chiesa
 Denisa Zoldakova
+Desirae Krawczyk
 Despina Papamichail
 Diana Shnaider
 Diane Parry
@@ -88,6 +92,7 @@ Elise Mertens
 Elizabeth Mandlik
 Elizara Yaneva
 Ella Seidel
+Ellen Perez
 Elsa Jacquemot
 Elvina Kalieva
 Emerson Jones
@@ -98,6 +103,7 @@ En Shuo Liang
 Erika Andreeva
 Eva Bennemann
 Eva Lys
+Eva Marie Desvignes
 Eva Vedder
 Fangran Tian
 Fernanda Labrana
@@ -118,6 +124,7 @@ Hanne Vandewinkel
 Hanyu Guo
 Harmony Tan
 Harriet Dart
+Haruka Kaji
 Hayu Kinoshita
 Heather Watson
 Himeno Sakatsume
@@ -162,7 +169,9 @@ Kristina Liutova
 Kristina Mladenovic
 Kristina Novak
 Kristina Penickova
+Kwan Yau Ng
 Kylie Collins
+Kyoka Okamura
 Lanlana Tararudee
 Laura Pigossi
 Laura Samson
@@ -216,6 +225,7 @@ Mary Stoiana
 Matilde Jorge
 Maya Joint
 Mayar Sherif
+Mei Yamaguchi
 Mell Elizabeth Reasco Gonzalez
 Mia Pohankova
 Mia Ristic
@@ -230,6 +240,7 @@ Nao Hibino
 Naomi Osaka
 Nastasja Schunk
 Nauhany Vitoria Leme Da Silva
+Nika Radisic
 Nikola Bartunkova
 Noemi Basiletti
 Noma Noha Akugue
@@ -255,12 +266,14 @@ Rebecca Sramkova
 Rebeka Masarova
 Reese Brantmeier
 Renata Zarazua
+Rina Saigo
 Robin Montgomery
 Rositsa Dencheva
 Ruth Roura Llaverias
 Samira De Stefano
 Sana Garakani
 Sara Bejlek
+Sara Saito
 Sara Sorribes Tormo
 Shuai Zhang
 Sinja Kraus
@@ -268,6 +281,7 @@ Sloane Stephens
 Sofia Costoulas
 Sofia Johnson
 Sofia Kenin
+Sofya Lansere
 Solana Sierra
 Sorana Cirstea
 Stephanie Judith Visscher
@@ -284,6 +298,7 @@ Teodora Kostovic
 Teresa Franco Dias
 Tereza Valentova
 Tyra Caterina Grant
+Ulrikke Eikeri
 Varvara Lepchenko
 Vendula Valdmannova
 Veronika Erjavec
@@ -294,12 +309,15 @@ Victoria Luiza Barros
 Victoria Mboko
 Victoria Rodriguez
 Viktoria Hruncakova
+Viktoria Morvayova
 Vivian Wolff
 Weronika Falkowska
 Whitney Osuigwe
 Xiaodi You
+Xinxin Yao
 Xinyu Gao
 Yasmine Kabbaj
+Ye Xin Ma
 Yeon Woo Ku
 Yue Yuan
 Yuliia Starodubtseva
