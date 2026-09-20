@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-13T10:48:50.775Z",
+ "generatedAt": "2026-09-20T10:18:27.748Z",
  "method": "Validation hors-échantillon : re-test du trend template sur des périodes distinctes (1re/2e moitié) et sur un panier d'actions entièrement différent (univers B).",
  "universeA": 74,
  "universeB": 103,
@@ -11,20 +11,20 @@
    "trend": {
     "periods": 59,
     "years": 5,
-    "annStrat": 15,
-    "annMkt": 11.6,
-    "vsMarket": 3.5,
-    "hitPct": 54,
-    "spread": 0.29
+    "annStrat": 16.6,
+    "annMkt": 11.8,
+    "vsMarket": 4.7,
+    "hitPct": 68,
+    "spread": 0.24
    },
    "composite": {
     "periods": 59,
     "years": 5,
-    "annStrat": 13.1,
-    "annMkt": 11.6,
-    "vsMarket": 1.5,
+    "annStrat": 13.6,
+    "annMkt": 11.8,
+    "vsMarket": 1.7,
     "hitPct": 51,
-    "spread": -0.14
+    "spread": -0.39
    }
   },
   {
@@ -34,20 +34,20 @@
    "trend": {
     "periods": 29,
     "years": 2.5,
-    "annStrat": 9.5,
-    "annMkt": 5.3,
-    "vsMarket": 4.1,
-    "hitPct": 59,
-    "spread": 0.06
+    "annStrat": 17,
+    "annMkt": 6.6,
+    "vsMarket": 10.4,
+    "hitPct": 69,
+    "spread": 0.02
    },
    "composite": {
     "periods": 29,
     "years": 2.5,
-    "annStrat": 5.4,
-    "annMkt": 5.3,
-    "vsMarket": 0.1,
-    "hitPct": 55,
-    "spread": -0.71
+    "annStrat": 9.6,
+    "annMkt": 6.6,
+    "vsMarket": 3,
+    "hitPct": 48,
+    "spread": -0.4
    }
   },
   {
@@ -57,20 +57,20 @@
    "trend": {
     "periods": 29,
     "years": 2.5,
-    "annStrat": 19.2,
-    "annMkt": 17.4,
-    "vsMarket": 1.8,
-    "hitPct": 45,
-    "spread": 0.72
+    "annStrat": 17.2,
+    "annMkt": 17,
+    "vsMarket": 0.1,
+    "hitPct": 55,
+    "spread": 0.32
    },
    "composite": {
     "periods": 29,
     "years": 2.5,
-    "annStrat": 15.2,
-    "annMkt": 17.4,
-    "vsMarket": -2.3,
+    "annStrat": 13.1,
+    "annMkt": 17,
+    "vsMarket": -3.9,
     "hitPct": 41,
-    "spread": -0.31
+    "spread": -0.46
    }
   },
   {
@@ -80,20 +80,20 @@
    "trend": {
     "periods": 59,
     "years": 5,
-    "annStrat": 7,
-    "annMkt": 11.6,
-    "vsMarket": -4.6,
-    "hitPct": 47,
-    "spread": -0.27
+    "annStrat": 8.1,
+    "annMkt": 11.8,
+    "vsMarket": -3.7,
+    "hitPct": 44,
+    "spread": -0.19
    },
    "composite": {
     "periods": 59,
     "years": 5,
-    "annStrat": 7.8,
-    "annMkt": 11.6,
-    "vsMarket": -3.8,
-    "hitPct": 47,
-    "spread": -0.46
+    "annStrat": 1,
+    "annMkt": 11.8,
+    "vsMarket": -10.8,
+    "hitPct": 42,
+    "spread": -1.22
    }
   },
   {
@@ -103,20 +103,20 @@
    "trend": {
     "periods": 29,
     "years": 2.5,
-    "annStrat": 8.9,
-    "annMkt": 17.4,
-    "vsMarket": -8.5,
+    "annStrat": 12.1,
+    "annMkt": 17,
+    "vsMarket": -4.9,
     "hitPct": 38,
-    "spread": 0.64
+    "spread": 0.85
    },
    "composite": {
     "periods": 29,
     "years": 2.5,
-    "annStrat": 13.1,
-    "annMkt": 17.4,
-    "vsMarket": -4.4,
-    "hitPct": 38,
-    "spread": 0.21
+    "annStrat": 18.5,
+    "annMkt": 17,
+    "vsMarket": 1.4,
+    "hitPct": 48,
+    "spread": 0.83
    }
   }
  ],
