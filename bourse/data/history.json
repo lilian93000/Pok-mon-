@@ -1329,23 +1329,23 @@
   "top": [
    {
     "symbol": "PURR",
-    "score": 81
+    "score": 83
    },
    {
-    "symbol": "AFGB",
-    "score": 81
-   },
-   {
-    "symbol": "RDVT",
-    "score": 81
-   },
-   {
-    "symbol": "REPX",
-    "score": 80
+    "symbol": "AFGD",
+    "score": 82
    },
    {
     "symbol": "SBC",
+    "score": 81
+   },
+   {
+    "symbol": "MG",
     "score": 80
+   },
+   {
+    "symbol": "NVDA",
+    "score": 79
    }
   ]
  }
