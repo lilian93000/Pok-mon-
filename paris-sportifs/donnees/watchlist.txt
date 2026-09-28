@@ -1,6 +1,7 @@
 Akasha Urhobo
 Alevtina Ibragimova
 Alexandra Eala
+Alexandra Panova
 Alexandra Shubladze
 Aliaksandra Sasnovich
 Alice Tubello
@@ -29,6 +30,7 @@ Anna Lena Friedsam
 Anna Siskova
 Annika Penickova
 Anouk Koevermans
+Antonia Ruzic
 Aoi Ito
 Arantxa Rus
 Ariana Arseneault
@@ -64,6 +66,7 @@ Carson Branstine
 Caty Mcnally
 Celia Cervino Ruiz
 Chengyiyi Yuan
+Chenting Zhu
 Chloe Paquet
 Claire Liu
 Clara Burel
@@ -197,6 +200,7 @@ Kristina Liutova
 Kristina Mladenovic
 Kristina Novak
 Kristina Penickova
+Ksenia Efremova
 Ksenia Zaytseva
 Kwan Yau Ng
 Kylie Collins
@@ -290,6 +294,7 @@ Nuria Sarganella Verdu
 Oceane Dodin
 Oksana Selekhmeteva
 Oleksandra Oliynykova
+Olivia Nicholls
 Panna Udvardy
 Paula Badosa
 Petra Marcinko
@@ -308,8 +313,10 @@ Rebeka Masarova
 Reese Brantmeier
 Renata Zarazua
 Rina Saigo
+Rinko Matsuda
 Robin Montgomery
 Rositsa Dencheva
+Ruien Zhang
 Ruth Roura Llaverias
 Sahaja Yamalapalli
 Samira De Stefano
@@ -318,6 +325,7 @@ Sara Bejlek
 Sara Saito
 Sara Sorribes Tormo
 Semra Aksu
+Shiyu Ye
 Shuai Zhang
 Sinja Kraus
 Sloane Stephens
@@ -343,10 +351,12 @@ Taylor Townsend
 Tena Lukas
 Teodora Kostovic
 Teresa Franco Dias
+Tereza Mihalikova
 Tereza Valentova
 Tyra Caterina Grant
 Ulrikke Eikeri
 Valentina Steiner
+Valeria Savinykh
 Varvara Lepchenko
 Vendula Valdmannova
 Veronika Erjavec
@@ -368,9 +378,13 @@ Yana Morderger
 Yasmine Kabbaj
 Ye Xin Ma
 Yeon Woo Ku
+Yiming Dang
 Yue Yuan
+Yufei Ren
 Yuki Naito
 Yuliia Starodubtseva
 Zeynep Sonmez
 Zhibek Kulambayeva
+Zhuoxuan Bai
+Zongyu Li
 Zuzanna Pawlikowska
