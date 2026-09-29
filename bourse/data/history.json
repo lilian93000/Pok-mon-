@@ -1423,5 +1423,30 @@
     "score": 78
    }
   ]
+ },
+ {
+  "date": "2026-09-29",
+  "top": [
+   {
+    "symbol": "CIX",
+    "score": 82
+   },
+   {
+    "symbol": "AFGB",
+    "score": 81
+   },
+   {
+    "symbol": "RDVT",
+    "score": 81
+   },
+   {
+    "symbol": "KEYS",
+    "score": 79
+   },
+   {
+    "symbol": "IMAX",
+    "score": 79
+   }
+  ]
  }
 ]
