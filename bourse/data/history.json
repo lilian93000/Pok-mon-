@@ -1448,5 +1448,30 @@
     "score": 79
    }
   ]
+ },
+ {
+  "date": "2026-09-30",
+  "top": [
+   {
+    "symbol": "CIX",
+    "score": 82
+   },
+   {
+    "symbol": "RDVT",
+    "score": 80
+   },
+   {
+    "symbol": "IMAX",
+    "score": 80
+   },
+   {
+    "symbol": "NTAP",
+    "score": 78
+   },
+   {
+    "symbol": "HQI",
+    "score": 78
+   }
+  ]
  }
 ]
