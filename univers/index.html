@@ -18,6 +18,8 @@
   --dim: #8d97ad;
   --accent: #f3c27a;
   --accent-ink: #1a1206;
+  --field: #6fd8ff;
+  --field-glow: rgba(111, 216, 255, 0.35);
   --font-display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
   --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -178,12 +180,45 @@ body {
   position: absolute; inset: 0; display: grid; place-items: center;
   font: 12px var(--font-data); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
 }
+#v3d-field {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 10px 16px 10px 12px; border-radius: 999px; cursor: pointer;
+  font: 500 13px var(--font-body); color: var(--ink);
+  background: var(--panel); border: 1px solid var(--line);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+#v3d-field .ico {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--dim); position: relative;
+}
+#v3d-field .ico::before, #v3d-field .ico::after {
+  content: ""; position: absolute; top: 50%; left: 50%; border: 1.5px solid var(--dim); border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+#v3d-field .ico::before { width: 8px; height: 16px; }
+#v3d-field .ico::after { width: 2px; height: 2px; background: var(--dim); }
+#v3d-field.on { border-color: var(--field); box-shadow: 0 0 22px var(--field-glow); }
+#v3d-field.on .ico, #v3d-field.on .ico::before, #v3d-field.on .ico::after { border-color: var(--field); }
+#v3d-field.on .ico::after { background: var(--field); }
+#v3d-field:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+#v3d-field-info {
+  position: absolute; left: 16px; top: calc(66px + env(safe-area-inset-top, 0px));
+  width: 300px; padding: 12px 14px; font-size: 12.5px; line-height: 1.5; color: var(--dim);
+}
+#v3d-field-info strong {
+  display: block; margin-bottom: 4px;
+  font: 500 10px var(--font-data); letter-spacing: 0.14em; text-transform: uppercase; color: var(--field);
+}
 body.in3d #panel { z-index: 5; }
 body.in3d #levels, body.in3d #scale, body.in3d #time, body.in3d #search-box, body.in3d #brand { visibility: hidden; }
 
 @media (max-width: 760px) {
   body.in3d #panel { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); max-height: 38%; }
   #v3d-hint { display: none; }
+  #v3d-field { left: auto; right: 16px; transform: none; top: calc(16px + env(safe-area-inset-top, 0px)); bottom: auto; padding: 8px 12px 8px 10px; }
+  #v3d-field-info { display: none; }
   #brand { right: 16px; max-width: none; }
   #brand h1 { font-size: 15px; }
   #brand p { display: none; }
@@ -254,6 +289,8 @@ body.in3d #levels, body.in3d #scale, body.in3d #time, body.in3d #search-box, bod
   <canvas aria-label="Vue 3D interactive de l'astre"></canvas>
   <button type="button" id="v3d-back">← Retour à la carte</button>
   <div id="v3d-hint">Glisser pour tourner · molette ou pincement pour zoomer</div>
+  <button type="button" id="v3d-field" aria-pressed="true" hidden><span class="ico" aria-hidden="true"></span>Champ magnétique</button>
+  <div id="v3d-field-info" class="glass" hidden></div>
   <div id="v3d-loading" hidden>Génération…</div>
 </div>
 
@@ -1337,6 +1374,12 @@ document.getElementById("v3d-back").addEventListener("click", () => {
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="textures.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 <script src="viewer3d.js"></script>
 </body>
 </html>

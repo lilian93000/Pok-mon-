@@ -72,6 +72,13 @@ on zoome en continu de la Terre et la Lune jusqu'au fond diffus cosmologique, à
   TRAPPIST-1 et ses 7 planètes, un trou noir avec lentille gravitationnelle,
   un quasar et ses jets, des galaxies, des nébuleuses, des amas, la sonde Voyager 1,
   l'héliopause, la toile cosmique et le fond diffus cosmologique.
+- **Champs magnétiques** (bouton « Champ magnétique » dans la vue 3D) : magnétosphère
+  terrestre avec ceintures de Van Allen, aurores, onde de choc et vent solaire ;
+  boucles coronales du Soleil ; magnétosphères géantes de Jupiter (tore d'Io) et
+  Saturne ; champs basculés d'Uranus et Neptune ; magnétisme fossile de Mars ;
+  magnétosphère induite de Vénus ; pulsar du Crabe et ses faisceaux ; jets en hélice
+  des trous noirs ; champ de la Voie lactée ; spirale de Parker jusqu'à l'héliopause.
+- Lueur cinématographique (bloom) et ciel avec la bande de la Voie lactée.
 
 Ouvre simplement `univers/index.html` dans ton navigateur (aucune installation ;
 la vue 3D charge Three.js depuis un CDN, il faut donc être connecté).

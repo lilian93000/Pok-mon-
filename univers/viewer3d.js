@@ -590,6 +590,8 @@
     moonPivot.rotation.y = 2.2;
     updaters.push((dt) => { moonPivot.rotation.y += dt * 0.02; });
     light.intensity = 1.2;
+    ctx3.sunDir = sunDir;
+    distantSun(sunDir);
     return { dist: 3.2, minD: 1.35, maxD: 14, theta: 0.1 };
   };
 
@@ -636,6 +638,8 @@
       const sc = light.shadow.camera; sc.left = sc.bottom = -3; sc.right = sc.top = 3; sc.near = 20; sc.far = 40;
     }
     updaters.push((dt) => { mesh.rotation.y += dt * (info.spin || 0.05); });
+    Object.assign(ctx3, { sunDir, mesh, tilt });
+    distantSun(sunDir);
     return { dist: info.ring ? 5.6 : 3.1, minD: 1.3, maxD: 14, phi: info.ring ? 1.0 : 1.35, theta: -0.35 };
   };
 
@@ -643,7 +647,8 @@
     const s = makeStar({ color: "#ffcf70", hot: [1, 0.93, 0.62], cool: [0.95, 0.42, 0.08], freq: 6, spots: 0.55, rays: 90, seed: 7 });
     scene.add(s);
     prominences(s, 1, 0xff7a30, 9, 4);
-    return { dist: 4.2, minD: 1.4, maxD: 16 };
+    ctx3.star = s;
+    return { dist: 4.2, minD: 1.4, maxD: 16, bloom: [0.55, 0.4, 0.9] };
   };
 
   // Paramètres d'étoiles particulières
@@ -690,16 +695,17 @@
 
   B.star = function (o) {
     const P = starPreset(o);
-    let view = { dist: 4.4, minD: 1.5, maxD: 30 };
+    let view = { dist: 4.4, minD: 1.5, maxD: 30, bloom: [0.55, 0.4, 0.9] };
     if (o.name === "Alpha du Centaure A et B" || o.name === "Capella") {
       const piv = new T.Group(); scene.add(piv);
-      const a = makeStar({ ...P, color: o.color, radius: 1 }); a.position.x = -1.9; piv.add(a);
+      const a = makeStar({ ...P, color: o.color, radius: 1 }); a.position.x = -1.9; piv.add(a); ctx3.star = a;
       const b = makeStar({ ...P, color: o.name === "Capella" ? "#ffd27a" : "#ffc080", radius: o.name === "Capella" ? 0.85 : 0.86, seed: P.seed + 9 });
       b.position.x = 2.3; piv.add(b);
       updaters.push((dt) => { piv.rotation.y += dt * 0.08; });
       view = { dist: 9, minD: 3, maxD: 40, phi: 1.3 };
     } else if (o.name === "Sirius") {
-      scene.add(makeStar({ ...P, radius: 1, hot: [0.9, 0.95, 1], cool: [0.55, 0.65, 0.95] }));
+      ctx3.star = makeStar({ ...P, radius: 1, hot: [0.9, 0.95, 1], cool: [0.55, 0.65, 0.95] });
+      scene.add(ctx3.star);
       const piv = new T.Group(); scene.add(piv);
       const b = makeStar({ color: "#e8f0ff", hot: [1, 1, 1], cool: [0.7, 0.8, 1], radius: 0.12, corona: 6, seed: 51 });
       b.position.x = 4.5; piv.add(b);
@@ -709,7 +715,7 @@
       view = { dist: 9, minD: 2, maxD: 30, phi: 1.2 };
     } else {
       const s = makeStar({ ...P, radius: 1 });
-      scene.add(s);
+      scene.add(s); ctx3.star = s;
       if (/Naine rouge/.test(o.label)) prominences(s, 1, 0xff5020, 6, P.seed);
     }
     if (o.name === "TRAPPIST-1") {
@@ -730,6 +736,7 @@
       }));
       view = { dist: 11, minD: 2, maxD: 30, phi: 1.15 };
     }
+    view.bloom = view.bloom || [0.55, 0.4, 0.9];
     return view;
   };
 
@@ -944,6 +951,7 @@
     }
     if (o.gtype === "spiral" && o.id !== "Voie lactée") g.rotation.x = (1 - (o.tilt || 1)) * 1.2;
     scene.add(g);
+    Object.assign(ctx3, { g, gopts: opts });
     updaters.push((dt) => { g.rotation.y += dt * 0.025; });
     const small = opts.type === "irr";
     return { dist: small ? 14 : 27, minD: 3, maxD: 60, phi: 1.05 };
@@ -994,6 +1002,7 @@
       });
     }
     if (crab) {
+      ctx3.crab = grp;
       // filaments et pulsar central
       for (let f = 0; f < 70; f++) {
         const d = new T.Vector3(gauss(r), gauss(r), gauss(r)).normalize(), pts = [];
@@ -1274,14 +1283,502 @@
     const sun = glowSprite(new T.Color(1, 0.9, 0.7), 3, 1); sun.position.copy(sunDir).multiplyScalar(200); scene.add(sun);
     const sl = textSprite("Soleil (à 23 heures-lumière)", "#ffd88a", 6); sl.position.copy(sun.position).add(new T.Vector3(3, 2, 0)); scene.add(sl);
     v.rotation.set(0.25, 0.4, 0.1);
+    ctx3.sunDir = sunDir;
     updaters.push((dt) => { v.rotation.y += dt * 0.04; });
     return { dist: 11, minD: 4, maxD: 30, phi: 1.3 };
   };
 
   /* ---------------------------------------------------------------------
+     Ciel : bande de la Voie lactée générée, et Soleil lointain
+     --------------------------------------------------------------------- */
+  let ctx3 = {};
+  function skySphere() {
+    const tex = cached("sky", () => {
+      const pole = new T.Vector3(0.35, 0.86, -0.37).normalize(), core = new T.Vector3(-0.8, 0.3, 0.52).normalize();
+      core.addScaledVector(pole, -core.dot(pole)).normalize();
+      const d = new T.Vector3();
+      return canvasTex(sphereTex(1024, 512, (x, y, z) => {
+        d.set(x, y, z);
+        const b = d.dot(pole), c = d.dot(core);
+        const n = fbm(x * 3 + 7, y * 3, z * 3, 5), dust = fbm(x * 7, y * 7 + 3, z * 7, 4);
+        const band = Math.exp(-Math.pow(b / (0.13 + 0.05 * n), 2)) * (0.55 + 0.45 * c * c * (c > 0 ? 1 : 0.4));
+        let v = band * (0.55 + 0.6 * n) - Math.max(0, dust + 0.05) * Math.exp(-Math.pow(b / 0.05, 2)) * 1.1;
+        v = Math.max(0, v);
+        const warm = Math.max(0, c);
+        v *= 0.6;
+        C[0] = Math.min(255, 3 + v * (120 + 70 * warm)); C[1] = Math.min(255, 4 + v * (105 + 40 * warm)); C[2] = Math.min(255, 9 + v * (130 - 30 * warm));
+        // nébuleuses lointaines
+        const neb = fbm(x * 1.6 + 2, y * 1.6, z * 1.6 + 9, 4);
+        if (neb > 0.2) { const k = (neb - 0.2) * 35; C[0] += k * 0.9; C[2] += k * 0.6; }
+      }));
+    });
+    const m = new T.Mesh(new T.SphereGeometry(900, 64, 32), new T.MeshBasicMaterial({ map: tex, side: T.BackSide, depthWrite: false, toneMapped: false }));
+    m.renderOrder = -2;
+    return m;
+  }
+  function distantSun(dir) {
+    const p = dir.clone().multiplyScalar(500);
+    const a = glowSprite(new T.Color(1, 0.95, 0.85), 14, 1); a.position.copy(p); scene.add(a);
+    const b = glowSprite(new T.Color(1, 0.75, 0.45), 60, 0.35); b.position.copy(p); scene.add(b);
+  }
+
+  /* ---------------------------------------------------------------------
+     Champs magnétiques
+     --------------------------------------------------------------------- */
+  U.ff = { value: 0 };   // fondu d'apparition du champ
+  function fieldMaterial(colA, colB, opts = {}) {
+    const m = new T.ShaderMaterial({
+      uniforms: {
+        time: { value: 0 }, colA: { value: new T.Color(colA) }, colB: { value: new T.Color(colB) },
+        speed: { value: opts.speed ?? 1 }, op: { value: opts.opacity ?? 1 }, dens: { value: opts.dens ?? 4 }, ff: U.ff,
+      },
+      vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      fragmentShader: `
+        uniform float time; uniform vec3 colA; uniform vec3 colB; uniform float speed; uniform float op; uniform float dens; uniform float ff;
+        varying vec2 vUv;
+        void main(){
+          float t = vUv.x, ph = vUv.y;
+          float s = fract(t * dens - time * speed * 0.22 + ph);
+          float pulse = pow(smoothstep(0.0, 0.9, s) * (1.0 - smoothstep(0.9, 1.0, s)), 4.0);
+          vec3 c = mix(colA, colB, abs(t * 2.0 - 1.0));
+          float fade = smoothstep(0.0, 0.03, t) * smoothstep(1.0, 0.97, t);
+          float reveal = smoothstep(ph * 0.3, ph * 0.3 + 0.7, ff * 1.0);
+          gl_FragColor = vec4(c * (0.14 + 1.25 * pulse) * op * fade * reveal, 1.0);
+        }`,
+      transparent: true, blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide,
+    });
+    updaters.push((dt, t) => { m.uniforms.time.value = t; });
+    return m;
+  }
+  function fluxTube(points, radius, mat, phase, segs) {
+    const g = new T.TubeGeometry(new T.CatmullRomCurve3(points), segs || Math.min(200, points.length * 2), radius, 5, false);
+    const uv = g.attributes.uv;
+    for (let i = 0; i < uv.count; i++) uv.setY(i, phase);
+    const m = new T.Mesh(g, mat); m.frustumCulled = false;
+    return m;
+  }
+  const V = (x, y, z) => new T.Vector3(x, y, z);
+  // Ligne de champ dipolaire r = L cos²λ, axe magnétique = y
+  function dipolePts(L, phi, n = 90, rMin = 1) {
+    const lm = Math.acos(Math.sqrt(Math.min(1, rMin / L))), pts = [];
+    for (let i = 0; i < n; i++) {
+      const lam = -lm + 2 * lm * i / (n - 1), r = L * Math.cos(lam) ** 2;
+      pts.push(V(r * Math.cos(lam) * Math.cos(phi), r * Math.sin(lam), r * Math.cos(lam) * Math.sin(phi)));
+    }
+    return pts;
+  }
+  // Compression côté jour, étirement côté nuit (vent solaire venant de s)
+  function windDeform(p, s, k) {
+    const d = p.dot(s);
+    const nd = d > 0 ? d / (1 + k * d) : d * (1 + 0.55 * k * -d);
+    return p.addScaledVector(s, nd - d);
+  }
+  function fieldCloud(n, f) { const c = cloud(n, f); c.material.uniforms.opacity = U.ff; return c; }
+
+  // Magnétosphère complète : lignes fermées, queue, ceintures, ovale auroral, onde de choc, vent solaire
+  function magnetosphere(grp, s, o) {
+    const mat = fieldMaterial(o.colA, o.colB, { dens: o.dens || 3, speed: o.speed || 1, opacity: o.opacity ?? 0.85 });
+    const tailMat = fieldMaterial(o.colB, o.colA, { dens: 2.5, speed: 1.4, opacity: (o.opacity ?? 0.85) * 0.8 });
+    const up = V(0, 1, 0), side = new T.Vector3().crossVectors(up, s).normalize();
+    const r = rng(o.seed || 1);
+    for (let i = 0; i < o.nPhi; i++) {
+      const phi = i / o.nPhi * Math.PI * 2 + 0.11;
+      const h = V(Math.cos(phi), 0, Math.sin(phi)), night = h.dot(s);
+      o.Ls.forEach((L, j) => {
+        if (o.tailFrom && L >= o.tailFrom && night < -0.2) {
+          // lignes ouvertes de la queue magnétique
+          for (const sg of [1, -1]) {
+            const lm = Math.acos(Math.sqrt(1 / L)), pts = [];
+            for (let k = 0; k < 14; k++) {
+              const lam = sg * (lm - (lm - 0.95) * k / 13), rr = L * Math.cos(lam) ** 2;
+              pts.push(windDeform(V(rr * Math.cos(lam) * Math.cos(phi), rr * Math.sin(lam), rr * Math.cos(lam) * Math.sin(phi)), s, o.k));
+            }
+            const last = pts[pts.length - 1], sc = o.tailScale || 1, lat = h.dot(side);
+            [0.25, 0.5, 0.75, 1].forEach((f, k) => {
+              const d = o.tailLen * f;
+              pts.push(V(0, 0, 0).addScaledVector(s, -(Math.max(0, -last.dot(s)) + d)).addScaledVector(up, sg * (Math.abs(last.y) * (1 - f) + (o.tailH || 2.2) * sc * f)).addScaledVector(side, lat * (o.tailW || 3) * sc * (0.5 + f * 0.6)));
+            });
+            grp.add(fluxTube(pts, o.radius * 0.8, tailMat, r(), 120));
+          }
+        } else {
+          const pts = dipolePts(L, phi, 90, 1.003).map((p) => windDeform(p, s, o.k));
+          grp.add(fluxTube(pts, o.radius * (L > 6 ? 1.1 : 1), mat, (j * 0.37 + i * 0.13) % 1, 140));
+        }
+      });
+    }
+    if (o.belts) {
+      grp.add(fieldCloud(9000, (i, p) => {
+        const inner = i < 3500, L = inner ? 1.25 + Math.abs(gauss(r)) * 0.55 : 3 + Math.abs(gauss(r)) * 1.6;
+        const lam = gauss(r) * (inner ? 0.28 : 0.38), phi = r() * Math.PI * 2, rr = L * Math.cos(lam) ** 2;
+        const q = windDeform(V(rr * Math.cos(lam) * Math.cos(phi), rr * Math.sin(lam), rr * Math.cos(lam) * Math.sin(phi)), s, o.k);
+        p.x = q.x; p.y = q.y; p.z = q.z;
+        if (inner) { p.r = 0.1; p.g = 0.045; p.b = 0.03; } else { p.r = 0.03; p.g = 0.08; p.b = 0.16; }
+        p.s = 0.16 + r() * 0.18;
+      }));
+    }
+    if (o.aurora) for (const sg of [1, -1]) grp.add(auroraOval(o.aurora.colat, s, sg, o.aurora));
+    if (o.shock) bowShock(grp, s, o.shock);
+  }
+
+  function auroraOval(colat, s, sign, o) {
+    const N = 360, pos = [], uvs = [], night = [], idx = [];
+    const nightAz = Math.atan2(-s.z, -s.x);
+    for (let i = 0; i <= N; i++) {
+      const a = i / N * Math.PI * 2, nf = Math.cos(a - nightAz);
+      const c = colat * (1 + 0.28 * nf) + 0.012 * Math.sin(a * 7 + 1) + 0.008 * Math.sin(a * 17);
+      const dir = V(Math.sin(c) * Math.cos(a), sign * Math.cos(c), Math.sin(c) * Math.sin(a));
+      const h = (o.height || 0.06) * (1 + 0.6 * Math.max(0, nf));
+      const b = dir.clone().multiplyScalar(1.008), t = dir.clone().multiplyScalar(1.008 + h);
+      pos.push(b.x, b.y, b.z, t.x, t.y, t.z);
+      uvs.push(i / N, 0, i / N, 1);
+      night.push(nf, nf);
+      if (i < N) { const k = i * 2; idx.push(k, k + 1, k + 2, k + 1, k + 3, k + 2); }
+    }
+    const g = new T.BufferGeometry();
+    g.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
+    g.setAttribute("uv", new T.Float32BufferAttribute(uvs, 2));
+    g.setAttribute("night", new T.Float32BufferAttribute(night, 1));
+    g.setIndex(idx);
+    const m = new T.ShaderMaterial({
+      uniforms: { time: { value: 0 }, low: { value: new T.Color(o.low || "#38ff8a") }, high: { value: new T.Color(o.high || "#d4389a") }, ff: U.ff, gain: { value: o.gain || 1 } },
+      vertexShader: `attribute float night; varying vec2 vUv; varying float vN; void main(){ vUv = uv; vN = night; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      fragmentShader: SNOISE + `
+        uniform float time; uniform vec3 low; uniform vec3 high; uniform float ff; uniform float gain;
+        varying vec2 vUv; varying float vN;
+        void main(){
+          float x = vUv.x, v = vUv.y;
+          float n = snoise(vec3(x * 38.0, time * 0.25, 1.0)) * 0.5 + 0.5;
+          float rays = pow(snoise(vec3(x * 220.0, time * 0.9, 4.0)) * 0.5 + 0.5, 2.5);
+          float fold = snoise(vec3(x * 9.0, time * 0.12, 8.0)) * 0.5 + 0.5;
+          vec3 c = mix(low, high, smoothstep(0.3, 1.0, v));
+          float a = pow(1.0 - v, 1.4) * smoothstep(0.0, 0.1, v) * (0.35 + 0.9 * n * fold) * (0.45 + 1.2 * rays);
+          a *= 0.35 + 0.9 * smoothstep(-0.6, 0.8, vN);
+          gl_FragColor = vec4(c * a * 1.8 * gain * ff, 1.0);
+        }`,
+      transparent: true, blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide,
+    });
+    updaters.push((dt, t) => { m.uniforms.time.value = t; });
+    return new T.Mesh(g, m);
+  }
+
+  function bowShock(grp, s, o) {
+    const pts = [];
+    for (let i = 0; i <= 40; i++) { const rho = i / 40 * o.width; pts.push(new T.Vector2(rho, o.nose - rho * rho / (2 * o.a))); }
+    const m = new T.Mesh(new T.LatheGeometry(pts, 96), new T.ShaderMaterial({
+      uniforms: { color: { value: new T.Color(o.color || "#7fc8ff") }, ff: U.ff },
+      vertexShader: `varying vec3 vN; varying vec3 vV; void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vN = normalize(mat3(modelMatrix) * normal); vV = normalize(cameraPosition - w.xyz); gl_Position = projectionMatrix * viewMatrix * w; }`,
+      fragmentShader: `uniform vec3 color; uniform float ff; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 3.0); gl_FragColor = vec4(color * f * 0.16 * ff, 1.0); }`,
+      transparent: true, blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide,
+    }));
+    m.quaternion.setFromUnitVectors(V(0, 1, 0), s);
+    grp.add(m);
+    // particules du vent solaire, déviées par l'onde de choc
+    const N = 2200, r = rng(17), e1 = new T.Vector3().crossVectors(s, V(0, 1, 0.001)).normalize(), e2 = new T.Vector3().crossVectors(s, e1);
+    const wind = fieldCloud(N, (i, p) => { p.r = 0.55; p.g = 0.45; p.b = 0.25; p.s = 0.14; });
+    const pos = wind.geometry.attributes.position, seeds = [];
+    for (let i = 0; i < N; i++) seeds.push([Math.sqrt(r()) * o.width * 1.1, r() * Math.PI * 2, r()]);
+    grp.add(wind);
+    const mp = o.mp, a2 = o.a * 0.8, q = new T.Vector3();
+    updaters.push((dt) => {
+      for (let i = 0; i < N; i++) {
+        const sd = seeds[i]; sd[2] += dt * 0.07; if (sd[2] > 1) sd[2] -= 1;
+        const x = o.nose * 2.2 - sd[2] * o.nose * 6;
+        let rho = sd[0];
+        const xm = mp - rho * rho / (2 * a2);
+        if (x < xm) rho = Math.sqrt(Math.max(rho * rho, 2 * a2 * (mp - x)));
+        q.copy(s).multiplyScalar(x).addScaledVector(e1, rho * Math.cos(sd[1])).addScaledVector(e2, rho * Math.sin(sd[1]));
+        pos.setXYZ(i, q.x, q.y, q.z);
+      }
+      pos.needsUpdate = true;
+    });
+  }
+
+  // Petites boucles ancrées à la surface (taches, croûte magnétisée…)
+  function surfaceLoop(center, tangent, sep, h, R) {
+    const axis = new T.Vector3().crossVectors(center, tangent).normalize(), pts = [];
+    for (let i = 0; i <= 28; i++) {
+      const t = i / 28, dir = center.clone().applyAxisAngle(axis, (t - 0.5) * sep);
+      pts.push(dir.multiplyScalar(R * (1 + h * Math.sin(Math.PI * t))));
+    }
+    return pts;
+  }
+  function randDir(r, latMin, latMax, lonMin = 0, lonMax = Math.PI * 2) {
+    const lat = (latMin + (latMax - latMin) * r()) * (r() < 0.5 && latMin >= 0 ? -1 : 1), lon = lonMin + (lonMax - lonMin) * r();
+    return V(Math.cos(lat) * Math.cos(lon), Math.sin(lat), Math.cos(lat) * Math.sin(lon));
+  }
+  function coronalField(grp, R, o) {
+    const r = rng(o.seed || 5);
+    const loopMat = fieldMaterial(o.colA, o.colB, { dens: 2, speed: 1.6 });
+    for (let i = 0; i < o.loops; i++) {
+      const c = randDir(r, 0.12, 0.6), tg = new T.Vector3(gauss(r), gauss(r), gauss(r)).cross(c).normalize();
+      const nest = 1 + ((r() * 3) | 0);
+      const sep0 = 0.06 + r() * 0.22;
+      for (let k = 0; k < nest; k++) {
+        const sep = sep0 * (1 + k * 0.35);
+        grp.add(fluxTube(surfaceLoop(c, tg, sep, sep * (0.9 + r() * 0.8), R * 1.002), R * (0.004 + r() * 0.006), loopMat, r(), 60));
+      }
+    }
+    // grande échelle : casques fermés et lignes ouvertes aux pôles
+    const bigMat = fieldMaterial(o.colB, o.colC || o.colB, { dens: 2, speed: 0.8, opacity: 0.7 });
+    for (let i = 0; i < 14; i++) {
+      const phi = i / 14 * Math.PI * 2;
+      [1.6, 2.4, 3.4].forEach((L, j) => {
+        const pts = dipolePts(L, phi + j * 0.2, 80, 1).map((p) => p.multiplyScalar(R));
+        grp.add(fluxTube(pts, R * 0.006, bigMat, (i * 0.3 + j * 0.2) % 1, 100));
+      });
+    }
+    const openMat = fieldMaterial(o.colB, o.colC || o.colA, { dens: 3, speed: 2, opacity: 0.6 });
+    for (let i = 0; i < 26; i++) {
+      const sg = i % 2 ? 1 : -1, lat = (0.95 + r() * 0.5) * 1.0, lon = r() * Math.PI * 2, pts = [];
+      const colat = Math.PI / 2 - lat * 0.9;
+      for (let k = 0; k < 20; k++) {
+        const d = 1 + k * 0.28, c = colat * (1 + k * 0.06);
+        pts.push(V(Math.sin(c) * Math.cos(lon), sg * Math.cos(c), Math.sin(c) * Math.sin(lon)).multiplyScalar(R * d));
+      }
+      grp.add(fluxTube(pts, R * 0.005, openMat, r(), 60));
+    }
+  }
+
+  function helicalJets(grp, o) {
+    const mat = fieldMaterial(o.colA, o.colB, { dens: 3, speed: 2.2 });
+    const r = rng(3);
+    for (let i = 0; i < o.n; i++) {
+      const r0 = o.r0 + r() * o.r1, a0 = r() * Math.PI * 2;
+      for (const sg of [1, -1]) {
+        const pts = [];
+        for (let k = 0; k <= 60; k++) {
+          const t = k / 60, rad = r0 * (1 - 0.82 * Math.sqrt(t)) + 0.4, ang = a0 + sg * t * o.turns * Math.PI * 2;
+          pts.push(V(Math.cos(ang) * rad, sg * (0.2 + t * o.h), Math.sin(ang) * rad));
+        }
+        grp.add(fluxTube(pts, o.w, mat, r(), 180));
+      }
+    }
+  }
+
+  const FIELD_TXT = {
+    Terre: ["Champ magnétique terrestre", "Produit par le fer liquide du noyau (effet dynamo). Il dévie le vent solaire, piège des particules dans les ceintures de Van Allen et dessine les aurores polaires. Côté nuit, il s'étire en une queue de plus d'un million de km."],
+    Soleil: ["Champ magnétique solaire", "Le plasma suit les lignes de champ : boucles coronales, casques et lignes ouvertes d'où s'échappe le vent solaire. En se tordant puis en se reconnectant, elles déclenchent les éruptions. Le champ s'inverse tous les 11 ans."],
+    Jupiter: ["Magnétosphère de Jupiter", "20 000 fois plus puissante que celle de la Terre. Si on pouvait la voir, elle paraîtrait plus grande que la pleine Lune dans notre ciel. Le volcan Io la remplit de soufre (le tore orange) et laisse une trace dans les aurores."],
+    Saturne: ["Magnétosphère de Saturne", "Son axe magnétique est aligné avec l'axe de rotation à moins de 0,1° près, un cas unique. Les geysers d'Encelade alimentent son plasma ; ses aurores brillent surtout en ultraviolet."],
+    Uranus: ["Champ magnétique d'Uranus", "Incliné de 59° par rapport à l'axe de rotation et décentré : la magnétosphère culbute à chaque rotation, en 17 heures."],
+    Neptune: ["Champ magnétique de Neptune", "Incliné de 47° et décalé de plus de la moitié du rayon : sans doute produit dans une couche d'eau et d'ammoniac, et non dans le noyau."],
+    Mercure: ["Champ magnétique de Mercure", "Faible (1 % de celui de la Terre) et décalé vers le nord. Si près du Soleil, la magnétosphère est écrasée à quelques centaines de km du sol côté jour."],
+    Mars: ["Magnétisme fossile de Mars", "Mars a perdu son champ global il y a environ 4 milliards d'années. Il reste des roches aimantées dans la croûte de l'hémisphère sud, qui forment de petites « mini-magnétosphères »."],
+    Vénus: ["Magnétosphère induite de Vénus", "Vénus n'a pas de champ propre. Le champ du vent solaire s'enroule autour de son atmosphère ionisée et s'étire en queue derrière la planète."],
+    "Nébuleuse du Crabe": ["Le pulsar du Crabe", "Une étoile à neutrons de 20 km qui tourne 30 fois par seconde, avec un champ de cent millions de teslas. Ses deux faisceaux balaient l'espace comme un phare (ralenti ici)."],
+    "Sagittarius A*": ["Champ autour du trou noir", "Les lignes de champ, entraînées par le disque en rotation, s'enroulent en hélice. Ce mécanisme peut lancer des jets de matière presque à la vitesse de la lumière."],
+    "Cygnus X-1": ["Champ autour du trou noir", "Le champ magnétique du disque d'accrétion, tordu par la rotation, canalise des jets de particules au-dessus des pôles."],
+    "Quasar 3C 273": ["Jets magnétiques du quasar", "Des lignes de champ enroulées en hélice canalisent des jets qui s'étendent sur des centaines de milliers d'années-lumière."],
+    "Voie lactée": ["Champ magnétique galactique", "Quelques microgauss à peine, un million de fois plus faible que celui de la Terre, mais étendu sur toute la galaxie. Il suit les bras spiraux et forme un « X » au-dessus et au-dessous du disque."],
+    "Héliopause": ["Spirale de Parker", "Le champ du Soleil, emporté par le vent solaire pendant que le Soleil tourne, s'enroule en spirale jusqu'à l'héliopause. La nappe de courant héliosphérique ondule comme une jupe de ballerine."],
+    "Voyager 1": ["Champ interstellaire", "Voyager 1 mesure le champ magnétique du milieu interstellaire avec son magnétomètre, monté au bout d'une perche de 13 m pour échapper au magnétisme de la sonde."],
+  };
+  function fieldText(o) {
+    if (FIELD_TXT[o.name]) return FIELD_TXT[o.name];
+    if (o.kind === "galaxy" && o.gtype === "spiral") return ["Champ magnétique galactique", "Faible mais immense, il suit les bras spiraux et s'échappe du disque en forme de « X »."];
+    if (/Naine rouge/.test(o.label || "")) return ["Champ magnétique de " + o.name, "Les naines rouges ont des champs des centaines de fois plus intenses que le Soleil : leurs boucles se rompent en éruptions violentes, un danger pour leurs planètes."];
+    return ["Champ magnétique de " + o.name, "Comme le Soleil, cette étoile est entourée de boucles magnétiques et de lignes ouvertes qui guident son vent stellaire."];
+  }
+
+  function buildField(o) {
+    const grp = new T.Group();
+    let dist = null, maxD = null;
+    const sunLocal = (g) => { g.updateMatrixWorld(true); return (ctx3.sunDir || V(1, 0, 0)).clone().applyQuaternion(g.getWorldQuaternion(new T.Quaternion()).invert()).normalize(); };
+    if (o.name === "Terre") {
+      grp.rotation.z = 23.4 * DEG; grp.rotation.x = 9.6 * DEG;
+      scene.add(grp);
+      magnetosphere(grp, sunLocal(grp), {
+        Ls: [1.5, 2.2, 3.1, 4.3, 5.9, 8, 10.5], nPhi: 14, k: 0.075, tailFrom: 8, tailLen: 34, tailH: 2.6, tailW: 4,
+        colA: "#2fb8ff", colB: "#7a4dff", radius: 0.016, belts: true, opacity: 0.75,
+        aurora: { colat: 0.36, height: 0.07 },
+        shock: { nose: 14, a: 11, width: 26, mp: 10 },
+      });
+      dist = 23; maxD = 80;
+    } else if (o.name === "Jupiter" || o.name === "Saturne") {
+      const jup = o.name === "Jupiter";
+      grp.rotation.z = ctx3.tilt.rotation.z + (jup ? 9.6 : 0) * DEG;
+      scene.add(grp);
+      const s = sunLocal(grp);
+      magnetosphere(grp, s, jup ? {
+        Ls: [2, 3.5, 5.9, 9, 14, 22, 32], nPhi: 12, k: 0.018, tailFrom: 22, tailLen: 90, tailH: 8, tailW: 12, tailScale: 1,
+        colA: "#c48bff", colB: "#ff6fcf", radius: 0.06, aurora: { colat: 0.27, height: 0.05, low: "#7fb0ff", high: "#d17bff", gain: 1.4 },
+        shock: { nose: 60, a: 45, width: 110, mp: 45, color: "#c48bff" },
+      } : {
+        Ls: [2, 3, 4, 6, 9, 13, 18], nPhi: 12, k: 0.035, tailFrom: 13, tailLen: 60, tailH: 5, tailW: 8,
+        colA: "#7fd6ff", colB: "#b08bff", radius: 0.045, aurora: { colat: 0.27, height: 0.05, low: "#ff6fb8", high: "#8f7bff", gain: 1.3 },
+        shock: { nose: 27, a: 22, width: 55, mp: 21 },
+      });
+      const r = rng(9);
+      if (jup) {
+        // tore de plasma d'Io et tube de flux d'Io
+        grp.add(fieldCloud(9000, (i, p) => {
+          const a = r() * Math.PI * 2, rr = 5.9 + gauss(r) * 0.25;
+          p.x = Math.cos(a) * rr; p.z = Math.sin(a) * rr; p.y = gauss(r) * 0.35;
+          const na = r() < 0.3; p.r = 0.35; p.g = na ? 0.25 : 0.12; p.b = na ? 0.05 : 0.08; p.s = 0.35;
+        }));
+        const ioPiv = new T.Group(); grp.add(ioPiv);
+        const io = miniPlanet("#e8d070", 3, 0.13); io.position.x = 5.9; ioPiv.add(io);
+        const il = textSprite("Io", "#e8d070", 0.9); il.position.set(6.1, 0.3, 0); ioPiv.add(il);
+        ioPiv.add(fluxTube(dipolePts(5.9, 0, 90, 1.003), 0.05, fieldMaterial("#ffd060", "#ff8030", { dens: 5, speed: 3 }), 0.1, 140));
+        updaters.push((dt) => { ioPiv.rotation.y += dt * 0.12; });
+      } else {
+        grp.add(fieldCloud(5000, (i, p) => {
+          const a = r() * Math.PI * 2, rr = 3.95 + gauss(r) * 0.3;
+          p.x = Math.cos(a) * rr; p.z = Math.sin(a) * rr; p.y = gauss(r) * 0.2;
+          p.r = 0.08; p.g = 0.14; p.b = 0.26; p.s = 0.3;
+        }));
+      }
+      dist = jup ? 75 : 50; maxD = jup ? 180 : 120;
+    } else if (o.name === "Uranus" || o.name === "Neptune") {
+      const ur = o.name === "Uranus";
+      grp.rotation.z = (ur ? 59 : 47) * DEG; grp.position.y = ur ? -0.3 : -0.55;
+      ctx3.mesh.add(grp);
+      magnetosphere(grp, V(1, 0, 0), { Ls: [1.6, 2.2, 3, 4.2, 6, 8.5], nPhi: 12, k: 0, colA: "#6ff0e0", colB: "#5f8bff", radius: 0.03, aurora: { colat: 0.4, height: 0.06, low: "#8fffd8", high: "#7f9bff" } });
+      dist = 22; maxD = 50;
+    } else if (o.name === "Mercure") {
+      grp.position.y = 0.2; grp.rotation.z = ctx3.tilt.rotation.z;
+      scene.add(grp);
+      magnetosphere(grp, sunLocal(grp), { Ls: [1.15, 1.35, 1.6, 1.95, 2.4, 3], nPhi: 12, k: 0.4, tailFrom: 1.95, tailLen: 10, tailH: 0.9, tailW: 1.4, colA: "#ffd27a", colB: "#ff8a5c", radius: 0.012, shock: { nose: 2.2, a: 1.8, width: 5, mp: 1.5, color: "#ffb070" } });
+      dist = 9.5; maxD = 25;
+    } else if (o.name === "Mars") {
+      ctx3.mesh.add(grp);
+      const r = rng(4), mat = fieldMaterial("#ff7a9a", "#ffd0a0", { dens: 2, speed: 1.2 });
+      for (let i = 0; i < 90; i++) {
+        const c = randDir(r, -1.2, -0.45, 2.4, 3.9), tg = V(gauss(r), gauss(r), gauss(r)).cross(c).normalize(), sep = 0.04 + r() * 0.12;
+        grp.add(fluxTube(surfaceLoop(c, tg, sep, sep * (0.8 + r()), 1.003), 0.004, mat, r(), 40));
+      }
+      dist = 3.1;
+    } else if (o.name === "Vénus") {
+      scene.add(grp);
+      const s = ctx3.sunDir.clone(), e = new T.Vector3().crossVectors(s, V(0, 1, 0)).normalize(), up = new T.Vector3().crossVectors(e, s);
+      const mat = fieldMaterial("#ffd08a", "#ff7a4a", { dens: 3, speed: 1.4, opacity: 0.45 });
+      let ph = 0;
+      for (let xi = -6; xi <= 3; xi++) for (let yi = -3; yi <= 3; yi++) {
+        const x0 = xi * 1.6, y0 = yi * 0.9, pts = [];
+        for (let k = 0; k <= 40; k++) {
+          const z = -8 + k * 0.4, rho2 = z * z + y0 * y0;
+          const drape = 3.2 * Math.exp(-rho2 / 5) * (x0 < 1 ? 1 + Math.max(0, -x0) * 0.25 : 0.6);
+          const x = x0 - drape;
+          const p = V(0, 0, 0).addScaledVector(s, x).addScaledVector(up, y0).addScaledVector(e, z);
+          if (p.length() < 1.15) p.setLength(1.15);
+          pts.push(p);
+        }
+        grp.add(fluxTube(pts, 0.008, mat, (ph += 0.137) % 1, 80));
+      }
+      dist = 17; maxD = 40;
+    } else if (o.kind === "sun") {
+      ctx3.star.add(grp);
+      coronalField(grp, 1, { loops: 34, colA: "#ffb050", colB: "#ff5a1a", colC: "#ffd090", seed: 7 });
+      dist = 6; maxD = 20;
+    } else if (o.kind === "star" && ctx3.star) {
+      ctx3.star.add(grp);
+      const rgb = hexRGB(o.color), col = "#" + new T.Color(...rgb).getHexString();
+      const dwarf = /Naine rouge/.test(o.label || "");
+      coronalField(grp, ctx3.star.children[0].geometry.parameters.radius, { loops: dwarf ? 40 : 18, colA: col, colB: dwarf ? "#ff5a2a" : "#8fb8ff", colC: col, seed: seedOf(o.name) });
+      dist = null;
+    } else if (o.name === "Nébuleuse du Crabe" && ctx3.crab) {
+      // pulsar : étoile à neutrons, dipole incliné, faisceaux
+      const spin = new T.Group(); ctx3.crab.add(spin); spin.add(grp);
+      const ns = new T.Mesh(new T.SphereGeometry(0.08, 32, 16), new T.MeshBasicMaterial({ color: 0xdfe8ff }));
+      spin.add(ns);
+      grp.rotation.z = 45 * DEG;
+      const mat = fieldMaterial("#9fd8ff", "#c08bff", { dens: 3, speed: 3 });
+      for (let i = 0; i < 12; i++) [1.6, 3, 5, 8].forEach((L, j) => grp.add(fluxTube(dipolePts(L, i / 12 * Math.PI * 2, 70, 1.01).map((p) => p.multiplyScalar(0.08)), 0.006, mat, (i * 0.17 + j * 0.3) % 1, 90)));
+      for (const sg of [1, -1]) {
+        const cone = new T.Mesh(new T.ConeGeometry(0.5, 3.5, 48, 1, true), new T.ShaderMaterial({
+          uniforms: { ff: U.ff },
+          vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+          fragmentShader: `uniform float ff; varying vec2 vUv; void main(){ float a = pow(vUv.y, 2.0) * 0.6; gl_FragColor = vec4(vec3(0.6, 0.8, 1.0) * a * ff, 1.0); }`,
+          transparent: true, blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide,
+        }));
+        cone.position.y = sg * 1.75; if (sg > 0) cone.rotation.x = Math.PI;
+        grp.add(cone);
+      }
+      updaters.push((dt) => { spin.rotation.y += dt * 2.2; });
+      dist = 4; maxD = 40;
+    } else if (o.kind === "blackhole" || o.kind === "quasar") {
+      scene.add(grp);
+      const q = o.kind === "quasar";
+      helicalJets(grp, { n: q ? 10 : 8, r0: q ? 5 : 4, r1: 4, h: q ? 40 : 26, turns: 2.5, w: q ? 0.07 : 0.05, colA: q ? "#8fb8ff" : "#c08bff", colB: q ? "#ffffff" : "#ff9ad8" });
+      // boucles au-dessus du disque
+      const mat = fieldMaterial("#ffb070", "#c08bff", { dens: 2, speed: 1.5, opacity: 0.6 });
+      const r = rng(11);
+      for (let i = 0; i < 24; i++) {
+        const r1 = 3.5 + r() * 6, r2 = r1 + 1 + r() * 2.5, a = r() * Math.PI * 2, pts = [];
+        for (let k = 0; k <= 30; k++) { const t = k / 30, rr = r1 + (r2 - r1) * t, ang = a + t * 0.6; pts.push(V(Math.cos(ang) * rr, Math.sin(Math.PI * t) * (r2 - r1) * 0.8, Math.sin(ang) * rr)); }
+        grp.add(fluxTube(pts, 0.04, mat, r(), 50));
+      }
+      dist = q ? 60 : 45; maxD = q ? 120 : 90;
+    } else if (o.kind === "galaxy" && ctx3.g && (ctx3.gopts.type === "spiral")) {
+      ctx3.g.add(grp);
+      const arms = ctx3.gopts.arms || 2, b = Math.tan((ctx3.gopts.pitch || 14) * DEG);
+      const mat = fieldMaterial("#7fc8ff", "#c9a0ff", { dens: 2, speed: 0.6, opacity: 0.8 });
+      let ph = 0;
+      for (let a = 0; a < arms; a++) for (const off of [-0.18, 0, 0.18]) {
+        const pts = [];
+        for (let k = 0; k <= 80; k++) { const rr = 1.4 + k / 80 * 8.8, th = Math.log(rr / 0.7) / b + a * Math.PI * 2 / arms + off; pts.push(V(rr * Math.cos(th), 0.03, rr * Math.sin(th))); }
+        grp.add(fluxTube(pts, 0.03, mat, (ph += 0.21) % 1, 200));
+      }
+      const xMat = fieldMaterial("#9fd8ff", "#7f8bff", { dens: 2, speed: 0.8, opacity: 0.28 });
+      for (let i = 0; i < 10; i++) {
+        const ang = i / 10 * Math.PI * 2 + 0.3;
+        for (const sg of [1, -1]) {
+          const pts = [];
+          for (let k = 0; k <= 30; k++) { const t = k / 30, rr = 0.8 + Math.pow(t, 1.6) * 6; pts.push(V(Math.cos(ang + t * 0.8) * rr, sg * (0.1 + Math.pow(t, 0.6) * 4.5), Math.sin(ang + t * 0.8) * rr)); }
+          grp.add(fluxTube(pts, 0.02, xMat, (ph += 0.13) % 1, 60));
+        }
+      }
+    } else if (o.name === "Héliopause") {
+      scene.add(grp);
+      const mat = fieldMaterial("#ffd27a", "#7fc8ff", { dens: 5, speed: 1.6 });
+      let ph = 0;
+      for (const lat of [-0.6, -0.3, 0, 0.3, 0.6]) for (let i = 0; i < 6; i++) {
+        const pts = [], a0 = i / 6 * Math.PI * 2 + lat;
+        for (let k = 0; k <= 160; k++) {
+          const rr = 0.2 + k / 160 * 3.4, a = a0 - rr * 4.2;
+          pts.push(V(Math.cos(a) * rr * Math.cos(lat), rr * Math.sin(lat), Math.sin(a) * rr * Math.cos(lat)));
+        }
+        grp.add(fluxTube(pts, 0.008, mat, (ph += 0.173) % 1, 320));
+      }
+      // nappe de courant héliosphérique
+      const NR = 60, NA = 180, pos = [], idx = [];
+      for (let i = 0; i <= NR; i++) for (let j = 0; j <= NA; j++) {
+        const rr = 0.25 + i / NR * 3.3, a = j / NA * Math.PI * 2;
+        pos.push(Math.cos(a) * rr, 0.3 * rr / 3.5 * Math.sin(a + rr * 4.2) * 1.4, Math.sin(a) * rr);
+        if (i < NR && j < NA) { const k = i * (NA + 1) + j; idx.push(k, k + 1, k + NA + 1, k + 1, k + NA + 2, k + NA + 1); }
+      }
+      const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
+      const sheet = new T.Mesh(g, new T.ShaderMaterial({
+        uniforms: { ff: U.ff },
+        vertexShader: `varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+        fragmentShader: `uniform float ff; varying vec3 vP; void main(){ float r = length(vP.xz); float a = 0.09 * smoothstep(3.6, 1.0, r) * (0.6 + 0.4 * sin(r * 12.0)); gl_FragColor = vec4(vec3(1.0, 0.7, 0.4) * a * ff, 1.0); }`,
+        transparent: true, blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide,
+      }));
+      grp.add(sheet);
+      updaters.push((dt) => { grp.rotation.y += dt * 0.05; });
+    } else if (o.name === "Voyager 1") {
+      scene.add(grp);
+      const mat = fieldMaterial("#7fc8ff", "#b08bff", { dens: 3, speed: 0.7, opacity: 0.7 });
+      for (let i = 0; i < 18; i++) {
+        const y = -6 + (i % 6) * 2.4, z = -8 - Math.floor(i / 6) * 4, pts = [];
+        for (let k = 0; k <= 40; k++) { const x = -30 + k * 1.5; pts.push(V(x, y + Math.sin(x * 0.08 + i) * 1.2, z + Math.cos(x * 0.05) * 2)); }
+        grp.add(fluxTube(pts, 0.04, mat, i * 0.31 % 1, 80));
+      }
+    } else {
+      return null;
+    }
+    const [title, text] = fieldText(o);
+    return { group: grp, dist, maxD, title, text };
+  }
+
+  /* ---------------------------------------------------------------------
      Cycle de vie
      --------------------------------------------------------------------- */
-  let lowRes = false, viewInfo = null;
+  let lowRes = false, viewInfo = null, composer = null, bloom = null, renderPass = null, field = null, fit = 1;
+  const fieldBtn = document.getElementById("v3d-field");
+  const fieldInfo = document.getElementById("v3d-field-info");
+  let fieldOn = true;
+  try { fieldOn = localStorage.getItem("atlas-field") !== "0"; } catch (e) { /* stockage indisponible */ }
 
   function ensureRenderer() {
     if (renderer) return true;
@@ -1294,21 +1791,50 @@
     renderer.setClearColor(0x05070d, 1);
     renderer.toneMapping = T.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.0;
-    camera = new T.PerspectiveCamera(45, 1, 0.05, 2000);
+    camera = new T.PerspectiveCamera(45, 1, 0.05, 3000);
+    // lueur (bloom) si les modules de post-traitement sont chargés
+    if (T.EffectComposer && T.RenderPass && T.UnrealBloomPass) {
+      try {
+        composer = new T.EffectComposer(renderer);
+        renderPass = new T.RenderPass(new T.Scene(), camera);
+        bloom = new T.UnrealBloomPass(new T.Vector2(window.innerWidth, window.innerHeight), 0.8, 0.5, 0.6);
+        composer.addPass(renderPass);
+        composer.addPass(bloom);
+      } catch (e) { composer = null; }
+    }
     window.addEventListener("resize", () => { if (isOpen) resize(); });
+    if (fieldBtn) fieldBtn.addEventListener("click", () => setField(!fieldOn, true));
     return true;
   }
   function resize() {
     const W = window.innerWidth, H = window.innerHeight;
-    renderer.setPixelRatio(lowRes ? Math.min(window.devicePixelRatio || 1, 1) * (W * H > 1.4e6 ? 0.75 : 1) : Math.min(window.devicePixelRatio || 1, 2));
+    const pr = lowRes ? Math.min(window.devicePixelRatio || 1, 1) * (W * H > 1.4e6 ? 0.75 : 1) : Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(pr);
     renderer.setSize(W, H, false);
+    if (composer) { composer.setPixelRatio(pr); composer.setSize(W, H); }
     camera.aspect = W / H;
     // décale l'astre pour qu'il ne soit pas caché par la fiche
     const panel = document.getElementById("panel");
     if (W > 760) camera.setViewOffset(W, H, Math.min(180, (panel.offsetWidth + 32) / 2), 0, W, H);
     else camera.setViewOffset(W, H, 0, Math.min(H * 0.22, panel.offsetHeight * 0.45), W, H);
     camera.updateProjectionMatrix();
-    U.px.value = H / (2 * Math.tan(camera.fov * DEG / 2)) * renderer.getPixelRatio();
+    U.px.value = H / (2 * Math.tan(camera.fov * DEG / 2)) * pr;
+  }
+
+  function setField(on, animate) {
+    fieldOn = on;
+    try { localStorage.setItem("atlas-field", on ? "1" : "0"); } catch (e) { /* stockage indisponible */ }
+    if (!field) return;
+    fieldBtn.setAttribute("aria-pressed", String(on));
+    fieldBtn.classList.toggle("on", on);
+    fieldInfo.hidden = !on;
+    if (on) field.group.visible = true;
+    if (animate) {
+      const d = on && field.dist ? field.dist : viewInfo.dist || 4;
+      ctl.maxD = Math.max(viewInfo.maxD || 20, on && field.maxD ? field.maxD : 0) * fit;
+      ctl.tDist = clamp(d * fit, ctl.minD, ctl.maxD);
+      ctl.idle = 0;
+    }
   }
 
   function disposeScene() {
@@ -1333,30 +1859,47 @@
     return B[o.kind] || B.star;
   }
 
+  let closeTimer = 0;
   function open(o) {
     if (!ensureRenderer()) return false;
     close(true);
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = 0; disposeScene(); }
     isOpen = true;
     document.body.classList.add("in3d");
     host.hidden = false;
     loading.hidden = false;
     loading.textContent = "Génération de " + o.name + "…";
+    fieldBtn.hidden = true; fieldInfo.hidden = true;
     requestAnimationFrame(() => host.classList.add("on"));
     // laisse le temps d'afficher le message avant le calcul des textures
     setTimeout(() => {
       if (!isOpen) return;
       scene = new T.Scene();
       updaters = [];
+      ctx3 = {};
       lowRes = false;
       renderer.shadowMap.enabled = false;
       viewInfo = builderFor(o)(o) || {};
-      if (viewInfo.stars !== false) scene.add(starfield());
+      if (viewInfo.stars !== false) { scene.add(skySphere()); scene.add(starfield()); }
+      // champ magnétique
+      U.ff.value = 0;
+      field = buildField(o);
       // écran en portrait : on recule pour que l'astre tienne en largeur
-      const aspect = window.innerWidth / window.innerHeight, fit = aspect < 1 ? Math.min(2.2, 0.85 / aspect) : 1;
-      ctl.tDist = (viewInfo.dist || 4) * fit; ctl.dist = ctl.tDist * 1.6;
+      const aspect = window.innerWidth / window.innerHeight;
+      fit = aspect < 1 ? Math.min(2.2, 0.85 / aspect) : 1;
       ctl.minD = viewInfo.minD || 1.5; ctl.maxD = (viewInfo.maxD || 20) * fit;
+      ctl.tDist = (viewInfo.dist || 4) * fit; ctl.dist = ctl.tDist * 1.6;
       ctl.phi = viewInfo.phi || 1.3; ctl.theta = viewInfo.theta ?? 0.5;
       ctl.vT = 0; ctl.vP = 0; ctl.auto = viewInfo.auto ?? 0.06; ctl.idle = 0;
+      if (field) {
+        fieldBtn.hidden = false;
+        fieldInfo.innerHTML = `<strong>${field.title}</strong><span>${field.text}</span>`;
+        field.group.visible = fieldOn;
+        setField(fieldOn, fieldOn);
+        if (fieldOn) ctl.dist = ctl.tDist * 1.3;
+      }
+      const bl = viewInfo.bloom || [0.75, 0.55, 0.62];
+      if (bloom) { bloom.strength = bl[0]; bloom.radius = bl[1]; bloom.threshold = bl[2]; renderPass.scene = scene; }
       resize();
       loading.hidden = true;
       clock.start();
@@ -1366,8 +1909,13 @@
         const dt = Math.min(0.05, clock.getDelta());
         t += dt;
         updateControls(dt);
+        if (field) {
+          const target = fieldOn ? 1 : 0;
+          U.ff.value += (target - U.ff.value) * Math.min(1, dt * (fieldOn ? 0.9 : 3));
+          if (!fieldOn && U.ff.value < 0.01) field.group.visible = false;
+        }
         for (const u of updaters) u(dt, t);
-        renderer.render(scene, camera);
+        if (composer) composer.render(dt); else renderer.render(scene, camera);
         raf = requestAnimationFrame(loop);
       };
       loop();
@@ -1381,8 +1929,15 @@
     cancelAnimationFrame(raf);
     document.body.classList.remove("in3d");
     host.classList.remove("on");
-    const done = () => { host.hidden = true; disposeScene(); };
-    if (instant) done(); else setTimeout(done, 350);
+    field = null;
+    const old = scene;
+    const done = () => {
+      closeTimer = 0;
+      if (scene === old) disposeScene();
+      if (!isOpen) host.hidden = true;
+    };
+    clearTimeout(closeTimer);
+    if (instant) done(); else closeTimer = setTimeout(done, 350);
   }
 
   window.Viewer3D = { open, close, isOpen: () => isOpen, relayout: () => { if (isOpen && renderer) resize(); } };
