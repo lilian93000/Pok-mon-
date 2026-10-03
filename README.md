@@ -52,3 +52,19 @@ Le dossier [`bourse/`](bourse/) contient un autre projet : une **machine d'analy
 boursière multi-facteurs** (technique, fondamental, momentum, sentiment des news)
 qui classe les actions selon leur potentiel de hausse. Ouvre `bourse/index.html`
 ou consulte [`bourse/README.md`](bourse/README.md).
+
+---
+
+## ✦ Bonus : Atlas cosmique
+
+Le dossier [`univers/`](univers/) contient une **carte interactive de l'univers** :
+on zoome en continu de la Terre et la Lune jusqu'au fond diffus cosmologique, à
+46,5 milliards d'années-lumière, avec de vraies distances.
+
+- Planètes à leur **position réelle du jour**, temps accéléré réglable.
+- Étoiles voisines, nébuleuses, Voie lactée, Groupe local, superamas Laniakea,
+  toile cosmique et limite de l'univers observable.
+- Fiche pour chaque astre : distance, temps de trajet de la lumière, taille, anecdote.
+- Recherche, raccourcis d'échelle, molette / pincement / glisser.
+
+Ouvre simplement `univers/index.html` dans ton navigateur (aucune installation).

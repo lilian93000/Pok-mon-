@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Atlas cosmique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+<style>
+/* Layout : carte plein écran, instruments posés aux bords comme sur une console d'observatoire.
+   Un seul monde visuel (le vide spatial), donc palette sombre unique. */
+:root {
+  --void: #05070d;
+  --panel: rgba(10, 14, 24, 0.82);
+  --line: rgba(160, 176, 210, 0.18);
+  --ink: #e8ecf4;
+  --dim: #8d97ad;
+  --accent: #f3c27a;
+  --accent-ink: #1a1206;
+  --font-display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--void);
+  color: var(--ink);
+  font: 14px/1.5 var(--font-body);
+  overflow: hidden;
+  touch-action: none;
+}
+#sky { position: fixed; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+#sky.dragging { cursor: grabbing; }
+
+.hud { position: fixed; z-index: 2; }
+.glass {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* En-tête */
+#brand { top: calc(16px + env(safe-area-inset-top, 0px)); left: 16px; max-width: 360px; pointer-events: none; }
+#brand h1 {
+  font: 400 20px/1.2 var(--font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+  text-wrap: balance;
+}
+#brand p { margin: 4px 0 0; color: var(--dim); font-size: 13px; }
+
+#search-box { top: calc(16px + env(safe-area-inset-top, 0px)); right: 16px; width: 280px; }
+#search {
+  width: 100%;
+  padding: 9px 12px;
+  font: 14px var(--font-body);
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  outline: none;
+}
+#search:focus { border-color: var(--accent); }
+#results {
+  margin-top: 6px;
+  padding: 4px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+#results button {
+  display: flex; justify-content: space-between; gap: 12px;
+  width: 100%; padding: 7px 8px;
+  background: none; border: 0; border-radius: 6px;
+  color: var(--ink); font: 13px var(--font-body); text-align: left; cursor: pointer;
+}
+#results button span:last-child { color: var(--dim); font-family: var(--font-data); font-size: 11px; white-space: nowrap; }
+#results button:hover, #results button:focus-visible { background: rgba(243, 194, 122, 0.12); outline: none; }
+
+/* Échelle des niveaux de zoom */
+#levels {
+  top: 50%; left: 16px; transform: translateY(-50%);
+  padding: 10px 8px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+#levels .rail-title {
+  font: 500 10px var(--font-data); letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--dim); padding: 0 8px 6px;
+}
+#levels button {
+  display: grid; grid-template-columns: 10px 1fr; align-items: center; column-gap: 10px;
+  padding: 6px 10px 6px 8px;
+  background: none; border: 0; border-radius: 6px;
+  color: var(--dim); cursor: pointer; text-align: left;
+}
+#levels button .dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid currentColor; }
+#levels button .name { font: 500 13px var(--font-body); color: inherit; }
+#levels button .size { grid-column: 2; font: 11px var(--font-data); color: var(--dim); opacity: 0.8; }
+#levels button:hover { color: var(--ink); background: rgba(255, 255, 255, 0.04); }
+#levels button:focus-visible { outline: 1px solid var(--accent); }
+#levels button.active { color: var(--accent); }
+#levels button.active .dot { background: var(--accent); border-color: var(--accent); }
+
+/* Barre d'échelle */
+#scale { left: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); padding: 10px 12px; font-family: var(--font-data); }
+#scale-bar { height: 6px; border: 1px solid var(--ink); border-top: 0; width: 100px; margin-bottom: 6px; transition: width 0.15s; }
+#scale-label { font-size: 12px; font-variant-numeric: tabular-nums; }
+#view-width { font-size: 11px; color: var(--dim); margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+/* Temps */
+#time {
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 14px;
+}
+#date { font: 500 13px var(--font-data); font-variant-numeric: tabular-nums; min-width: 92px; }
+#time .speeds { display: flex; gap: 2px; }
+#time button {
+  padding: 5px 9px; border: 0; border-radius: 6px; background: none;
+  color: var(--dim); font: 12px var(--font-data); cursor: pointer; white-space: nowrap;
+}
+#time button:hover { color: var(--ink); }
+#time button:focus-visible { outline: 1px solid var(--accent); }
+#time button.on { background: var(--accent); color: var(--accent-ink); }
+
+/* Fiche de l'objet */
+#panel {
+  right: 16px; top: calc(70px + env(safe-area-inset-top, 0px));
+  width: 320px; max-height: calc(100% - 170px);
+  overflow-y: auto; padding: 18px 18px 16px;
+}
+#panel .kind { font: 500 10px var(--font-data); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+#panel h2 { font: 400 19px/1.3 var(--font-display); letter-spacing: 0.04em; margin: 6px 0 12px; text-wrap: balance; }
+#panel dl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 6px 14px; margin: 0 0 14px; font-size: 13px; }
+#panel dt { color: var(--dim); }
+#panel dd { margin: 0; font-family: var(--font-data); font-size: 12.5px; font-variant-numeric: tabular-nums; min-width: 0; }
+#panel p { margin: 0 0 10px; color: var(--ink); }
+#panel .note { color: var(--dim); font-size: 12px; }
+#panel .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+#panel .actions button {
+  padding: 8px 12px; border-radius: 7px; cursor: pointer;
+  font: 500 13px var(--font-body);
+  border: 1px solid var(--line); background: none; color: var(--ink);
+}
+#panel .actions button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+#panel .actions button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#panel ul { margin: 0 0 10px; padding-left: 18px; color: var(--dim); font-size: 13px; }
+#panel kbd { font: 11px var(--font-data); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; color: var(--ink); }
+#close {
+  position: absolute; top: 10px; right: 10px; width: 28px; height: 28px;
+  border: 0; border-radius: 6px; background: none; color: var(--dim); font-size: 18px; cursor: pointer;
+}
+#close:hover { color: var(--ink); }
+
+@media (max-width: 760px) {
+  #brand { right: 16px; max-width: none; }
+  #brand h1 { font-size: 15px; }
+  #brand p { display: none; }
+  #search-box { top: calc(48px + env(safe-area-inset-top, 0px)); left: 16px; right: 16px; width: auto; }
+  #levels {
+    top: auto; transform: none; left: 16px; right: 16px;
+    bottom: calc(66px + env(safe-area-inset-bottom, 0px));
+    flex-direction: row; overflow-x: auto; padding: 6px; scrollbar-width: none;
+  }
+  #levels .rail-title { display: none; }
+  #levels button { flex: 0 0 auto; grid-template-columns: 8px auto; column-gap: 7px; }
+  #levels button .size { display: none; }
+  #scale { bottom: calc(126px + env(safe-area-inset-bottom, 0px)); padding: 6px 10px; background: none; border: 0; backdrop-filter: none; }
+  #time { left: 16px; right: 16px; transform: none; justify-content: space-between; }
+  #time .speeds { overflow-x: auto; }
+  #panel {
+    left: 16px; right: 16px; width: auto; top: auto;
+    bottom: calc(118px + env(safe-area-inset-bottom, 0px));
+    max-height: 42%;
+  }
+  #panel.intro p, #panel.intro ul { display: none; }
+  #panel.intro h2 { font-size: 15px; margin-bottom: 0; }
+  #panel.intro .actions { margin-top: 10px; }
+  #date { min-width: 0; white-space: nowrap; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #scale-bar { transition: none; }
+}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-label="Carte interactive de l'univers"></canvas>
+
+<header id="brand" class="hud">
+  <h1>Atlas cosmique</h1>
+  <p>De la Terre au bord de l'univers observable, à l'échelle.</p>
+</header>
+
+<div id="search-box" class="hud">
+  <input id="search" type="search" placeholder="Chercher : Mars, Sirius, Andromède…" autocomplete="off" aria-label="Chercher un objet" />
+  <div id="results" class="glass" hidden></div>
+</div>
+
+<nav id="levels" class="hud glass" aria-label="Niveaux d'échelle">
+  <div class="rail-title">Échelles</div>
+</nav>
+
+<div id="scale" class="hud glass" aria-live="polite">
+  <div id="scale-bar"></div>
+  <div id="scale-label">—</div>
+  <div id="view-width">—</div>
+</div>
+
+<div id="time" class="hud glass">
+  <span id="date">—</span>
+  <div class="speeds" role="group" aria-label="Vitesse du temps">
+    <button type="button" data-speed="0" id="sp-pause">Pause</button>
+    <button type="button" data-speed="0.0000115741" id="sp-real">Réel</button>
+    <button type="button" data-speed="1" id="sp-day">1 j/s</button>
+    <button type="button" data-speed="30" id="sp-month">1 mois/s</button>
+    <button type="button" data-speed="365.25" id="sp-year">1 an/s</button>
+  </div>
+</div>
+
+<aside id="panel" class="hud glass" aria-live="polite"></aside>
+
+<script>
+"use strict";
+/* =========================================================================
+   Unités : la carte est en ANNÉES-LUMIÈRE (al).
+   ========================================================================= */
+const KM_PER_LY = 9.4607e12;
+const AU_PER_LY = 63241.077;
+const AU = 1 / AU_PER_LY;
+const KM = 1 / KM_PER_LY;
+const J2000 = Date.UTC(2000, 0, 1, 12);
+const R_OBS = 4.65e10;              // rayon de l'univers observable (al, comobile)
+const MIN_L = -9.4, MAX_L = 8.4;    // bornes de log10(al par pixel)
+const DEG = Math.PI / 180;
+
+// Direction approximative : on projette sur un plan selon l'ascension droite.
+function polar(d, raHours) {
+  const t = raHours * 15 * DEG;
+  return [d * Math.cos(t), -d * Math.sin(t)];
+}
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function gauss(rnd) { return Math.sqrt(-2 * Math.log(rnd() + 1e-9)) * Math.cos(2 * Math.PI * rnd()); }
+function hash(i, j, k, s) {
+  let h = Math.imul(i, 374761393) ^ Math.imul(j, 668265263) ^ Math.imul(k + 7, 1442695041) ^ Math.imul(s + 3, 2246822519);
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
+}
+const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+
+/* =========================================================================
+   Données
+   ========================================================================= */
+const GC = polar(26670, 17.76);       // centre galactique (Sagittarius A*)
+let simDays = (Date.now() - J2000) / 864e5;
+
+const PLANETS = [
+  // nom, a (UA), période (jours), longitude moyenne J2000 (°), rayon (km), couleur, fait
+  ["Mercure", 0.387, 87.969, 252.25, 2440, "#b9b2a8", "Une année y dure 88 jours, mais un jour solaire (de midi à midi) en dure 176."],
+  ["Vénus", 0.723, 224.70, 181.98, 6052, "#e8cf9a", "La planète la plus chaude : environ 465 °C au sol, à cause d'un effet de serre emballé."],
+  ["Terre", 1.000, 365.256, 100.46, 6371, "#6fa8ff", "La seule planète connue qui abrite la vie. Vous êtes ici."],
+  ["Mars", 1.524, 686.98, 355.45, 3390, "#e0754a", "Olympus Mons y culmine à environ 22 km : le plus haut volcan connu du Système solaire."],
+  ["Jupiter", 5.203, 4332.59, 34.40, 69911, "#d9b48a", "Elle pourrait contenir plus de 1 300 Terres. Sa Grande Tache rouge est une tempête plus large que notre planète."],
+  ["Saturne", 9.537, 10759.2, 49.94, 58232, "#e9d39c", "Elle est moins dense que l'eau. Ses anneaux s'étendent sur environ 280 000 km mais font souvent moins de 100 m d'épaisseur."],
+  ["Uranus", 19.19, 30688.5, 313.23, 25362, "#9fdcdc", "Elle tourne couchée sur le côté : son axe est incliné de 98°."],
+  ["Neptune", 30.07, 60182, 304.88, 24622, "#5b7cf0", "Ses vents dépassent 2 000 km/h, les plus rapides du Système solaire."],
+  ["Pluton", 39.48, 90560, 238.93, 1188, "#cdb8a0", "Planète naine depuis 2006. New Horizons a photographié sa grande plaine glacée en forme de cœur en 2015."],
+];
+
+const OBJECTS = [];
+const byId = {};
+function add(o) { o.id = o.id || o.name; OBJECTS.push(o); byId[o.id] = o; return o; }
+function posOf(o) { return o.pos ? o.pos(simDays) : o.p; }
+
+add({
+  name: "Soleil", kind: "sun", label: "Étoile", p: [0, 0], r: 696000 * KM, color: "#ffd88a", sep: Infinity,
+  size: "Diamètre : 1,39 million de km", zoomR: 1.8 * AU,
+  desc: "Une étoile naine jaune ordinaire, âgée de 4,6 milliards d'années. Elle contient 99,8 % de la masse du Système solaire.",
+});
+
+for (const [name, a, period, L0, rkm, color, fact] of PLANETS) {
+  const o = add({
+    name, kind: "planet", label: name === "Pluton" ? "Planète naine" : "Planète", r: rkm * KM, color, sep: a * AU, a: a * AU,
+    size: "Diamètre : " + fmtNum(rkm * 2) + " km",
+    extra: [["Année", fmtPeriod(period)], ["Distance au Soleil", fmtNum(a) + " UA"]],
+    pos: (d) => {
+      const L = (L0 + 360 * d / period) * DEG;
+      return [a * AU * Math.cos(L), -a * AU * Math.sin(L)];
+    },
+    desc: fact, zoomR: Math.max(rkm * 14 * KM, name === "Terre" ? 520000 * KM : 0),
+    ring: name === "Saturne",
+  });
+  if (name === "Terre") byId.Terre = o;
+}
+add({
+  name: "Lune", kind: "planet", label: "Satellite", r: 1737 * KM, color: "#c9c9c4", sep: 384400 * KM, parent: "Terre",
+  size: "Diamètre : 3 474 km", extra: [["Distance à la Terre", "384 400 km"]],
+  pos: (d) => {
+    const e = byId.Terre.pos(d), L = (218.32 + 360 * d / 27.3217) * DEG, r = 384400 * KM;
+    return [e[0] + r * Math.cos(L), e[1] - r * Math.sin(L)];
+  },
+  desc: "Elle s'éloigne de la Terre d'environ 3,8 cm par an. Sa lumière (reflétée) met 1,3 seconde à nous parvenir.",
+  zoomR: 30000 * KM,
+});
+add({
+  name: "Voyager 1", kind: "probe", label: "Sonde spatiale", color: "#f3c27a", r: 0,
+  pos: (d) => {
+    const years = (d - 9131.5) / 365.25;          // depuis le 1er janvier 2025
+    return polar((165.5 + 3.57 * years) * AU, 17.2);
+  },
+  get sep() { return Math.hypot(...posOf(this)); },
+  size: "Lancée le 5 septembre 1977",
+  desc: "L'objet humain le plus lointain. Elle a franchi l'héliopause en 2012 et file à 61 000 km/h. Elle atteint un jour-lumière de la Terre vers la fin de 2026.",
+  zoomR: 60 * AU,
+});
+add({
+  name: "Ceinture de Kuiper", kind: "region", label: "Région", p: polar(46 * AU, 7.5), r: 50 * AU, sep: 40 * AU, color: "#9fb3d9",
+  size: "De 30 à 50 UA du Soleil", zoomR: 70 * AU, quiet: true,
+  desc: "Un anneau de corps glacés au-delà de Neptune, dont Pluton, Éris et Arrokoth. C'est le réservoir des comètes à courte période.",
+});
+add({
+  name: "Héliopause", kind: "region", label: "Frontière", p: polar(121 * AU, 3.5), r: 121 * AU, sep: 121 * AU, color: "#9fb3d9",
+  size: "Environ 120 UA du Soleil", zoomR: 200 * AU, quiet: true,
+  desc: "La frontière où le vent solaire cède face au milieu interstellaire. Voyager 1 l'a franchie en 2012, Voyager 2 en 2018.",
+});
+add({
+  name: "Nuage d'Oort", kind: "region", label: "Région", p: polar(0.9, 9.5), r: 1.6, sep: 0.6, color: "#9fb3d9",
+  size: "De 2 000 à 100 000 UA", zoomR: 2.2, quiet: true,
+  desc: "Une sphère hypothétique de milliards de noyaux glacés, à mi-chemin des étoiles voisines. Les comètes à longue période en viendraient.",
+});
+
+const STARS = [
+  // nom, distance (al), AD (h), couleur, type, description, éclat (0..1)
+  ["Proxima du Centaure", 4.24, 14.50, "#ff8a5c", "Naine rouge", "L'étoile la plus proche du Soleil. Elle possède au moins une planète dans sa zone habitable, Proxima b.", 0.6],
+  ["Alpha du Centaure A et B", 4.37, 14.66, "#ffe9b0", "Étoile double", "Deux étoiles semblables au Soleil qui tournent l'une autour de l'autre en 80 ans.", 0.9],
+  ["Étoile de Barnard", 5.96, 17.96, "#ff8a5c", "Naine rouge", "L'étoile au plus grand mouvement propre du ciel : elle se déplace d'un diamètre de Lune tous les 180 ans.", 0.4],
+  ["Wolf 359", 7.86, 10.94, "#ff7a4a", "Naine rouge", "Une petite étoile très peu lumineuse, invisible à l'œil nu.", 0.3],
+  ["Sirius", 8.60, 6.75, "#cfe0ff", "Étoile blanche", "L'étoile la plus brillante du ciel nocturne. Elle a une compagne naine blanche, Sirius B.", 1],
+  ["Epsilon Eridani", 10.5, 3.55, "#ffd29a", "Étoile orange", "Une jeune étoile entourée d'un disque de débris, comme notre Système solaire à ses débuts.", 0.5],
+  ["Tau Ceti", 11.9, 1.73, "#ffe9b0", "Étoile jaune", "Une étoile proche et stable, cible favorite de la recherche de vie extraterrestre.", 0.5],
+  ["Altaïr", 16.7, 19.85, "#eef2ff", "Étoile blanche", "Elle tourne si vite sur elle-même (un tour en 9 heures) qu'elle est aplatie aux pôles.", 0.8],
+  ["Véga", 25.0, 18.62, "#d6e4ff", "Étoile blanche", "Elle a servi de référence pour la magnitude zéro. Dans 12 000 ans, elle sera l'étoile polaire.", 0.9],
+  ["Arcturus", 36.7, 14.26, "#ffb36b", "Géante orange", "La plus brillante étoile de l'hémisphère nord céleste, 25 fois plus large que le Soleil.", 0.9],
+  ["TRAPPIST-1", 40.7, 23.11, "#ff6a40", "Naine rouge", "Sept planètes de la taille de la Terre, dont plusieurs dans la zone habitable.", 0.35],
+  ["Capella", 42.9, 5.28, "#ffe4a0", "Système de géantes", "En réalité quatre étoiles : deux géantes jaunes et deux naines rouges.", 0.8],
+  ["Aldébaran", 65.3, 4.60, "#ff9b5a", "Géante rouge", "L'œil rouge du Taureau, 44 fois plus large que le Soleil.", 0.8],
+  ["Régulus", 79.3, 10.14, "#d8e4ff", "Étoile bleu-blanc", "Le cœur du Lion. Elle tourne si vite qu'elle est presque déchirée.", 0.7],
+  ["Polaris", 433, 2.53, "#fff3d0", "Supergéante jaune", "L'étoile polaire : elle indique le nord à moins de 1° près.", 0.8],
+  ["Bételgeuse", 548, 5.92, "#ff6a3d", "Supergéante rouge", "Si elle remplaçait le Soleil, elle engloutirait Mars. Elle explosera en supernova d'ici 100 000 ans.", 1],
+  ["Antarès", 550, 16.49, "#ff5a3a", "Supergéante rouge", "Le cœur du Scorpion, environ 700 fois plus large que le Soleil.", 0.9],
+  ["Rigel", 860, 5.24, "#bcd2ff", "Supergéante bleue", "Environ 120 000 fois plus lumineuse que le Soleil.", 1],
+  ["Deneb", 2600, 20.69, "#e6eeff", "Supergéante blanche", "L'une des étoiles les plus lumineuses connues ; visible à l'œil nu malgré sa distance.", 1],
+  ["Kepler-452", 1800, 19.73, "#ffe9b0", "Étoile jaune", "Son étoile ressemble au Soleil et sa planète Kepler-452b a été surnommée « la cousine de la Terre ».", 0.35],
+];
+for (const [name, d, ra, color, type, desc, mag] of STARS) {
+  add({
+    name, kind: "star", label: type, p: polar(d, ra), color, sep: d, dist: d, mag,
+    desc, zoomR: Math.max(1.5, d * 0.25),
+  });
+}
+
+const DEEP = [
+  // nom, kind, distance (al), AD (h), rayon (al), couleur, étiquette, description, options
+  ["Amas des Pléiades", "cluster", 444, 3.79, 9, "#9fc1ff", "Amas d'étoiles", "Les « Sept Sœurs » : un jeune amas d'un millier d'étoiles âgées d'environ 100 millions d'années."],
+  ["Nébuleuse d'Orion", "nebula", 1344, 5.59, 12, "#ff7fb0", "Nébuleuse", "Une pouponnière d'étoiles visible à l'œil nu sous le baudrier d'Orion."],
+  ["Nébuleuse du Crabe", "nebula", 6500, 5.58, 5.5, "#8fe0ff", "Reste de supernova", "Les restes d'une étoile dont l'explosion a été observée par des astronomes chinois en 1054."],
+  ["Piliers de la création", "nebula", 5700, 18.31, 35, "#ffb37a", "Nébuleuse de l'Aigle", "Des colonnes de gaz et de poussière de plusieurs années-lumière, où naissent des étoiles."],
+  ["Nébuleuse de la Carène", "nebula", 8500, 10.73, 115, "#ff8fa0", "Nébuleuse", "Une immense nébuleuse qui abrite Eta Carinae, une étoile instable 5 millions de fois plus lumineuse que le Soleil."],
+  ["Cygnus X-1", "blackhole", 7200, 19.97, 0, "#ffa860", "Trou noir stellaire", "Le premier trou noir largement reconnu (1971). Il dévore une supergéante bleue voisine."],
+  ["Omega du Centaure", "cluster", 17090, 13.45, 86, "#ffe9c0", "Amas globulaire", "Environ 10 millions d'étoiles serrées dans une boule : peut-être le cœur d'une galaxie naine avalée."],
+  ["Sagittarius A*", "blackhole", 26670, 17.76, 0, "#ffa860", "Trou noir supermassif", "Le trou noir au centre de notre galaxie : 4 millions de masses solaires. Photographié en 2022 par l'Event Horizon Telescope."],
+];
+for (const [name, kind, d, ra, r, color, label, desc] of DEEP) {
+  add({ name, kind, label, p: polar(d, ra), r, color, sep: d, dist: d, desc, zoomR: Math.max(r * 6, d * 0.08) });
+}
+
+const GALAXIES = [
+  // nom, distance (al), AD (h), diamètre (al), type, rotation, inclinaison, étiquette, description, regard (Ga, si lointain)
+  ["Grand Nuage de Magellan", 1.63e5, 5.39, 32000, "irr", 0.4, 0.8, "Galaxie satellite", "Une galaxie naine en orbite autour de la Voie lactée, visible à l'œil nu depuis l'hémisphère sud."],
+  ["Petit Nuage de Magellan", 2.0e5, 0.88, 19000, "irr", 1.2, 0.7, "Galaxie satellite", "Petite sœur du Grand Nuage, déformée par la gravité de la Voie lactée."],
+  ["Galaxie d'Andromède", 2.54e6, 0.71, 220000, "spiral", 0.6, 0.35, "Galaxie spirale", "L'objet le plus lointain visible à l'œil nu. Elle fonce vers nous à 110 km/s et fusionnera avec la Voie lactée dans environ 4,5 milliards d'années."],
+  ["Galaxie du Triangle", 2.73e6, 1.56, 61000, "spiral", 2.1, 0.7, "Galaxie spirale", "La troisième grande galaxie du Groupe local, environ 40 milliards d'étoiles."],
+  ["Galaxie de Bode (M81)", 1.18e7, 9.93, 90000, "spiral", 2.6, 0.5, "Galaxie spirale", "Une belle spirale de la Grande Ourse, en interaction avec sa voisine M82."],
+  ["Centaurus A", 1.2e7, 13.42, 60000, "ell", 0.9, 0.85, "Galaxie elliptique", "Une galaxie traversée d'une bande de poussière, née d'une collision. Ses jets radio s'étendent sur un million d'années-lumière."],
+  ["Galaxie du Tourbillon (M51)", 2.3e7, 13.50, 76000, "spiral", 1.6, 0.9, "Galaxie spirale", "La première galaxie dont on a vu la structure spirale (Lord Rosse, 1845)."],
+  ["Galaxie du Sombrero", 3.1e7, 12.67, 50000, "ell", 0.1, 0.32, "Galaxie spirale", "Vue presque par la tranche, avec un bulbe brillant et un anneau de poussière."],
+  ["M87", 5.35e7, 12.51, 130000, "ell", 0, 0.95, "Galaxie elliptique", "Elle abrite le premier trou noir jamais photographié (2019) : 6,5 milliards de masses solaires."],
+];
+add({
+  id: "Voie lactée", name: "Voie lactée", kind: "galaxy", gtype: "spiral", label: "Notre galaxie", p: GC, r: 50000, rot: 0, tilt: 1,
+  sep: 1e5, color: "#f3e3c0", size: "Diamètre : environ 100 000 années-lumière", distText: "Vous êtes dedans", zoomR: 62000,
+  desc: "Notre galaxie : entre 100 et 400 milliards d'étoiles. Le Soleil est à 26 700 années-lumière du centre et en fait le tour en 230 millions d'années.",
+  sprite: true,
+});
+for (const [name, d, ra, diam, gtype, rot, tilt, label, desc] of GALAXIES) {
+  add({
+    name, kind: "galaxy", gtype, label, p: polar(d, ra), r: diam / 2, rot, tilt, color: "#f3e3c0",
+    sep: d, dist: d, desc, size: "Diamètre : " + fmtLy(diam), zoomR: Math.max(diam * 1.4, d * 0.04),
+  });
+}
+
+const LARGE = [
+  // nom, kind, distance (al), AD (h), rayon (al), étiquette, description, regard dans le passé (années) si différent
+  ["Amas de la Vierge", "gcluster", 5.4e7, 12.45, 7.5e6, "Amas de galaxies", "Plus de 1 300 galaxies liées par la gravité. M87 trône en son centre."],
+  ["Laniakea", "super", 2.5e8, 16.25, 2.6e8, "Superamas", "Notre superamas : « horizon céleste immense » en hawaïen. 100 000 galaxies s'écoulent vers le Grand Attracteur. La Voie lactée est à sa périphérie."],
+  ["Grand Attracteur", "gcluster", 2.5e8, 16.25, 1.2e7, "Anomalie gravitationnelle", "Une concentration de masse qui attire des milliers de galaxies, dont la nôtre, à environ 600 km/s."],
+  ["Amas de Coma", "gcluster", 3.21e8, 13.0, 1e7, "Amas de galaxies", "C'est en l'étudiant que Fritz Zwicky a proposé en 1933 l'existence de la matière noire."],
+  ["Superamas de Shapley", "gcluster", 6.5e8, 13.42, 3e7, "Superamas", "La plus grande concentration de galaxies de l'univers proche."],
+  ["Vide du Bouvier", "void", 7.0e8, 14.83, 1.65e8, "Vide cosmique", "Une bulle presque vide de 330 millions d'années-lumière de large. On n'y connaît qu'une soixantaine de galaxies."],
+  ["Grand Mur de Sloan", "gcluster", 1.37e9, 12.0, 6e8, "Filament de galaxies", "Un mur de galaxies long de 1,4 milliard d'années-lumière, découvert en 2003.", 1.3e9],
+  ["Quasar 3C 273", "quasar", 2.4e9, 12.48, 0, "Quasar", "Le premier quasar identifié (1963) : un trou noir qui brille comme 4 000 milliards de Soleils.", 2.4e9],
+  ["GN-z11", "galaxy", 3.2e10, 12.6, 1200, "Galaxie primitive", "Une galaxie observée telle qu'elle était 400 millions d'années après le Big Bang.", 1.34e10],
+  ["JADES-GS-z14-0", "galaxy", 3.4e10, 3.54, 1600, "Galaxie primitive", "Découverte par le télescope James Webb en 2024 : vue 290 millions d'années après le Big Bang.", 1.35e10],
+];
+for (const [name, kind, d, ra, r, label, desc, lookback] of LARGE) {
+  add({
+    name, kind, label, p: polar(d, ra), r, color: kind === "void" ? "#7d8aa8" : "#f3e3c0", gtype: "ell", rot: 0, tilt: 1,
+    sep: d, dist: d, desc, lookback, zoomR: Math.max(r * 1.6, d * 0.05),
+    size: r ? "Diamètre : " + fmtLy(r * 2) : undefined, tiny: kind === "galaxy",
+  });
+}
+add({
+  name: "Fond diffus cosmologique", kind: "cmb", label: "Limite de l'univers observable", p: polar(R_OBS, 10.8), r: R_OBS,
+  sep: R_OBS, dist: R_OBS, lookback: 1.38e10, color: "#ff9a6a", zoomR: R_OBS * 1.15,
+  size: "Rayon : 46,5 milliards d'années-lumière",
+  desc: "La plus vieille lumière de l'univers, émise 380 000 ans après le Big Bang. L'univers s'étant dilaté depuis, la matière qui l'a émise est aujourd'hui à 46,5 milliards d'années-lumière.",
+});
+
+/* =========================================================================
+   Particules générées (galaxie, ceintures, nuage d'Oort)
+   ========================================================================= */
+function genMilkyWay() {
+  const rnd = mulberry32(42), N = 9000;
+  const x = new Float32Array(N), y = new Float32Array(N), c = new Uint8Array(N), s = new Float32Array(N);
+  const b = Math.tan(13 * DEG), a0 = 4200;
+  // Bras orientés pour que le Soleil soit près du bras d'Orion
+  const phase = Math.atan2(-GC[1], -GC[0]) - Math.log(26670 / a0) / b - Math.PI / 4;
+  for (let i = 0; i < N; i++) {
+    let px, py, col;
+    const u = rnd();
+    if (u < 0.16) {           // bulbe et barre
+      const rr = Math.abs(gauss(rnd)) * 3600, th = rnd() * Math.PI * 2;
+      px = rr * Math.cos(th) * 1.7; py = rr * Math.sin(th) * 0.75;
+      const bar = 0.5; const cx = px * Math.cos(bar) - py * Math.sin(bar); py = px * Math.sin(bar) + py * Math.cos(bar); px = cx;
+      col = 0;
+    } else if (u < 0.82) {    // bras
+      const arm = (rnd() * 4) | 0;
+      const r = 3500 + Math.pow(rnd(), 0.9) * 48000;
+      const th = Math.log(r / a0) / b + arm * Math.PI / 2 + phase + gauss(rnd) * 0.07;
+      const spread = r * 0.035 * gauss(rnd);
+      px = (r + spread) * Math.cos(th); py = (r + spread) * Math.sin(th);
+      col = rnd() < 0.07 ? 3 : (rnd() < 0.6 ? 1 : 2);
+    } else {                  // disque diffus
+      const r = -Math.log(1 - rnd() * 0.97) * 12000, th = rnd() * Math.PI * 2;
+      px = r * Math.cos(th); py = r * Math.sin(th); col = 2;
+    }
+    x[i] = GC[0] + px; y[i] = GC[1] + py; c[i] = col; s[i] = 0.6 + rnd() * 1.1;
+  }
+  return { x, y, c, s, N, colors: ["255,214,160", "200,216,255", "255,240,220", "255,120,170"] };
+}
+function genRing(n, rmin, rmax, seed, logDist) {
+  const rnd = mulberry32(seed);
+  const r = new Float32Array(n), a = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    r[i] = logDist ? rmin * Math.pow(rmax / rmin, rnd()) : rmin + (rmax - rmin) * (0.5 + 0.5 * gauss(rnd) * 0.45);
+    a[i] = rnd() * Math.PI * 2;
+  }
+  return { r, a, n };
+}
+const MW = genMilkyWay();
+const ASTEROIDS = genRing(1400, 2.2 * AU, 3.3 * AU, 7);
+const KUIPER = genRing(1600, 30 * AU, 50 * AU, 11);
+const OORT = genRing(2600, 2000 * AU, 100000 * AU, 13, true);
+
+function makeSprite(type, seed) {
+  const c = document.createElement("canvas"); c.width = c.height = 160;
+  const g = c.getContext("2d"), rnd = mulberry32(seed), C = 80;
+  g.globalCompositeOperation = "lighter";
+  if (type === "spiral") {
+    const core = g.createRadialGradient(C, C, 0, C, C, 30);
+    core.addColorStop(0, "rgba(255,236,200,0.95)"); core.addColorStop(1, "rgba(255,220,170,0)");
+    g.fillStyle = core; g.fillRect(0, 0, 160, 160);
+    for (let i = 0; i < 2200; i++) {
+      const arm = i % 2, r = Math.pow(rnd(), 0.8) * 76;
+      const th = Math.log(r / 6 + 1) / 0.33 + arm * Math.PI + gauss(rnd) * 0.28;
+      g.fillStyle = rnd() < 0.1 ? "rgba(255,140,190,0.5)" : "rgba(200,215,255,0.32)";
+      g.fillRect(C + Math.cos(th) * r, C + Math.sin(th) * r, 1.4, 1.4);
+    }
+  } else if (type === "ell") {
+    const gr = g.createRadialGradient(C, C, 0, C, C, 78);
+    gr.addColorStop(0, "rgba(255,236,200,1)"); gr.addColorStop(0.25, "rgba(255,214,160,0.45)"); gr.addColorStop(1, "rgba(255,200,150,0)");
+    g.fillStyle = gr; g.fillRect(0, 0, 160, 160);
+  } else {
+    for (let i = 0; i < 14; i++) {
+      const bx = C + gauss(rnd) * 22, by = C + gauss(rnd) * 16, br = 10 + rnd() * 22;
+      const gr = g.createRadialGradient(bx, by, 0, bx, by, br);
+      gr.addColorStop(0, "rgba(210,220,255,0.35)"); gr.addColorStop(1, "rgba(210,220,255,0)");
+      g.fillStyle = gr; g.fillRect(0, 0, 160, 160);
+    }
+  }
+  return c;
+}
+function makeNebula(color, seed) {
+  const c = document.createElement("canvas"); c.width = c.height = 128;
+  const g = c.getContext("2d"), rnd = mulberry32(seed);
+  g.globalCompositeOperation = "lighter";
+  const [r, gg, b] = [1, 3, 5].map((i) => parseInt(color.slice(i, i + 2), 16));
+  for (let i = 0; i < 18; i++) {
+    const bx = 64 + gauss(rnd) * 16, by = 64 + gauss(rnd) * 16, br = 12 + rnd() * 26;
+    const gr = g.createRadialGradient(bx, by, 0, bx, by, br);
+    gr.addColorStop(0, `rgba(${r},${gg},${b},0.28)`); gr.addColorStop(1, `rgba(${r},${gg},${b},0)`);
+    g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
+  }
+  return c;
+}
+let seedN = 100;
+for (const o of OBJECTS) {
+  if (o.kind === "galaxy") o.img = makeSprite(o.gtype, seedN++);
+  if (o.kind === "nebula") o.img = makeNebula(o.color, seedN++);
+}
+
+/* =========================================================================
+   Mise en forme des nombres
+   ========================================================================= */
+function fmtNum(v) {
+  const digits = v >= 100 ? 0 : v >= 10 ? 1 : 2;
+  return new Intl.NumberFormat("fr-FR", { maximumSignificantDigits: 3, maximumFractionDigits: digits }).format(v);
+}
+function fmtLy(ly) {
+  if (ly < 1e6) return fmtNum(ly) + " années-lumière";
+  if (ly < 1e9) return fmtNum(ly / 1e6) + " millions d'années-lumière";
+  return fmtNum(ly / 1e9) + " milliards d'années-lumière";
+}
+function fmtDist(ly) {
+  const km = ly * KM_PER_LY, au = ly * AU_PER_LY;
+  if (km < 3e6) return fmtNum(km) + " km";
+  if (au < 10000) return fmtNum(au) + " UA";
+  return fmtLy(ly);
+}
+function fmtPeriod(days) {
+  return days < 800 ? fmtNum(days) + " jours" : fmtNum(days / 365.25) + " ans";
+}
+function fmtLight(years) {
+  const s = years * 365.25 * 86400;
+  if (s < 90) return fmtNum(s) + " secondes";
+  if (s < 5400) return fmtNum(s / 60) + " minutes";
+  if (s < 172800) return fmtNum(s / 3600) + " heures";
+  if (years < 1) return fmtNum(s / 86400) + " jours";
+  if (years < 1e6) return fmtNum(years) + " ans";
+  if (years < 1e9) return fmtNum(years / 1e6) + " millions d'années";
+  return fmtNum(years / 1e9) + " milliards d'années";
+}
+// Unité pour la barre d'échelle
+function scaleUnit(ly) {
+  const km = ly * KM_PER_LY, au = ly * AU_PER_LY;
+  if (km < 3e6) return [KM_PER_LY, "km"];
+  if (au < 10000) return [AU_PER_LY, "UA"];
+  if (ly < 1e6) return [1, "al"];
+  if (ly < 1e9) return [1e-6, "millions d'al"];
+  return [1e-9, "milliards d'al"];
+}
+
+/* =========================================================================
+   Caméra et rendu
+   ========================================================================= */
+const canvas = document.getElementById("sky");
+const ctx = canvas.getContext("2d");
+let W = 0, H = 0, DPR = 1;
+const cam = { x: 0, y: 0, l: -6 };       // l = log10(al par pixel)
+let S = Math.pow(10, cam.l);
+let follow = null, flight = null, selected = null;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let bgStars = null;
+
+function resize() {
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth; H = window.innerHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  bgStars = document.createElement("canvas");
+  bgStars.width = W * DPR; bgStars.height = H * DPR;
+  const g = bgStars.getContext("2d"), rnd = mulberry32(5);
+  g.scale(DPR, DPR);
+  const n = Math.round(W * H / 2600);
+  for (let i = 0; i < n; i++) {
+    const a = 0.15 + rnd() * rnd() * 0.6;
+    g.fillStyle = `rgba(${200 + rnd() * 55 | 0},${210 + rnd() * 45 | 0},255,${a})`;
+    const s = rnd() < 0.04 ? 1.6 : 0.9;
+    g.fillRect(rnd() * W, rnd() * H, s, s);
+  }
+}
+const minDim = () => Math.max(160, Math.min(W, H - 140));
+const lFor = (radius) => Math.log10(radius / (minDim() * 0.45));
+const toScreen = (p) => [(p[0] - cam.x) / S + W / 2, (p[1] - cam.y) / S + H / 2];
+const onScreen = (x, y, m) => x > -m && x < W + m && y > -m && y < H + m;
+
+let hits = [], labels = [];
+function addLabel(text, x, y, pri, color, dy, font) {
+  labels.push({ text, x, y, pri, color: color || "rgba(232,236,244,0.9)", dy: dy || 0, font: font || "12px IBM Plex Sans, system-ui, sans-serif" });
+}
+
+function drawWeb() {
+  const a = smooth(4.4, 5.4, cam.l);
+  if (a <= 0) return;
+  const T0 = 1.6e6;
+  const f = Math.log2(44 * S / T0), k0 = Math.max(0, Math.floor(f)), frac = f < 0 ? 0 : f - k0;
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  for (const [k, w] of [[k0, 1 - frac], [k0 + 1, frac]]) {
+    if (w < 0.02) continue;
+    const T = T0 * Math.pow(2, k);
+    const i0 = Math.floor((cam.x - W / 2 * S) / T) - 1, i1 = Math.floor((cam.x + W / 2 * S) / T) + 1;
+    const j0 = Math.floor((cam.y - H / 2 * S) / T) - 1, j1 = Math.floor((cam.y + H / 2 * S) / T) + 1;
+    const node = (i, j) => [(i + 0.15 + 0.7 * hash(i, j, k, 1)) * T, (j + 0.15 + 0.7 * hash(i, j, k, 2)) * T, Math.pow(hash(i, j, k, 3), 2.2)];
+    for (let i = i0; i <= i1; i++) {
+      for (let j = j0; j <= j1; j++) {
+        const n = node(i, j);
+        if (Math.hypot(n[0], n[1]) > R_OBS) continue;
+        const [sx, sy] = toScreen(n);
+        const nb = [node(i + 1, j), node(i, j + 1)];
+        if (hash(i, j, k, 4) > 0.55) nb.push(node(i + 1, j + 1));
+        for (const m of nb) {
+          const bright = (n[2] + m[2]) * 0.5;
+          if (bright < 0.04) continue;
+          const [mx, my] = toScreen(m);
+          ctx.strokeStyle = `rgba(150,170,255,${(0.05 + bright * 0.35) * a * w})`;
+          ctx.lineWidth = 0.6 + bright * 1.6;
+          ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(mx, my); ctx.stroke();
+        }
+        if (n[2] > 0.25) {
+          const rr = 1 + n[2] * 4;
+          const gr = ctx.createRadialGradient(sx, sy, 0, sx, sy, rr * 3);
+          gr.addColorStop(0, `rgba(255,236,210,${0.8 * a * w * n[2]})`); gr.addColorStop(1, "rgba(255,220,200,0)");
+          ctx.fillStyle = gr; ctx.fillRect(sx - rr * 3, sy - rr * 3, rr * 6, rr * 6);
+        }
+      }
+    }
+  }
+  ctx.restore();
+}
+
+function drawCMB() {
+  const R = R_OBS / S;
+  if (R > Math.hypot(W, H) * 3 || cam.l < 6) return;
+  const [ox, oy] = toScreen([0, 0]);
+  ctx.save();
+  ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.arc(ox, oy, R, 0, Math.PI * 2, true);
+  ctx.fillStyle = "rgba(5,7,13,0.92)"; ctx.fill();
+  const gr = ctx.createRadialGradient(ox, oy, R * 0.94, ox, oy, R * 1.04);
+  gr.addColorStop(0, "rgba(255,120,70,0)"); gr.addColorStop(0.6, "rgba(255,140,90,0.35)"); gr.addColorStop(1, "rgba(255,120,70,0)");
+  ctx.fillStyle = gr;
+  ctx.beginPath(); ctx.arc(ox, oy, R * 1.04, 0, Math.PI * 2); ctx.arc(ox, oy, R * 0.94, 0, Math.PI * 2, true); ctx.fill();
+  ctx.restore();
+}
+
+const RINGS = [
+  [1 * AU, "1 UA"], [10 * AU, "10 UA"], [100 * AU, "100 UA"], [1000 * AU, "1 000 UA"], [1, "1 al"], [10, "10 al"], [100, "100 al"],
+  [1000, "1 000 al"], [1e4, "10 000 al"], [1e5, "100 000 al"], [1e6, "1 million d'al"], [1e7, "10 millions d'al"],
+  [1e8, "100 millions d'al"], [1e9, "1 milliard d'al"], [1e10, "10 milliards d'al"],
+];
+function drawRings() {
+  const [ox, oy] = toScreen([0, 0]);
+  ctx.save();
+  ctx.setLineDash([2, 5]);
+  ctx.font = "10px IBM Plex Mono, ui-monospace, monospace";
+  for (const [r, txt] of RINGS) {
+    const R = r / S;
+    const a = smooth(50, 110, R) * (1 - smooth(minDim() * 0.7, minDim() * 1.4, R));
+    if (a <= 0.01) continue;
+    ctx.strokeStyle = `rgba(160,176,210,${0.22 * a})`;
+    ctx.beginPath(); ctx.arc(ox, oy, R, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = `rgba(160,176,210,${0.7 * a})`;
+    const ang = -Math.PI * 0.28, lx = ox + Math.cos(ang) * R + 4, ly = oy + Math.sin(ang) * R - 4;
+    if (onScreen(lx, ly, 0)) ctx.fillText(txt, lx, ly);
+  }
+  ctx.restore();
+}
+
+function drawMilkyWay() {
+  const a = smooth(-0.6, 0.8, cam.l) * (1 - smooth(4.8, 5.6, cam.l));
+  if (a <= 0) return;
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  const scale = Math.min(2.2, Math.max(0.8, 400 / (100000 / S) * 1.6));
+  for (let c = 0; c < 4; c++) {
+    ctx.fillStyle = `rgba(${MW.colors[c]},${(c === 0 ? 0.55 : 0.4) * a})`;
+    for (let i = 0; i < MW.N; i++) {
+      if (MW.c[i] !== c) continue;
+      const sx = (MW.x[i] - cam.x) / S + W / 2, sy = (MW.y[i] - cam.y) / S + H / 2;
+      if (sx < -2 || sx > W + 2 || sy < -2 || sy > H + 2) continue;
+      const s = MW.s[i] * scale;
+      ctx.fillRect(sx, sy, s, s);
+    }
+  }
+  // lueur centrale
+  const [gx, gy] = toScreen(GC), gr0 = 9000 / S;
+  if (gr0 > 2) {
+    const gr = ctx.createRadialGradient(gx, gy, 0, gx, gy, gr0);
+    gr.addColorStop(0, `rgba(255,214,160,${0.35 * a})`); gr.addColorStop(1, "rgba(255,214,160,0)");
+    ctx.fillStyle = gr; ctx.fillRect(gx - gr0, gy - gr0, gr0 * 2, gr0 * 2);
+  }
+  ctx.restore();
+}
+
+function drawBelt(belt, period, color, maxA, minPx, maxPx) {
+  const rRef = belt.r[0] / S;
+  const a = smooth(minPx, minPx * 2.5, rRef) * (1 - smooth(maxPx, maxPx * 3, rRef)) * maxA;
+  if (a <= 0.01) return;
+  const [ox, oy] = toScreen([0, 0]);
+  const rot = period ? (simDays / period) * Math.PI * 2 : 0;
+  ctx.fillStyle = `rgba(${color},${a})`;
+  for (let i = 0; i < belt.n; i++) {
+    const r = belt.r[i] / S, t = belt.a[i] + (period ? rot * Math.pow(belt.r[0] / belt.r[i], 1.5) : 0);
+    const x = ox + r * Math.cos(t), y = oy - r * Math.sin(t);
+    if (x < 0 || x > W || y < 0 || y > H) continue;
+    ctx.fillRect(x, y, 1.2, 1.2);
+  }
+}
+
+function glow(x, y, r, color, alpha) {
+  const gr = ctx.createRadialGradient(x, y, 0, x, y, r);
+  gr.addColorStop(0, color); gr.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = gr; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  ctx.globalAlpha = 1;
+}
+
+function drawObject(o) {
+  const p = posOf(o);
+  const sepPx = o.sep / S;
+  let a = o.kind === "sun" ? 1 : smooth(5, 14, sepPx);
+  const isMW = o.id === "Voie lactée";
+  if (isMW) a = smooth(2.6, 3.2, cam.l);
+  if (o.kind === "cmb") a = smooth(6, 6.8, cam.l);
+  if (o.kind === "sun") a = 1 - smooth(2.6, 3.2, cam.l);
+  if (a <= 0.01) return;
+  const [x, y] = toScreen(p);
+  const physPx = (o.r || 0) / S;
+  if (o.kind !== "cmb" && o.kind !== "super" && o.kind !== "void" && o.kind !== "region" && !onScreen(x, y, physPx + 40)) return;
+
+  let hitR = 8, labelDy = 0, pri = 1, lc = null;
+  ctx.globalAlpha = a;
+  switch (o.kind) {
+    case "sun": {
+      const r = Math.max(physPx, 5);
+      glow(x, y, r * 4 + 10, "rgba(255,200,110,0.6)", a);
+      ctx.globalAlpha = a;
+      ctx.fillStyle = "#fff1cf"; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      hitR = r + 6; labelDy = r + 14; pri = 9;
+      break;
+    }
+    case "planet": {
+      const r = Math.max(physPx, o.name === "Lune" || o.name === "Pluton" ? 2 : 3);
+      if (o.ring && r > 3) {
+        ctx.strokeStyle = "rgba(233,211,156,0.7)"; ctx.lineWidth = Math.max(1, r * 0.25);
+        ctx.beginPath(); ctx.ellipse(x, y, r * 2.2, r * 0.8, -0.35, 0, Math.PI * 2); ctx.stroke();
+      }
+      const gr = ctx.createRadialGradient(x - r * 0.4, y - r * 0.4, r * 0.1, x, y, r);
+      gr.addColorStop(0, o.color); gr.addColorStop(1, shade(o.color));
+      ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      hitR = r + 7; labelDy = r + 13; pri = o.name === "Terre" ? 8 : 6;
+      break;
+    }
+    case "probe": {
+      ctx.fillStyle = o.color;
+      ctx.beginPath(); ctx.moveTo(x, y - 4); ctx.lineTo(x + 4, y); ctx.lineTo(x, y + 4); ctx.lineTo(x - 4, y); ctx.fill();
+      labelDy = 14; pri = 4; lc = "rgba(243,194,122,0.95)";
+      break;
+    }
+    case "star": {
+      const r = 1.5 + o.mag * 2.2;
+      glow(x, y, r * 5, hexA(o.color, 0.55), a);
+      ctx.globalAlpha = a;
+      ctx.fillStyle = o.color; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      labelDy = r + 12; pri = 2 + o.mag * 3;
+      if (sepPx < 40) pri -= 3;
+      break;
+    }
+    case "nebula": {
+      const s = Math.max(physPx * 2, 14);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.drawImage(o.img, x - s / 2, y - s / 2, s, s);
+      ctx.globalCompositeOperation = "source-over";
+      labelDy = s / 3 + 12; pri = 3;
+      break;
+    }
+    case "cluster": {
+      const rnd = mulberry32(o.name.length * 31), rr = Math.max(physPx, 6);
+      ctx.fillStyle = o.color;
+      for (let i = 0; i < 26; i++) {
+        const d = Math.abs(gauss(rnd)) * rr * 0.5, t = rnd() * 6.283;
+        ctx.fillRect(x + Math.cos(t) * d, y + Math.sin(t) * d, 1.4, 1.4);
+      }
+      labelDy = rr + 12; pri = 3;
+      break;
+    }
+    case "blackhole": {
+      ctx.strokeStyle = o.color; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = "#000"; ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2); ctx.fill();
+      labelDy = 16; pri = o.name === "Sagittarius A*" ? 5 : 3;
+      break;
+    }
+    case "galaxy": {
+      const s = Math.max(physPx * 2, o.tiny ? 5 : 9);
+      ctx.save();
+      if (isMW) ctx.globalAlpha = smooth(4.5, 5.2, cam.l);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.translate(x, y); ctx.rotate(o.rot || 0); ctx.scale(1, o.tilt || 1);
+      ctx.drawImage(o.img, -s / 2, -s / 2, s, s);
+      ctx.restore();
+      ctx.globalAlpha = a;
+      hitR = Math.max(9, s * 0.35); labelDy = s * 0.35 + 12; pri = o.id === "Voie lactée" ? 8 : (o.tiny ? 2 : 4);
+      break;
+    }
+    case "gcluster": {
+      const rr = Math.max(physPx, 4);
+      glow(x, y, rr * 1.2 + 6, "rgba(255,226,190,0.45)", a);
+      ctx.globalAlpha = a;
+      labelDy = Math.min(rr, 40) + 12; pri = 3; hitR = Math.max(10, Math.min(rr, 40));
+      break;
+    }
+    case "quasar": {
+      ctx.strokeStyle = "rgba(170,200,255,0.9)"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x - 7, y); ctx.lineTo(x + 7, y); ctx.moveTo(x, y - 7); ctx.lineTo(x, y + 7); ctx.stroke();
+      glow(x, y, 8, "rgba(200,220,255,0.9)", a);
+      labelDy = 16; pri = 3;
+      break;
+    }
+    case "region": case "super": case "void": case "cmb": {
+      if (o.kind === "super" || o.kind === "void") {
+        const R = physPx;
+        if (R < 12 || R > Math.hypot(W, H) * 4) { ctx.globalAlpha = 1; return; }
+        ctx.setLineDash(o.kind === "void" ? [3, 6] : [8, 6]);
+        ctx.strokeStyle = o.kind === "void" ? "rgba(125,138,168,0.55)" : "rgba(243,194,122,0.4)";
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(x, y, R, 0, Math.PI * 2); ctx.stroke();
+        ctx.setLineDash([]);
+        if (o.kind === "void") { ctx.fillStyle = "rgba(5,7,13,0.55)"; ctx.fill(); }
+        // étiquette sur le bord supérieur visible
+        const ly = Math.max(40, y - R + 16);
+        if (!onScreen(x, ly, 0)) { ctx.globalAlpha = 1; return; }
+        hits.push({ o, x, y: ly - 4, r: 30 });
+        addLabel(o.name, x, ly, 3, o.kind === "void" ? "rgba(160,170,200,0.9)" : "rgba(243,194,122,0.95)", 0);
+        ctx.globalAlpha = 1;
+        return;
+      }
+      if (o.kind === "cmb") {
+        const [ox, oy] = toScreen([0, 0]), R = R_OBS / S;
+        const lx = ox, ly = oy - R + 22;
+        if (onScreen(lx, ly, 0)) {
+          hits.push({ o, x: lx, y: ly - 4, r: 40 });
+          addLabel("Fond diffus cosmologique · limite de l'univers observable", lx, ly, 7, "rgba(255,170,130,0.95)", 0);
+        }
+        ctx.globalAlpha = 1;
+        return;
+      }
+      // zones du Système solaire : simple étiquette discrète
+      if (physPx < 50 || physPx > minDim() * 1.6) { ctx.globalAlpha = 1; return; }
+      hits.push({ o, x, y: y - 4, r: 26 });
+      addLabel(o.name, x, y, 2, "rgba(160,180,220,0.75)", 0, "italic 11px IBM Plex Sans, system-ui, sans-serif");
+      ctx.globalAlpha = 1;
+      return;
+    }
+  }
+  ctx.globalAlpha = 1;
+  hits.push({ o, x, y, r: hitR });
+  if (sepPx > (o.kind === "star" ? 26 : 18) || o.kind === "sun" || o.id === "Voie lactée") {
+    addLabel(o.name, x, y, pri, lc, labelDy, o.kind === "sun" || o.id === "Voie lactée" || o.name === "Terre" ? "500 12.5px IBM Plex Sans, system-ui, sans-serif" : undefined);
+  }
+}
+function shade(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const f = (v) => Math.round(v * 0.35);
+  return `rgb(${f(n >> 16)},${f((n >> 8) & 255)},${f(n & 255)})`;
+}
+function hexA(hex, a) {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
+}
+
+function drawOrbits() {
+  ctx.save();
+  ctx.lineWidth = 1;
+  for (const o of OBJECTS) {
+    if (o.kind !== "planet") continue;
+    const R = o.sep / S;
+    const a = smooth(5, 16, R);
+    if (a <= 0.01) continue;
+    const c = o.parent ? toScreen(byId[o.parent].pos(simDays)) : toScreen([0, 0]);
+    if (R > Math.hypot(W, H) * 6) continue;
+    ctx.strokeStyle = `rgba(160,176,210,${(o === selected ? 0.55 : 0.18) * a})`;
+    ctx.beginPath(); ctx.arc(c[0], c[1], R, 0, Math.PI * 2); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawYouAreHere() {
+  const earth = byId.Terre.pos(simDays);
+  const p = cam.l < 4.6 ? earth : GC;
+  const [x, y] = toScreen(p);
+  if (!onScreen(x, y, 20)) return;
+  const label = cam.l < -5.2 ? null : cam.l < 4.6 ? "Vous êtes ici" : null;
+  if (!label) return;
+  ctx.strokeStyle = "rgba(243,194,122,0.9)"; ctx.lineWidth = 1;
+  const r = 9;
+  ctx.beginPath();
+  ctx.moveTo(x - r - 5, y); ctx.lineTo(x - r + 2, y); ctx.moveTo(x + r - 2, y); ctx.lineTo(x + r + 5, y);
+  ctx.moveTo(x, y - r - 5); ctx.lineTo(x, y - r + 2); ctx.moveTo(x, y + r - 2); ctx.lineTo(x, y + r + 5);
+  ctx.stroke();
+  addLabel(label, x, y, 10, "rgba(243,194,122,1)", -r - 10, "500 11px IBM Plex Mono, ui-monospace, monospace");
+}
+
+function drawSelection() {
+  if (!selected) return;
+  const h = hits.find((h) => h.o === selected);
+  if (!h) return;
+  const t = performance.now() / 1000;
+  ctx.strokeStyle = "rgba(243,194,122,0.85)"; ctx.lineWidth = 1.2;
+  const r = h.r + 4 + (reduceMotion ? 0 : Math.sin(t * 3) * 1.5);
+  ctx.beginPath();
+  for (let i = 0; i < 4; i++) {
+    const a0 = i * Math.PI / 2 + Math.PI / 4;
+    ctx.arc(h.x, h.y, r, a0 - 0.45, a0 + 0.45);
+    ctx.moveTo(h.x + Math.cos(a0 + Math.PI / 2 - 0.45) * r, h.y + Math.sin(a0 + Math.PI / 2 - 0.45) * r);
+  }
+  ctx.stroke();
+}
+
+function drawLabels() {
+  labels.sort((a, b) => b.pri - a.pri);
+  const placed = [];
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  for (const L of labels) {
+    ctx.font = L.font;
+    const w = ctx.measureText(L.text).width, h = 14;
+    let x = L.x, y = L.y + L.dy;
+    x = Math.min(W - w / 2 - 6, Math.max(w / 2 + 6, x));
+    const box = [x - w / 2 - 3, y - h / 2, x + w / 2 + 3, y + h / 2];
+    if (placed.some((b) => box[0] < b[2] && box[2] > b[0] && box[1] < b[3] && box[3] > b[1])) continue;
+    placed.push(box);
+    ctx.fillStyle = "rgba(5,7,13,0.55)";
+    ctx.fillText(L.text, x + 1, y + 1);
+    ctx.fillStyle = L.color;
+    ctx.fillText(L.text, x, y);
+  }
+  ctx.textAlign = "start"; ctx.textBaseline = "alphabetic";
+}
+
+/* =========================================================================
+   Vol de caméra
+   ========================================================================= */
+function flyTo(target, radius, opts = {}) {
+  const getPos = typeof target === "function" ? target : () => target;
+  const l1 = Math.min(MAX_L, Math.max(MIN_L, lFor(radius)));
+  const p1 = getPos();
+  const distPx = Math.hypot(p1[0] - cam.x, p1[1] - cam.y) / S;
+  const lPeak = distPx > minDim() * 0.6 ? Math.log10(Math.hypot(p1[0] - cam.x, p1[1] - cam.y) / (minDim() * 0.4)) : -Infinity;
+  const decades = Math.abs(l1 - cam.l) + Math.max(0, lPeak - Math.max(cam.l, l1)) * 2;
+  flight = {
+    t0: performance.now(), dur: reduceMotion ? 1 : Math.min(5200, 1100 + decades * 260),
+    x0: cam.x, y0: cam.y, l0: cam.l, l1, lPeak, getPos,
+  };
+  follow = opts.follow || null;
+}
+const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+function stepFlight(now) {
+  if (!flight) return;
+  const F = flight;
+  const t = Math.min(1, (now - F.t0) / F.dur), e = ease(t);
+  const peak = F.lPeak > Math.max(F.l0, F.l1);
+  if (peak) {
+    cam.l = t < 0.5 ? F.l0 + (F.lPeak - F.l0) * ease(t * 2) : F.lPeak + (F.l1 - F.lPeak) * ease((t - 0.5) * 2);
+  } else {
+    cam.l = F.l0 + (F.l1 - F.l0) * e;
+  }
+  S = Math.pow(10, cam.l);
+  const p1 = F.getPos();
+  const w = (1 - e) * Math.min(1, S / Math.pow(10, F.l0));
+  cam.x = p1[0] + (F.x0 - p1[0]) * w;
+  cam.y = p1[1] + (F.y0 - p1[1]) * w;
+  if (t >= 1) flight = null;
+}
+
+/* =========================================================================
+   Niveaux d'échelle
+   ========================================================================= */
+const LEVELS = [
+  { name: "Terre et Lune", size: "800 000 km", target: () => byId.Terre.pos(simDays), r: 520000 * KM, follow: "Terre" },
+  { name: "Planètes intérieures", size: "3 UA", target: () => [0, 0], r: 1.75 * AU },
+  { name: "Système solaire", size: "80 UA", target: () => [0, 0], r: 42 * AU },
+  { name: "Nuage d'Oort", size: "3 al", target: () => [0, 0], r: 1.7 },
+  { name: "Étoiles voisines", size: "25 al", target: () => [0, 0], r: 12.5 },
+  { name: "Étoiles brillantes", size: "1 500 al", target: () => [0, 0], r: 900 },
+  { name: "Voie lactée", size: "120 000 al", target: () => GC, r: 60000 },
+  { name: "Groupe local", size: "6 millions d'al", target: () => polar(1.25e6, 0.71), r: 2.6e6 },
+  { name: "Superamas", size: "600 millions d'al", target: () => polar(1.6e8, 15.5), r: 3.4e8 },
+  { name: "Univers observable", size: "93 milliards d'al", target: () => [0, 0], r: R_OBS * 1.05 },
+];
+const levelsEl = document.getElementById("levels");
+LEVELS.forEach((lv, i) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.id = "lv-" + i;
+  b.innerHTML = `<span class="dot"></span><span class="name">${lv.name}</span><span class="size">${lv.size}</span>`;
+  b.addEventListener("click", () => {
+    flyTo(lv.target, lv.r, { follow: lv.follow ? byId[lv.follow] : null });
+  });
+  lv.el = b;
+  levelsEl.appendChild(b);
+});
+let activeLevel = -1;
+function updateLevels() {
+  let best = 0, bd = Infinity;
+  LEVELS.forEach((lv, i) => { const d = Math.abs(lFor(lv.r) - cam.l); if (d < bd) { bd = d; best = i; } });
+  if (best !== activeLevel) {
+    LEVELS.forEach((lv, i) => lv.el.classList.toggle("active", i === best));
+    activeLevel = best;
+    if (window.innerWidth <= 760) LEVELS[best].el.scrollIntoView({ block: "nearest", inline: "center" });
+  }
+}
+
+/* =========================================================================
+   HUD : échelle, date, fiche
+   ========================================================================= */
+const scaleBar = document.getElementById("scale-bar"), scaleLabel = document.getElementById("scale-label");
+const viewWidth = document.getElementById("view-width"), dateEl = document.getElementById("date");
+let lastHud = 0;
+function updateHud(now) {
+  if (now - lastHud < 120) return;
+  lastHud = now;
+  const target = 110 * S;
+  const [f, unit] = scaleUnit(target);
+  const v = target * f, pow = Math.pow(10, Math.floor(Math.log10(v)));
+  const nice = [1, 2, 5, 10].map((n) => n * pow).filter((n) => n <= v).pop() || pow;
+  scaleBar.style.width = Math.round(nice / f / S) + "px";
+  scaleLabel.textContent = fmtNum(nice) + " " + unit;
+  viewWidth.textContent = "Largeur de la vue : " + fmtDist(W * S);
+  const d = new Date(J2000 + simDays * 864e5);
+  dateEl.textContent = isFinite(d) ? d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" }) : "—";
+  updateLevels();
+  if (selected && selected.pos) renderPanelStats();
+}
+
+const panel = document.getElementById("panel");
+function intro() {
+  selected = null;
+  panel.classList.add("intro");
+  panel.innerHTML = `
+    <div class="kind">Mode d'emploi</div>
+    <h2>Zoomez de la Terre jusqu'au bord de l'univers</h2>
+    <p>Chaque distance est à l'échelle. Les planètes sont à leur vraie position du jour et tournent selon la vitesse du temps choisie.</p>
+    <ul>
+      <li>Molette, pincement ou <kbd>+</kbd> <kbd>−</kbd> pour zoomer</li>
+      <li>Glisser ou flèches pour se déplacer</li>
+      <li>Cliquer sur un astre pour sa fiche</li>
+      <li>Les échelles à gauche font le voyage pour vous</li>
+    </ul>
+    <p class="note">Le ciel est projeté sur un plan : les distances au Soleil sont réelles, les directions sont approximatives. Les filaments de la toile cosmique sont une illustration.</p>
+    <div class="actions"><button type="button" class="primary" id="tour">Partir de la Terre</button></div>`;
+  document.getElementById("tour").addEventListener("click", () => select(byId.Terre, true));
+}
+function distFromEarth(o) {
+  if (o.dist) return o.dist;
+  const p = posOf(o), e = byId.Terre.pos(simDays);
+  return Math.hypot(p[0] - e[0], p[1] - e[1]);
+}
+function renderPanelStats() {
+  const el = document.getElementById("stats");
+  if (!el || !selected) return;
+  el.innerHTML = statsHtml(selected);
+}
+function statsHtml(o) {
+  const rows = [];
+  if (o.name === "Terre") rows.push(["Distance", "0 km, vous êtes ici"]);
+  else if (o.distText) rows.push(["Distance", o.distText]);
+  else {
+    const d = distFromEarth(o);
+    rows.push(["Distance de la Terre", fmtDist(d)]);
+    if (o.lookback) rows.push(["Lumière partie il y a", fmtLight(o.lookback)]);
+    else rows.push(["Trajet de la lumière", fmtLight(d)]);
+    if (d >= 1e9 && !o.lookback) rows.push(["Note", "distance actuelle (comobile)"]);
+    if (o.lookback && d > 1e9) rows.push(["Distance actuelle", "comobile, dilatée par l'expansion"]);
+  }
+  if (o.size) rows.push(["Taille", o.size.replace(/^Diamètre : /, "Ø ")]);
+  for (const r of o.extra || []) rows.push(r);
+  return rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
+}
+function select(o, fly) {
+  selected = o;
+  panel.classList.remove("intro");
+  panel.innerHTML = `
+    <button id="close" type="button" aria-label="Fermer la fiche">×</button>
+    <div class="kind">${o.label || ""}</div>
+    <h2>${o.name}</h2>
+    <dl id="stats">${statsHtml(o)}</dl>
+    <p>${o.desc || ""}</p>
+    <div class="actions">
+      <button type="button" class="primary" id="go">Zoomer dessus</button>
+      <button type="button" id="back">Revenir à la Terre</button>
+    </div>`;
+  document.getElementById("close").addEventListener("click", intro);
+  document.getElementById("go").addEventListener("click", () => goTo(o));
+  document.getElementById("back").addEventListener("click", () => select(byId.Terre, true));
+  if (fly) goTo(o);
+}
+function goTo(o) {
+  flyTo(() => posOf(o), o.zoomR || 1, { follow: o.pos ? o : null });
+}
+
+/* Recherche */
+const search = document.getElementById("search"), results = document.getElementById("results");
+const norm = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+search.addEventListener("input", () => {
+  const q = norm(search.value.trim());
+  if (!q) { results.hidden = true; return; }
+  const found = OBJECTS.filter((o) => norm(o.name).includes(q) || norm(o.label || "").includes(q)).slice(0, 8);
+  results.innerHTML = found.length
+    ? found.map((o, i) => `<button type="button" data-i="${OBJECTS.indexOf(o)}"><span>${o.name}</span><span>${o.distText ? "ici" : o.name === "Terre" ? "0 km" : fmtDist(distFromEarth(o))}</span></button>`).join("")
+    : `<div style="padding:8px;color:var(--dim);font-size:13px">Aucun objet ne correspond à « ${search.value.replace(/[<>&]/g, "")} ».</div>`;
+  results.hidden = false;
+});
+results.addEventListener("click", (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  select(OBJECTS[+b.dataset.i], true);
+  results.hidden = true; search.value = ""; search.blur();
+});
+search.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") { const b = results.querySelector("button"); if (b) b.click(); }
+  if (e.key === "Escape") { results.hidden = true; search.blur(); }
+});
+
+/* Temps */
+let speed = 1;
+const speedBtns = [...document.querySelectorAll("#time button")];
+function setSpeed(v) { speed = v; speedBtns.forEach((b) => b.classList.toggle("on", +b.dataset.speed === v)); }
+speedBtns.forEach((b) => b.addEventListener("click", () => setSpeed(+b.dataset.speed)));
+setSpeed(1);
+
+/* =========================================================================
+   Interactions
+   ========================================================================= */
+function zoomAt(mx, my, dl) {
+  const nl = Math.min(MAX_L, Math.max(MIN_L, cam.l + dl));
+  flight = null;
+  if (follow) { cam.l = nl; S = Math.pow(10, nl); return; }
+  const wx = cam.x + (mx - W / 2) * S, wy = cam.y + (my - H / 2) * S;
+  cam.l = nl; S = Math.pow(10, nl);
+  cam.x = wx - (mx - W / 2) * S; cam.y = wy - (my - H / 2) * S;
+}
+canvas.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const dy = e.deltaMode === 1 ? e.deltaY * 30 : e.deltaY;
+  zoomAt(e.clientX, e.clientY, Math.max(-0.5, Math.min(0.5, dy * 0.0018)));
+}, { passive: false });
+
+const pointers = new Map();
+let dragMoved = 0, pinch = null;
+canvas.addEventListener("pointerdown", (e) => {
+  canvas.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  dragMoved = 0;
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), l: cam.l };
+  }
+  canvas.classList.add("dragging");
+});
+canvas.addEventListener("pointermove", (e) => {
+  const prev = pointers.get(e.pointerId);
+  if (!prev) return;
+  const cur = { x: e.clientX, y: e.clientY };
+  pointers.set(e.pointerId, cur);
+  if (pointers.size === 2 && pinch) {
+    const [a, b] = [...pointers.values()];
+    const d = Math.hypot(a.x - b.x, a.y - b.y);
+    const target = pinch.l - Math.log10(d / pinch.d);
+    zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, target - cam.l);
+    dragMoved += 10;
+    return;
+  }
+  const dx = cur.x - prev.x, dy = cur.y - prev.y;
+  dragMoved += Math.abs(dx) + Math.abs(dy);
+  if (dragMoved > 4) {
+    flight = null; follow = null;
+    cam.x -= dx * S; cam.y -= dy * S;
+  }
+});
+function endPointer(e) {
+  const wasTap = pointers.size === 1 && dragMoved <= 4;
+  pointers.delete(e.pointerId);
+  if (pointers.size < 2) pinch = null;
+  if (!pointers.size) canvas.classList.remove("dragging");
+  if (wasTap && e.type === "pointerup") pick(e.clientX, e.clientY);
+}
+canvas.addEventListener("pointerup", endPointer);
+canvas.addEventListener("pointercancel", endPointer);
+canvas.addEventListener("dblclick", (e) => zoomAt(e.clientX, e.clientY, -0.6));
+
+function pick(x, y) {
+  let best = null, bd = Infinity;
+  for (const h of hits) {
+    const d = Math.hypot(h.x - x, h.y - y);
+    if (d < Math.max(h.r, 14) && d < bd) { bd = d; best = h.o; }
+  }
+  if (best) select(best, false);
+}
+
+window.addEventListener("keydown", (e) => {
+  if (e.target === search) return;
+  const step = 60 * S;
+  switch (e.key) {
+    case "+": case "=": zoomAt(W / 2, H / 2, -0.25); break;
+    case "-": case "_": zoomAt(W / 2, H / 2, 0.25); break;
+    case "ArrowLeft": follow = null; flight = null; cam.x -= step; break;
+    case "ArrowRight": follow = null; flight = null; cam.x += step; break;
+    case "ArrowUp": follow = null; flight = null; cam.y -= step; break;
+    case "ArrowDown": follow = null; flight = null; cam.y += step; break;
+    case "Escape": intro(); break;
+    default: return;
+  }
+  e.preventDefault();
+});
+window.addEventListener("resize", resize);
+
+/* =========================================================================
+   Boucle principale
+   ========================================================================= */
+let lastT = performance.now();
+function frame(now) {
+  const dt = Math.min(0.1, (now - lastT) / 1000);
+  lastT = now;
+  simDays += speed * dt;
+  stepFlight(now);
+  if (!flight && follow) { const p = posOf(follow); cam.x = p[0]; cam.y = p[1]; }
+  S = Math.pow(10, cam.l);
+
+  ctx.fillStyle = "#05070d";
+  ctx.fillRect(0, 0, W, H);
+  ctx.globalAlpha = 0.9;
+  ctx.drawImage(bgStars, 0, 0, W, H);
+  ctx.globalAlpha = 1;
+
+  hits = []; labels = [];
+  drawWeb();
+  drawCMB();
+  drawRings();
+  drawMilkyWay();
+  drawBelt(OORT, 0, "170,190,230", 0.35, 18, 4000);
+  drawBelt(KUIPER, 0, "170,190,230", 0.5, 30, 1400);
+  drawBelt(ASTEROIDS, 4.6 * 365.25, "200,190,170", 0.55, 20, 1600);
+  drawOrbits();
+  for (const o of OBJECTS) drawObject(o);
+  drawYouAreHere();
+  drawSelection();
+  drawLabels();
+  updateHud(now);
+  requestAnimationFrame(frame);
+}
+
+resize();
+cam.l = lFor(LEVELS[2].r);
+S = Math.pow(10, cam.l);
+intro();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
