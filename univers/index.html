@@ -220,6 +220,35 @@ body {
 .chip[aria-pressed="true"] { border-color: var(--field); color: var(--field); }
 .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+/* Dossier du vaisseau-arche */
+#panel.dossier { width: 440px; }
+.sd-tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; margin: 0 -4px 10px; scrollbar-width: thin; }
+.sd-tabs button {
+  flex: 0 0 auto; padding: 6px 10px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+  font: 500 12px var(--font-body); color: var(--dim); background: none; border: 1px solid var(--line);
+}
+.sd-tabs button[aria-selected="true"] { color: var(--accent-ink); background: var(--field); border-color: var(--field); }
+.sd-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sd-body h4 { font: 500 10.5px var(--font-data); letter-spacing: 0.12em; text-transform: uppercase; color: var(--field); margin: 16px 0 8px; }
+.sd-body p { font-size: 13.5px; line-height: 1.6; }
+.sd-lead { font-size: 14.5px !important; color: var(--ink); }
+.sd-note { color: var(--dim); font-size: 12px !important; }
+.sd-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin: 4px 0 12px; }
+.sd-tile { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-width: 0; }
+.sd-tile .k { display: block; font: 500 9.5px var(--font-data); letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
+.sd-tile .v { display: block; font: 400 16px/1.3 var(--font-display); letter-spacing: 0.02em; margin: 3px 0 1px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.sd-tile .s { display: block; font-size: 11px; color: var(--dim); }
+.sd-list { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 8px; }
+.sd-list li { display: grid; gap: 2px; font-size: 13px; line-height: 1.5; padding-left: 10px; border-left: 2px solid var(--line); }
+.sd-list li b { color: var(--ink); font-weight: 500; }
+.sd-list li span { color: var(--dim); }
+.sd-svg { width: 100%; height: auto; display: block; margin: 6px 0 4px; }
+.sd-timeline { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+.sd-timeline label { font-size: 13px; color: var(--dim); }
+.sd-timeline label b { color: var(--ink); font-family: var(--font-data); }
+.sd-timeline input { width: 100%; margin: 8px 0 10px; accent-color: var(--field); }
+@media (max-width: 760px) { #panel.dossier { width: auto; } #btn-ship { display: none; } }
+
 /* Visite guidée */
 #tour-bar, #light-bar {
   position: fixed; z-index: 6; left: 50%; transform: translateX(-50%);
@@ -346,6 +375,7 @@ body.in3d #levels, body.in3d #scale, body.in3d #time, body.in3d #search-box, bod
   <p>De la Terre au bord de l'univers observable, à l'échelle.</p>
   <div class="brand-actions">
     <button type="button" id="btn-tour" class="chip primary">▶ Voyage guidé</button>
+    <button type="button" id="btn-ship" class="chip">Vaisseau-arche</button>
     <button type="button" id="btn-light" class="chip"><span class="long">✦ Voyage de la lumière</span><span class="short">✦ Lumière</span></button>
     <button type="button" id="btn-sound" class="chip" aria-pressed="false">Son : coupé</button>
   </div>
@@ -419,6 +449,7 @@ body.in3d #levels, body.in3d #scale, body.in3d #time, body.in3d #search-box, bod
   </div>
 </section>
 
+<script src="ship.js"></script>
 <script>
 "use strict";
 /* =========================================================================
@@ -648,6 +679,17 @@ for (const [name, d, ra, color, type, desc, mag] of STARS) {
     desc, zoomR: Math.max(1.5, d * 0.25),
   });
 }
+
+// Vaisseau-arche (concept) sur sa route vers Proxima b ; la position suit la frise du dossier
+const PROX = byId["Proxima du Centaure"].p;
+add({
+  name: "Arche Aurore", kind: "ship", label: "Vaisseau-arche · concept", color: "#8fe0ff", r: 0,
+  pos: () => { const f = window.Ship ? window.Ship.state(window.Ship.year).frac : 0.45; return [PROX[0] * f, PROX[1] * f]; },
+  get sep() { return Math.hypot(...posOf(this)); },
+  size: "2,4 km · 1 200 personnes",
+  desc: "Un vaisseau-génération imaginé pour coloniser Proxima b : 89 ans de voyage, deux anneaux en rotation pour la gravité, une écologie entièrement recyclée. Touchez les modules en 3D pour explorer.",
+  zoomR: 1.2,
+});
 
 const DEEP = [
   // nom, kind, distance (al), AD (h), rayon (al), couleur, étiquette, description, options
@@ -1211,6 +1253,26 @@ function drawObject(o) {
       hitR = r + 7; labelDy = r + 13; pri = o.name === "Terre" ? 8 : 6;
       break;
     }
+    case "ship": {
+      // route Terre → Proxima, puis le vaisseau orienté vers sa cible
+      const [ox, oy] = toScreen([0, 0]), [tx2, ty2] = toScreen(PROX);
+      ctx.save();
+      ctx.setLineDash([4, 6]); ctx.strokeStyle = "rgba(143,224,255,0.35)"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(tx2, ty2); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.strokeStyle = "rgba(143,224,255,0.75)"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(x, y); ctx.stroke();
+      const ang = Math.atan2(ty2 - oy, tx2 - ox);
+      ctx.translate(x, y); ctx.rotate(ang);
+      glow(0, 0, 14, "rgba(143,224,255,0.5)", a);
+      ctx.globalAlpha = a;
+      ctx.fillStyle = "#dff6ff";
+      ctx.beginPath(); ctx.moveTo(7, 0); ctx.lineTo(-5, -4); ctx.lineTo(-3, 0); ctx.lineTo(-5, 4); ctx.closePath(); ctx.fill();
+      ctx.restore();
+      ctx.globalAlpha = a;
+      labelDy = 15; pri = 7; lc = "rgba(143,224,255,1)"; hitR = 14;
+      break;
+    }
     case "probe": {
       ctx.fillStyle = o.color;
       ctx.beginPath(); ctx.moveTo(x, y - 4); ctx.lineTo(x + 4, y); ctx.lineTo(x, y + 4); ctx.lineTo(x - 4, y); ctx.fill();
@@ -1516,7 +1578,9 @@ function intro() {
     <div class="actions">
       <button type="button" class="primary" id="tour">▶ Lancer le voyage guidé</button>
       <button type="button" id="free">Partir de la Terre</button>
+      <button type="button" id="ship-intro">Vaisseau-arche</button>
     </div>`;
+  document.getElementById("ship-intro").addEventListener("click", () => explore(byId["Arche Aurore"]));
   document.getElementById("tour").addEventListener("click", startTour);
   document.getElementById("free").addEventListener("click", () => explore(byId.Terre));
 }
@@ -1612,6 +1676,8 @@ function statsHtml(o) {
 function select(o, fly) {
   selected = o;
   panel.classList.remove("intro");
+  panel.classList.toggle("dossier", o.kind === "ship");
+  if (o.kind === "ship" && window.Ship) { renderShipPanel(o, fly); return; }
   panel.innerHTML = `
     <button id="close" type="button" aria-label="Fermer la fiche">×</button>
     <div class="kind">${o.label || ""}</div>
@@ -1629,6 +1695,30 @@ function select(o, fly) {
   if (fly) goTo(o);
   if (window.Viewer3D) window.Viewer3D.relayout();
 }
+function renderShipPanel(o, fly) {
+  panel.innerHTML = `
+    <button id="close" type="button" aria-label="Fermer la fiche">×</button>
+    <div class="kind">${o.label}</div>
+    <h2>${o.name}</h2>
+    <div id="sd-root"></div>
+    <div class="actions">
+      ${has3D() && !in3D() ? '<button type="button" class="primary" id="go3d">Voir le vaisseau en 3D</button>' : ""}
+      <button type="button" id="back">Revenir à la Terre</button>
+    </div>`;
+  window.Ship.render(document.getElementById("sd-root"));
+  document.getElementById("close").addEventListener("click", () => { close3D(); intro(); });
+  const go3d = document.getElementById("go3d");
+  if (go3d) go3d.addEventListener("click", () => open3D(o));
+  document.getElementById("back").addEventListener("click", () => explore(byId.Terre));
+  if (fly) goTo(o);
+  if (window.Viewer3D) window.Viewer3D.relayout();
+}
+// clic sur un module du vaisseau en 3D
+window.atlasShipSection = (id) => {
+  const root = document.getElementById("sd-root");
+  if (root && window.Ship) { window.Ship.render(root, id); root.scrollIntoView({ block: "nearest" }); }
+};
+
 function goTo(o, onDone) {
   flyTo(() => posOf(o), o.zoomR || 1, { follow: o.pos ? o : null, onDone });
 }
@@ -1662,6 +1752,7 @@ const TOUR = [
   { id: "Saturne", compare: true, title: "Saturne", text: "Ses anneaux font 280 000 km de large mais souvent moins de 100 m d'épaisseur. À côté, la Terre à l'échelle." },
   { id: "Voyager 1", title: "Voyager 1", text: "Lancée en 1977, c'est l'objet humain le plus lointain. Elle atteint un jour-lumière de la Terre fin 2026." },
   { id: "Proxima du Centaure", title: "L'étoile la plus proche", text: "4,24 années-lumière. À la vitesse de Voyager, il faudrait plus de 70 000 ans pour l'atteindre. Une planète, Proxima b, tourne dans sa zone habitable." },
+  { id: "Arche Aurore", field: false, title: "Et si nous y allions ?", text: "L'Arche Aurore, un vaisseau-génération imaginé pour 1 200 personnes : 89 ans de voyage vers Proxima b, deux anneaux en rotation pour recréer la gravité, et une écologie qui recycle tout." },
   { id: "Bételgeuse", compare: true, title: "Bételgeuse", text: "Une supergéante rouge. Les cercles montrent les orbites de la Terre et de Mars : placée au centre du Système solaire, elle les engloutirait." },
   { id: "Nébuleuse d'Orion", title: "La nébuleuse d'Orion", text: "À 1 344 années-lumière, une pouponnière où naissent des milliers d'étoiles. Visible à l'œil nu sous le baudrier d'Orion." },
   { id: "Sagittarius A*", title: "Le cœur de la Voie lactée", text: "Un trou noir de 4 millions de masses solaires. Sa gravité courbe la lumière du disque qui l'entoure : on voit même le dessous du disque, au-dessus du trou." },
@@ -1835,6 +1926,7 @@ function drawLightFront() {
   }
 }
 document.getElementById("btn-light").addEventListener("click", startLight);
+document.getElementById("btn-ship").addEventListener("click", () => { stopTour(); stopLight(); explore(byId["Arche Aurore"]); });
 document.getElementById("lb-stop").addEventListener("click", stopLight);
 document.getElementById("lb-restart").addEventListener("click", startLight);
 LB["lb-pause"].addEventListener("click", () => {

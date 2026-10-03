@@ -102,6 +102,13 @@ on zoome en continu de la Terre et la Lune jusqu'au fond diffus cosmologique, à
 - Planètes éclairées du côté du Soleil, toile cosmique organique, géantes gazeuses aux
   bandes animées en rotation différentielle et ombre des anneaux sur Saturne.
 
+- **Vaisseau-arche « Arche Aurore »** (concept) : un vaisseau-génération de 2,4 km pour
+  1 200 personnes, en route vers Proxima b sur la carte. Modèle 3D détaillé dont chaque
+  module est cliquable (anneaux en rotation à 1 g, bouclier, réservoirs, radiateurs, moteur
+  à fusion, tirs laser anti-poussière, bouclier magnétique) et dossier technique complet :
+  air et oxygène, eau, nourriture, déchets, énergie, équipage, salles, défense, et une frise
+  des 89 ans de voyage.
+
 **En ligne :** https://lilian93000.github.io/Pok-mon-/univers/
 
 Ouvre `univers/index.html` dans ton navigateur (la vue 3D charge Three.js depuis un CDN,
