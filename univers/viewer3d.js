@@ -11,7 +11,8 @@
 
   const canvas = host.querySelector("canvas");
   const loading = document.getElementById("v3d-loading");
-  const TEX = window.ATLAS_TEXTURES || {};
+  const SCRIPT_SRC = (document.currentScript && document.currentScript.src) || "";
+  const COARSE = window.matchMedia("(pointer: coarse)").matches;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const DEG = Math.PI / 180;
 
@@ -107,8 +108,54 @@
     }
     return c;
   }
-  function canvasTex(c) { const t = new T.CanvasTexture(c); t.anisotropy = 4; return t; }
-  function imgTex(url) { const t = new T.TextureLoader().load(url); t.anisotropy = 4; return t; }
+  let ANISO = 8;
+  function canvasTex(c) { const t = new T.CanvasTexture(c); t.anisotropy = ANISO; return t; }
+  function imgTex(url) { const t = new T.TextureLoader().load(url); t.anisotropy = ANISO; return t; }
+
+  /* Images HD : cartes NASA (domaine public, dépôt NASA-3D-Resources) et Terre « Blue Marble »,
+     chargées à la demande depuis le dossier tex/ */
+  const HD_FILES = {
+    earthDay: "earth_day.jpg", earthNight: "earth_night.jpg", earthClouds: "earth_clouds.jpg", earthSpec: "earth_spec.jpg",
+    earthNormal: "earth_normal.jpg", moon: "moon.jpg", stars: "stars.jpg",
+    Mars: "mars.jpg", Vénus: "venus.jpg", Jupiter: "jupiter.jpg", Saturne: "saturn.jpg", Neptune: "neptune.jpg", Pluton: "pluto.jpg",
+    Io: "io.jpg", Europe: "europa.jpg", Ganymède: "ganymede.jpg", Callisto: "callisto.jpg", Titan: "titan.jpg", Encelade: "enceladus.jpg",
+    Rhéa: "rhea.jpg", Triton: "triton.jpg", Phobos: "phobos.jpg", Deimos: "deimos.jpg", Titania: "titania.jpg", Miranda: "miranda.jpg",
+    Charon: "charon.jpg",
+  };
+  const HD_BASE = (() => { try { return new URL("tex/", SCRIPT_SRC || location.href).href; } catch (e) { return "tex/"; } })();
+  const CAN_HD = location.protocol !== "file:";
+  const hdCache = {};
+  const EMBED = { earthDay: "earthDay", earthNight: "earthLights", earthSpec: "earthSpec", earthClouds: "earthClouds", moon: "moon" };
+  function loadHD(keys) {
+    if (!CAN_HD) return ensureEmbedded();
+    return Promise.all(keys.filter((k) => HD_FILES[k] && !(k in hdCache)).map((k) => new Promise((res) => {
+      new T.TextureLoader().load(HD_BASE + HD_FILES[k], (t) => { t.anisotropy = ANISO; hdCache[k] = t; res(); }, undefined, () => { hdCache[k] = null; res(); });
+    }))).then(() => (keys.some((k) => EMBED[k] && !hdCache[k]) ? ensureEmbedded() : null));
+  }
+  function lazyHD(key) {
+    if (hdCache[key]) return hdCache[key];
+    if (!CAN_HD || !HD_FILES[key] || hdCache[key] === null) return tx(key);
+    const t = new T.TextureLoader().load(HD_BASE + HD_FILES[key]); t.anisotropy = ANISO; hdCache[key] = t;
+    return t;
+  }
+  function tx(key) {
+    if (hdCache[key]) return hdCache[key];
+    const e = EMBED[key], emb = window.ATLAS_TEXTURES || {};
+    if (e && emb[e]) return cached("emb-" + key, () => imgTex(emb[e]));
+    return null;
+  }
+  // Ouvert en local (file://), le navigateur refuse les images comme textures : on charge la version embarquée.
+  let embedPromise = null;
+  function ensureEmbedded() {
+    if (window.ATLAS_TEXTURES) return Promise.resolve();
+    if (!embedPromise) embedPromise = new Promise((res) => {
+      const sc = document.createElement("script");
+      sc.src = new URL("textures.js", SCRIPT_SRC || location.href).href;
+      sc.onload = sc.onerror = () => res();
+      document.head.appendChild(sc);
+    });
+    return embedPromise;
+  }
 
   const cache = {};
   function cached(key, fn) { return cache[key] || (cache[key] = fn()); }
@@ -402,10 +449,10 @@
      Planètes : textures procédurales
      --------------------------------------------------------------------- */
   const PLANET_TEX = {
-    Mercure: () => craters(sphereTex(1024, 512, (x, y, z) => {
+    Mercure: () => craters(sphereTex(COARSE ? 1024 : 2048, COARSE ? 512 : 1024, (x, y, z) => {
       const n = fbm(x * 4, y * 4, z * 4, 6), v = 125 + n * 90;
       C[0] = v * 1.02; C[1] = v * 0.97; C[2] = v * 0.9;
-    }), 420, 21, 1),
+    }), COARSE ? 420 : 900, 21, 1),
     Vénus: () => sphereTex(1024, 512, (x, y, z) => {
       const w = fbm(x * 2, y * 2, z * 2, 3);
       const n = fbm(x * 2.5 + w * 1.6, y * 7 + w * 2, z * 2.5 + w, 6);
@@ -487,12 +534,15 @@
     Mars: [["Phobos", 2.76, 0.03, "#8a7a6a", 0.32], ["Deimos", 6.92, 0.025, "#9a8a7a", 1.26]],
     Neptune: [["Triton", 14.4, 0.08, "#d8c8c0", -5.88]],
     Uranus: [["Miranda", 5.1, 0.03, "#b8b8b8", 1.41], ["Titania", 17.1, 0.05, "#c0b8b0", 8.7]],
+    Pluton: [["Charon", 16.5, 0.51, "#a8a098", 6.39]],
   };
   function addMoons(parent, list) {
     list.forEach(([name, d, rad, col, per], i) => {
       parent.add(orbitLine(d, 0x8d97ad, 0.16));
       const piv = new T.Group(); piv.rotation.y = i * 1.9 + 0.6; parent.add(piv);
-      const m = miniPlanet(col, i * 13 + 5, rad); m.position.x = d; piv.add(m);
+      const mt = tx(name);
+      const m = mt ? new T.Mesh(new T.SphereGeometry(rad, 64, 32), new T.MeshStandardMaterial({ map: mt, roughness: 1 })) : miniPlanet(col, i * 13 + 5, rad);
+      m.position.x = d; piv.add(m);
       if (name === "Titan") { const a = atmosphere(rad * 1.25, "#e0a050", 2, 1.2, ctx3.sunDir, rad); a.position.x = d; piv.add(a); }
       const l = textSprite(name, "#d8dce8", 0.75, true); l.position.set(d + rad * 1.3, rad, 0); piv.add(l);
       if (name === "Io") ctx3.ioPivot = piv;
@@ -530,11 +580,14 @@
           q.x += jet * ph * 0.035 * flow;
           q.y += snoise(vec3(q.x * 22.0, q.y * 46.0, time * 0.04)) * 0.0022 * flow;
           q.x += snoise(vec3(q.x * 9.0 + 4.0, q.y * 28.0, time * 0.03)) * 0.004 * flow;
-          return texture2D(map, q).rgb;
+          return texture2D(map, q, -0.6).rgb;
         }
         void main(){
           float p0 = fract(time * 0.05), p1 = fract(time * 0.05 + 0.5);
           vec3 col = mix(samp(p0 - 0.5), samp(p1 - 0.5), abs(2.0 * p0 - 1.0));
+          // détail fin : filets de nuages étirés le long des bandes
+          float fine = snoise(vec3(vUv.x * 110.0, vUv.y * 820.0, time * 0.02)) * 0.6 + snoise(vec3(vUv.x * 320.0, vUv.y * 1500.0, 3.0)) * 0.4;
+          col *= 1.0 + fine * 0.05 * flow;
           vec3 N = normalize(vN), L = normalize(sunDir), V = normalize(vView);
           float d = dot(N, L);
           float lit = smoothstep(-0.06, 0.2, d) * mix(0.5, 1.0, max(d, 0.0));
@@ -639,35 +692,50 @@
       const l = liveSun(new Date());
       sunDir.copy(l.dir); light.position.copy(sunDir).multiplyScalar(30); liveBadge(l);
     }));
-    const day = cached("earthDay", () => TEX.earthDay ? imgTex(TEX.earthDay) : null);
+    const day = tx("earthDay"), normal = tx("earthNormal");
     let earth;
     if (day) {
       const mat = new T.ShaderMaterial({
         uniforms: {
           dayMap: { value: day },
-          nightMap: { value: cached("earthLights", () => imgTex(TEX.earthLights)) },
-          specMap: { value: cached("earthSpec", () => imgTex(TEX.earthSpec)) },
+          nightMap: { value: tx("earthNight") },
+          specMap: { value: tx("earthSpec") },
+          normalMap: { value: normal || day },
+          hasNormal: { value: normal ? 1 : 0 },
           sunDir: { value: sunDir },
         },
+        extensions: { derivatives: true },
         vertexShader: `
-          varying vec2 vUv; varying vec3 vN; varying vec3 vView;
+          varying vec2 vUv; varying vec3 vN; varying vec3 vView; varying vec3 vW;
           void main(){
             vUv = uv;
             vec4 w = modelMatrix * vec4(position,1.0);
+            vW = w.xyz;
             vN = normalize(mat3(modelMatrix) * normal);
             vView = normalize(cameraPosition - w.xyz);
             gl_Position = projectionMatrix * viewMatrix * w;
           }`,
         fragmentShader: `
-          uniform sampler2D dayMap; uniform sampler2D nightMap; uniform sampler2D specMap; uniform vec3 sunDir;
-          varying vec2 vUv; varying vec3 vN; varying vec3 vView;
+          uniform sampler2D dayMap; uniform sampler2D nightMap; uniform sampler2D specMap; uniform sampler2D normalMap;
+          uniform float hasNormal; uniform vec3 sunDir;
+          varying vec2 vUv; varying vec3 vN; varying vec3 vView; varying vec3 vW;
+          // relief : carte de normales en espace tangent, repère reconstruit par dérivées écran
+          vec3 perturb(vec3 p, vec3 n, vec3 mapN) {
+            vec3 q0 = dFdx(p), q1 = dFdy(p); vec2 st0 = dFdx(vUv), st1 = dFdy(vUv);
+            vec3 q1perp = cross(q1, n), q0perp = cross(n, q0);
+            vec3 T = q1perp * st0.x + q0perp * st1.x, B = q1perp * st0.y + q0perp * st1.y;
+            float det = max(dot(T, T), dot(B, B)), sc = det == 0.0 ? 0.0 : inversesqrt(det);
+            return normalize(T * (mapN.x * sc) + B * (mapN.y * sc) + n * mapN.z);
+          }
           void main(){
             vec3 N = normalize(vN), L = normalize(sunDir), V = normalize(vView);
             float d = dot(N, L);
-            vec3 day = texture2D(dayMap, vUv).rgb;
+            vec3 Nd = N;
+            if (hasNormal > 0.5) { vec3 mn = texture2D(normalMap, vUv).xyz * 2.0 - 1.0; mn.xy *= 1.6; Nd = perturb(vW, N, mn); }
+            vec3 day = texture2D(dayMap, vUv, -0.5).rgb;
             vec3 night = texture2D(nightMap, vUv).r * vec3(1.0, 0.78, 0.45) * 1.7;
             float k = smoothstep(-0.18, 0.22, d);
-            vec3 col = mix(night, day * (0.08 + 1.05 * max(d, 0.0)), k);
+            vec3 col = mix(night, day * (0.08 + 1.05 * max(dot(Nd, L), 0.0)), k);
             float spec = texture2D(specMap, vUv).r;
             vec3 R = reflect(-L, N);
             col += spec * pow(max(dot(R, V), 0.0), 28.0) * 0.75 * vec3(1.0, 0.95, 0.85) * k;
@@ -678,10 +746,10 @@
             gl_FragColor = vec4(col, 1.0);
           }`,
       });
-      earth = new T.Mesh(new T.SphereGeometry(1, 128, 64), mat);
+      earth = new T.Mesh(new T.SphereGeometry(1, 192, 96), mat);
       const clouds = new T.Mesh(
         new T.SphereGeometry(1.012, 96, 48),
-        new T.MeshLambertMaterial({ color: 0xffffff, alphaMap: cached("earthClouds", () => imgTex(TEX.earthClouds)), transparent: true, depthWrite: false, opacity: 0.95 })
+        new T.MeshLambertMaterial({ color: 0xffffff, alphaMap: tx("earthClouds"), transparent: true, depthWrite: false, opacity: 0.95 })
       );
       tilt.add(clouds);
       updaters.push((dt) => { clouds.rotation.y += dt * 0.018; });
@@ -712,29 +780,29 @@
     ctx3.sunDir = sunDir;
     distantSun(sunDir);
     // la caméra regarde la limite jour/nuit
-    return { dist: 3.2, minD: 1.25, maxD: 14, theta: Math.atan2(sunDir.x, sunDir.z) - 1.0, phi: Math.PI / 2 - 0.25 };
+    return { dist: 3.2, minD: 1.55, maxD: 14, theta: Math.atan2(sunDir.x, sunDir.z) - 1.0, phi: Math.PI / 2 - 0.25 };
   };
 
   function moonMaterial() {
-    const t = cached("moonTex", () => TEX.moon ? imgTex(TEX.moon) : canvasTex(craters(sphereTex(512, 256, (x, y, z) => { const v = 140 + fbm(x * 4, y * 4, z * 4, 5) * 80; C[0] = C[1] = C[2] = v; }), 200, 5, 1)));
-    return new T.MeshStandardMaterial({ map: t, bumpMap: t, bumpScale: 0.012, roughness: 1, metalness: 0 });
+    const t = tx("moon") || cached("moonProc", () => canvasTex(craters(sphereTex(512, 256, (x, y, z) => { const v = 140 + fbm(x * 4, y * 4, z * 4, 5) * 80; C[0] = C[1] = C[2] = v; }), 200, 5, 1)));
+    return new T.MeshStandardMaterial({ map: t, bumpMap: t, bumpScale: 0.004, roughness: 1, metalness: 0 });
   }
 
   B.moon = function () {
     const sunDir = new T.Vector3(1, 0.1, 0.3).normalize();
     sunLight(sunDir);
-    const moon = new T.Mesh(new T.SphereGeometry(1, 128, 64), moonMaterial());
+    const moon = new T.Mesh(new T.SphereGeometry(1, 192, 96), moonMaterial());
     scene.add(moon);
     updaters.push((dt) => { moon.rotation.y += dt * 0.01; });
     // La Terre au loin
-    if (TEX.earthDay) {
-      const e = new T.Mesh(new T.SphereGeometry(1.2, 64, 32), new T.MeshStandardMaterial({ map: cached("earthDay", () => imgTex(TEX.earthDay)), roughness: 0.8 }));
+    if (tx("earthDay")) {
+      const e = new T.Mesh(new T.SphereGeometry(1.2, 64, 32), new T.MeshStandardMaterial({ map: tx("earthDay"), roughness: 0.8 }));
       e.position.set(-18, 4, -26); scene.add(e);
       const a = atmosphere(1.254, "#5aa0ff", 3, 1.3, sunDir, 1.2); a.position.copy(e.position); scene.add(a);
       const l = textSprite("Terre", "#6fa8ff", 1.6); l.position.set(-16.4, 5.4, -26); scene.add(l);
       updaters.push((dt) => { e.rotation.y += dt * 0.05; });
     }
-    return { dist: 3.4, minD: 1.3, maxD: 12, theta: -0.2, bloom: [0.35, 0.4, 0.92] };
+    return { dist: 3.4, minD: 1.5, maxD: 12, theta: -0.2, bloom: [0.35, 0.4, 0.92] };
   };
 
   B.planet = function (o) {
@@ -742,14 +810,25 @@
     const sunDir = (info.ring ? new T.Vector3(1, 0.55, 0.6) : new T.Vector3(1, 0.1, 0.45)).normalize();
     const light = sunLight(sunDir);
     const tilt = new T.Group(); tilt.rotation.z = (info.tilt || 0) * DEG; scene.add(tilt);
-    const tex = cached("p-" + o.name, () => canvasTex((PLANET_TEX[o.name] || PLANET_TEX.Mercure)()));
+    const tex = tx(o.name) || cached("p-" + o.name, () => canvasTex((PLANET_TEX[o.name] || PLANET_TEX.Mercure)()));
+    const real = !!tx(o.name);
     const rocky = ["Mercure", "Mars", "Pluton"].includes(o.name);
     const gas = GAS_FLOW[o.name];
     const ringTex = info.ring && !info.faintRing ? cached("ring-" + o.name, () => saturnRingTex(info.faintRing)) : null;
     const mat = gas
       ? gasGiantMaterial(tex, { flow: gas[0], rim: gas[1], sunDir, ringTex, ring: info.ring })
-      : new T.MeshStandardMaterial({ map: tex, roughness: rocky ? 1 : 0.85, metalness: 0, bumpMap: rocky ? tex : null, bumpScale: 0.03 });
-    const mesh = new T.Mesh(new T.SphereGeometry(1, 128, 64), mat);
+      : new T.MeshStandardMaterial({ map: tex, roughness: rocky || real ? 1 : 0.85, metalness: 0, bumpMap: rocky || o.name === "Vénus" ? tex : null, bumpScale: real ? 0.006 : 0.03 });
+    const mesh = new T.Mesh(new T.SphereGeometry(1, 160, 80), mat);
+    // ajustements de teinte des cartes réelles après tonemapping
+    if (real && o.name === "Mars") mat.color.setRGB(1.1, 0.88, 0.76);
+    if (real && o.name === "Pluton") mat.color.setRGB(0.78, 0.76, 0.74);
+    if (o.name === "Vénus" && real) {
+      // la surface (radar Magellan) sous une couche de nuages qui fait le tour en 4 jours
+      const ct = cached("p-Vénus-nuages", () => canvasTex(PLANET_TEX["Vénus"]()));
+      const clouds = new T.Mesh(new T.SphereGeometry(1.012, 128, 64), new T.MeshStandardMaterial({ map: ct, transparent: true, opacity: 0.38, roughness: 1, depthWrite: false }));
+      tilt.add(clouds);
+      updaters.push((dt) => { clouds.rotation.y += dt * 0.12; });
+    }
     if (gas) {
       const inv = new T.Matrix4();
       updaters.push((dt, t) => {
@@ -774,7 +853,7 @@
     Object.assign(ctx3, { sunDir, mesh, tilt });
     if (MOONS[o.name]) addMoons(tilt, MOONS[o.name]);
     distantSun(sunDir);
-    return { dist: info.ring ? 5.6 : 3.1, minD: 1.3, maxD: 14, phi: info.ring ? 1.0 : 1.35, theta: -0.35, bloom: [0.55, 0.45, 0.8] };
+    return { dist: info.ring ? 5.6 : 3.1, minD: 1.5, maxD: 14, phi: info.ring ? 1.0 : 1.35, theta: -0.35, bloom: [0.55, 0.45, 0.8] };
   };
 
   B.sun = function () {
@@ -1513,7 +1592,7 @@
     return g;
   }
   function ghostEarth(r) {
-    const t = TEX.earthDay ? cached("earthDay", () => imgTex(TEX.earthDay)) : null;
+    const t = lazyHD("earthDay");
     return new T.Mesh(new T.SphereGeometry(r, 48, 24), new T.MeshStandardMaterial({ map: t, color: t ? 0xffffff : 0x3366cc, roughness: 0.8 }));
   }
   function ringAt(r, color, label, ang) {
@@ -1533,7 +1612,7 @@
     };
     if (o.kind === "planet") {
       const rkm = o.r / (1 / 9.4607e12);
-      if (o.name === "Terre") side(1737 / 6371, new T.Mesh(new T.SphereGeometry(1737 / 6371, 48, 24), new T.MeshStandardMaterial({ map: TEX.moon ? cached("moonTex", () => imgTex(TEX.moon)) : null })), "Lune (à l'échelle)", "#c9c9c4");
+      if (o.name === "Terre") side(1737 / 6371, new T.Mesh(new T.SphereGeometry(1737 / 6371, 48, 24), new T.MeshStandardMaterial({ map: lazyHD("moon") })), "Lune (à l'échelle)", "#c9c9c4");
       else side(6371 / rkm, ghostEarth(6371 / rkm), "Terre (à l'échelle)", "#6fa8ff");
     } else if (o.kind === "sun") {
       g.add(new T.PointLight(0xfff0d0, 2.5, 0, 2)); g.add(new T.AmbientLight(0x404858, 0.5));
@@ -1564,6 +1643,13 @@
      --------------------------------------------------------------------- */
   let ctx3 = {};
   function skySphere() {
+    // vraie carte du ciel (catalogue Tycho, NASA) si disponible
+    const st = tx("stars");
+    if (st) {
+      const m = new T.Mesh(new T.SphereGeometry(900, 96, 48), new T.MeshBasicMaterial({ map: st, color: 0x8a8a8a, side: T.BackSide, depthWrite: false, toneMapped: false }));
+      m.scale.x = -1; m.renderOrder = -2;
+      return m;
+    }
     const tex = cached("sky", () => {
       const pole = new T.Vector3(0.35, 0.86, -0.37).normalize(), core = new T.Vector3(-0.8, 0.3, 0.52).normalize();
       core.addScaledVector(pole, -core.dot(pole)).normalize();
@@ -2069,10 +2155,16 @@
     renderer.toneMapping = T.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.0;
     camera = new T.PerspectiveCamera(45, 1, 0.05, 3000);
-    // lueur (bloom) si les modules de post-traitement sont chargés
+    ANISO = renderer.capabilities.getMaxAnisotropy();
+    // lueur (bloom) si les modules de post-traitement sont chargés ; anticrénelage MSAA en WebGL2
     if (T.EffectComposer && T.RenderPass && T.UnrealBloomPass) {
       try {
-        composer = new T.EffectComposer(renderer);
+        let rt;
+        if (renderer.capabilities.isWebGL2 && T.WebGLMultisampleRenderTarget) {
+          rt = new T.WebGLMultisampleRenderTarget(window.innerWidth, window.innerHeight, { format: T.RGBAFormat });
+          rt.samples = 4;
+        }
+        composer = new T.EffectComposer(renderer, rt);
         renderPass = new T.RenderPass(new T.Scene(), camera);
         bloom = new T.UnrealBloomPass(new T.Vector2(window.innerWidth, window.innerHeight), 0.8, 0.5, 0.6);
         composer.addPass(renderPass);
@@ -2147,12 +2239,21 @@
     scene = null;
   }
 
+  function texKeysFor(o) {
+    const k = o.kind === "blackhole" || o.kind === "quasar" ? [] : ["stars"];
+    if (o.name === "Terre") k.push("earthDay", "earthNight", "earthClouds", "earthSpec", "earthNormal", "moon");
+    else if (o.name === "Lune") k.push("moon", "earthDay");
+    else if (HD_FILES[o.name]) k.push(o.name);
+    (MOONS[o.name] || []).forEach(([n]) => { if (HD_FILES[n]) k.push(n); });
+    return k;
+  }
+
   function builderFor(o) {
     if (o.kind === "planet") return o.name === "Terre" ? B.earth : o.name === "Lune" ? B.moon : B.planet;
     return B[o.kind] || B.star;
   }
 
-  let closeTimer = 0;
+  let closeTimer = 0, openToken = 0;
   function open(o, opts = {}) {
     if (!ensureRenderer()) return false;
     close(true);
@@ -2167,16 +2268,20 @@
     currentObj = o; compare = null; compareOn = false;
     compareBtn.setAttribute("aria-pressed", "false"); compareBtn.classList.remove("on");
     requestAnimationFrame(() => host.classList.add("on"));
-    // laisse le temps d'afficher le message avant le calcul des textures
-    setTimeout(() => {
-      if (!isOpen) return;
+    const token = ++openToken;
+    const keys = texKeysFor(o);
+    if (keys.some((k) => HD_FILES[k] && !(k in hdCache))) loading.textContent = "Chargement des images NASA · " + o.name + "…";
+    // charge les images HD, puis laisse le temps d'afficher le message avant le calcul des textures
+    loadHD(keys).then(() => new Promise((r) => setTimeout(r, 30))).then(() => {
+      if (!isOpen || token !== openToken) return;
+      loading.textContent = "Génération de " + o.name + "…";
       scene = new T.Scene();
       updaters = [];
       ctx3 = {};
       lowRes = false;
       renderer.shadowMap.enabled = false;
       viewInfo = builderFor(o)(o) || {};
-      if (viewInfo.stars !== false) { scene.add(skySphere()); scene.add(starfield()); }
+      if (viewInfo.stars !== false) { scene.add(skySphere()); scene.add(starfield(tx("stars") ? 1600 : 5000)); }
       // champ magnétique
       U.ff.value = 0;
       field = buildField(o);
@@ -2230,7 +2335,7 @@
         raf = requestAnimationFrame(loop);
       };
       loop();
-    }, 40);
+    });
     return true;
   }
 

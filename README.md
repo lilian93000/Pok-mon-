@@ -102,5 +102,15 @@ on zoome en continu de la Terre et la Lune jusqu'au fond diffus cosmologique, à
 - Planètes éclairées du côté du Soleil, toile cosmique organique, géantes gazeuses aux
   bandes animées en rotation différentielle et ombre des anneaux sur Saturne.
 
-Ouvre simplement `univers/index.html` dans ton navigateur (aucune installation ;
-la vue 3D charge Three.js depuis un CDN, il faut donc être connecté).
+**En ligne :** https://lilian93000.github.io/Pok-mon-/univers/
+
+Ouvre `univers/index.html` dans ton navigateur (la vue 3D charge Three.js depuis un CDN,
+il faut donc être connecté). Pour les images HD, passe par un serveur
+(`python3 -m http.server`, puis http://localhost:8000/univers/) : ouvert directement en
+fichier local, le navigateur interdit les images comme textures et la carte se
+rabat sur des versions plus légères.
+
+**Images :** cartes de Mars, Vénus (radar Magellan), Jupiter, Saturne, Neptune, Pluton,
+des lunes et carte du ciel Tycho : dépôt [NASA-3D-Resources](https://github.com/nasa/NASA-3D-Resources)
+(domaine public). Terre 4K, nuages, lumières nocturnes, relief : images NASA « Blue Marble »
+via le dépôt three.js. Les autres surfaces (Mercure, Uranus, étoiles, nébuleuses…) sont générées.
