@@ -89,6 +89,18 @@ on zoome en continu de la Terre et la Lune jusqu'au fond diffus cosmologique, à
   (et les orbites de la Terre et de Mars à l'intérieur de Bételgeuse).
 - **Ambiance sonore** générée en direct (Web Audio) et **qualité adaptative** qui
   baisse la résolution si l'appareil peine.
+- **Vraies positions célestes** : hors du Système solaire, la carte est vue du pôle
+  nord galactique ; chaque astre est placé selon sa vraie longitude galactique
+  (conversion des coordonnées J2000), à sa vraie distance.
+- **Portrait de la Voie lactée** : barre centrale, deux bras majeurs (Persée,
+  Écu-Croix), bras secondaires et bras d'Orion où se trouve le Soleil, nommés sur la carte.
+- **Voyage de la lumière** : un rayon part de la Terre ; le front lumineux s'étend et
+  chaque astre atteint s'affiche avec le temps réel de trajet (Lune 1,3 s, Proxima 4,24 ans…).
+- **Fiches scientifiques** : masse, gravité, jour, température, lunes ; type spectral,
+  température, luminosité et rayon des étoiles ; et « Sur Terre quand cette lumière
+  est partie » pour relier chaque distance à l'histoire humaine.
+- Planètes éclairées du côté du Soleil, toile cosmique organique, géantes gazeuses aux
+  bandes animées en rotation différentielle et ombre des anneaux sur Saturne.
 
 Ouvre simplement `univers/index.html` dans ton navigateur (aucune installation ;
 la vue 3D charge Three.js depuis un CDN, il faut donc être connecté).

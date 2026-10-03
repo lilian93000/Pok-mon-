@@ -500,6 +500,64 @@
     });
   }
 
+  /* Géantes gazeuses : bandes animées en rotation différentielle (technique des « flow maps »),
+     ombre des anneaux calculée analytiquement */
+  function gasGiantMaterial(tex, o) {
+    tex.wrapS = T.RepeatWrapping; tex.needsUpdate = true;
+    const mat = new T.ShaderMaterial({
+      uniforms: {
+        map: { value: tex }, ringMap: { value: o.ringTex || tex }, time: { value: 0 }, flow: { value: o.flow },
+        sunDir: { value: o.sunDir }, sunLocal: { value: new T.Vector3(1, 0, 0) },
+        ringR: { value: new T.Vector2(...(o.ring || [0, 0])) }, hasRing: { value: o.ringTex ? 1 : 0 }, rim: { value: new T.Color(o.rim || "#ffffff") },
+      },
+      vertexShader: `
+        varying vec2 vUv; varying vec3 vN; varying vec3 vView; varying vec3 vLocal;
+        void main(){
+          vUv = uv; vLocal = position;
+          vec4 w = modelMatrix * vec4(position, 1.0);
+          vN = normalize(mat3(modelMatrix) * normal);
+          vView = normalize(cameraPosition - w.xyz);
+          gl_Position = projectionMatrix * viewMatrix * w;
+        }`,
+      fragmentShader: SNOISE + `
+        uniform sampler2D map; uniform sampler2D ringMap; uniform float time; uniform float flow;
+        uniform vec3 sunDir; uniform vec3 sunLocal; uniform vec2 ringR; uniform float hasRing; uniform vec3 rim;
+        varying vec2 vUv; varying vec3 vN; varying vec3 vView; varying vec3 vLocal;
+        vec3 samp(float ph){
+          float lat = (vUv.y - 0.5) * 3.14159;
+          float jet = sin(lat * 13.0) * 0.6 + sin(lat * 4.0) * 0.4;
+          vec2 q = vUv;
+          q.x += jet * ph * 0.035 * flow;
+          q.y += snoise(vec3(q.x * 22.0, q.y * 46.0, time * 0.04)) * 0.0022 * flow;
+          q.x += snoise(vec3(q.x * 9.0 + 4.0, q.y * 28.0, time * 0.03)) * 0.004 * flow;
+          return texture2D(map, q).rgb;
+        }
+        void main(){
+          float p0 = fract(time * 0.05), p1 = fract(time * 0.05 + 0.5);
+          vec3 col = mix(samp(p0 - 0.5), samp(p1 - 0.5), abs(2.0 * p0 - 1.0));
+          vec3 N = normalize(vN), L = normalize(sunDir), V = normalize(vView);
+          float d = dot(N, L);
+          float lit = smoothstep(-0.06, 0.2, d) * mix(0.5, 1.0, max(d, 0.0));
+          if (hasRing > 0.5) {
+            vec3 sl = normalize(sunLocal);
+            if (abs(sl.y) > 0.001) {
+              float t = -vLocal.y / sl.y;
+              if (t > 0.0) {
+                vec3 q = vLocal + sl * t; float r = length(q.xz);
+                if (r > ringR.x && r < ringR.y) lit *= 1.0 - 0.85 * texture2D(ringMap, vec2((r - ringR.x) / (ringR.y - ringR.x), 0.5)).a;
+              }
+            }
+          }
+          vec3 c = col * (0.025 + 0.98 * lit);
+          float fres = pow(1.0 - max(dot(N, V), 0.0), 2.5);
+          c += rim * fres * 0.4 * smoothstep(-0.25, 0.4, d);
+          gl_FragColor = vec4(c, 1.0);
+        }`,
+    });
+    return mat;
+  }
+  const GAS_FLOW = { Jupiter: [1, "#e8c9a0"], Saturne: [0.7, "#f2dfb0"], Uranus: [0.25, "#a8f0ff"], Neptune: [0.6, "#7aa0ff"] };
+
   function saturnRingTex(faint) {
     const c = document.createElement("canvas"); c.width = 1024; c.height = 4;
     const g = c.getContext("2d"), img = g.createImageData(1024, 4), r = rng(77);
@@ -686,8 +744,21 @@
     const tilt = new T.Group(); tilt.rotation.z = (info.tilt || 0) * DEG; scene.add(tilt);
     const tex = cached("p-" + o.name, () => canvasTex((PLANET_TEX[o.name] || PLANET_TEX.Mercure)()));
     const rocky = ["Mercure", "Mars", "Pluton"].includes(o.name);
-    const mat = new T.MeshStandardMaterial({ map: tex, roughness: rocky ? 1 : 0.85, metalness: 0, bumpMap: rocky ? tex : null, bumpScale: 0.03 });
+    const gas = GAS_FLOW[o.name];
+    const ringTex = info.ring && !info.faintRing ? cached("ring-" + o.name, () => saturnRingTex(info.faintRing)) : null;
+    const mat = gas
+      ? gasGiantMaterial(tex, { flow: gas[0], rim: gas[1], sunDir, ringTex, ring: info.ring })
+      : new T.MeshStandardMaterial({ map: tex, roughness: rocky ? 1 : 0.85, metalness: 0, bumpMap: rocky ? tex : null, bumpScale: 0.03 });
     const mesh = new T.Mesh(new T.SphereGeometry(1, 128, 64), mat);
+    if (gas) {
+      const inv = new T.Matrix4();
+      updaters.push((dt, t) => {
+        mat.uniforms.time.value = t;
+        mesh.updateMatrixWorld();
+        inv.copy(mesh.matrixWorld).invert();
+        mat.uniforms.sunLocal.value.copy(sunDir).transformDirection(inv);
+      });
+    }
     mesh.castShadow = true;
     tilt.add(mesh);
     if (info.atmo) tilt.add(atmosphere(1.035, info.atmo[0], info.atmo[1], info.atmo[2], sunDir));
@@ -934,11 +1005,13 @@
         if (u < 0.17) {
           const rr = Math.abs(gauss(r)) * 1.1;
           const th = r() * Math.PI * 2, ph = Math.acos(2 * r() - 1);
-          p.x = rr * Math.sin(ph) * Math.cos(th) * (opts.bar ? 1.9 : 1); p.z = rr * Math.sin(ph) * Math.sin(th); p.y = rr * Math.cos(ph) * 0.55;
+          p.x = rr * Math.sin(ph) * Math.cos(th) * (opts.bar ? 1.9 : 1); p.z = rr * Math.sin(ph) * Math.sin(th) * (opts.bar ? 0.65 : 1); p.y = rr * Math.cos(ph) * 0.55;
+          if (opts.barAngle) { const ca = Math.cos(opts.barAngle), sa = Math.sin(opts.barAngle), x0 = p.x; p.x = x0 * ca - p.z * sa; p.z = x0 * sa + p.z * ca; }
           p.r = 1; p.g = 0.82; p.b = 0.55; p.s = 0.09;
         } else if (u < 0.8) {
-          const rr = 0.9 + Math.pow(r(), 0.85) * 9.5, arm = (r() * arms) | 0;
-          const th = Math.log(rr / 0.7) / b + arm * Math.PI * 2 / arms + gauss(r) * 0.2;
+          const arm = (r() * arms) | 0;
+          const rr = opts.armFn ? 2.1 + Math.pow(r(), 0.85) * 8.4 : 0.9 + Math.pow(r(), 0.85) * 9.5;
+          const th = (opts.armFn ? opts.armFn(rr * 5000, arm) : Math.log(rr / 0.7) / b + arm * Math.PI * 2 / arms) + gauss(r) * (opts.armFn ? 0.07 : 0.2);
           const sp = rr * 0.09 * gauss(r);
           p.x = (rr + sp) * Math.cos(th); p.z = (rr + sp) * Math.sin(th); p.y = gauss(r) * 0.12 * (1.2 - rr / 11);
           const k = r();
@@ -954,11 +1027,11 @@
       }));
       // bandes de poussière
       grp.add(cloud(N / 6 | 0, (i, p) => {
-        const rr = 1.6 + Math.pow(r(), 0.9) * 8.5, arm = (r() * arms) | 0;
-        const th = Math.log(rr / 0.7) / b + arm * Math.PI * 2 / arms - 0.22 + gauss(r) * 0.07;
+        const rr = (opts.armFn ? 2.2 : 1.6) + Math.pow(r(), 0.9) * (opts.armFn ? 7.6 : 8.5), arm = (r() * arms) | 0;
+        const th = opts.armFn ? opts.armFn(rr * 5000, arm) + 0.085 + gauss(r) * 0.03 : Math.log(rr / 0.7) / b + arm * Math.PI * 2 / arms - 0.22 + gauss(r) * 0.07;
         p.x = rr * Math.cos(th); p.z = rr * Math.sin(th); p.y = gauss(r) * 0.05;
         p.r = 0.06; p.g = 0.04; p.b = 0.03; p.s = 0.28;
-      }, { dark: true, opacity: 0.35 }));
+      }, { dark: true, opacity: opts.armFn ? 0.2 : 0.35 }));
       grp.add(glowSprite(new T.Color(1, 0.85, 0.6), 5.5, 0.85));
     } else if (type === "ell") {
       const N = opts.n || 50000, ax = opts.axes || [1, 0.75, 0.85];
@@ -987,7 +1060,7 @@
   }
   B.galaxy = function (o) {
     let opts = { type: o.gtype || "spiral" };
-    if (o.id === "Voie lactée") opts = { type: "spiral", arms: 4, pitch: 13, bar: true, n: 90000 };
+    if (o.id === "Voie lactée") opts = { type: "spiral", arms: 4, pitch: 13, bar: true, n: 70000, armFn: window.ATLAS_ARM, barAngle: window.ATLAS_MWM ? window.ATLAS_MWM.barAngle : 0 };
     if (o.name === "Galaxie d'Andromède") opts = { type: "spiral", arms: 2, pitch: 10, n: 90000 };
     if (o.name === "Galaxie du Sombrero" || o.name === "Centaurus A") opts = { type: "ell", axes: o.name === "Centaurus A" ? [1, 0.85, 1] : [1, 0.45, 1] };
     if (o.tiny) opts = { type: "irr", primitive: true, n: 20000 };
@@ -1007,8 +1080,16 @@
       if (!sombrero) g.rotation.z = 0.6;
     }
     if (o.id === "Voie lactée") {
-      // position du Soleil : 26 700 al du centre (~ 5,3 unités)
-      const sp = new T.Vector3(Math.cos(2.3) * 5.4, 0, Math.sin(2.3) * 5.4);
+      // disque peint (le même modèle que la carte) : 1 unité = 5 000 al
+      if (window.ATLAS_MW) {
+        const t = cached("mwimg", () => new T.CanvasTexture(window.ATLAS_MW.canvas));
+        const sz = window.ATLAS_MW.ext / 5000;
+        const disc = new T.Mesh(new T.PlaneGeometry(sz, sz), new T.MeshBasicMaterial({ map: t, transparent: true, blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide, opacity: 0.9, toneMapped: false }));
+        disc.rotation.x = -Math.PI / 2;
+        g.add(disc);
+      }
+      // position du Soleil : 26 700 al du centre, du côté opposé au centre galactique
+      const sp = new T.Vector3(0, 0, 26670 / 5000);
       const m = glowSprite(new T.Color(1, 0.8, 0.45), 0.7, 1); m.position.copy(sp); g.add(m);
       const l = textSprite("Vous êtes ici", "#f3c27a", 0.9); l.position.copy(sp).add(new T.Vector3(0.25, 0.35, 0)); g.add(l);
     }
@@ -1907,10 +1988,11 @@
       let ph = 0;
       for (let a = 0; a < arms; a++) for (const off of [-0.18, 0, 0.18]) {
         const pts = [];
-        for (let k = 0; k <= 80; k++) { const rr = 1.4 + k / 80 * 8.8, th = Math.log(rr / 0.7) / b + a * Math.PI * 2 / arms + off; pts.push(V(rr * Math.cos(th), 0.03, rr * Math.sin(th))); }
+        const fn = o.id === "Voie lactée" && window.ATLAS_ARM;
+        for (let k = 0; k <= 80; k++) { const rr = (fn ? 2.1 : 1.4) + k / 80 * (fn ? 8.1 : 8.8), th = (fn ? fn(rr * 5000, a) : Math.log(rr / 0.7) / b + a * Math.PI * 2 / arms) + off; pts.push(V(rr * Math.cos(th), 0.03, rr * Math.sin(th))); }
         grp.add(fluxTube(pts, 0.03, mat, (ph += 0.21) % 1, 200));
       }
-      const xMat = fieldMaterial("#9fd8ff", "#7f8bff", { dens: 2, speed: 0.8, opacity: 0.28 });
+      const xMat = fieldMaterial("#9fd8ff", "#7f8bff", { dens: 2, speed: 0.8, opacity: 0.14 });
       for (let i = 0; i < 10; i++) {
         const ang = i / 10 * Math.PI * 2 + 0.3;
         for (const sg of [1, -1]) {
