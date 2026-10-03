@@ -53,7 +53,7 @@ function renderHome(main) {
     <section class="hero">
       <span class="eyebrow">Cours interactif · ${LESSONS.length} leçons · ${LESSONS.reduce((n, l) => n + (l.body.match(/class="lab"/g) || []).length, 0)} labos</span>
       <h1>Comprendre l'<em>électricité</em> et le <strong>nucléaire</strong></h1>
-      <p>Chaque leçon explique un phénomène avec des mots simples, puis te laisse le manipuler : fais circuler des électrons, équilibre le réseau à 50 Hz, pilote une réaction en chaîne, démarre une centrale depuis sa salle de commande. Deux questions valident chaque leçon.</p>
+      <p>Chaque leçon explique un phénomène avec des mots simples, puis te laisse le manipuler : fais circuler des électrons, équilibre le réseau à 50 Hz, pilote une réaction en chaîne, démarre une centrale depuis sa salle de commande. Quelques questions valident chaque leçon.</p>
       <canvas class="hero-canvas" id="hero-cv" aria-hidden="true"></canvas>
     </section>
     <div class="tracks">${card("elec")}${card("nuc")}${card("cen")}</div>
@@ -133,7 +133,7 @@ function renderLesson(main, l) {
     </header>
     ${l.body}
     <section class="check">
-      <div class="check-head"><h3>Valide la leçon</h3><span class="eyebrow" id="chk-state">${done.has(l.id) ? "Déjà validée ✓" : "Réponds juste aux deux questions"}</span></div>
+      <div class="check-head"><h3>Valide la leçon</h3><span class="eyebrow" id="chk-state">${done.has(l.id) ? "Déjà validée ✓" : "Réponds juste à toutes les questions"}</span></div>
       <div id="chk"></div>
     </section>
     <nav class="lesson-nav">

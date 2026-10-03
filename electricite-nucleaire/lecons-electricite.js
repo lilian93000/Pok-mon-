@@ -374,9 +374,341 @@ lesson({
 
 /* ===================================================================== */
 lesson({
+  id: "naissance", track: "elec",
+  title: "D'où vient l'électricité ? L'alternateur expliqué",
+  lead: "Une centrale, une éolienne, une voiture ou une dynamo de vélo produisent l'électricité de la même façon : en faisant bouger un aimant près d'un fil. Voici pourquoi ça marche, étape par étape, en partant de zéro.",
+  body: `
+  <div class="prose">
+    <h2>1. On ne fabrique pas d'électricité, on pousse des électrons</h2>
+    <p>C'est le point le plus important, et le plus mal compris. Un fil de cuivre est <strong>déjà rempli d'électrons libres</strong>, des milliards de milliards, qui se baladent au hasard sans aller nulle part. Tout le circuit en est plein, de la centrale jusqu'à ta lampe.</p>
+    <p>Un alternateur ne crée donc pas d'électrons. Il les <strong>pousse</strong>, comme une pompe pousse l'eau qui est déjà dans les tuyaux d'un chauffage central. La « tension » (en volts), c'est la force de cette poussée. Le « courant » (en ampères), c'est le débit d'électrons qui en résulte.</p>
+    <p>La vraie question est donc : <strong>comment pousser des électrons qui sont à l'intérieur d'un fil, sans les toucher ?</strong> Réponse : avec un aimant qui bouge.</p>
+
+    <h2>2. Le phénomène de base : un aimant qui bouge pousse les électrons</h2>
+    <p>Un aimant est entouré d'un <strong>champ magnétique</strong> invisible : c'est lui qui attire les trombones à distance. Tant que ce champ reste immobile, les électrons d'un fil posé à côté ne sentent rien.</p>
+    <p>Mais dès que le champ <strong>change</strong> à l'endroit du fil (parce que l'aimant s'approche, s'éloigne ou tourne), une force apparaît et pousse les électrons le long du fil. C'est l'<strong>induction électromagnétique</strong>, découverte par Michael Faraday en 1831. C'est une loi de base de la nature, comme la gravité : un champ magnétique qui varie crée une force électrique.</p>
+    <p>Essaie toi-même : attrape l'aimant et fais-le entrer et sortir de la bobine.</p>
+  </div>
+  ${lab("Labo 1", "L'expérience de Faraday : bouge l'aimant", `
+    <canvas id="na-cv" tabindex="0" style="touch-action:none;cursor:grab" aria-label="Aimant à déplacer près d'une bobine reliée à un galvanomètre. Flèches gauche et droite pour le déplacer."></canvas>
+    <div class="row">
+      <button class="btn" id="na-auto">Allers-retours automatiques</button>
+      <button class="btn" id="na-flip">Retourner l'aimant</button>
+      <span class="hint">Glisse l'aimant avec la souris ou le doigt (ou flèches ← →).</span>
+    </div>
+    <div class="controls">${slider("na-n", "Nombre de spires de la bobine", 5, 60, 5, 20)}</div>
+    <p class="status" id="na-msg"></p>`)}
+  <div class="prose">
+    <p>Ce que tu viens d'observer résume tout :</p>
+    <ul>
+      <li><strong>Aimant immobile = aucun courant</strong>, même s'il est au milieu de la bobine. Seul le <em>changement</em> compte.</li>
+      <li><strong>Plus l'aimant va vite, plus la poussée est forte</strong> (tension plus élevée).</li>
+      <li><strong>L'aimant entre : les électrons partent dans un sens. Il sort : ils partent dans l'autre sens.</strong></li>
+      <li><strong>Plus il y a de spires, plus la tension est forte.</strong> Chaque tour de fil reçoit sa petite poussée, et les poussées s'additionnent, comme des piles mises bout à bout.</li>
+    </ul>
+
+    <h2>3. De la main à la rotation : l'alternateur</h2>
+    <p>Pousser un aimant à la main, ce n'est pas pratique. L'idée géniale : le faire <strong>tourner</strong>. Un aimant qui tourne devant une bobine présente tantôt son pôle Nord, tantôt son pôle Sud. Le champ magnétique dans la bobine change donc sans arrêt, et les électrons sont poussés dans un sens, puis dans l'autre, puis encore dans le premier…</p>
+    <p>C'est exactement un <strong>alternateur</strong>, et c'est pour ça que le courant produit est <strong>alternatif</strong> : un aller-retour par tour pour un aimant à deux pôles. À 50 allers-retours par seconde, c'est le 50 Hz de ta prise. Conséquence surprenante : dans le réseau, les électrons ne voyagent pas de la centrale jusqu'à chez toi. Ils font des petits allers-retours sur place, et c'est ce mouvement de va-et-vient qui transmet l'énergie, comme une vague transmet un mouvement sans que l'eau voyage.</p>
+
+    <h2>4. Et l'énergie, elle vient d'où ?</h2>
+    <p>Si l'électricité s'obtenait gratuitement en tournant un aimant, on aurait inventé le mouvement perpétuel. Il y a un prix : <strong>dès que le courant circule, il freine l'aimant</strong>. Les électrons poussés dans la bobine créent à leur tour un champ magnétique qui s'oppose au mouvement (c'est la loi de Lenz). Plus on consomme d'électricité, plus l'alternateur est dur à faire tourner.</p>
+    <p>L'énergie électrique est donc simplement l'énergie de ce qui fait tourner l'arbre, transformée. Sens-le avec la manivelle :</p>
+  </div>
+  ${lab("Labo 2", "Tourne la manivelle et allume les lampes", `
+    <canvas id="nb-cv" style="touch-action:none;cursor:grab" aria-label="Manivelle reliée à un alternateur et à des lampes"></canvas>
+    <div class="row" id="nb-lamps"><span class="hint">Lampes branchées :</span></div>
+    <div class="controls">${slider("nb-m", "Force du moteur qui tourne la manivelle", 0, 100, 1, 0)}</div>
+    <div class="readouts">${readout("nb-rpm", "Vitesse")}${readout("nb-u", "Tension produite")}${readout("nb-p", "Puissance électrique")}${readout("nb-f", "Effort pour tourner")}</div>
+    <p class="status" id="nb-msg"></p>
+    <p class="hint">Fais tourner la roue en traçant des cercles avec la souris ou le doigt, ou monte la force du moteur. Puis branche des lampes et regarde ce qui arrive à la vitesse.</p>`)}
+  <div class="prose">
+    <p>C'est ce qui se passe à l'échelle d'un pays : quand des millions de personnes allument leur four à 19 h, tous les alternateurs deviennent plus durs à tourner et ralentissent un tout petit peu. Il faut alors envoyer plus de vapeur ou plus d'eau dans les turbines. C'est le jeu d'équilibre du <a href="#reseau">réseau électrique</a>.</p>
+    <h2>5. Qui fait tourner l'aimant ?</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Machine</th><th>Ce qui fait tourner l'alternateur</th><th>D'où vient cette énergie</th></tr></thead>
+      <tbody>
+        <tr><td>Centrale nucléaire</td><td>Turbine à vapeur</td><td>Chaleur de la fission de l'uranium</td></tr>
+        <tr><td>Centrale à gaz ou charbon</td><td>Turbine à vapeur ou à gaz</td><td>Chaleur de la combustion</td></tr>
+        <tr><td>Barrage</td><td>Turbine hydraulique</td><td>Eau qui tombe (gravité)</td></tr>
+        <tr><td>Éolienne</td><td>Pales</td><td>Vent</td></tr>
+        <tr><td>Voiture thermique</td><td>Courroie reliée au moteur</td><td>Essence ou gazole</td></tr>
+        <tr><td>Dynamo de vélo</td><td>Roue du vélo</td><td>Tes jambes</td></tr>
+        <tr><td>Groupe électrogène</td><td>Petit moteur diesel</td><td>Gazole</td></tr>
+      </tbody></table></div>
+    <h2>6. Dans une centrale</h2>
+    <p>L'alternateur d'un réacteur de 1 300 MWe est un monstre de plusieurs centaines de tonnes. Quelques différences avec ta manivelle :</p>
+    <ul>
+      <li><strong>L'aimant qui tourne (le rotor) est un électroaimant</strong> : une grosse bobine parcourue par un courant continu, appelé courant d'excitation. Aucun aimant permanent n'est assez puissant, et l'électroaimant permet de régler la force du champ.</li>
+      <li><strong>Les bobines fixes (le stator) sont au nombre de trois</strong>, décalées d'un tiers de tour. Elles produisent trois courants alternatifs décalés : c'est le <strong>triphasé</strong>, plus efficace pour transporter l'énergie et faire tourner les moteurs.</li>
+      <li>Le rotor tourne à <strong>1 500 tours par minute</strong> (4 pôles) et produit environ 20 000 V, ensuite élevés à 400 000 V.</li>
+    </ul>
+    <h2>7. Dans une voiture</h2>
+    <p>Une voiture thermique a aussi son alternateur, gros comme un melon, entraîné par une courroie depuis le moteur. Même principe : un rotor électroaimant tourne dans trois bobines. Mais la voiture a besoin de <strong>courant continu</strong> pour recharger sa batterie de 12 V. Un <strong>pont de diodes</strong>, des composants qui ne laissent passer le courant que dans un sens, transforme l'alternatif en continu. Et un <strong>régulateur</strong> ajuste en permanence le courant d'excitation du rotor pour garder environ 14 V, que le moteur tourne au ralenti ou à fond.</p>
+  </div>
+  ${lab("Labo 3", "L'alternateur d'une voiture", `
+    <div id="nc-svg" style="overflow-x:auto"></div>
+    <div class="controls">${slider("nc-rpm", "Régime du moteur", 0, 6000, 100, 800)}</div>
+    <div class="row" id="nc-cons"><span class="hint">Allume :</span></div>
+    <div class="readouts">${readout("nc-u", "Tension du réseau de bord")}${readout("nc-ia", "Courant de l'alternateur")}${readout("nc-bat", "Batterie")}${readout("nc-ex", "Courant d'excitation du rotor")}${readout("nc-pm", "Puissance prise au moteur")}</div>
+    <p class="status" id="nc-msg"></p>
+    <p class="hint">Modèle simplifié d'un alternateur de 150 A, poulie 3 fois plus petite que celle du moteur.</p>`)}
+  <div class="prose">
+    <p class="note"><b>Voiture électrique et vélo.</b> Le moteur électrique d'une voiture électrique est un alternateur fonctionnant à l'envers : on lui donne du courant, il tourne. Et quand tu freines, les roues font tourner le moteur, qui redevient alternateur et recharge la batterie : c'est le freinage régénératif. La dynamo d'un vélo, elle, est un petit aimant permanent qui tourne dans une bobine : tu sens d'ailleurs qu'il faut pédaler un peu plus fort quand la lampe est allumée.</p>
+    <p class="note"><b>Les exceptions.</b> Presque toute l'électricité du monde sort d'un alternateur. Les rares exceptions : les panneaux solaires (la lumière arrache directement des électrons au silicium), les piles et batteries (une réaction chimique pousse les électrons), et quelques sources exotiques comme les thermocouples des sondes spatiales.</p>
+    <p class="note"><b>En une phrase.</b> On fait tourner un aimant près de bobines de fil ; le champ magnétique qui change pousse les électrons déjà présents dans le fil, dans un sens puis dans l'autre ; et l'énergie de cette poussée vient de ce qui fait tourner l'aimant : vapeur, eau, vent, moteur ou muscles.</p>
+  </div>`,
+  mount(root) {
+    const stops = [];
+
+    /* ---------- Labo 1 : aimant et bobine ---------- */
+    const cv = $("#na-cv", root), kit = canvasKit(cv, 0.42);
+    let mx = null, prevPhi = null, emf = 0, drag = false, grab = 0, auto = false, flip = 1, N = 20, speed = 0, lastX = 0, phase = 0, autoT = 0;
+    bindRange(root, "na-n", v => v + " spires", v => { N = v; });
+    const geo = () => {
+      const { w, h: H } = kit;
+      return { cx: w * 0.6, cy: H * 0.7, L: w * 0.22, ry: H * 0.16, ml: Math.max(70, w * 0.16), mh: Math.max(24, H * 0.13), w, H };
+    };
+    const phi = x => { const g = geo(); return flip * Math.exp(-(((x - g.cx) / (g.L * 0.6)) ** 2)); };
+    const pos = e => { const r = cv.getBoundingClientRect(); return e.clientX - r.left; };
+    cv.addEventListener("pointerdown", e => {
+      const g = geo(), x = pos(e);
+      drag = true; auto = false; $("#na-auto", root).classList.remove("on");
+      grab = Math.abs(x - mx) < g.ml / 2 ? x - mx : 0;
+      cv.setPointerCapture(e.pointerId); cv.style.cursor = "grabbing";
+    });
+    cv.addEventListener("pointermove", e => { if (drag) { const g = geo(); mx = clamp(pos(e) - grab, g.ml / 2 + 4, g.w - g.ml / 2 - 4); } });
+    const up = () => { drag = false; cv.style.cursor = "grab"; };
+    cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+    cv.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); const g = geo(); mx = clamp(mx + (e.key === "ArrowRight" ? 18 : -18), g.ml / 2 + 4, g.w - g.ml / 2 - 4); }
+    });
+    $("#na-auto", root).onclick = e => { auto = !auto; e.currentTarget.classList.toggle("on", auto); autoT = 0; };
+    $("#na-flip", root).onclick = () => { flip = -flip; prevPhi = phi(mx); };
+    kit.onResize = () => { mx = kit.w * 0.18; prevPhi = null; };
+    kit.onResize();
+    let ui = 0;
+    stops.push(animate((dt, t) => {
+      const g = geo(), { ctx } = kit;
+      if (auto) { autoT += dt; mx = g.cx - g.L * 0.2 - (g.cx - g.L * 0.2 - g.ml / 2 - 10) * (0.5 + 0.5 * Math.cos(autoT * 2.4)); }
+      const p = phi(mx);
+      const raw = prevPhi == null ? 0 : -(p - prevPhi) / dt * (g.L * 0.6) / (g.w * 0.33) * (N / 20);
+      prevPhi = p;
+      emf += (raw - emf) * Math.min(1, dt * 14);
+      speed += ((mx - lastX) / dt - speed) * Math.min(1, dt * 10); lastX = mx;
+      phase += emf * dt * 6;
+      ctx.clearRect(0, 0, g.w, g.H);
+      // fils vers le galvanomètre et la LED
+      const x0 = g.cx - g.L / 2, x1 = g.cx + g.L / 2, gy = g.H * 0.3, gr = Math.min(g.H * 0.22, 80);
+      ctx.strokeStyle = T.muted; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x0, g.cy - g.ry); ctx.lineTo(x0, gy + 10); ctx.lineTo(g.cx - gr, gy + 10); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x1, g.cy - g.ry); ctx.lineTo(x1, gy + 10); ctx.lineTo(g.cx + gr, gy + 10); ctx.stroke();
+      // galvanomètre
+      ctx.fillStyle = T.surface; ctx.strokeStyle = T.ink; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(g.cx, gy + 10, gr, Math.PI, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+      for (let k = -3; k <= 3; k++) { const a = -Math.PI / 2 + k * Math.PI / 9; ctx.beginPath(); ctx.moveTo(g.cx + Math.cos(a) * gr * 0.82, gy + 10 + Math.sin(a) * gr * 0.82); ctx.lineTo(g.cx + Math.cos(a) * gr * 0.92, gy + 10 + Math.sin(a) * gr * 0.92); ctx.stroke(); }
+      text(ctx, "−", g.cx - gr * 0.72, gy - gr * 0.25, T.muted, 13, "center"); text(ctx, "+", g.cx + gr * 0.72, gy - gr * 0.25, T.muted, 13, "center");
+      text(ctx, "0", g.cx, gy - gr * 0.62, T.muted, 11, "center");
+      const na = -Math.PI / 2 + clamp(emf, -1.5, 1.5) / 1.5 * (Math.PI / 3);
+      ctx.strokeStyle = T.danger; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(g.cx, gy + 10); ctx.lineTo(g.cx + Math.cos(na) * gr * 0.85, gy + 10 + Math.sin(na) * gr * 0.85); ctx.stroke();
+      circle(ctx, g.cx, gy + 10, 5, T.ink);
+      text(ctx, "galvanomètre", g.cx, gy + 24, T.muted, 10, "center");
+      // LED
+      const lx = Math.min(g.w - 30, x1 + 60), on = clamp((Math.abs(emf) - 0.25) / 0.8, 0, 1);
+      ctx.strokeStyle = T.muted; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x1, g.cy + g.ry); ctx.lineTo(lx, g.cy + g.ry); ctx.lineTo(lx, g.cy + 8); ctx.stroke();
+      if (on > 0) circle(ctx, lx, g.cy, 10 + 26 * on, alpha(T.glow, 0.55 * on));
+      circle(ctx, lx, g.cy, 8, on > 0 ? T.glow : T.surface, T.ink);
+      text(ctx, "lampe", lx, g.cy - 20, T.muted, 10, "center");
+      // bobine : arrière des spires
+      const loops = clamp(Math.round(N / 4) + 3, 4, 18);
+      ctx.lineWidth = 2.5;
+      for (let i = 0; i < loops; i++) {
+        const x = x0 + (i + 0.5) * g.L / loops;
+        ctx.strokeStyle = alpha(T.volt, 0.45); ctx.beginPath(); ctx.ellipse(x, g.cy, 6, g.ry, 0, Math.PI / 2, Math.PI * 1.5); ctx.stroke();
+      }
+      // aimant
+      const mL = mx - g.ml / 2, half = g.ml / 2;
+      ctx.fillStyle = flip > 0 ? T.cold : T.hot; ctx.fillRect(mL, g.cy - g.mh / 2, half, g.mh);
+      ctx.fillStyle = flip > 0 ? T.hot : T.cold; ctx.fillRect(mL + half, g.cy - g.mh / 2, half, g.mh);
+      text(ctx, flip > 0 ? "S" : "N", mL + half / 2, g.cy, T.surface, 14, "center", "sans");
+      text(ctx, flip > 0 ? "N" : "S", mL + half * 1.5, g.cy, T.surface, 14, "center", "sans");
+      if (!drag && !auto && Math.abs(speed) < 5) text(ctx, "↔ glisse-moi", mx, g.cy + g.mh / 2 + 14, T.muted, 11, "center");
+      // bobine : avant des spires + électrons
+      for (let i = 0; i < loops; i++) {
+        const x = x0 + (i + 0.5) * g.L / loops;
+        ctx.strokeStyle = T.volt; ctx.beginPath(); ctx.ellipse(x, g.cy, 6, g.ry, 0, -Math.PI / 2, Math.PI / 2); ctx.stroke();
+        for (let k = 0; k < 2; k++) {
+          const a = phase + i * 0.9 + k * Math.PI;
+          const front = Math.cos(a) > 0;
+          circle(ctx, x + Math.cos(a) * 6, g.cy + Math.sin(a) * g.ry, 2.6, front ? T.core : alpha(T.core, 0.3));
+        }
+      }
+      text(ctx, N + " spires", g.cx, g.cy + g.ry + 16, T.muted, 10, "center");
+      ui += dt;
+      if (ui > 0.2) {
+        ui = 0;
+        const m = $("#na-msg", root), inside = Math.abs(mx - g.cx) < g.L / 2;
+        if (Math.abs(emf) < 0.06) { m.className = "status"; m.textContent = inside ? "L'aimant est dans la bobine mais immobile : le champ ne change pas, donc aucun courant. Les électrons (points bleus) ne bougent pas." : "Aimant immobile : aucun courant. Bouge-le vers la bobine !"; }
+        else { m.className = "status ok"; m.textContent = (emf > 0 ? "Aiguille vers + : " : "Aiguille vers − : ") + (Math.abs(emf) > 0.6 ? "forte poussée, la lampe s'allume ! " : "petite poussée. Va plus vite ! ") + "Les électrons tournent dans la bobine " + (emf > 0 ? "dans un sens." : "dans l'autre sens."); }
+      }
+    }));
+    stops.push(() => kit.stop());
+
+    /* ---------- Labo 2 : manivelle ---------- */
+    const cv2 = $("#nb-cv", root), k2 = canvasKit(cv2, 0.42);
+    let th = 0, om = 0, dragging = false, lastA = 0, lastT = 0, motor = 0, lamps = [false, false, false, false];
+    const kE = 0.175, r = 0.1, J = 0.15;
+    const lb = $("#nb-lamps", root);
+    lamps.forEach((_, i) => { const b = h(`<button class="btn">Lampe ${i + 1}</button>`); b.onclick = () => { lamps[i] = !lamps[i]; b.classList.toggle("on", lamps[i]); b.classList.add("volt"); }; lb.appendChild(b); });
+    bindRange(root, "nb-m", v => v + " %", v => { motor = v / 100; });
+    const wheel = () => ({ x: k2.w * 0.18, y: k2.h / 2, R: Math.min(k2.h * 0.36, k2.w * 0.14) });
+    const ang = e => { const rc = cv2.getBoundingClientRect(), wh = wheel(); return Math.atan2(e.clientY - rc.top - wh.y, e.clientX - rc.left - wh.x); };
+    cv2.addEventListener("pointerdown", e => { dragging = true; lastA = ang(e); lastT = performance.now(); cv2.setPointerCapture(e.pointerId); cv2.style.cursor = "grabbing"; });
+    cv2.addEventListener("pointermove", e => {
+      if (!dragging) return;
+      const a = ang(e), now = performance.now();
+      let d = a - lastA; if (d > Math.PI) d -= 2 * Math.PI; if (d < -Math.PI) d += 2 * Math.PI;
+      const dtm = Math.max(0.008, (now - lastT) / 1000);
+      th += d; om += (clamp(d / dtm, -25, 25) - om) * 0.35;
+      lastA = a; lastT = now;
+    });
+    const up2 = () => { dragging = false; cv2.style.cursor = "grab"; };
+    cv2.addEventListener("pointerup", up2); cv2.addEventListener("pointercancel", up2);
+    let ui2 = 0;
+    stops.push(animate((dt, t) => {
+      const n = lamps.filter(Boolean).length, Rl = n ? 1 / n : Infinity;
+      const E = kE * Math.abs(om), I = n ? E / (Rl + r) : 0, Pe = n ? I * I * Rl : 0;
+      const tauE = Math.abs(om) > 0.05 ? Pe / Math.abs(om) : 0, fric = 0.06 * Math.abs(om);
+      if (!dragging) {
+        const sgn = Math.sign(om) || 1;
+        om += ((motor * 1.2) - sgn * (tauE + fric)) / J * dt * (motor > 0 ? 1 : 1);
+        if (motor === 0 && Math.abs(om) < 0.05) om = 0;
+        om = clamp(om, -25, 25);
+        th += om * dt;
+      } else if (performance.now() - lastT > 120) om *= Math.pow(0.02, dt); // doigt arrêté
+      const { ctx, w, h: H } = k2, wh = wheel();
+      ctx.clearRect(0, 0, w, H);
+      // roue et manivelle
+      circle(ctx, wh.x, wh.y, wh.R, T.surface, T.ink);
+      ctx.lineWidth = 3; ctx.strokeStyle = T.muted;
+      for (let k = 0; k < 6; k++) { const a = th + k * Math.PI / 3; ctx.beginPath(); ctx.moveTo(wh.x, wh.y); ctx.lineTo(wh.x + Math.cos(a) * wh.R, wh.y + Math.sin(a) * wh.R); ctx.stroke(); }
+      circle(ctx, wh.x + Math.cos(th) * wh.R * 0.82, wh.y + Math.sin(th) * wh.R * 0.82, 9, T.volt, T.ink);
+      text(ctx, "manivelle", wh.x, wh.y + wh.R + 14, T.muted, 10, "center");
+      // arbre
+      const ax = w * 0.46, rr = Math.min(H * 0.27, w * 0.1);
+      ctx.strokeStyle = T.ink; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(wh.x, wh.y); ctx.lineTo(ax, wh.y); ctx.stroke();
+      // alternateur : aimant tournant entre deux bobines
+      [-1, 1].forEach(s => {
+        const y = wh.y + s * (rr + 16);
+        ctx.fillStyle = T.surface; ctx.strokeStyle = T.volt; ctx.lineWidth = 2;
+        ctx.fillRect(ax - rr * 0.8, y - 10, rr * 1.6, 20);
+        for (let i = 0; i < 7; i++) { const x = ax - rr * 0.8 + (i + 0.5) * rr * 1.6 / 7; ctx.beginPath(); ctx.moveTo(x, y - 10); ctx.lineTo(x, y + 10); ctx.stroke(); }
+      });
+      ctx.save(); ctx.translate(ax, wh.y); ctx.rotate(th);
+      ctx.fillStyle = T.hot; ctx.fillRect(-rr * 0.22, -rr, rr * 0.44, rr);
+      ctx.fillStyle = T.cold; ctx.fillRect(-rr * 0.22, 0, rr * 0.44, rr);
+      ctx.restore();
+      circle(ctx, ax, wh.y, 4, T.ink);
+      text(ctx, "alternateur", ax, wh.y + rr + 40, T.muted, 10, "center");
+      // fils et lampes
+      const lx0 = w * 0.64, lsp = (w - lx0 - 20) / 4, inst = kE * om * Math.sin(th) * 2;
+      ctx.strokeStyle = n ? alpha(T.volt, 0.4 + 0.6 * Math.min(1, Math.abs(inst))) : T.line; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(ax + rr * 0.8, wh.y - rr - 16); ctx.lineTo(lx0, wh.y - rr - 16); ctx.lineTo(w - 20, wh.y - rr - 16);
+      ctx.moveTo(ax + rr * 0.8, wh.y + rr + 16); ctx.lineTo(w - 20, wh.y + rr + 16); ctx.stroke();
+      const pl = n ? Pe / n : 0;
+      lamps.forEach((on, i) => {
+        const x = lx0 + (i + 0.5) * lsp;
+        ctx.strokeStyle = on ? T.muted : alpha(T.muted, 0.25); ctx.beginPath(); ctx.moveTo(x, wh.y - rr - 16); ctx.lineTo(x, wh.y - 12); ctx.moveTo(x, wh.y + 12); ctx.lineTo(x, wh.y + rr + 16); ctx.stroke();
+        const b = on ? clamp(pl, 0, 1.3) : 0;
+        if (b > 0.03) circle(ctx, x, wh.y, 12 + 30 * b, alpha(T.glow, 0.5 * Math.min(1, b)));
+        circle(ctx, x, wh.y, 11, b > 0.03 ? alpha(T.glow, 0.4 + 0.6 * Math.min(1, b)) : T.surface, on ? T.ink : alpha(T.muted, 0.4));
+      });
+      ui2 += dt; if (ui2 < 0.2) return; ui2 = 0;
+      const rpm = Math.abs(om) / (2 * Math.PI) * 60;
+      $("#nb-rpm", root).textContent = fmt(rpm, 0) + " tr/min";
+      $("#nb-u", root).textContent = fmt(E * 12, 1) + " V";
+      $("#nb-p", root).textContent = fmt(Pe * 20, 0) + " W";
+      $("#nb-f", root).textContent = n === 0 ? (rpm > 1 ? "presque nul" : "–") : fmt((tauE + fric) * 10, 1) + " N·m";
+      const m = $("#nb-msg", root);
+      if (rpm < 2) { m.className = "status"; m.textContent = "À l'arrêt : aucun mouvement, aucune électricité. Fais tourner la manivelle ou monte la force du moteur."; }
+      else if (!n) { m.className = "status"; m.textContent = "Aucune lampe branchée : le circuit est ouvert, aucun courant ne circule. La tension existe, mais rien ne freine l'aimant : la roue tourne presque sans effort."; }
+      else if (n >= 3) { m.className = "status warn"; m.textContent = `${n} lampes : le courant freine fortement l'aimant. Il faut forcer davantage, sinon la roue ralentit et les lampes faiblissent. L'énergie des lampes vient de ce qui tourne la roue.`; }
+      else { m.className = "status ok"; m.textContent = "Le courant circule et les lampes s'allument. Note que la roue est plus dure à faire tourner qu'à vide : c'est la loi de Lenz."; }
+    }));
+    stops.push(() => k2.stop());
+
+    /* ---------- Labo 3 : alternateur de voiture ---------- */
+    $("#nc-svg", root).innerHTML = `<svg viewBox="0 0 760 230" style="min-width:560px" role="img" aria-label="Moteur, courroie, alternateur, diodes, batterie et consommateurs">
+      <rect x="20" y="40" width="150" height="150" rx="14" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2"/>
+      <text x="95" y="62" text-anchor="middle" font-size="14" font-weight="600" fill="var(--ink)" font-family="IBM Plex Sans, sans-serif">Moteur</text>
+      <circle cx="120" cy="140" r="34" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+      <circle cx="250" cy="90" r="14" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+      <path d="M120 106 L250 76 M120 174 L250 104" stroke="var(--ink)" stroke-width="5" fill="none"/>
+      <path id="nc-belt" d="M120 106 L250 76 M120 174 L250 104" stroke="var(--volt)" stroke-width="2.5" stroke-dasharray="6 8" fill="none" class="flow"/>
+      <text x="185" y="160" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono, monospace">courroie</text>
+      <rect x="236" y="40" width="130" height="100" rx="40" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+      <g id="nc-rotor" style="transform-origin:316px 90px"><rect x="309" y="64" width="14" height="26" fill="var(--hot)"/><rect x="309" y="90" width="14" height="26" fill="var(--cold)"/></g>
+      <text x="300" y="158" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)" font-family="IBM Plex Sans, sans-serif">Alternateur</text>
+      <text x="300" y="174" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">alternatif triphasé</text>
+      <path d="M366 90 H420" stroke="var(--volt)" stroke-width="3"/>
+      <rect x="420" y="66" width="96" height="48" rx="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+      <path d="M452 78 L452 102 L474 90 Z M474 78 V102" fill="var(--ink)" stroke="var(--ink)" stroke-width="2"/>
+      <text x="468" y="132" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">diodes + régulateur</text>
+      <path d="M516 90 H600 M560 90 V150" stroke="var(--volt)" stroke-width="3" fill="none"/>
+      <rect x="520" y="150" width="80" height="50" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+      <text x="560" y="180" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)" font-family="IBM Plex Sans, sans-serif">Batterie</text>
+      <text x="560" y="215" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">12 V</text>
+      <rect x="600" y="50" width="140" height="80" rx="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+      <text x="670" y="84" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)" font-family="IBM Plex Sans, sans-serif">Équipements</text>
+      <text x="670" y="104" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">continu ≈ 14 V</text>
+    </svg>`;
+    const cons = [["Électronique et injection", 15, true, true], ["Phares", 10, false], ["Ventilation / clim", 20, false], ["Dégivrage arrière", 15, false], ["Sièges chauffants", 8, false], ["Musique", 5, false]];
+    const cb = $("#nc-cons", root);
+    cons.forEach((c, i) => {
+      if (c[3]) return;
+      const b = h(`<button class="btn">${c[0]} <span class="mono" style="opacity:.7">${c[1]} A</span></button>`);
+      b.onclick = () => { c[2] = !c[2]; b.classList.toggle("on", c[2]); upd(); };
+      cb.appendChild(b);
+    });
+    let rpmCar = 800;
+    function upd() {
+      const ra = rpmCar * 3;
+      const Imax = ra < 1000 ? 0 : 150 * (1 - Math.exp(-(ra - 1000) / 2500));
+      const demand = cons.reduce((a, c) => a + (c[2] ? c[1] : 0), 0);
+      const want = demand + 10; // + recharge de la batterie
+      const Ia = Math.min(Imax, want), bat = Ia - demand;
+      const U = Ia >= demand ? 14.4 : 12.2;
+      const Iex = ra > 0 ? clamp((Ia / 150 + 0.15) * 4 * Math.pow(3000 / Math.max(ra, 1000), 0.6), 0, 5) : 0;
+      $("#nc-u", root).textContent = fmt(U, 1) + " V";
+      $("#nc-ia", root).textContent = fmt(Ia, 0) + " A";
+      $("#nc-bat", root).textContent = bat >= 0 ? "se charge (+" + fmt(bat, 0) + " A)" : "se vide (" + fmt(bat, 0) + " A)";
+      $("#nc-ex", root).textContent = fmt(Iex, 2) + " A";
+      $("#nc-pm", root).textContent = fmt(14.4 * Ia / 0.6 / 1000, 2) + " kW";
+      const m = $("#nc-msg", root);
+      if (rpmCar === 0) { m.className = "status danger"; m.textContent = "Moteur coupé : l'alternateur ne tourne pas, c'est la batterie seule qui alimente tout. Laisse les phares allumés toute la nuit et elle sera vide au matin."; }
+      else if (bat < 0) { m.className = "status warn"; m.textContent = "Au ralenti avec beaucoup d'équipements, l'alternateur tourne trop lentement pour tout fournir : la batterie complète. Monte le régime."; }
+      else { m.className = "status ok"; m.textContent = "L'alternateur alimente tout et recharge la batterie. Le régulateur ajuste le courant d'excitation du rotor pour garder 14,4 V : il le baisse quand le moteur accélère, l'augmente quand tu allumes des équipements."; }
+      const belt = $("#nc-belt", root), rot = $("#nc-rotor", root);
+      belt.style.animationDuration = rpmCar ? (600 / rpmCar) + "s" : "0s";
+      belt.style.animationPlayState = rpmCar ? "running" : "paused";
+      rot.style.animation = rpmCar ? `spin ${Math.max(0.12, 900 / ra)}s linear infinite` : "none";
+    }
+    bindRange(root, "nc-rpm", v => v ? fmt(v, 0) + " tr/min" : "moteur coupé", v => { rpmCar = v; upd(); });
+
+    return () => stops.forEach(f => f());
+  },
+  quiz: [
+    { q: "Un aimant est posé immobile au milieu d'une bobine. Que se passe-t-il ?", a: ["Un fort courant circule", "Un faible courant circule", "Aucun courant ne circule", "La bobine chauffe"], c: 2, why: "Seul un champ magnétique qui change pousse les électrons. Aimant immobile, champ constant : rien." },
+    { q: "Quand on allume plus de lampes branchées sur un alternateur, la manivelle…", a: ["devient plus facile à tourner", "devient plus dure à tourner", "ne change pas", "tourne toute seule"], c: 1, why: "Le courant produit freine l'aimant (loi de Lenz). L'énergie électrique vient de l'effort fourni pour tourner." },
+    { q: "L'alternateur d'une centrale fabrique-t-il des électrons ?", a: ["Oui, à partir de l'uranium", "Oui, à partir de la vapeur", "Non, il pousse les électrons déjà présents dans les fils", "Non, ce sont les protons qui circulent"], c: 2, why: "Les électrons sont déjà dans tout le circuit. L'alternateur est une « pompe à électrons »." }
+  ]
+});
+
+/* ===================================================================== */
+lesson({
   id: "induction", track: "elec",
   title: "Magnétisme et induction",
-  lead: "Presque toute l'électricité du monde est produite de la même manière : en faisant tourner un aimant près d'une bobine de fil. C'est l'induction, découverte par Faraday en 1831.",
+  lead: "Tu as vu le principe avec les mains dans la leçon précédente. Ici, on passe à la version physicienne : la loi de Faraday, le flux magnétique et pourquoi le courant produit est une sinusoïde.",
   body: `
   <div class="prose">
     <p>Électricité et magnétisme sont les deux faces d'un même phénomène, l'<strong>électromagnétisme</strong>. Un courant dans un fil crée un champ magnétique autour de lui (c'est le principe de l'électroaimant et du moteur). Et inversement :</p>

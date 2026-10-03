@@ -86,7 +86,7 @@ button, input, select { font: inherit; color: inherit; }
 .btn:hover:not(:disabled) { border-color: var(--core); }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .btn.primary { background: var(--core); border-color: var(--core); color: var(--surface); font-weight: 600; }
-.btn.on { background: var(--core-soft); border-color: var(--core); color: var(--core); font-weight: 600; }
+.btn.on { background: var(--track-soft, var(--core-soft)); border-color: var(--track, var(--core)); color: var(--track, var(--core)); font-weight: 600; }
 .btn.volt.on { background: var(--volt-soft); border-color: var(--volt); color: var(--volt); }
 .menu-btn { display: none; }
 
@@ -253,3 +253,4 @@ input[type="search"] { width: 100%; max-width: 420px; border: 1px solid var(--li
 /* Courant animé dans les schémas SVG */
 .flow { animation: dash 1.2s linear infinite; }
 @keyframes dash { to { stroke-dashoffset: -28; } }
+@keyframes spin { to { transform: rotate(360deg); } }

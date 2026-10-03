@@ -55,4 +55,4 @@ ou consulte [`bourse/README.md`](bourse/README.md).
 
 ## ⚡ Aussi dans ce dépôt
 
-- [`electricite-nucleaire/`](electricite-nucleaire/) : cours interactif pour tout comprendre sur l'électricité et le nucléaire (23 leçons, simulations, quiz).
+- [`electricite-nucleaire/`](electricite-nucleaire/) : cours interactif pour tout comprendre sur l'électricité et le nucléaire (24 leçons, simulations, quiz).
