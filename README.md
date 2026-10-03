@@ -66,5 +66,12 @@ on zoome en continu de la Terre et la Lune jusqu'au fond diffus cosmologique, à
   toile cosmique et limite de l'univers observable.
 - Fiche pour chaque astre : distance, temps de trajet de la lumière, taille, anecdote.
 - Recherche, raccourcis d'échelle, molette / pincement / glisser.
+- **Vue 3D interactive** : un clic sur un astre zoome dessus puis ouvre une scène 3D
+  qu'on fait tourner au doigt ou à la souris. La Terre (jour, nuit, nuages,
+  océans brillants, atmosphère), la Lune, les planètes, le Soleil animé, les étoiles,
+  TRAPPIST-1 et ses 7 planètes, un trou noir avec lentille gravitationnelle,
+  un quasar et ses jets, des galaxies, des nébuleuses, des amas, la sonde Voyager 1,
+  l'héliopause, la toile cosmique et le fond diffus cosmologique.
 
-Ouvre simplement `univers/index.html` dans ton navigateur (aucune installation).
+Ouvre simplement `univers/index.html` dans ton navigateur (aucune installation ;
+la vue 3D charge Three.js depuis un CDN, il faut donc être connecté).

@@ -24,6 +24,7 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { height: 100%; margin: 0; }
 body {
   background: var(--void);
@@ -156,7 +157,33 @@ body {
 }
 #close:hover { color: var(--ink); }
 
+/* Vue 3D */
+#v3d { position: fixed; inset: 0; z-index: 4; background: var(--void); opacity: 0; transition: opacity 0.35s ease; }
+#v3d.on { opacity: 1; }
+#v3d canvas { width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+#v3d canvas:active { cursor: grabbing; }
+#v3d-back {
+  position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); left: 16px;
+  padding: 9px 14px; border-radius: 8px; cursor: pointer;
+  font: 500 13px var(--font-body); color: var(--ink);
+  background: var(--panel); border: 1px solid var(--line);
+}
+#v3d-back:hover { border-color: var(--accent); }
+#v3d-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#v3d-hint {
+  position: absolute; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  font: 11px var(--font-data); color: var(--dim); letter-spacing: 0.04em;
+}
+#v3d-loading {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font: 12px var(--font-data); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+}
+body.in3d #panel { z-index: 5; }
+body.in3d #levels, body.in3d #scale, body.in3d #time, body.in3d #search-box, body.in3d #brand { visibility: hidden; }
+
 @media (max-width: 760px) {
+  body.in3d #panel { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); max-height: 38%; }
+  #v3d-hint { display: none; }
   #brand { right: 16px; max-width: none; }
   #brand h1 { font-size: 15px; }
   #brand p { display: none; }
@@ -222,6 +249,13 @@ body {
 </div>
 
 <aside id="panel" class="hud glass" aria-live="polite"></aside>
+
+<div id="v3d" hidden>
+  <canvas aria-label="Vue 3D interactive de l'astre"></canvas>
+  <button type="button" id="v3d-back">← Retour à la carte</button>
+  <div id="v3d-hint">Glisser pour tourner · molette ou pincement pour zoomer</div>
+  <div id="v3d-loading" hidden>Génération…</div>
+</div>
 
 <script>
 "use strict";
@@ -970,7 +1004,7 @@ function flyTo(target, radius, opts = {}) {
   const decades = Math.abs(l1 - cam.l) + Math.max(0, lPeak - Math.max(cam.l, l1)) * 2;
   flight = {
     t0: performance.now(), dur: reduceMotion ? 1 : Math.min(5200, 1100 + decades * 260),
-    x0: cam.x, y0: cam.y, l0: cam.l, l1, lPeak, getPos,
+    x0: cam.x, y0: cam.y, l0: cam.l, l1, lPeak, getPos, onDone: opts.onDone,
   };
   follow = opts.follow || null;
 }
@@ -990,7 +1024,7 @@ function stepFlight(now) {
   const w = (1 - e) * Math.min(1, S / Math.pow(10, F.l0));
   cam.x = p1[0] + (F.x0 - p1[0]) * w;
   cam.y = p1[1] + (F.y0 - p1[1]) * w;
-  if (t >= 1) flight = null;
+  if (t >= 1) { flight = null; if (F.onDone) F.onDone(); }
 }
 
 /* =========================================================================
@@ -1063,12 +1097,12 @@ function intro() {
     <ul>
       <li>Molette, pincement ou <kbd>+</kbd> <kbd>−</kbd> pour zoomer</li>
       <li>Glisser ou flèches pour se déplacer</li>
-      <li>Cliquer sur un astre pour sa fiche</li>
+      <li>Cliquer sur un astre : zoom, puis vue 3D à faire tourner</li>
       <li>Les échelles à gauche font le voyage pour vous</li>
     </ul>
-    <p class="note">Le ciel est projeté sur un plan : les distances au Soleil sont réelles, les directions sont approximatives. Les filaments de la toile cosmique sont une illustration.</p>
+    <p class="note">Le ciel est projeté sur un plan : les distances au Soleil sont réelles, les directions sont approximatives. Les filaments de la toile cosmique sont une illustration. Textures de la Terre et de la Lune : NASA, via le dépôt three.js ; les autres surfaces sont générées.</p>
     <div class="actions"><button type="button" class="primary" id="tour">Partir de la Terre</button></div>`;
-  document.getElementById("tour").addEventListener("click", () => select(byId.Terre, true));
+  document.getElementById("tour").addEventListener("click", () => explore(byId.Terre));
 }
 function distFromEarth(o) {
   if (o.dist) return o.dist;
@@ -1106,16 +1140,36 @@ function select(o, fly) {
     <dl id="stats">${statsHtml(o)}</dl>
     <p>${o.desc || ""}</p>
     <div class="actions">
-      <button type="button" class="primary" id="go">Zoomer dessus</button>
-      <button type="button" id="back">Revenir à la Terre</button>
+      ${has3D() ? `<button type="button" class="primary" id="go3d">${in3D() ? "Recentrer la vue 3D" : "Voir en 3D"}</button>` : ""}
+      <button type="button" id="back">${o.name === "Terre" ? "Zoomer sur la Terre" : "Revenir à la Terre"}</button>
     </div>`;
-  document.getElementById("close").addEventListener("click", intro);
-  document.getElementById("go").addEventListener("click", () => goTo(o));
-  document.getElementById("back").addEventListener("click", () => select(byId.Terre, true));
+  document.getElementById("close").addEventListener("click", () => { close3D(); intro(); });
+  const go3d = document.getElementById("go3d");
+  if (go3d) go3d.addEventListener("click", () => open3D(o));
+  document.getElementById("back").addEventListener("click", () => explore(byId.Terre));
   if (fly) goTo(o);
+  if (window.Viewer3D) window.Viewer3D.relayout();
 }
-function goTo(o) {
-  flyTo(() => posOf(o), o.zoomR || 1, { follow: o.pos ? o : null });
+function goTo(o, onDone) {
+  flyTo(() => posOf(o), o.zoomR || 1, { follow: o.pos ? o : null, onDone });
+}
+const has3D = () => !!window.Viewer3D;
+const in3D = () => has3D() && window.Viewer3D.isOpen();
+function open3D(o) { if (has3D()) window.Viewer3D.open(o); }
+function close3D() { if (in3D()) window.Viewer3D.close(); }
+// Clic sur un astre : zoom sur la carte, puis ouverture de la vue 3D
+function explore(o) {
+  const wasIn3D = in3D();
+  close3D();
+  select(o, false);
+  if (wasIn3D) {
+    // depuis la 3D, on saute directement à l'astre suivant
+    const p = posOf(o); cam.x = p[0]; cam.y = p[1]; cam.l = lFor(o.zoomR || 1); S = Math.pow(10, cam.l);
+    follow = o.pos ? o : null; flight = null;
+    open3D(o);
+    return;
+  }
+  goTo(o, () => open3D(o));
 }
 
 /* Recherche */
@@ -1133,7 +1187,7 @@ search.addEventListener("input", () => {
 results.addEventListener("click", (e) => {
   const b = e.target.closest("button");
   if (!b) return;
-  select(OBJECTS[+b.dataset.i], true);
+  explore(OBJECTS[+b.dataset.i]);
   results.hidden = true; search.value = ""; search.blur();
 });
 search.addEventListener("keydown", (e) => {
@@ -1214,11 +1268,12 @@ function pick(x, y) {
     const d = Math.hypot(h.x - x, h.y - y);
     if (d < Math.max(h.r, 14) && d < bd) { bd = d; best = h.o; }
   }
-  if (best) select(best, false);
+  if (best) explore(best);
 }
 
 window.addEventListener("keydown", (e) => {
   if (e.target === search) return;
+  if (in3D() && e.key !== "Escape") return;
   const step = 60 * S;
   switch (e.key) {
     case "+": case "=": zoomAt(W / 2, H / 2, -0.25); break;
@@ -1227,7 +1282,7 @@ window.addEventListener("keydown", (e) => {
     case "ArrowRight": follow = null; flight = null; cam.x += step; break;
     case "ArrowUp": follow = null; flight = null; cam.y -= step; break;
     case "ArrowDown": follow = null; flight = null; cam.y += step; break;
-    case "Escape": intro(); break;
+    case "Escape": if (in3D()) { close3D(); } else intro(); break;
     default: return;
   }
   e.preventDefault();
@@ -1245,6 +1300,7 @@ function frame(now) {
   stepFlight(now);
   if (!flight && follow) { const p = posOf(follow); cam.x = p[0]; cam.y = p[1]; }
   S = Math.pow(10, cam.l);
+  if (in3D()) { updateHud(now); requestAnimationFrame(frame); return; }
 
   ctx.fillStyle = "#05070d";
   ctx.fillRect(0, 0, W, H);
@@ -1274,6 +1330,13 @@ cam.l = lFor(LEVELS[2].r);
 S = Math.pow(10, cam.l);
 intro();
 requestAnimationFrame(frame);
+document.getElementById("v3d-back").addEventListener("click", () => {
+  close3D();
+  if (selected) select(selected, false);
+});
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="textures.js"></script>
+<script src="viewer3d.js"></script>
 </body>
 </html>
