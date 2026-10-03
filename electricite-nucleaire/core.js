@@ -56,7 +56,7 @@ function si(x, unit, d = 3) {
 function sci(x, d = 2) {
   if (x === 0) return "0";
   const e = Math.floor(Math.log10(Math.abs(x)));
-  if (e >= -2 && e < 6) return fmt(x, d);
+  if (e >= -1 && e < 6) return fmt(x, d);
   const m = x / Math.pow(10, e);
   const sup = String(e).replace(/-/g, "⁻").replace(/\d/g, c => "⁰¹²³⁴⁵⁶⁷⁸⁹"[c]);
   return fmt(m, d) + " × 10" + sup;

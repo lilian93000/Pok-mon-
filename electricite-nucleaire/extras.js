@@ -39,6 +39,17 @@ const GLOSSARY = [
   ["nuc", "MOX", "Combustible mélangeant oxyde de plutonium et d'uranium appauvri."],
   ["nuc", "Échelle INES", "Échelle internationale de 0 à 7 qui classe la gravité des événements nucléaires."],
   ["nuc", "Plasma", "État de la matière très chaude où les électrons sont séparés des noyaux."],
+  ["elec", "Guerre des courants", "Rivalité des années 1880–1890 entre le courant continu d'Edison et l'alternatif de Westinghouse et Tesla."],
+  ["elec", "HVDC", "Courant continu haute tension : lignes modernes pour les très longues distances et les câbles sous-marins."],
+  ["cen", "Tranche", "Un réacteur et ses installations (turbine, alternateur, salle de commande). Un site compte souvent 2 à 6 tranches."],
+  ["cen", "Arrêt de tranche", "Arrêt programmé tous les 12 à 18 mois pour recharger le combustible et faire la maintenance."],
+  ["cen", "Visite décennale", "Grand contrôle d'un réacteur tous les 10 ans, après lequel l'Autorité de sûreté autorise ou non 10 ans de plus."],
+  ["cen", "Bore", "Élément dissous dans l'eau primaire pour absorber des neutrons et régler la réactivité."],
+  ["cen", "pcm", "« Pour cent mille » : unité de réactivité. 0 pcm = réacteur critique, puissance stable."],
+  ["cen", "Couplage", "Raccordement de l'alternateur au réseau, une fois sa vitesse et sa fréquence synchronisées à 50 Hz."],
+  ["cen", "Source froide", "Rivière, mer ou atmosphère qui reçoit la chaleur non convertie en électricité (environ deux tiers)."],
+  ["cen", "Palier", "Série de réacteurs identiques : 900 MWe, 1 300 MWe, N4, EPR."],
+  ["cen", "Suivi de charge", "Modulation de la puissance d'un réacteur pour suivre la consommation au fil de la journée."],
   ["nuc", "Tokamak", "Chambre en forme d'anneau où un champ magnétique confine un plasma de fusion."]
 ];
 

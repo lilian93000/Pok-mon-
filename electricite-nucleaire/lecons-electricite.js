@@ -458,7 +458,7 @@ lesson({
     <p>Le <strong>courant continu</strong> (DC) circule toujours dans le même sens : piles, batteries, panneaux solaires, électronique. Le <strong>courant alternatif</strong> (AC) change de sens 100 fois par seconde (50 allers-retours) : c'est ce que produisent les alternateurs.</p>
     <p>Les 230 V de ta prise sont une valeur <strong>efficace</strong> : la tension oscille en réalité entre −325 V et +325 V (230 × √2), mais chauffe autant qu'un continu de 230 V.</p>
     <h2>La guerre des courants</h2>
-    <p>Dans les années 1880, Thomas Edison défendait le continu, George Westinghouse et Nikola Tesla l'alternatif. L'alternatif a gagné pour une raison : on peut facilement <strong>changer sa tension</strong> avec un transformateur, et transporter l'électricité à très haute tension sur des centaines de kilomètres avec peu de pertes.</p>
+    <p>Dans les années 1880, Thomas Edison défendait le continu, George Westinghouse et Nikola Tesla l'alternatif. L'alternatif a gagné pour une raison : on peut facilement <strong>changer sa tension</strong> avec un transformateur, et transporter l'électricité à très haute tension sur des centaines de kilomètres avec peu de pertes. Toute cette histoire est racontée dans la <a href="#guerre">leçon suivante</a>.</p>
     <p>Un transformateur, ce sont deux bobines enroulées sur un même noyau de fer. Le courant alternatif dans la première crée un champ magnétique variable, qui induit une tension dans la seconde. Le rapport des tensions est celui des nombres de spires :</p>
     <p class="formula">U₂ / U₁ = N₂ / N₁      et (presque sans pertes)  U₁ × I₁ ≈ U₂ × I₂</p>
   </div>
@@ -543,6 +543,149 @@ lesson({
   quiz: [
     { q: "Un transformateur a 2 000 spires au primaire et 100 au secondaire. On applique 230 V. On obtient…", a: ["4 600 V", "11,5 V", "115 V", "230 V"], c: 1, why: "U₂ = 230 × 100/2 000 = 11,5 V." },
     { q: "Pourquoi un transformateur ne fonctionne-t-il pas en courant continu ?", a: ["Le fer fond", "Le flux magnétique ne varie pas, donc rien n'est induit", "Le continu est trop faible", "Il fonctionne très bien en continu"], c: 1, why: "L'induction exige une variation du champ magnétique." }
+  ]
+});
+
+/* ===================================================================== */
+lesson({
+  id: "guerre", track: "elec",
+  title: "La guerre des courants : Edison contre Tesla",
+  lead: "À la fin des années 1880, deux visions s'affrontent pour électrifier le monde : le courant continu de Thomas Edison et le courant alternatif de Nikola Tesla et George Westinghouse. Brevets, coups bas, chaise électrique et chutes du Niagara : voici l'histoire.",
+  body: `
+  <div class="prose">
+    <p>En 1880, l'électricité est une curiosité. Dix ans plus tard, c'est une industrie qui vaut des fortunes. La question est simple : <strong>quel courant faut-il envoyer dans les rues ?</strong> Le choix fait à cette époque explique pourquoi ta prise délivre aujourd'hui du courant alternatif à 50 Hz.</p>
+  </div>
+  <div class="tracks" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+    <div class="track-card"><div class="eyebrow" style="color:var(--volt)">Courant continu</div><h2>Thomas Edison</h2><p class="hint mono">1847 – 1931 · États-Unis</p>
+      <p>Inventeur et homme d'affaires redoutable, plus de 1 000 brevets. Il met au point en 1879 une ampoule à incandescence durable et, surtout, tout le système autour : centrales, câbles, compteurs, interrupteurs. Il croit au <strong>courant continu</strong>, qu'il maîtrise et qui fonctionne bien avec ses lampes et ses moteurs.</p></div>
+    <div class="track-card"><div class="eyebrow" style="color:var(--core)">Courant alternatif</div><h2>Nikola Tesla</h2><p class="hint mono">1856 – 1943 · né à Smiljan (actuelle Croatie)</p>
+      <p>Ingénieur visionnaire d'origine serbe. Il imagine le <strong>moteur à champ tournant</strong> (moteur à induction) et un système complet de courant <strong>alternatif polyphasé</strong> : générateurs, transformateurs, moteurs. C'est encore le principe de nos réseaux triphasés. L'unité de champ magnétique, le tesla, porte son nom.</p></div>
+    <div class="track-card"><div class="eyebrow" style="color:var(--hot)">L'industriel</div><h2>George Westinghouse</h2><p class="hint mono">1846 – 1914 · États-Unis</p>
+      <p>Riche inventeur du frein à air pour les trains. Il parie sur l'alternatif, rachète les brevets de Tesla et devient le <strong>vrai adversaire commercial</strong> d'Edison. Dans les faits, la « guerre » oppose surtout les entreprises Edison et Westinghouse.</p></div>
+  </div>
+  ${lab("Labo 1", "La frise de la guerre des courants", `
+    <div class="steps" id="gw-steps"></div>
+    <div class="info-panel" id="gw-info" aria-live="polite"></div>`)}
+  <div class="prose">
+    <h2>Le vrai problème du courant continu</h2>
+    <p>Au XIXᵉ siècle, on ne sait pas changer facilement la tension d'un courant continu. Edison distribue donc directement <strong>110 V</strong>, la tension de ses lampes. Pour transporter beaucoup de puissance à si basse tension, il faut un courant énorme, et les pertes dans les câbles (R × I²) explosent avec la distance. Résultat : une centrale Edison ne peut desservir qu'un rayon d'environ <strong>1,5 km</strong>. Il faudrait une centrale dans chaque quartier.</p>
+    <p>Avec l'alternatif, un <strong>transformateur</strong> élève la tension à des milliers de volts pour le transport, puis l'abaisse près des maisons. Le courant dans la ligne devient minuscule, les pertes aussi, et une seule grande centrale peut alimenter une ville entière à des dizaines de kilomètres.</p>
+  </div>
+  ${lab("Labo 2", "Edison contre Westinghouse : alimente la ville", `
+    <div class="row"><button class="btn volt on" id="gw-dc">Edison · continu 110 V</button><button class="btn" id="gw-ac">Westinghouse-Tesla · alternatif 2 400 V</button></div>
+    <canvas id="gw-cv" aria-label="Centrale reliée à une ville par une ligne électrique"></canvas>
+    <div class="controls">${slider("gw-d", "Distance entre la centrale et la ville", 0.2, 30, 0.1, 1)}</div>
+    <div class="readouts">${readout("gw-u", "Tension chez les clients")}${readout("gw-loss", "Pertes dans la ligne")}${readout("gw-eta", "Puissance livrée")}${readout("gw-cu", "Cuivre de la ligne")}</div>
+    <p class="status" id="gw-msg"></p>
+    <p class="hint">Une ville de 400 lampes de 50 W (20 kW). Edison utilise de gros câbles de cuivre de 500 mm², Westinghouse des câbles de 50 mm², dix fois plus fins. Les lampes sont prévues pour 110 V.</p>`)}
+  <div class="prose">
+    <h2>Mythes et réalité</h2>
+    <ul>
+      <li><strong>« Tesla a inventé le courant alternatif. »</strong> Pas seul. Le transformateur moderne doit beaucoup au Français <strong>Lucien Gaulard</strong> et à l'Anglais John Gibbs (1882–1884), puis aux ingénieurs hongrois de l'entreprise Ganz (1885). L'Italien Galileo Ferraris a eu l'idée du champ tournant presque en même temps que Tesla. L'apport de Tesla, c'est un système polyphasé complet et un moteur pratique.</li>
+      <li><strong>« Edison a escroqué Tesla de 50 000 dollars. »</strong> L'anecdote vient des souvenirs de Tesla lui-même. Elle est plausible mais invérifiable.</li>
+      <li><strong>« Edison a électrocuté l'éléphante Topsy. »</strong> Faux. En 1903, l'exécution de Topsy à Coney Island a été filmée par la société de production d'Edison, mais Edison n'y a pas participé, et la guerre des courants était terminée depuis dix ans.</li>
+      <li><strong>« Edison était le méchant, Tesla le génie incompris. »</strong> C'est la version de la culture populaire. Edison a mené une campagne de peur honteuse, mais il a aussi inventé le premier réseau électrique de l'histoire. Tesla était génial mais piètre homme d'affaires : il est mort pauvre à New York en 1943.</li>
+    </ul>
+    <h2>Qui a gagné, finalement ?</h2>
+    <p>L'alternatif a gagné le réseau : partout dans le monde, l'électricité est produite et distribuée en alternatif triphasé. Mais le continu prend sa revanche :</p>
+    <ul>
+      <li>tous tes appareils électroniques (téléphone, ordinateur, LED) fonctionnent en continu, grâce au petit bloc qui convertit le 230 V ;</li>
+      <li>panneaux solaires et batteries produisent et stockent du continu ;</li>
+      <li>pour les très longues distances et les câbles sous-marins, on construit aujourd'hui des lignes à <strong>courant continu haute tension</strong> (HVDC), devenues possibles grâce à l'électronique de puissance. La France est reliée à l'Angleterre et à l'Espagne par de telles liaisons.</li>
+    </ul>
+    <p class="note"><b>Fin officielle.</b> À New York, la compagnie Con Edison, héritière directe d'Edison, a coupé son dernier client en courant continu le 14 novembre 2007, 125 ans après l'ouverture de la centrale de Pearl Street.</p>
+  </div>`,
+  mount(root) {
+    const ev = [
+      ["1879", "L'ampoule d'Edison", "Edison met au point une ampoule à filament de carbone qui dure des centaines d'heures. Il ne vend pas seulement des ampoules : il veut vendre tout le système électrique qui va avec."],
+      ["1882", "Pearl Street", "Le 4 septembre, Edison inaugure à New York la centrale de Pearl Street : la première centrale électrique commerciale au monde. Courant continu, 110 V, quelques centaines de clients dans un rayon d'environ 1,5 km. Pendant ce temps en Europe, Gaulard et Gibbs présentent leur « générateur secondaire », ancêtre du transformateur."],
+      ["1884", "Tesla chez Edison", "Tesla débarque à New York avec presque rien en poche et une lettre de recommandation. Il est embauché dans l'entreprise d'Edison pour améliorer les dynamos à courant continu. Selon son propre récit, Edison lui aurait promis 50 000 dollars s'il réussissait, puis aurait répondu : « Vous ne comprenez pas l'humour américain. » Tesla démissionne en 1885."],
+      ["1886", "Premier réseau alternatif", "Pendant que Tesla, ruiné, creuse des tranchées pour gagner sa vie, l'ingénieur William Stanley installe pour Westinghouse un réseau alternatif avec transformateurs à Great Barrington (Massachusetts). Westinghouse fonde sa compagnie électrique et commence à concurrencer Edison."],
+      ["1888", "Les brevets de Tesla", "Tesla dépose ses brevets sur le moteur à induction et les systèmes polyphasés, et donne une conférence remarquée. Westinghouse les achète aussitôt. Le même année, Harold Brown, soutenu par le camp Edison, électrocute publiquement des animaux avec du courant alternatif pour prouver qu'il est mortel."],
+      ["1890", "La chaise électrique", "Le 6 août, William Kemmler est le premier condamné exécuté sur une chaise électrique, à la prison d'Auburn (New York). Elle fonctionne au courant alternatif avec des générateurs Westinghouse obtenus en secret. L'exécution est atroce. Le camp Edison voulait que le public associe l'alternatif à la mort ; Edison proposait même d'appeler ça être « westinghousé »."],
+      ["1892", "Edison écarté", "Les financiers, dont J. P. Morgan, fusionnent la société d'Edison avec son concurrent Thomson-Houston, qui fait déjà de l'alternatif. Naissance de General Electric. Edison perd le contrôle de l'entreprise qui porte son nom, et le nom disparaît même de la raison sociale."],
+      ["1893", "L'exposition de Chicago", "Westinghouse remporte le contrat pour éclairer l'Exposition universelle de Chicago, en cassant les prix face à General Electric. Près de 100 000 lampes et un système polyphasé de Tesla en démonstration devant des millions de visiteurs : c'est la victoire de l'alternatif dans l'opinion."],
+      ["1896", "Niagara", "La centrale hydraulique des chutes du Niagara, équipée de générateurs Westinghouse conçus sur les brevets de Tesla, envoie son courant alternatif jusqu'à Buffalo, à environ 40 km. Impossible en continu à l'époque. La guerre est gagnée."],
+      ["1943", "Mort de Tesla", "Tesla meurt seul et pauvre dans une chambre d'hôtel à New York, le 7 janvier. On raconte qu'il avait renoncé dans les années 1890 aux redevances que Westinghouse lui devait, pour sauver l'entreprise en difficulté. Edison, lui, était mort en 1931, célébré comme un héros national."],
+      ["2007", "Fin du continu à New York", "Con Edison coupe son dernier client en courant continu, un immeuble de Manhattan. Mais à la même époque, les liaisons à courant continu haute tension (HVDC) se multiplient dans le monde : le continu revient par la grande porte."]
+    ];
+    const bx = $("#gw-steps", root);
+    ev.forEach((e, i) => { const b = h(`<button class="step"><i>${e[0]}</i>${e[1]}</button>`); b.onclick = () => sel(i); bx.appendChild(b); });
+    function sel(i) {
+      $$(".step", bx).forEach((b, j) => b.classList.toggle("on", i === j));
+      $("#gw-info", root).innerHTML = `<div class="eyebrow">${ev[i][0]}</div><h4>${ev[i][1]}</h4><p>${ev[i][2]}</p><div class="row"><button class="btn" ${i ? "" : "disabled"} id="gw-prev">← Avant</button><button class="btn" ${i < ev.length - 1 ? "" : "disabled"} id="gw-next">Après →</button></div>`;
+      $("#gw-prev", root).onclick = () => i && sel(i - 1);
+      $("#gw-next", root).onclick = () => i < ev.length - 1 && sel(i + 1);
+    }
+    sel(0);
+
+    /* Simulateur : même ville, deux systèmes */
+    const kit = canvasKit($("#gw-cv", root), 0.36);
+    let ac = false, d = 1, res = { bright: 1, lossFrac: 0 };
+    const P = 20000;
+    function calc() {
+      const U = ac ? 2400 : 110, S = ac ? 50e-6 : 500e-6;
+      const R = 1.7e-8 * 2 * d * 1000 / S;            // aller-retour
+      const RL = U * U / P;                            // charge vue depuis la ligne
+      const I = U / (R + RL), Pl = RL * I * I, loss = R * I * I;
+      const Uc = I * RL * (ac ? 110 / 2400 : 1);       // tension chez le client (après transformateur)
+      res = { bright: Pl / P, lossFrac: loss / (loss + Pl) };
+      $("#gw-u", root).textContent = fmt(Uc, 0) + " V";
+      $("#gw-loss", root).textContent = si(loss, "W") + " (" + fmt(res.lossFrac * 100, 0) + " %)";
+      $("#gw-eta", root).textContent = si(Pl, "W") + " / 20 kW";
+      $("#gw-cu", root).textContent = fmt(8960 * 2 * d * 1000 * S / 1000, 1) + " t";
+      const m = $("#gw-msg", root);
+      if (Pl / P > 0.9) { m.className = "status ok"; m.textContent = ac ? "Les lampes brillent normalement. L'alternatif transporte l'énergie loin avec des câbles fins." : "À cette distance, le continu d'Edison fonctionne bien : c'est un quartier autour de sa centrale."; }
+      else if (Pl / P > 0.6) { m.className = "status warn"; m.textContent = "La tension chute en route : les lampes sont jaunâtres et faiblardes."; }
+      else { m.className = "status danger"; m.textContent = ac ? "Même l'alternatif finit par perdre trop à cette distance : il faudrait une tension encore plus haute." : "La ville est plongée dans la pénombre : l'essentiel de l'énergie chauffe les câbles. Il faudrait construire une centrale ici."; }
+    }
+    const setMode = v => { ac = v; $("#gw-dc", root).classList.toggle("on", !v); $("#gw-ac", root).classList.toggle("on", v); calc(); };
+    $("#gw-dc", root).onclick = () => setMode(false);
+    $("#gw-ac", root).onclick = () => setMode(true);
+    bindRange(root, "gw-d", v => fmt(v, 1) + " km", v => { d = v; calc(); });
+    const stop = animate((dt, t) => {
+      const { ctx, w, h: H } = kit;
+      ctx.clearRect(0, 0, w, H);
+      const ly = H * 0.5, x0 = 80, x1 = w - Math.min(220, w * 0.42);
+      // centrale
+      ctx.fillStyle = T.surface; ctx.strokeStyle = T.ink; ctx.lineWidth = 2;
+      ctx.fillRect(14, ly - 26, 54, 52); ctx.strokeRect(14, ly - 26, 54, 52);
+      ctx.fillRect(48, ly - 50, 12, 24); ctx.strokeRect(48, ly - 50, 12, 24);
+      circle(ctx, 56, ly - 60 - (t * 12 % 14), 5, alpha(T.muted, 0.35));
+      text(ctx, "centrale", 41, ly + 40, T.muted, 10, "center");
+      // transformateurs
+      const tr = x => { circle(ctx, x - 5, ly, 9, T.surface, T.core); circle(ctx, x + 5, ly, 9, null, T.core); };
+      // ligne
+      const heat = res.lossFrac;
+      ctx.strokeStyle = alpha(T.hot, 0.15 + heat * 0.85); ctx.lineWidth = ac ? 3 : 9;
+      ctx.beginPath(); ctx.moveTo(68, ly); ctx.lineTo(x1, ly); ctx.stroke();
+      if (heat > 0.2) { ctx.strokeStyle = alpha(T.hot, heat * 0.25); ctx.lineWidth = (ac ? 3 : 9) + 10 * heat; ctx.stroke(); }
+      // charges en mouvement
+      const n = Math.floor((x1 - 68) / 22), sp = (ac ? 0 : 1) * 30 * res.bright;
+      for (let i = 0; i < n; i++) {
+        const x = 68 + ((i * 22 + (ac ? Math.sin(t * 8) * 6 : (t * sp) % 22)) + 22) % (x1 - 68);
+        circle(ctx, 68 + (x - 68), ly, 2.4, T.volt);
+      }
+      if (ac) { tr(x0 + 6); tr(x1 - 14); text(ctx, "2 400 V", (x0 + x1) / 2, ly - 16, T.core, 11, "center"); text(ctx, "élévateur", x0 + 6, ly + 22, T.muted, 9, "center"); text(ctx, "abaisseur", x1 - 14, ly + 22, T.muted, 9, "center"); }
+      else text(ctx, "110 V", (x0 + x1) / 2, ly - 16, T.volt, 11, "center");
+      text(ctx, fmt(d, 1) + " km", (x0 + x1) / 2, ly + 22, T.muted, 11, "center");
+      // ville : 40 maisons
+      const cols = 8, rows = 5, cw = (w - x1 - 14) / cols, rh = (H - 20) / rows;
+      for (let i = 0; i < 40; i++) {
+        const cx = x1 + 6 + (i % cols) * cw + cw / 2, cy = 10 + Math.floor(i / cols) * rh + rh / 2;
+        const b = clamp(res.bright, 0, 1), s = Math.min(cw, rh) * 0.34;
+        if (b > 0.05) circle(ctx, cx, cy, s * (1.2 + 1.6 * b), alpha(T.glow, 0.35 * b * b));
+        ctx.fillStyle = T.surface; ctx.strokeStyle = T.muted; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(cx - s, cy); ctx.lineTo(cx, cy - s); ctx.lineTo(cx + s, cy); ctx.lineTo(cx + s, cy + s); ctx.lineTo(cx - s, cy + s); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = b > 0.05 ? alpha(T.volt, 0.25 + 0.75 * b * b) : alpha(T.muted, 0.3);
+        ctx.fillRect(cx - s * 0.35, cy + s * 0.1, s * 0.7, s * 0.6);
+      }
+    });
+    return () => { stop(); kit.stop(); };
+  },
+  quiz: [
+    { q: "Pourquoi le courant alternatif l'a-t-il emporté pour les réseaux ?", a: ["Il est moins dangereux", "On peut changer sa tension avec un transformateur et le transporter loin avec peu de pertes", "Edison l'a choisi", "Il ne chauffe pas les câbles"], c: 1, why: "Le transformateur permet de transporter à haute tension (courant faible, pertes faibles), puis de redescendre à 110 ou 230 V chez les clients." },
+    { q: "Quel industriel a racheté les brevets de Tesla ?", a: ["Thomas Edison", "J. P. Morgan", "George Westinghouse", "Henry Ford"], c: 2, why: "Westinghouse a acheté les brevets du moteur à induction et des systèmes polyphasés en 1888." }
   ]
 });
 

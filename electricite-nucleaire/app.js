@@ -3,7 +3,13 @@
 
 const TRACKS = {
   elec: { name: "Électricité", color: "var(--volt)", soft: "var(--volt-soft)" },
-  nuc: { name: "Nucléaire", color: "var(--core)", soft: "var(--core-soft)" }
+  nuc: { name: "Nucléaire", color: "var(--core)", soft: "var(--core-soft)" },
+  cen: { name: "Centrales nucléaires", color: "var(--plant)", soft: "var(--plant-soft)" }
+};
+const TRACK_INTRO = {
+  elec: "Des électrons libres au réseau européen, en passant par la guerre des courants entre Edison et Tesla.",
+  nuc: "Du noyau atomique à la fission : radioactivité, demi-vie, E = mc², déchets, sûreté et fusion.",
+  cen: "Comment fonctionne une centrale, de l'uranium à ta prise. Pilote un réacteur et découvre le parc français."
 };
 let done = new Set(store.get("done", []));
 const savedTheme = store.get("theme", null);
@@ -36,7 +42,7 @@ function renderHome(main) {
     return `<div class="track-card" style="--track:${t.color}">
       <div class="eyebrow" style="color:${t.color}">Parcours · ${ls.length} leçons</div>
       <h2>${t.name}</h2>
-      <p class="hint">${k === "elec" ? "Des électrons libres au réseau européen : comment on produit, transporte et utilise l'électricité." : "Du noyau atomique au réacteur : radioactivité, fission, sûreté, déchets et fusion."}</p>
+      <p class="hint">${TRACK_INTRO[k]}</p>
       <div class="bar" style="color:${t.color}"><i style="width:${n / ls.length * 100}%"></i></div>
       <span class="hint mono">${n} / ${ls.length} validées</span>
       <ol>${ls.map(l => `<li><a href="#${l.id}">${l.title}</a>${done.has(l.id) ? " ✓" : ""}</li>`).join("")}</ol>
@@ -47,10 +53,10 @@ function renderHome(main) {
     <section class="hero">
       <span class="eyebrow">Cours interactif · ${LESSONS.length} leçons · ${LESSONS.reduce((n, l) => n + (l.body.match(/class="lab"/g) || []).length, 0)} labos</span>
       <h1>Comprendre l'<em>électricité</em> et le <strong>nucléaire</strong></h1>
-      <p>Chaque leçon explique un phénomène avec des mots simples, puis te laisse le manipuler : fais circuler des électrons, équilibre le réseau à 50 Hz, pilote une réaction en chaîne, explore une centrale. Deux questions valident chaque leçon.</p>
+      <p>Chaque leçon explique un phénomène avec des mots simples, puis te laisse le manipuler : fais circuler des électrons, équilibre le réseau à 50 Hz, pilote une réaction en chaîne, démarre une centrale depuis sa salle de commande. Deux questions valident chaque leçon.</p>
       <canvas class="hero-canvas" id="hero-cv" aria-hidden="true"></canvas>
     </section>
-    <div class="tracks">${card("elec")}${card("nuc")}</div>
+    <div class="tracks">${card("elec")}${card("nuc")}${card("cen")}</div>
     <div class="extras">
       <a class="extra-card" href="#quiz"><b>Quiz final</b><span>15 questions tirées de tout le cours. Meilleur score : <span class="mono">${store.get("best", "–")}${store.get("best", null) != null ? " / 15" : ""}</span></span></a>
       <a class="extra-card" href="#glossaire"><b>Glossaire</b><span>${GLOSSARY.length} mots clés, du volt au tokamak.</span></a>
