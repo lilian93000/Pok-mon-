@@ -52,3 +52,7 @@ Le dossier [`bourse/`](bourse/) contient un autre projet : une **machine d'analy
 boursière multi-facteurs** (technique, fondamental, momentum, sentiment des news)
 qui classe les actions selon leur potentiel de hausse. Ouvre `bourse/index.html`
 ou consulte [`bourse/README.md`](bourse/README.md).
+
+## ⚡ Aussi dans ce dépôt
+
+- [`electricite-nucleaire/`](electricite-nucleaire/) : cours interactif pour tout comprendre sur l'électricité et le nucléaire (18 leçons, simulations, quiz).
