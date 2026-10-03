@@ -79,6 +79,16 @@ on zoome en continu de la Terre et la Lune jusqu'au fond diffus cosmologique, à
   magnétosphère induite de Vénus ; pulsar du Crabe et ses faisceaux ; jets en hélice
   des trous noirs ; champ de la Voie lactée ; spirale de Parker jusqu'à l'héliopause.
 - Lueur cinématographique (bloom) et ciel avec la bande de la Voie lactée.
+- **Voyage guidé** : 14 étapes commentées de la Terre au fond diffus cosmologique.
+- **Terre en direct** : jour et nuit calculés pour l'instant présent (position réelle
+  du Soleil), ISS en orbite, anneau des satellites géostationnaires.
+- **Orbites képlériennes** (éléments JPL) : vraies ellipses, excentricités et inclinaisons.
+- **Lunes** de Jupiter, Saturne, Mars, Uranus et Neptune ; **James Webb** au point L2
+  et **Voyager 2**.
+- **Comparer les tailles** : la Terre ou le Soleil à l'échelle à côté de chaque astre
+  (et les orbites de la Terre et de Mars à l'intérieur de Bételgeuse).
+- **Ambiance sonore** générée en direct (Web Audio) et **qualité adaptative** qui
+  baisse la résolution si l'appareil peine.
 
 Ouvre simplement `univers/index.html` dans ton navigateur (aucune installation ;
 la vue 3D charge Three.js depuis un CDN, il faut donc être connecté).

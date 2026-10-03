@@ -180,15 +180,69 @@ body {
   position: absolute; inset: 0; display: grid; place-items: center;
   font: 12px var(--font-data); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
 }
-#v3d-field {
+#v3d-tools {
   position: absolute; left: 50%; transform: translateX(-50%);
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+}
+#v3d-tools .tool {
   display: inline-flex; align-items: center; gap: 9px;
   padding: 10px 16px 10px 12px; border-radius: 999px; cursor: pointer;
   font: 500 13px var(--font-body); color: var(--ink);
   background: var(--panel); border: 1px solid var(--line);
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
+#v3d-compare .ico2 { width: 18px; height: 18px; position: relative; }
+#v3d-compare .ico2::before, #v3d-compare .ico2::after { content: ""; position: absolute; bottom: 2px; border: 1.5px solid var(--dim); border-radius: 50%; }
+#v3d-compare .ico2::before { left: 0; width: 12px; height: 12px; }
+#v3d-compare .ico2::after { right: 0; width: 5px; height: 5px; }
+#v3d-compare.on { border-color: var(--accent); box-shadow: 0 0 22px rgba(243, 194, 122, 0.3); }
+#v3d-compare.on .ico2::before, #v3d-compare.on .ico2::after { border-color: var(--accent); }
+#v3d-tools .tool:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+#v3d-live {
+  position: absolute; left: 50%; transform: translateX(-50%); top: calc(18px + env(safe-area-inset-top, 0px));
+  display: flex; align-items: center; gap: 8px;
+  font: 11px var(--font-data); letter-spacing: 0.06em; color: var(--ink);
+  padding: 7px 12px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line);
+}
+#v3d-live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #ff5a5a; box-shadow: 0 0 8px #ff5a5a; animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.35; } }
+
+/* En-tête : actions */
+.brand-actions { display: flex; gap: 8px; margin-top: 10px; pointer-events: auto; }
+.chip {
+  padding: 7px 12px; border-radius: 999px; cursor: pointer;
+  font: 500 12px var(--font-body); color: var(--ink);
+  background: var(--panel); border: 1px solid var(--line);
+}
+.chip.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.chip[aria-pressed="true"] { border-color: var(--field); color: var(--field); }
+.chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Visite guidée */
+#tour-bar {
+  position: fixed; z-index: 6; left: 50%; transform: translateX(-50%);
+  bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+  width: min(600px, calc(100% - 32px)); padding: 16px 18px 12px;
+  animation: rise 0.5s ease both;
+}
+@keyframes rise { from { opacity: 0; transform: translate(-50%, 12px); } }
+.tour-meta { display: flex; justify-content: space-between; gap: 12px; font: 500 10px var(--font-data); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+#tour-dist { color: var(--dim); letter-spacing: 0.06em; text-transform: none; font-size: 11px; }
+#tour-title { font: 400 18px/1.3 var(--font-display); letter-spacing: 0.04em; margin: 6px 0 6px; text-wrap: balance; }
+#tour-text { margin: 0 0 12px; font-size: 14.5px; line-height: 1.55; color: var(--ink); max-width: 62ch; }
+.tour-progress { height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; margin-bottom: 10px; }
+.tour-progress i { display: block; height: 100%; width: 0; background: var(--accent); }
+.tour-ctl { display: flex; gap: 6px; flex-wrap: wrap; }
+.tour-ctl button {
+  padding: 6px 11px; border-radius: 7px; cursor: pointer; font: 500 12px var(--font-body);
+  color: var(--ink); background: none; border: 1px solid var(--line);
+}
+.tour-ctl button:hover { border-color: var(--accent); }
+.tour-ctl button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#tour-stop { margin-left: auto; color: var(--dim); }
+body.touring #panel, body.touring #time, body.touring #levels, body.touring #v3d-hint, body.touring #v3d-field-info { display: none; }
+
 #v3d-field .ico {
   width: 18px; height: 18px; border-radius: 50%;
   border: 1.5px solid var(--dim); position: relative;
@@ -217,7 +271,17 @@ body.in3d #levels, body.in3d #scale, body.in3d #time, body.in3d #search-box, bod
 @media (max-width: 760px) {
   body.in3d #panel { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); max-height: 38%; }
   #v3d-hint { display: none; }
-  #v3d-field { left: auto; right: 16px; transform: none; top: calc(16px + env(safe-area-inset-top, 0px)); bottom: auto; padding: 8px 12px 8px 10px; }
+  #v3d-tools { left: auto; right: 16px; transform: none; top: calc(16px + env(safe-area-inset-top, 0px)); bottom: auto; flex-direction: column; align-items: flex-end; }
+  #v3d-tools .tool { padding: 7px 11px 7px 9px; font-size: 12px; }
+  #v3d-live { top: auto; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: 16px; transform: none; }
+  body.in3d #v3d-live { display: none; }
+  #tour-bar { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); padding: 12px 14px 10px; }
+  #tour-title { font-size: 15px; }
+  #tour-text { font-size: 13px; margin-bottom: 8px; }
+  #brand { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .brand-actions { margin-top: 0; }
+  .chip { padding: 6px 10px; font-size: 11px; }
+  #btn-sound { display: none; }
   #v3d-field-info { display: none; }
   #brand { right: 16px; max-width: none; }
   #brand h1 { font-size: 15px; }
@@ -244,8 +308,16 @@ body.in3d #levels, body.in3d #scale, body.in3d #time, body.in3d #search-box, bod
   #panel.intro .actions { margin-top: 10px; }
   #date { min-width: 0; white-space: nowrap; font-size: 12px; }
 }
+@media (max-height: 780px) and (min-width: 761px) {
+  #levels { top: calc(50% + 36px); padding: 6px; }
+  #levels .rail-title { padding-bottom: 2px; }
+  #levels button { padding-block: 4px; }
+  #levels button .size { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
   #scale-bar { transition: none; }
+  #tour-bar { animation: none; }
+  #v3d-live::before { animation: none; }
 }
 </style>
 </head>
@@ -255,6 +327,10 @@ body.in3d #levels, body.in3d #scale, body.in3d #time, body.in3d #search-box, bod
 <header id="brand" class="hud">
   <h1>Atlas cosmique</h1>
   <p>De la Terre au bord de l'univers observable, à l'échelle.</p>
+  <div class="brand-actions">
+    <button type="button" id="btn-tour" class="chip primary">▶ Voyage guidé</button>
+    <button type="button" id="btn-sound" class="chip" aria-pressed="false">Son : coupé</button>
+  </div>
 </header>
 
 <div id="search-box" class="hud">
@@ -289,10 +365,27 @@ body.in3d #levels, body.in3d #scale, body.in3d #time, body.in3d #search-box, bod
   <canvas aria-label="Vue 3D interactive de l'astre"></canvas>
   <button type="button" id="v3d-back">← Retour à la carte</button>
   <div id="v3d-hint">Glisser pour tourner · molette ou pincement pour zoomer</div>
-  <button type="button" id="v3d-field" aria-pressed="true" hidden><span class="ico" aria-hidden="true"></span>Champ magnétique</button>
+  <div id="v3d-tools">
+    <button type="button" id="v3d-field" class="tool" aria-pressed="true" hidden><span class="ico" aria-hidden="true"></span>Champ magnétique</button>
+    <button type="button" id="v3d-compare" class="tool" aria-pressed="false" hidden><span class="ico2" aria-hidden="true"></span>Comparer les tailles</button>
+  </div>
+  <div id="v3d-live" hidden></div>
   <div id="v3d-field-info" class="glass" hidden></div>
   <div id="v3d-loading" hidden>Génération…</div>
 </div>
+
+<section id="tour-bar" class="glass" hidden aria-live="polite">
+  <div class="tour-meta"><span id="tour-step">Voyage guidé</span><span id="tour-dist"></span></div>
+  <h3 id="tour-title">—</h3>
+  <p id="tour-text"></p>
+  <div class="tour-progress"><i id="tour-prog"></i></div>
+  <div class="tour-ctl">
+    <button type="button" id="tour-prev" aria-label="Étape précédente">◀</button>
+    <button type="button" id="tour-pause">Pause</button>
+    <button type="button" id="tour-next">Suivant ▶</button>
+    <button type="button" id="tour-stop">Quitter</button>
+  </div>
+</section>
 
 <script>
 "use strict";
@@ -360,15 +453,46 @@ add({
   desc: "Une étoile naine jaune ordinaire, âgée de 4,6 milliards d'années. Elle contient 99,8 % de la masse du Système solaire.",
 });
 
+// Éléments képlériens J2000 et dérives par siècle (JPL, « Approximate Positions of the Planets »)
+// a (UA), e, i (°), L (°), longitude du périhélie ϖ (°), nœud Ω (°) ; puis taux par siècle
+const KEPLER = {
+  Mercure: [0.38709927, 0.20563593, 7.00497902, 252.25032350, 77.45779628, 48.33076593, 0.00000037, 0.00001906, 149472.67411175, 0.16047689],
+  Vénus: [0.72333566, 0.00677672, 3.39467605, 181.97909950, 131.60246718, 76.67984255, 0.00000390, -0.00004107, 58517.81538729, 0.00268329],
+  Terre: [1.00000261, 0.01671123, -0.00001531, 100.46457166, 102.93768193, 0, 0.00000562, -0.00004392, 35999.37244981, 0.32327364],
+  Mars: [1.52371034, 0.09339410, 1.84969142, -4.55343205, -23.94362959, 49.55953891, 0.00001847, 0.00007882, 19140.30268499, 0.44441088],
+  Jupiter: [5.20288700, 0.04838624, 1.30439695, 34.39644051, 14.72847983, 100.47390909, -0.00011607, -0.00013253, 3034.74612775, 0.21252668],
+  Saturne: [9.53667594, 0.05386179, 2.48599187, 49.95424423, 92.59887831, 113.66242448, -0.00125060, -0.00050991, 1222.49362201, -0.41897216],
+  Uranus: [19.18916464, 0.04725744, 0.77263783, 313.23810451, 170.95427630, 74.01692503, -0.00196176, -0.00004397, 428.48202785, 0.40805281],
+  Neptune: [30.06992276, 0.00859048, 1.77004347, -55.12002969, 44.96476227, 131.78422574, 0.00026291, 0.00005105, 218.45945325, -0.32241464],
+  Pluton: [39.48211675, 0.24882730, 17.14001206, 238.92903833, 224.06891629, 110.30393684, -0.00031596, 0.00005170, 145.20780515, -0.04062942],
+};
+// Position héliocentrique écliptique (UA) à partir de l'anomalie excentrique E
+function keplerXY(k, d, Eoverride) {
+  const T = d / 36525;
+  const a = k[0] + k[6] * T, e = k[1] + k[7] * T, I = k[2] * DEG, L = k[3] + k[8] * T, w = k[4] + k[9] * T, O = k[5] * DEG;
+  const om = (w - k[5]) * DEG;
+  let E;
+  if (Eoverride === undefined) {
+    let M = ((L - w) % 360 + 540) % 360 - 180;
+    M *= DEG;
+    E = M + e * Math.sin(M);
+    for (let i = 0; i < 6; i++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+  } else E = Eoverride;
+  const xp = a * (Math.cos(E) - e), yp = a * Math.sqrt(1 - e * e) * Math.sin(E);
+  const co = Math.cos(om), so = Math.sin(om), cO = Math.cos(O), sO = Math.sin(O), cI = Math.cos(I);
+  const x = (co * cO - so * sO * cI) * xp + (-so * cO - co * sO * cI) * yp;
+  const y = (co * sO + so * cO * cI) * xp + (-so * sO + co * cO * cI) * yp;
+  return [x * AU, -y * AU];
+}
+
 for (const [name, a, period, L0, rkm, color, fact] of PLANETS) {
+  const kep = KEPLER[name];
   const o = add({
     name, kind: "planet", label: name === "Pluton" ? "Planète naine" : "Planète", r: rkm * KM, color, sep: a * AU, a: a * AU,
     size: "Diamètre : " + fmtNum(rkm * 2) + " km",
-    extra: [["Année", fmtPeriod(period)], ["Distance au Soleil", fmtNum(a) + " UA"]],
-    pos: (d) => {
-      const L = (L0 + 360 * d / period) * DEG;
-      return [a * AU * Math.cos(L), -a * AU * Math.sin(L)];
-    },
+    extra: [["Année", fmtPeriod(period)], ["Excentricité", String(KEPLER[name][1].toFixed(3)).replace(".", ",")], ["Inclinaison", name === "Terre" ? "0° (plan de référence)" : fmtNum(Math.abs(KEPLER[name][2])) + "°"]],
+    kep,
+    pos: (d) => keplerXY(kep, d),
     desc: fact, zoomR: Math.max(rkm * 14 * KM, name === "Terre" ? 520000 * KM : 0),
     ring: name === "Saturne",
   });
@@ -385,7 +509,7 @@ add({
   zoomR: 30000 * KM,
 });
 add({
-  name: "Voyager 1", kind: "probe", label: "Sonde spatiale", color: "#f3c27a", r: 0,
+  name: "Voyager 1", kind: "probe", model: "voyager", label: "Sonde spatiale", color: "#f3c27a", r: 0,
   pos: (d) => {
     const years = (d - 9131.5) / 365.25;          // depuis le 1er janvier 2025
     return polar((165.5 + 3.57 * years) * AU, 17.2);
@@ -394,6 +518,25 @@ add({
   size: "Lancée le 5 septembre 1977",
   desc: "L'objet humain le plus lointain. Elle a franchi l'héliopause en 2012 et file à 61 000 km/h. Elle atteint un jour-lumière de la Terre vers la fin de 2026.",
   zoomR: 60 * AU,
+});
+add({
+  name: "Voyager 2", kind: "probe", model: "voyager", label: "Sonde spatiale", color: "#f3c27a", r: 0,
+  pos: (d) => polar((137.7 + 3.2 * (d - 9131.5) / 365.25) * AU, 20.1),
+  get sep() { return Math.hypot(...posOf(this)); },
+  size: "Lancée le 20 août 1977",
+  desc: "La seule sonde à avoir visité Uranus (1986) et Neptune (1989). Elle a franchi l'héliopause en 2018. Position approximative.",
+  zoomR: 60 * AU,
+});
+add({
+  name: "Télescope James Webb", kind: "probe", model: "jwst", label: "Observatoire spatial", color: "#e8c060", r: 0, parent: "Terre",
+  pos: (d) => {
+    const e = byId.Terre.pos(d), n = Math.hypot(e[0], e[1]), k = 1 + 1.5e6 * KM / n;
+    return [e[0] * k, e[1] * k];
+  },
+  sep: 1.5e6 * KM,
+  size: "Miroir de 6,5 m · pare-soleil de 21 m",
+  desc: "Placé au point de Lagrange L2, à 1,5 million de km de la Terre, à l'opposé du Soleil. Son pare-soleil garde ses instruments à −233 °C pour voir l'infrarouge des premières galaxies.",
+  zoomR: 2.2e6 * KM,
 });
 add({
   name: "Ceinture de Kuiper", kind: "region", label: "Région", p: polar(46 * AU, 7.5), r: 50 * AU, sep: 40 * AU, color: "#9fb3d9",
@@ -972,7 +1115,15 @@ function drawOrbits() {
     const c = o.parent ? toScreen(byId[o.parent].pos(simDays)) : toScreen([0, 0]);
     if (R > Math.hypot(W, H) * 6) continue;
     ctx.strokeStyle = `rgba(160,176,210,${(o === selected ? 0.55 : 0.18) * a})`;
-    ctx.beginPath(); ctx.arc(c[0], c[1], R, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath();
+    if (o.kep) {
+      // vraie ellipse képlérienne
+      for (let i = 0; i <= 160; i++) {
+        const [sx, sy] = toScreen(keplerXY(o.kep, simDays, i / 160 * Math.PI * 2));
+        if (i) ctx.lineTo(sx, sy); else ctx.moveTo(sx, sy);
+      }
+    } else ctx.arc(c[0], c[1], R, 0, Math.PI * 2);
+    ctx.stroke();
   }
   ctx.restore();
 }
@@ -1138,8 +1289,12 @@ function intro() {
       <li>Les échelles à gauche font le voyage pour vous</li>
     </ul>
     <p class="note">Le ciel est projeté sur un plan : les distances au Soleil sont réelles, les directions sont approximatives. Les filaments de la toile cosmique sont une illustration. Textures de la Terre et de la Lune : NASA, via le dépôt three.js ; les autres surfaces sont générées.</p>
-    <div class="actions"><button type="button" class="primary" id="tour">Partir de la Terre</button></div>`;
-  document.getElementById("tour").addEventListener("click", () => explore(byId.Terre));
+    <div class="actions">
+      <button type="button" class="primary" id="tour">▶ Lancer le voyage guidé</button>
+      <button type="button" id="free">Partir de la Terre</button>
+    </div>`;
+  document.getElementById("tour").addEventListener("click", startTour);
+  document.getElementById("free").addEventListener("click", () => explore(byId.Terre));
 }
 function distFromEarth(o) {
   if (o.dist) return o.dist;
@@ -1164,6 +1319,7 @@ function statsHtml(o) {
     if (o.lookback && d > 1e9) rows.push(["Distance actuelle", "comobile, dilatée par l'expansion"]);
   }
   if (o.size) rows.push(["Taille", o.size.replace(/^Diamètre : /, "Ø ")]);
+  if (o.kep) rows.push(["Distance au Soleil", fmtDist(Math.hypot(...posOf(o)))]);
   for (const r of o.extra || []) rows.push(r);
   return rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
 }
@@ -1192,7 +1348,7 @@ function goTo(o, onDone) {
 }
 const has3D = () => !!window.Viewer3D;
 const in3D = () => has3D() && window.Viewer3D.isOpen();
-function open3D(o) { if (has3D()) window.Viewer3D.open(o); }
+function open3D(o, opts) { if (has3D()) window.Viewer3D.open(o, opts); }
 function close3D() { if (in3D()) window.Viewer3D.close(); }
 // Clic sur un astre : zoom sur la carte, puis ouverture de la vue 3D
 function explore(o) {
@@ -1209,6 +1365,159 @@ function explore(o) {
   goTo(o, () => open3D(o));
 }
 
+/* =========================================================================
+   Voyage guidé : de la Terre au bord de l'univers
+   ========================================================================= */
+const TOUR = [
+  { id: "Terre", field: true, title: "La Terre, en direct", text: "Le jour et la nuit que vous voyez sont ceux de cet instant précis. Autour, le champ magnétique dévie le vent solaire et allume les aurores." },
+  { id: "Lune", title: "La Lune", text: "À 384 400 km. Sa lumière met 1,3 seconde à nous parvenir. Douze humains y ont marché entre 1969 et 1972." },
+  { id: "Soleil", field: true, title: "Le Soleil", text: "109 fois plus large que la Terre. Sa lumière met 8 minutes 20 secondes pour arriver jusqu'à nous. Ses boucles magnétiques façonnent la couronne." },
+  { id: "Jupiter", field: true, title: "Jupiter", text: "La géante du Système solaire et ses quatre grandes lunes. Sa magnétosphère est le plus grand objet du Système solaire." },
+  { id: "Saturne", compare: true, title: "Saturne", text: "Ses anneaux font 280 000 km de large mais souvent moins de 100 m d'épaisseur. À côté, la Terre à l'échelle." },
+  { id: "Voyager 1", title: "Voyager 1", text: "Lancée en 1977, c'est l'objet humain le plus lointain. Elle atteint un jour-lumière de la Terre fin 2026." },
+  { id: "Proxima du Centaure", title: "L'étoile la plus proche", text: "4,24 années-lumière. À la vitesse de Voyager, il faudrait plus de 70 000 ans pour l'atteindre. Une planète, Proxima b, tourne dans sa zone habitable." },
+  { id: "Bételgeuse", compare: true, title: "Bételgeuse", text: "Une supergéante rouge. Les cercles montrent les orbites de la Terre et de Mars : placée au centre du Système solaire, elle les engloutirait." },
+  { id: "Nébuleuse d'Orion", title: "La nébuleuse d'Orion", text: "À 1 344 années-lumière, une pouponnière où naissent des milliers d'étoiles. Visible à l'œil nu sous le baudrier d'Orion." },
+  { id: "Sagittarius A*", title: "Le cœur de la Voie lactée", text: "Un trou noir de 4 millions de masses solaires. Sa gravité courbe la lumière du disque qui l'entoure : on voit même le dessous du disque, au-dessus du trou." },
+  { id: "Voie lactée", field: false, title: "Notre galaxie", text: "100 000 années-lumière de diamètre, des centaines de milliards d'étoiles. Le Soleil met 230 millions d'années à en faire le tour." },
+  { id: "Galaxie d'Andromède", title: "Andromède", text: "À 2,5 millions d'années-lumière, elle fonce vers nous à 110 km/s. Les deux galaxies fusionneront dans environ 4,5 milliards d'années." },
+  { id: "Laniakea", title: "Laniakea", text: "Notre superamas : 100 000 galaxies emportées vers le Grand Attracteur. La Voie lactée est un point à sa périphérie." },
+  { id: "Fond diffus cosmologique", title: "Le bord de l'univers observable", text: "La plus vieille lumière qui existe, émise 380 000 ans après le Big Bang. Au-delà, rien ne nous est encore parvenu. Fin du voyage." },
+];
+const tourBar = document.getElementById("tour-bar");
+const tourEls = ["tour-step", "tour-dist", "tour-title", "tour-text", "tour-prog", "tour-pause"].reduce((m, id) => (m[id] = document.getElementById(id), m), {});
+let tour = null;
+const HOLD = 12000;
+function startTour() {
+  if (!has3D()) { explore(byId.Terre); return; }
+  tour = { i: -1, paused: false, timer: 0, guard: 0 };
+  document.body.classList.add("touring");
+  tourBar.hidden = false;
+  Sound.cue();
+  gotoStep(0);
+}
+function stopTour() {
+  if (!tour) return;
+  clearTimeout(tour.timer); clearTimeout(tour.guard);
+  tour = null;
+  document.body.classList.remove("touring");
+  tourBar.hidden = true;
+  if (selected) select(selected, false);
+}
+function progress(run) {
+  const bar = tourEls["tour-prog"];
+  bar.style.transition = "none"; bar.style.width = "0%";
+  if (!run) return;
+  void bar.offsetWidth;
+  bar.style.transition = `width ${HOLD}ms linear`; bar.style.width = "100%";
+}
+function gotoStep(i) {
+  if (!tour) return;
+  clearTimeout(tour.timer); clearTimeout(tour.guard);
+  if (i >= TOUR.length) { stopTour(); return; }
+  tour.i = Math.max(0, i);
+  const st = TOUR[tour.i], o = byId[st.id];
+  tourEls["tour-step"].textContent = `Voyage guidé · ${tour.i + 1} / ${TOUR.length}`;
+  tourEls["tour-dist"].textContent = o.name === "Terre" ? "ici" : (o.distText || fmtDist(distFromEarth(o)));
+  tourEls["tour-title"].textContent = st.title;
+  tourEls["tour-text"].textContent = st.text;
+  tourEls["tour-pause"].textContent = tour.paused ? "Reprendre" : "Pause";
+  document.getElementById("tour-next").textContent = tour.i === TOUR.length - 1 ? "Terminer" : "Suivant ▶";
+  progress(false);
+  close3D();
+  select(o, false);
+  const arrive = () => {
+    if (!tour || TOUR[tour.i] !== st) return;
+    clearTimeout(tour.guard);
+    open3D(o, { field: st.field, compare: !!st.compare });
+    Sound.cue();
+    hold();
+  };
+  goTo(o, arrive);
+  tour.guard = setTimeout(() => { if (tour && !in3D()) arrive(); }, 9000);
+}
+function hold() {
+  if (!tour) return;
+  clearTimeout(tour.timer);
+  if (tour.paused) { progress(false); return; }
+  progress(true);
+  tour.timer = setTimeout(() => gotoStep(tour.i + 1), HOLD);
+}
+document.getElementById("btn-tour").addEventListener("click", startTour);
+document.getElementById("tour-next").addEventListener("click", () => tour && gotoStep(tour.i + 1));
+document.getElementById("tour-prev").addEventListener("click", () => tour && gotoStep(tour.i - 1));
+document.getElementById("tour-stop").addEventListener("click", stopTour);
+document.getElementById("tour-pause").addEventListener("click", () => {
+  if (!tour) return;
+  tour.paused = !tour.paused;
+  tourEls["tour-pause"].textContent = tour.paused ? "Reprendre" : "Pause";
+  if (in3D()) hold();
+});
+
+/* =========================================================================
+   Ambiance sonore générée (Web Audio) : nappe grave, souffle, notes lointaines
+   ========================================================================= */
+const Sound = (() => {
+  let ac = null, master = null, verb = null, on = false, timer = 0;
+  const btn = document.getElementById("btn-sound");
+  function init() {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return false;
+    ac = new AC();
+    master = ac.createGain(); master.gain.value = 0; master.connect(ac.destination);
+    // réverbération : réponse impulsionnelle de bruit décroissant
+    verb = ac.createConvolver();
+    const len = ac.sampleRate * 5, ir = ac.createBuffer(2, len, ac.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+    verb.buffer = ir;
+    const wet = ac.createGain(); wet.gain.value = 0.6; verb.connect(wet); wet.connect(master);
+    // nappe : quintes graves légèrement désaccordées, filtre qui respire
+    const lp = ac.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 420; lp.Q.value = 2;
+    const lfo = ac.createOscillator(), lfoG = ac.createGain(); lfo.frequency.value = 0.04; lfoG.gain.value = 260;
+    lfo.connect(lfoG); lfoG.connect(lp.frequency); lfo.start();
+    [[55, "sine", 0.22], [82.41, "sine", 0.14], [110.3, "triangle", 0.06], [164.8, "sine", 0.05], [54.6, "sine", 0.18]].forEach(([f, t, g]) => {
+      const o = ac.createOscillator(), gn = ac.createGain();
+      o.type = t; o.frequency.value = f; gn.gain.value = g;
+      o.connect(gn); gn.connect(lp); o.start();
+    });
+    lp.connect(master); lp.connect(verb);
+    // souffle cosmique
+    const nb = ac.createBuffer(1, ac.sampleRate * 4, ac.sampleRate), nd = nb.getChannelData(0);
+    for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+    const ns = ac.createBufferSource(); ns.buffer = nb; ns.loop = true;
+    const bp = ac.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 500; bp.Q.value = 0.8;
+    const nl = ac.createOscillator(), nlg = ac.createGain(); nl.frequency.value = 0.07; nlg.gain.value = 300; nl.connect(nlg); nlg.connect(bp.frequency); nl.start();
+    const ng = ac.createGain(); ng.gain.value = 0.025;
+    ns.connect(bp); bp.connect(ng); ng.connect(master); ng.connect(verb); ns.start();
+    return true;
+  }
+  function bell(gain = 0.05) {
+    if (!on) return;
+    const scale = [220, 246.9, 293.7, 329.6, 392, 440, 493.9, 587.3, 659.3];
+    const f = scale[(Math.random() * scale.length) | 0] * (Math.random() < 0.3 ? 2 : 1), t = ac.currentTime;
+    [[1, 1], [2.01, 0.3], [3.02, 0.12]].forEach(([m, g]) => {
+      const o = ac.createOscillator(), e = ac.createGain();
+      o.frequency.value = f * m;
+      e.gain.setValueAtTime(0, t); e.gain.linearRampToValueAtTime(gain * g, t + 0.03);
+      e.gain.exponentialRampToValueAtTime(0.0001, t + 5);
+      o.connect(e); e.connect(verb); e.connect(master);
+      o.start(t); o.stop(t + 5.1);
+    });
+  }
+  function loop() { bell(); timer = setTimeout(loop, 3500 + Math.random() * 6000); }
+  function set(v) {
+    if (v && !ac && !init()) return;
+    on = v;
+    btn.setAttribute("aria-pressed", String(v));
+    btn.textContent = v ? "Son : activé" : "Son : coupé";
+    if (!ac) return;
+    if (v) { ac.resume(); master.gain.setTargetAtTime(0.55, ac.currentTime, 1.5); clearTimeout(timer); timer = setTimeout(loop, 1500); }
+    else { master.gain.setTargetAtTime(0, ac.currentTime, 0.4); clearTimeout(timer); }
+  }
+  btn.addEventListener("click", () => set(!on));
+  return { set, cue: () => bell(0.08) };
+})();
+
 /* Recherche */
 const search = document.getElementById("search"), results = document.getElementById("results");
 const norm = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -1224,6 +1533,7 @@ search.addEventListener("input", () => {
 results.addEventListener("click", (e) => {
   const b = e.target.closest("button");
   if (!b) return;
+  stopTour();
   explore(OBJECTS[+b.dataset.i]);
   results.hidden = true; search.value = ""; search.blur();
 });
@@ -1305,7 +1615,7 @@ function pick(x, y) {
     const d = Math.hypot(h.x - x, h.y - y);
     if (d < Math.max(h.r, 14) && d < bd) { bd = d; best = h.o; }
   }
-  if (best) explore(best);
+  if (best) { stopTour(); explore(best); }
 }
 
 window.addEventListener("keydown", (e) => {
@@ -1319,7 +1629,7 @@ window.addEventListener("keydown", (e) => {
     case "ArrowRight": follow = null; flight = null; cam.x += step; break;
     case "ArrowUp": follow = null; flight = null; cam.y -= step; break;
     case "ArrowDown": follow = null; flight = null; cam.y += step; break;
-    case "Escape": if (in3D()) { close3D(); } else intro(); break;
+    case "Escape": if (tour) stopTour(); else if (in3D()) { close3D(); } else intro(); break;
     default: return;
   }
   e.preventDefault();
@@ -1368,6 +1678,7 @@ S = Math.pow(10, cam.l);
 intro();
 requestAnimationFrame(frame);
 document.getElementById("v3d-back").addEventListener("click", () => {
+  stopTour();
   close3D();
   if (selected) select(selected, false);
 });
