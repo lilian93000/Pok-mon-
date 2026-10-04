@@ -1590,30 +1590,8 @@
     const l = textSprite(label, "#bfeeff", 0.62, true); l.position.copy(lp); l.center.set(0.5, labelY > pos.y ? -0.2 : 1.2); parent.add(l);
   }
 
-  // environnement réfléchi par les métaux (dégradé et quelques sources lumineuses)
-  function shipEnvMap() {
-    return cached("shipEnv", () => {
-      const es = new T.Scene();
-      const sky = new T.Mesh(new T.SphereGeometry(50, 32, 16), new T.ShaderMaterial({
-        side: T.BackSide,
-        vertexShader: `varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
-        fragmentShader: `varying vec3 vP; void main(){ float h = normalize(vP).y; vec3 c = mix(vec3(0.02,0.025,0.04), vec3(0.18,0.22,0.32), smoothstep(-0.2, 1.0, h)); gl_FragColor = vec4(c, 1.0); }`,
-      }));
-      es.add(sky);
-      [[20, 30, 10, 1.6, 0xfff1d8], [-30, 5, -20, 0.8, 0x8fb0ff], [5, -25, 30, 0.5, 0xffb070]].forEach(([x, y, z, k, c]) => {
-        const p = new T.Mesh(new T.PlaneGeometry(14, 14), new T.MeshBasicMaterial({ color: new T.Color(c).multiplyScalar(k), side: T.DoubleSide }));
-        p.position.set(x, y, z); p.lookAt(0, 0, 0); es.add(p);
-      });
-      const pm = new T.PMREMGenerator(renderer);
-      const tex = pm.fromScene(es, 0.04).texture;
-      pm.dispose();
-      return tex;
-    });
-  }
-
   B.ship = function () {
     hotspots = [];
-    scene.environment = shipEnvMap();
     const key = new T.DirectionalLight(0xfff4e6, 1.1); key.position.set(12, 16, 10); scene.add(key);
     const rim = new T.DirectionalLight(0x8fb0ff, 0.6); rim.position.set(-14, -6, -12); scene.add(rim);
     scene.add(new T.HemisphereLight(0x8090b0, 0x101018, 0.35));
@@ -1924,8 +1902,8 @@
     const sun = new T.Mesh(new T.CylinderGeometry(R - 3.2, R - 3.2, 0.5, 360, 1, true), sunMat); sun.rotation.z = Math.PI / 2; world.add(sun);
     const roof = new T.Mesh(new T.CylinderGeometry(R - 3.25, R - 3.25, W, 360, 1, true), new T.MeshBasicMaterial({ color: 0x9ab8e0, transparent: true, opacity: 0.08, side: T.DoubleSide, depthWrite: false }));
     roof.rotation.z = Math.PI / 2; world.add(roof);
-    const hemi = new T.HemisphereLight(0xfff4e0, 0x405030, 1.0); scene.add(hemi);
-    const dirL = new T.DirectionalLight(0xfff0d8, 0.6); dirL.position.set(0, 10, 0); scene.add(dirL);
+    const hemi = new T.HemisphereLight(0xfff4e0, 0x405030, 0.7); scene.add(hemi);
+    const dirL = new T.DirectionalLight(0xfff0d8, 0.4); dirL.position.set(0, 10, 0); scene.add(dirL);
 
     let winMat = null;
     if (city) {
@@ -1965,11 +1943,11 @@
     }
     world.add(trunk); world.add(crown);
     // habitants qui se promènent
-    const PN = 500, people = new T.InstancedMesh(new T.CylinderGeometry(0.02, 0.025, 0.17, 6), new T.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6 }), PN);
+    const PN = 500, people = new T.InstancedMesh(new T.CylinderGeometry(0.012, 0.016, 0.17, 6), new T.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6 }), PN);
     const walkers = [];
     for (let i = 0; i < PN; i++) {
       walkers.push([r() * Math.PI * 2, (r() * 2 - 1) * (city ? 0.5 : 4), (r() < 0.5 ? -1 : 1) * (0.00004 + r() * 0.00008)]);
-      people.setColorAt(i, new T.Color().setHSL(r(), 0.5, 0.55));
+      people.setColorAt(i, new T.Color().setHSL(r(), 0.22, 0.42 + r() * 0.2));
     }
     world.add(people);
     updaters.push(() => {
@@ -1982,20 +1960,20 @@
       lake.rotation.z = Math.PI / 2; world.add(lake);
     }
     // cycle jour-nuit (une journée en 2 minutes)
-    scene.fog = new T.Fog(0xb8cde6, 4, 70);
-    scene.background = new T.Color(0xb8cde6);
-    const dayC = new T.Color(0xb8cde6), nightC = new T.Color(0x0b1020), duskC = new T.Color(0xe0a070), tmpC = new T.Color();
+    scene.fog = new T.Fog(0x9fb6d2, 10, 120);
+    scene.background = new T.Color(0x9fb6d2);
+    const dayC = new T.Color(0x9fb6d2), nightC = new T.Color(0x0b1020), duskC = new T.Color(0xe0a070), tmpC = new T.Color();
     updaters.push((dt, t) => {
       const ph = (t / 120 + 0.3) % 1, day = Math.max(0, Math.sin(ph * Math.PI * 2)), dusk = Math.max(0, 1 - Math.abs(Math.sin(ph * Math.PI * 2)) * 4) * (ph < 0.6 ? 1 : 0.6);
       tmpC.copy(nightC).lerp(dayC, day).lerp(duskC, dusk * 0.5);
       scene.fog.color.copy(tmpC); scene.background.copy(tmpC);
       sunMat.color.setRGB(0.1 + 0.9 * day + dusk * 0.4, 0.1 + 0.85 * day + dusk * 0.2, 0.25 + 0.7 * day);
-      hemi.intensity = 0.15 + 0.95 * day; dirL.intensity = 0.05 + 0.6 * day;
+      hemi.intensity = 0.12 + 0.6 * day; dirL.intensity = 0.04 + 0.35 * day;
       if (winMat) winMat.emissiveIntensity = 0.15 + 0.9 * (1 - day);
     });
     const lab = textSprite(city ? "Anneau A · la ville : le sol remonte jusqu'au-dessus de vous" : "Anneau B · fermes, vergers et lac", "#ffffff", 0.9, true);
     lab.position.copy(P(0.45, 0, 2.5)); world.add(lab);
-    return { look: { R, th: 0, walk: 0.004 }, noFit: true, dist: 0.4, minD: 0.17, maxD: 30, phi: Math.PI / 2 - 0.12, theta: 0, auto: 0, stars: false, bloom: [0.35, 0.4, 0.9] };
+    return { look: { R, th: 0, walk: 0.004 }, noFit: true, dist: 0.4, minD: 0.17, maxD: 30, phi: Math.PI / 2 - 0.12, theta: 0, auto: 0, stars: false, bloom: [0.18, 0.3, 0.97] };
   };
 
   /* Télescope spatial James Webb */

@@ -104,7 +104,7 @@
     // une année de fonctionnement normal
     st.t = t1;
     S.setYear(st.t);
-    const births = Math.round(st.pop * 0.016 * (st.moral / 75)), deaths = Math.round(st.pop * 0.004 + (st.t > 25 ? st.pop * 0.004 : 0));
+    const births = Math.round(st.pop * (st.pop > 2800 ? 0.006 : 0.012) * (st.moral / 75)), deaths = Math.round(st.pop * 0.004 + (st.t > 25 ? st.pop * 0.004 : 0));
     st.pop += births - deaths; st.deaths += deaths;
     st.water -= 0.37;                        // ≈ 1 m³ par jour de pertes
     st.food += 0.05 - (st.pop - 2000) * 0.00004;
@@ -168,7 +168,7 @@
         ${meter("Nourriture", st.food, 3, (v) => nf(v, 1) + " an" + (v >= 2 ? "s" : ""), 0.3)}
         ${meter("Eau", st.water, 150, (v) => nf(v * 1000) + " m³", 0.3)}
         ${meter("Coque", st.hull, 100, (v) => nf(v) + " %", 0.4)}
-        ${meter("Carburant", s.fuel, 1, (v) => nf(v * 100) + " %", 0.15)}
+        ${meter("Carburant", s.fuel, 1, (v) => nf(v * 100) + " %", 0.03)}
       </div>
       ${ev ? `
         <div class="sim-card">
