@@ -248,6 +248,58 @@ body {
 .sd-timeline label b { color: var(--ink); font-family: var(--font-data); }
 .sd-timeline input { width: 100%; margin: 8px 0 10px; accent-color: var(--field); }
 @media (max-width: 760px) { #panel.dossier { width: auto; } #btn-ship { display: none; } }
+.sd-actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 12px; }
+.sd-btn {
+  padding: 7px 12px; border-radius: 8px; cursor: pointer; font: 500 12.5px var(--font-body);
+  color: var(--ink); background: none; border: 1px solid var(--line);
+}
+.sd-btn.primary { background: var(--field); border-color: var(--field); color: var(--accent-ink); }
+.sd-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sd-day { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; }
+.sd-day li { display: grid; grid-template-columns: 46px 1fr; column-gap: 10px; font-size: 13px; line-height: 1.45; }
+.sd-day time { font: 500 11.5px var(--font-data); color: var(--field); padding-top: 1px; }
+.sd-day b { font-weight: 500; }
+.sd-day span { grid-column: 2; color: var(--dim); }
+
+/* Simulateur de mission */
+#sim {
+  position: fixed; z-index: 8; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(680px, calc(100% - 32px)); max-height: calc(100% - 32px); overflow-y: auto;
+  padding: 18px 20px 16px;
+}
+body.simming #panel, body.simming #levels, body.simming #time { visibility: hidden; }
+.sim-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.sim-k { font: 500 10px var(--font-data); letter-spacing: 0.14em; text-transform: uppercase; color: var(--field); }
+.sim-head h3 { font: 400 20px/1.3 var(--font-display); margin: 4px 0 0; letter-spacing: 0.03em; }
+.sim-head h3 small { font: 13px var(--font-body); color: var(--dim); letter-spacing: 0; }
+.sim-x { width: 30px; height: 30px; border: 0; border-radius: 6px; background: none; color: var(--dim); font-size: 20px; cursor: pointer; }
+.sim-bar { position: relative; height: 6px; border-radius: 3px; background: var(--line); margin: 14px 0 20px; }
+.sim-bar i { position: absolute; inset: 0 auto 0 0; border-radius: 3px; background: linear-gradient(90deg, var(--field), var(--accent)); }
+.sim-bar span { position: absolute; top: 9px; font: 10px var(--font-data); color: var(--dim); }
+.sim-bar span:last-child { right: 0; }
+.sim-meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+.sim-m { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px 10px; position: relative; min-width: 0; }
+.sim-m .k { display: block; font: 500 9.5px var(--font-data); letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
+.sim-m .v { display: block; font: 400 15px var(--font-display); margin: 3px 0 6px; font-variant-numeric: tabular-nums; }
+.sim-m i { display: block; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--field) var(--p), var(--line) var(--p)); }
+.sim-m.low { border-color: #ff7a6a; }
+.sim-m.low i { background: linear-gradient(90deg, #ff7a6a var(--p), var(--line) var(--p)); }
+.sim-card { border: 1px solid var(--field); border-radius: 10px; padding: 14px; margin-bottom: 12px; background: rgba(111, 216, 255, 0.05); }
+.sim-card.fail { border-color: #ff7a6a; background: rgba(255, 122, 106, 0.06); }
+.sim-card.win { border-color: var(--accent); background: rgba(243, 194, 122, 0.07); }
+.sim-card h4 { font: 400 17px/1.3 var(--font-display); margin: 4px 0 6px; }
+.sim-card p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; }
+.sim-choices { display: grid; gap: 6px; }
+.sim-choices button { text-align: left; padding: 9px 12px; border-radius: 8px; cursor: pointer; font: 13.5px var(--font-body); color: var(--ink); background: var(--panel); border: 1px solid var(--line); }
+.sim-choices button:hover, .sim-choices button:focus-visible { border-color: var(--field); outline: none; }
+.sim-ctl { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.sim-ctl button { padding: 7px 12px; border-radius: 8px; cursor: pointer; font: 500 12.5px var(--font-body); color: var(--ink); background: none; border: 1px solid var(--line); }
+.sim-ctl button:first-child:not(:disabled) { background: var(--field); border-color: var(--field); color: var(--accent-ink); }
+.sim-ctl button:disabled { opacity: 0.4; cursor: default; }
+.sim-log { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 12.5px; color: var(--dim); }
+.sim-log time { font: 11px var(--font-data); color: var(--field); margin-right: 6px; }
+.sim-log b { color: var(--ink); font-weight: 500; }
+@media (max-width: 560px) { .sim-meters { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sim-head h3 small { display: block; } }
 
 /* Visite guidée */
 #tour-bar, #light-bar {
@@ -421,6 +473,8 @@ body.in3d #levels, body.in3d #scale, body.in3d #time, body.in3d #search-box, bod
   <div id="v3d-field-info" class="glass" hidden></div>
   <div id="v3d-loading" hidden>Génération…</div>
 </div>
+
+<section id="sim" class="glass" hidden aria-live="polite"></section>
 
 <section id="light-bar" class="glass" hidden aria-live="polite">
   <div class="tour-meta"><span>Voyage de la lumière · 299 792 km/s</span><span id="lb-speed"></span></div>
@@ -686,8 +740,8 @@ add({
   name: "Arche Aurore", kind: "ship", label: "Vaisseau-arche · concept", color: "#8fe0ff", r: 0,
   pos: () => { const f = window.Ship ? window.Ship.state(window.Ship.year).frac : 0.45; return [PROX[0] * f, PROX[1] * f]; },
   get sep() { return Math.hypot(...posOf(this)); },
-  size: "2,4 km · 1 200 personnes",
-  desc: "Un vaisseau-génération imaginé pour coloniser Proxima b : 89 ans de voyage, deux anneaux en rotation pour la gravité, une écologie entièrement recyclée. Touchez les modules en 3D pour explorer.",
+  size: "3,2 km · 2 000 personnes",
+  desc: "Le vaisseau ultime pour coloniser Proxima b : 38 ans de voyage, une seule génération, deux anneaux en rotation pour la gravité et une écologie entièrement recyclée.",
   zoomR: 1.2,
 });
 
@@ -1713,6 +1767,15 @@ function renderShipPanel(o, fly) {
   if (fly) goTo(o);
   if (window.Viewer3D) window.Viewer3D.relayout();
 }
+// boutons du dossier : visites intérieures, vue extérieure, simulateur
+if (window.Ship) window.Ship.onAction = (act) => {
+  const ship = byId["Arche Aurore"];
+  if (act === "sim") { if (window.ShipSim) window.ShipSim.open(); return; }
+  if (!has3D()) return;
+  if (act === "exterior") open3D(ship);
+  if (act === "visit-A") open3D({ kind: "shipInterior", ring: "A", name: "Anneau A · la ville", id: "interieur-A" });
+  if (act === "visit-B") open3D({ kind: "shipInterior", ring: "B", name: "Anneau B · fermes et parcs", id: "interieur-B" });
+};
 // clic sur un module du vaisseau en 3D
 window.atlasShipSection = (id) => {
   const root = document.getElementById("sd-root");
@@ -1752,7 +1815,7 @@ const TOUR = [
   { id: "Saturne", compare: true, title: "Saturne", text: "Ses anneaux font 280 000 km de large mais souvent moins de 100 m d'épaisseur. À côté, la Terre à l'échelle." },
   { id: "Voyager 1", title: "Voyager 1", text: "Lancée en 1977, c'est l'objet humain le plus lointain. Elle atteint un jour-lumière de la Terre fin 2026." },
   { id: "Proxima du Centaure", title: "L'étoile la plus proche", text: "4,24 années-lumière. À la vitesse de Voyager, il faudrait plus de 70 000 ans pour l'atteindre. Une planète, Proxima b, tourne dans sa zone habitable." },
-  { id: "Arche Aurore", field: false, title: "Et si nous y allions ?", text: "L'Arche Aurore, un vaisseau-génération imaginé pour 1 200 personnes : 89 ans de voyage vers Proxima b, deux anneaux en rotation pour recréer la gravité, et une écologie qui recycle tout." },
+  { id: "Arche Aurore", field: false, title: "Et si nous y allions ?", text: "L'Arche Aurore : 2 000 personnes, 38 ans de voyage vers Proxima b à 12 % de la vitesse de la lumière, deux anneaux en rotation pour recréer la gravité et une écologie qui recycle tout." },
   { id: "Bételgeuse", compare: true, title: "Bételgeuse", text: "Une supergéante rouge. Les cercles montrent les orbites de la Terre et de Mars : placée au centre du Système solaire, elle les engloutirait." },
   { id: "Nébuleuse d'Orion", title: "La nébuleuse d'Orion", text: "À 1 344 années-lumière, une pouponnière où naissent des milliers d'étoiles. Visible à l'œil nu sous le baudrier d'Orion." },
   { id: "Sagittarius A*", title: "Le cœur de la Voie lactée", text: "Un trou noir de 4 millions de masses solaires. Sa gravité courbe la lumière du disque qui l'entoure : on voit même le dessous du disque, au-dessus du trou." },
@@ -2101,7 +2164,7 @@ function pick(x, y) {
 
 window.addEventListener("keydown", (e) => {
   if (e.target === search) return;
-  if (in3D() && e.key !== "Escape") return;
+  if ((in3D() || (window.ShipSim && window.ShipSim.isOpen())) && e.key !== "Escape") return;
   const step = 60 * S;
   switch (e.key) {
     case "+": case "=": zoomAt(W / 2, H / 2, -0.25); break;
@@ -2110,7 +2173,7 @@ window.addEventListener("keydown", (e) => {
     case "ArrowRight": follow = null; flight = null; cam.x += step; break;
     case "ArrowUp": follow = null; flight = null; cam.y -= step; break;
     case "ArrowDown": follow = null; flight = null; cam.y += step; break;
-    case "Escape": if (light) stopLight(); else if (tour) stopTour(); else if (in3D()) { close3D(); } else intro(); break;
+    case "Escape": if (window.ShipSim && window.ShipSim.isOpen()) window.ShipSim.close(); else if (light) stopLight(); else if (tour) stopTour(); else if (in3D()) { close3D(); } else intro(); break;
     default: return;
   }
   e.preventDefault();
@@ -2180,5 +2243,6 @@ document.getElementById("v3d-back").addEventListener("click", () => {
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 <script src="viewer3d.js"></script>
+<script src="sim.js"></script>
 </body>
 </html>

@@ -363,6 +363,19 @@
       if (!reduceMotion) ctl.theta += ctl.auto * dt * smooth01(ctl.idle / 3);
     }
     ctl.dist += (ctl.tDist - ctl.dist) * Math.min(1, dt * 6);
+    if (viewInfo && viewInfo.look) {
+      // vue à hauteur d'humain dans un anneau : on avance le long du sol courbe
+      const L = viewInfo.look;
+      if (!ctl.drag && !reduceMotion) L.th += dt * L.walk;
+      const th = L.th, h = ctl.dist;
+      const up = new T.Vector3(0, Math.cos(th), -Math.sin(th)), fw = new T.Vector3(0, Math.sin(th), Math.cos(th)), side = new T.Vector3(1, 0, 0);
+      const eye = new T.Vector3(0, -(L.R - h) * Math.cos(th), (L.R - h) * Math.sin(th));
+      const el = Math.PI / 2 - ctl.phi, yaw = ctl.theta;
+      const dir = fw.clone().multiplyScalar(Math.cos(el) * Math.cos(yaw)).addScaledVector(side, Math.cos(el) * Math.sin(yaw)).addScaledVector(up, Math.sin(el));
+      camera.position.copy(eye); camera.up.copy(up); camera.lookAt(eye.add(dir));
+      return;
+    }
+    camera.up.set(0, 1, 0);
     const s = Math.sin(ctl.phi);
     camera.position.set(ctl.dist * s * Math.sin(ctl.theta), ctl.dist * Math.cos(ctl.phi), ctl.dist * s * Math.cos(ctl.theta)).add(ctl.target);
     camera.lookAt(ctl.target);
@@ -1577,140 +1590,217 @@
     const l = textSprite(label, "#bfeeff", 0.62, true); l.position.copy(lp); l.center.set(0.5, labelY > pos.y ? -0.2 : 1.2); parent.add(l);
   }
 
+  // environnement réfléchi par les métaux (dégradé et quelques sources lumineuses)
+  function shipEnvMap() {
+    return cached("shipEnv", () => {
+      const es = new T.Scene();
+      const sky = new T.Mesh(new T.SphereGeometry(50, 32, 16), new T.ShaderMaterial({
+        side: T.BackSide,
+        vertexShader: `varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+        fragmentShader: `varying vec3 vP; void main(){ float h = normalize(vP).y; vec3 c = mix(vec3(0.02,0.025,0.04), vec3(0.18,0.22,0.32), smoothstep(-0.2, 1.0, h)); gl_FragColor = vec4(c, 1.0); }`,
+      }));
+      es.add(sky);
+      [[20, 30, 10, 1.6, 0xfff1d8], [-30, 5, -20, 0.8, 0x8fb0ff], [5, -25, 30, 0.5, 0xffb070]].forEach(([x, y, z, k, c]) => {
+        const p = new T.Mesh(new T.PlaneGeometry(14, 14), new T.MeshBasicMaterial({ color: new T.Color(c).multiplyScalar(k), side: T.DoubleSide }));
+        p.position.set(x, y, z); p.lookAt(0, 0, 0); es.add(p);
+      });
+      const pm = new T.PMREMGenerator(renderer);
+      const tex = pm.fromScene(es, 0.04).texture;
+      pm.dispose();
+      return tex;
+    });
+  }
+
   B.ship = function () {
     hotspots = [];
-    const key = new T.DirectionalLight(0xdfe8ff, 1.0); key.position.set(10, 14, 8); scene.add(key);
-    const rim = new T.DirectionalLight(0x8fb0ff, 0.5); rim.position.set(-12, -4, -10); scene.add(rim);
-    scene.add(new T.HemisphereLight(0x8090b0, 0x101018, 0.45));
+    scene.environment = shipEnvMap();
+    const key = new T.DirectionalLight(0xfff4e6, 1.1); key.position.set(12, 16, 10); scene.add(key);
+    const rim = new T.DirectionalLight(0x8fb0ff, 0.6); rim.position.set(-14, -6, -12); scene.add(rim);
+    scene.add(new T.HemisphereLight(0x8090b0, 0x101018, 0.35));
     const ship = new T.Group(); scene.add(ship);
-    const hull = new T.MeshStandardMaterial({ color: 0xc9ced8, metalness: 0.55, roughness: 0.42 });
-    const dark = new T.MeshStandardMaterial({ color: 0x3a3f4a, metalness: 0.6, roughness: 0.5 });
-    const white = new T.MeshStandardMaterial({ color: 0xeef0f4, metalness: 0.2, roughness: 0.5 });
+    const hull = new T.MeshStandardMaterial({ color: 0xd5d9e2, metalness: 0.7, roughness: 0.3, envMapIntensity: 1.1 });
+    const dark = new T.MeshStandardMaterial({ color: 0x3a3f4a, metalness: 0.7, roughness: 0.4 });
+    const white = new T.MeshStandardMaterial({ color: 0xf2f3f6, metalness: 0.25, roughness: 0.45 });
+    const gold = new T.MeshStandardMaterial({ color: 0xd8a940, metalness: 0.9, roughness: 0.28 });
     const toX = (m) => { m.rotation.z = Math.PI / 2; return m; };
     const X = (x, y = 0, z = 0) => new T.Vector3(x, y, z);
+    const r = rng(77);
 
-    // épine dorsale en treillis
-    ship.add(toX(new T.Mesh(new T.CylinderGeometry(0.28, 0.28, 24, 24), dark)));
+    // épine dorsale en treillis (3,1 km)
+    ship.add(toX(new T.Mesh(new T.CylinderGeometry(0.34, 0.34, 31, 24), dark)));
     for (let k = 0; k < 4; k++) {
-      const a = k * Math.PI / 2 + Math.PI / 4, l = toX(new T.Mesh(new T.CylinderGeometry(0.045, 0.045, 24, 6), hull));
-      l.position.set(0, Math.cos(a) * 0.48, Math.sin(a) * 0.48); ship.add(l);
+      const a = k * Math.PI / 2 + Math.PI / 4, l = toX(new T.Mesh(new T.CylinderGeometry(0.05, 0.05, 31, 6), hull));
+      l.position.set(0, Math.cos(a) * 0.6, Math.sin(a) * 0.6); ship.add(l);
     }
-    for (let x = -11.5; x <= 11.5; x += 1.15) {
-      const f = new T.Mesh(new T.TorusGeometry(0.48, 0.025, 6, 24), hull); f.rotation.y = Math.PI / 2; f.position.x = x; ship.add(f);
+    for (let x = -15; x <= 15; x += 1.2) {
+      const f = new T.Mesh(new T.TorusGeometry(0.6, 0.03, 6, 24), hull); f.rotation.y = Math.PI / 2; f.position.x = x; ship.add(f);
     }
-
-    // bouclier frontal : béryllium ablatif et plaques Whipple
-    const shield = new T.Mesh(new T.SphereGeometry(6.5, 64, 16, 0, Math.PI * 2, 0, 0.42), new T.MeshStandardMaterial({ color: 0x9aa3ad, metalness: 0.75, roughness: 0.35 }));
-    shield.rotation.z = -Math.PI / 2; shield.position.x = 12 - 6.5 * Math.cos(0.42) + 0.0; ship.add(shield);
-    shield.position.x = 12 - 6.5;
-    for (const [dx, op] of [[0.9, 0.35], [1.7, 0.22]]) {
-      const w = new T.Mesh(new T.CircleGeometry(2.3 - dx * 0.3, 64), new T.MeshStandardMaterial({ color: 0xb8c4d2, metalness: 0.8, roughness: 0.3, transparent: true, opacity: op, side: T.DoubleSide }));
-      w.rotation.y = Math.PI / 2; w.position.x = 12.2 + dx; ship.add(w);
-      const st = toX(new T.Mesh(new T.CylinderGeometry(0.03, 0.03, dx, 6), hull)); st.position.x = 12.2 + dx / 2; ship.add(st);
+    // détails de surface (« greebles ») : boîtiers, conduites, antennes
+    const gN = 900, gMesh = new T.InstancedMesh(new T.BoxGeometry(1, 1, 1), new T.MeshStandardMaterial({ color: 0xaab0bc, metalness: 0.6, roughness: 0.45 }), gN);
+    const mtx = new T.Matrix4(), q = new T.Quaternion(), sc = new T.Vector3(), ps = new T.Vector3();
+    for (let i = 0; i < gN; i++) {
+      const x = -15 + r() * 30, a = r() * Math.PI * 2, rad = 0.36;
+      ps.set(x, Math.cos(a) * rad, Math.sin(a) * rad);
+      q.setFromUnitVectors(V(0, 1, 0), V(0, Math.cos(a), Math.sin(a)));
+      sc.set(0.08 + r() * 0.35, 0.04 + r() * 0.12, 0.06 + r() * 0.12);
+      gMesh.setMatrixAt(i, mtx.compose(ps, q, sc));
     }
-    addHotspot(ship, X(13.6, 2.2, 0), "Bouclier frontal", "defense", 4.4);
+    ship.add(gMesh);
 
-    // module de commandement
-    const cmd = toX(new T.Mesh(new T.CylinderGeometry(0.85, 0.95, 2.2, 32), hull)); cmd.position.x = 10; ship.add(cmd);
-    const cmdWin = toX(new T.Mesh(new T.CylinderGeometry(0.86, 0.86, 0.25, 32, 1, true), new T.MeshStandardMaterial({ map: windowTex(0.85, "#ffe6b0", 3), emissive: 0xffffff, emissiveMap: windowTex(0.85, "#ffe6b0", 3), emissiveIntensity: 0.9 })));
-    cmdWin.position.x = 10.6; ship.add(cmdWin);
-    const dish = new T.Mesh(new T.SphereGeometry(0.9, 32, 8, 0, Math.PI * 2, 0, 0.6), white); dish.rotation.z = Math.PI / 2; dish.position.set(9.4, 1.6, 0); ship.add(dish);
-    addHotspot(ship, X(10, 1.1, 0.4), "Pont de commandement", "salles", -3.6);
+    // bouclier frontal plus large que les anneaux (ils restent dans son ombre)
+    const Rs = 10, th = 0.5;
+    const shield = new T.Mesh(new T.SphereGeometry(Rs, 96, 24, 0, Math.PI * 2, 0, th), new T.MeshStandardMaterial({ color: 0x9aa3ad, metalness: 0.8, roughness: 0.32 }));
+    shield.rotation.z = -Math.PI / 2; shield.position.x = 16 - Rs; ship.add(shield);
+    const rimS = new T.Mesh(new T.TorusGeometry(Rs * Math.sin(th), 0.08, 8, 128), hull); rimS.rotation.y = Math.PI / 2; rimS.position.x = 16 - Rs + Rs * Math.cos(th); ship.add(rimS);
+    for (const [dx, rr, op] of [[0.8, 3.9, 0.3], [1.6, 3.2, 0.2], [2.4, 2.5, 0.14]]) {
+      const w = new T.Mesh(new T.CircleGeometry(rr, 96), new T.MeshStandardMaterial({ color: 0xb8c4d2, metalness: 0.85, roughness: 0.25, transparent: true, opacity: op, side: T.DoubleSide }));
+      w.rotation.y = Math.PI / 2; w.position.x = 16.1 + dx; ship.add(w);
+    }
+    const st = toX(new T.Mesh(new T.CylinderGeometry(0.04, 0.04, 2.5, 6), hull)); st.position.x = 17.3; ship.add(st);
+    addHotspot(ship, X(17.2, 4.2, 0), "Bouclier frontal", "defense", 6.4);
 
-    // deux anneaux habités contrarotatifs (rayon 224 m, 2 tours par minute = 1 g)
-    const mkRing = (x, lit, glow, seed, dir, label, sec, labelY) => {
+    // module de commandement et antenne vers la Terre
+    const cmd = toX(new T.Mesh(new T.CylinderGeometry(1.0, 1.15, 2.6, 40), hull)); cmd.position.x = 13.6; ship.add(cmd);
+    const wtex = windowTex(0.85, "#ffe6b0", 3);
+    const cmdWin = toX(new T.Mesh(new T.CylinderGeometry(1.02, 1.02, 0.3, 40, 1, true), new T.MeshStandardMaterial({ map: wtex, emissive: 0xffffff, emissiveMap: wtex, emissiveIntensity: 1 })));
+    cmdWin.position.x = 14.3; ship.add(cmdWin);
+    const dish = new T.Mesh(new T.SphereGeometry(1.1, 40, 10, 0, Math.PI * 2, 0, 0.6), white); dish.rotation.z = Math.PI / 2; dish.position.set(12.8, 1.9, 0); ship.add(dish);
+    addHotspot(ship, X(13.6, -1.3, 0), "Pont de commandement", "salles", -5.6);
+
+    // anneaux contrarotatifs : 400 m de rayon, 1,5 tour/min = 1 g
+    const R = 4, Ri = 3.55, Wd = 1.0;
+    const mkRing = (x, opts) => {
       const g = new T.Group(); g.position.x = x; ship.add(g);
-      const R = 2.24, Ri = 1.94, w = 0.6;
-      const tex = windowTex(lit, glow, seed);
-      const outer = toX(new T.Mesh(new T.CylinderGeometry(R, R, w, 160, 1, true), new T.MeshStandardMaterial({ color: 0xd4d8e0, map: tex, emissive: 0xffffff, emissiveMap: tex, emissiveIntensity: 0.85, metalness: 0.4, roughness: 0.5, side: T.DoubleSide })));
-      g.add(outer);
-      const inner = toX(new T.Mesh(new T.CylinderGeometry(Ri, Ri, w, 160, 1, true), new T.MeshStandardMaterial({ color: 0x8a909c, metalness: 0.5, roughness: 0.5, side: T.DoubleSide })));
-      g.add(inner);
+      const inner = new T.Group(); inner.rotation.z = Math.PI / 2; g.add(inner);   // repère du cylindre : axe y
+      const gap = opts.cut ? 0.62 : 0;   // demi-ouverture de la vue en coupe (rad)
+      const tex = windowTex(opts.lit, opts.glow, opts.seed);
+      const shellMat = new T.MeshStandardMaterial({ color: 0xd4d8e0, map: tex, emissive: 0xffffff, emissiveMap: tex, emissiveIntensity: 0.9, metalness: 0.5, roughness: 0.4, side: T.DoubleSide });
+      inner.add(new T.Mesh(new T.CylinderGeometry(R, R, Wd, 200, 1, true, gap, Math.PI * 2 - 2 * gap), shellMat));
+      inner.add(new T.Mesh(new T.CylinderGeometry(Ri, Ri, Wd, 200, 1, true, gap, Math.PI * 2 - 2 * gap), new T.MeshStandardMaterial({ color: 0x8a909c, metalness: 0.6, roughness: 0.45, side: T.DoubleSide })));
       for (const s of [-1, 1]) {
-        const cap = new T.Mesh(new T.RingGeometry(Ri, R, 160), new T.MeshStandardMaterial({ color: 0xb8bec8, metalness: 0.5, roughness: 0.45, side: T.DoubleSide }));
-        cap.rotation.y = Math.PI / 2; cap.position.x = s * w / 2; g.add(cap);
+        const cap = new T.Mesh(new T.RingGeometry(Ri, R, 200, 1, Math.PI / 2 - gap + Math.PI, Math.PI * 2 - 2 * gap), new T.MeshStandardMaterial({ color: 0xb8bec8, metalness: 0.6, roughness: 0.4, side: T.DoubleSide }));
+        cap.rotation.x = -Math.PI / 2; cap.position.y = s * Wd / 2; inner.add(cap);
       }
-      // verrières : lumière des fermes ou des rues
-      const glass = toX(new T.Mesh(new T.CylinderGeometry(Ri + 0.01, Ri + 0.01, w * 0.5, 160, 1, true), new T.MeshBasicMaterial({ color: new T.Color(glow), transparent: true, opacity: 0.35, side: T.DoubleSide, blending: T.AdditiveBlending, depthWrite: false })));
-      g.add(glass);
-      for (let k = 0; k < 6; k++) {
-        const a = k * Math.PI / 3, sp = new T.Mesh(new T.CylinderGeometry(0.06, 0.06, Ri - 0.5, 8), hull);
-        sp.position.set(0, Math.cos(a) * (0.5 + (Ri - 0.5) / 2), Math.sin(a) * (0.5 + (Ri - 0.5) / 2)); sp.rotation.x = a; g.add(sp);
+      if (!opts.cut) {
+        const glass = new T.Mesh(new T.CylinderGeometry(Ri + 0.01, Ri + 0.01, Wd * 0.55, 200, 1, true), new T.MeshBasicMaterial({ color: new T.Color(opts.glow), transparent: true, opacity: 0.4, side: T.DoubleSide, blending: T.AdditiveBlending, depthWrite: false }));
+        inner.add(glass);
+      } else {
+        // intérieur visible : sol, immeubles, arbres, ligne de lumière
+        const floor = new T.Mesh(new T.CylinderGeometry(R - 0.02, R - 0.02, Wd * 0.98, 96, 1, true, -gap - 0.2, 2 * gap + 0.4), new T.MeshStandardMaterial({ color: 0x5a6a4a, roughness: 0.9, side: T.BackSide }));
+        inner.add(floor);
+        const bN = 260, bMesh = new T.InstancedMesh(new T.BoxGeometry(1, 1, 1), new T.MeshStandardMaterial({ color: 0xe8e2d6, roughness: 0.7, emissive: 0xffd9a0, emissiveIntensity: 0.18 }), bN);
+        const tN = 300, tMesh = new T.InstancedMesh(new T.ConeGeometry(0.5, 1, 6), new T.MeshStandardMaterial({ color: 0x3f7f45, roughness: 0.9 }), tN);
+        const place = (mesh, i, ang, y, h, w, d) => {
+          const inward = V(-Math.sin(ang), 0, -Math.cos(ang));
+          ps.set(Math.sin(ang) * (R - 0.02 - h / 2), y, Math.cos(ang) * (R - 0.02 - h / 2));
+          q.setFromUnitVectors(V(0, 1, 0), inward);
+          sc.set(w, h, d); mesh.setMatrixAt(i, mtx.compose(ps, q, sc));
+        };
+        for (let i = 0; i < bN; i++) {
+          const ang = (r() * 2 - 1) * (gap + 0.15), y = (r() < 0.5 ? -1 : 1) * (0.12 + r() * 0.32);
+          place(bMesh, i, ang, y, 0.05 + r() * 0.22, 0.06 + r() * 0.08, 0.05 + r() * 0.06);
+        }
+        for (let i = 0; i < tN; i++) {
+          const ang = (r() * 2 - 1) * (gap + 0.15), y = (r() * 2 - 1) * 0.46;
+          place(tMesh, i, ang, Math.abs(y) < 0.09 ? y + 0.12 : y, 0.06 + r() * 0.05, 0.04, 0.04);
+        }
+        inner.add(bMesh); inner.add(tMesh);
+        const sun = new T.Mesh(new T.CylinderGeometry(Ri + 0.05, Ri + 0.05, 0.05, 96, 1, true, -gap - 0.2, 2 * gap + 0.4), new T.MeshBasicMaterial({ color: 0xfff1d0, side: T.DoubleSide, toneMapped: false }));
+        inner.add(sun);
+        const pl = new T.PointLight(0xfff1d8, 1.2, 6, 2); pl.position.set(0, 0, R - 1.2); inner.add(pl);
       }
-      const hub = toX(new T.Mesh(new T.CylinderGeometry(0.55, 0.55, 0.9, 32), hull)); g.add(hub);
-      for (const s of [1, -1]) { const nav = glowSprite(new T.Color(s > 0 ? 0xff4040 : 0x40ff70), 0.25, 1); nav.position.set(0, s * R, 0); g.add(nav); }
-      updaters.push((dt) => { g.rotation.x += dir * dt * Math.PI * 2 / 30; });
-      addHotspot(ship, X(x, labelY > 0 ? R + 0.1 : -R - 0.1, 0), label, sec, labelY);
+      for (let k = 0; k < 8; k++) {
+        const a = k * Math.PI / 4, sp = new T.Mesh(new T.CylinderGeometry(0.07, 0.07, Ri - 0.6, 8), hull);
+        sp.position.set(0, Math.cos(a) * (0.6 + (Ri - 0.6) / 2), Math.sin(a) * (0.6 + (Ri - 0.6) / 2)); sp.rotation.x = a; g.add(sp);
+      }
+      const hub = toX(new T.Mesh(new T.CylinderGeometry(0.65, 0.65, 1.1, 32), hull)); g.add(hub);
+      for (const s of [1, -1]) { const nav = glowSprite(new T.Color(s > 0 ? 0xff4040 : 0x40ff70), 0.3, 1); nav.position.set(0, s * R, 0); g.add(nav); }
+      updaters.push((dt) => { g.rotation.x += opts.dir * dt * Math.PI * 2 / 40; });
       return g;
     };
-    mkRing(7.6, 0.75, "#ffd9a0", 11, 1, "Anneau A · la ville", "equipage", 4.4);
-    mkRing(5.2, 0.85, "#a8ff9a", 12, -1, "Anneau B · fermes et parcs", "nourriture", -3.6);
-    addHotspot(ship, X(6.4, -0.8, 0.9), "Photobioréacteurs · air", "air", -4.8);
+    mkRing(10, { lit: 0.8, glow: "#ffd9a0", seed: 11, dir: 1, cut: true });
+    mkRing(7.4, { lit: 0.85, glow: "#a8ff9a", seed: 12, dir: -1 });
+    addHotspot(ship, X(10, R + 0.15, 0), "Anneau A · la ville (vue en coupe)", "vie", 6.4);
+    addHotspot(ship, X(7.4, -R - 0.15, 0), "Anneau B · fermes et parcs", "nourriture", -5.6);
+    addHotspot(ship, X(8.7, 0.9, 0.9), "Photobioréacteurs · air", "air", 5.2);
 
-    // hangar et atterrisseurs
-    for (let k = 0; k < 6; k++) {
-      const a = k * Math.PI / 3, lander = new T.Group();
-      const body = new T.Mesh(new T.CylinderGeometry(0.18, 0.24, 0.55, 12), white); lander.add(body);
-      const nose = new T.Mesh(new T.ConeGeometry(0.18, 0.3, 12), white); nose.position.y = 0.42; lander.add(nose);
-      const fin = new T.Mesh(new T.BoxGeometry(0.5, 0.2, 0.03), dark); fin.position.y = -0.2; lander.add(fin);
-      lander.position.set(3.2, Math.cos(a) * 0.95, Math.sin(a) * 0.95); lander.rotation.x = a;
+    // réservoir d'eau, abri anti-radiations
+    const water = toX(new T.Mesh(new T.CylinderGeometry(1.8, 1.8, 3.6, 56), new T.MeshStandardMaterial({ color: 0xe6ebf2, metalness: 0.35, roughness: 0.35 })));
+    water.position.x = 4.1; ship.add(water);
+    for (const dx of [-1.4, -0.5, 0.5, 1.4]) { const b = new T.Mesh(new T.TorusGeometry(1.81, 0.05, 8, 72), dark); b.rotation.y = Math.PI / 2; b.position.x = 4.1 + dx; ship.add(b); }
+    addHotspot(ship, X(4.1, -1.9, 0), "Eau · abri anti-radiations", "eau", -5.0);
+
+    // hangar et 8 atterrisseurs
+    const hangar = toX(new T.Mesh(new T.CylinderGeometry(0.75, 0.75, 1.6, 8), dark)); hangar.position.x = 1.3; ship.add(hangar);
+    for (let k = 0; k < 8; k++) {
+      const a = k * Math.PI / 4, lander = new T.Group();
+      const body = new T.Mesh(new T.CylinderGeometry(0.2, 0.27, 0.6, 12), white); lander.add(body);
+      const nose = new T.Mesh(new T.ConeGeometry(0.2, 0.32, 12), white); nose.position.y = 0.46; lander.add(nose);
+      const fin = new T.Mesh(new T.BoxGeometry(0.55, 0.22, 0.03), dark); fin.position.y = -0.22; lander.add(fin);
+      lander.position.set(1.3, Math.cos(a) * 1.1, Math.sin(a) * 1.1); lander.rotation.x = a;
       ship.add(lander);
     }
-    const hangar = toX(new T.Mesh(new T.CylinderGeometry(0.6, 0.6, 1.4, 6), dark)); hangar.position.x = 3.2; ship.add(hangar);
-    addHotspot(ship, X(3.2, 1.6, 0), "Hangar · 6 atterrisseurs", "voyage", 3.4);
+    addHotspot(ship, X(1.3, 1.6, 0), "Hangar · 8 atterrisseurs", "colonie", 4.4);
 
-    // réservoir d'eau et abri anti-radiations
-    const water = toX(new T.Mesh(new T.CylinderGeometry(1.35, 1.35, 3.2, 48), new T.MeshStandardMaterial({ color: 0xdfe6ee, metalness: 0.3, roughness: 0.45 })));
-    water.position.x = 0.8; ship.add(water);
-    for (const dx of [-1.2, 0, 1.2]) { const b = new T.Mesh(new T.TorusGeometry(1.36, 0.05, 8, 64), dark); b.rotation.y = Math.PI / 2; b.position.x = 0.8 + dx; ship.add(b); }
-    addHotspot(ship, X(0.8, 1.6, 0), "Eau · abri anti-radiations", "eau", -3.6);
-
-    // usine, recyclage, banque génétique
-    const fab = new T.Mesh(new T.BoxGeometry(1.3, 0.9, 0.9), hull); fab.position.set(-1.4, 0, 0.75); ship.add(fab);
-    const fabG = new T.Mesh(new T.BoxGeometry(1.32, 0.12, 0.92), new T.MeshBasicMaterial({ color: 0xffb070 })); fabG.position.set(-1.4, 0.2, 0.75); ship.add(fabG);
-    addHotspot(ship, X(-1.4, 0.2, 1.4), "Recyclage et usine", "dechets", 4.8);
-    const vault = new T.Mesh(new T.BoxGeometry(1.1, 0.8, 0.8), white); vault.position.set(-1.4, 0, -0.75); ship.add(vault);
-    const vG = new T.Mesh(new T.BoxGeometry(1.12, 0.1, 0.82), new T.MeshBasicMaterial({ color: 0x8fe0ff })); vG.position.set(-1.4, 0.18, -0.75); ship.add(vG);
-    addHotspot(ship, X(-1.4, -0.9, -1.2), "Banque génétique · archives", "salles", -4.8);
-
-    // réservoirs de carburant (deutérium, hélium 3)
-    const tankMat = new T.MeshStandardMaterial({ color: 0xf2f3f6, metalness: 0.25, roughness: 0.4 });
-    const bandMat = new T.MeshStandardMaterial({ color: 0xd8a940, metalness: 0.6, roughness: 0.35 });
-    for (const x of [-3.2, -5, -6.8]) for (let k = 0; k < 4; k++) {
-      const a = k * Math.PI / 2 + Math.PI / 4;
-      const tk = new T.Mesh(new T.SphereGeometry(0.85, 32, 16), tankMat); tk.position.set(x, Math.cos(a) * 1.2, Math.sin(a) * 1.2); ship.add(tk);
-      const bd = new T.Mesh(new T.TorusGeometry(0.86, 0.04, 6, 32), bandMat); bd.position.copy(tk.position); bd.rotation.y = Math.PI / 2; ship.add(bd);
+    // usine-recyclage, hôpital, banque génétique
+    const mods = [[-0.9, 0.85, 0xffb070, "Recyclage et usine", "dechets", 5.2], [-0.9, -0.85, 0x8fe0ff, "Banque génétique · archives", "salles", -5.0], [-2.1, 0.85, 0xff7a8a, "Hôpital · 150 lits", "medecine", 6.2]];
+    for (const [x, z, col, lab, sec, ly] of mods) {
+      const b = new T.Mesh(new T.BoxGeometry(1.0, 0.9, 0.9), hull); b.position.set(x, 0, z); ship.add(b);
+      const gl = new T.Mesh(new T.BoxGeometry(1.02, 0.1, 0.92), new T.MeshBasicMaterial({ color: col, toneMapped: false })); gl.position.set(x, 0.22, z); ship.add(gl);
+      addHotspot(ship, X(x, ly > 0 ? 0.45 : -0.45, z), lab, sec, ly);
     }
-    addHotspot(ship, X(-5, 2.3, 0), "Carburant · 4,5 Mt", "voyage", 3.4);
+    // cœurs de l'IA
+    const ai = new T.Mesh(new T.OctahedronGeometry(0.45, 0), new T.MeshStandardMaterial({ color: 0x223040, metalness: 0.8, roughness: 0.2, emissive: 0x2a6aff, emissiveIntensity: 0.6 }));
+    ai.position.set(-2.1, 0, -0.95); ship.add(ai);
+    updaters.push((dt, t) => { ai.rotation.y += dt * 0.6; ai.material.emissiveIntensity = 0.45 + 0.25 * Math.sin(t * 2); });
+    addHotspot(ship, X(-2.1, -0.5, -0.95), "IA de bord VIGIE", "ia", -6.2);
 
-    // radiateurs rougeoyants
+    // réservoirs de carburant
+    const tankMat = new T.MeshStandardMaterial({ color: 0xf2f3f6, metalness: 0.35, roughness: 0.32 });
+    for (const x of [-3.6, -5.6, -7.6]) for (let k = 0; k < 4; k++) {
+      const a = k * Math.PI / 2 + Math.PI / 4;
+      const tk = new T.Mesh(new T.SphereGeometry(0.95, 40, 20), tankMat); tk.position.set(x, Math.cos(a) * 1.35, Math.sin(a) * 1.35); ship.add(tk);
+      const bd = new T.Mesh(new T.TorusGeometry(0.96, 0.045, 6, 40), gold); bd.position.copy(tk.position); bd.rotation.y = Math.PI / 2; ship.add(bd);
+    }
+    addHotspot(ship, X(-5.6, 2.4, 0), "Carburant · 4,4 Mt", "voyage", 4.4);
+
+    // voile magnétique repliée (tambour)
+    const drum = toX(new T.Mesh(new T.CylinderGeometry(1.25, 1.25, 1.1, 40), new T.MeshStandardMaterial({ color: 0x2a3140, metalness: 0.8, roughness: 0.35 })));
+    drum.position.x = -9.6; ship.add(drum);
+    const coilBand = toX(new T.Mesh(new T.CylinderGeometry(1.27, 1.27, 0.5, 40, 1, true), new T.MeshStandardMaterial({ color: 0xb87333, metalness: 0.9, roughness: 0.3 })));
+    coilBand.position.x = -9.6; ship.add(coilBand);
+    addHotspot(ship, X(-9.6, -1.3, 0), "Voile magnétique repliée", "voyage", -5.6);
+
+    // radiateurs
     const radTex = stripeTex("#ff8a3a", "#5a1a0a");
     for (let k = 0; k < 4; k++) {
-      const a = k * Math.PI / 2, p = new T.Mesh(new T.BoxGeometry(3.6, 0.04, 2.2), new T.MeshStandardMaterial({ color: 0x40281c, map: radTex, emissive: 0xffffff, emissiveMap: radTex, emissiveIntensity: 0.7, metalness: 0.4, roughness: 0.6 }));
-      p.position.set(-9, Math.cos(a) * 1.65, Math.sin(a) * 1.65); p.rotation.x = a; ship.add(p);
+      const a = k * Math.PI / 2, p = new T.Mesh(new T.BoxGeometry(4.4, 0.04, 2.8), new T.MeshStandardMaterial({ color: 0x40281c, map: radTex, emissive: 0xffffff, emissiveMap: radTex, emissiveIntensity: 0.75, metalness: 0.4, roughness: 0.55 }));
+      p.position.set(-12.3, Math.cos(a) * 2.0, Math.sin(a) * 2.0); p.rotation.x = a; ship.add(p);
     }
-    addHotspot(ship, X(-9, 3.0, 0), "Radiateurs", "energie", -3.6);
+    addHotspot(ship, X(-12.3, 3.4, 0), "Radiateurs · 2 km²", "energie", 5.2);
 
-    // réacteurs
-    const reac = toX(new T.Mesh(new T.CylinderGeometry(1.0, 1.0, 1.3, 32), dark)); reac.position.x = -11; ship.add(reac);
-    for (const dx of [-0.4, 0.4]) { const rg = new T.Mesh(new T.TorusGeometry(1.02, 0.06, 8, 48), new T.MeshBasicMaterial({ color: 0x8fb8ff })); rg.rotation.y = Math.PI / 2; rg.position.x = -11 + dx; ship.add(rg); }
-    addHotspot(ship, X(-11, -1.4, 0), "Réacteurs de fusion", "energie", 4.4);
+    // trois réacteurs
+    for (let k = 0; k < 3; k++) {
+      const x = -14.6 + k * 0.0, a = k * Math.PI * 2 / 3;
+      const rc = toX(new T.Mesh(new T.CylinderGeometry(0.55, 0.55, 1.4, 24), dark)); rc.position.set(x, Math.cos(a) * 0.9, Math.sin(a) * 0.9); ship.add(rc);
+      const rg = new T.Mesh(new T.TorusGeometry(0.57, 0.05, 8, 32), new T.MeshBasicMaterial({ color: 0x8fb8ff, toneMapped: false })); rg.rotation.y = Math.PI / 2; rg.position.copy(rc.position); ship.add(rg);
+    }
+    addHotspot(ship, X(-14.6, -1.6, 0), "3 réacteurs de fusion", "energie", -5.0);
 
-    // moteur : chambre d'allumage et tuyère magnétique (bobines)
-    const chamber = new T.Mesh(new T.SphereGeometry(0.7, 32, 16), dark); chamber.position.x = -12.2; ship.add(chamber);
-    const coilMat = new T.MeshStandardMaterial({ color: 0xb87333, metalness: 0.9, roughness: 0.3 });
-    [[0.9, -12.6], [1.3, -13.1], [1.75, -13.7], [2.2, -14.4]].forEach(([r, x]) => {
-      const c = new T.Mesh(new T.TorusGeometry(r, 0.09, 10, 64), coilMat); c.rotation.y = Math.PI / 2; c.position.x = x; ship.add(c);
+    // moteur : chambre et tuyère magnétique
+    const chamber = new T.Mesh(new T.SphereGeometry(0.85, 32, 16), dark); chamber.position.x = -15.9; ship.add(chamber);
+    const coilMat = new T.MeshStandardMaterial({ color: 0xb87333, metalness: 0.95, roughness: 0.25 });
+    [[1.0, -16.4], [1.5, -17.0], [2.05, -17.7], [2.6, -18.5]].forEach(([rr, x]) => {
+      const c = new T.Mesh(new T.TorusGeometry(rr, 0.11, 12, 72), coilMat); c.rotation.y = Math.PI / 2; c.position.x = x; ship.add(c);
     });
     for (let k = 0; k < 6; k++) {
-      const a = k * Math.PI / 3, s = new T.Mesh(new T.CylinderGeometry(0.035, 0.035, 2.1, 6), hull);
-      s.position.set(-13.4, Math.cos(a) * 1.5, Math.sin(a) * 1.5); s.rotation.set(a, 0, Math.PI / 2 - 0.55 * 0); s.rotation.z = Math.PI / 2; s.rotation.x = a;
-      ship.add(s);
+      const a = k * Math.PI / 3, s = toX(new T.Mesh(new T.CylinderGeometry(0.04, 0.04, 2.4, 6), hull));
+      s.position.set(-17.3, Math.cos(a) * 1.8, Math.sin(a) * 1.8); ship.add(s);
     }
-    addHotspot(ship, X(-13.5, 2.6, 0), "Moteur à fusion", "voyage", -4.0);
+    addHotspot(ship, X(-17.5, 2.8, 0), "Moteur à fusion", "voyage", 6.2);
 
-    // jet de plasma : visible pendant l'accélération et le freinage
-    const plume = new T.Mesh(new T.CylinderGeometry(0.5, 3.2, 22, 48, 1, true), new T.ShaderMaterial({
+    // jet de plasma : accélération et fin du freinage
+    const plume = new T.Mesh(new T.CylinderGeometry(0.6, 3.8, 26, 48, 1, true), new T.ShaderMaterial({
       uniforms: { time: { value: 0 }, on: { value: 0 } },
       vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
       fragmentShader: SNOISE + `uniform float time; uniform float on; varying vec2 vUv;
@@ -1721,28 +1811,66 @@
         }`,
       transparent: true, blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide,
     }));
-    plume.rotation.z = Math.PI / 2; plume.position.x = -14.4 - 11; ship.add(plume);
-    const flare = glowSprite(new T.Color(0.7, 0.8, 1), 4, 0); flare.position.x = -12.4; ship.add(flare);
+    plume.rotation.z = Math.PI / 2; plume.position.x = -18.5 - 13; ship.add(plume);
+    const flare = glowSprite(new T.Color(0.7, 0.8, 1), 5, 0); flare.position.x = -16; ship.add(flare);
+
+    // voile magnétique déployée (boucle de 100 km, ici non à l'échelle)
+    const sail = new T.Group(); sail.position.x = 40; ship.add(sail);
+    const loop = new T.Mesh(new T.TorusGeometry(16, 0.08, 8, 256), new T.MeshStandardMaterial({ color: 0xb87333, metalness: 0.9, roughness: 0.3, emissive: 0x6fd8ff, emissiveIntensity: 0 }));
+    loop.rotation.y = Math.PI / 2; sail.add(loop);
+    const tethers = [];
+    for (let k = 0; k < 6; k++) {
+      const a = k * Math.PI / 3, line = new T.Line(new T.BufferGeometry().setFromPoints([X(0, Math.cos(a) * 16, Math.sin(a) * 16), X(-23, 0, 0)]), new T.LineBasicMaterial({ color: 0x9aa8c0, transparent: true, opacity: 0.6 }));
+      sail.add(line); tethers.push(line);
+    }
+    const bow = new T.Mesh(new T.CircleGeometry(17, 96), new T.ShaderMaterial({
+      uniforms: { time: { value: 0 }, k: { value: 0 } },
+      vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      fragmentShader: SNOISE + `uniform float time; uniform float k; varying vec2 vUv;
+        void main(){ float r = length(vUv - 0.5) * 2.0; float a = smoothstep(1.0, 0.85, r) * smoothstep(0.3, 0.95, r) * (0.5 + 0.5 * snoise(vec3(vUv * 6.0, time * 0.5)));
+          gl_FragColor = vec4(vec3(0.4, 0.75, 1.0) * a * 0.35 * k, 1.0); }`,
+      transparent: true, blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide,
+    }));
+    bow.rotation.y = Math.PI / 2; bow.position.x = 0.5; sail.add(bow);
+    const sailLabel = textSprite("Voile magnétique · boucle de 100 km (non à l'échelle)", "#8fe0ff", 0.7, true); sailLabel.position.set(0, 17.5, 0); sail.add(sailLabel);
+
     updaters.push((dt, t) => {
-      const st = window.Ship ? window.Ship.state(window.Ship.year) : { phase: "Croisière" };
-      const on = st.phase === "Accélération" || st.phase === "Freinage" ? 1 : 0;
-      plume.material.uniforms.on.value += (on - plume.material.uniforms.on.value) * Math.min(1, dt * 3);
-      plume.material.uniforms.time.value = t;
-      flare.material.opacity = plume.material.uniforms.on.value * (0.7 + 0.3 * Math.sin(t * 40));
+      const s = window.Ship ? window.Ship.state(window.Ship.year) : { engine: false, sail: false };
+      const u = plume.material.uniforms;
+      u.on.value += ((s.engine ? 1 : 0) - u.on.value) * Math.min(1, dt * 3); u.time.value = t;
+      flare.material.opacity = u.on.value * (0.7 + 0.3 * Math.sin(t * 40));
+      sail.visible = s.sail;
+      bow.material.uniforms.k.value = s.sail ? 1 : 0; bow.material.uniforms.time.value = t;
+      loop.material.emissiveIntensity = s.sail ? 0.4 + 0.3 * Math.sin(t * 3) : 0;
     });
 
-    // défense : tirs laser du lidar sur les poussières, devant la proue
+    // navettes entre le hangar et les moyeux
+    const shuttleMat = new T.MeshStandardMaterial({ color: 0xf2f3f6, metalness: 0.4, roughness: 0.4 });
+    [[1.3, 10, 0.9, 0], [1.3, 7.4, -0.9, 2.1], [4.1, 13.6, 1.4, 4.2]].forEach(([x0, x1, off, ph]) => {
+      const s = new T.Group();
+      s.add(new T.Mesh(new T.BoxGeometry(0.28, 0.1, 0.14), shuttleMat));
+      const lt = glowSprite(new T.Color(1, 0.8, 0.5), 0.22, 1); lt.position.x = -0.16; s.add(lt);
+      ship.add(s);
+      updaters.push((dt, t) => {
+        const u = (Math.sin(t * 0.25 + ph) + 1) / 2, dir = Math.cos(t * 0.25 + ph) >= 0 ? 1 : -1;
+        s.position.set(x0 + (x1 - x0) * u, off + Math.sin(u * Math.PI) * 1.2, off * 0.6);
+        s.rotation.y = dir > 0 ? 0 : Math.PI;
+        lt.material.opacity = 0.5 + 0.5 * Math.sin(t * 9 + ph);
+      });
+    });
+
+    // défense : tirs laser du lidar sur les poussières
     const beamMat = new T.LineBasicMaterial({ color: 0x7dffb0, transparent: true, opacity: 0, blending: T.AdditiveBlending });
-    const beamGeo = new T.BufferGeometry().setFromPoints([X(13, 0, 0), X(20, 0, 0)]);
-    const beam = new T.Line(beamGeo, beamMat); ship.add(beam);
-    const spark = glowSprite(new T.Color(0.6, 1, 0.75), 0.7, 0); ship.add(spark);
+    const beamGeo = new T.BufferGeometry().setFromPoints([X(16, 0, 0), X(24, 0, 0)]);
+    ship.add(new T.Line(beamGeo, beamMat));
+    const spark = glowSprite(new T.Color(0.6, 1, 0.75), 0.8, 0); ship.add(spark);
     let nextShot = 1.5, shotT = -1;
     updaters.push((dt, t) => {
       if (t > nextShot) {
-        const a = Math.random() * Math.PI * 2, rr = Math.random() * 1.8, from = X(12.6, Math.cos(a) * 1.2, Math.sin(a) * 1.2);
-        const to = X(17 + Math.random() * 6, Math.cos(a + 0.5) * rr, Math.sin(a + 0.5) * rr);
+        const a = Math.random() * Math.PI * 2, rr = Math.random() * 2.6, from = X(16.4, Math.cos(a) * 1.6, Math.sin(a) * 1.6);
+        const to = X(21 + Math.random() * 8, Math.cos(a + 0.5) * rr, Math.sin(a + 0.5) * rr);
         beamGeo.setFromPoints([from, to]); spark.position.copy(to);
-        shotT = t; nextShot = t + 1.2 + Math.random() * 2.2;
+        shotT = t; nextShot = t + 1.1 + Math.random() * 2.2;
       }
       const k = shotT < 0 ? 0 : Math.max(0, 1 - (t - shotT) / 0.25);
       beamMat.opacity = k; spark.material.opacity = k;
@@ -1751,11 +1879,123 @@
     ship.position.x = 0.5;
     ctx3.ship = ship;
     if (window.innerWidth < window.innerHeight) {
-      // portrait : le vaisseau se dresse, proue vers le haut
       ship.rotation.z = Math.PI / 2; ship.position.set(0, 0.5, 0);
-      return { dist: 60, minD: 10, maxD: 130, phi: 1.45, theta: 0.5, auto: 0.012, noFit: true, bloom: [0.75, 0.5, 0.72] };
+      return { dist: 80, minD: 10, maxD: 160, phi: 1.45, theta: 0.5, auto: 0.012, noFit: true, bloom: [0.75, 0.5, 0.72] };
     }
-    return { dist: 38, minD: 8, maxD: 90, phi: 1.36, theta: 0.5, auto: 0.012, bloom: [0.75, 0.5, 0.72] };
+    return { dist: 48, minD: 8, maxD: 120, phi: 1.36, theta: 0.5, auto: 0.012, bloom: [0.75, 0.5, 0.72] };
+  };
+
+  /* Intérieur d'un anneau, à hauteur d'humain (1 unité = 10 m).
+     Le sol est la face interne d'un cylindre de 400 m de rayon : il remonte devant et derrière. */
+  B.shipInterior = function (o) {
+    const city = o.ring === "A";
+    const R = 40, W = 10, r = rng(city ? 5 : 9);
+    const world = new T.Group(); scene.add(world);
+    const P = (th, x, h) => new T.Vector3(x, -(R - h) * Math.cos(th), (R - h) * Math.sin(th));
+    const mtx = new T.Matrix4(), q = new T.Quaternion(), sc = new T.Vector3(), eul = new T.Euler();
+    const put = (mesh, i, th, x, h, w, hh, d, yaw = 0) => {
+      eul.set(-th, yaw, 0, "XYZ"); q.setFromEuler(eul);
+      sc.set(w, hh, d); mesh.setMatrixAt(i, mtx.compose(P(th, x, h + hh / 2), q, sc));
+    };
+    // sol, murs latéraux, plafond vitré et ligne de lumière
+    const floorTex = (() => {
+      const c = document.createElement("canvas"); c.width = 512; c.height = 64;
+      const g = c.getContext("2d");
+      if (city) {
+        g.fillStyle = "#6f8a5a"; g.fillRect(0, 0, 512, 64);
+        g.fillStyle = "#c9c2b2"; g.fillRect(0, 26, 512, 12);
+        g.fillStyle = "#4f7ab0"; g.fillRect(0, 22, 512, 3); g.fillRect(0, 39, 512, 3);
+      } else {
+        const cols = ["#5f9a45", "#86ad4a", "#c9b24a", "#4f8a3f", "#9cc06a"];
+        for (let x = 0; x < 512; x += 16) for (let y = 0; y < 64; y += 16) { g.fillStyle = cols[(Math.random() * cols.length) | 0]; g.fillRect(x, y, 16, 16); }
+        g.fillStyle = "#3f78b8"; g.fillRect(0, 28, 512, 8);
+      }
+      const t = new T.CanvasTexture(c); t.wrapS = T.RepeatWrapping; t.repeat.set(city ? 40 : 30, 1); t.anisotropy = ANISO;
+      return t;
+    })();
+    const floor = new T.Mesh(new T.CylinderGeometry(R, R, W, 360, 1, true), new T.MeshStandardMaterial({ map: floorTex, roughness: 0.95, side: T.BackSide }));
+    floor.rotation.z = Math.PI / 2; world.add(floor);
+    const wallMat = new T.MeshStandardMaterial({ color: 0x9aa2ae, roughness: 0.6, metalness: 0.3, side: T.DoubleSide });
+    for (const s of [-1, 1]) {
+      const wall = new T.Mesh(new T.RingGeometry(R - 3.2, R, 360), wallMat); wall.rotation.y = Math.PI / 2; wall.position.x = s * W / 2; world.add(wall);
+      const win = new T.Mesh(new T.RingGeometry(R - 2.6, R - 1.2, 360), new T.MeshBasicMaterial({ color: 0x0a1428, side: T.DoubleSide })); win.rotation.y = Math.PI / 2; win.position.x = s * (W / 2 - 0.02); world.add(win);
+    }
+    const sunMat = new T.MeshBasicMaterial({ color: 0xfff1d0, toneMapped: false });
+    const sun = new T.Mesh(new T.CylinderGeometry(R - 3.2, R - 3.2, 0.5, 360, 1, true), sunMat); sun.rotation.z = Math.PI / 2; world.add(sun);
+    const roof = new T.Mesh(new T.CylinderGeometry(R - 3.25, R - 3.25, W, 360, 1, true), new T.MeshBasicMaterial({ color: 0x9ab8e0, transparent: true, opacity: 0.08, side: T.DoubleSide, depthWrite: false }));
+    roof.rotation.z = Math.PI / 2; world.add(roof);
+    const hemi = new T.HemisphereLight(0xfff4e0, 0x405030, 1.0); scene.add(hemi);
+    const dirL = new T.DirectionalLight(0xfff0d8, 0.6); dirL.position.set(0, 10, 0); scene.add(dirL);
+
+    let winMat = null;
+    if (city) {
+      // immeubles des deux côtés de l'avenue
+      const c = document.createElement("canvas"); c.width = 64; c.height = 128;
+      const g = c.getContext("2d"); g.fillStyle = "#e9e3d6"; g.fillRect(0, 0, 64, 128);
+      for (let y = 6; y < 128; y += 12) for (let x = 4; x < 64; x += 10) { g.fillStyle = Math.random() < 0.6 ? "#ffd58a" : "#3a4250"; g.fillRect(x, y, 6, 7); }
+      const bt = new T.CanvasTexture(c);
+      winMat = new T.MeshStandardMaterial({ map: bt, emissive: 0xffffff, emissiveMap: bt, emissiveIntensity: 0.15, roughness: 0.8 });
+      const N = 900, b = new T.InstancedMesh(new T.BoxGeometry(1, 1, 1), winMat, N);
+      for (let i = 0; i < N; i++) {
+        const side = i % 2 ? 1 : -1, th = (i / N) * Math.PI * 2 + r() * 0.004;
+        const plaza = Math.abs(((th * 8 / Math.PI) % 2) - 1) < 0.12;
+        const hh = plaza ? 0.001 : 0.5 + Math.pow(r(), 2) * 2.4;
+        put(b, i, th, side * (1.6 + r() * 2.6), 0, 0.5 + r() * 0.7, hh, 0.6 + r() * 0.8);
+      }
+      world.add(b);
+    } else {
+      // serres et vergers
+      const N = 260, gh = new T.InstancedMesh(new T.CylinderGeometry(0.5, 0.5, 1, 12, 1, true, 0, Math.PI), new T.MeshStandardMaterial({ color: 0xcfe8ff, transparent: true, opacity: 0.45, roughness: 0.1, metalness: 0.2, side: T.DoubleSide }), N);
+      for (let i = 0; i < N; i++) {
+        const th = (i / N) * Math.PI * 2, x = (i % 2 ? 1 : -1) * (2.2 + r() * 1.8);
+        eul.set(-th, 0, Math.PI / 2, "XYZ"); q.setFromEuler(eul);
+        sc.set(0.7, 3 + r() * 2, 0.7); gh.setMatrixAt(i, mtx.compose(P(th, x, 0.0), q, sc));
+      }
+      world.add(gh);
+    }
+    // arbres
+    const TN = 2200, trunk = new T.InstancedMesh(new T.CylinderGeometry(0.03, 0.04, 1, 5), new T.MeshStandardMaterial({ color: 0x6b4a2e }), TN);
+    const crown = new T.InstancedMesh(new T.IcosahedronGeometry(0.5, 1), new T.MeshStandardMaterial({ color: 0x3f8a46, roughness: 0.9 }), TN);
+    for (let i = 0; i < TN; i++) {
+      const th = r() * Math.PI * 2, x = city ? (r() < 0.5 ? -1 : 1) * (0.75 + r() * 0.5) : (r() * 2 - 1) * 4.6;
+      const hh = 0.25 + r() * 0.35;
+      put(trunk, i, th, x, 0, 1, hh, 1);
+      put(crown, i, th, x, hh * 0.85, 0.35 + r() * 0.25, 0.4 + r() * 0.3, 0.35 + r() * 0.25);
+      crown.setColorAt(i, new T.Color().setHSL(0.27 + r() * 0.08, 0.45, 0.28 + r() * 0.12));
+    }
+    world.add(trunk); world.add(crown);
+    // habitants qui se promènent
+    const PN = 500, people = new T.InstancedMesh(new T.CylinderGeometry(0.02, 0.025, 0.17, 6), new T.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6 }), PN);
+    const walkers = [];
+    for (let i = 0; i < PN; i++) {
+      walkers.push([r() * Math.PI * 2, (r() * 2 - 1) * (city ? 0.5 : 4), (r() < 0.5 ? -1 : 1) * (0.00004 + r() * 0.00008)]);
+      people.setColorAt(i, new T.Color().setHSL(r(), 0.5, 0.55));
+    }
+    world.add(people);
+    updaters.push(() => {
+      for (let i = 0; i < PN; i++) { const w = walkers[i]; w[0] += w[2]; put(people, i, w[0], w[1], 0, 1, 1, 1); }
+      people.instanceMatrix.needsUpdate = true;
+    });
+    // lac (anneau B) ou canal (anneau A)
+    if (!city) {
+      const lake = new T.Mesh(new T.CylinderGeometry(R - 0.02, R - 0.02, 6, 96, 1, true, Math.PI * 0.9, 0.35), new T.MeshStandardMaterial({ color: 0x2f6aa8, metalness: 0.6, roughness: 0.15, side: T.BackSide }));
+      lake.rotation.z = Math.PI / 2; world.add(lake);
+    }
+    // cycle jour-nuit (une journée en 2 minutes)
+    scene.fog = new T.Fog(0xb8cde6, 4, 70);
+    scene.background = new T.Color(0xb8cde6);
+    const dayC = new T.Color(0xb8cde6), nightC = new T.Color(0x0b1020), duskC = new T.Color(0xe0a070), tmpC = new T.Color();
+    updaters.push((dt, t) => {
+      const ph = (t / 120 + 0.3) % 1, day = Math.max(0, Math.sin(ph * Math.PI * 2)), dusk = Math.max(0, 1 - Math.abs(Math.sin(ph * Math.PI * 2)) * 4) * (ph < 0.6 ? 1 : 0.6);
+      tmpC.copy(nightC).lerp(dayC, day).lerp(duskC, dusk * 0.5);
+      scene.fog.color.copy(tmpC); scene.background.copy(tmpC);
+      sunMat.color.setRGB(0.1 + 0.9 * day + dusk * 0.4, 0.1 + 0.85 * day + dusk * 0.2, 0.25 + 0.7 * day);
+      hemi.intensity = 0.15 + 0.95 * day; dirL.intensity = 0.05 + 0.6 * day;
+      if (winMat) winMat.emissiveIntensity = 0.15 + 0.9 * (1 - day);
+    });
+    const lab = textSprite(city ? "Anneau A · la ville : le sol remonte jusqu'au-dessus de vous" : "Anneau B · fermes, vergers et lac", "#ffffff", 0.9, true);
+    lab.position.copy(P(0.45, 0, 2.5)); world.add(lab);
+    return { look: { R, th: 0, walk: 0.004 }, noFit: true, dist: 0.4, minD: 0.17, maxD: 30, phi: Math.PI / 2 - 0.12, theta: 0, auto: 0, stars: false, bloom: [0.35, 0.4, 0.9] };
   };
 
   /* Télescope spatial James Webb */
@@ -2174,7 +2414,7 @@
     "Quasar 3C 273": ["Jets magnétiques du quasar", "Des lignes de champ enroulées en hélice canalisent des jets qui s'étendent sur des centaines de milliers d'années-lumière."],
     "Voie lactée": ["Champ magnétique galactique", "Quelques microgauss à peine, un million de fois plus faible que celui de la Terre, mais étendu sur toute la galaxie. Il suit les bras spiraux et forme un « X » au-dessus et au-dessous du disque."],
     "Héliopause": ["Spirale de Parker", "Le champ du Soleil, emporté par le vent solaire pendant que le Soleil tourne, s'enroule en spirale jusqu'à l'héliopause. La nappe de courant héliosphérique ondule comme une jupe de ballerine."],
-    "Arche Aurore": ["Bouclier magnétique", "Des bobines supraconductrices créent autour des zones habitées un champ qui dévie les protons et les noyaux des rayons cosmiques. Il complète le blindage d'eau : ensemble, ils gardent la dose sous 20 mSv par an."],
+    "Arche Aurore": ["Bouclier magnétique", "Des bobines supraconductrices créent autour des zones habitées un champ qui dévie les protons et les noyaux des rayons cosmiques. Avec 3 m d'eau, ils gardent la dose sous 10 mSv par an."],
     "Voyager 2": ["Champ interstellaire", "Voyager 2 a franchi l'héliopause en 2018 et mesure toujours le champ magnétique interstellaire, qui s'enroule autour de la bulle du Soleil."],
     "Voyager 1": ["Champ interstellaire", "Voyager 1 mesure le champ magnétique du milieu interstellaire avec son magnétomètre, monté au bout d'une perche de 13 m pour échapper au magnétisme de la sonde."],
   };
@@ -2365,10 +2605,10 @@
     } else if (o.kind === "ship" && ctx3.ship) {
       // bouclier magnétique supraconducteur centré sur la proue habitée
       ctx3.ship.add(grp);
-      grp.position.x = 8; grp.rotation.z = Math.PI / 2;
+      grp.position.x = 10; grp.rotation.z = Math.PI / 2;
       const mat = fieldMaterial("#6fd8ff", "#9a7bff", { dens: 3, speed: 1.4, opacity: 0.7 });
-      for (let i = 0; i < 12; i++) [1.8, 2.6, 3.6, 5].forEach((L, j) => grp.add(fluxTube(dipolePts(L, i / 12 * Math.PI * 2, 80, 1).map((p) => p.multiplyScalar(2.4)), 0.035, mat, (i * 0.17 + j * 0.29) % 1, 120)));
-      dist = window.innerWidth < window.innerHeight ? 72 : 44; maxD = 140;
+      for (let i = 0; i < 12; i++) [1.8, 2.6, 3.6, 5].forEach((L, j) => grp.add(fluxTube(dipolePts(L, i / 12 * Math.PI * 2, 80, 1).map((p) => p.multiplyScalar(4.2)), 0.05, mat, (i * 0.17 + j * 0.29) % 1, 120)));
+      dist = window.innerWidth < window.innerHeight ? 95 : 62; maxD = 180;
     } else if (o.model === "voyager") {
       scene.add(grp);
       const mat = fieldMaterial("#7fc8ff", "#b08bff", { dens: 3, speed: 0.7, opacity: 0.7 });
