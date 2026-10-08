@@ -44,6 +44,7 @@ import caracteristiques
 ELO_INITIAL = 1500.0
 POIDS_SURFACE = 0.5    # mélange : 50 % Elo global + 50 % Elo de la surface
 SEUIL_VALUE = 0.03     # edge minimal (3 %) pour signaler un value bet
+COTE_MIN = 1.50        # plancher de cote : sous 1.50 on ne parie pas (tranche deficitaire, cf. suivi)
 EDGE_MAX = 0.15        # au-dela : divergence suspecte (modele rate une info), pas un bet
 FRACTION_KELLY = 0.15  # Kelly fractionné (abaisse de 0.25 -> 0.15 : survivre a la variance)
 POIDS_MARCHE = 0.5     # ancrage marche : proba pariee = 50% modele + 50% marche de-vigge
@@ -325,6 +326,7 @@ def analyser_rencontre(moteur, elo, r, bankroll):
 
     value_bets = []            # value fiables
     suspects = []              # divergences trop fortes (edge > EDGE_MAX)
+    sous_cote = []             # value ecartes car cote < COTE_MIN (tranche deficitaire)
     for nom, p, pb, cote in ((j1, p1, pb1, r["cote_1"]),
                              (j2, p2, pb2, r["cote_2"])):
         edge_b = pb * cote - 1          # edge sur la proba ancrée au marché
@@ -334,7 +336,10 @@ def analyser_rencontre(moteur, elo, r, bankroll):
         if edge_b > EDGE_MAX or edge_m > 0.25:
             suspects.append((nom, p, pb, cote, edge_m))
         elif edge_b >= SEUIL_VALUE and not alertes:
-            value_bets.append((nom, pb, cote, edge_b, edge_m, kelly(pb, cote)))
+            if cote < COTE_MIN:
+                sous_cote.append((nom, cote, edge_b))   # plancher de cote : pas de pari
+            else:
+                value_bets.append((nom, pb, cote, edge_b, edge_m, kelly(pb, cote)))
 
     if alertes:
         print("\n⚠ AVERTISSEMENTS (fiabilité réduite) :")
@@ -356,8 +361,14 @@ def analyser_rencontre(moteur, elo, r, bankroll):
         for nom, p, pb, cote, em in suspects:
             print(f"   - {nom} : modèle {p:.0%} vs marché {1/cote:.0%} "
                   f"(edge modèle {em:+.0%}) → à investiguer, ne pas miser à l'aveugle")
+    if sous_cote:
+        print(f"\n⚠ VALUE ÉCARTÉ (cote < {COTE_MIN:.2f}) — tranche historiquement "
+              "déficitaire (grosses favorites), on ne parie pas :")
+        for nom, cote, eb in sous_cote:
+            print(f"   - {nom} : cote {cote:.2f}, edge ancré {eb:+.1%} → écarté (plancher de cote)")
     if not value_bets:
-        raison = ("avertissements de fiabilité" if alertes and not suspects
+        raison = (f"value sous le plancher de cote {COTE_MIN:.2f}" if sous_cote and not alertes and not suspects
+                  else "avertissements de fiabilité" if alertes and not suspects
                   else "divergence non fiable" if suspects
                   else f"edge ancré marché < {SEUIL_VALUE:.0%}")
         print(f"\nAucun value bet fiable ({raison}).")
