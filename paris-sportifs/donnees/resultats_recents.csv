@@ -247,11 +247,11 @@ date,gagnante,perdante,surface,tournoi,source
 20260818,Amanda Anisimova,Alexandra Eala,dur,Cincinnati WTA,websearch
 20260818,Coco Gauff,Ann Li,dur,Cincinnati WTA,websearch
 20260818,Madison Keys,Katerina Siniakova,dur,Cincinnati WTA,websearch
-20260818,Xinyu Wang,Elina Svitolina,dur,Cincinnati WTA,websearch
+20260818,Xin Yu Wang,Elina Svitolina,dur,Cincinnati WTA,websearch
 20260818,Marta Kostyuk,Sloane Stephens,dur,Cincinnati WTA,websearch
 20260818,Diana Shnaider,Maja Chwalinska,dur,Cincinnati WTA,websearch
 20260818,Linda Noskova,Clara Tauson,dur,Cincinnati WTA,websearch
-20260818,Aryna Sabalenka,Xinyu Wang,dur,Cincinnati WTA,websearch
+20260818,Aryna Sabalenka,Xin Yu Wang,dur,Cincinnati WTA,websearch
 20260819,Elena Rybakina,Diana Shnaider,dur,Cincinnati WTA,websearch
 20260819,Marta Kostyuk,Mirra Andreeva,dur,Cincinnati WTA,websearch
 20260817,Jessica Pegula,Emma Navarro,dur,Cincinnati WTA,websearch
@@ -304,7 +304,7 @@ date,gagnante,perdante,surface,tournoi,source
 20260901,Elise Mertens,Kaitlin Quevedo,dur,US Open,websearch
 20260901,Alexandra Eala,Mary Stoiana,dur,US Open,websearch
 20260831,Oksana Selekhmeteva,Aoi Ito,dur,US Open,websearch
-20260901,Iga Swiatek,Wang Xiyu,dur,US Open,websearch
+20260901,Iga Swiatek,Xiyu Wang,dur,US Open,websearch
 20260901,Amanda Anisimova,Ashlyn Krueger,dur,US Open,websearch
 20260901,Naomi Osaka,Anastasia Zakharova,dur,US Open,websearch
 20260901,Diana Shnaider,Daria Snigur,dur,US Open,websearch
@@ -337,7 +337,7 @@ date,gagnante,perdante,surface,tournoi,source
 20260905,Emma Navarro,Karolina Muchova,dur,US Open,websearch
 20260905,Linda Noskova,Ann Li,dur,US Open,websearch
 20260830,Anna Kalinskaya,Anna Blinkova,dur,US Open,websearch
-20260901,Anna Kalinskaya,Xinyu Wang,dur,US Open,websearch
+20260901,Anna Kalinskaya,Xin Yu Wang,dur,US Open,websearch
 20260905,Qinwen Zheng,Madison Keys,dur,US Open,websearch
 20260905,Naomi Osaka,Elise Mertens,dur,US Open,websearch
 20260905,Coco Gauff,Cristina Bucsa,dur,US Open,websearch
@@ -515,4 +515,5 @@ date,gagnante,perdante,surface,tournoi,source
 20261011,Ayla Aksu,Lucrezia Stefanini,dur,Samsun,websearch
 20261012,Sonay Kartal,Anhelina Kalinina,dur,Wuhan,websearch
 20260929,Sonay Kartal,Andrea Lazaro Garcia,dur,Beijing,websearch
-20260930,Sonay Kartal,Wang Xinyu,dur,Beijing,websearch
+20260930,Sonay Kartal,Xin Yu Wang,dur,Beijing,websearch
+20261002,Xiyu Wang,Shuai Zhang,dur,Asian Games,websearch
