@@ -53,6 +53,7 @@ import json
 import math
 import os
 import sys
+import unicodedata
 from collections import defaultdict
 
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
@@ -161,6 +162,23 @@ def _f(x):
         return None
 
 
+def _norm_nom(s):
+    """Minuscule, sans accents, espaces normalisés."""
+    s = unicodedata.normalize("NFD", s or "")
+    s = "".join(c for c in s if unicodedata.category(c) != "Mn")
+    return " ".join(s.lower().split())
+
+
+def cle_nom(s):
+    """Clé d'identité robuste à l'ordre ET à l'espacement des prénoms
+    (noms chinois notamment) : jetons normalisés triés puis collés.
+      « Wang Xinyu » = « Xinyu Wang » = « Xin Yu Wang » -> « wangxinyu »
+      « Zheng Qinwen » = « Qinwen Zheng »               -> « qinwenzheng »
+    Une collision suppose exactement les mêmes syllabes romanisées, ce qui
+    revient quasi toujours à la même joueuse."""
+    return "".join(sorted(_norm_nom(s).split()))
+
+
 def _date_ordinale(tourney_date, tour):
     s = str(tourney_date)
     d = datetime.date(int(s[:4]), int(s[4:6]), int(s[6:8]))
@@ -209,6 +227,7 @@ def charger_matchs(chemins):
     """Charge les CSV (format Sackmann complet ou format simple) triés
     chronologiquement, avec stats détaillées et score analysé."""
     matchs = []
+    poids_nom = defaultdict(lambda: defaultdict(float))  # cle_nom -> {graphie: poids}
     for chemin in chemins:
         secondaire = "qual_itf" in os.path.basename(chemin)
         with open(chemin, newline="", encoding="utf-8") as f:
@@ -285,8 +304,21 @@ def charger_matchs(chemins):
                         "g": {}, "p": {},
                     }
                 matchs.append(m)
+                # autorité : les gros fichiers Sackmann (circuit principal)
+                # fixent la graphie de référence ; le format simple (flux /
+                # ingestion web) ne fait qu'un appoint.
+                w = 1.0 if sackmann else 0.1
+                for nom in (m["gagnante"], m["perdante"]):
+                    poids_nom[cle_nom(nom)][nom] += w
     if not matchs:
         sys.exit("Aucun match exploitable.")
+    # Canonicalisation : une même identité (ordre/espacement différents) est
+    # ramenée à une seule graphie, pour ne plus fragmenter l'historique.
+    canon = {k: max(d, key=lambda n: (d[n], len(n), n))
+             for k, d in poids_nom.items()}
+    for m in matchs:
+        m["gagnante"] = canon.get(cle_nom(m["gagnante"]), m["gagnante"])
+        m["perdante"] = canon.get(cle_nom(m["perdante"]), m["perdante"])
     matchs.sort(key=lambda m: m["cle"])
     return matchs
 

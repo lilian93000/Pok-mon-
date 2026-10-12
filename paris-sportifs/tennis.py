@@ -81,6 +81,12 @@ def resoudre_nom(saisie, joueuses, nb_matchs):
     exactes = [j for j in joueuses if j.lower() == s]
     if exactes:
         return exactes[0]
+    # identité robuste à l'ordre/espacement (« Wang Xinyu » = « Xinyu Wang »)
+    cle = caracteristiques.cle_nom(saisie)
+    if cle:
+        par_cle = [j for j in joueuses if caracteristiques.cle_nom(j) == cle]
+        if par_cle:
+            return max(par_cle, key=lambda j: nb_matchs[j])
     candidates = [j for j in joueuses if s in j.lower()]
     if not candidates:
         sys.exit(f"Joueuse introuvable dans les données : « {saisie} »")
@@ -467,9 +473,23 @@ def main():
         sys.exit('Fournir --match "A:B" --cote1 --cote2, ou --cotes fichier.csv, '
                  "ou --classement")
 
+    # Garde-fou : un flux de cotes contient souvent des matchs DÉJÀ JOUÉS
+    # (cotes périmées) -> on les écarte pour ne pas inventer de value bet.
+    joues = set()
+    if args.cotes and matchs:
+        _max = max(m["date"] for m in matchs)
+        joues = {frozenset((caracteristiques.cle_nom(m["gagnante"]),
+                            caracteristiques.cle_nom(m["perdante"])))
+                 for m in matchs if m["date"] >= _max - 3}
+
     for r in rencontres:
         r["j1"] = resoudre_nom(r["j1"], elo.global_.keys(), elo.nb_matchs)
         r["j2"] = resoudre_nom(r["j2"], elo.global_.keys(), elo.nb_matchs)
+        if frozenset((caracteristiques.cle_nom(r["j1"]),
+                      caracteristiques.cle_nom(r["j2"]))) in joues:
+            print(f"\n[=] {r['j1']} vs {r['j2']} : déjà joué (résultat en "
+                  "base, cote périmée) — ignoré.")
+            continue
         for j in (r["j1"], r["j2"]):
             if elo.nb_matchs[j] < 10:
                 print(f"[!] Attention : {j} n'a que {elo.nb_matchs[j]} matchs dans "
