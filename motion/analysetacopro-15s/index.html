@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="fr" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* Branding capturé sur analysetacopro.fr (voir ../BRANDING.md) */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --brand-light: #4d8bff;
+        --navy: #061a4a;
+        --ink: #0c1424;
+        --muted: #5a6577;
+        --tint: #e8f0ff;
+        --ground: #f5f8ff;
+        --border: #e5e7eb;
+        --green: #12b981;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--ground);
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: var(--ink);
+        background: var(--ground);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+      }
+      .center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(11, 95, 255, 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(11, 95, 255, 0.06) 1px, transparent 1px);
+        background-size: 96px 96px;
+      }
+      .glow {
+        position: absolute;
+        width: 1400px;
+        height: 1400px;
+        left: 260px;
+        top: -160px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(77, 139, 255, 0.22) 0%, rgba(77, 139, 255, 0) 60%);
+      }
+      .eyebrow {
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--brand);
+      }
+      .blue {
+        color: var(--brand);
+      }
+
+      /* ---------- Scène 1 : logo ---------- */
+      #s1 {
+        background: #ffffff;
+      }
+      #logo-row {
+        display: flex;
+        align-items: center;
+        gap: 44px;
+      }
+      #mark {
+        width: 260px;
+        height: 260px;
+        overflow: visible;
+      }
+      #wordmark-mask {
+        overflow: hidden;
+        padding: 10px 0;
+      }
+      #wordmark {
+        font-size: 132px;
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        white-space: nowrap;
+        line-height: 1;
+      }
+      #s1-tagline {
+        margin-top: 56px;
+        font-size: 36px;
+        font-weight: 500;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      #s1-tagline .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--green);
+      }
+
+      /* ---------- Scène 2 : message 1 ---------- */
+      #m1-title {
+        margin-top: 36px;
+        font-size: 118px;
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        line-height: 1.05;
+        text-align: center;
+      }
+      #m1-title .line {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 8px;
+      }
+      #m1-title .inner {
+        display: inline-block;
+      }
+      #m1-sub {
+        margin-top: 44px;
+        font-size: 38px;
+        color: var(--muted);
+      }
+
+      /* ---------- Scène 3 : message 2 ---------- */
+      #m2-title {
+        margin-top: 28px;
+        font-size: 84px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.08;
+        text-align: center;
+      }
+      #cards {
+        margin-top: 72px;
+        display: flex;
+        gap: 40px;
+      }
+      .card {
+        width: 440px;
+        padding: 44px 44px 48px;
+        background: #ffffff;
+        border: 2px solid var(--border);
+        border-radius: 28px;
+        box-shadow: 0 24px 60px rgba(6, 26, 74, 0.1);
+      }
+      .icon {
+        width: 92px;
+        height: 92px;
+        border-radius: 22px;
+        background: var(--tint);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--brand);
+      }
+      .icon svg {
+        width: 50px;
+        height: 50px;
+      }
+      .card h3 {
+        margin-top: 32px;
+        font-size: 44px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      .card p {
+        margin-top: 14px;
+        font-size: 28px;
+        line-height: 1.4;
+        color: var(--muted);
+      }
+
+      /* ---------- Scène 4 : message 3 (score) ---------- */
+      #s4 {
+        background: var(--navy);
+        color: #ffffff;
+      }
+      #s4 .grid {
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      }
+      #s4-row {
+        display: flex;
+        align-items: center;
+        gap: 120px;
+      }
+      #gauge-card {
+        width: 560px;
+        height: 560px;
+        border-radius: 40px;
+        background: #ffffff;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.35);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #gauge {
+        width: 420px;
+        height: 420px;
+        transform: rotate(-90deg);
+      }
+      #gauge-label {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--ink);
+      }
+      #score {
+        font-size: 156px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+      #score-sub {
+        margin-top: 8px;
+        font-size: 34px;
+        color: var(--muted);
+      }
+      #s4-text {
+        width: 820px;
+      }
+      #s4-text .eyebrow {
+        color: var(--brand-light);
+      }
+      #s4-title {
+        margin-top: 24px;
+        font-size: 86px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.06;
+      }
+      #s4-points {
+        margin-top: 44px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .point {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        font-size: 38px;
+        font-weight: 500;
+        color: #d6e2ff;
+      }
+      .point .chk {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: rgba(18, 185, 129, 0.18);
+        color: var(--green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+      }
+      .point .chk svg {
+        width: 30px;
+        height: 30px;
+      }
+
+      /* ---------- Scène 5 : appel à l'action ---------- */
+      #s5 {
+        background: linear-gradient(135deg, #061a4a 0%, #0a3fb8 55%, #0b5fff 100%);
+        color: #ffffff;
+      }
+      #s5-logo {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-size: 44px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      #s5-logo svg {
+        width: 64px;
+        height: 64px;
+      }
+      #s5-title {
+        margin-top: 56px;
+        font-size: 92px;
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        line-height: 1.06;
+        text-align: center;
+      }
+      #cta {
+        margin-top: 64px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 34px 60px;
+        border-radius: 999px;
+        background: #ffffff;
+        color: var(--brand);
+        font-size: 44px;
+        font-weight: 700;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+      }
+      #cta svg {
+        width: 44px;
+        height: 44px;
+      }
+      #url {
+        margin-top: 60px;
+        font-size: 72px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      #url-bar {
+        margin-top: 14px;
+        width: 560px;
+        height: 8px;
+        border-radius: 4px;
+        background: linear-gradient(90deg, #4d8bff, #ffffff);
+        transform-origin: left center;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="15"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- 0–3 s : logo animé -->
+      <section id="s1" class="clip center" data-start="0" data-duration="3" data-track-index="0">
+        <div class="grid"></div>
+        <div id="logo-row">
+          <svg id="mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect id="lg-top" x="10" y="9" width="28" height="5" rx="2.5" fill="#0B5FFF" />
+            <rect id="lg-top2" x="13" y="14" width="22" height="3" rx="1.5" fill="#0B5FFF" opacity="0.85" />
+            <rect class="lg-pillar" x="15" y="18" width="3.5" height="22" rx="1.75" fill="#0B5FFF" />
+            <rect class="lg-pillar" x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#0B5FFF" />
+            <rect class="lg-pillar" x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#0B5FFF" />
+            <rect id="lg-base" x="12" y="40" width="24" height="4" rx="2" fill="#0B5FFF" />
+          </svg>
+          <div id="wordmark-mask">
+            <div id="wordmark">AnalyseTa<span class="blue">Copro</span></div>
+          </div>
+        </div>
+        <div id="s1-tagline"><span class="dot"></span>Cabinet d'analyse 100% indépendant</div>
+      </section>
+
+      <!-- 3–5,7 s : message 1 -->
+      <section id="s2" class="clip center" data-start="3" data-duration="2.7" data-track-index="0">
+        <div class="glow"></div>
+        <div class="eyebrow" id="m1-eyebrow">Avant d'acheter</div>
+        <h1 id="m1-title">
+          <span class="line"><span class="inner">N'achetez pas un appartement</span></span>
+          <span class="line"><span class="inner">sans <span class="blue">analyser sa copropriété.</span></span></span>
+        </h1>
+        <p id="m1-sub">Nous décryptons ses documents pour vous.</p>
+      </section>
+
+      <!-- 5,7–8,4 s : message 2 -->
+      <section id="s3" class="clip center" data-start="5.7" data-duration="2.7" data-track-index="0">
+        <div class="grid"></div>
+        <div class="eyebrow" id="m2-eyebrow">Les risques cachés</div>
+        <h2 id="m2-title">Révélés avant que <span class="blue">vous signiez.</span></h2>
+        <div id="cards">
+          <div class="card">
+            <div class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9" /><path d="m18 15 4-4" /><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5" /></svg>
+            </div>
+            <h3>Travaux cachés</h3>
+            <p>Ravalement, toiture, ascenseur…</p>
+          </div>
+          <div class="card">
+            <div class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></svg>
+            </div>
+            <h3>Impayés &amp; dettes</h3>
+            <p>Des charges qui fragilisent votre budget.</p>
+          </div>
+          <div class="card">
+            <div class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="M7 21h10" /><path d="M12 3v18" /><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" /></svg>
+            </div>
+            <h3>Litiges</h3>
+            <p>Procédures en cours, rarement évoquées.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8,4–11 s : message 3 -->
+      <section id="s4" class="clip center" data-start="8.4" data-duration="2.6" data-track-index="0">
+        <div class="grid"></div>
+        <div id="s4-row">
+          <div id="gauge-card">
+            <svg id="gauge" viewBox="0 0 220 220">
+              <defs>
+                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0B5FFF" />
+                  <stop offset="100%" stop-color="#4D8BFF" />
+                </linearGradient>
+              </defs>
+              <circle cx="110" cy="110" r="96" fill="none" stroke="#E8F0FF" stroke-width="18" />
+              <circle id="gauge-arc" cx="110" cy="110" r="96" fill="none" stroke="url(#gaugeGrad)" stroke-width="18" stroke-linecap="round" stroke-dasharray="603.19" stroke-dashoffset="603.19" />
+            </svg>
+            <div id="gauge-label">
+              <div id="score">0.0</div>
+              <div id="score-sub">sur 10</div>
+            </div>
+          </div>
+          <div id="s4-text">
+            <div class="eyebrow">L'élément central</div>
+            <h2 id="s4-title">Le AnalyseTaCopro Score</h2>
+            <div id="s4-points">
+              <div class="point"><span class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span>Une note unique sur 10</div>
+              <div class="point"><span class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span>7 critères pondérés</div>
+              <div class="point"><span class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span>Rapport clair livré en 72h</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11–15 s : appel à l'action -->
+      <section id="s5" class="clip center" data-start="11" data-duration="4" data-track-index="0">
+        <div class="grid" style="background-image: linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px)"></div>
+        <div id="s5-logo">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <h2 id="s5-title">Votre futur appartement mérite<br />une analyse avant la signature.</h2>
+        <div id="cta">
+          Faire analyser ma copropriété
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url">analysetacopro.fr</div>
+        <div id="url-bar"></div>
+      </section>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // 0–3 s — le logo se construit : fronton, chapiteau, piliers, socle, puis le nom
+      tl.fromTo("#lg-top", { scaleX: 0, transformOrigin: "50% 50%" }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, 0.15);
+      tl.fromTo("#lg-top2", { scaleX: 0, transformOrigin: "50% 50%" }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 0.35);
+      tl.fromTo(".lg-pillar", { scaleY: 0, transformOrigin: "50% 0%" }, { scaleY: 1, duration: 0.5, ease: "power3.out", stagger: 0.1 }, 0.5);
+      tl.fromTo("#lg-base", { scaleX: 0, transformOrigin: "50% 50%" }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 0.9);
+      tl.fromTo("#mark", { scale: 0.85 }, { scale: 1, duration: 1.2, ease: "power2.out" }, 0.15);
+      tl.fromTo("#mark", { x: 402 }, { x: 0, duration: 0.65, ease: "power3.inOut" }, 0.95);
+      tl.fromTo("#wordmark", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 1.45);
+      tl.fromTo("#s1-tagline", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 1.25);
+      tl.to("#logo-row, #s1-tagline", { y: -40, opacity: 0, duration: 0.25, ease: "power2.in" }, 2.75);
+
+      // 3–5,7 s — message 1
+      tl.fromTo("#m1-eyebrow", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 3.1);
+      tl.fromTo("#m1-title .inner", { yPercent: 110 }, { yPercent: 0, duration: 0.7, ease: "power4.out", stagger: 0.14 }, 3.2);
+      tl.fromTo("#m1-sub", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 3.75);
+      tl.fromTo("#s2 .glow", { scale: 0.7, opacity: 0 }, { scale: 1.1, opacity: 1, duration: 2.6, ease: "sine.out" }, 3);
+      tl.to("#m1-eyebrow, #m1-title, #m1-sub", { y: -50, opacity: 0, duration: 0.35, ease: "power2.in", stagger: 0.04 }, 5.3);
+
+      // 5,7–8,4 s — message 2
+      tl.fromTo("#m2-eyebrow", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 5.75);
+      tl.fromTo("#m2-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 5.85);
+      tl.fromTo("#cards .card", { y: 120, opacity: 0, scale: 0.92 }, { y: 0, opacity: 1, scale: 1, duration: 0.65, ease: "back.out(1.4)", stagger: 0.15 }, 6.15);
+      tl.fromTo("#cards .icon", { rotation: -12, scale: 0.6 }, { rotation: 0, scale: 1, duration: 0.5, ease: "back.out(2)", stagger: 0.15 }, 6.35);
+      tl.to("#m2-eyebrow, #m2-title, #cards", { y: -50, opacity: 0, duration: 0.35, ease: "power2.in", stagger: 0.04 }, 8.0);
+
+      // 8,4–11 s — message 3 : la jauge du Score monte jusqu'à 8.4
+      const gauge = { v: 0 };
+      const C = 603.19;
+      tl.fromTo("#gauge-card", { x: -120, opacity: 0, scale: 0.9 }, { x: 0, opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" }, 8.45);
+      tl.fromTo(
+        gauge,
+        { v: 0 },
+        {
+          v: 8.4,
+          duration: 1.3,
+          ease: "power2.out",
+          onUpdate: () => {
+            document.getElementById("score").textContent = gauge.v.toFixed(1);
+            document.getElementById("gauge-arc").setAttribute("stroke-dashoffset", (C * (1 - gauge.v / 10)).toFixed(2));
+          },
+        },
+        8.65,
+      );
+      tl.fromTo("#s4-text .eyebrow, #s4-title", { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out", stagger: 0.1 }, 8.6);
+      tl.fromTo("#s4-points .point", { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "power3.out", stagger: 0.12 }, 8.9);
+      tl.to("#s4-row", { scale: 0.96, opacity: 0, duration: 0.25, ease: "power2.in" }, 10.75);
+
+      // 11–15 s — appel à l'action
+      tl.fromTo("#s5", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(75% at 50% 50%)", duration: 0.6, ease: "power3.inOut" }, 11);
+      tl.fromTo("#s5-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 11.35);
+      tl.fromTo("#s5-title", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 11.5);
+      tl.fromTo("#cta", { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.8)" }, 12.0);
+      tl.fromTo("#url", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 12.4);
+      tl.fromTo("#url-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.inOut" }, 12.6);
+      tl.to("#cta", { scale: 1.06, duration: 0.4, ease: "sine.inOut", yoyo: true, repeat: 3 }, 13.2);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,190 @@
+[span] AnalyseTa
+[span] Copro
+[a] Avant achat
+[a] À propos
+[a] Connexion
+[a] Faire analyser
+[a] Avant achat
+[a] Agences
+[a] Tarifs
+[a] À propos
+[a] FAQ
+[a] Faire analyser ma copropriété
+[span] Cabinet d'analyse 100% indépendant
+[h1] N'achetez pas un appartement sans
+[span] analyser sa copropriété.
+[p] Nous décryptons les documents de copropriété pour révéler les risques cachés — travaux, impayés, litiges — avant que vous signiez. Rapport clair, indépendant, livré en 72h.
+[a] Faire analyser ma copropriété
+[a] Découvrir le Score
+[span] 1 200+ lots gérés
+[span] 40 AG / an
+[span] 100% indépendant
+[span] 8.4
+[span] sur 10
+[p] AnalyseTaCopro Score
+[span] Copropriété
+[span] excellente
+[span] Finances
+[span] 8.5
+[span] Travaux
+[span] 8.0
+[span] Gestion
+[span] 8.8
+[span] Contentieux
+[span] 9.0
+[span] Impayés
+[span] 7.5
+[span] Énergie
+[span] 7.8
+[span] Transparence
+[span] 9.2
+[p] Le problème
+[h2] Ce que les 300 pages de documents ne vous disent pas clairement
+[p] Avant chaque vente, vous recevez une montagne de documents. Personne ne prend le temps de les analyser pour vous.
+[h3] Travaux cachés
+[p] Ravalement, toiture, ascenseur : des dizaines de milliers d'euros qui vous tomberont dessus après l'achat.
+[h3] Impayés & dettes
+[p] Des copropriétaires qui ne paient pas leurs charges fragilisent toute la copropriété — et votre budget.
+[h3] Litiges & procédures
+[p] Contentieux en cours, procédures contre le syndic ou un voisin : des risques rarement évoqués.
+[h3] Charges qui s'envolent
+[p] Une trajectoire de charges mal maîtrisée peut transformer un bon achat en gouffre financier.
+[h3] Mauvaise gestion
+[p] Un syndic défaillant, des AG bâclées, un carnet d'entretien vide : les signaux d'alerte.
+[h3] Passoire thermique
+[p] DPE collectif, isolation : des travaux énergétiques bientôt obligatoires et coûteux.
+[p] Ni l'agence, ni le notaire ne réalisent cette analyse.
+[span] Nous, si.
+[p] Comment ça marche
+[h2] Trois étapes, zéro jargon
+[p] Un parcours simple, de l'envoi des documents à votre décision d'achat.
+[h3] Envoyez vos documents
+[p] PV d'AG, règlement de copropriété, pré-état daté, carnet d'entretien, annexes comptables.
+[h3] Nous analysons
+[p] Un expert décortique finances, travaux, gestion et risques, critère par critère.
+[h3] Recevez votre rapport
+[p] Synthèse claire + AnalyseTaCopro Score + recommandations concrètes pour décider.
+[p] L'élément central
+[h2] Le AnalyseTaCopro Score
+[p] Une note unique sur 10, synthèse de 7 critères pondérés. Pour comprendre en un coup d'œil la santé d'une copropriété.
+[span] 8.4
+[span] sur 10
+[p] AnalyseTaCopro Score
+[span] Copropriété
+[span] excellente
+[span] Finances
+[span] 8.5
+[span] Travaux
+[span] 8.0
+[span] Gestion
+[span] 8.8
+[span] Contentieux
+[span] 9.0
+[span] Impayés
+[span] 7.5
+[span] Énergie
+[span] 7.8
+[span] Transparence
+[span] 9.2
+[h3] 7 critères, une méthode rigoureuse
+[p] Finances
+[p] Trésorerie, fonds travaux, budget prévisionnel.
+[p] Travaux
+[p] Travaux votés, à venir, état du bâti.
+[p] Gestion
+[p] Qualité du syndic, suivi, réactivité.
+[p] Contentieux
+[p] Litiges, procédures en cours.
+[p] Impayés
+[p] Dettes des copropriétaires, recouvrement.
+[p] Énergie
+[p] Performance énergétique, passoires thermiques.
+[p] Transparence
+[p] Clarté et complétude des documents.
+[span] Excellente
+[span] Bonne
+[span] 7.9
+[span] Acceptable
+[span] 5.9
+[span] Risquée
+[span] 3.9
+[span] Très risquée
+[span] 1.9
+[p] Particuliers & investisseurs
+[h2] Une analyse, trois niveaux d'accompagnement
+[p] Paiement unique, sans abonnement. Rapport indépendant livré rapidement.
+[h3] Essentiel
+[p] L'analyse complète pour décider sereinement.
+[span] 149
+[p] Livraison 72h
+[span] Rapport complet ~15 pages
+[span] AnalyseTaCopro Score sur 10
+[span] Synthèse des risques majeurs
+[span] Recommandations claires
+[span] Livraison sous 72h
+[a] Choisir
+[a] Essentiel
+[span] Le plus choisi
+[h3] Premium
+[p] L'analyse approfondie avec un conseil dédié.
+[span] 249
+[p] Livraison 48h
+[span] Rapport approfondi 20+ pages
+[span] Score détaillé par critère
+[span] Appel conseil 30 min
+[span] Analyse financière poussée
+[span] Livraison sous 48h
+[a] Choisir
+[a] Premium
+[h3] Investisseur
+[p] Pour les achats locatifs et la valorisation.
+[span] 349
+[p] Livraison 48h
+[span] Tout le contenu Premium
+[span] Analyse de rendement locatif
+[span] Stratégie de valorisation
+[span] Appel conseil 45 min
+[span] Livraison sous 48h
+[a] Choisir
+[a] Investisseur
+[span] Option Urgence
+[p] Livraison en 24h sur n'importe quelle formule.
+[span] Le fondateur
+[h2] Pas un théoricien. Un professionnel de la copropriété.
+[p] AnalyseTaCopro n'est pas né d'une idée abstraite, mais d'années passées à gérer des copropriétés au quotidien : budgets, assemblées générales, travaux, litiges. Je sais où se cachent les risques — parce que je les ai gérés.
+[span] Tiers indépendant
+[span] Aucun intérêt dans la vente
+[span] 100% confidentiel
+[p] ans d'expérience
+[p] 1 200+
+[p] lots gérés
+[p] AG par an
+[p] FAQ
+[h2] Vos questions, nos réponses
+[p] Tout ce qu'il faut savoir avant de nous confier votre analyse.
+[span] Vous remplacez le notaire ou le diagnostic ?
+[p] Non, nous sommes complémentaires. Le notaire sécurise la vente, les diagnostics évaluent le logement. Nous, nous analysons la santé de la copropriété — un angle mort que personne ne couvre.
+[span] Quels documents dois-je transmettre ?
+[p] Les PV des 3 dernières AG, le règlement de copropriété, le pré-état daté, le carnet d'entretien et les annexes comptables. Nous vous guidons pas à pas.
+[span] Quel est le délai de réception ?
+[p] 72h pour la formule Essentiel, 48h pour Premium et Investisseur. Une option Urgence permet une livraison en 24h.
+[span] Mes documents sont-ils confidentiels ?
+[p] Oui, strictement. Vos documents sont stockés de façon chiffrée et peuvent être supprimés après la livraison de votre rapport, sur simple demande.
+[span] Pourquoi êtes-vous vraiment indépendant ?
+[p] Parce que nous ne touchons aucune commission sur la vente. Nous ne sommes ni agence, ni syndic, ni notaire. Notre seul client, c'est vous — l'acheteur.
+[h2] Votre futur appartement mérite une analyse avant la signature
+[p] Rejoignez les acheteurs qui décident en confiance, documents en main et risques sous les yeux.
+[a] Faire analyser ma copropriété
+[span] AnalyseTa
+[p] Comprenez. Anticipez. Décidez en confiance.
+[p] L'analyse indépendante de copropriété avant votre achat immobilier.
+[a] Analyse avant achat
+[a] Pour les agences
+[a] Le Score
+[h3] Ressources
+[h3] Entreprise
+[a] À propos
+[a] Confidentialité
+[a] Mentions légales
+[p] Service d'analyse documentaire — ne constitue pas un conseil juridique, fiscal ou notarial. TVA non applicable, art. 293 B du CGI.
+[p] AnalyseTaCopro. Tous droits réservés.
