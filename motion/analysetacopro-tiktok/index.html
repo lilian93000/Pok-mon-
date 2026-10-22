@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* Branding capturé sur analysetacopro.fr — plans réels : Pixabay (licence Pixabay, voir README.md) */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --brand-light: #4d8bff;
+        --navy: #061a4a;
+        --ink: #0c1424;
+        --muted: #5a6577;
+        --tint: #e8f0ff;
+        --green: #12b981;
+        --amber: #f5a524;
+        --orange: #f97316;
+        --red: #ef4444;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        background: #000;
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+      }
+      video.clip {
+        width: 1080px;
+        height: 1920px;
+        object-fit: cover;
+      }
+      /* Zone sûre TikTok : texte entre x 60–920 et y 220–1480 */
+      .scrim-top,
+      .scrim-bottom {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 900px;
+      }
+      .scrim-top {
+        top: 0;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+      }
+      .scrim-bottom {
+        bottom: 0;
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.5) 45%, rgba(0, 0, 0, 0) 100%);
+      }
+      .txt {
+        position: absolute;
+        left: 70px;
+        width: 860px;
+        color: #fff;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+        line-height: 1.04;
+        text-shadow: 0 6px 30px rgba(0, 0, 0, 0.55), 0 2px 0 rgba(0, 0, 0, 0.35);
+      }
+      .xl {
+        font-size: 104px;
+      }
+      .l {
+        font-size: 84px;
+      }
+      .m {
+        font-size: 56px;
+        font-weight: 800;
+      }
+      .w {
+        display: inline-block;
+      }
+      .hl {
+        display: inline-block;
+        padding: 2px 24px 12px;
+        border-radius: 18px;
+        background: var(--brand);
+        text-shadow: none;
+      }
+      .hl.red {
+        background: var(--red);
+      }
+      .hl.green {
+        background: var(--green);
+      }
+      .pill {
+        position: absolute;
+        left: 70px;
+        padding: 14px 30px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.95);
+        color: var(--ink);
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+      }
+
+      /* Scène 3 : compteur de pages */
+      #pages {
+        position: absolute;
+        left: 70px;
+        top: 1010px;
+        color: #fff;
+        text-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+      }
+      #pages-num {
+        font-size: 260px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.9;
+      }
+      #pages-sub {
+        margin-top: 10px;
+        font-size: 56px;
+        font-weight: 800;
+      }
+
+      /* Scène 4 : risques */
+      .risk {
+        position: absolute;
+        left: 70px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 18px 40px 18px 18px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--ink);
+        font-size: 60px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      }
+      .risk .ic {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+      }
+      .risk .ic svg {
+        width: 48px;
+        height: 48px;
+      }
+
+      /* Scène 5 : téléphone avec le site */
+      #dim {
+        background: rgba(6, 26, 74, 0.55);
+      }
+      #phone {
+        position: absolute;
+        left: 255px;
+        top: 470px;
+        width: 570px;
+        height: 1110px;
+        padding: 22px;
+        border-radius: 72px;
+        background: #0c1424;
+        box-shadow: 0 50px 120px rgba(0, 0, 0, 0.55), inset 0 0 0 4px #2b3754;
+      }
+      #phone-screen {
+        position: relative;
+        width: 526px;
+        height: 1066px;
+        border-radius: 52px;
+        overflow: hidden;
+        background: #fff;
+      }
+      #site {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 526px;
+      }
+      #notch {
+        position: absolute;
+        left: 50%;
+        top: 18px;
+        width: 150px;
+        height: 40px;
+        margin-left: -75px;
+        border-radius: 20px;
+        background: #0c1424;
+      }
+      #tap {
+        position: absolute;
+        left: 263px;
+        top: 758px;
+        width: 140px;
+        height: 140px;
+        margin: -70px 0 0 -70px;
+        border-radius: 50%;
+        border: 8px solid #fff;
+        background: rgba(11, 95, 255, 0.35);
+      }
+
+      /* Scène 6 : carte Score */
+      #score-card {
+        position: absolute;
+        left: 70px;
+        top: 1010px;
+        width: 860px;
+        padding: 36px 44px;
+        border-radius: 40px;
+        background: #fff;
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        gap: 40px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      }
+      #gauge-wrap {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        flex: none;
+      }
+      #gauge {
+        width: 300px;
+        height: 300px;
+        transform: rotate(-90deg);
+      }
+      #gauge-label {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      #score {
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        line-height: 1;
+      }
+      #score-sub {
+        font-size: 30px;
+        color: var(--muted);
+      }
+      #score-side .k {
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+      #score-side .v {
+        margin-top: 6px;
+        font-size: 48px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        color: #0e9467;
+        line-height: 1.05;
+      }
+      #score-side .t {
+        margin-top: 22px;
+        display: inline-block;
+        padding: 10px 22px;
+        border-radius: 999px;
+        background: var(--tint);
+        color: var(--brand);
+        font-size: 32px;
+        font-weight: 800;
+      }
+
+      /* Scène 8 : carte de fin */
+      #end {
+        background: linear-gradient(160deg, #061a4a 0%, #0a3fb8 55%, #0b5fff 100%);
+        color: #fff;
+      }
+      #end-inner {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 480px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #end-logo {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-size: 50px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      #end-logo svg {
+        width: 76px;
+        height: 76px;
+      }
+      #end-title {
+        margin-top: 70px;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.02;
+      }
+      #end-cta {
+        margin-top: 70px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 34px 50px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 46px;
+        font-weight: 800;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+      }
+      #end-cta svg {
+        width: 44px;
+        height: 44px;
+      }
+      #end-url {
+        margin-top: 60px;
+        font-size: 76px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+      }
+      #end-bar {
+        margin-top: 12px;
+        width: 640px;
+        height: 10px;
+        border-radius: 5px;
+        background: linear-gradient(90deg, #4d8bff, #ffffff);
+        transform-origin: left center;
+      }
+      #end-bio {
+        margin-top: 60px;
+        padding: 16px 34px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.7);
+        font-size: 40px;
+        font-weight: 800;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30.5"
+      data-width="1080"
+      data-height="1920"
+    >
+      <!-- Plans réels (Pixabay), recadrés en 9:16 -->
+      <video id="v1" class="clip" src="assets/clips/44646.mp4" data-start="0" data-duration="3.4" data-track-index="0" muted playsinline></video>
+      <video id="v2" class="clip" src="assets/clips/233399.mp4" data-start="3.4" data-duration="3.4" data-track-index="0" muted playsinline></video>
+      <video id="v3" class="clip" src="assets/clips/272633.mp4" data-start="6.8" data-duration="3.9" data-track-index="0" muted playsinline></video>
+      <video id="v4" class="clip" src="assets/clips/83874.mp4" data-start="10.7" data-duration="3.9" data-track-index="0" muted playsinline></video>
+      <video id="v5" class="clip" src="assets/clips/130647.mp4" data-start="14.6" data-duration="4.9" data-track-index="0" muted playsinline></video>
+      <video id="v6" class="clip" src="assets/clips/215751.mp4" data-start="19.5" data-duration="4.4" data-track-index="0" muted playsinline></video>
+      <video id="v7" class="clip" src="assets/clips/198888.mp4" data-start="23.9" data-duration="3.4" data-track-index="0" muted playsinline></video>
+
+      <!-- 0–3,4 s : accroche -->
+      <div id="o1" class="clip" data-start="0" data-duration="3.4" data-track-index="1">
+        <div class="scrim-bottom"></div>
+        <div class="pill" style="top: 260px">Acheteurs, écoutez ça</div>
+        <div class="txt xl" style="top: 1040px"><span class="w">Tu</span> <span class="w">vas</span> <span class="w">acheter</span> <span class="w">un</span> <span class="w">appart&nbsp;?</span></div>
+        <div class="txt xl" style="top: 1290px"><span class="hl red" id="attends">ATTENDS.</span></div>
+      </div>
+
+      <!-- 3,4–6,8 s : le coup de cœur -->
+      <div id="o2" class="clip" data-start="3.4" data-duration="3.4" data-track-index="1">
+        <div class="scrim-top"></div>
+        <div class="txt l" style="top: 250px"><span class="w">Vous</span> <span class="w">avez</span> <span class="w">eu</span> <span class="w">le</span></div>
+        <div class="txt xl" style="top: 350px"><span class="hl" id="coeur">coup de cœur.</span></div>
+      </div>
+
+      <!-- 6,8–10,7 s : la paperasse -->
+      <div id="o3" class="clip" data-start="6.8" data-duration="3.9" data-track-index="1">
+        <div class="scrim-bottom"></div>
+        <div class="txt m" style="top: 920px">Puis vous recevez…</div>
+        <div id="pages">
+          <div id="pages-num">0</div>
+          <div id="pages-sub">pages de documents de copro.</div>
+        </div>
+      </div>
+
+      <!-- 10,7–14,6 s : les risques cachés -->
+      <div id="o4" class="clip" data-start="10.7" data-duration="3.9" data-track-index="1">
+        <div class="scrim-bottom"></div>
+        <div class="txt m" style="top: 860px">Et dedans, il peut y avoir :</div>
+        <div class="risk" id="r1" style="top: 980px">
+          <span class="ic" style="background: #f97316"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9" /><path d="m18 15 4-4" /><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5" /></svg></span>
+          Travaux cachés
+        </div>
+        <div class="risk" id="r2" style="top: 1130px">
+          <span class="ic" style="background: #ef4444"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></svg></span>
+          Impayés
+        </div>
+        <div class="risk" id="r3" style="top: 1280px">
+          <span class="ic" style="background: #d97706"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="M7 21h10" /><path d="M12 3v18" /><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" /></svg></span>
+          Litiges
+        </div>
+      </div>
+
+      <!-- 14,6–19,5 s : la solution, le site dans le téléphone -->
+      <div id="o5" class="clip" data-start="14.6" data-duration="4.9" data-track-index="1">
+        <div id="dim" class="clip"></div>
+        <div class="txt l" style="top: 220px">La solution&nbsp;:</div>
+        <div class="txt l" style="top: 320px"><span class="hl" id="brand-hl">AnalyseTaCopro</span></div>
+        <div id="phone">
+          <div id="phone-screen" data-layout-allow-overflow>
+            <img id="site" src="assets/site/site-mobile.jpg" alt="analysetacopro.fr sur mobile" />
+            <div id="notch"></div>
+            <div id="tap"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 19,5–23,9 s : l'expert et le Score -->
+      <div id="o6" class="clip" data-start="19.5" data-duration="4.4" data-track-index="1">
+        <div class="scrim-top"></div>
+        <div class="scrim-bottom"></div>
+        <div class="txt l" style="top: 230px"><span class="w">Un</span> <span class="w">expert</span> <span class="w">analyse</span> <span class="w">tout.</span></div>
+        <div id="score-card">
+          <div id="gauge-wrap">
+            <svg id="gauge" viewBox="0 0 220 220">
+              <defs>
+                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0B5FFF" />
+                  <stop offset="100%" stop-color="#4D8BFF" />
+                </linearGradient>
+              </defs>
+              <circle cx="110" cy="110" r="96" fill="none" stroke="#E8F0FF" stroke-width="18" />
+              <circle id="gauge-arc" cx="110" cy="110" r="96" fill="none" stroke="url(#gaugeGrad)" stroke-width="18" stroke-linecap="round" stroke-dasharray="603.19" stroke-dashoffset="603.19" />
+            </svg>
+            <div id="gauge-label">
+              <div id="score">0.0</div>
+              <div id="score-sub">sur 10</div>
+            </div>
+          </div>
+          <div id="score-side">
+            <div class="k">AnalyseTaCopro Score</div>
+            <div class="v">Copropriété excellente</div>
+            <div class="t">Rapport en 72h</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 23,9–27,3 s : la signature -->
+      <div id="o7" class="clip" data-start="23.9" data-duration="3.4" data-track-index="1">
+        <div class="scrim-bottom"></div>
+        <div class="txt xl" style="top: 1060px"><span class="w">Vous</span> <span class="w">signez</span></div>
+        <div class="txt xl" style="top: 1180px"><span class="hl green" id="serein">l'esprit tranquille.</span></div>
+      </div>
+
+      <!-- 27,3–30,5 s : appel à l'action -->
+      <div id="end" class="clip" data-start="27.3" data-duration="3.2" data-track-index="1">
+        <div id="end-inner">
+          <div id="end-logo">
+            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+              <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+              <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+              <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+              <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+              <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+            </svg>
+            <span>AnalyseTaCopro</span>
+          </div>
+          <div id="end-title">N'achetez pas sans analyser.</div>
+          <div id="end-cta">
+            Faire analyser ma copro
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+          </div>
+          <div id="end-url">analysetacopro.fr</div>
+          <div id="end-bar"></div>
+          <div id="end-bio">Lien en bio</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const pop = { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)" };
+      const words = (sel, t) => tl.fromTo(sel, { y: 50, opacity: 0, scale: 0.8 }, { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", stagger: 0.09 }, t);
+      // Léger zoom « punch » à chaque coupe, puis zoom lent
+      [["#v1", 0, 3.4], ["#v2", 3.4, 3.4], ["#v3", 6.8, 3.9], ["#v4", 10.7, 3.9], ["#v5", 14.6, 4.9], ["#v6", 19.5, 4.4], ["#v7", 23.9, 3.4]].forEach(([v, t, d]) => {
+        tl.fromTo(v, { scale: 1.14 }, { scale: 1.02, duration: 0.35, ease: "power3.out" }, t);
+        tl.to(v, { scale: 1.1, duration: d - 0.35, ease: "none" }, t + 0.35);
+      });
+
+      // 0–3,4 s — accroche
+      tl.fromTo("#o1 .pill", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 0);
+      words("#o1 .w", 0.1);
+      tl.fromTo("#attends", { scale: 2.4, opacity: 0, rotation: -8 }, { scale: 1, opacity: 1, rotation: -3, duration: 0.4, ease: "back.out(2.2)" }, 1.25);
+      tl.to("#attends", { x: 10, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, 1.7);
+
+      // 3,4–6,8 s — coup de cœur
+      words("#o2 .w", 3.5);
+      tl.fromTo("#coeur", { scale: 0, opacity: 0, rotation: 0 }, { ...pop, rotation: -2 }, 3.95);
+
+      // 6,8–10,7 s — 300 pages
+      tl.fromTo("#o3 .m", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 6.85);
+      tl.fromTo("#pages", { scale: 0.6, opacity: 0, transformOrigin: "0% 50%" }, { ...pop }, 7.15);
+      const pages = { v: 0 };
+      tl.fromTo(pages, { v: 0 }, { v: 300, duration: 1.5, ease: "power2.out", onUpdate: () => (document.getElementById("pages-num").textContent = Math.round(pages.v)) }, 7.2);
+      tl.to("#pages-num", { scale: 1.12, color: "#FF6B6B", transformOrigin: "0% 50%", duration: 0.18, yoyo: true, repeat: 1 }, 8.7);
+
+      // 10,7–14,6 s — risques
+      tl.fromTo("#o4 .m", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 10.75);
+      tl.fromTo("#o4 .risk", { x: -500, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "back.out(1.6)", stagger: 0.55 }, 11.1);
+
+      // 14,6–19,5 s — le site dans le téléphone : tap sur « Faire analyser », puis défilement jusqu'au Score
+      tl.fromTo("#dim", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 14.6);
+      tl.fromTo("#o5 .txt", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out", stagger: 0.12 }, 14.65);
+      tl.fromTo("#phone", { y: 900, rotation: 8 }, { y: 0, rotation: 0, duration: 0.6, ease: "back.out(1.2)" }, 14.75);
+      tl.fromTo("#tap", { scale: 0.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "power2.out" }, 15.75);
+      tl.to("#tap", { scale: 1.6, opacity: 0, duration: 0.4, ease: "power2.out" }, 16.0);
+      tl.to("#site", { y: -1000, duration: 1.4, ease: "power2.inOut" }, 16.5);
+      tl.to("#phone", { scale: 1.05, duration: 1.4, ease: "sine.inOut" }, 16.5);
+
+      // 19,5–23,9 s — expert + Score
+      words("#o6 .w", 19.6);
+      tl.fromTo("#score-card", { y: 400, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.3)" }, 20.0);
+      const g = { v: 0 };
+      tl.fromTo(
+        g,
+        { v: 0 },
+        {
+          v: 8.4,
+          duration: 1.5,
+          ease: "power2.out",
+          onUpdate: () => {
+            document.getElementById("score").textContent = g.v.toFixed(1);
+            document.getElementById("gauge-arc").setAttribute("stroke-dashoffset", (603.19 * (1 - g.v / 10)).toFixed(2));
+          },
+        },
+        20.4,
+      );
+      tl.fromTo("#score-side > *", { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power3.out", stagger: 0.25 }, 20.6);
+
+      // 23,9–27,3 s — signature sereine
+      words("#o7 .w", 24.0);
+      tl.fromTo("#serein", { scale: 0, opacity: 0, rotation: 0 }, { ...pop, rotation: -2 }, 24.45);
+
+      // 27,3–30,5 s — appel à l'action
+      tl.fromTo("#end", { clipPath: "circle(0% at 50% 60%)" }, { clipPath: "circle(120% at 50% 60%)", duration: 0.5, ease: "power3.inOut" }, 27.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 27.5);
+      tl.fromTo("#end-title", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 27.6);
+      tl.fromTo("#end-cta", { scale: 0.6, opacity: 0 }, { ...pop, duration: 0.45 }, 27.95);
+      tl.fromTo("#end-url", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 28.2);
+      tl.fromTo("#end-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.inOut" }, 28.35);
+      tl.fromTo("#end-bio", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 28.35);
+      tl.to("#end-cta", { scale: 1.06, duration: 0.35, ease: "sine.inOut", yoyo: true, repeat: 3 }, 28.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
