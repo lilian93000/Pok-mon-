@@ -26,6 +26,6 @@ Habillage permanent : grain pellicule animé, vignettage, flashs de coupe. Texte
 
 ## Bande-son
 
-- **Musique** : composition originale synthétisée par `tools/soundtrack.py` (fa mineur, Fm–D♭–A♭–E♭, 120 BPM) ; aucun droit tiers.
+- **Musique (v2)** : drift phonk originale (120 BPM, ré mineur : cloche 808, basse 808 qui glisse, charleston en triolets, drop B en tamborzão), générée par `tools/soundtrack.py` avec le moteur partagé `../audio-engine/engine.py` ; aucun droit tiers.
 - **Bruitages** : banque intégrée à HyperFrames, issue de Pixabay (Pixabay Content License, usage commercial libre, sans attribution obligatoire).
-- Mix normalisé à −14 LUFS (cible TikTok), crête −1,5 dBTP.
+- Mix normalisé à −11 LUFS (niveau des sons TikTok), limiteur à −1 dBTP.

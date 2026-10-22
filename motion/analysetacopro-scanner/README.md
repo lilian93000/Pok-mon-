@@ -27,6 +27,6 @@ Les chiffres du scan (38 000 €, 3 lots, 9 800 €…) sont un **exemple illust
 
 ## Bande-son
 
-- Musique originale synthétisée par `tools/soundtrack.py` (120 BPM ; fa majeur → ré mineur → fa majeur), sans droits tiers.
+- **Musique (v2)** : rêverie au piano électrique → trap sombre pendant le scan → drop phonk lumineux en fa majeur avec supersaw (120 BPM), générée par `tools/soundtrack.py` avec le moteur partagé `../audio-engine/engine.py` ; aucun droit tiers.
 - Bruitages : banque intégrée à HyperFrames issue de Pixabay (Pixabay Content License, usage commercial libre).
-- Mix normalisé à −14 LUFS, crête −1,5 dBTP.
+- Mix normalisé à −11 LUFS (niveau des sons TikTok), limiteur à −1 dBTP.

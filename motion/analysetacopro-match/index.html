@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « CoproMatch » — on swipe des profils de copropriétés. 128 BPM : 1 mesure = 1,875 s (16 mesures = 30 s).
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --brand-light: #4d8bff;
+        --sky: #8fb5ff;
+        --pink: #ff4d8d;
+        --navy: #061a4a;
+        --deep: #070b24;
+        --ink: #0c1424;
+        --muted: #5a6577;
+        --green: #12b981;
+        --red: #ff3b5c;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--deep);
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #fff;
+        background: var(--deep);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      .bg {
+        background:
+          radial-gradient(60% 40% at 15% 20%, rgba(255, 77, 141, 0.35), rgba(255, 77, 141, 0) 70%),
+          radial-gradient(60% 45% at 90% 75%, rgba(11, 95, 255, 0.45), rgba(11, 95, 255, 0) 70%),
+          linear-gradient(170deg, #0d1440 0%, #070b24 100%);
+      }
+      .glow {
+        position: absolute;
+        border-radius: 50%;
+      }
+
+      /* Accroche */
+      #hook {
+        left: 70px;
+        top: 520px;
+        font-size: 128px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.98;
+      }
+      #hook .p {
+        color: var(--pink);
+      }
+      #appicon {
+        left: 70px;
+        top: 1230px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+      .icon {
+        width: 120px;
+        height: 120px;
+        border-radius: 32px;
+        background: linear-gradient(140deg, #ff4d8d, #0b5fff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 20px 60px rgba(255, 77, 141, 0.45);
+      }
+      .icon svg {
+        width: 70px;
+        height: 70px;
+      }
+
+      /* Appli */
+      #header {
+        left: 70px;
+        right: 160px;
+        top: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      #header .brand {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 48px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+      #header .brand .icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 20px;
+      }
+      #header .brand .icon svg {
+        width: 42px;
+        height: 42px;
+      }
+      #header .by {
+        font-size: 28px;
+        font-weight: 700;
+        color: #b9c6ef;
+      }
+      .card {
+        position: absolute;
+        left: 70px;
+        top: 330px;
+        width: 850px;
+        height: 1000px;
+        border-radius: 48px;
+        background: #fff;
+        color: var(--ink);
+        overflow: hidden;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+      }
+      .card .img {
+        position: relative;
+        width: 850px;
+        height: 600px;
+        overflow: hidden;
+      }
+      .card .img svg {
+        width: 850px;
+        height: 600px;
+      }
+      .card .info {
+        padding: 30px 44px;
+      }
+      .card .name {
+        font-size: 56px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+      .card .price {
+        margin-top: 6px;
+        font-size: 44px;
+        font-weight: 800;
+        color: var(--brand);
+        letter-spacing: -0.03em;
+      }
+      .card .bio {
+        margin-top: 20px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .card .bio span {
+        padding: 10px 22px;
+        border-radius: 999px;
+        background: #eef3ff;
+        font-size: 30px;
+        font-weight: 700;
+        color: #34405a;
+      }
+      .scanbar {
+        position: absolute;
+        left: 0;
+        width: 850px;
+        height: 6px;
+        top: 0;
+        background: #5be1ff;
+        box-shadow: 0 0 30px 8px rgba(91, 225, 255, 0.8);
+        opacity: 0;
+      }
+      .flags {
+        position: absolute;
+        left: 30px;
+        bottom: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      .flag {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 26px 14px 16px;
+        border-radius: 999px;
+        background: rgba(12, 20, 36, 0.88);
+        color: #fff;
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+      .flag i {
+        width: 46px;
+        height: 46px;
+        flex: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-style: normal;
+        font-size: 30px;
+        font-weight: 900;
+      }
+      .flag.bad i {
+        background: var(--red);
+      }
+      .flag.good i {
+        background: var(--green);
+        color: #032318;
+      }
+      .stamp {
+        position: absolute;
+        top: 70px;
+        padding: 8px 26px;
+        border: 9px solid;
+        border-radius: 22px;
+        font-size: 84px;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        opacity: 0;
+      }
+      .stamp.nope {
+        right: 40px;
+        color: var(--red);
+        border-color: var(--red);
+        transform: rotate(14deg);
+        background: rgba(255, 255, 255, 0.85);
+      }
+      .stamp.yes {
+        left: 40px;
+        color: var(--green);
+        border-color: var(--green);
+        transform: rotate(-14deg);
+        background: rgba(255, 255, 255, 0.9);
+      }
+      .badge-score {
+        position: absolute;
+        right: 30px;
+        top: 30px;
+        width: 190px;
+        height: 190px;
+        border-radius: 50%;
+        background: rgba(4, 14, 40, 0.92);
+        border: 6px solid var(--green);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 60px rgba(18, 185, 129, 0.6);
+        opacity: 0;
+      }
+      .badge-score b {
+        font-size: 76px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        line-height: 1;
+        color: #fff;
+      }
+      .badge-score small {
+        font-size: 24px;
+        font-weight: 700;
+        color: #b9cbee;
+      }
+      #buttons {
+        left: 70px;
+        width: 850px;
+        top: 1360px;
+        display: flex;
+        justify-content: center;
+        gap: 120px;
+      }
+      .btn {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+      }
+      .btn svg {
+        width: 64px;
+        height: 64px;
+      }
+
+      /* Interludes */
+      .big {
+        left: 70px;
+        right: 160px;
+        font-size: 120px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.98;
+      }
+      .sub {
+        left: 70px;
+        right: 160px;
+        font-size: 52px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: #b9c6ef;
+      }
+
+      /* Match */
+      #match {
+        background: radial-gradient(70% 50% at 50% 45%, rgba(255, 77, 141, 0.55), rgba(11, 95, 255, 0.25) 60%, rgba(7, 11, 36, 1) 100%);
+        opacity: 0;
+      }
+      #match-title {
+        left: 0;
+        right: 0;
+        top: 380px;
+        text-align: center;
+        font-size: 150px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.95;
+        background: linear-gradient(90deg, #ff9ac0, #ffffff 50%, #8fb5ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 0 40px rgba(255, 77, 141, 0.6));
+      }
+      .avatar {
+        position: absolute;
+        top: 800px;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        border: 10px solid #fff;
+        overflow: hidden;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      }
+      #av1 {
+        left: 200px;
+        background: linear-gradient(160deg, #ffd6e4, #ff8fb5);
+      }
+      #av2 {
+        left: 580px;
+        background: linear-gradient(160deg, #cfe0ff, #8fb5ff);
+      }
+      .avatar svg {
+        width: 100%;
+        height: 100%;
+      }
+      #heart {
+        left: 455px;
+        top: 870px;
+        width: 170px;
+        height: 170px;
+      }
+      #match-sub {
+        left: 0;
+        right: 0;
+        top: 1160px;
+        text-align: center;
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+      }
+      #match-sub span {
+        display: inline-block;
+        padding: 16px 34px;
+        border-radius: 999px;
+        background: var(--green);
+        color: #032318;
+      }
+      .h {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        opacity: 0;
+      }
+
+      /* Stats */
+      .pillstat {
+        position: absolute;
+        left: 70px;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        padding: 26px 40px 26px 26px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid rgba(255, 255, 255, 0.18);
+        font-size: 64px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+      .pillstat i {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        background: linear-gradient(140deg, #ff4d8d, #0b5fff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-style: normal;
+        font-size: 44px;
+      }
+
+      /* Fin */
+      #end {
+        background: linear-gradient(165deg, #3a0f3f 0%, #0a3fb8 55%, #0b5fff 100%);
+      }
+      #end-title {
+        left: 70px;
+        top: 470px;
+        font-size: 140px;
+        font-weight: 900;
+        letter-spacing: -0.065em;
+        line-height: 0.95;
+      }
+      #end-title .p {
+        color: #ffb3cf;
+      }
+      #end-logo {
+        left: 70px;
+        top: 320px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 80px;
+        height: 80px;
+      }
+      #cta {
+        left: 70px;
+        top: 1050px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35), 0 0 80px rgba(255, 77, 141, 0.45);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1240px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1390px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+
+      #grain {
+        inset: -60px;
+        opacity: 0.08;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>");
+        background-size: 300px 300px;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <!-- Mesure 1 : accroche -->
+      <section id="s1" class="clip bg" data-start="0" data-duration="1.875" data-track-index="0">
+        <div id="hook" class="abs">
+          <span class="mask"><span>Acheter</span></span>
+          <span class="mask"><span>un appart,</span></span>
+          <span class="mask"><span>c'est comme</span></span>
+          <span class="mask"><span class="p">un date.</span></span>
+        </div>
+        <div id="appicon" class="abs"><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.3 8.3 2.3 4 6.3 4c2.3 0 3.9 1.3 5.7 3.4C13.8 5.3 15.4 4 17.7 4c4 0 6 4.3 4.3 7.7C19.5 16.4 12 21 12 21z" fill="#fff" /></svg></div>CoproMatch</div>
+      </section>
+
+      <!-- Mesures 2–7 : trois profils, trois red flags -->
+      <section id="app" class="clip bg" data-start="1.875" data-duration="11.25" data-track-index="0">
+        <div id="header" class="abs">
+          <div class="brand"><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.3 8.3 2.3 4 6.3 4c2.3 0 3.9 1.3 5.7 3.4C13.8 5.3 15.4 4 17.7 4c4 0 6 4.3 4.3 7.7C19.5 16.4 12 21 12 21z" fill="#fff" /></svg></div>CoproMatch</div>
+          <div class="by">par AnalyseTaCopro</div>
+        </div>
+        <div class="card" id="card3" data-kind="haussmann" data-name="Villa Haussmann" data-price="4 pièces · 349 000 €" data-bio="Charme de l'ancien|Moulures|Parquet" data-flags="Toiture à refaire|DPE collectif : G"></div>
+        <div class="card" id="card2" data-kind="tower" data-name="Le Panoramique" data-price="2 pièces · 315 000 €" data-bio="Vue imprenable|Ascenseur|Gardien" data-flags="12 % d'impayés|Litige avec le syndic"></div>
+        <div class="card" id="card1" data-kind="modern" data-name="Les Tilleuls" data-price="3 pièces · 289 000 €" data-bio="Calme|Lumineux|Pas de travaux" data-flags="Ravalement voté : 45 000 €|Fonds travaux vide"></div>
+        <div id="buttons" class="abs">
+          <div class="btn" id="btnX"><svg viewBox="0 0 24 24" fill="none" stroke="#ff3b5c" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg></div>
+          <div class="btn" id="btnH"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.3 8.3 2.3 4 6.3 4c2.3 0 3.9 1.3 5.7 3.4C13.8 5.3 15.4 4 17.7 4c4 0 6 4.3 4.3 7.7C19.5 16.4 12 21 12 21z" fill="#12b981" /></svg></div>
+        </div>
+      </section>
+
+      <!-- Mesure 8 : à l'aveugle -->
+      <section id="s8" class="clip bg" data-start="13.125" data-duration="1.875" data-track-index="0">
+        <div class="big abs" id="blind" style="top: 640px">
+          <span class="mask"><span>Tu swipes</span></span>
+          <span class="mask"><span style="color: #ff4d8d">à l'aveugle&nbsp;?</span></span>
+        </div>
+        <div class="sub abs" id="blind-sub" style="top: 940px">300 pages de documents par profil.</div>
+      </section>
+
+      <!-- Mesure 9 : break -->
+      <section id="s9" class="clip" data-start="15" data-duration="1.875" data-track-index="0" style="background: #03050f">
+        <div class="glow" id="s9-glow" style="left: 40px; top: 560px; width: 1000px; height: 1000px; background: radial-gradient(closest-side, rgba(11, 95, 255, 0.5), rgba(11, 95, 255, 0))"></div>
+        <div class="big abs" id="readit" style="top: 700px">
+          <span class="mask"><span>On lit</span></span>
+          <span class="mask"><span>les profils</span></span>
+          <span class="mask"><span style="color: #8fb5ff">pour toi.</span></span>
+        </div>
+      </section>
+
+      <!-- Mesures 10–11 : le bon profil -->
+      <section id="app2" class="clip bg" data-start="16.875" data-duration="3.75" data-track-index="0">
+        <div class="card" id="card4" data-kind="park" data-name="Résidence du Parc" data-price="3 pièces · 299 000 €" data-bio="Bien gérée|Calme|Jardin" data-flags="Finances saines|Travaux anticipés|Zéro litige" data-good="1"></div>
+        <div id="buttons2" class="abs" style="left: 70px; width: 850px; top: 1360px; display: flex; justify-content: center; gap: 120px">
+          <div class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="#ff3b5c" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg></div>
+          <div class="btn" id="btnH2"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.3 8.3 2.3 4 6.3 4c2.3 0 3.9 1.3 5.7 3.4C13.8 5.3 15.4 4 17.7 4c4 0 6 4.3 4.3 7.7C19.5 16.4 12 21 12 21z" fill="#12b981" /></svg></div>
+        </div>
+      </section>
+
+      <!-- Mesures 12 : C'est un match ! -->
+      <section id="s12" class="clip bg" data-start="20.625" data-duration="1.875" data-track-index="0">
+        <div id="match" class="clip"></div>
+        <div id="hearts"></div>
+        <div id="match-title" class="abs">C'est un<br />match&nbsp;!</div>
+        <div class="avatar" id="av1"><svg viewBox="0 0 100 100"><circle cx="50" cy="40" r="17" fill="#fff" /><path d="M18 96 q4-34 32-34 q28 0 32 34z" fill="#fff" /></svg></div>
+        <div class="avatar" id="av2"><svg viewBox="0 0 100 100"><rect x="27" y="22" width="46" height="70" rx="3" fill="#fff" /><g fill="#8fb5ff"><rect x="34" y="30" width="10" height="12" /><rect x="56" y="30" width="10" height="12" /><rect x="34" y="50" width="10" height="12" /><rect x="56" y="50" width="10" height="12" /><rect x="45" y="72" width="10" height="20" /></g></svg></div>
+        <svg id="heart" class="abs" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.3 8.3 2.3 4 6.3 4c2.3 0 3.9 1.3 5.7 3.4C13.8 5.3 15.4 4 17.7 4c4 0 6 4.3 4.3 7.7C19.5 16.4 12 21 12 21z" fill="#ff4d8d" stroke="#fff" stroke-width="1.2" /></svg>
+        <div id="match-sub" class="abs"><span>Score 8.4 · Copropriété excellente</span></div>
+      </section>
+
+      <!-- Mesures 13–14 : ce qu'on lit -->
+      <section id="s13" class="clip bg" data-start="22.5" data-duration="3.75" data-track-index="0">
+        <div class="big abs" id="s13-title" style="top: 330px; font-size: 96px">
+          <span class="mask"><span>Avant ton swipe,</span></span>
+          <span class="mask"><span style="color: #ff4d8d">on lit tout&nbsp;:</span></span>
+        </div>
+        <div class="pillstat" style="top: 680px"><i><svg viewBox="0 0 24 24" width="50" height="50" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg></i>300 pages</div>
+        <div class="pillstat" style="top: 900px"><i><svg viewBox="0 0 24 24" width="50" height="50" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></i>7 critères notés</div>
+        <div class="pillstat" style="top: 1120px"><i><svg viewBox="0 0 24 24" width="50" height="50" fill="#fff"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></i>Rapport en 72h</div>
+      </section>
+
+      <!-- Mesures 15–16 : fin -->
+      <section id="end" class="clip" data-start="26.25" data-duration="3.75" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Matche</span></span>
+          <span class="mask"><span>avec la</span></span>
+          <span class="mask"><span class="p">bonne copro.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="1" data-layout-allow-overlap></div>
+      <div id="grain" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      // ---------- Illustrations des profils (SVG, déterministes) ----------
+      function scene(kind) {
+        const sky = kind === "park" ? ["#9fd3ff", "#e9f6ff"] : kind === "tower" ? ["#7aa7f0", "#dbe8ff"] : ["#ffc7a6", "#fff1e3"];
+        let s = `<defs><linearGradient id="sk-${kind}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky[0]}"/><stop offset="1" stop-color="${sky[1]}"/></linearGradient></defs>`;
+        s += `<rect width="850" height="600" fill="url(#sk-${kind})"/><circle cx="700" cy="120" r="70" fill="#fff6d8" opacity=".9"/>`;
+        s += `<rect y="520" width="850" height="80" fill="${kind === "park" ? "#7fcf8f" : "#d8cbb6"}"/>`;
+        const win = (x, y, w, h, c) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" fill="${c}"/>`;
+        if (kind === "modern") {
+          s += `<rect x="190" y="150" width="470" height="380" fill="#f6f2ec"/><rect x="180" y="140" width="490" height="18" fill="#d9cfc2"/>`;
+          for (let r = 0; r < 4; r++)
+            for (let c = 0; c < 4; c++) {
+              s += win(215 + c * 112, 180 + r * 88, 72, 54, (r + c) % 3 ? "#8fc1ec" : "#ffd98a");
+              s += `<rect x="${205 + c * 112}" y="${236 + r * 88}" width="92" height="10" fill="#b8865a"/>`;
+            }
+          s += `<circle cx="120" cy="460" r="70" fill="#5aa86a"/><circle cx="160" cy="420" r="55" fill="#6cc07c"/><rect x="112" y="470" width="16" height="60" fill="#7a5a3a"/>`;
+          s += `<circle cx="740" cy="470" r="60" fill="#5aa86a"/><rect x="733" y="480" width="14" height="50" fill="#7a5a3a"/>`;
+        } else if (kind === "tower") {
+          s += `<rect x="300" y="40" width="250" height="490" fill="#3d5a8a"/>`;
+          for (let r = 0; r < 11; r++) for (let c = 0; c < 4; c++) s += win(315 + c * 58, 56 + r * 42, 46, 30, (r * 3 + c) % 5 ? "#9cc6f2" : "#ffe3a3");
+          s += `<rect x="120" y="300" width="150" height="230" fill="#9aa9c4"/><rect x="580" y="260" width="170" height="270" fill="#8b9bba"/>`;
+          for (let r = 0; r < 5; r++) for (let c = 0; c < 2; c++) s += win(140 + c * 62, 320 + r * 42, 44, 26, "#dbe8ff") + win(600 + c * 72, 284 + r * 46, 50, 28, "#dbe8ff");
+        } else if (kind === "haussmann") {
+          s += `<polygon points="170,170 210,90 640,90 680,170" fill="#5e6c7e"/><rect x="170" y="170" width="510" height="360" fill="#eee4d3"/>`;
+          for (let r = 0; r < 4; r++) {
+            s += `<rect x="160" y="${170 + r * 88}" width="530" height="8" fill="#d6c5a8"/>`;
+            for (let c = 0; c < 5; c++) s += win(198 + c * 94, 190 + r * 88, 56, 62, (r + c) % 4 ? "#86b6e6" : "#ffd98a") + `<rect x="${194 + c * 94}" y="${246 + r * 88}" width="64" height="6" fill="#1f2430"/>`;
+          }
+          [260, 425, 590].forEach((x) => (s += `<rect x="${x - 26}" y="104" width="52" height="56" fill="#eee4d3"/><rect x="${x - 16}" y="114" width="32" height="40" fill="#86b6e6"/>`));
+        } else {
+          s += `<rect x="150" y="250" width="560" height="280" fill="#ffffff"/><rect x="140" y="232" width="580" height="26" rx="8" fill="#4caf72"/>`;
+          for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) s += win(180 + c * 104, 280 + r * 80, 70, 54, (r + c) % 4 ? "#8fd0f0" : "#ffe3a3");
+          [[80, 450, 80], [770, 440, 90], [430, 560, 0]].forEach(([x, y, r]) => r && (s += `<circle cx="${x}" cy="${y}" r="${r}" fill="#4caf72"/><circle cx="${x + 30}" cy="${y - 40}" r="${r * 0.7}" fill="#6cc98a"/><rect x="${x - 8}" y="${y + 20}" width="16" height="70" fill="#7a5a3a"/>`));
+          s += `<rect x="0" y="520" width="850" height="12" fill="#65bf78"/>`;
+        }
+        return `<svg viewBox="0 0 850 600">${s}</svg>`;
+      }
+      document.querySelectorAll(".card").forEach((c) => {
+        const good = c.dataset.good === "1";
+        const flags = c.dataset.flags.split("|").map((f) => `<div class="flag ${good ? "good" : "bad"}"><i>${good ? "✓" : "!"}</i>${f}</div>`).join("");
+        c.innerHTML = `<div class="img">${scene(c.dataset.kind)}<div class="scanbar"></div><div class="flags">${flags}</div>
+          <div class="stamp ${good ? "yes" : "nope"}">${good ? "MATCH" : "RED FLAG"}</div>${good ? '<div class="badge-score"><b>8.4</b><small>sur 10</small></div>' : ""}</div>
+          <div class="info"><div class="name">${c.dataset.name}</div><div class="price">${c.dataset.price}</div><div class="bio">${c.dataset.bio
+            .split("|")
+            .map((b) => `<span>${b}</span>`)
+            .join("")}</div></div>`;
+      });
+      const hearts = document.getElementById("hearts");
+      for (let i = 0; i < 22; i++)
+        hearts.insertAdjacentHTML(
+          "beforeend",
+          `<svg class="h" style="left:510px;top:930px" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.3 8.3 2.3 4 6.3 4c2.3 0 3.9 1.3 5.7 3.4C13.8 5.3 15.4 4 17.7 4c4 0 6 4.3 4.3 7.7C19.5 16.4 12 21 12 21z" fill="${["#ff4d8d", "#ffffff", "#8fb5ff", "#12b981"][i % 4]}"/></svg>`,
+        );
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      // ---------- Timeline (calée sur les mesures à 128 BPM) ----------
+      const BAR = 1.875,
+        ST = BAR / 16;
+      const B = (b, s = 0) => (b - 1) * BAR + s * ST;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.7, d = 0.3) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const rise = (sel, t, st = 0.08) => tl.fromTo(sel, { yPercent: 115 }, { yPercent: 0, duration: 0.4, ease: "power4.out", stagger: st }, t);
+      const shake = (sel, t, amp = 12, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      for (let i = 0; i < 120; i++) tl.set("#grain", { x: Math.round((rnd(i, 50) - 0.5) * 100), y: Math.round((rnd(i, 51) - 0.5) * 100) }, i * 0.25);
+
+      // Mesure 1 — accroche, un mot par temps
+      rise("#hook .mask > span", 0.0, ST * 3);
+      tl.fromTo("#appicon", { scale: 0, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)" }, B(1, 12));
+
+      // Mesures 2–7 — trois profils
+      flash(B(2), 0.8, 0.3);
+      tl.fromTo("#header", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, B(2));
+      tl.fromTo("#buttons", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(1.8)" }, B(2, 2));
+      tl.fromTo("#card1", { y: 900, rotation: 6 }, { y: 0, rotation: 0, duration: 0.45, ease: "back.out(1.3)" }, B(2));
+      tl.set("#card2, #card3", { autoAlpha: 0 }, 0);
+      [["#card1", 3], ["#card2", 5], ["#card3", 7]].forEach(([c, b], k) => {
+        // Mesure b : l'analyse révèle les red flags, puis swipe à gauche sur la fin de mesure
+        tl.fromTo(`${c} .scanbar`, { y: 0, opacity: 1 }, { y: 600, duration: 0.45, ease: "power1.inOut" }, B(b));
+        tl.to(`${c} .scanbar`, { opacity: 0, duration: 0.1 }, B(b) + 0.45);
+        tl.fromTo(`${c} .flag`, { x: -60, opacity: 0, scale: 0.8 }, { x: 0, opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2.5)", stagger: ST * 4 }, B(b, 4));
+        tl.fromTo(`${c} .stamp`, { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "power4.in" }, B(b, 11) - 0.18);
+        shake(c, B(b, 11), 14, 4);
+        tl.fromTo("#btnX", { scale: 1 }, { scale: 1.25, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, B(b + 1) - 0.42);
+        tl.to(c, { x: -1300, rotation: -28, duration: 0.3, ease: "power3.in" }, B(b + 1) - 0.3);
+        tl.set(c, { autoAlpha: 0 }, B(b + 1));
+        const next = ["#card2", "#card3", null][k];
+        if (next) tl.fromTo(next, { autoAlpha: 1, scale: 0.88, y: 40 }, { scale: 1, y: 0, duration: 0.35, ease: "back.out(1.6)", immediateRender: false }, B(b + 1) - 0.3);
+      });
+
+      // Mesure 8 — à l'aveugle
+      flash(B(8), 0.6, 0.25);
+      rise("#blind .mask > span", B(8), ST * 3);
+      shake("#s8", B(8, 4), 16);
+      tl.fromTo("#blind-sub", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, B(8, 7));
+
+      // Mesure 9 — break
+      rise("#readit .mask > span", B(9), ST * 4);
+      tl.fromTo("#s9-glow", { scale: 0.5, opacity: 0 }, { scale: 1.2, opacity: 1, duration: BAR, ease: "sine.inOut" }, B(9));
+      tl.fromTo("#readit", { scale: 1 }, { scale: 1.08, duration: BAR, ease: "power2.in", transformOrigin: "0% 50%" }, B(9));
+
+      // Mesures 10–11 — le bon profil (drop 2)
+      flash(B(10), 1, 0.45);
+      tl.fromTo("#card4", { y: 900, rotation: -6 }, { y: 0, rotation: 0, duration: 0.45, ease: "back.out(1.3)" }, B(10));
+      tl.fromTo("#buttons2", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(1.8)" }, B(10, 2));
+      tl.fromTo("#card4 .scanbar", { y: 0, opacity: 1 }, { y: 600, duration: 0.6, ease: "power1.inOut" }, B(10, 8));
+      tl.to("#card4 .scanbar", { opacity: 0, duration: 0.1 }, B(10, 8) + 0.6);
+      tl.fromTo("#card4 .flag", { x: -60, opacity: 0, scale: 0.8 }, { x: 0, opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2.5)", stagger: ST * 4 }, B(11));
+      tl.fromTo("#card4 .badge-score", { scale: 0, opacity: 0, rotation: -90 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.4, ease: "back.out(2)" }, B(11, 10));
+      tl.fromTo("#card4 .stamp", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "power4.in" }, B(11, 14) - 0.18);
+      tl.fromTo("#btnH2", { scale: 1 }, { scale: 1.3, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, B(12) - 0.42);
+      tl.to("#card4", { x: 1300, rotation: 28, duration: 0.32, ease: "power3.in" }, B(12) - 0.32);
+
+      // Mesure 12 — C'est un match !
+      flash(B(12), 0.9, 0.4);
+      tl.to("#match", { opacity: 1, duration: 0.2 }, B(12));
+      tl.fromTo("#match-title", { scale: 2.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power4.out" }, B(12));
+      tl.fromTo("#av1", { x: -500, rotation: -30 }, { x: 0, rotation: 0, duration: 0.4, ease: "back.out(1.6)" }, B(12, 2));
+      tl.fromTo("#av2", { x: 500, rotation: 30 }, { x: 0, rotation: 0, duration: 0.4, ease: "back.out(1.6)" }, B(12, 2));
+      tl.fromTo("#heart", { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(3)" }, B(12, 5));
+      tl.to("#heart", { scale: 1.15, duration: ST * 2, yoyo: true, repeat: 5, ease: "sine.inOut" }, B(12, 8));
+      tl.fromTo(
+        ".h",
+        { x: 0, y: 0, opacity: 1, scale: 0.4, rotation: 0 },
+        { x: (i) => Math.cos(i * 0.9) * (300 + rnd(i, 7) * 300), y: (i) => Math.sin(i * 0.9) * (300 + rnd(i, 8) * 400) - 150, scale: (i) => 0.8 + rnd(i, 9) * 1.2, rotation: (i) => (rnd(i, 10) - 0.5) * 90, opacity: 0, duration: 1.4, ease: "power3.out" },
+        B(12, 5),
+      );
+      tl.fromTo("#match-sub span", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)" }, B(12, 8));
+
+      // Mesures 13–14 — ce qu'on lit
+      rise("#s13-title .mask > span", B(13), ST * 2);
+      tl.fromTo(".pillstat", { x: -600, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "back.out(1.6)", stagger: ST * 4 }, B(13, 4));
+      tl.to(".pillstat", { x: 12, duration: ST, yoyo: true, repeat: 15, ease: "sine.inOut", stagger: ST }, B(14));
+
+      // Mesures 15–16 — fin
+      flash(B(15), 0.7, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, B(15));
+      rise("#end-title .mask > span", B(15), ST * 2);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, B(15, 4));
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.04 }, B(15, 8));
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, B(16));
+      tl.to("#cta", { scale: 1.06, duration: ST * 2, ease: "sine.inOut", yoyo: true, repeat: 7 }, B(16));
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
