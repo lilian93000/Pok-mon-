@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* Branding capturé sur analysetacopro.fr (voir ../analysetacopro-15s/BRANDING.md) */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --brand-light: #4d8bff;
+        --navy: #061a4a;
+        --deep: #030d26;
+        --ink: #0c1424;
+        --muted: #5a6577;
+        --tint: #e8f0ff;
+        --ground: #f5f8ff;
+        --green: #12b981;
+        --amber: #f5a524;
+        --orange: #f97316;
+        --red: #ef4444;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--deep);
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #fff;
+        background: var(--deep);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      /* Zone sûre TikTok : contenu entre x 70–920 et y 220–1480 */
+      .eyebrow {
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--brand-light);
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.06em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+
+      /* Fond ambiant (taches de lumière) */
+      .blob {
+        position: absolute;
+        border-radius: 50%;
+      }
+      .dark-bg {
+        background: radial-gradient(120% 80% at 50% 0%, #0a2a6e 0%, #061a4a 45%, #030d26 100%);
+      }
+      .gridlines {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+        background-size: 90px 90px;
+      }
+      .gridlines.light {
+        background-image:
+          linear-gradient(rgba(11, 95, 255, 0.07) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(11, 95, 255, 0.07) 1px, transparent 1px);
+      }
+
+      /* Volets de transition */
+      .wipe {
+        position: absolute;
+        inset: 0;
+        transform: scaleY(0);
+      }
+
+      /* S1 : logo */
+      #s1-mark {
+        left: 340px;
+        top: 560px;
+        width: 400px;
+        height: 400px;
+        overflow: visible;
+      }
+      #s1-ring {
+        left: 290px;
+        top: 510px;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        border: 6px solid var(--brand-light);
+      }
+      #s1-word {
+        left: 0;
+        right: 0;
+        top: 1030px;
+        text-align: center;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+      }
+      #s1-word .l {
+        display: inline-block;
+      }
+      #s1-word .b {
+        color: var(--brand-light);
+      }
+      #s1-tag {
+        left: 0;
+        right: 0;
+        top: 1190px;
+        text-align: center;
+        font-size: 38px;
+        font-weight: 600;
+        color: #c9d8ff;
+      }
+      #s1-tag .dot {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 14px;
+        border-radius: 50%;
+        background: var(--green);
+        vertical-align: middle;
+      }
+
+      /* S2 : typo cinétique */
+      #s2 {
+        background: var(--ground);
+        color: var(--ink);
+      }
+      #s2-stack {
+        left: 70px;
+        top: 440px;
+        font-size: 158px;
+        font-weight: 900;
+        letter-spacing: -0.055em;
+        line-height: 0.94;
+        text-transform: uppercase;
+      }
+      .outline {
+        color: transparent;
+        -webkit-text-stroke: 5px var(--ink);
+      }
+      .blue {
+        color: var(--brand);
+      }
+      #s2-block {
+        position: relative;
+        display: inline-block;
+        padding: 0 26px 10px;
+        color: #fff;
+      }
+      #s2-block-bg {
+        position: absolute;
+        inset: 6px 0 0 0;
+        background: var(--brand);
+        border-radius: 22px;
+        transform-origin: left center;
+      }
+      #s2-block-txt {
+        position: relative;
+      }
+      #s2-under {
+        left: 70px;
+        top: 1272px;
+        width: 520px;
+        height: 14px;
+        border-radius: 7px;
+        background: var(--ink);
+        transform-origin: left center;
+      }
+
+      /* S3 : 300 pages */
+      .paper {
+        position: absolute;
+        left: 340px;
+        top: 360px;
+        width: 400px;
+        height: 520px;
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        padding: 54px 46px;
+      }
+      .paper i {
+        display: block;
+        height: 16px;
+        margin-bottom: 26px;
+        border-radius: 8px;
+        background: #dbe5f7;
+      }
+      .paper i.h {
+        width: 60%;
+        height: 26px;
+        background: #b9cbee;
+        margin-bottom: 40px;
+      }
+      #s3-num {
+        left: 70px;
+        top: 960px;
+        font-size: 330px;
+        font-weight: 900;
+        letter-spacing: -0.07em;
+        line-height: 0.85;
+      }
+      #s3-sub {
+        left: 76px;
+        top: 1250px;
+        font-size: 64px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.08;
+      }
+      #s3-sub .dim {
+        color: #9fb6ea;
+      }
+
+      /* S4 : risques */
+      #s4-glow {
+        left: -300px;
+        top: 300px;
+        width: 1680px;
+        height: 1400px;
+        background: radial-gradient(closest-side, rgba(239, 68, 68, 0.35), rgba(239, 68, 68, 0));
+      }
+      #s4-title {
+        left: 70px;
+        top: 270px;
+        font-size: 100px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.02;
+      }
+      .tile {
+        position: absolute;
+        left: 70px;
+        width: 860px;
+        height: 230px;
+        padding: 36px 40px;
+        border-radius: 36px;
+        background: #fff;
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        gap: 34px;
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
+      }
+      .tile .ic {
+        width: 150px;
+        height: 150px;
+        flex: none;
+        border-radius: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+      }
+      .tile .ic svg {
+        width: 80px;
+        height: 80px;
+      }
+      .tile h3 {
+        font-size: 58px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      .tile p {
+        margin-top: 8px;
+        font-size: 32px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .badge {
+        position: absolute;
+        right: -18px;
+        top: -22px;
+        width: 76px;
+        height: 76px;
+        border-radius: 50%;
+        background: var(--red);
+        color: #fff;
+        font-size: 50px;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.25);
+      }
+
+      /* S5 : méthode */
+      #s5 {
+        background: var(--ground);
+        color: var(--ink);
+      }
+      #s5 .eyebrow {
+        color: var(--brand);
+      }
+      #s5-head {
+        left: 70px;
+        top: 260px;
+      }
+      #s5-title {
+        margin-top: 18px;
+        font-size: 110px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        line-height: 0.98;
+      }
+      #s5-line {
+        left: 143px;
+        top: 760px;
+        width: 14px;
+        height: 640px;
+        border-radius: 7px;
+        background: linear-gradient(180deg, #0b5fff, #4d8bff);
+        transform-origin: top center;
+      }
+      .step {
+        position: absolute;
+        left: 70px;
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
+      .step .node {
+        width: 160px;
+        height: 160px;
+        flex: none;
+        border-radius: 50%;
+        background: var(--brand);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 0 14px #dbe7ff, 0 20px 50px rgba(11, 95, 255, 0.35);
+      }
+      .step .node svg {
+        width: 74px;
+        height: 74px;
+      }
+      .step .n {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--brand);
+        letter-spacing: 0.1em;
+      }
+      .step h3 {
+        margin-top: 4px;
+        font-size: 60px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+        line-height: 1.02;
+      }
+
+      /* S6 : Score */
+      #s6-eyebrow {
+        left: 70px;
+        right: 160px;
+        top: 250px;
+        text-align: center;
+      }
+      #s6-title {
+        left: 70px;
+        right: 160px;
+        top: 310px;
+        text-align: center;
+        font-size: 92px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+      }
+      #s6-halo {
+        left: 70px;
+        top: 450px;
+        width: 860px;
+        height: 860px;
+        background: radial-gradient(closest-side, rgba(77, 139, 255, 0.45), rgba(77, 139, 255, 0));
+      }
+      #s6-gauge-wrap {
+        left: 220px;
+        top: 540px;
+        width: 560px;
+        height: 560px;
+      }
+      #s6-gauge {
+        width: 560px;
+        height: 560px;
+        transform: rotate(-90deg);
+      }
+      #s6-label {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      #s6-score {
+        font-size: 200px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 1;
+      }
+      #s6-sur {
+        font-size: 40px;
+        color: #b9cbee;
+        font-weight: 600;
+      }
+      #s6-chip {
+        left: 0;
+        top: 1130px;
+        width: 1000px;
+        text-align: center;
+      }
+      #s6-chip span {
+        display: inline-block;
+        padding: 18px 40px;
+        border-radius: 999px;
+        background: var(--green);
+        color: #04291c;
+        font-size: 44px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 0 60px rgba(18, 185, 129, 0.55);
+      }
+      #s6-crit {
+        left: 70px;
+        top: 1250px;
+        width: 860px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px 44px;
+      }
+      .crow {
+        font-size: 32px;
+        font-weight: 700;
+      }
+      .crow .lab {
+        display: flex;
+        justify-content: space-between;
+      }
+      .crow .lab b {
+        color: #9fc0ff;
+      }
+      .crow .track {
+        margin-top: 8px;
+        height: 12px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.12);
+        overflow: hidden;
+      }
+      .crow .bar {
+        height: 100%;
+        border-radius: 6px;
+        background: linear-gradient(90deg, #0b5fff, #8fb5ff);
+        transform-origin: left center;
+      }
+
+      /* S7 : appel à l'action */
+      #s7 {
+        background: linear-gradient(165deg, #061a4a 0%, #0a3fb8 50%, #0b5fff 100%);
+      }
+      #s7-logo {
+        left: 70px;
+        top: 420px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        font-size: 56px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #s7-logo svg {
+        width: 92px;
+        height: 92px;
+      }
+      #s7-title {
+        left: 70px;
+        top: 610px;
+        font-size: 138px;
+        font-weight: 900;
+        letter-spacing: -0.055em;
+        line-height: 0.96;
+      }
+      #s7-title .soft {
+        color: #a9c4ff;
+      }
+      #cta {
+        left: 70px;
+        top: 1100px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        overflow: hidden;
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #cta-shine {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        width: 120px;
+        height: 260px;
+        background: linear-gradient(90deg, rgba(11, 95, 255, 0), rgba(11, 95, 255, 0.18), rgba(11, 95, 255, 0));
+        transform: rotate(20deg);
+      }
+      #url {
+        left: 70px;
+        top: 1300px;
+        font-size: 92px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        white-space: nowrap;
+      }
+      #url .c {
+        display: inline-block;
+      }
+      #caret {
+        display: inline-block;
+        width: 8px;
+        height: 84px;
+        margin-left: 8px;
+        vertical-align: -10px;
+        background: #fff;
+      }
+      #bio {
+        left: 70px;
+        top: 1440px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.75);
+        font-size: 42px;
+        font-weight: 800;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30.5"
+      data-width="1080"
+      data-height="1920"
+    >
+      <!-- 0–3,5 s : le logo se construit -->
+      <section id="s1" class="clip dark-bg" data-start="0" data-duration="3.5" data-track-index="0">
+        <div class="gridlines"></div>
+        <div class="blob" id="s1-blobA" style="left: -260px; top: 220px; width: 900px; height: 900px; background: radial-gradient(closest-side, rgba(11, 95, 255, 0.55), rgba(11, 95, 255, 0))"></div>
+        <div class="blob" id="s1-blobB" style="left: 480px; top: 1000px; width: 860px; height: 860px; background: radial-gradient(closest-side, rgba(77, 139, 255, 0.4), rgba(77, 139, 255, 0))"></div>
+        <div id="s1-ring" class="abs"></div>
+        <svg id="s1-mark" class="abs" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <rect id="m-top" x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+          <rect id="m-top2" x="13" y="14" width="22" height="3" rx="1.5" fill="#4D8BFF" />
+          <rect class="m-pil" x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+          <rect class="m-pil" x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+          <rect class="m-pil" x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+          <rect id="m-base" x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+        </svg>
+        <div id="s1-word" class="abs"></div>
+        <div id="s1-tag" class="abs"><span class="dot"></span>Cabinet d'analyse 100% indépendant</div>
+      </section>
+
+      <!-- 3,5–7,3 s : typo cinétique -->
+      <section id="s2" class="clip" data-start="3.5" data-duration="3.8" data-track-index="0">
+        <div class="gridlines light"></div>
+        <div id="s2-stack" class="abs">
+          <span class="mask"><span>N'achetez</span></span>
+          <span class="mask"><span>pas sans</span></span>
+          <span class="mask"><span class="outline">analyser</span></span>
+          <span class="mask"><span>votre</span></span>
+          <span class="mask"><span id="s2-block"><span id="s2-block-bg"></span><span id="s2-block-txt">copro.</span></span></span>
+        </div>
+        <div id="s2-under" class="abs"></div>
+        <div id="s2-sub" class="abs" style="left: 70px; top: 1320px; font-size: 46px; font-weight: 700; color: #5a6577; letter-spacing: -0.02em">Travaux, impayés, litiges&nbsp;: on regarde tout.</div>
+      </section>
+
+      <!-- 7,3–11,3 s : 300 pages -->
+      <section id="s3" class="clip dark-bg" data-start="7.3" data-duration="4" data-track-index="0">
+        <div class="gridlines"></div>
+        <div id="s3-papers"></div>
+        <div id="s3-num" class="abs">0</div>
+        <div id="s3-sub" class="abs">pages de documents.<br /><span class="dim">Personne ne les lit pour vous.</span></div>
+      </section>
+
+      <!-- 11,3–15,5 s : les risques -->
+      <section id="s4" class="clip dark-bg" data-start="11.3" data-duration="4.2" data-track-index="0">
+        <div class="gridlines"></div>
+        <div id="s4-glow" class="abs"></div>
+        <div id="s4-title" class="abs">
+          <span class="mask"><span>Ce qu'elles</span></span>
+          <span class="mask"><span style="color: #ff8a8a">cachent&nbsp;:</span></span>
+        </div>
+        <div class="tile" id="t1" style="top: 640px">
+          <div class="ic" style="background: #f97316"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9" /><path d="m18 15 4-4" /><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5" /></svg></div>
+          <div><h3>Travaux cachés</h3><p>Des dizaines de milliers d'euros</p></div>
+          <div class="badge">!</div>
+        </div>
+        <div class="tile" id="t2" style="top: 920px">
+          <div class="ic" style="background: #ef4444"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></svg></div>
+          <div><h3>Impayés</h3><p>Des charges qui fragilisent tout</p></div>
+          <div class="badge">!</div>
+        </div>
+        <div class="tile" id="t3" style="top: 1200px">
+          <div class="ic" style="background: #d97706"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="M7 21h10" /><path d="M12 3v18" /><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" /></svg></div>
+          <div><h3>Litiges</h3><p>Des procédures dont on ne parle pas</p></div>
+          <div class="badge">!</div>
+        </div>
+      </section>
+
+      <!-- 15,5–19,8 s : la méthode -->
+      <section id="s5" class="clip" data-start="15.5" data-duration="4.3" data-track-index="0">
+        <div class="gridlines light"></div>
+        <div id="s5-head" class="abs">
+          <div class="eyebrow">Notre méthode</div>
+          <div id="s5-title">
+            <span class="mask"><span>3 étapes.</span></span>
+            <span class="mask"><span class="blue">Zéro jargon.</span></span>
+          </div>
+        </div>
+        <div id="s5-line" class="abs"></div>
+        <div class="step" style="top: 680px">
+          <div class="node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12" /><path d="m17 8-5-5-5 5" /><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /></svg></div>
+          <div class="txt"><div class="n">ÉTAPE 1</div><h3>Envoyez vos<br />documents</h3></div>
+        </div>
+        <div class="step" style="top: 1000px">
+          <div class="node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg></div>
+          <div class="txt"><div class="n">ÉTAPE 2</div><h3>Un expert<br />analyse tout</h3></div>
+        </div>
+        <div class="step" style="top: 1320px">
+          <div class="node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /><path d="m9 15 2 2 4-4" /></svg></div>
+          <div class="txt"><div class="n">ÉTAPE 3</div><h3>Rapport + Score<br />en 72h</h3></div>
+        </div>
+      </section>
+
+      <!-- 19,8–25,5 s : le Score -->
+      <section id="s6" class="clip dark-bg" data-start="19.8" data-duration="5.7" data-track-index="0">
+        <div class="gridlines"></div>
+        <div id="s6-eyebrow" class="abs eyebrow">L'élément central</div>
+        <div id="s6-title" class="abs">Le Score /10</div>
+        <div id="s6-halo" class="abs"></div>
+        <div id="s6-gauge-wrap" class="abs">
+          <svg id="s6-gauge" viewBox="0 0 220 220">
+            <defs>
+              <linearGradient id="gg" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#0B5FFF" />
+                <stop offset="100%" stop-color="#8FB5FF" />
+              </linearGradient>
+            </defs>
+            <circle cx="110" cy="110" r="96" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="16" />
+            <circle id="s6-arc" cx="110" cy="110" r="96" fill="none" stroke="url(#gg)" stroke-width="16" stroke-linecap="round" stroke-dasharray="603.19" stroke-dashoffset="603.19" />
+          </svg>
+          <div id="s6-label">
+            <div id="s6-score">0.0</div>
+            <div id="s6-sur">sur 10</div>
+          </div>
+        </div>
+        <div id="s6-chip" class="abs"><span>Copropriété excellente</span></div>
+        <div id="s6-crit" class="abs"></div>
+      </section>
+
+      <!-- 25,5–30,5 s : appel à l'action -->
+      <section id="s7" class="clip" data-start="25.5" data-duration="5" data-track-index="0">
+        <div class="gridlines"></div>
+        <div class="blob" id="s7-blob" style="left: 300px; top: -300px; width: 1100px; height: 1100px; background: radial-gradient(closest-side, rgba(143, 181, 255, 0.45), rgba(143, 181, 255, 0))"></div>
+        <div id="s7-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="s7-title" class="abs">
+          <span class="mask"><span>Achetez</span></span>
+          <span class="mask"><span>l'esprit</span></span>
+          <span class="mask"><span class="soft">tranquille.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          <div id="cta-shine"></div>
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <!-- Volets de transition entre les scènes -->
+      <div id="wipes" class="clip" data-start="0" data-duration="30.5" data-track-index="1" data-layout-allow-overlap>
+        <div class="wipe" id="w1" style="background: #4d8bff"></div>
+        <div class="wipe" id="w2" style="background: #0b5fff"></div>
+        <div class="wipe" id="w3" style="background: #061a4a"></div>
+      </div>
+    </div>
+    <script>
+      // ---------- Contenu généré (déterministe) ----------
+      document.getElementById("s1-word").innerHTML =
+        "AnalyseTa".split("").map((c) => `<span class="l">${c}</span>`).join("") +
+        "Copro".split("").map((c) => `<span class="l b">${c}</span>`).join("");
+
+      const papers = document.getElementById("s3-papers");
+      for (let i = 0; i < 7; i++) {
+        papers.insertAdjacentHTML("beforeend", `<div class="paper"><i class="h"></i><i></i><i style="width:85%"></i><i></i><i style="width:70%"></i><i></i><i style="width:55%"></i><i></i></div>`);
+      }
+
+      const CRIT = [["Finances", 8.5], ["Travaux", 8.0], ["Gestion", 8.8], ["Contentieux", 9.0], ["Impayés", 7.5], ["Énergie", 7.8]];
+      document.getElementById("s6-crit").innerHTML = CRIT.map(
+        ([n, v]) => `<div class="crow"><div class="lab"><span>${n}</span><b>${v.toFixed(1)}</b></div><div class="track"><div class="bar" style="width:${v * 10}%"></div></div></div>`,
+      ).join("");
+
+      document.getElementById("url").innerHTML =
+        "analysetacopro.fr".split("").map((c) => `<span class="c">${c}</span>`).join("") + '<span id="caret"></span>';
+
+      // ---------- Timeline ----------
+      const tl = gsap.timeline({ paused: true });
+      const rise = (sel, t, st = 0.08, d = 0.55) => tl.fromTo(sel, { yPercent: 115 }, { yPercent: 0, duration: d, ease: "power4.out", stagger: st }, t);
+
+      tl.set("#w1, #w2, #w3", { scaleY: 0 }, 0);
+      // Volets : couvrent l'écran juste avant la coupe T, puis se retirent vers le haut
+      [3.5, 7.3, 11.3, 15.5, 19.8, 25.5].forEach((T) => {
+        ["#w1", "#w2", "#w3"].forEach((w, i) => {
+          tl.set(w, { transformOrigin: "50% 100%" }, T - 0.37 + i * 0.05);
+          tl.to(w, { scaleY: 1, duration: 0.28, ease: "power3.in" }, T - 0.36 + i * 0.05);
+          tl.set(w, { transformOrigin: "50% 0%" }, T + 0.01);
+          tl.to(w, { scaleY: 0, duration: 0.32, ease: "power3.out" }, T + 0.02 + (2 - i) * 0.05);
+        });
+      });
+
+      // 0–3,5 s — logo
+      tl.fromTo("#s1-blobA", { x: 0, y: 0 }, { x: 160, y: 120, duration: 3.5, ease: "sine.inOut" }, 0);
+      tl.fromTo("#s1-blobB", { x: 0, y: 0 }, { x: -180, y: -140, duration: 3.5, ease: "sine.inOut" }, 0);
+      tl.fromTo("#m-top", { scaleX: 0.15, transformOrigin: "50% 50%" }, { scaleX: 1, duration: 0.45, ease: "expo.out" }, 0);
+      tl.fromTo("#m-top2", { scaleX: 0, transformOrigin: "50% 50%" }, { scaleX: 1, duration: 0.4, ease: "expo.out" }, 0.15);
+      tl.fromTo(".m-pil", { scaleY: 0, transformOrigin: "50% 0%" }, { scaleY: 1, duration: 0.45, ease: "expo.out", stagger: 0.08 }, 0.25);
+      tl.fromTo("#m-base", { scaleX: 0, transformOrigin: "50% 50%" }, { scaleX: 1, duration: 0.4, ease: "expo.out" }, 0.55);
+      tl.fromTo("#s1-ring", { scale: 0.5, opacity: 0.9 }, { scale: 2.4, opacity: 0, duration: 1.1, ease: "power2.out" }, 0.7);
+      tl.fromTo("#s1-mark", { scale: 1.25, y: 120 }, { scale: 0.62, y: -120, duration: 0.7, ease: "power3.inOut" }, 0.95);
+      tl.fromTo("#s1-word .l", { yPercent: 120, opacity: 0, rotation: 12 }, { yPercent: 0, opacity: 1, rotation: 0, duration: 0.5, ease: "back.out(1.8)", stagger: 0.035 }, 1.25);
+      tl.fromTo("#s1-word", { y: 0 }, { y: -170, duration: 0.7, ease: "power3.inOut" }, 0.95);
+      tl.fromTo("#s1-tag", { y: 30, opacity: 0 }, { y: -170, opacity: 1, duration: 0.6, ease: "power3.out" }, 1.75);
+
+      // 3,5–7,3 s — typo cinétique
+      rise("#s2-stack .mask > span", 3.55, 0.11, 0.6);
+      tl.fromTo("#s2-block-bg", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "expo.out" }, 4.15);
+      tl.fromTo("#s2-under", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out" }, 4.5);
+      tl.fromTo("#s2-sub", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 4.75);
+      tl.to("#s2-stack .outline", { color: "#0C1424", duration: 0.35, ease: "power2.out" }, 5.0);
+      tl.fromTo("#s2-stack", { scale: 1, transformOrigin: "0% 50%" }, { scale: 1.05, duration: 3, ease: "none" }, 4.2);
+
+      // 7,3–11,3 s — 300 pages en éventail 3D, puis elles s'envolent
+      tl.fromTo(
+        "#s3-papers .paper",
+        { y: 1400, rotation: 0, rotationY: 0, transformPerspective: 1400 },
+        { y: (i) => -i * 6, rotation: (i) => (i - 3) * 9, rotationY: (i) => (i - 3) * 6, transformOrigin: "50% 120%", duration: 0.7, ease: "back.out(1.3)", stagger: 0.06 },
+        7.35,
+      );
+      tl.fromTo("#s3-num", { scale: 0.5, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2)" }, 7.75);
+      const pages = { v: 0 };
+      tl.fromTo(pages, { v: 0 }, { v: 300, duration: 1.4, ease: "power2.out", onUpdate: () => (document.getElementById("s3-num").textContent = Math.round(pages.v)) }, 7.8);
+      tl.fromTo("#s3-sub", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 8.3);
+      tl.to("#s3-papers .paper", { y: -1500, scale: 1.6, rotation: (i) => (i - 3) * 20, duration: 0.8, ease: "power3.in", stagger: 0.05 }, 10.2);
+
+      // 11,3–15,5 s — risques
+      rise("#s4-title .mask > span", 11.35, 0.1);
+      tl.fromTo("#s4-glow", { opacity: 0.3, scale: 0.9 }, { opacity: 1, scale: 1.05, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 7 }, 11.3);
+      tl.fromTo(".tile", { x: 1100, rotation: 6 }, { x: 0, rotation: 0, duration: 0.6, ease: "back.out(1.2)", stagger: 0.42 }, 11.7);
+      tl.fromTo(".badge", { scale: 0 }, { scale: 1, duration: 0.35, ease: "back.out(3)", stagger: 0.42 }, 12.15);
+      tl.to(".tile", { rotation: 1.2, duration: 0.05, yoyo: true, repeat: 5, ease: "none", stagger: 0.42 }, 12.32);
+
+      // 15,5–19,8 s — méthode en 3 étapes
+      tl.fromTo("#s5-head .eyebrow", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 15.55);
+      rise("#s5-title .mask > span", 15.6, 0.1);
+      tl.fromTo("#s5-line", { scaleY: 0 }, { scaleY: 1, duration: 1.8, ease: "power2.inOut" }, 16.0);
+      tl.fromTo(".step .node", { scale: 0 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)", stagger: 0.6 }, 16.05);
+      tl.fromTo(".step .txt", { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "power3.out", stagger: 0.6 }, 16.2);
+
+      // 19,8–25,5 s — le Score
+      tl.fromTo("#s6-eyebrow, #s6-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out", stagger: 0.1 }, 19.85);
+      tl.fromTo("#s6-halo", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: "power2.out" }, 19.9);
+      tl.to("#s6-halo", { scale: 1.12, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: 3 }, 21.1);
+      tl.fromTo("#s6-gauge-wrap", { scale: 0.6, opacity: 0, rotation: -40 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.7, ease: "back.out(1.5)" }, 20.0);
+      const g = { v: 0 };
+      tl.fromTo(
+        g,
+        { v: 0 },
+        {
+          v: 8.4,
+          duration: 1.8,
+          ease: "power3.out",
+          onUpdate: () => {
+            document.getElementById("s6-score").textContent = g.v.toFixed(1);
+            document.getElementById("s6-arc").setAttribute("stroke-dashoffset", (603.19 * (1 - g.v / 10)).toFixed(2));
+          },
+        },
+        20.3,
+      );
+      tl.fromTo("#s6-chip span", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.5)" }, 22.0);
+      tl.fromTo("#s6-crit .crow", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out", stagger: 0.1 }, 22.3);
+      tl.fromTo("#s6-crit .bar", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out", stagger: 0.1 }, 22.4);
+
+      // 25,5–30,5 s — appel à l'action
+      tl.fromTo("#s7-blob", { x: 0, y: 0 }, { x: -260, y: 220, duration: 5, ease: "sine.inOut" }, 25.5);
+      tl.fromTo("#s7-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 25.6);
+      rise("#s7-title .mask > span", 25.7, 0.1, 0.6);
+      tl.fromTo("#cta", { scale: 0.5, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2)" }, 26.3);
+      tl.fromTo("#cta-shine", { x: -200 }, { x: 900, duration: 0.9, ease: "power2.inOut", repeat: 2, repeatDelay: 0.5 }, 26.8);
+      tl.fromTo("#url .c", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.12, ease: "power2.out", stagger: 0.045 }, 26.7);
+      tl.fromTo("#caret", { opacity: 1 }, { opacity: 0, duration: 0.25, ease: "steps(1)", yoyo: true, repeat: 9 }, 26.7);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 27.6);
+      tl.to("#cta", { scale: 1.05, duration: 0.4, ease: "sine.inOut", yoyo: true, repeat: 3 }, 28.2);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
