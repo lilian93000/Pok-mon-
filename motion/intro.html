@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0b1f3a; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden;
+    background: radial-gradient(ellipse at 50% 45%, #163a66 0%, #0b1f3a 60%, #07142a 100%);
+    font-family: "Inter Display", "Inter", sans-serif; }
+  #grid { position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 80px 80px; }
+  #content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  svg#logo { width: 360px; height: 360px; overflow: visible; }
+  #title { margin-top: 30px; font-size: 128px; font-weight: 700; letter-spacing: -2px; color: #fff; white-space: nowrap; display: flex; }
+  #title span { display: inline-block; }
+  #title .accent { color: #2ee6a6; }
+  #bar { margin-top: 18px; height: 6px; width: 520px; border-radius: 3px; background: linear-gradient(90deg, #2ee6a6, #3aa0ff); transform-origin: center; }
+  #tagline { margin-top: 30px; font-size: 44px; font-weight: 400; color: #c9d6ea; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="grid"></div>
+  <div id="content">
+    <svg id="logo" viewBox="0 0 360 360">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#2ee6a6"/><stop offset="1" stop-color="#3aa0ff"/>
+        </linearGradient>
+      </defs>
+      <!-- immeuble -->
+      <path id="building" d="M60 320 V110 L150 60 L240 110 V320 Z M30 320 H290"
+            fill="none" stroke="#fff" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/>
+      <g id="windows"></g>
+      <!-- loupe -->
+      <g id="loupe">
+        <circle cx="0" cy="0" r="62" fill="rgba(11,31,58,.85)" stroke="url(#g)" stroke-width="14"/>
+        <line x1="44" y1="44" x2="92" y2="92" stroke="url(#g)" stroke-width="18" stroke-linecap="round"/>
+        <path id="check" d="M-28 2 L-8 22 L30 -20" fill="none" stroke="#2ee6a6" stroke-width="12"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </svg>
+    <div id="title"></div>
+    <div id="bar"></div>
+    <div id="tagline">Votre copropriété, analysée.</div>
+  </div>
+</div>
+<script>
+  const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+  const prog = (t, start, dur) => clamp((t - start) / dur);
+  const easeOut = x => 1 - Math.pow(1 - x, 3);
+  const easeInOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+  const backOut = x => { const c = 1.70158; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+
+  // fenêtres : 3 colonnes x 4 rangées
+  const win = document.getElementById('windows');
+  const wins = [];
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    el.setAttribute('x', 88 + c * 50); el.setAttribute('y', 140 + r * 42);
+    el.setAttribute('width', 26); el.setAttribute('height', 24); el.setAttribute('rx', 3);
+    el.setAttribute('fill', '#2ee6a6');
+    win.appendChild(el); wins.push(el);
+  }
+
+  // titre lettre par lettre
+  const title = document.getElementById('title');
+  const letters = [];
+  ['Analysetacopro', '.fr'].forEach((word, i) => {
+    for (const ch of word) {
+      const s = document.createElement('span');
+      s.textContent = ch;
+      if (i === 1) s.className = 'accent';
+      title.appendChild(s); letters.push(s);
+    }
+  });
+
+  const building = document.getElementById('building');
+  const len = building.getTotalLength();
+  building.style.strokeDasharray = len;
+  const check = document.getElementById('check');
+  const clen = check.getTotalLength();
+  check.style.strokeDasharray = clen;
+  const loupe = document.getElementById('loupe');
+  const logo = document.getElementById('logo');
+  const bar = document.getElementById('bar');
+  const tagline = document.getElementById('tagline');
+  const content = document.getElementById('content');
+  const grid = document.getElementById('grid');
+
+  window.render = (t) => {
+    // fond
+    grid.style.opacity = 0.2 + 0.8 * easeOut(prog(t, 0, 1));
+    grid.style.transform = `translateY(${-t * 12}px)`;
+
+    // logo : tracé de l'immeuble
+    building.style.strokeDashoffset = len * (1 - easeInOut(prog(t, 0.1, 1.1)));
+    wins.forEach((w, i) => {
+      const p = easeOut(prog(t, 0.8 + i * 0.05, 0.3));
+      w.style.opacity = p * (i % 4 === 1 ? 0.45 : 0.9);
+      w.style.transformBox = 'fill-box'; w.style.transformOrigin = 'center';
+      w.style.transform = `scale(${0.4 + 0.6 * p})`;
+    });
+
+    // loupe qui glisse puis se pose
+    const lp = prog(t, 1.2, 0.9);
+    const lx = 300 - 70 * easeOut(lp), ly = 300 - 80 * easeOut(lp);
+    loupe.setAttribute('transform', `translate(${lx} ${ly}) scale(${backOut(lp) * 0.9 + 0.1 * (lp > 0)}) rotate(${-20 * (1 - easeOut(lp))})`);
+    loupe.style.opacity = lp > 0 ? 1 : 0;
+    check.style.strokeDashoffset = clen * (1 - easeOut(prog(t, 1.9, 0.4)));
+
+    // titre : lettres qui montent en cascade
+    letters.forEach((s, i) => {
+      const p = prog(t, 1.9 + i * 0.035, 0.5);
+      s.style.opacity = easeOut(p);
+      s.style.transform = `translateY(${60 * (1 - easeOut(p))}px)`;
+      s.style.filter = `blur(${8 * (1 - easeOut(p))}px)`;
+    });
+
+    // barre + slogan
+    bar.style.transform = `scaleX(${easeInOut(prog(t, 2.8, 0.6))})`;
+    const tp = easeOut(prog(t, 3.1, 0.7));
+    tagline.style.opacity = tp;
+    tagline.style.transform = `translateY(${20 * (1 - tp)}px)`;
+    tagline.style.letterSpacing = `${1 + 6 * (1 - tp)}px`;
+
+    // léger zoom continu pour garder de la vie sur la fin
+    content.style.transform = `scale(${1 + 0.03 * easeInOut(prog(t, 0, 5))})`;
+    logo.style.transform = `translateY(${-6 * Math.sin(prog(t, 3.5, 1.5) * Math.PI)}px)`;
+  };
+  render(0);
+</script>
+</body>
+</html>
