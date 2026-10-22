@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « Le Scanner » — un plan continu : la façade de l'annonce, puis sa radiographie.
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py (120 BPM). */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --brand-light: #4d8bff;
+        --sky: #8fb5ff;
+        --cyan: #5be1ff;
+        --navy: #061a4a;
+        --deep: #020a1f;
+        --ink: #0c1424;
+        --muted: #5a6577;
+        --green: #12b981;
+        --red: #ff4d5e;
+        --orange: #ff8a3d;
+        --amber: #ffc24d;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--deep);
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #fff;
+        background: var(--deep);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.06em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+
+      /* Ciel du plan continu : jour (annonce) → nuit (scanner) */
+      #sky-day {
+        background: linear-gradient(180deg, #8ec5ff 0%, #cfe6ff 45%, #fdf3e3 100%);
+      }
+      #sky-night {
+        background: radial-gradient(110% 70% at 50% 40%, #0b2d78 0%, #061a4a 45%, #020a1f 100%);
+        opacity: 0;
+      }
+      #blueprint {
+        background-image:
+          linear-gradient(rgba(91, 225, 255, 0.07) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(91, 225, 255, 0.07) 1px, transparent 1px),
+          linear-gradient(rgba(91, 225, 255, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(91, 225, 255, 0.035) 1px, transparent 1px);
+        background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+        opacity: 0;
+      }
+      #sun {
+        left: 640px;
+        top: 120px;
+        width: 520px;
+        height: 520px;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(255, 236, 190, 0.95), rgba(255, 214, 140, 0.35) 45%, rgba(255, 214, 140, 0));
+      }
+      .cloud {
+        position: absolute;
+        height: 70px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.85);
+      }
+      #ground {
+        left: 0;
+        right: 0;
+        top: 1480px;
+        bottom: 0;
+        background: linear-gradient(180deg, #d9cbb5 0%, #c7b79d 100%);
+      }
+
+      /* Immeubles */
+      .bld {
+        position: absolute;
+        left: 180px;
+        top: 380px;
+        width: 720px;
+        height: 1100px;
+      }
+      .bld svg {
+        position: absolute;
+        inset: 0;
+        width: 720px;
+        height: 1100px;
+        overflow: visible;
+      }
+      .xray {
+        clip-path: inset(0% 0% 100% 0%);
+      }
+      #bldB {
+        transform: translateX(1100px);
+      }
+
+      /* Rayon du scanner */
+      .beam {
+        position: absolute;
+        left: 120px;
+        width: 840px;
+        height: 8px;
+        margin-top: -4px;
+        border-radius: 4px;
+        background: linear-gradient(90deg, rgba(91, 225, 255, 0), #ffffff 20%, #ffffff 80%, rgba(91, 225, 255, 0));
+        box-shadow: 0 0 24px 6px rgba(91, 225, 255, 0.9), 0 0 90px 30px rgba(11, 95, 255, 0.45);
+        opacity: 0;
+      }
+      .beam::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 4px;
+        height: 160px;
+        background: linear-gradient(0deg, rgba(91, 225, 255, 0.28), rgba(91, 225, 255, 0));
+      }
+      #beamA {
+        top: 380px;
+      }
+      #beamB {
+        top: 380px;
+      }
+
+      /* HUD */
+      #hud {
+        opacity: 0;
+      }
+      .corner {
+        position: absolute;
+        width: 70px;
+        height: 70px;
+        border-color: var(--cyan);
+        border-style: solid;
+        border-width: 0;
+      }
+      #hud-bar {
+        left: 70px;
+        right: 160px;
+        top: 1500px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        color: var(--cyan);
+      }
+      #hud-bar .rec {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        margin-right: 14px;
+        border-radius: 50%;
+        background: var(--red);
+        vertical-align: 1px;
+        box-shadow: 0 0 16px var(--red);
+      }
+      #pct {
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Légendes du haut */
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 200px;
+        font-size: 74px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.02;
+      }
+      #capA {
+        color: var(--ink);
+      }
+      #capA .b {
+        color: var(--brand);
+      }
+      #price {
+        left: 560px;
+        top: 1210px;
+        padding: 18px 30px;
+        border-radius: 22px;
+        background: #fff;
+        color: var(--ink);
+        box-shadow: 0 24px 60px rgba(12, 20, 36, 0.25);
+        transform: rotate(-4deg);
+      }
+      #price small {
+        display: block;
+        font-size: 28px;
+        font-weight: 700;
+        color: #0e9467;
+        letter-spacing: 0.06em;
+      }
+      #price b {
+        font-size: 64px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+      #really {
+        left: 0;
+        right: 0;
+        top: 820px;
+        text-align: center;
+        font-size: 200px;
+        font-weight: 900;
+        letter-spacing: -0.07em;
+        color: #fff;
+        text-shadow: 0 0 70px rgba(91, 225, 255, 0.8);
+        opacity: 0;
+      }
+      #really .r,
+      #really .c {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        opacity: 0;
+        mix-blend-mode: screen;
+      }
+      #really .r {
+        color: #ff2e63;
+      }
+      #really .c {
+        color: #00e5ff;
+      }
+
+      /* Fiches d'alerte */
+      .call {
+        position: absolute;
+        width: 440px;
+        padding: 22px 28px 24px 34px;
+        border-radius: 26px;
+        background: rgba(4, 14, 40, 0.86);
+        border: 2px solid rgba(255, 255, 255, 0.14);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+        overflow: hidden;
+      }
+      .call::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 10px;
+        background: var(--c);
+      }
+      .call .k {
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        color: var(--c);
+      }
+      .call .v {
+        margin-top: 6px;
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.08;
+      }
+
+      /* Bilan */
+      #sum {
+        left: 70px;
+        width: 860px;
+        top: 1110px;
+        padding: 36px 40px;
+        border-radius: 36px;
+        background: rgba(4, 14, 40, 0.9);
+        border: 2px solid rgba(255, 77, 94, 0.55);
+        box-shadow: 0 0 80px rgba(255, 77, 94, 0.25);
+        opacity: 0;
+      }
+      #sum .n {
+        font-size: 62px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        color: var(--red);
+      }
+      #sum .m {
+        margin-top: 12px;
+        font-size: 44px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      #sum .f {
+        margin-top: 14px;
+        font-size: 28px;
+        font-weight: 600;
+        color: #9fb0d0;
+      }
+
+      /* Score sur l'immeuble B */
+      #scoreCard {
+        left: 245px;
+        top: 860px;
+        width: 590px;
+        padding: 34px 30px 36px;
+        border-radius: 44px;
+        background: rgba(4, 14, 40, 0.88);
+        border: 2px solid rgba(18, 185, 129, 0.6);
+        box-shadow: 0 0 100px rgba(18, 185, 129, 0.35), 0 40px 100px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        opacity: 0;
+      }
+      #gaugeWrap {
+        position: relative;
+        width: 330px;
+        height: 330px;
+        margin: 0 auto;
+      }
+      #gauge {
+        width: 330px;
+        height: 330px;
+        transform: rotate(-90deg);
+      }
+      #gaugeLabel {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      #score {
+        font-size: 130px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 1;
+      }
+      #scoreSub {
+        font-size: 32px;
+        color: #b9cbee;
+        font-weight: 600;
+      }
+      #chip {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 14px 32px;
+        border-radius: 999px;
+        background: var(--green);
+        color: #032318;
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+      }
+
+      /* Stats */
+      #s4 {
+        background: radial-gradient(110% 70% at 30% 30%, #0b2d78 0%, #061a4a 45%, #020a1f 100%);
+      }
+      .stat {
+        position: absolute;
+        left: 70px;
+        display: flex;
+        align-items: baseline;
+        gap: 26px;
+        white-space: nowrap;
+      }
+      .stat .num {
+        font-size: 190px;
+        font-weight: 900;
+        letter-spacing: -0.07em;
+        line-height: 1;
+        color: var(--cyan);
+        text-shadow: 0 0 60px rgba(91, 225, 255, 0.45);
+        font-variant-numeric: tabular-nums;
+      }
+      .stat .lab {
+        font-size: 64px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+      .stat .lab i {
+        font-style: normal;
+        color: #9fb6ea;
+      }
+
+      /* Fin */
+      #s5 {
+        background: linear-gradient(165deg, #061a4a 0%, #0a3fb8 50%, #0b5fff 100%);
+      }
+      #s5-grid {
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 90px 90px;
+      }
+      #s5-logo {
+        left: 70px;
+        top: 360px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        font-size: 56px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #s5-logo svg {
+        width: 92px;
+        height: 92px;
+      }
+      #s5-title {
+        left: 70px;
+        top: 540px;
+        font-size: 150px;
+        font-weight: 900;
+        letter-spacing: -0.065em;
+        line-height: 0.93;
+        padding-bottom: 40px;
+        clip-path: inset(0% 0% 100% 0%);
+      }
+      #s5-title .c {
+        color: var(--cyan);
+      }
+      #beamC {
+        left: 40px;
+        width: 1000px;
+        top: 540px;
+      }
+      #cta {
+        left: 70px;
+        top: 1110px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35), 0 0 80px rgba(143, 181, 255, 0.45);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1300px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1440px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+
+      /* Habillage */
+      #grain {
+        inset: -60px;
+        opacity: 0.08;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>");
+        background-size: 300px 300px;
+      }
+      #vignette {
+        background: radial-gradient(120% 85% at 50% 50%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.32) 100%);
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+      #scanlines {
+        background: repeating-linear-gradient(0deg, rgba(91, 225, 255, 0.05) 0 2px, transparent 2px 6px);
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <!-- 0–22 s : un seul plan continu sur l'immeuble -->
+      <section id="shot" class="clip" data-start="0" data-duration="22" data-track-index="0">
+        <div id="sky-day" class="clip"></div>
+        <div id="sun" class="abs"></div>
+        <div class="cloud" id="cl1" style="left: -70px; top: 470px; width: 240px"></div>
+        <div class="cloud" id="cl2" style="left: 760px; top: 250px; width: 200px; height: 56px"></div>
+        <div id="sky-night" class="clip"></div>
+        <div id="blueprint" class="clip"></div>
+        <div id="ground" class="abs"></div>
+
+        <div id="world" class="clip">
+          <div class="bld" id="bldA">
+            <svg class="facade" viewBox="0 0 720 1100"></svg>
+            <svg class="xray" viewBox="0 0 720 1100"></svg>
+          </div>
+          <div class="bld" id="bldB">
+            <svg class="facade" viewBox="0 0 720 1100"></svg>
+            <svg class="xray" viewBox="0 0 720 1100"></svg>
+          </div>
+          <div class="beam" id="beamA"></div>
+          <div class="beam" id="beamB"></div>
+        </div>
+
+        <div id="price" class="abs"><small>À VENDRE</small><b>349 000 €</b></div>
+
+        <div id="hud" class="clip">
+          <div class="corner" style="left: 150px; top: 350px; border-top-width: 6px; border-left-width: 6px"></div>
+          <div class="corner" style="left: 860px; top: 350px; border-top-width: 6px; border-right-width: 6px"></div>
+          <div class="corner" style="left: 150px; top: 1440px; border-bottom-width: 6px; border-left-width: 6px"></div>
+          <div class="corner" style="left: 860px; top: 1440px; border-bottom-width: 6px; border-right-width: 6px"></div>
+          <div id="hud-bar" class="abs"><span><span class="rec"></span><span id="hud-label">SCAN · EXEMPLE</span></span><span id="pct">0%</span></div>
+        </div>
+
+        <div class="call" id="c1" style="--c: #ff4d5e; left: 480px; top: 420px"><div class="k">TOITURE</div><div class="v">Travaux votés&nbsp;: 38&nbsp;000&nbsp;€</div></div>
+        <div class="call" id="c2" style="--c: #ff8a3d; left: 470px; top: 720px"><div class="k">FAÇADE</div><div class="v">Fissures&nbsp;: ravalement à prévoir</div></div>
+        <div class="call" id="c3" style="--c: #ff4d5e; left: 70px; top: 960px"><div class="k">IMPAYÉS</div><div class="v">3 lots en retard de charges</div></div>
+        <div class="call" id="c4" style="--c: #ffc24d; left: 470px; top: 1260px"><div class="k">LITIGE</div><div class="v">Procédure en cours contre le syndic</div></div>
+
+        <div id="sum" class="abs">
+          <div class="n">4 risques détectés</div>
+          <div class="m">≈ 9&nbsp;800&nbsp;€ de frais cachés pour votre lot</div>
+          <div class="f">Exemple illustratif de scan</div>
+        </div>
+
+        <div id="scoreCard" class="abs">
+          <div id="gaugeWrap">
+            <svg id="gauge" viewBox="0 0 220 220">
+              <defs>
+                <linearGradient id="gg" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#12B981" />
+                  <stop offset="100%" stop-color="#5BE1FF" />
+                </linearGradient>
+              </defs>
+              <circle cx="110" cy="110" r="96" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="15" />
+              <circle id="arc" cx="110" cy="110" r="96" fill="none" stroke="url(#gg)" stroke-width="15" stroke-linecap="round" stroke-dasharray="603.19" stroke-dashoffset="603.19" />
+            </svg>
+            <div id="gaugeLabel">
+              <div id="score">0.0</div>
+              <div id="scoreSub">sur 10</div>
+            </div>
+          </div>
+          <div id="chip">Copropriété excellente</div>
+        </div>
+
+        <div class="cap" id="capA"><span class="mask"><span>Cet appart a l'air</span></span><span class="mask"><span class="b">parfait.</span></span></div>
+        <div class="cap" id="capB"><span class="mask"><span>On passe la copro</span></span><span class="mask"><span style="color: #5be1ff">au scanner.</span></span></div>
+        <div class="cap" id="capC"><span class="mask"><span>Ce que l'annonce</span></span><span class="mask"><span style="color: #ff4d5e">ne dit pas.</span></span></div>
+        <div class="cap" id="capD"><span class="mask"><span>Et celle-là&nbsp;?</span></span></div>
+        <div class="cap" id="capE"><span class="mask"><span>Celle-là,</span></span><span class="mask"><span style="color: #12b981">vous pouvez signer.</span></span></div>
+
+        <div id="really" class="abs">Vraiment&nbsp;?<span class="r">Vraiment&nbsp;?</span><span class="c">Vraiment&nbsp;?</span></div>
+        <div id="scanlines" class="clip"></div>
+      </section>
+
+      <!-- 22–26 s : ce qu'on fait pour vous -->
+      <section id="s4" class="clip" data-start="22" data-duration="4" data-track-index="0">
+        <div class="stat" id="st1" style="top: 430px"><span class="num" id="n1">0</span><span class="lab">pages <i>lues.</i></span></div>
+        <div class="stat" id="st2" style="top: 690px"><span class="num" id="n2">0</span><span class="lab">critères <i>notés.</i></span></div>
+        <div class="stat" id="st3" style="top: 950px"><span class="num" id="n3">0</span><span class="lab">rapport <i>clair.</i></span></div>
+        <div class="stat" id="st4" style="top: 1210px"><span class="num" id="n4">0h</span><span class="lab">chrono.</span></div>
+      </section>
+
+      <!-- 26–30 s : signature -->
+      <section id="s5" class="clip" data-start="26" data-duration="4" data-track-index="0">
+        <div id="s5-grid" class="clip"></div>
+        <div id="s5-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="s5-title" class="abs">Scannez<br />avant de<br /><span class="c">signer.</span></div>
+        <div class="beam" id="beamC"></div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="vignette" class="clip" data-start="0" data-duration="30" data-track-index="1" data-layout-allow-overlap></div>
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="1" data-layout-allow-overlap></div>
+      <div id="grain" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      // ---------- Immeuble haussmannien en SVG : façade ou radiographie ----------
+      const WX = [95, 245, 395, 545]; // fenêtres
+      const FLOOR = (i) => 150 + i * 166; // 5 étages, de 150 à 980
+      function facade(p) {
+        let s = `<defs><linearGradient id="gl${p.id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${p.glass1}"/><stop offset="1" stop-color="${p.glass2}"/></linearGradient></defs>`;
+        s += `<rect x="150" y="0" width="34" height="60" fill="${p.chim}"/><rect x="540" y="0" width="34" height="60" fill="${p.chim}"/>`;
+        s += `<polygon points="40,150 92,34 628,34 680,150" fill="${p.roof}"/><rect x="84" y="26" width="552" height="12" rx="4" fill="${p.roofTop}"/>`;
+        [150, 290, 430, 570].forEach((x) => {
+          s += `<polygon points="${x - 38},70 ${x},40 ${x + 38},70" fill="${p.wall}"/><rect x="${x - 34}" y="68" width="68" height="70" fill="${p.wall}"/><rect x="${x - 22}" y="78" width="44" height="56" rx="4" fill="url(#gl${p.id})"/>`;
+        });
+        s += `<rect x="40" y="150" width="640" height="830" fill="${p.wall}"/>`;
+        for (let i = 0; i <= 5; i++) s += `<rect x="30" y="${FLOOR(i) - 4}" width="660" height="10" fill="${p.line}"/>`;
+        for (let i = 0; i < 5; i++) {
+          const y = FLOOR(i) + 26;
+          WX.forEach((x, k) => {
+            const lit = (i * 4 + k) % 5 === 2;
+            s += `<rect x="${x - 6}" y="${y - 8}" width="${92}" height="${132}" rx="6" fill="${p.frame}"/>`;
+            s += `<rect x="${x}" y="${y}" width="80" height="116" rx="4" fill="${lit ? p.lit : `url(#gl${p.id})`}"/>`;
+            s += `<rect x="${x + 38}" y="${y}" width="4" height="116" fill="${p.frame}"/>`;
+            if (i !== 1 && i !== 4) {
+              s += `<rect x="${x - 4}" y="${y + 96}" width="88" height="6" fill="${p.rail}"/>`;
+              for (let b = 0; b < 8; b++) s += `<rect x="${x + b * 11}" y="${y + 100}" width="3" height="22" fill="${p.rail}"/>`;
+            }
+          });
+          if (i === 1 || i === 4) {
+            s += `<rect x="62" y="${y + 104}" width="596" height="8" fill="${p.rail}"/><rect x="62" y="${y + 138}" width="596" height="6" fill="${p.rail}"/>`;
+            for (let b = 0; b < 50; b++) s += `<rect x="${66 + b * 12}" y="${y + 110}" width="3" height="28" fill="${p.rail}"/>`;
+            if (p.plants) [80, 300, 520, 610].forEach((x, k) => (s += `<circle cx="${x}" cy="${y + 98}" r="${16 + (k % 2) * 6}" fill="#4caf72"/><circle cx="${x + 18}" cy="${y + 92}" r="12" fill="#6cc98a"/>`));
+          }
+        }
+        s += `<rect x="40" y="980" width="640" height="120" fill="${p.shop}"/>`;
+        s += `<rect x="70" y="1000" width="200" height="100" rx="6" fill="url(#gl${p.id})"/><rect x="450" y="1000" width="200" height="100" rx="6" fill="url(#gl${p.id})"/>`;
+        s += `<path d="M305 1100 V1040 a55 55 0 0 1 110 0 V1100 Z" fill="${p.door}"/>`;
+        return s;
+      }
+      function xray(p) {
+        const st = `stroke="${p.line}" fill="none" stroke-width="3"`;
+        let s = `<rect x="40" y="150" width="640" height="950" fill="rgba(4,18,58,0.94)"/><polygon points="40,150 92,34 628,34 680,150" fill="rgba(4,18,58,0.94)" ${st}/>`;
+        s += `<rect x="40" y="150" width="640" height="950" ${st}/>`;
+        for (let i = 1; i <= 5; i++) s += `<line x1="40" y1="${FLOOR(i)}" x2="680" y2="${FLOOR(i)}" stroke="${p.line}" stroke-width="4"/>`;
+        for (let i = 0; i < 5; i++) {
+          const y = FLOOR(i);
+          [210, 360, 510].forEach((x) => (s += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + 166}" stroke="${p.dim}" stroke-width="2" stroke-dasharray="10 8"/>`));
+          WX.forEach((x) => (s += `<rect x="${x}" y="${y + 26}" width="80" height="116" rx="4" stroke="${p.dim}" fill="none" stroke-width="2"/>`));
+        }
+        // Réseaux : colonnes d'eau et d'électricité
+        s += `<line x1="330" y1="40" x2="330" y2="1100" stroke="${p.pipe}" stroke-width="6" stroke-dasharray="18 10"/>`;
+        s += `<line x1="392" y1="40" x2="392" y2="1100" stroke="${p.pipe2}" stroke-width="4" stroke-dasharray="4 10"/>`;
+        [150, 290, 430, 570].forEach((x) => (s += `<rect x="${x - 22}" y="78" width="44" height="56" rx="4" stroke="${p.dim}" fill="none" stroke-width="2"/>`));
+        s += `<path d="M305 1100 V1040 a55 55 0 0 1 110 0 V1100" ${st}/>`;
+        // Cotes d'architecte
+        s += `<line x1="16" y1="150" x2="16" y2="1100" stroke="${p.dim}" stroke-width="2"/><line x1="8" y1="150" x2="24" y2="150" stroke="${p.dim}" stroke-width="2"/><line x1="8" y1="1100" x2="24" y2="1100" stroke="${p.dim}" stroke-width="2"/>`;
+        if (p.bad) {
+          s += `<g class="issue" id="i1"><polygon points="140,140 92,34 360,34" fill="rgba(255,77,94,0.35)"/><path d="M180 40 l20 30 -18 22 24 30" stroke="#ff4d5e" stroke-width="6" fill="none" stroke-linecap="round"/></g>`;
+          s += `<g class="issue" id="i2"><path d="M70 330 l26 36 -18 28 30 40 -14 30 22 30" stroke="#ff8a3d" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M640 360 l-20 30 16 24 -22 34" stroke="#ff8a3d" stroke-width="6" fill="none" stroke-linecap="round"/></g>`;
+          s += `<g class="issue" id="i3">${[95, 245, 545].map((x) => `<rect x="${x}" y="${FLOOR(3) + 26}" width="80" height="116" rx="4" fill="rgba(255,77,94,0.55)" stroke="#ff4d5e" stroke-width="4"/><text x="${x + 40}" y="${FLOOR(3) + 98}" text-anchor="middle" font-family="Inter" font-weight="900" font-size="46" fill="#fff">€</text>`).join("")}</g>`;
+          s += `<g class="issue" id="i4"><circle cx="360" cy="1050" r="70" fill="rgba(255,194,77,0.25)" stroke="#ffc24d" stroke-width="5"/><text x="360" y="1068" text-anchor="middle" font-family="Inter" font-weight="900" font-size="54" fill="#ffc24d">§</text></g>`;
+        } else {
+          [[230, 92], [140, 420], [470, 735], [360, 1050]].forEach(([x, y], k) => {
+            s += `<g class="ok" id="ok${k}"><circle cx="${x}" cy="${y}" r="38" fill="#12b981"/><path d="M${x - 16} ${y} l11 12 21 -24" stroke="#032318" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+          });
+        }
+        return s;
+      }
+      const PAL_A = { id: "A", wall: "#EEE4D3", line: "#D6C5A8", roof: "#5E6C7E", roofTop: "#46525F", chim: "#A88F74", frame: "#FFFFFF", glass1: "#7FB3E6", glass2: "#D9EBFB", lit: "#FFD98A", rail: "#1F2430", shop: "#2C3A55", door: "#1A2A4A", plants: true };
+      const PAL_B = { id: "B", wall: "#F1EADF", line: "#DDCDB4", roof: "#4F5E73", roofTop: "#3A4656", chim: "#B79C7E", frame: "#FFFFFF", glass1: "#86BDEA", glass2: "#E2F0FC", lit: "#FFE3A3", rail: "#22324F", shop: "#0B3F8F", door: "#0B5FFF", plants: true };
+      document.querySelector("#bldA .facade").innerHTML = facade(PAL_A);
+      document.querySelector("#bldA .xray").innerHTML = xray({ line: "#5BE1FF", dim: "rgba(91,225,255,0.45)", pipe: "#4D8BFF", pipe2: "#8FB5FF", bad: true });
+      document.querySelector("#bldB .facade").innerHTML = facade(PAL_B);
+      document.querySelector("#bldB .xray").innerHTML = xray({ line: "#5BE1FF", dim: "rgba(91,225,255,0.45)", pipe: "#4D8BFF", pipe2: "#8FB5FF", bad: false });
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      // ---------- Timeline ----------
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.8, d = 0.35) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 12, n = 6) => {
+        for (let i = 0; i < n; i++) {
+          const f = 1 - i / n;
+          tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * f, y: (rnd(i, t + 1) - 0.5) * 2 * amp * f, duration: 0.035, ease: "none" }, t + i * 0.035);
+        }
+        tl.to(sel, { x: 0, y: 0, duration: 0.05, ease: "none" }, t + n * 0.035);
+      };
+      const capIn = (sel, t) => {
+        tl.set(sel, { autoAlpha: 1 }, t);
+        tl.fromTo(`${sel} .mask > span`, { yPercent: 115 }, { yPercent: 0, duration: 0.5, ease: "power4.out", stagger: 0.1 }, t);
+      };
+      const capOut = (sel, t) => {
+        tl.to(`${sel} .mask > span`, { yPercent: -115, duration: 0.3, ease: "power3.in", stagger: 0.05 }, t);
+        tl.set(sel, { autoAlpha: 0 }, t + 0.4);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      tl.set(".cap .mask > span", { yPercent: 115 }, 0);
+      tl.set(".cap, .call", { autoAlpha: 0 }, 0);
+      for (let i = 0; i < 120; i++) tl.set("#grain", { x: Math.round((rnd(i, 50) - 0.5) * 100), y: Math.round((rnd(i, 51) - 0.5) * 100) }, i * 0.25);
+
+      // 0–4 s — l'annonce : belle façade au soleil
+      tl.fromTo("#world", { scale: 1.12, transformOrigin: "50% 60%" }, { scale: 1, duration: 4, ease: "power2.out" }, 0);
+      tl.fromTo("#sun", { scale: 0.85 }, { scale: 1.05, duration: 4, ease: "sine.inOut" }, 0);
+      tl.fromTo("#cl1", { x: -40 }, { x: 60, duration: 4, ease: "none" }, 0);
+      tl.fromTo("#cl2", { x: 30 }, { x: -50, duration: 4, ease: "none" }, 0);
+      capIn("#capA", 0.25);
+      tl.fromTo("#price", { scale: 0, rotation: -20 }, { scale: 1, rotation: -4, duration: 0.5, ease: "back.out(2.4)" }, 1.5);
+      tl.to("#price", { y: -10, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 2 }, 2.0);
+
+      // 3,9–5 s — « Vraiment ? » : la bande freine, glitch, la nuit tombe
+      capOut("#capA", 3.7);
+      tl.to("#price", { scale: 0, opacity: 0, duration: 0.25, ease: "back.in(2)" }, 3.75);
+      tl.to("#sky-night", { opacity: 1, duration: 0.15 }, 4.0);
+      tl.to("#blueprint", { opacity: 1, duration: 0.6 }, 4.0);
+      tl.to("#ground", { opacity: 0, duration: 0.2 }, 4.0);
+      tl.to("#sun, .cloud", { opacity: 0, duration: 0.1 }, 4.0);
+      flash(4.0, 0.9, 0.3);
+      tl.fromTo("#really", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "power4.out" }, 4.0);
+      for (let i = 0; i < 8; i++) {
+        tl.set("#really .r", { opacity: 0.85, x: (rnd(i, 3) - 0.5) * 40 }, 4.05 + i * 0.06);
+        tl.set("#really .c", { opacity: 0.85, x: (rnd(i, 4) - 0.5) * 40 }, 4.05 + i * 0.06);
+      }
+      tl.set("#really .r, #really .c", { opacity: 0, x: 0 }, 4.55);
+      shake("#root", 4.0, 14);
+      tl.to("#really", { scale: 0.9, opacity: 0, duration: 0.25, ease: "power3.in" }, 5.0);
+
+      // 5–12,5 s — le scan : le rayon descend, la radiographie apparaît sous lui
+      tl.to("#hud", { opacity: 1, duration: 0.3 }, 5.0);
+      tl.to("#scanlines", { opacity: 1, duration: 0.4 }, 5.0);
+      capIn("#capB", 5.1);
+      tl.to("#beamA", { opacity: 1, duration: 0.15 }, 5.4);
+      tl.fromTo("#beamA", { y: 0 }, { y: 1100, duration: 7, ease: "none" }, 5.5);
+      tl.fromTo("#bldA .xray", { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 7, ease: "none" }, 5.5);
+      const pct = { v: 0 };
+      tl.fromTo(pct, { v: 0 }, { v: 100, duration: 7, ease: "none", onUpdate: () => (document.getElementById("pct").textContent = Math.round(pct.v) + "%") }, 5.5);
+      tl.to("#hud-bar .rec", { opacity: 0.2, duration: 0.25, ease: "steps(1)", yoyo: true, repeat: 27 }, 5.0);
+      // Chaque alerte tombe quand le rayon passe sur le défaut (t = 5,5 + 7 × y / 1100)
+      [["#c1", "#i1", 5.95], ["#c2", "#i2", 7.92], ["#c3", "#i3", 10.18], ["#c4", "#i4", 12.12]].forEach(([c, iss, t]) => {
+        tl.fromTo(c, { x: 60, autoAlpha: 0, scale: 0.9 }, { x: 0, autoAlpha: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, t);
+        tl.fromTo(iss, { opacity: 0.4 }, { opacity: 1, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 5 }, t);
+        if (t + 1.6 < 12.2) tl.to(c, { opacity: 0.55, scale: 0.94, duration: 0.4, ease: "power2.out" }, t + 1.6);
+      });
+      capOut("#capB", 12.3);
+      tl.to("#beamA", { opacity: 0, duration: 0.2 }, 12.5);
+
+      // 12,5–16 s — bilan
+      tl.to(".call", { autoAlpha: 0, x: 40, duration: 0.3, ease: "power2.in", stagger: 0.05 }, 12.6);
+      tl.to("#bldA", { scale: 0.62, transformOrigin: "50% 0%", duration: 0.8, ease: "power3.inOut" }, 12.7);
+      tl.to("#hud", { opacity: 0, duration: 0.3 }, 12.7);
+      capIn("#capC", 12.9);
+      tl.fromTo("#sum", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.6)" }, 13.4);
+      tl.fromTo("#sum", { boxShadow: "0 0 40px rgba(255,77,94,0.15)" }, { boxShadow: "0 0 120px rgba(255,77,94,0.5)", duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut" }, 13.9);
+
+      // 16–22 s — Et celle-là ? Coup de fouet vers un autre immeuble, scan express, tout est vert
+      capOut("#capC", 15.7);
+      tl.to("#sum", { opacity: 0, y: 60, duration: 0.3, ease: "power2.in" }, 15.7);
+      tl.to("#bldA", { x: -1150, filter: "blur(16px)", duration: 0.35, ease: "power3.in" }, 16.0);
+      tl.fromTo("#bldB", { x: 1150, filter: "blur(16px)" }, { x: 0, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 16.15);
+      capIn("#capD", 16.3);
+      tl.to("#hud", { opacity: 1, duration: 0.2 }, 16.5);
+      tl.set("#pct", { textContent: "0%" }, 16.5);
+      tl.to("#beamB", { opacity: 1, duration: 0.1 }, 16.85);
+      tl.fromTo("#beamB", { y: 0 }, { y: 1100, duration: 1.0, ease: "power1.inOut" }, 16.9);
+      tl.fromTo("#bldB .xray", { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.0, ease: "power1.inOut" }, 16.9);
+      const pct2 = { v: 0 };
+      tl.fromTo(pct2, { v: 0 }, { v: 100, duration: 1.0, ease: "power1.inOut", onUpdate: () => (document.getElementById("pct").textContent = Math.round(pct2.v) + "%") }, 16.9);
+      tl.fromTo("#bldB .ok", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.3, ease: "back.out(3)", stagger: 0.22 }, 17.0);
+      tl.to("#beamB", { opacity: 0, duration: 0.15 }, 17.9);
+      // 18 s : DROP
+      flash(18.0, 0.8, 0.45);
+      capOut("#capD", 17.8);
+      capIn("#capE", 18.05);
+      tl.to("#bldB", { opacity: 0.45, duration: 0.4 }, 18.0);
+      tl.to("#hud", { opacity: 0, duration: 0.3 }, 18.0);
+      tl.fromTo("#scoreCard", { scale: 0.6, opacity: 0, y: 80 }, { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.8)" }, 18.0);
+      const g = { v: 0 };
+      tl.fromTo(
+        g,
+        { v: 0 },
+        {
+          v: 8.4,
+          duration: 1.4,
+          ease: "power3.out",
+          onUpdate: () => {
+            document.getElementById("score").textContent = g.v.toFixed(1);
+            document.getElementById("arc").setAttribute("stroke-dashoffset", (603.19 * (1 - g.v / 10)).toFixed(2));
+          },
+        },
+        18.15,
+      );
+      tl.fromTo("#chip", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.6)" }, 19.6);
+      tl.to("#scoreCard", { y: -12, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: 2 }, 20.0);
+      tl.to("#shot", { scale: 1.3, filter: "blur(16px)", opacity: 0.2, duration: 0.25, ease: "power3.in" }, 21.75);
+
+      // 22–26 s — compteurs
+      [["#st1", "#n1", 300, "", 22.0], ["#st2", "#n2", 7, "", 22.75], ["#st3", "#n3", 1, "", 23.5], ["#st4", "#n4", 72, "h", 24.25]].forEach(([row, n, v, suf, t]) => {
+        tl.fromTo(row, { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power4.out" }, t);
+        const o = { v: 0 };
+        tl.fromTo(o, { v: 0 }, { v, duration: 0.5, ease: "power2.out", onUpdate: () => (document.querySelector(n).textContent = Math.round(o.v) + suf) }, t);
+      });
+      tl.fromTo("#s4", { scale: 1 }, { scale: 1.04, duration: 4, ease: "none" }, 22.0);
+      tl.to("#s4 .stat", { x: 120, opacity: 0, duration: 0.25, ease: "power3.in", stagger: 0.04 }, 25.7);
+
+      // 26–30 s — le rayon révèle la signature
+      flash(26.0, 0.6, 0.3);
+      tl.to("#beamC", { opacity: 1, duration: 0.1 }, 26.0);
+      tl.fromTo("#beamC", { y: 0 }, { y: 440, duration: 0.8, ease: "power2.inOut" }, 26.05);
+      tl.fromTo("#s5-title", { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power2.inOut" }, 26.05);
+      tl.to("#beamC", { opacity: 0, duration: 0.3 }, 26.9);
+      tl.fromTo("#s5-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 26.3);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.2)" }, 27.0);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.1, ease: "power2.out", stagger: 0.045 }, 27.3);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 28.0);
+      tl.to("#cta", { scale: 1.05, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: 3 }, 28.2);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
