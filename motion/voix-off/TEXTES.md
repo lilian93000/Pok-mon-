@@ -155,11 +155,11 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 
 ## Le groupe de la copro
 > 0,2 — POV : tu rejoins le groupe de ta nouvelle copro.
-> 3,9 — Premier message : appel de fonds. Cinq mille deux cents euros.
-> 6,2 — Une note vocale… les cafards sont revenus.
-> 8,4 — Un portail à dix-huit mille euros. Personne l'a voté.
+> 3,9 — Appel de fonds : cinq mille deux cents euros.
+> 6,2 — Note vocale : les cafards.
+> 8,4 — Portail à dix-huit mille. Personne l'a voté.
 > 10,8 — Et un procès avec le cinquième.
-> 14,1 — Tu peux pas quitter le groupe.
+> 14,1 — Tu peux pas partir.
 > 15,4 — Tout ça était écrit dans les PV.
 > 19,4 — Nous, on les lit avant que tu entres.
 > 24,2 — Lis les PV avant d'entrer dans le groupe.
