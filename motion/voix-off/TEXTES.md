@@ -152,3 +152,35 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 > 14,7 — La solution : Analyse ta copro.
 > 19,6 — Un expert, un rapport en soixante-douze heures.
 > 24,0 — Et tu signes l'esprit tranquille.
+
+## Le groupe de la copro
+> 0,2 — POV : tu rejoins le groupe de ta nouvelle copro.
+> 3,9 — Premier message : appel de fonds. Cinq mille deux cents euros.
+> 6,2 — Une note vocale… les cafards sont revenus.
+> 8,4 — Un portail à dix-huit mille euros. Personne l'a voté.
+> 10,8 — Et un procès avec le cinquième.
+> 14,1 — Tu peux pas quitter le groupe.
+> 15,4 — Tout ça était écrit dans les PV.
+> 19,4 — Nous, on les lit avant que tu entres.
+> 24,2 — Lis les PV avant d'entrer dans le groupe.
+
+## Unboxing
+> 0,2 — Unboxing de mon nouvel appart.
+> 2,1 — Les clés, la vue… parfait.
+> 6,2 — Euh. Les fenêtres des parties communes ?
+> 8,9 — Des infiltrations au parking.
+> 11,5 — La clim, interdite.
+> 13,5 — Et un contrat à mille neuf cents euros par an.
+> 15,5 — Treize mille euros de surprises. Non remboursable.
+> 17,6 — Nous, on ouvre le colis avant que tu achètes.
+> 24,2 — Ouvre le colis avant de l'acheter.
+
+## La recette ratée
+> 0,2 — Recette : rater son achat immo en trente secondes.
+> 2,6 — Un coup de cœur. Zéro page lue. Un agent pressé.
+> 8,6 — On enfourne.
+> 11,5 — Résultat : c'est cramé.
+> 12,2 — Colonne de gaz. Platanes à élaguer. Charges énormes.
+> 16,8 — La recette du chef : une analyse, tous les PV lus.
+> 20,0 — Et un gâteau parfait.
+> 24,2 — Suis la bonne recette avant de signer.

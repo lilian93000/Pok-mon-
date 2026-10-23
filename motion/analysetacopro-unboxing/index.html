@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « UNBOXING » — le déballage ASMR de « mon nouvel appart ». 90 BPM (lo-fi) : 1 mesure ≈ 2,67 s.
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --kraft: #c8955c;
+        --red: #e5243b;
+        --green: #12965c;
+        --ink: #1e1a16;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #e9dcc8;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: var(--ink);
+        background:
+          repeating-linear-gradient(90deg, rgba(120, 80, 40, 0.06) 0 2px, transparent 2px 140px),
+          radial-gradient(80% 60% at 50% 45%, #f3e7d4 0%, #e2d1b8 70%, #cdb795 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 220px;
+        font-size: 62px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+      }
+      .cap .tag {
+        display: inline-block;
+        margin-left: 12px;
+        padding: 4px 18px 8px;
+        border-radius: 999px;
+        background: var(--ink);
+        color: #fff;
+        font-size: 34px;
+        letter-spacing: 0.06em;
+        vertical-align: middle;
+      }
+      .cap .r {
+        color: var(--red);
+      }
+      .cap .b {
+        color: var(--brand);
+      }
+      /* Carton */
+      #box {
+        left: 240px;
+        top: 1080px;
+        width: 600px;
+        height: 250px;
+      }
+      #box .front {
+        position: absolute;
+        inset: 0;
+        border-radius: 10px;
+        background: linear-gradient(180deg, #d3a167, #b98249);
+        box-shadow: 0 40px 70px rgba(80, 50, 20, 0.35);
+      }
+      #box .tape {
+        position: absolute;
+        left: 260px;
+        width: 80px;
+        top: 0;
+        bottom: 0;
+        background: rgba(240, 225, 190, 0.75);
+      }
+      #box .lbl {
+        position: absolute;
+        left: 30px;
+        top: 70px;
+        width: 210px;
+        padding: 14px 16px;
+        border-radius: 8px;
+        background: #fff;
+        font-size: 24px;
+        font-weight: 900;
+        line-height: 1.15;
+        transform: rotate(-3deg);
+      }
+      #box .lbl small {
+        display: block;
+        margin-top: 6px;
+        color: var(--red);
+        letter-spacing: 0.12em;
+      }
+      #box .flap {
+        position: absolute;
+        top: -70px;
+        width: 300px;
+        height: 70px;
+        background: linear-gradient(180deg, #b98249, #d3a167);
+        transform-origin: 50% 100%;
+      }
+      #fl {
+        left: 0;
+        clip-path: polygon(6% 0, 100% 0, 100% 100%, 0 100%);
+      }
+      #fr {
+        right: 0;
+        clip-path: polygon(0 0, 94% 0, 100% 100%, 0 100%);
+      }
+      #cut {
+        position: absolute;
+        left: 296px;
+        top: -70px;
+        width: 8px;
+        height: 70px;
+        background: #6b4a2a;
+        transform-origin: 50% 0%;
+      }
+      /* Objets */
+      .item {
+        position: absolute;
+        left: 320px;
+        top: 450px;
+        width: 440px;
+        height: 440px;
+        opacity: 0;
+      }
+      .item svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        filter: drop-shadow(0 30px 30px rgba(80, 50, 20, 0.3));
+      }
+      .pill {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 905px;
+        padding: 18px 26px;
+        border-radius: 24px;
+        background: #fff;
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.12;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(80, 50, 20, 0.2);
+        opacity: 0;
+        z-index: 4;
+      }
+      .pill.good b {
+        color: var(--green);
+      }
+      .pill.bad {
+        background: #fff1f2;
+        border: 4px solid var(--red);
+      }
+      .pill.bad b {
+        color: var(--red);
+      }
+      .thumb {
+        position: absolute;
+        top: 1360px;
+        width: 120px;
+        height: 120px;
+        border-radius: 22px;
+        background: #fff;
+        box-shadow: 0 10px 20px rgba(80, 50, 20, 0.2);
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .thumb svg {
+        width: 92px;
+        height: 92px;
+      }
+      .thumb.bad {
+        border: 5px solid var(--red);
+      }
+      #total {
+        left: 120px;
+        top: 560px;
+        width: 760px;
+        padding: 30px 30px 26px;
+        border: 12px solid var(--red);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.95);
+        color: var(--red);
+        text-align: center;
+        font-size: 58px;
+        font-weight: 900;
+        line-height: 1.02;
+        transform: rotate(-6deg);
+        opacity: 0;
+        z-index: 6;
+      }
+      #total small {
+        display: block;
+        margin-top: 12px;
+        font-size: 34px;
+        color: var(--ink);
+        letter-spacing: 0.08em;
+      }
+      #check {
+        left: 70px;
+        top: 470px;
+        width: 850px;
+        padding: 30px 34px;
+        border-radius: 28px;
+        background: #fff;
+        box-shadow: 0 30px 60px rgba(80, 50, 20, 0.25);
+        opacity: 0;
+        z-index: 5;
+      }
+      #check .row {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 14px 0;
+        font-size: 40px;
+        font-weight: 800;
+        opacity: 0;
+      }
+      #check .row i {
+        width: 58px;
+        height: 58px;
+        flex: none;
+        border-radius: 50%;
+        background: var(--green);
+        color: #fff;
+        font-style: normal;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #check .sc {
+        margin-top: 16px;
+        padding: 18px;
+        border-radius: 20px;
+        background: #e8f7ef;
+        color: #0b7a4a;
+        text-align: center;
+        font-size: 46px;
+        font-weight: 900;
+        opacity: 0;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+        color: #fff;
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 116px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.96;
+      }
+      #end-title .y {
+        color: #f2c45a;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(242, 196, 90, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="i-keys" viewBox="0 0 300 300"><circle cx="100" cy="90" r="50" fill="none" stroke="#c9a24a" stroke-width="16" /><path d="M128 128l110 110M200 210l24-24M222 232l22-22" stroke="#d6b25c" stroke-width="22" stroke-linecap="round" /><path d="M95 140l-30 130M70 232h-30M78 200h-26" stroke="#b9c3cf" stroke-width="20" stroke-linecap="round" /><rect x="50" y="20" width="80" height="34" rx="10" fill="#0b5fff" /></symbol>
+        <symbol id="i-view" viewBox="0 0 300 300"><rect x="30" y="20" width="240" height="270" rx="8" fill="#fff" /><rect x="48" y="38" width="204" height="190" fill="#ffb36b" /><circle cx="150" cy="150" r="40" fill="#ffe08a" /><path d="M48 228V180h30v-30h26v40h24v-60h30v70h20v-36h30v24h44v60z" fill="#3a2f55" /><text x="150" y="268" text-anchor="middle" font-family="Inter" font-weight="800" font-size="24" fill="#555">la vue ♥</text></symbol>
+        <symbol id="i-bill" viewBox="0 0 300 300"><rect x="20" y="60" width="260" height="180" rx="10" fill="#fff" stroke="#ddd" stroke-width="4" /><path d="M20 70l130 90 130-90" fill="none" stroke="#ccc" stroke-width="6" /><g transform="rotate(-14 150 150)"><rect x="70" y="110" width="160" height="60" rx="8" fill="none" stroke="#e5243b" stroke-width="8" /><text x="150" y="152" text-anchor="middle" font-family="Inter" font-weight="900" font-size="32" fill="#e5243b">FACTURE</text></g></symbol>
+        <symbol id="i-leak" viewBox="0 0 300 300"><rect x="40" y="40" width="220" height="150" rx="16" fill="#2b3a55" /><text x="150" y="150" text-anchor="middle" font-family="Inter" font-weight="900" font-size="110" fill="#fff">P</text><path d="M90 200c0 20-14 30-14 44a14 14 0 0 0 28 0c0-14-14-24-14-44zM170 210c0 18-12 26-12 38a12 12 0 0 0 24 0c0-12-12-20-12-38z" fill="#3d8bff" /><ellipse cx="150" cy="282" rx="120" ry="14" fill="#7fb3ff" opacity="0.6" /></symbol>
+        <symbol id="i-rules" viewBox="0 0 300 300"><rect x="50" y="20" width="200" height="260" rx="12" fill="#2f4a8a" /><rect x="66" y="36" width="168" height="228" rx="8" fill="#f5f1e6" /><text x="150" y="82" text-anchor="middle" font-family="Inter" font-weight="900" font-size="24" fill="#2f4a8a">RÈGLEMENT</text><rect x="96" y="130" width="108" height="60" rx="8" fill="#dfe6ee" stroke="#8a97a8" stroke-width="5" /><path d="M106 150h88M106 166h88" stroke="#8a97a8" stroke-width="4" /><path d="M86 112l128 100M214 112L86 212" stroke="#e5243b" stroke-width="14" stroke-linecap="round" /></symbol>
+        <symbol id="i-contract" viewBox="0 0 300 300"><rect x="56" y="20" width="188" height="260" rx="10" fill="#fff" stroke="#ddd" stroke-width="4" /><text x="150" y="70" text-anchor="middle" font-family="Inter" font-weight="900" font-size="24" fill="#333">CONTRAT</text><path d="M80 100h140M80 130h140M80 160h100" stroke="#ccc" stroke-width="8" stroke-linecap="round" /><text x="150" y="232" text-anchor="middle" font-family="Inter" font-weight="900" font-size="34" fill="#e5243b">+1 900 €/an</text></symbol>
+      </defs>
+    </svg>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="table" class="clip" data-start="0" data-duration="24" data-track-index="0">
+        <div class="cap" id="cap0">Unboxing de mon<br />nouvel appart <span class="tag">ASMR</span></div>
+        <div class="cap" id="cap1" style="visibility: hidden">Euh… c'était <span class="r">pas</span><br /><span class="r">dans l'annonce.</span></div>
+        <div class="cap" id="cap2" style="visibility: hidden">Le colis est <span class="r">non</span><br /><span class="r">remboursable.</span></div>
+        <div class="cap" id="cap3" style="visibility: hidden">Nous, on ouvre le colis<br /><span class="b">avant que tu achètes.</span></div>
+
+        <div id="box" class="abs">
+          <div class="flap" id="fl"></div>
+          <div class="flap" id="fr"></div>
+          <div id="cut"></div>
+          <div class="front"><div class="tape"></div><div class="lbl" id="lbl">MON NOUVEL APPART<small>FRAGILE</small></div></div>
+        </div>
+
+        <div class="item" id="it0"><svg viewBox="0 0 300 300"><use href="#i-keys" /></svg></div>
+        <div class="item" id="it1"><svg viewBox="0 0 300 300"><use href="#i-view" /></svg></div>
+        <div class="item" id="it2"><svg viewBox="0 0 300 300"><use href="#i-bill" /></svg></div>
+        <div class="item" id="it3"><svg viewBox="0 0 300 300"><use href="#i-leak" /></svg></div>
+        <div class="item" id="it4"><svg viewBox="0 0 300 300"><use href="#i-rules" /></svg></div>
+        <div class="item" id="it5"><svg viewBox="0 0 300 300"><use href="#i-contract" /></svg></div>
+
+        <div class="pill good" id="pl0">Les clés : <b>10/10</b></div>
+        <div class="pill good" id="pl1">La vue : <b>10/10</b></div>
+        <div class="pill bad" id="pl2">Fenêtres des parties communes<br /><b>ta part : 3 900 €</b></div>
+        <div class="pill bad" id="pl3">Infiltrations au parking<br /><b>7 600 €</b></div>
+        <div class="pill bad" id="pl4">Règlement :<br /><b>clim interdite en façade</b></div>
+        <div class="pill bad" id="pl5">Nouveau contrat de gardiennage<br /><b>+1 900 € par an</b></div>
+
+        <div class="thumb" id="th0" style="left: 80px"><svg viewBox="0 0 300 300"><use href="#i-keys" /></svg></div>
+        <div class="thumb" id="th1" style="left: 220px"><svg viewBox="0 0 300 300"><use href="#i-view" /></svg></div>
+        <div class="thumb bad" id="th2" style="left: 360px"><svg viewBox="0 0 300 300"><use href="#i-bill" /></svg></div>
+        <div class="thumb bad" id="th3" style="left: 500px"><svg viewBox="0 0 300 300"><use href="#i-leak" /></svg></div>
+        <div class="thumb bad" id="th4" style="left: 640px"><svg viewBox="0 0 300 300"><use href="#i-rules" /></svg></div>
+        <div class="thumb bad" id="th5" style="left: 780px"><svg viewBox="0 0 300 300"><use href="#i-contract" /></svg></div>
+
+        <div id="total" class="abs" data-layout-allow-overlap>13 400 €<br />DE SURPRISES<small>RETOUR IMPOSSIBLE</small></div>
+
+        <div id="check" class="abs" data-layout-allow-overlap>
+          <div class="row"><i>✓</i>Fenêtres refaites en 2023</div>
+          <div class="row"><i>✓</i>Parking sec, contrôlé</div>
+          <div class="row"><i>✓</i>Règlement sans piège</div>
+          <div class="row"><i>✓</i>Charges stables</div>
+          <div class="sc">Résidence Les Érables · 8.8/10</div>
+        </div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Ouvre le colis</span></span>
+          <span class="mask"><span class="y">avant de</span></span>
+          <span class="mask"><span class="y">l'acheter.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 90,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+      gsap.set("#cut", { scaleY: 0 });
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const swapCap = (from, to, t) => {
+        tl.set(from, { visibility: "hidden" }, t);
+        tl.set(to, { visibility: "visible" }, t);
+        tl.fromTo(to, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+
+      // 0–2 s : on ouvre le carton
+      tl.fromTo("#box", { rotation: -1 }, { rotation: 1, duration: 0.3, yoyo: true, repeat: 1, ease: "sine.inOut" }, 0.1);
+      tl.to("#cut", { scaleY: 1, duration: 0.45, ease: "power1.inOut" }, 0.6);
+      tl.to("#fl", { scaleY: -0.7, rotation: -12, duration: 0.35, ease: "back.out(2)" }, 1.3);
+      tl.to("#fr", { scaleY: -0.7, rotation: 12, duration: 0.35, ease: "back.out(2)" }, 1.4);
+      tl.to("#cut", { opacity: 0, duration: 0.1 }, 1.3);
+
+      // Les objets sortent un par un
+      const T = [2.0, 4.0, 6.0, 8.7, 11.3, 13.3];
+      T.forEach((t, k) => {
+        const next = k < T.length - 1 ? T[k + 1] : 15.3;
+        tl.fromTo(`#it${k}`, { y: 420, scale: 0.4, opacity: 0, rotation: -8 }, { y: 0, scale: 1, opacity: 1, rotation: 0, duration: 0.45, ease: "back.out(1.6)", immediateRender: false }, t);
+        tl.to(`#it${k}`, { y: -10, duration: 0.6, yoyo: true, repeat: 1, ease: "sine.inOut" }, t + 0.5);
+        tl.fromTo(`#pl${k}`, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "back.out(2)", immediateRender: false }, t + 0.3);
+        tl.to(`#it${k}`, { opacity: 0, scale: 0.3, y: 760, duration: 0.3, ease: "power2.in" }, next - 0.3);
+        tl.to(`#pl${k}`, { opacity: 0, duration: 0.15 }, next - 0.25);
+        tl.fromTo(`#th${k}`, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "back.out(3)", immediateRender: false }, next - 0.05);
+        if (k >= 2) {
+          shake("#table", t + 0.35, 10, 5);
+          flash(t + 0.35, 0.3, 0.15);
+        }
+      });
+      swapCap("#cap0", "#cap1", T[2]);
+      // 15,3 s : le total
+      const TT = 15.3;
+      tl.fromTo("#total", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, TT - 0.16);
+      shake("#table", TT, 18, 6);
+      flash(TT, 0.4, 0.25);
+      swapCap("#cap1", "#cap2", TT);
+      // 17,4 s : la bonne copro
+      const G = 17.4;
+      swapCap("#cap2", "#cap3", G);
+      tl.to("#total", { opacity: 0, duration: 0.2 }, G);
+      tl.to(".thumb", { opacity: 0, y: 40, duration: 0.25, stagger: 0.03 }, G);
+      tl.set("#lbl", { innerHTML: "RÉSIDENCE<br/>LES ÉRABLES<small style='color:#12965c'>ANALYSÉE ✓</small>" }, G);
+      tl.fromTo("#box", { scale: 0.9 }, { scale: 1, duration: 0.4, ease: "back.out(2)", immediateRender: false }, G);
+      tl.fromTo("#check", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, G + 0.3);
+      tl.fromTo("#check .row", { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: "back.out(2)", stagger: BEAT, immediateRender: false }, G + 0.6);
+      tl.fromTo("#check .sc", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.5)", immediateRender: false }, G + 0.6 + 4 * BEAT);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 3.5);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 5 }, E0 + BEAT * 4);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

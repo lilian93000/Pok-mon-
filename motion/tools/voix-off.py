@@ -39,6 +39,9 @@ FILES = {
     "4K (« N'achète pas sans analyser »)": "4k",
     "Motion design (3 étapes)": "tiktok-motion",
     "Vrais humains": "tiktok",
+    "Le groupe de la copro": "groupe",
+    "Unboxing": "unboxing",
+    "La recette ratée": "recette",
 }
 
 NUM = {"0": "zéro", "1": "un", "2": "deux", "3": "trois", "4": "quatre", "5": "cinq", "6": "six", "7": "sept", "8": "huit", "9": "neuf"}

@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « LE GROUPE DE LA COPRO » — POV : tu rejoins le groupe de discussion de ta nouvelle copro. 112 BPM (amapiano).
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --bg: #0b141a;
+        --bub: #202c33;
+        --mine: #005c4b;
+        --red: #ff5a6e;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--bg);
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #e9edef;
+        background:
+          radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.025) 0 2px, transparent 3px) 0 0 / 60px 60px,
+          var(--bg);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 215px;
+        font-size: 56px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+        color: #fff;
+        z-index: 6;
+      }
+      .cap .g {
+        color: #25d366;
+      }
+      .cap .r {
+        color: var(--red);
+      }
+      .cap .b {
+        color: #7fb0ff;
+      }
+      /* En-tête de conversation */
+      .head {
+        position: absolute;
+        left: 40px;
+        right: 120px;
+        top: 360px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 0 24px;
+        border-radius: 28px;
+        background: #1f2c34;
+      }
+      .head .av {
+        width: 84px;
+        height: 84px;
+        border-radius: 50%;
+        background: #3b4a54;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .head .av svg {
+        width: 50px;
+        height: 50px;
+      }
+      .head .n {
+        font-size: 38px;
+        font-weight: 800;
+        color: #fff;
+      }
+      .head .m {
+        font-size: 28px;
+        color: #8696a0;
+        margin-top: 4px;
+      }
+      /* Fil */
+      .feed {
+        position: absolute;
+        left: 40px;
+        right: 120px;
+        top: 500px;
+        height: 870px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 14px;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 90px);
+        mask-image: linear-gradient(180deg, transparent 0, #000 90px);
+      }
+      .msg {
+        display: none;
+        max-width: 780px;
+        padding: 16px 24px 14px;
+        border-radius: 8px 28px 28px 28px;
+        background: var(--bub);
+        font-size: 38px;
+        line-height: 1.22;
+        align-self: flex-start;
+        transform-origin: 0% 100%;
+      }
+      .msg .who {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 4px;
+      }
+      .msg .tm {
+        float: right;
+        margin: 14px 0 0 18px;
+        font-size: 22px;
+        color: #8696a0;
+      }
+      .msg b {
+        color: var(--red);
+      }
+      .msg.me {
+        align-self: flex-end;
+        background: var(--mine);
+        border-radius: 28px 8px 28px 28px;
+        transform-origin: 100% 100%;
+      }
+      .msg.sys {
+        align-self: center;
+        background: #182229;
+        color: #8696a0;
+        font-size: 30px;
+        border-radius: 16px;
+        text-align: center;
+      }
+      .msg.sys.alert {
+        background: #3a1219;
+        color: #ffb3bd;
+        font-weight: 800;
+      }
+      .msg.ok b {
+        color: #25d366;
+      }
+      .typing {
+        display: none;
+        align-self: flex-start;
+        padding: 22px 30px;
+        border-radius: 8px 28px 28px 28px;
+        background: var(--bub);
+      }
+      .typing i {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin: 0 5px;
+        border-radius: 50%;
+        background: #8696a0;
+      }
+      .voice {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-top: 6px;
+      }
+      .voice .play {
+        width: 0;
+        height: 0;
+        border-left: 30px solid #8696a0;
+        border-top: 18px solid transparent;
+        border-bottom: 18px solid transparent;
+      }
+      .voice .bars {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        height: 60px;
+      }
+      .voice .bars span {
+        width: 8px;
+        border-radius: 4px;
+        background: #8696a0;
+      }
+      .voice .tx {
+        margin-top: 8px;
+        font-size: 30px;
+        font-style: normal;
+        color: #b8c4cb;
+      }
+      .score {
+        align-self: center;
+        display: none;
+        padding: 22px 34px;
+        border-radius: 26px;
+        background: #fff;
+        color: #0c1424;
+        font-size: 44px;
+        font-weight: 900;
+        text-align: center;
+      }
+      .score small {
+        display: block;
+        font-size: 28px;
+        font-weight: 700;
+        color: #5a6577;
+      }
+      .score b {
+        color: #0b7a4a;
+      }
+      /* Barre de saisie */
+      .input {
+        position: absolute;
+        left: 40px;
+        right: 120px;
+        top: 1385px;
+        height: 96px;
+        display: flex;
+        align-items: center;
+        padding: 0 32px;
+        border-radius: 48px;
+        background: #2a3942;
+        font-size: 36px;
+        color: #8696a0;
+      }
+      .input .txt {
+        color: #e9edef;
+      }
+      .input .cur {
+        display: inline-block;
+        width: 3px;
+        height: 44px;
+        margin-left: 4px;
+        background: #25d366;
+        vertical-align: middle;
+      }
+      /* PV d'AG */
+      #pv {
+        left: 70px;
+        top: 520px;
+        width: 850px;
+        height: 860px;
+        border-radius: 20px;
+        background: #fbfaf6;
+        color: #1c1b19;
+        padding: 40px 44px;
+        opacity: 0;
+        z-index: 5;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      }
+      #pv h3 {
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+      }
+      #pv .sub {
+        margin-top: 6px;
+        font-size: 28px;
+        color: #6b6658;
+      }
+      #pv .ln {
+        position: relative;
+        margin-top: 34px;
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      #pv .ln .hl {
+        position: absolute;
+        left: -10px;
+        right: -10px;
+        top: 2px;
+        bottom: 2px;
+        background: rgba(255, 225, 77, 0.75);
+        transform-origin: 0% 50%;
+        z-index: -1;
+      }
+      #pv .ln span.res {
+        display: block;
+        font-size: 26px;
+        font-weight: 700;
+        color: #6b6658;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+        color: #fff;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.96;
+        color: #fff;
+      }
+      #end-title .g {
+        color: #25d366;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(37, 211, 102, 0.3);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+        color: #fff;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+        color: #fff;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="chat" class="clip" data-start="0" data-duration="24" data-track-index="0">
+        <div class="cap" id="cap0">POV : tu rejoins le groupe<br /><span class="g">de ta nouvelle copro.</span></div>
+        <div class="cap" id="cap1" style="visibility: hidden">Tout ça était écrit<br /><span class="r">dans les PV d'AG.</span></div>
+        <div class="cap" id="cap2" style="visibility: hidden">Nous, on les lit<br /><span class="b">avant que tu entres.</span></div>
+
+        <div class="head" id="h1">
+          <div class="av"><svg viewBox="0 0 24 24"><path d="M4 21V7l8-4 8 4v14M9 21v-5h6v5M8 10h2M14 10h2M8 13h2M14 13h2" fill="none" stroke="#cfd8dc" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" /></svg></div>
+          <div><div class="n">Résidence Les Lilas</div><div class="m">Copropriétaires · 52 membres</div></div>
+        </div>
+        <div class="head" id="h2" style="visibility: hidden">
+          <div class="av" style="background: #1d5a43"><svg viewBox="0 0 24 24"><path d="M4 21V7l8-4 8 4v14M9 21v-5h6v5M8 10h2M14 10h2M8 13h2M14 13h2" fill="none" stroke="#dfffee" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" /></svg></div>
+          <div><div class="n">Résidence Bellevue</div><div class="m">Copropriétaires · 38 membres</div></div>
+        </div>
+
+        <div class="feed" id="f1">
+          <div class="msg sys" id="m0" style="display: block">Tu as été ajouté au groupe</div>
+          <div class="msg" id="m1"><div class="who" style="color: #ff9ad5">Mme Garnier · 3ᵉ B</div>Bienvenue au nouveau du 4ᵉ !<span class="tm">19:02</span></div>
+          <div class="msg" id="m2"><div class="who" style="color: #7fd6ff">M. Ferreira · 1ᵉʳ</div>Il est au courant pour la cour ?<span class="tm">19:02</span></div>
+          <div class="typing" id="ty1"><i></i><i></i><i></i></div>
+          <div class="msg" id="m3"><div class="who" style="color: #ffd27f">Le syndic</div>Rappel : appel de fonds exceptionnel pour la cour et les évacuations : <b>5 200 € par lot</b>.<span class="tm">19:03</span></div>
+          <div class="msg" id="m4"><div class="who" style="color: #9dff9a">Karim · 2ᵉ</div><div class="voice"><div class="play"></div><div class="bars" id="bars"></div><span class="tm" style="margin: 0">0:12</span></div><div class="tx">« Les cafards sont revenus au 2ᵉ… »</div></div>
+          <div class="msg" id="m5"><div class="who" style="color: #ff9ad5">Mme Garnier · 3ᵉ B</div>Qui a voté le portail électrique à <b>18 000 €</b> ??<span class="tm">19:05</span></div>
+          <div class="msg" id="m6"><div class="who" style="color: #7fd6ff">M. Ferreira · 1ᵉʳ</div>Pas moi<span class="tm">19:05</span></div>
+          <div class="msg" id="m7"><div class="who" style="color: #9dff9a">Karim · 2ᵉ</div>Moi non plus<span class="tm">19:05</span></div>
+          <div class="msg" id="m8"><div class="who" style="color: #c7a6ff">Lucie · RDC</div>Pas moi !<span class="tm">19:05</span></div>
+          <div class="msg" id="m9"><div class="who" style="color: #7fd6ff">M. Ferreira · 1ᵉʳ</div>Et le procès avec le 5ᵉ reprend en janvier.<span class="tm">19:06</span></div>
+          <div class="msg me" id="m10">Je peux quitter le groupe ?<span class="tm">19:06 ✓✓</span></div>
+          <div class="msg sys alert" id="m11">Impossible de quitter ce groupe : tu es copropriétaire.</div>
+        </div>
+        <div class="feed" id="f2" style="visibility: hidden">
+          <div class="msg sys" id="n0" style="display: block">Tu as été ajouté au groupe</div>
+          <div class="msg ok" id="n1"><div class="who" style="color: #ff9ad5">Sophie · 2ᵉ</div>Bienvenue ! Fête des voisins samedi :)<span class="tm">18:40</span></div>
+          <div class="msg ok" id="n2"><div class="who" style="color: #ffd27f">Le syndic</div>Comptes 2025 <b>approuvés à l'unanimité</b>.<span class="tm">18:41</span></div>
+          <div class="msg ok" id="n3"><div class="who" style="color: #ffd27f">Le syndic</div>Pas de gros travaux avant 2030, <b>fonds travaux bien rempli</b>.<span class="tm">18:41</span></div>
+          <div class="score" id="n4">Score copro <b>9.0/10</b><small>analysée par AnalyseTaCopro</small></div>
+        </div>
+
+        <div class="input"><span class="txt" id="intxt"></span><span class="cur" id="cur"></span><span id="ph">&nbsp;Message</span></div>
+
+        <div id="pv" class="abs" data-layout-allow-overlap>
+          <h3>PROCÈS-VERBAL D'AG</h3>
+          <div class="sub">Résidence Les Lilas · 2024 et 2025</div>
+          <div class="ln"><span class="hl"></span>Résolution 9 : réfection de la cour et des évacuations — adoptée<span class="res">appel de fonds exceptionnel, réparti par tantièmes</span></div>
+          <div class="ln"><span class="hl"></span>Résolution 12 : portail électrique (18 000 €) — adoptée<span class="res">votée à la majorité des présents</span></div>
+          <div class="ln"><span class="hl"></span>Point 15 : traitement des nuisibles — reporté<span class="res">signalements répétés au 2ᵉ étage</span></div>
+          <div class="ln"><span class="hl"></span>Point 18 : procédure contre le lot du 5ᵉ — en cours<span class="res">audience prévue en janvier</span></div>
+        </div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Lis les PV</span></span>
+          <span class="mask"><span>avant d'entrer</span></span>
+          <span class="mask"><span class="g">dans le groupe.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 112;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      gsap.set("#pv .hl", { scaleX: 0 });
+      document.getElementById("bars").innerHTML = Array.from({ length: 26 }, (_, i) => `<span style="height:${Math.round(14 + rnd(i, 3) * 46)}px"></span>`).join("");
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const swapCap = (from, to, t) => {
+        tl.set(from, { visibility: "hidden" }, t);
+        tl.set(to, { visibility: "visible" }, t);
+        tl.fromTo(to, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+      };
+      // Un message arrive : il apparaît en bas, le fil remonte
+      const pop = (sel, t, disp = "block") => {
+        tl.set(sel, { display: disp }, t);
+        tl.fromTo(sel, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(2.2)", immediateRender: false }, t);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      tl.to("#cur", { opacity: 0, duration: BEAT / 2, yoyo: true, repeat: 47, ease: "steps(1)" }, 0);
+
+      // ----- Le groupe des Lilas -----
+      pop("#m1", 0.9);
+      pop("#m2", 1.9);
+      pop("#ty1", 2.9);
+      tl.to("#ty1 i", { y: -10, duration: 0.18, yoyo: true, repeat: 5, ease: "sine.inOut", stagger: 0.09 }, 2.9);
+      tl.set("#ty1", { display: "none" }, 3.9);
+      pop("#m3", 3.9);
+      pop("#m4", 6.0);
+      tl.fromTo("#bars span", { scaleY: 0.3 }, { scaleY: 1, duration: 0.12, yoyo: true, repeat: 15, ease: "sine.inOut", stagger: 0.03, immediateRender: false }, 6.2);
+      pop("#m5", 8.2);
+      pop("#m6", 9.1);
+      pop("#m7", 9.5);
+      pop("#m8", 9.9);
+      pop("#m9", 10.7);
+      // tu écris…
+      tl.set("#ph", { display: "none" }, 12.0);
+      const TXT = "Je peux quitter le groupe ?";
+      for (let k = 1; k <= TXT.length; k++) tl.set("#intxt", { textContent: TXT.slice(0, k) }, 12.0 + k * 0.03);
+      tl.set("#intxt", { textContent: "" }, 13.0);
+      tl.set("#ph", { display: "inline" }, 13.0);
+      pop("#m10", 13.0);
+      pop("#m11", 14.0);
+      shake("#chat", 14.0, 16, 6);
+      flash(14.0, 0.35, 0.2);
+
+      // ----- Les PV d'AG -----
+      const PV = 15.2;
+      swapCap("#cap0", "#cap1", PV);
+      tl.fromTo("#pv", { y: 120, opacity: 0, rotation: 3 }, { y: 0, opacity: 1, rotation: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, PV);
+      tl.to("#f1, #h1", { opacity: 0.12, duration: 0.3 }, PV);
+      tl.to("#pv .hl", { scaleX: 1, duration: 0.25, ease: "power2.out", stagger: BEAT * 1.4 }, PV + 0.5);
+      tl.to("#pv", { y: 120, opacity: 0, duration: 0.25, ease: "power2.in" }, 19.1);
+
+      // ----- La bonne copro -----
+      const B = 19.3;
+      swapCap("#cap1", "#cap2", B);
+      flash(B, 0.5, 0.25);
+      tl.set("#h1, #f1", { visibility: "hidden" }, B);
+      tl.set("#h2, #f2", { visibility: "visible" }, B);
+      pop("#n1", B + 0.4);
+      pop("#n2", B + 1.4);
+      pop("#n3", B + 2.4);
+      pop("#n4", B + 3.4);
+
+      // ----- Fin -----
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 7 }, E0 + BEAT * 4.5);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
