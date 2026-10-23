@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « L'ADDITION » — le ticket de caisse qui n'en finit pas. 96 BPM : 1 temps = 0,625 s, 1 mesure = 2,5 s.
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --red: #e5243b;
+        --green: #0e925e;
+        --ink: #1c1b19;
+        --paper: #fbfaf5;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #151a2e;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #fff;
+        background: radial-gradient(80% 55% at 50% 40%, #2a3358 0%, #151a2e 60%, #0b0e1c 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 190px;
+        font-size: 66px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.02;
+      }
+      .cap .r {
+        color: #ff6b7d;
+      }
+      .cap .g {
+        color: #5ff0b0;
+      }
+      /* Imprimante */
+      .printer {
+        position: absolute;
+        left: 150px;
+        top: 340px;
+        width: 780px;
+        height: 120px;
+        border-radius: 28px;
+        background: linear-gradient(180deg, #3b4256, #222738);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.15);
+        z-index: 5;
+      }
+      .printer::after {
+        content: "";
+        position: absolute;
+        left: 60px;
+        right: 60px;
+        bottom: 18px;
+        height: 14px;
+        border-radius: 7px;
+        background: #0b0d14;
+      }
+      .printer .led {
+        position: absolute;
+        right: 40px;
+        top: 26px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #19d48b;
+        box-shadow: 0 0 14px #19d48b;
+      }
+      .printer .brand {
+        position: absolute;
+        left: 40px;
+        top: 20px;
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        color: #9aa3bd;
+      }
+      /* Ticket */
+      .paperwrap {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      .paper {
+        position: absolute;
+        left: 220px;
+        top: 440px;
+        width: 640px;
+        height: 330px;
+        background: var(--paper);
+        color: var(--ink);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+      }
+      .paper::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 16px;
+        background: linear-gradient(-45deg, transparent 10px, #151a2e 10px) 0 0 / 22px 16px repeat-x, linear-gradient(45deg, transparent 10px, #151a2e 10px) 0 0 / 22px 16px repeat-x;
+      }
+      .pl {
+        position: absolute;
+        left: 34px;
+        right: 34px;
+        top: 0;
+        height: 64px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 31px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .pl .a {
+        font-weight: 900;
+      }
+      .pl.cost .a {
+        color: var(--red);
+      }
+      .pl.ok .a {
+        color: var(--green);
+      }
+      .pl.head {
+        justify-content: center;
+        font-size: 30px;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+      }
+      .pl.sep {
+        border-top: 4px dashed #b9b4a6;
+        height: 0;
+        top: 30px;
+      }
+      .pl.big {
+        font-size: 40px;
+        font-weight: 900;
+      }
+      #halfL {
+        clip-path: polygon(0 0, 52% 0, 47% 20%, 53% 40%, 46% 60%, 52% 80%, 48% 100%, 0 100%);
+      }
+      #halfR {
+        clip-path: polygon(52% 0, 100% 0, 100% 100%, 48% 100%, 52% 80%, 46% 60%, 53% 40%, 47% 20%);
+      }
+      /* Total */
+      #total {
+        left: 70px;
+        right: 160px;
+        top: 1320px;
+        padding: 26px 34px;
+        border-radius: 28px;
+        background: #0b0e1c;
+        border: 3px solid rgba(255, 255, 255, 0.18);
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        z-index: 6;
+      }
+      #total .k {
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        color: #9aa3bd;
+      }
+      #total .v {
+        font-size: 74px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        font-variant-numeric: tabular-nums;
+      }
+      #stamp {
+        left: 160px;
+        top: 900px;
+        padding: 14px 30px;
+        border: 10px solid var(--red);
+        border-radius: 18px;
+        color: var(--red);
+        font-size: 64px;
+        font-weight: 900;
+        line-height: 1;
+        text-align: center;
+        transform: rotate(-10deg);
+        background: rgba(255, 255, 255, 0.82);
+        opacity: 0;
+        z-index: 7;
+      }
+      /* Deuxième ticket */
+      #paper2 {
+        border-top: 10px solid var(--brand);
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 132px;
+        font-weight: 900;
+        letter-spacing: -0.065em;
+        line-height: 0.95;
+      }
+      #end-title .g {
+        color: #5ff0b0;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1060px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(95, 240, 176, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1250px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1400px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+      #grain {
+        inset: -60px;
+        opacity: 0.07;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>");
+        background-size: 300px 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <!-- 0–25 s : l'imprimante -->
+      <section id="shop" class="clip" data-start="0" data-duration="25" data-track-index="0">
+        <div class="cap" id="cap1">Le <span class="r">VRAI</span> prix<br />de ton appart&nbsp;:</div>
+        <div class="cap" id="cap2" style="visibility: hidden">Ça, personne<br />ne te l'a <span class="r">dit.</span></div>
+        <div class="cap" id="cap3" style="visibility: hidden">Avec une analyse<br /><span class="g">avant de signer&nbsp;:</span></div>
+        <div class="cap" id="cap4" style="visibility: hidden">Tu connais l'addition<br /><span class="g">avant de signer.</span></div>
+        <div class="paperwrap" id="halfL"><div class="paper p1"></div></div>
+        <div class="paperwrap" id="halfR"><div class="paper p1"></div></div>
+        <div class="paperwrap" id="wrap2" style="visibility: hidden"><div class="paper" id="paper2"></div></div>
+        <div class="printer"><div class="brand">IMPRIMANTE À SURPRISES</div><div class="led"></div></div>
+        <div id="stamp" class="abs">+52 000 €<br />DE SURPRISES</div>
+        <div id="total" class="abs"><span class="k" id="tk">TOTAL</span><span class="v" id="tv">289 000 €</span></div>
+      </section>
+
+      <!-- 25–30 s : fin -->
+      <section id="end" class="clip" data-start="25" data-duration="5" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Connais</span></span>
+          <span class="mask"><span>l'addition</span></span>
+          <span class="mask"><span class="g">avant de signer.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+      <div id="grain" class="clip" data-start="0" data-duration="30" data-track-index="3" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 0.625,
+        BAR = 2.5,
+        LH = 64;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      const fmt = (v) => Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " €";
+      // Ticket 1 : en-tête déjà imprimé à l'image 0, puis les coûts cachés
+      const HEAD1 = [["head", "★ TICKET D'ACHAT ★", ""], ["", "Appart T3 · 62 m²", ""], ["", "Prix affiché", "289 000 €"], ["sep", "", ""]];
+      const COSTS = [
+        ["Ravalement voté (ta part)", 12400],
+        ["Ascenseur à remplacer", 3800],
+        ["Fonds travaux vide : appel", 6200],
+        ["Procédure contre le syndic", 1200],
+        ["Impayés des voisins", 2900],
+        ["Charges +35 % (sur 10 ans)", 18000],
+        ["Isolation (DPE collectif G)", 7500],
+      ];
+      const TAIL1 = [["sep", "", ""], ["cost big", "SURPRISES", "+52 000 €"]];
+      // Ordre d'impression : le plus récent sort en haut, juste sous l'imprimante
+      const lines1 = [...HEAD1, ...COSTS.map(([l, v]) => ["cost", l, "+" + fmt(v)]), ...TAIL1];
+      const html1 = lines1.map(([c, l, a], i) => `<div class="pl ${c} L${i}"><span>${l}</span><span class="a">${a}</span></div>`).join("");
+      document.querySelectorAll(".p1").forEach((p) => (p.innerHTML = html1));
+      const lines2 = [
+        ["head", "★ ANALYSETACOPRO ★", ""],
+        ["", "Copro : Résidence du Parc", ""],
+        ["sep", "", ""],
+        ["ok", "300 pages lues", "✓"],
+        ["ok", "Travaux à venir", "identifiés ✓"],
+        ["ok", "Charges", "anticipées ✓"],
+        ["ok", "Litiges", "aucun ✓"],
+        ["sep", "", ""],
+        ["ok big", "SCORE", "8.4 / 10"],
+        ["ok big", "SURPRISES", "0 €"],
+      ];
+      document.getElementById("paper2").innerHTML = lines2.map(([c, l, a], i) => `<div class="pl ${c} M${i}"><span>${l}</span><span class="a">${a}</span></div>`).join("");
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      // ---------- Timeline ----------
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      for (let i = 0; i < 120; i++) tl.set("#grain", { x: Math.round((rnd(i, 50) - 0.5) * 100), y: Math.round((rnd(i, 51) - 0.5) * 100) }, i * 0.25);
+
+      // Imprime une ligne : le papier sort d'un cran, les anciennes lignes descendent
+      // positions initiales : l'en-tête (4 lignes) est déjà sorti, du plus récent (en haut) au plus ancien
+      const place = (prefix, n, printedCount) => {
+        for (let i = 0; i < n; i++) gsap.set(`.${prefix}${i}`, { y: i < printedCount ? 20 + (printedCount - 1 - i) * LH : -LH, opacity: i < printedCount ? 1 : 0 });
+      };
+      place("L", lines1.length, HEAD1.length);
+      gsap.set(".p1", { height: 40 + HEAD1.length * LH });
+      const printLine = (prefix, sel, idx, t, total, d = 0.22) => {
+        // le papier s'allonge, toutes les lignes déjà imprimées descendent
+        tl.to(sel, { height: 40 + (idx + 1) * LH, duration: d, ease: "steps(4)" }, t);
+        for (let j = 0; j <= idx; j++) tl.to(`.${prefix}${j}`, { y: 20 + (idx - j) * LH, opacity: 1, duration: d, ease: "steps(4)" }, t);
+      };
+      // 0–2,5 s : accroche (déjà à l'écran), le papier tremble
+      tl.fromTo(".printer", { y: 0 }, { y: -3, duration: 0.05, yoyo: true, repeat: 9, ease: "none" }, 0.3);
+      let total = 289000;
+      const tv = { v: 289000 };
+      COSTS.forEach(([, v], k) => {
+        const t = BAR + k * BAR / 2;
+        const idx = HEAD1.length + k;
+        printLine("L", ".p1", idx, t, lines1.length);
+        tl.fromTo(".printer", { y: 0 }, { y: -4, duration: 0.04, yoyo: true, repeat: 5, ease: "none", immediateRender: false }, t);
+        const from = total;
+        total += v;
+        const to = total;
+        const o = { v: from };
+        tl.fromTo(o, { v: from }, { v: to, duration: 0.35, ease: "power2.out", immediateRender: false, onUpdate: () => (document.getElementById("tv").textContent = fmt(o.v)) }, t + 0.1);
+        tl.fromTo("#total .v", { scale: 1.15, color: "#ff6b7d" }, { scale: 1, color: "#ffffff", duration: 0.4, ease: "power2.out", immediateRender: false }, t + 0.1);
+        shake("#total", t + 0.1, 8, 4);
+      });
+      // Séparateur + SURPRISES
+      printLine("L", ".p1", HEAD1.length + COSTS.length, BAR * 4 + 0.25, lines1.length, 0.15);
+      printLine("L", ".p1", HEAD1.length + COSTS.length + 1, BAR * 4 + BEAT, lines1.length);
+      tl.fromTo("#stamp", { scale: 2.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in" }, BAR * 4 + BEAT * 2 - 0.16);
+      shake("#shop", BAR * 4 + BEAT * 2, 16, 6);
+      flash(BAR * 4 + BEAT * 2, 0.4, 0.25);
+      tl.set("#tk", { textContent: "TOTAL RÉEL" }, BAR * 4 + BEAT * 2);
+      // 12,5 s : « Ça, personne ne te l'a dit. »
+      tl.set("#cap1", { visibility: "hidden" }, BAR * 5);
+      tl.set("#cap2", { visibility: "visible" }, BAR * 5);
+      tl.fromTo("#cap2", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, BAR * 5);
+      tl.to("#halfL, #halfR", { y: 20, rotation: 1.5, duration: BAR, ease: "sine.inOut", transformOrigin: "50% 25%" }, BAR * 5);
+      // 15 s : le ticket se déchire
+      const RIP = BAR * 6;
+      tl.to("#stamp", { opacity: 0, duration: 0.1 }, RIP);
+      tl.to("#halfL", { x: -700, y: 900, rotation: -35, duration: 0.9, ease: "power2.in" }, RIP);
+      tl.to("#halfR", { x: 700, y: 900, rotation: 35, duration: 0.9, ease: "power2.in" }, RIP);
+      flash(RIP, 0.7, 0.3);
+      shake("#shop", RIP, 18, 6);
+      tl.set("#cap2", { visibility: "hidden" }, RIP + BEAT * 2);
+      tl.set("#cap3", { visibility: "visible" }, RIP + BEAT * 2);
+      tl.fromTo("#cap3", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, RIP + BEAT * 2);
+      tl.set("#tk", { textContent: "SURPRISES" }, RIP + BEAT * 2);
+      tl.set("#tv", { textContent: "…" }, RIP + BEAT * 2);
+      tl.set("#halfL, #halfR", { visibility: "hidden" }, RIP + 1.0);
+
+      // 17,5 s : le ticket AnalyseTaCopro
+      const T2 = BAR * 7;
+      place("M", lines2.length, 0);
+      gsap.set("#paper2", { height: 40 });
+      tl.set("#wrap2", { visibility: "visible" }, T2);
+      lines2.forEach((_, k) => printLine("M", "#paper2", k, T2 + k * BEAT * 0.5, lines2.length, 0.15));
+      tl.set("#tv", { textContent: "0 €", color: "#5ff0b0" }, T2 + 9 * BEAT * 0.5);
+      tl.fromTo("#total .v", { scale: 1.4 }, { scale: 1, duration: 0.4, ease: "back.out(3)", immediateRender: false }, T2 + 9 * BEAT * 0.5);
+      tl.set("#cap3", { visibility: "hidden" }, BAR * 9 - 0.6);
+      tl.set("#cap4", { visibility: "visible" }, BAR * 9 - 0.6);
+      tl.fromTo("#cap4", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, BAR * 9 - 0.6);
+      tl.to("#wrap2", { y: -10, duration: BEAT, yoyo: true, repeat: 5, ease: "sine.inOut" }, BAR * 9);
+
+      // 25–30 s : fin
+      const E0 = 25.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 5 }, E0 + BEAT * 4.5);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
