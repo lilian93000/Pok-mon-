@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « BILAN DE SANTÉ » — la radiographie de ton futur immeuble. Cœur à 86 BPM, drum & bass à 172 BPM.
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --cyan: #6ff3ff;
+        --red: #ff4d6d;
+        --green: #5ff0b0;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #02090c;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #fff;
+        background: radial-gradient(90% 60% at 50% 45%, #06262d 0%, #02090c 70%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 230px;
+        font-size: 62px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.03;
+      }
+      .cap .c {
+        color: var(--cyan);
+      }
+      .cap .r {
+        color: var(--red);
+      }
+      .cap .g {
+        color: var(--green);
+      }
+      .xr {
+        position: absolute;
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 790px;
+        border-radius: 30px;
+        overflow: hidden;
+        border: 3px solid rgba(111, 243, 255, 0.35);
+        background:
+          repeating-linear-gradient(0deg, rgba(111, 243, 255, 0.05) 0 2px, transparent 2px 6px),
+          radial-gradient(80% 70% at 50% 45%, #0a3640 0%, #031418 75%);
+      }
+      .xr.ok {
+        border-color: rgba(95, 240, 176, 0.45);
+        background:
+          repeating-linear-gradient(0deg, rgba(95, 240, 176, 0.05) 0 2px, transparent 2px 6px),
+          radial-gradient(80% 70% at 50% 45%, #0b3a2c 0%, #03150f 75%);
+      }
+      .xr svg.art {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 850px;
+        height: 790px;
+        overflow: visible;
+      }
+      .xr .hd {
+        position: absolute;
+        left: 30px;
+        right: 30px;
+        top: 22px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        color: var(--cyan);
+      }
+      .xr.ok .hd {
+        color: var(--green);
+      }
+      .xr .hd .bpm {
+        font-variant-numeric: tabular-nums;
+      }
+      .scan {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 8px;
+        background: #fff;
+        box-shadow: 0 0 30px 10px rgba(111, 243, 255, 0.8);
+        opacity: 0;
+      }
+      .ecg {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 850px;
+        height: 120px;
+        overflow: hidden;
+        border-top: 2px solid rgba(111, 243, 255, 0.25);
+        background: rgba(0, 0, 0, 0.35);
+      }
+      .ecg svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 6800px;
+        height: 120px;
+      }
+      #stamp {
+        left: 120px;
+        top: 700px;
+        width: 760px;
+        padding: 26px 30px;
+        border: 12px solid var(--red);
+        border-radius: 24px;
+        background: rgba(30, 4, 10, 0.88);
+        color: var(--red);
+        text-align: center;
+        font-size: 70px;
+        font-weight: 900;
+        line-height: 1;
+        transform: rotate(-8deg);
+        opacity: 0;
+        z-index: 8;
+      }
+      #stamp small {
+        display: block;
+        margin-top: 12px;
+        font-size: 40px;
+        color: #fff;
+      }
+      #redwash {
+        background: radial-gradient(70% 60% at 50% 50%, rgba(255, 30, 60, 0) 30%, rgba(255, 30, 60, 0.45) 100%);
+        opacity: 0;
+      }
+      .card {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 1270px;
+        height: 200px;
+        padding: 0 30px;
+        border-radius: 30px;
+        background: #fff;
+        color: #0c1424;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        z-index: 6;
+      }
+      .card .ic {
+        width: 116px;
+        height: 116px;
+        flex: none;
+        border-radius: 50%;
+        background: #d81b33;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        text-align: center;
+        line-height: 1;
+      }
+      .card .t {
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        color: #5a6577;
+      }
+      .card .v {
+        font-size: 42px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.08;
+      }
+      .card .v b {
+        color: #d81b33;
+      }
+      .card.ok .ic {
+        background: #0e8a57;
+        font-size: 64px;
+      }
+      .card.ok .v b {
+        color: #0b7a4a;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 116px;
+        font-weight: 900;
+        letter-spacing: -0.065em;
+        line-height: 0.95;
+      }
+      #end-title .g {
+        color: var(--green);
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1060px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(95, 240, 176, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1250px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1400px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+      #grain {
+        inset: -60px;
+        opacity: 0.08;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>");
+        background-size: 300px 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <!-- 0–24 s : la radio -->
+      <section id="clinic" class="clip" data-start="0" data-duration="24" data-track-index="0">
+        <div class="cap" id="cap0">J'ai fait passer une <span class="c">radio</span><br />à mon futur immeuble.</div>
+        <div class="cap" id="cap1" style="visibility: hidden">Diagnostic&nbsp;:<br /><span class="r">48 900 € de soins.</span></div>
+        <div class="cap" id="cap2" style="visibility: hidden">Avec une analyse,<br /><span class="g">le check-up se fait avant.</span></div>
+        <div class="cap" id="cap3" style="visibility: hidden">Résidence Montaigne&nbsp;:<br /><span class="g">en pleine forme.</span></div>
+
+        <div class="xr" id="xr1">
+          <div class="hd"><span>PATIENT : RÉSIDENCE LE BELVÉDÈRE · 1974</span><span class="bpm">♥ <span id="bpm1">86</span></span></div>
+          <svg class="art" viewBox="0 0 850 790" id="art1"></svg>
+          <div class="scan" id="scan"></div>
+          <div class="ecg"><svg id="ecg1" viewBox="0 0 6800 120"></svg></div>
+        </div>
+        <div class="xr ok" id="xr2" style="visibility: hidden">
+          <div class="hd"><span>PATIENT : RÉSIDENCE MONTAIGNE · 1988</span><span class="bpm">♥ 72</span></div>
+          <svg class="art" viewBox="0 0 850 790" id="art2"></svg>
+          <div class="ecg"><svg id="ecg2" viewBox="0 0 6800 120"></svg></div>
+        </div>
+
+        <div class="card" id="c1"><div class="ic">OS</div><div><div class="t">SQUELETTE · FONDATIONS</div><div class="v">Fissures : reprise en<br /><b>sous-œuvre · 23 500 €</b></div></div></div>
+        <div class="card" id="c2"><div class="ic">VEINES</div><div><div class="t">CANALISATIONS</div><div class="v">Colonnes d'eau<br /><b>en plomb · 6 400 €</b></div></div></div>
+        <div class="card" id="c3"><div class="ic">POU-<br />MONS</div><div><div class="t">CAVES</div><div class="v">Mérule détectée<br /><b>traitement · 19 000 €</b></div></div></div>
+        <div class="card" id="c4"><div class="ic">CŒUR</div><div><div class="t">GESTION</div><div class="v">Syndic bénévole débordé :<br /><b>comptes non votés depuis 2 ans</b></div></div></div>
+        <div class="card ok" id="k1"><div class="ic">✓</div><div><div class="t">SQUELETTE</div><div class="v">Fondations <b>saines</b></div></div></div>
+        <div class="card ok" id="k2"><div class="ic">✓</div><div><div class="t">VEINES</div><div class="v">Colonnes <b>refaites en 2020</b></div></div></div>
+        <div class="card ok" id="k3"><div class="ic">✓</div><div><div class="t">POUMONS</div><div class="v">Caves <b>sèches et ventilées</b></div></div></div>
+        <div class="card ok" id="k4"><div class="ic">✓</div><div><div class="t">CERTIFICAT</div><div class="v">Bonne santé · <b>score 8.7/10</b></div></div></div>
+
+        <div class="clip" id="redwash" data-layout-allow-overlap></div>
+        <div id="stamp" class="abs">OPÉRATION URGENTE<small>48 900 € de soins à prévoir</small></div>
+      </section>
+
+      <!-- 24–30 s : fin -->
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Un check-up</span></span>
+          <span class="mask"><span>pour ta copro,</span></span>
+          <span class="mask"><span class="g">avant de signer.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+      <div id="grain" class="clip" data-start="0" data-duration="30" data-track-index="3" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 172,
+        BAR = BEAT * 4,
+        HB = BEAT * 2; // battement de cœur à 86 BPM
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      // ---------- Radiographie ----------
+      const xray = (col, sick) => {
+        const bone = sick ? "#dffcff" : "#e3fff2";
+        let s = `<defs><filter id="gl${sick ? 1 : 2}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+        s += `<g filter="url(#gl${sick ? 1 : 2})">`;
+        s += `<path d="M20 520H830" stroke="${col}" stroke-width="3" opacity="0.5"/>`;
+        s += `<rect x="250" y="90" width="350" height="430" fill="${col}" fill-opacity="0.06" stroke="${col}" stroke-width="5"/>`;
+        s += `<path d="M232 90H618" stroke="${col}" stroke-width="7" stroke-linecap="round"/>`;
+        for (let k = 1; k < 5; k++) s += `<path d="M250 ${90 + k * 86}H600" stroke="${col}" stroke-width="3" opacity="0.45"/>`;
+        s += `<rect x="250" y="520" width="350" height="90" fill="none" stroke="${col}" stroke-width="4" stroke-dasharray="14 10" opacity="0.8"/>`;
+        // squelette
+        s += `<g class="bone">${[285, 425, 565].map((x) => `<path d="M${x} 96V646" stroke="${bone}" stroke-width="12" stroke-linecap="round" opacity="0.85"/>`).join("")}<rect x="232" y="612" width="386" height="34" rx="8" fill="none" stroke="${bone}" stroke-width="8" opacity="0.85"/></g>`;
+        if (sick) s += `<path class="crack" d="M505 646l-14-30 18-26-16-34 14-30-12-40" fill="none" stroke="#ff4d6d" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>`;
+        // veines
+        s += `<g class="vein">${[335, 515].map((x) => `<path d="M${x} 100V600" stroke="${sick ? "#b28cff" : col}" stroke-width="9" stroke-linecap="round"/>` + [1, 2, 3, 4].map((k) => `<path d="M${x} ${90 + k * 86 - 18}h${x < 425 ? -50 : 50}" stroke="${sick ? "#b28cff" : col}" stroke-width="6" stroke-linecap="round"/>`).join("")).join("")}</g>`;
+        // poumons (caves)
+        if (sick) s += `<g class="lung">${[[300, 572, 22], [346, 590, 15], [556, 568, 20], [520, 594, 12]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#ff9a3c" opacity="0.9"/>`).join("")}</g>`;
+        // cœur
+        s += `<path class="heart" d="M425 340c-44-32-66-54-66-78a33 33 0 0 1 66-11 33 33 0 0 1 66 11c0 24-22 46-66 78z" fill="${sick ? "#ff4d6d" : "#5ff0b0"}" opacity="0.92"/>`;
+        s += `</g>`;
+        return s;
+      };
+      document.getElementById("art1").innerHTML = xray("#6ff3ff", true);
+      document.getElementById("art2").innerHTML = xray("#5ff0b0", false);
+      // ECG : la plume est à x = 820 ; un battement à l'instant tb s'inscrit à x = 820 + V·tb
+      const V = 200,
+        PEN = 820;
+      const beatsBad = [],
+        beatsGood = [];
+      for (let t = 0; t < 2.79; t += HB) beatsBad.push(t);
+      for (let t = 2.79; t < 13.95; t += BEAT) beatsBad.push(t);
+      for (let t = -4; t < 30; t += HB * 1.2) beatsGood.push(t);
+      const ecgPath = (beats) => {
+        let d = `M0 70`;
+        const xs = beats.map((t) => PEN + V * t).filter((x) => x > 0 && x < 6750);
+        xs.forEach((x) => (d += `L${x - 30} 70l8-8 8 8 6 0 6-58 8 92 6-34 10 0 10-12 10 12`));
+        return d + `L6800 70`;
+      };
+      document.getElementById("ecg1").innerHTML = `<path d="${ecgPath(beatsBad)}" fill="none" stroke="#6ff3ff" stroke-width="4" stroke-linejoin="round"/>`;
+      document.getElementById("ecg2").innerHTML = `<path d="${ecgPath(beatsGood)}" fill="none" stroke="#5ff0b0" stroke-width="4" stroke-linejoin="round"/>`;
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      gsap.set(".heart", { transformOrigin: "50% 60%", transformBox: "fill-box" });
+      gsap.set("#xr1 .lung circle", { scale: 0, transformOrigin: "50% 50%", transformBox: "fill-box" });
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const swapCap = (from, to, t) => {
+        tl.set(from, { visibility: "hidden" }, t);
+        tl.set(to, { visibility: "visible" }, t);
+        tl.fromTo(to, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+      };
+      const card = (sel, t, out) => {
+        tl.fromTo(sel, { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(1.8)", immediateRender: false }, t);
+        if (out) tl.to(sel, { y: 40, opacity: 0, duration: 0.18, ease: "power2.in" }, out);
+      };
+      const scan = (t, y0, y1) => {
+        tl.fromTo("#scan", { y: y0, opacity: 1 }, { y: y1, opacity: 1, duration: 0.5, ease: "power1.inOut", immediateRender: false }, t);
+        tl.to("#scan", { opacity: 0, duration: 0.1 }, t + 0.5);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      for (let i = 0; i < 120; i++) tl.set("#grain", { x: Math.round((rnd(i, 50) - 0.5) * 100), y: Math.round((rnd(i, 51) - 0.5) * 100) }, i * 0.25);
+
+      // ECG qui défile + cœur qui bat
+      tl.fromTo("#ecg1", { x: 0 }, { x: -V * 16, duration: 16, ease: "none" }, 0);
+      tl.fromTo("#ecg2", { x: 0 }, { x: -V * 30, duration: 30, ease: "none" }, 0);
+      beatsBad.forEach((t) => tl.fromTo("#xr1 .heart", { scale: 1.18 }, { scale: 1, duration: Math.min(0.3, HB * 0.6), ease: "power2.out", immediateRender: false }, t));
+      for (let t = 16.74; t < 24; t += HB * 1.2) tl.fromTo("#xr2 .heart", { scale: 1.15 }, { scale: 1, duration: 0.35, ease: "power2.out", immediateRender: false }, t);
+
+      // Diagnostics (une tous les 2 mesures)
+      const D = [2.79, 2.79 + 2 * BAR, 2.79 + 4 * BAR, 2.79 + 6 * BAR];
+      tl.set("#bpm1", { textContent: "172" }, D[0]);
+      tl.to("#xr1 .hd .bpm", { color: "#ff4d6d", duration: 0.1 }, D[0]);
+      // 1. squelette
+      scan(D[0], 560, 680);
+      tl.to("#xr1 .crack", { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" }, D[0] + 0.3);
+      tl.to("#xr1 .bone path, #xr1 .bone rect", { stroke: "#ff9aa9", duration: 0.2 }, D[0] + 0.3);
+      card("#c1", D[0] + 0.2, D[1] - 0.2);
+      shake("#xr1", D[0] + 0.3, 8, 4);
+      // 2. veines
+      scan(D[1], 60, 640);
+      tl.to("#xr1 .vein path", { stroke: "#ff4d6d", duration: 0.25 }, D[1] + 0.35);
+      tl.to("#xr1 .vein", { opacity: 0.4, duration: BEAT / 2, yoyo: true, repeat: 5, ease: "steps(1)" }, D[1] + 0.4);
+      card("#c2", D[1] + 0.2, D[2] - 0.2);
+      // 3. poumons
+      scan(D[2], 480, 660);
+      tl.to("#xr1 .lung circle", { scale: 1, duration: 0.3, ease: "back.out(3)", stagger: 0.08 }, D[2] + 0.35);
+      tl.to("#xr1 .lung circle", { scale: 1.25, duration: BEAT, yoyo: true, repeat: 3, ease: "sine.inOut", stagger: 0.05 }, D[2] + 0.8);
+      card("#c3", D[2] + 0.2, D[3] - 0.2);
+      // 4. cœur : arythmie
+      scan(D[3], 160, 420);
+      for (let k = 0; k < 6; k++) tl.to("#xr1 .heart", { x: (rnd(k, 9) - 0.5) * 30, y: (rnd(k, 10) - 0.5) * 20, duration: 0.08, ease: "none" }, D[3] + 0.4 + k * 0.12);
+      tl.to("#xr1 .heart", { x: 0, y: 0, duration: 0.1 }, D[3] + 1.2);
+      card("#c4", D[3] + 0.2, 13.95 - 0.1);
+
+      // 13,95 s : ligne plate
+      const F = 13.95;
+      tl.set("#bpm1", { textContent: "0" }, F);
+      swapCap("#cap0", "#cap1", F);
+      tl.fromTo("#redwash", { opacity: 0 }, { opacity: 1, duration: 0.2, immediateRender: false }, F);
+      tl.to("#redwash", { opacity: 0.4, duration: 0.35, yoyo: true, repeat: 3, ease: "sine.inOut" }, F + 0.2);
+      tl.fromTo("#stamp", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, F + HB - 0.16);
+      shake("#clinic", F + HB, 16, 6);
+      flash(F + HB, 0.4, 0.25);
+
+      // 16,74 s : le bon patient
+      const G = 16.74;
+      flash(G, 0.8, 0.35);
+      swapCap("#cap1", "#cap2", G);
+      tl.to("#stamp, #redwash", { opacity: 0, duration: 0.15 }, G);
+      tl.set("#xr1", { visibility: "hidden" }, G);
+      tl.set("#xr2", { visibility: "visible" }, G);
+      tl.fromTo("#xr2", { scale: 0.92, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, G);
+      card("#k1", G + 0.5, G + 0.5 + BAR - 0.15);
+      card("#k2", G + 0.5 + BAR, G + 0.5 + 2 * BAR - 0.15);
+      card("#k3", G + 0.5 + 2 * BAR, G + 0.5 + 3 * BAR - 0.15);
+      card("#k4", G + 0.5 + 3 * BAR);
+      swapCap("#cap2", "#cap3", G + 0.5 + 3 * BAR);
+
+      // 24–30 s : fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BAR);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BAR * 0.75);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BAR * 1.75);
+      tl.to("#cta", { scale: 1.05, duration: HB / 2, ease: "sine.inOut", yoyo: true, repeat: 9 }, E0 + BAR * 2);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
