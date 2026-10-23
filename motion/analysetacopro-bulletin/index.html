@@ -378,20 +378,20 @@
         const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
         return x - Math.floor(x);
       };
-      const SUBJECTS = ["Entretien de l'immeuble", "Gestion du budget", "Vie de la copro", "Paiement des charges", "Énergie (DPE)"];
+      const SUBJECTS = ["Toiture & étanchéité", "Ascenseur", "Assiduité en AG", "Relations avec le syndic", "Préparation de l'avenir"];
       const BAD = [
-        [6, "Ravalement repoussé depuis 2015."],
-        [4, "Fonds travaux vide. Doit faire des efforts."],
-        [5, "Procédure en cours contre le syndic."],
-        [3, "12 % d'impayés. Bavarde en AG."],
-        [7, "Étiquette F. Peut mieux faire."],
+        [5, "Fuites signalées depuis 2019."],
+        [4, "En panne 3 mois par an. Doit faire des efforts."],
+        [6, "Quorum jamais atteint. Absent sans excuse."],
+        [3, "Change de syndic tous les ans."],
+        [7, "Aucun plan de travaux voté. Peut mieux faire."],
       ];
       const GOOD = [
-        [17, "Ravalement fait en 2022. Bravo."],
-        [16, "Fonds travaux bien rempli."],
-        [18, "Aucun litige. Ambiance studieuse."],
-        [17, "Charges payées à l'heure."],
-        [16, "Étiquette C. Bons progrès."],
+        [15, "Toiture refaite en 2021."],
+        [17, "Contrat d'entretien solide."],
+        [16, "Copropriétaires impliqués. Bravo."],
+        [18, "Même syndic depuis 10 ans."],
+        [16, "Plan de travaux sur 10 ans voté."],
       ];
       const sheet = (el, who, rows, avg, stamp, gold) => {
         el.innerHTML =
@@ -405,8 +405,8 @@
           `<div class="avg"><span>MOYENNE GÉNÉRALE</span><span class="v">${avg}<small>/20</small></span></div>` +
           `<div class="stamp ${gold ? "gold" : ""}" data-layout-allow-overlap>${stamp}</div>`;
       };
-      sheet(document.getElementById("s1"), "Résidence Les Tilleuls", BAD, "5", "REDOUBLE<small>AVIS DU CONSEIL : NE PAS SIGNER</small>", false);
-      sheet(document.getElementById("s2"), "Résidence du Parc", GOOD, "16,8", "FÉLICITATIONS<br/>DU CONSEIL<small>SCORE COPRO 8.4/10</small>", true);
+      sheet(document.getElementById("s1"), "Résidence Les Peupliers", BAD, "5", "REDOUBLE<small>AVIS DU CONSEIL : NE PAS SIGNER</small>", false);
+      sheet(document.getElementById("s2"), "Résidence des Acacias", GOOD, "16,4", "FÉLICITATIONS<br/>DU CONSEIL<small>SCORE COPRO 8.2/10</small>", true);
       document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
 
       // Image 0 : le bulletin est là, en-tête rempli, notes encore vides

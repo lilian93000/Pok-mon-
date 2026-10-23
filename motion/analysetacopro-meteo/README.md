@@ -14,15 +14,15 @@ npx hyperframes render --resolution portrait-4k -f 60 -q delivery -o ../analyset
 |---|---|---|
 | 0–2 s (1ʳᵉ image) | « ALERTE ROUGE sur ta future copro. », immeuble sous l'orage, vigilance rouge, éclairs | Sirène, tonnerre, pluie |
 | 2–4 s | Le ciel se vide : « Les prévisions pour ton futur appart : » | Jingle météo télé |
-| 4–7 s | Averses de charges (+35 % en 5 ans), vigilance jaune | Groove funk, pluie |
-| 7–10 s | Orage de travaux (ravalement 45 000 €), la façade se fissure, vigilance orange | Tonnerre |
-| 10–13 s | Brouillard sur les comptes (fonds travaux : 0 €) | Nappe |
-| 13–16 s | Rafales d'impayés (8 000 € de dettes), vigilance rouge | Rafales |
+| 4–7 s | Averses sur la toiture (étanchéité : 27 000 €), vigilance jaune | Groove funk, pluie |
+| 7–10 s | Orage électrique (mise aux normes : 14 000 €), la façade se fissure, vigilance orange | Tonnerre |
+| 10–13 s | Brouillard chez le syndic (3 syndics en 4 ans) | Nappe |
+| 13–16 s | Tempête en AG (procès contre le promoteur), vigilance rouge | Rafales |
 | 16–19 s | Prévisions sur 10 ans : orages partout. « Ça, l'agent immo ne te l'a pas dit. » | Tension, roulement |
-| 19–25 s | Soleil : « Avec une analyse, tu choisis la copro où il fait beau. » Ciel dégagé, score 8.4/10, prévisions au beau fixe | Drop house en majeur |
+| 19–25 s | Soleil : « Avec une analyse, tu choisis la copro où il fait beau. » Ciel dégagé (Résidence des Acacias), score 9.1/10, prévisions au beau fixe | Drop house en majeur |
 | 25–30 s | « Regarde la météo de ta copro avant de signer. », bouton, analysetacopro.fr, « Lien en bio » | Fin |
 
-Les montants, pourcentages, noms et le score sont fictifs (exemple).
+Les montants, noms et le score sont fictifs (exemple).
 
 ## Bande-son
 
