@@ -7,8 +7,14 @@ cd "$(dirname "$0")/.."
 mkdir -p avec-accroche
 for v in "$@"; do
   out="avec-accroche/$(basename "$v")"
-  ffmpeg -nostdin -loglevel error -y -i hook-accroche.mp4 -i "$v" -filter_complex \
-    "[0:v]scale=2160:3840,fps=60,setsar=1[h];[1:v]scale=2160:3840,fps=60,setsar=1[m];[0:a]aresample=48000,aformat=channel_layouts=stereo[ha];[1:a]aresample=48000,aformat=channel_layouts=stereo[ma];[h][ha][m][ma]concat=n=2:v=1:a=1[v][a]" \
+  # vidéo sans piste son : on ajoute un silence pour pouvoir enchaîner
+  if ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 "$v" | grep -q .; then
+    extra=(); ma="[1:a]"
+  else
+    extra=(-f lavfi -t "$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$v")" -i anullsrc=r=48000:cl=stereo); ma="[2:a]"
+  fi
+  ffmpeg -nostdin -loglevel error -y -i hook-accroche.mp4 -i "$v" "${extra[@]}" -filter_complex \
+    "[0:v]scale=2160:3840,fps=60,setsar=1[h];[1:v]scale=2160:3840,fps=60,setsar=1[m];[0:a]aresample=48000,aformat=channel_layouts=stereo[ha];${ma}aresample=48000,aformat=channel_layouts=stereo[ma];[h][ha][m][ma]concat=n=2:v=1:a=1[v][a]" \
     -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 21 -pix_fmt yuv420p -c:a aac -b:a 256k -movflags +faststart "$out"
   echo "$out $(du -h "$out" | cut -f1)"
 done
