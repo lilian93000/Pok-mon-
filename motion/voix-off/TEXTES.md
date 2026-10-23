@@ -165,13 +165,13 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 > 24,2 — Lis les PV avant d'entrer dans le groupe.
 
 ## Unboxing
-> 0,2 — Unboxing de mon nouvel appart.
+> 0,2 — Unboxing de mon appart.
 > 2,1 — Les clés, la vue… parfait.
 > 6,2 — Euh. Les fenêtres des parties communes ?
 > 8,9 — Des infiltrations au parking.
 > 11,5 — La clim, interdite.
-> 13,5 — Et un contrat à mille neuf cents euros par an.
-> 15,5 — Treize mille euros de surprises. Non remboursable.
+> 13,5 — Gardiennage en plus.
+> 15,5 — Treize mille euros de surprises.
 > 17,6 — Nous, on ouvre le colis avant que tu achètes.
 > 24,2 — Ouvre le colis avant de l'acheter.
 
