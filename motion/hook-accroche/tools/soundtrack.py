@@ -1,11 +1,10 @@
-"""Logo sonore de l'accroche (2,4 s) : annonce → zoom arrière → boom → scan.
+"""Logo sonore de l'accroche (2,11 s) : phonk brésilienne, 128 BPM, le drop tombe dès l'image 0.
 
-0–0,5 s    ambiance douce « appli d'annonces » (accord feutré) ; « like » à 0,2 s
-0,5–1,0    zoom arrière : la musique ralentit et plonge (effet dolly), souffle qui aspire
-1,0        boom : sub + impact + accord « marque » en ré mineur
-1,15–1,65  balayage du scan AnalyseTaCopro + 4 bips d'alerte
-1,65       coup « …et tous ses problèmes »
-2,15–2,4   cymbale inversée + souffle vers la vidéo
+0 s        CE QUE           crash + kick + 808 distordue + cloche phonk (riff en doubles-croches)
+0,47 s     TON FUTUR APPART kick + impact, charleston
+0,94 s     TE CACHE         alarme + roulement de caisse claire qui accélère
+1,41 s     la colonne       gros drop : sub qui plonge, accord saturé, « hey ! », claquement
+2,03 s     vers la vidéo    souffle
 Usage :  python3 tools/soundtrack.py <dossier_sfx_hyperframes> <sortie.wav>
 """
 import os
@@ -16,71 +15,69 @@ import numpy as np
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "audio-engine"))
 import engine as E  # noqa: E402
 
-DUR = 2.4
-HIT = 1.0
+BEAT = 60 / 128
+STEP = BEAT / 4
+DUR = 2.11
+P = [0.0, BEAT, BEAT * 2, BEAT * 3]
 
 
-def sweep_tone(f0, f1, L, amp=0.2):
+def crash(L=1.2):
     t = E.secs(L)
-    f = f0 * (f1 / f0) ** (t / L)
-    return np.sin(np.cumsum(f) / E.SR * 2 * np.pi) * amp * np.minimum(t / 0.01, 1) * np.minimum((L - t) / 0.02, 1)
+    return E.highpass(E.noise(L), 4000) * np.exp(-t * 3.5) * 0.5
 
 
-def blip(note, L=0.12):
+def alarm(L):
     t = E.secs(L)
-    f = E.midi(note)
-    return np.sign(np.sin(2 * np.pi * f * t)) * np.exp(-t * 18) * 0.12
-
-
-def brand_stab(L=1.2):
-    t = E.secs(L)
-    return E.supersaw([50, 57, 62, 64, 69], L, cutoff=2600, attack=0.004) * np.exp(-t * 2.6) * 1.4
-
-
-def scan_zap(L=0.5):
-    t = E.secs(L)
-    buzz = E.lowpass(E.saw(60, t) + 0.5 * E.saw(120.5, t), 1800) * 0.25
-    return (buzz + sweep_tone(400, 2400, L, 0.12)) * np.sin(np.pi * t / L)
+    f = np.where((t * 8) % 1 < 0.5, 1046, 784)
+    return E.lowpass(np.sign(np.sin(np.cumsum(f) / E.SR * 2 * np.pi)), 3500) * 0.09
 
 
 bus = E.Bus(DUR)
-# 0–0,5 : accord feutré (fa majeur 7) qui va « tomber » avec le zoom
-chord = sum(E.ep(n, 1.0) for n in (65, 69, 72, 76)) * 0.6
-bus.add(chord, 0.0, 0.8, rev=0.3)
-bus.add(E.hat(0.03, tone=1.3), 0.2, 0.3)
-# 0,5–1,0 : plongée
-bus.add(sweep_tone(900, 55, 0.5, 0.18), 0.5, 1.0)
-bus.add(E.whoosh(0.5, up=False), 0.5, 0.9)
-bus.add(E.reverse_cymbal(0.5), 0.5, 0.6)
-# 1,0 : boom
-bus.add(E.impact(1.4), HIT, 1.0)
-bus.add(E.bass808(26, 1.2, glide_from=38, drive=2.8, glide=0.2), HIT, 0.9)
-bus.add(brand_stab(), HIT, 0.5, rev=0.6)
-bus.add(E.clap(), HIT, 0.5, rev=0.8)
-# 1,15–1,65 : scan + alertes
-bus.add(scan_zap(), 1.15, 0.8, pan=-0.2)
-for k, n in enumerate((81, 84, 81, 88)):
-    bus.add(blip(n), 1.21 + k * 0.12, 0.9, pan=(k % 2 - 0.5) * 0.6)
-# 1,65 : « …et tous ses problèmes »
-bus.add(E.kick(top=160, drive=2.6), 1.62, 0.8)
-bus.add(E.snare(), 1.62, 0.5, rev=0.4)
-bus.add(E.bass808(29, 0.5, drive=2.4), 1.62, 0.6)
-# 2,15 : vers la vidéo
-bus.add(E.reverse_cymbal(0.3), DUR - 0.3, 0.6)
-music = bus.render([], duck_depth=0.0, fade_out=0.0)
-# l'accord ralentit jusqu'à l'arrêt pendant le zoom (effet « bande »)
-a, b = int(0.5 * E.SR), int(0.98 * E.SR)
-seg = music[a:].copy()
-rate = np.linspace(1, 0, b - a) ** 1.2
-pos = np.cumsum(rate)
-for c in range(2):
-    music[a:b, c] = np.interp(pos, np.arange(len(seg)), seg[:, c]) * 0.7 + music[a:b, c] * 0.3
+kicks = []
+K = E.kick(top=230, drive=3.2)
+C = E.clap()
+# riff de cloche phonk (ré mineur) sur 3 temps, joué en doubles-croches
+RIFF = [74, 74, 77, 74, 72, 74, 69, None, 74, 74, 77, 79, 77, 74, 72, 69]
+for s in range(12):
+    n = RIFF[s % 16]
+    if n is not None:
+        bus.add(E.cowbell(n), s * STEP, 0.75, pan=0.18 if s % 2 else -0.12, rev=0.15, duck=True)
+# temps 1 : crash + kick + 808
+bus.add(crash(), 0.0, 1.0)
+for t, g in ((0.0, 1.0), (P[1], 0.95), (P[1] + STEP * 2, 0.6), (P[2], 0.95)):
+    bus.add(K, t, g)
+    kicks.append(t)
+bus.add(E.bass808(38, BEAT * 0.95, drive=3.0), 0.0, 0.9)
+bus.add(E.bass808(41, BEAT * 0.95, glide_from=38, drive=3.0), P[1], 0.9)
+bus.add(E.bass808(44, BEAT * 0.95, glide_from=41, drive=3.0), P[2], 0.9)
+bus.add(C, P[1], 0.6, rev=0.2)
+bus.add(E.impact(0.6), P[1], 0.6)
+for s in range(4, 12):
+    bus.add(E.hat(0.035), s * STEP, 0.25 + 0.02 * s, pan=0.25)
+# temps 3 : alarme + roulement
+bus.add(alarm(BEAT), P[2], 0.9)
+for k in range(8):
+    bus.add(E.snare(), P[2] + k * BEAT / 8, 0.25 + 0.08 * k)
+bus.add(E.riser(BEAT, 600, 12000, (400, 2400)), P[2], 0.5)
+# temps 4 : le drop de la colonne
+D = P[3] + 0.09
+bus.add(E.impact(1.2), D, 1.0)
+bus.add(E.kick(L=0.6, top=260, drive=3.6), D, 1.0)
+kicks.append(D)
+bus.add(E.bass808(26, 0.62, glide_from=38, drive=3.4, glide=0.12), D, 1.0)
+bus.add(E.supersaw([50, 57, 62, 65, 69], 0.6, cutoff=3800, attack=0.003), D, 0.7, rev=0.4)
+bus.add(E.vox("e", 62, 0.3), D + 0.02, 0.6, rev=0.3)
+bus.add(C, D, 0.8, rev=0.5)
+for s in range(3):
+    bus.add(E.cowbell([81, 77, 74][s]), D + 0.12 + s * STEP, 0.5, rev=0.3)
+bus.add(E.reverse_cymbal(0.25), DUR - 0.25, 0.6)
+music = bus.render(kicks, duck_depth=0.35, fade_out=0.0)
 
 SFX = [
-    (0.19, "pop.mp3", -1, 0.0),
-    (2.12, "whoosh-short.mp3", -2, 0.0),
+    (P[3] + 0.09, "impact-bass-1.mp3", 0, 0.0),
+    (DUR - 0.12, "whoosh-short.mp3", -1, 0.0),
 ]
 
 if __name__ == "__main__":
-    E.mixdown(music, SFX, sys.argv[1], sys.argv[2], DUR, lufs=-10.0)
+    E.mixdown(music, SFX, sys.argv[1], sys.argv[2], DUR, lufs=-9.5)
     print("ok", sys.argv[2])

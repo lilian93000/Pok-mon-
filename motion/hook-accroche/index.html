@@ -5,20 +5,15 @@
     <meta name="viewport" content="width=1080, height=1920" />
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
-      /* Accroche signature AnalyseTaCopro (2,4 s), à placer devant chaque vidéo TikTok.
-         « Tu crois acheter ça : » (une annonce) → zoom arrière : c'était une fenêtre de tout un immeuble →
-         « En vrai, tu achètes tout l'immeuble. » → le scan AnalyseTaCopro révèle ses problèmes.
+      /* Accroche signature AnalyseTaCopro (2,1 s) — la même devant chaque vidéo TikTok.
+         4 coupes franches sur le temps (phonk 128 BPM, le drop tombe dès l'image 0) :
+         « CE QUE » (jaune) → « TON FUTUR APPART » (noir) → « TE CACHE » (rouge) → la colonne + « On l'a trouvé. » (bleu)
          Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Son : tools/soundtrack.py */
       @font-face {
         font-family: "Inter";
         src: url("assets/fonts/Inter.woff2") format("woff2");
         font-weight: 100 900;
         font-style: normal;
-      }
-      :root {
-        --brand: #0b5fff;
-        --red: #ff3b4e;
-        --ink: #14161c;
       }
       * {
         margin: 0;
@@ -30,7 +25,7 @@
         width: 1080px;
         height: 1920px;
         overflow: hidden;
-        background: #1b2440;
+        background: #ffe14d;
       }
       #root {
         position: relative;
@@ -38,7 +33,7 @@
         height: 1920px;
         overflow: hidden;
         font-family: "Inter", sans-serif;
-        background: linear-gradient(180deg, #1b2a55 0%, #3b4f8a 45%, #e3a77a 78%, #2b2a33 78.2%, #1d1c22 100%);
+        background: #ffe14d;
       }
       .clip {
         position: absolute;
@@ -48,154 +43,114 @@
       .abs {
         position: absolute;
       }
-      /* L'immeuble (coordonnées monde 800 × 1000, posé en 140,470 à l'échelle 1) */
-      #world {
+      .ph {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #p1 {
+        background: #ffe14d;
+      }
+      #p2 {
+        background: #09090d;
+      }
+      #p3 {
+        background: #ff2340;
+      }
+      #p4 {
+        background: radial-gradient(70% 50% at 50% 46%, #3d86ff 0%, #0b5fff 45%, #0636a8 100%);
+      }
+      .txt {
+        position: relative;
+        width: 940px;
+        margin-left: -70px;
+        text-align: center;
+        font-weight: 900;
+        letter-spacing: -0.065em;
+        line-height: 0.86;
+      }
+      #p1 .txt {
+        font-size: 340px;
+        color: #09090d;
+      }
+      #p2 .txt {
+        font-size: 236px;
+        color: #fff;
+      }
+      #p2 .txt .y {
+        color: #ffe14d;
+      }
+      #p3 .txt {
+        font-size: 250px;
+        color: #fff;
+      }
+      .ghost {
         position: absolute;
-        left: 140px;
+        inset: 0;
+        mix-blend-mode: screen;
+      }
+      #g1 {
+        color: #00f0ff;
+      }
+      #g2 {
+        color: #ffd400;
+      }
+      .lines {
+        position: absolute;
+        left: -420px;
+        top: -420px;
+        width: 1920px;
+        height: 2760px;
+        opacity: 0.22;
+      }
+      #col {
+        position: absolute;
+        left: 345px;
         top: 470px;
-        width: 800px;
-        height: 1000px;
-        transform-origin: 400px 440px;
+        width: 320px;
+        height: 470px;
       }
-      #world svg {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 800px;
-        height: 1000px;
+      #col svg {
+        width: 100%;
+        height: 100%;
         overflow: visible;
+        filter: drop-shadow(0 0 50px rgba(255, 255, 255, 0.55));
       }
-      /* L'annonce */
-      #card {
+      .ring {
         position: absolute;
-        left: 100px;
-        top: 500px;
-        width: 880px;
-        height: 980px;
-        border-style: solid;
-        border-color: #fff;
-        border-width: 20px 20px 120px 20px;
-        border-radius: 28px;
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
-        transform-origin: 440px 440px;
-        z-index: 4;
-      }
-      #card .meta {
-        position: absolute;
-        left: 6px;
-        right: 6px;
-        bottom: -108px;
-        height: 96px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        color: var(--ink);
-      }
-      #card .t {
-        font-size: 34px;
-        font-weight: 700;
-        color: #59606e;
-      }
-      #card .p {
-        font-size: 50px;
-        font-weight: 900;
-        letter-spacing: -0.03em;
-      }
-      #card .heart {
-        width: 84px;
-        height: 84px;
-      }
-      #card .tag {
-        position: absolute;
-        left: 20px;
-        top: 20px;
-        padding: 10px 20px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.92);
-        color: var(--ink);
-        font-size: 28px;
-        font-weight: 800;
-      }
-      #tap {
-        position: absolute;
-        left: 870px;
-        top: 1395px;
-        width: 90px;
-        height: 90px;
-        margin: -45px 0 0 -45px;
+        left: 505px;
+        top: 900px;
+        width: 40px;
+        height: 40px;
+        margin: -20px 0 0 -20px;
         border-radius: 50%;
-        border: 6px solid #fff;
+        border: 5px solid rgba(255, 255, 255, 0.8);
         opacity: 0;
-        z-index: 5;
       }
-      /* Textes */
-      .cap {
-        position: absolute;
-        left: 70px;
-        top: 230px;
-        padding: 18px 30px 22px;
-        border-radius: 22px;
-        background: var(--ink);
-        color: #fff;
-        font-size: 64px;
+      #found {
+        left: 0;
+        width: 1010px;
+        top: 1000px;
+        text-align: center;
+        font-size: 150px;
         font-weight: 900;
-        letter-spacing: -0.04em;
-        line-height: 1.05;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-        z-index: 6;
-      }
-      .cap .r {
-        color: #ff6b7a;
-      }
-      #pill {
-        left: 70px;
-        top: 1330px;
-        padding: 20px 32px;
-        border-radius: 22px;
-        background: var(--red);
+        letter-spacing: -0.06em;
         color: #fff;
-        font-size: 56px;
-        font-weight: 900;
-        letter-spacing: -0.035em;
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-        opacity: 0;
-        z-index: 6;
+        line-height: 0.95;
       }
-      /* Le scan AnalyseTaCopro */
-      #beam {
-        left: 100px;
-        top: 0;
-        width: 880px;
-        height: 10px;
-        border-radius: 5px;
-        background: #9cc2ff;
-        box-shadow: 0 0 40px 16px rgba(11, 95, 255, 0.85), 0 0 120px 40px rgba(11, 95, 255, 0.45);
-        opacity: 0;
-        z-index: 5;
-      }
-      #beam .lbl {
-        position: absolute;
-        right: 0;
-        top: -62px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px 18px;
-        border-radius: 999px;
-        background: var(--brand);
-        color: #fff;
-        font-size: 28px;
-        font-weight: 900;
-        white-space: nowrap;
-      }
-      #beam .lbl svg {
-        width: 34px;
-        height: 34px;
+      #brand {
+        left: 0;
+        width: 1010px;
+        top: 1180px;
+        text-align: center;
+        font-size: 52px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        color: #cfe0ff;
       }
       #flash {
         background: #fff;
         opacity: 0;
-        z-index: 9;
       }
     </style>
   </head>
@@ -204,148 +159,113 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="2.4"
+      data-duration="2.11"
       data-width="1080"
       data-height="1920"
     >
-      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="2.4" data-track-index="4" data-volume="1"></audio>
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="2.11" data-track-index="4" data-volume="1"></audio>
 
-      <section id="scene" class="clip" data-start="0" data-duration="2.4" data-track-index="0">
-        <div id="world"><svg id="bld" viewBox="0 0 800 1000"></svg></div>
-
-        <div id="card">
-          <div class="tag">Coup de cœur ✨</div>
-          <div class="meta">
-            <div><div class="t">T2 lumineux · 48 m²</div><div class="p">334 000 €</div></div>
-            <svg class="heart" viewBox="0 0 24 24"><path id="heartp" d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.4 5 6.8 5c2 0 3.6 1.1 5.2 3 1.6-1.9 3.2-3 5.2-3 3.4 0 5.8 3.3 4.3 6.8C19.5 16.4 12 21 12 21z" fill="none" stroke="#14161c" stroke-width="1.8" stroke-linejoin="round" /></svg>
-          </div>
-        </div>
-        <div id="tap"></div>
-
-        <div class="cap" id="cap0">Tu crois acheter ça&nbsp;:</div>
-        <div class="cap" id="cap1" style="visibility: hidden">En vrai, tu achètes<br /><span class="r">tout l'immeuble.</span></div>
-
-        <div id="beam" class="abs">
-          <div class="lbl">
-            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
-              <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
-              <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
-              <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
-              <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
-              <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
-              <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
-            </svg>
-            AnalyseTaCopro
-          </div>
-        </div>
-        <div id="pill" class="abs">…et tous ses problèmes.</div>
+      <section id="p1" class="clip ph" data-start="0" data-duration="0.469" data-track-index="0">
+        <svg class="lines" id="l1" viewBox="0 0 1920 2760"></svg>
+        <div class="txt">CE<br />QUE</div>
       </section>
-      <div id="flash" class="clip" data-start="0" data-duration="2.4" data-track-index="2" data-layout-allow-overlap></div>
+      <section id="p2" class="clip ph" data-start="0.469" data-duration="0.469" data-track-index="0">
+        <svg class="lines" id="l2" viewBox="0 0 1920 2760"></svg>
+        <div class="txt">TON<br />FUTUR<br /><span class="y">APPART</span></div>
+      </section>
+      <section id="p3" class="clip ph" data-start="0.938" data-duration="0.469" data-track-index="0">
+        <svg class="lines" id="l3" viewBox="0 0 1920 2760"></svg>
+        <div class="txt"><span class="ghost" id="g1">TE<br />CACHE</span><span class="ghost" id="g2">TE<br />CACHE</span><span style="position: relative">TE<br />CACHE</span></div>
+      </section>
+      <section id="p4" class="clip" data-start="1.407" data-duration="0.703" data-track-index="0">
+        <svg class="lines" id="l4" viewBox="0 0 1920 2760"></svg>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div id="col">
+          <svg viewBox="0 0 48 70">
+            <rect x="4" y="2" width="40" height="7" rx="3.5" fill="#fff" />
+            <rect x="8.5" y="10" width="31" height="4" rx="2" fill="#fff" opacity="0.9" />
+            <rect x="11" y="15.5" width="6" height="43" rx="3" fill="#fff" />
+            <rect x="21" y="15.5" width="6" height="43" rx="3" fill="#fff" />
+            <rect x="31" y="15.5" width="6" height="43" rx="3" fill="#fff" />
+            <rect x="6" y="60" width="36" height="7" rx="3.5" fill="#fff" />
+          </svg>
+        </div>
+        <div id="found" class="abs">On l'a trouvé.</div>
+        <div id="brand" class="abs">AnalyseTaCopro</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="2.11" data-track-index="2" data-layout-allow-overlap></div>
     </div>
     <script>
-      // ---------- L'immeuble ----------
-      const WX = (c) => 50 + c * 150,
-        WY = (r) => 110 + r * 140;
-      const TC = 2,
-        TR = 2; // la fenêtre de « ton » appart
-      let s = `<defs>
-        <linearGradient id="fac" x1="0" x2="1"><stop offset="0" stop-color="#efe3cc"/><stop offset="1" stop-color="#d9cbb0"/></linearGradient>
-        <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9fc3ef"/><stop offset="1" stop-color="#4f78b8"/></linearGradient>
-        <linearGradient id="room" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe7c2"/><stop offset="1" stop-color="#f7c98f"/></linearGradient>
-        <clipPath id="win"><rect x="${WX(TC)}" y="${WY(TR)}" width="100" height="100"/></clipPath>
-      </defs>`;
-      // toit en zinc + cheminées
-      s += `<path d="M-10 0 L40 -90 H760 L810 0Z" fill="#6f7a8c"/><rect x="150" y="-140" width="40" height="70" fill="#8a6a55"/><rect x="600" y="-130" width="40" height="60" fill="#8a6a55"/>`;
-      s += `<rect x="0" y="0" width="800" height="1000" fill="url(#fac)"/>`;
-      s += `<rect x="-14" y="-6" width="828" height="26" rx="6" fill="#d2c3a6"/>`;
-      for (let r = 0; r < 6; r++)
-        for (let c = 0; c < 5; c++) {
-          const x = WX(c),
-            y = WY(r);
-          if (r === 5 && c === 2) continue;
-          s += `<rect x="${x - 6}" y="${y - 6}" width="112" height="112" rx="4" fill="#fff"/>`;
-          if (!(r === TR && c === TC)) s += `<rect x="${x}" y="${y}" width="100" height="100" fill="url(#glass)"/><path d="M${x + 50} ${y}V${y + 100}" stroke="#fff" stroke-width="5"/>`;
-          if (r === 1 || r === 4) s += `<path d="M${x - 14} ${y + 104}h128M${x - 10} ${y + 104}v-26M${x + 22} ${y + 104}v-26M${x + 54} ${y + 104}v-26M${x + 86} ${y + 104}v-26M${x + 110} ${y + 104}v-26M${x - 14} ${y + 78}h128" stroke="#2f3442" stroke-width="4" fill="none"/>`;
-        }
-      // l'intérieur de « ton » appart (vu de près au début)
-      const x0 = WX(TC),
-        y0 = WY(TR);
-      s += `<g clip-path="url(#win)">
-        <rect x="${x0}" y="${y0}" width="100" height="100" fill="url(#room)"/>
-        <rect x="${x0 + 58}" y="${y0 + 12}" width="30" height="40" rx="2" fill="#bfe0ff" stroke="#fff" stroke-width="2"/>
-        <path d="M${x0 + 73} ${y0 + 12}v40M${x0 + 58} ${y0 + 32}h30" stroke="#fff" stroke-width="1.5"/>
-        <rect x="${x0}" y="${y0 + 78}" width="100" height="22" fill="#c98f5a"/>
-        <rect x="${x0 + 8}" y="${y0 + 56}" width="46" height="22" rx="5" fill="#5c7cff"/>
-        <rect x="${x0 + 8}" y="${y0 + 48}" width="12" height="18" rx="4" fill="#5c7cff"/>
-        <rect x="${x0 + 42}" y="${y0 + 48}" width="12" height="18" rx="4" fill="#5c7cff"/>
-        <rect x="${x0 + 22}" y="${y0 + 50}" width="10" height="9" rx="2" fill="#ffd36b"/>
-        <path d="M${x0 + 88} ${y0 + 78}v-16" stroke="#6b4a2f" stroke-width="2"/>
-        <circle cx="${x0 + 84}" cy="${y0 + 58}" r="6" fill="#3fae6b"/><circle cx="${x0 + 92}" cy="${y0 + 60}" r="5" fill="#2f9a5a"/><circle cx="${x0 + 88}" cy="${y0 + 52}" r="5" fill="#46bb75"/>
-        <path d="M${x0 + 22} ${y0 + 6}v14" stroke="#555" stroke-width="1"/><path d="M${x0 + 15} ${y0 + 28}l7-8 7 8z" fill="#ffd36b"/>
-        <ellipse cx="${x0 + 22}" cy="${y0 + 40}" rx="14" ry="8" fill="#fff6c8" opacity="0.5"/>
-      </g>
-      <rect id="mine" x="${x0 - 6}" y="${y0 - 6}" width="112" height="112" rx="4" fill="none" stroke="#ffd36b" stroke-width="0"/>`;
-      // porte
-      s += `<path d="M350 1000V880a50 50 0 0 1 100 0v120z" fill="#5a4636"/>`;
-      // défauts cachés (révélés par le scan)
-      s += `<path class="def" id="crack" d="M690 210l-18 60 26 50-22 70 30 60-24 80 20 70" fill="none" stroke="#2a2420" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>`;
-      s += `<ellipse class="def" id="damp" cx="150" cy="930" rx="120" ry="60" fill="#6f6a4a" opacity="0"/>`;
-      s += `<path class="def" id="tarp" d="M240 -70 L300 -86 L420 -80 L470 -60 L460 -8 L250 -6Z" fill="#2f6fd6" opacity="0"/>`;
-      const MK = [[330, -60], [700, 330], [140, 920], [560, 590]];
-      MK.forEach(([x, y], k) => (s += `<g class="mk" id="mk${k}" transform="translate(${x} ${y})"><circle r="38" fill="#ff3b4e" stroke="#fff" stroke-width="7"/><path d="M0 -18V6M0 16v2" stroke="#fff" stroke-width="9" stroke-linecap="round"/></g>`));
-      document.getElementById("bld").innerHTML = s;
-
-      // ---------- Image 0 : zoom sur la fenêtre = la photo de l'annonce ----------
-      const Z = 8.4;
-      gsap.set("#world", { scale: Z, x: 0, y: 30 });
-      gsap.set(".mk", { scale: 0, transformOrigin: "50% 50%", transformBox: "fill-box" });
-
-      const tl = gsap.timeline({ paused: true });
+      const BEAT = 60 / 128;
       const rnd = (i, k) => {
         const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
         return x - Math.floor(x);
       };
-      const shake = (sel, t, amp, n) => {
-        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.025, ease: "none" }, t + i * 0.025);
-        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.025);
+      // Lignes de vitesse (rayonnent du centre)
+      const speed = (col) => {
+        let s = "";
+        for (let i = 0; i < 46; i++) {
+          const a = (i / 46) * Math.PI * 2 + rnd(i, 1) * 0.08;
+          const r0 = 260 + rnd(i, 2) * 260,
+            r1 = 1500;
+          s += `<path d="M${960 + Math.cos(a) * r0} ${1380 + Math.sin(a) * r0}L${960 + Math.cos(a) * r1} ${1380 + Math.sin(a) * r1}" stroke="${col}" stroke-width="${6 + rnd(i, 3) * 16}" stroke-linecap="round"/>`;
+        }
+        return s;
       };
+      document.getElementById("l1").innerHTML = speed("#09090d");
+      document.getElementById("l2").innerHTML = speed("#ffffff");
+      document.getElementById("l3").innerHTML = speed("#ffffff");
+      document.getElementById("l4").innerHTML = speed("#ffffff");
+
+      // Image 0 : « CE QUE » déjà plein écran (le coup est déjà parti)
+      gsap.set("#p1 .txt", { scale: 1.12, rotation: -3 });
+      gsap.set("#col", { y: -900, scaleY: 1.3, transformOrigin: "50% 100%" });
+      gsap.set("#found, #brand", { opacity: 0 });
+
+      const tl = gsap.timeline({ paused: true });
+      const P = [0, BEAT, BEAT * 2, BEAT * 3];
+      const shake = (sel, t, amp, n) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.022, ease: "none" }, t + i * 0.022);
+        tl.to(sel, { x: 0, y: 0, duration: 0.03 }, t + n * 0.022);
+      };
+      const flash = (t, a) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: 0.09, ease: "power2.out", immediateRender: false }, t);
       tl.set("#flash", { opacity: 0 }, 0);
-      tl.to("#world", { scale: Z * 1.04, duration: 0.5, ease: "none" }, 0);
-      // 0,2 s : like
-      tl.fromTo("#tap", { scale: 0.4, opacity: 0.9 }, { scale: 1.6, opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, 0.18);
-      tl.to("#heartp", { fill: "#ff3b4e", stroke: "#ff3b4e", duration: 0.05 }, 0.2);
-      tl.fromTo("#card .heart", { scale: 1.5 }, { scale: 1, duration: 0.3, ease: "back.out(4)", immediateRender: false }, 0.2);
-      // 0,5–1,0 s : zoom arrière, l'annonce rétrécit dans sa fenêtre
-      const ZO = 0.5,
-        ZD = 0.5,
-        HIT = ZO + ZD;
-      tl.to("#world", { scale: 1, x: 0, y: 0, duration: ZD, ease: "power3.in" }, ZO);
-      tl.to("#card", { scale: 1 / Z, duration: ZD, ease: "power3.in" }, ZO);
-      tl.to("#card", { opacity: 0, duration: 0.18 }, ZO + 0.12);
-      tl.to("#cap0", { opacity: 0, y: -20, duration: 0.15 }, ZO + 0.2);
-      tl.to("#mine", { strokeWidth: 8, duration: 0.2 }, ZO + 0.3);
-      // 1,0 s : impact
-      tl.fromTo("#flash", { opacity: 0.7 }, { opacity: 0, duration: 0.22, ease: "power2.out", immediateRender: false }, HIT);
-      shake("#scene", HIT, 26, 10);
-      tl.set("#cap1", { visibility: "visible" }, HIT - 0.05);
-      tl.fromTo("#cap1", { scale: 1.6, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, HIT - 0.06);
-      // 1,15–1,6 s : le scan révèle les défauts
-      const S0 = 1.15,
-        SD = 0.5;
-      tl.fromTo("#beam", { y: 340, opacity: 1 }, { y: 1480, opacity: 1, duration: SD, ease: "power1.inOut", immediateRender: false }, S0);
-      tl.to("#beam", { opacity: 0, duration: 0.1 }, S0 + SD);
-      const order = [0, 1, 3, 2];
-      order.forEach((k, i) => tl.to(`#mk${k}`, { scale: 1, duration: 0.18, ease: "back.out(3)" }, S0 + 0.06 + i * 0.12));
-      tl.to("#tarp", { opacity: 1, duration: 0.1 }, S0 + 0.05);
-      tl.to("#crack", { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, S0 + 0.12);
-      tl.to("#damp", { opacity: 0.55, duration: 0.2 }, S0 + 0.38);
-      // 1,65 s : « …et tous ses problèmes. »
-      tl.fromTo("#pill", { scale: 1.8, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.12, ease: "power4.in", immediateRender: false }, 1.62);
-      shake("#scene", 1.74, 12, 6);
-      tl.to(".mk", { scale: 1.2, duration: 0.12, yoyo: true, repeat: 3, ease: "sine.inOut" }, 1.75);
-      // 2,15 s : départ éclair vers la vidéo
-      tl.to("#scene", { y: -300, duration: 0.25, ease: "power3.in" }, 2.15);
-      tl.fromTo("#flash", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.in", immediateRender: false }, 2.15);
+      // lignes qui tournent en continu
+      ["#l1", "#l2", "#l3", "#l4"].forEach((l, k) => tl.fromTo(l, { rotation: 0 }, { rotation: k % 2 ? -14 : 14, duration: 0.7, ease: "none", transformOrigin: "50% 50%" }, P[k]));
+
+      // 1. CE QUE (jaune) — déjà là à l'image 0, puis petits coups sur les doubles-croches
+      tl.to("#p1 .txt", { scale: 1, rotation: 0, duration: 0.12, ease: "power4.out" }, 0);
+      tl.to("#p1 .txt", { scale: 1.06, duration: BEAT - 0.12, ease: "none" }, 0.12);
+      shake("#p1 .txt", 0, 16, 5);
+      // 2. TON FUTUR APPART (noir)
+      flash(P[1], 0.8);
+      tl.fromTo("#p2 .txt", { scale: 1.4, rotation: 3 }, { scale: 1, rotation: 0, duration: 0.11, ease: "power4.out", immediateRender: false }, P[1]);
+      tl.to("#p2 .txt", { scale: 1.07, duration: BEAT - 0.11, ease: "none" }, P[1] + 0.11);
+      shake("#p2 .txt", P[1], 18, 5);
+      // 3. TE CACHE (rouge, glitch)
+      flash(P[2], 0.8);
+      tl.fromTo("#p3 .txt", { scale: 1.5 }, { scale: 1, duration: 0.11, ease: "power4.out", immediateRender: false }, P[2]);
+      tl.to("#p3 .txt", { scale: 1.08, duration: BEAT - 0.11, ease: "none" }, P[2] + 0.11);
+      for (let k = 0; k < 8; k++) {
+        tl.set("#g1", { x: (rnd(k, 7) - 0.5) * 50, y: (rnd(k, 8) - 0.5) * 20 }, P[2] + k * (BEAT / 8));
+        tl.set("#g2", { x: (rnd(k, 9) - 0.5) * -50, y: (rnd(k, 10) - 0.5) * 20 }, P[2] + k * (BEAT / 8));
+      }
+      shake("#p3 .txt", P[2], 22, 8);
+      // 4. La colonne s'écrase + « On l'a trouvé. » (bleu)
+      flash(P[3], 1);
+      tl.to("#col", { y: 0, scaleY: 1, duration: 0.09, ease: "power4.in" }, P[3]);
+      tl.to("#col", { scaleY: 0.85, scaleX: 1.12, duration: 0.04 }, P[3] + 0.09);
+      tl.to("#col", { scaleY: 1, scaleX: 1, duration: 0.3, ease: "elastic.out(1.2, 0.4)" }, P[3] + 0.13);
+      tl.fromTo(".ring", { scale: 0.5, opacity: 0.8 }, { scale: (i) => 22 + i * 10, opacity: 0, duration: 0.5, ease: "power2.out", stagger: 0.06, immediateRender: false }, P[3] + 0.09);
+      shake("#p4", P[3] + 0.09, 26, 8);
+      tl.fromTo("#found", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.1, ease: "power4.out", immediateRender: false }, P[3] + 0.16);
+      tl.fromTo("#brand", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.15, ease: "power3.out", immediateRender: false }, P[3] + 0.26);
+      tl.to("#p4 > #col, #found, #brand", { scale: 1.05, duration: 0.4, ease: "none" }, P[3] + 0.3);
+      // sortie éclair vers la vidéo
+      tl.fromTo("#flash", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power2.in", immediateRender: false }, 2.11 - 0.08);
 
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
