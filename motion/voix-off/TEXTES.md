@@ -176,11 +176,11 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 > 24,2 — Ouvre le colis avant de l'acheter.
 
 ## La recette ratée
-> 0,2 — Recette : rater son achat immo en trente secondes.
+> 0,2 — Recette : rater son achat immo.
 > 2,6 — Un coup de cœur. Zéro page lue. Un agent pressé.
 > 8,6 — On enfourne.
-> 11,5 — Résultat : c'est cramé.
-> 12,2 — Colonne de gaz. Platanes à élaguer. Charges énormes.
-> 16,8 — La recette du chef : une analyse, tous les PV lus.
+> 11,5 — C'est cramé.
+> 12,8 — Le gaz, les platanes, les charges.
+> 16,8 — La recette du chef : une analyse.
 > 20,0 — Et un gâteau parfait.
 > 24,2 — Suis la bonne recette avant de signer.
