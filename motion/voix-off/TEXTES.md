@@ -209,12 +209,12 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 > 24,2 — Ton appart, c'est pas un jeu de hasard.
 
 ## Le jeu des 5 erreurs
-> 0,2 — Jeu des cinq erreurs : l'annonce contre la réalité.
+> 0,1 — Cinq erreurs. Tu les vois ?
 > 2,4 — Un immeuble de sept étages en face.
 > 5,9 — Une antenne relais.
-> 8,6 — Les vélos, remplacés par les poubelles.
+> 8,6 — Le local vélos ? Poubelles.
 > 11,4 — Un digicode à deux mille neuf cents.
 > 14,1 — Et des volets imposés.
-> 15,8 — T'en as trouvé combien ? Dis-le en commentaire.
+> 16,0 — T'en as trouvé combien ?
 > 17,6 — Nous, on les trouve dans les PV.
 > 24,2 — Compare l'annonce et les PV avant de signer.
