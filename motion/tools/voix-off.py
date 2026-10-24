@@ -144,14 +144,16 @@ def build(name, secs):
     f = []
     for k, (start, _) in enumerate(plan, start=1):
         ms = int(start * 1000)
-        f.append(f"[{k}:a]atempo={tempo:.3f},adelay={ms}|{ms},apad[v{k}]" if tempo != 1.0 else f"[{k}:a]adelay={ms}|{ms},apad[v{k}]")
+        tempo_f = f"atempo={tempo:.3f}," if tempo != 1.0 else ""
+        # chaque phrase est ramenée à un niveau voix off clair (≈ −13 LUFS) avant d'être placée
+        f.append(f"[{k}:a]{tempo_f}loudnorm=I=-13:TP=-1.5:LRA=7,aresample=48000,adelay={ms}|{ms},apad[v{k}]")
     vo_in = "".join(f"[v{k}]" for k in range(1, len(plan) + 1))
     f.append(f"{vo_in}amix=inputs={len(plan)}:normalize=0:duration=longest,atrim=0:{total:.3f},"
-             "highpass=f=90,equalizer=f=3500:t=q:w=1.2:g=3,acompressor=threshold=0.08:ratio=4:attack=5:release=120:makeup=3,"
+             "highpass=f=90,equalizer=f=3500:t=q:w=1.2:g=3,acompressor=threshold=0.2:ratio=3:attack=5:release=120,"
              "aformat=channel_layouts=stereo,asplit=2[vo][key]")
-    f.append("[0:a]aresample=48000,aformat=channel_layouts=stereo,volume=0.8[mus]")
-    f.append("[mus][key]sidechaincompress=threshold=0.03:ratio=10:attack=15:release=350:makeup=1[duck]")
-    f.append("[duck][vo]amix=inputs=2:normalize=0:weights='1 1.25',loudnorm=I=-11:TP=-1:LRA=11,aresample=48000[a]")
+    f.append("[0:a]aresample=48000,aformat=channel_layouts=stereo,volume=0.55[mus]")
+    f.append("[mus][key]sidechaincompress=threshold=0.015:ratio=20:attack=10:release=300:makeup=1[duck]")
+    f.append("[duck][vo]amix=inputs=2:normalize=0:weights='1 1',loudnorm=I=-11:TP=-1:LRA=11,aresample=48000[a]")
     args += ["-filter_complex", ";".join(f), "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k",
              "-movflags", "+faststart", "-t", f"{total:.3f}", out]
     os.makedirs(os.path.dirname(out), exist_ok=True)
