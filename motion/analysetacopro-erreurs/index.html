@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « LE JEU DES 5 ERREURS » — l'annonce contre la réalité des PV. 132 BPM (UK garage) : 1 mesure ≈ 1,82 s.
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --red: #e5243b;
+        --green: #12965c;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #fff5d6;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #1b1b22;
+        background: radial-gradient(80% 60% at 50% 45%, #fff8e1 0%, #ffe9a8 70%, #ffd76b 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 215px;
+        font-size: 56px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        z-index: 6;
+      }
+      .cap .r {
+        color: var(--red);
+      }
+      .cap .g {
+        color: var(--green);
+      }
+      #count {
+        right: 160px;
+        top: 222px;
+        padding: 8px 22px;
+        border-radius: 999px;
+        background: #1b1b22;
+        color: #ffd23f;
+        font-size: 46px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        z-index: 6;
+      }
+      .panel {
+        position: absolute;
+        left: 70px;
+        width: 850px;
+        height: 420px;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 6px solid #1b1b22;
+        background: #9fd0ff;
+      }
+      .panel svg {
+        width: 100%;
+        height: 100%;
+      }
+      .panel .lbl {
+        position: absolute;
+        left: 16px;
+        top: 14px;
+        padding: 8px 18px;
+        border-radius: 999px;
+        background: #1b1b22;
+        color: #fff;
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+      }
+      .panel .lbl.r {
+        background: var(--red);
+      }
+      .panel .lbl.g {
+        background: var(--green);
+      }
+      .ring {
+        fill: none;
+        stroke: var(--red);
+        stroke-width: 9;
+        stroke-linecap: round;
+      }
+      .pill {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 1330px;
+        padding: 16px 26px;
+        border-radius: 22px;
+        background: #fff;
+        border: 4px solid var(--red);
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        text-align: center;
+        opacity: 0;
+        z-index: 5;
+      }
+      .pill b {
+        color: var(--red);
+      }
+      .stamp {
+        position: absolute;
+        left: 200px;
+        top: 760px;
+        padding: 18px 38px;
+        border: 14px solid var(--green);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.95);
+        color: var(--green);
+        font-size: 96px;
+        font-weight: 900;
+        text-align: center;
+        line-height: 1;
+        transform: rotate(-8deg);
+        opacity: 0;
+        z-index: 7;
+      }
+      .stamp small {
+        display: block;
+        margin-top: 10px;
+        font-size: 36px;
+        color: #1b1b22;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+        color: #fff;
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 104px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.97;
+      }
+      #end-title .y {
+        color: #ffd23f;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(255, 210, 63, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="game" class="clip" data-start="0" data-duration="24" data-track-index="0">
+        <div class="cap" id="cap0">Le jeu des 5 erreurs&nbsp;:<br /><span class="r">l'annonce vs la réalité.</span></div>
+        <div class="cap" id="cap1" style="visibility: hidden">T'en as trouvé combien&nbsp;?<br /><span class="r">Dis-le en commentaire.</span></div>
+        <div class="cap" id="cap2" style="visibility: hidden">Nous, on les trouve<br /><span class="g">dans les PV.</span></div>
+        <div id="count" class="abs">0/5</div>
+
+        <div class="panel" id="pa" style="top: 430px"><svg viewBox="0 0 850 420" id="sa"></svg><div class="lbl">L'ANNONCE</div></div>
+        <div class="panel" id="pb" style="top: 880px"><svg viewBox="0 0 850 420" id="sb"></svg><div class="lbl r" id="lb">LA RÉALITÉ</div></div>
+
+        <div class="pill" id="d0">Permis accordé en face : <b>R+7, ta vue disparaît</b></div>
+        <div class="pill" id="d1">Antenne relais <b>votée en AG</b></div>
+        <div class="pill" id="d2">Local vélos devenu <b>local poubelles</b></div>
+        <div class="pill" id="d3">Digicode + visiophone : <b>2&nbsp;900&nbsp;€</b></div>
+        <div class="pill" id="d4">Volets imposés par le règlement : <b>1&nbsp;200&nbsp;€ pièce</b></div>
+
+        <div class="stamp" id="ok" data-layout-allow-overlap>0 ERREUR<small>Résidence Le Verger · 8.3/10</small></div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Compare l'annonce</span></span>
+          <span class="mask"><span>et les PV</span></span>
+          <span class="mask"><span class="y">avant de signer.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 132,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      // ---------- Dessin de l'immeuble (real = version « réalité ») ----------
+      const WX = (k) => 290 + k * 75,
+        WY = (r) => 88 + r * 62;
+      const scene = (real, good) => {
+        let s = `<rect width="850" height="420" fill="#9fd0ff"/><circle cx="110" cy="70" r="36" fill="#ffe27a"/>`;
+        s += `<rect y="405" width="850" height="15" fill="#7a8a6a"/>`;
+        // à droite : arbre (annonce) ou chantier R+7 (réalité)
+        if (real && !good) {
+          s += `<rect x="640" y="150" width="180" height="255" fill="#c9ccd2" stroke="#8a8f99" stroke-width="4"/>`;
+          for (let r = 0; r < 6; r++) s += `<path d="M640 ${170 + r * 40}h180" stroke="#8a8f99" stroke-width="3"/>`;
+          s += `<path d="M700 405V40M700 40H840M700 60L840 40M820 40v60" stroke="#f2a900" stroke-width="10" fill="none"/>`;
+          s += `<rect x="652" y="330" width="156" height="58" rx="6" fill="#fff" stroke="#e5243b" stroke-width="4"/><text x="730" y="356" text-anchor="middle" font-family="Inter" font-weight="900" font-size="15" fill="#e5243b">PERMIS DE</text><text x="730" y="377" text-anchor="middle" font-family="Inter" font-weight="900" font-size="15" fill="#e5243b">CONSTRUIRE R+7</text>`;
+        } else {
+          s += `<rect x="725" y="300" width="18" height="105" fill="#7a5a3a"/><circle cx="734" cy="260" r="66" fill="#3fae6b"/><circle cx="690" cy="300" r="42" fill="#46bb75"/><circle cx="780" cy="300" r="42" fill="#2f9a5a"/>`;
+        }
+        // immeuble
+        s += `<rect x="270" y="60" width="310" height="345" fill="#f1e4c8" stroke="#1b1b22" stroke-width="4"/><rect x="258" y="50" width="334" height="16" fill="#c9b48e" stroke="#1b1b22" stroke-width="4"/>`;
+        if (real && !good) s += `<path d="M330 50V8M316 20h28M320 32h20" stroke="#1b1b22" stroke-width="6" stroke-linecap="round"/><rect x="322" y="6" width="16" height="10" fill="#e5243b"/>`;
+        for (let r = 0; r < 5; r++)
+          for (let k = 0; k < 4; k++) {
+            if (r === 4 && (k === 1 || k === 2)) continue;
+            const mine = r === 1 && k === 2;
+            s += `<rect x="${WX(k)}" y="${WY(r)}" width="50" height="44" fill="${mine ? "#ffe9b0" : "#7fb3ff"}" stroke="#1b1b22" stroke-width="3"/>`;
+            if (mine && real && !good) s += `<rect x="${WX(k) - 14}" y="${WY(r) - 2}" width="14" height="48" fill="#2f7a3a" stroke="#1b1b22" stroke-width="2"/><rect x="${WX(k) + 50}" y="${WY(r) - 2}" width="14" height="48" fill="#2f7a3a" stroke="#1b1b22" stroke-width="2"/>`;
+            if (mine && !(real && !good)) s += `<circle cx="${WX(k) + 25}" cy="${WY(r) + 40}" r="9" fill="#ff5a8a"/>`;
+          }
+        // porte + digicode
+        s += `<path d="M395 405v-60a30 30 0 0 1 60 0v60z" fill="#5a4636" stroke="#1b1b22" stroke-width="3"/>`;
+        if (real && !good) s += `<rect x="462" y="352" width="22" height="34" rx="4" fill="#2b2f36"/><rect x="466" y="356" width="14" height="10" fill="#7fffd0"/>`;
+        // local à gauche
+        s += `<rect x="70" y="330" width="160" height="75" fill="#d8cdb6" stroke="#1b1b22" stroke-width="4"/><rect x="85" y="342" width="130" height="30" rx="4" fill="#fff" stroke="#1b1b22" stroke-width="3"/>`;
+        s += `<text x="150" y="364" text-anchor="middle" font-family="Inter" font-weight="900" font-size="17" fill="${real && !good ? "#c4142c" : "#0a6e40"}">${real && !good ? "POUBELLES" : "LOCAL VÉLOS"}</text>`;
+        return s;
+      };
+      const RINGS = [
+        [735, 230, 120, 190],
+        [330, 30, 40, 36],
+        [150, 357, 92, 34],
+        [473, 369, 30, 34],
+        [465, 132, 66, 36],
+      ];
+      document.getElementById("sa").innerHTML = scene(false, false);
+      document.getElementById("sb").innerHTML = scene(true, false) + RINGS.map(([x, y, rx, ry], k) => `<ellipse class="ring" id="r${k}" cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>`).join("");
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const swapCap = (from, to, t) => {
+        tl.set(from, { visibility: "hidden" }, t);
+        tl.set(to, { visibility: "visible" }, t);
+        tl.fromTo(to, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      tl.fromTo("#count", { scale: 1 }, { scale: 1.12, duration: BEAT / 2, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false }, 0.2);
+
+      // Les 5 erreurs, une toutes les 2 mesures (à partir de 2,2 s)
+      const T = [2.2, 2.2 + 2 * BAR, 2.2 + 3.5 * BAR, 2.2 + 5 * BAR, 2.2 + 6.5 * BAR];
+      T.forEach((t, k) => {
+        const next = k < 4 ? T[k + 1] : 15.6;
+        tl.to(`#r${k}`, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, t);
+        tl.set("#count", { textContent: `${k + 1}/5` }, t + 0.1);
+        tl.fromTo("#count", { scale: 1.5 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t + 0.1);
+        tl.fromTo(`#d${k}`, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "back.out(2)", immediateRender: false }, t + 0.15);
+        tl.to(`#d${k}`, { opacity: 0, duration: 0.15 }, next - 0.2);
+        shake("#pb", t + 0.1, 6, 4);
+      });
+
+      // 15,6 s : à toi de jouer
+      swapCap("#cap0", "#cap1", 15.6);
+      tl.to(".ring", { strokeWidth: 14, duration: BEAT / 2, yoyo: true, repeat: 3, ease: "sine.inOut" }, 15.6);
+
+      // 17,4 s : la bonne copro
+      const G = 17.4;
+      swapCap("#cap1", "#cap2", G);
+      flash(G, 0.6, 0.3);
+      tl.set("#sa", { innerHTML: scene(false, true) }, G);
+      tl.set("#sb", { innerHTML: scene(true, true) }, G);
+      tl.set("#lb", { className: "lbl g" }, G);
+      tl.set("#count", { textContent: "0/5" }, G);
+      tl.fromTo("#pa, #pb", { scale: 0.92 }, { scale: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, G);
+      tl.fromTo("#ok", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, G + 1.2);
+      flash(G + 1.36, 0.4, 0.25);
+      tl.to("#ok", { scale: 1.05, duration: BEAT / 2, yoyo: true, repeat: 9, ease: "sine.inOut" }, G + 1.6);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 9 }, E0 + BEAT * 4.5);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

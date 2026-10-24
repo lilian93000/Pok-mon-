@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « LE DÉTECTEUR DE MENSONGES » — le vendeur passe au polygraphe. 100 BPM (thriller) : 1 mesure = 2,4 s.
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --red: #ff2d46;
+        --green: #19c37d;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #08090c;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #fff;
+        background: radial-gradient(60% 40% at 50% 34%, #2a2d36 0%, #121318 55%, #050608 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 220px;
+        font-size: 58px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        z-index: 6;
+      }
+      .cap .r {
+        color: var(--red);
+      }
+      .cap .g {
+        color: var(--green);
+      }
+      /* Polygraphe */
+      #poly {
+        left: 70px;
+        top: 440px;
+        width: 850px;
+        height: 440px;
+        border-radius: 26px;
+        background: #1b1d24;
+        border: 4px solid #3a3e4a;
+        box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6);
+        overflow: hidden;
+      }
+      #poly .lbl {
+        position: absolute;
+        left: 26px;
+        top: 18px;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        color: #8d93a3;
+      }
+      #poly .rec {
+        position: absolute;
+        right: 26px;
+        top: 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 26px;
+        font-weight: 800;
+        color: var(--red);
+        letter-spacing: 0.1em;
+      }
+      #poly .rec i {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--red);
+      }
+      #paper {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        top: 70px;
+        bottom: 20px;
+        border-radius: 12px;
+        overflow: hidden;
+        background:
+          repeating-linear-gradient(90deg, rgba(200, 80, 80, 0.22) 0 2px, transparent 2px 40px),
+          repeating-linear-gradient(180deg, rgba(200, 80, 80, 0.22) 0 2px, transparent 2px 40px),
+          #f4efe2;
+      }
+      #paper svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 350px;
+        width: 6000px;
+      }
+      #pen {
+        position: absolute;
+        left: 795px;
+        top: 0;
+        width: 150px;
+        height: 12px;
+        margin-top: -6px;
+        border-radius: 6px;
+        background: #2a2d36;
+        z-index: 2;
+      }
+      #pen::before {
+        content: "";
+        position: absolute;
+        left: -10px;
+        top: -4px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--red);
+      }
+      /* Questions / réponses */
+      .bub {
+        position: absolute;
+        max-width: 760px;
+        padding: 18px 28px 20px;
+        border-radius: 28px;
+        font-size: 44px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.12;
+        opacity: 0;
+        z-index: 4;
+      }
+      .bub small {
+        display: block;
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        opacity: 0.7;
+        margin-bottom: 4px;
+      }
+      .q {
+        left: 70px;
+        top: 920px;
+        background: #2a2d36;
+        border-radius: 8px 28px 28px 28px;
+      }
+      .a {
+        right: 160px;
+        top: 1050px;
+        background: #f2f2f2;
+        color: #15161a;
+        border-radius: 28px 8px 28px 28px;
+        text-align: right;
+      }
+      .truth {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 1200px;
+        padding: 20px 28px;
+        border-radius: 24px;
+        background: #fff;
+        color: #15161a;
+        border-left: 14px solid var(--red);
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.12;
+        opacity: 0;
+        z-index: 4;
+      }
+      .truth small {
+        display: block;
+        font-size: 24px;
+        letter-spacing: 0.12em;
+        color: #8a8f9c;
+        margin-bottom: 6px;
+      }
+      .truth b {
+        color: #d81b33;
+      }
+      .stamp {
+        position: absolute;
+        left: 170px;
+        top: 560px;
+        padding: 16px 36px;
+        border: 12px solid var(--red);
+        border-radius: 20px;
+        color: var(--red);
+        background: rgba(20, 4, 8, 0.82);
+        font-size: 100px;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        transform: rotate(-9deg);
+        opacity: 0;
+        z-index: 5;
+      }
+      #redwash {
+        background: radial-gradient(70% 60% at 50% 40%, rgba(255, 30, 60, 0) 30%, rgba(255, 30, 60, 0.42) 100%);
+        opacity: 0;
+      }
+      #report {
+        left: 70px;
+        top: 920px;
+        width: 850px;
+        padding: 28px 32px;
+        border-radius: 26px;
+        background: #fff;
+        color: #15161a;
+        opacity: 0;
+        z-index: 5;
+      }
+      #report h4 {
+        font-size: 30px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: var(--brand);
+        margin-bottom: 10px;
+      }
+      #report .row {
+        padding: 12px 0;
+        border-top: 3px solid #eef0f4;
+        font-size: 36px;
+        font-weight: 800;
+        opacity: 0;
+      }
+      #report .row b {
+        color: #d81b33;
+      }
+      #report .sc {
+        margin-top: 12px;
+        padding: 16px;
+        border-radius: 18px;
+        background: #fff4dc;
+        color: #8a5a00;
+        text-align: center;
+        font-size: 40px;
+        font-weight: 900;
+        opacity: 0;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 118px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.96;
+      }
+      #end-title .g {
+        color: var(--green);
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(25, 195, 125, 0.3);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="room" class="clip" data-start="0" data-duration="24" data-track-index="0">
+        <div class="cap" id="cap0">J'ai mis le vendeur au<br /><span class="r">détecteur de mensonges.</span></div>
+        <div class="cap" id="cap1" style="visibility: hidden">Le vrai détecteur&nbsp;?<br /><span class="g">Les PV d'AG.</span></div>
+
+        <div id="poly" class="abs">
+          <div class="lbl">POLYGRAPHE · VENDEUR</div>
+          <div class="rec"><i></i>REC</div>
+          <div id="paper"><svg id="trace" viewBox="0 0 6000 350"></svg><div id="pen"></div></div>
+        </div>
+        <div class="stamp" id="st0" data-layout-allow-overlap>MENSONGE</div>
+        <div class="stamp" id="st1" data-layout-allow-overlap>MENSONGE</div>
+        <div class="stamp" id="st2" data-layout-allow-overlap>MENSONGE</div>
+        <div class="stamp" id="st3" data-layout-allow-overlap style="font-size: 76px">MACHINE HS</div>
+
+        <div class="bub q" id="q0"><small>L'ENQUÊTEUR</small>Des travaux prévus&nbsp;?</div>
+        <div class="bub a" id="a0"><small>LE VENDEUR</small>Non, aucun.</div>
+        <div class="truth" id="t0"><small>DANS LES PV D'AG</small>Cage d'escalier + porte de garage votées : <b>6&nbsp;900&nbsp;€</b></div>
+        <div class="bub q" id="q1"><small>L'ENQUÊTEUR</small>Les charges sont stables&nbsp;?</div>
+        <div class="bub a" id="a1"><small>LE VENDEUR</small>Très stables.</div>
+        <div class="truth" id="t1"><small>DANS LES COMPTES</small>Nouveau contrat d'énergie : <b>+22 % en 2 ans</b></div>
+        <div class="bub q" id="q2"><small>L'ENQUÊTEUR</small>Le voisinage est calme&nbsp;?</div>
+        <div class="bub a" id="a2"><small>LE VENDEUR</small>Super calme.</div>
+        <div class="truth" id="t2"><small>DANS LE RÈGLEMENT</small><b>6 appartements</b> en location courte durée</div>
+        <div class="bub q" id="q3"><small>L'ENQUÊTEUR</small>Pourquoi vous vendez&nbsp;?</div>
+        <div class="bub a" id="a3"><small>LE VENDEUR</small>Pour… me rapprocher de ma famille.</div>
+
+        <div class="clip" id="redwash" data-layout-allow-overlap></div>
+
+        <div id="report" class="abs" data-layout-allow-overlap>
+          <h4>RAPPORT ANALYSETACOPRO</h4>
+          <div class="row">PV 2025 : travaux votés · <b>6&nbsp;900&nbsp;€</b></div>
+          <div class="row">Comptes : charges · <b>+22 %</b></div>
+          <div class="row">Règlement : location courte <b>autorisée</b></div>
+          <div class="sc">Score 6.2/10 · de quoi négocier</div>
+        </div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Les documents,</span></span>
+          <span class="mask"><span class="g">eux, ne mentent</span></span>
+          <span class="mask"><span class="g">pas.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 0.6,
+        BAR = 2.4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+      // ---------- Tracé du polygraphe ----------
+      const Q = [1.2, 6.0, 10.8, 15.6]; // questions
+      const LIE = [3.6, 8.4, 13.2]; // le vendeur ment
+      const V = 150,
+        PEN = 795,
+        MID = 175;
+      // amplitude de l'aiguille à l'instant t
+      const amp = (t) => {
+        let a = 10;
+        LIE.forEach((L) => {
+          const d = t - L;
+          if (d > -0.4 && d < 1.4) a += 150 * Math.exp(-Math.abs(d - 0.2) * 2.2);
+        });
+        if (t > 16.8 && t < 19.4) a += 160;
+        return Math.min(a, 168);
+      };
+      const val = (t) => {
+        const a = amp(t);
+        const f = a > 40 ? 9 : 1.6;
+        return MID + a * Math.sin(t * f * 2 * Math.PI + rnd(Math.floor(t * 20), 2) * (a > 40 ? 2.4 : 0.4)) * (a > 40 ? 0.8 + 0.2 * rnd(Math.floor(t * 40), 3) : 1);
+      };
+      let d = "";
+      for (let t = -5; t <= 20; t += 0.02) {
+        const x = PEN + V * t;
+        if (x < 0 || x > 6000) continue;
+        d += (d ? "L" : "M") + x.toFixed(1) + " " + val(t).toFixed(1);
+      }
+      document.getElementById("trace").innerHTML = `<path d="${d}" fill="none" stroke="#1d2fa6" stroke-width="4" stroke-linejoin="round"/>`;
+      gsap.set("#pen", { y: val(0) });
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const swapCap = (from, to, t) => {
+        tl.set(from, { visibility: "hidden" }, t);
+        tl.set(to, { visibility: "visible" }, t);
+        tl.fromTo(to, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+      };
+      const show = (sel, t, from = { y: 30 }) => tl.fromTo(sel, { ...from, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.25, ease: "back.out(2)", immediateRender: false }, t);
+      const hide = (sel, t) => tl.to(sel, { opacity: 0, duration: 0.15 }, t);
+      tl.set("#flash", { opacity: 0 }, 0);
+      tl.to("#poly .rec i", { opacity: 0.2, duration: BEAT / 2, yoyo: true, repeat: 39, ease: "steps(1)" }, 0);
+      // le papier défile, l'aiguille suit le tracé
+      tl.fromTo("#trace", { x: 0 }, { x: -V * 20, duration: 20, ease: "none" }, 0);
+      for (let t = 0.05; t <= 20; t += 0.05) tl.set("#pen", { y: val(t) }, t);
+
+      // Les 3 mensonges
+      for (let k = 0; k < 3; k++) {
+        const q = Q[k],
+          next = Q[k + 1];
+        show(`#q${k}`, q, { x: -40 });
+        show(`#a${k}`, q + 1.2, { x: 40 });
+        tl.fromTo(`#st${k}`, { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.15, ease: "power4.in", immediateRender: false }, LIE[k] + 0.05);
+        tl.fromTo("#redwash", { opacity: 1 }, { opacity: 0, duration: 0.8, immediateRender: false }, LIE[k] + 0.2);
+        shake("#room", LIE[k] + 0.2, 14, 6);
+        show(`#t${k}`, LIE[k] + 0.35);
+        hide(`#q${k}, #a${k}, #t${k}, #st${k}`, next - 0.2);
+      }
+      // 4e question : la machine s'affole
+      show("#q3", Q[3], { x: -40 });
+      show("#a3", Q[3] + 1.0, { x: 40 });
+      tl.fromTo("#redwash", { opacity: 0.4 }, { opacity: 1, duration: 0.25, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false }, 16.8);
+      for (let k = 0; k < 8; k++) shake("#poly", 16.9 + k * 0.3, 18, 4);
+      tl.fromTo("#st3", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.15, ease: "power4.in", immediateRender: false }, 18.0);
+
+      // 19,4 s : le vrai détecteur
+      const R = 19.4;
+      flash(R, 0.7, 0.3);
+      swapCap("#cap0", "#cap1", R);
+      hide("#q3, #a3, #st3", R);
+      tl.to("#redwash", { opacity: 0, duration: 0.2 }, R);
+      tl.to("#poly", { opacity: 0.25, duration: 0.3 }, R);
+      tl.fromTo("#report", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, R + 0.2);
+      tl.fromTo("#report .row", { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: "back.out(2)", stagger: BEAT, immediateRender: false }, R + 0.6);
+      tl.fromTo("#report .sc", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.5)", immediateRender: false }, R + 0.6 + 3 * BEAT);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 3.5);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 7 }, E0 + BEAT * 4);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

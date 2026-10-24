@@ -184,3 +184,37 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 > 16,8 — La recette du chef : une analyse.
 > 20,0 — Et un gâteau parfait.
 > 24,2 — Suis la bonne recette avant de signer.
+
+## Le détecteur de mensonges
+> 0,2 — J'ai mis le vendeur au détecteur de mensonges.
+> 2,5 — Aucuns travaux ?
+> 3,8 — Mensonge : six mille neuf cents euros votés.
+> 7,3 — Charges stables ?
+> 8,6 — Mensonge : plus vingt-deux pour cent.
+> 12,1 — Voisinage calme ?
+> 13,4 — Six locations courte durée.
+> 17,0 — Et là… la machine lâche.
+> 19,6 — Le vrai détecteur, c'est les PV.
+> 24,2 — Les documents, eux, ne mentent pas.
+
+## Le ticket à gratter
+> 0,2 — J'ai acheté mon appart au ticket à gratter.
+> 2,6 — Façade, rien. Caves, rien.
+> 6,0 — Et la VMC…
+> 8,5 — Perdu. Huit mille deux cents euros.
+> 10,0 — Bonus : l'assurance qui flambe.
+> 12,3 — Acheter sans analyse, c'est jouer.
+> 14,2 — Avec Analyse ta copro, rien à gratter.
+> 18,2 — Gagné : zéro surprise.
+> 24,2 — Ton appart, c'est pas un jeu de hasard.
+
+## Le jeu des 5 erreurs
+> 0,2 — Jeu des cinq erreurs : l'annonce contre la réalité.
+> 2,4 — Un immeuble de sept étages en face.
+> 5,9 — Une antenne relais.
+> 8,6 — Les vélos, remplacés par les poubelles.
+> 11,4 — Un digicode à deux mille neuf cents.
+> 14,1 — Et des volets imposés.
+> 15,8 — T'en as trouvé combien ? Dis-le en commentaire.
+> 17,6 — Nous, on les trouve dans les PV.
+> 24,2 — Compare l'annonce et les PV avant de signer.

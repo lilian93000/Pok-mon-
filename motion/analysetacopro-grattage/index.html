@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « LE TICKET À GRATTER » — acheter sans analyse, c'est jouer. 118 BPM (disco casino) : 1 mesure ≈ 2,03 s.
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --red: #e5243b;
+        --green: #0e9a5a;
+        --gold: #ffcf3a;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #3a0c5c;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #fff;
+        background:
+          repeating-conic-gradient(from 0deg at 50% 45%, rgba(255, 255, 255, 0.05) 0 10deg, transparent 10deg 20deg),
+          radial-gradient(70% 55% at 50% 45%, #7b1fa2 0%, #4a1072 55%, #22063a 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 220px;
+        font-size: 58px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        text-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+        z-index: 6;
+      }
+      .cap .y {
+        color: var(--gold);
+      }
+      .cap .r {
+        color: #ff7a8a;
+      }
+      .cap .g {
+        color: #7dffb8;
+      }
+      /* Ticket */
+      .ticket {
+        position: absolute;
+        left: 90px;
+        top: 420px;
+        width: 820px;
+        height: 1040px;
+        border-radius: 30px;
+        padding: 30px 40px;
+        background: linear-gradient(160deg, #ffe066 0%, #ffb02e 55%, #ff7a2e 100%);
+        color: #2a0c3e;
+        box-shadow: 0 40px 90px rgba(0, 0, 0, 0.5);
+      }
+      .ticket.ok {
+        background: linear-gradient(160deg, #e9f2ff 0%, #c6dcff 55%, #9cc1ff 100%);
+      }
+      .ticket .h {
+        text-align: center;
+        font-size: 74px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+      .ticket .h small {
+        display: block;
+        margin-top: 8px;
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+      }
+      .ticket .stars {
+        text-align: center;
+        font-size: 34px;
+        letter-spacing: 0.4em;
+        margin: 6px 0 16px;
+      }
+      .zone {
+        position: relative;
+        height: 170px;
+        margin-top: 22px;
+        border-radius: 18px;
+        background: #fff;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 44px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+      .zone.small {
+        height: 140px;
+        font-size: 36px;
+      }
+      .zone .good {
+        color: var(--green);
+      }
+      .zone .bad {
+        color: var(--red);
+      }
+      .zone .silver {
+        position: absolute;
+        inset: 0;
+        background:
+          repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0 6px, transparent 6px 14px),
+          linear-gradient(135deg, #d9dde3, #9aa1ab 50%, #d4d8de);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        color: rgba(60, 64, 72, 0.6);
+      }
+      .coin {
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #fff3b0, #e0a800 60%, #a87400);
+        border: 6px solid #8a5f00;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 60px;
+        font-weight: 900;
+        color: #8a5f00;
+        opacity: 0;
+        z-index: 5;
+      }
+      .stamp {
+        position: absolute;
+        padding: 16px 40px;
+        border: 14px solid var(--red);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--red);
+        font-size: 120px;
+        font-weight: 900;
+        transform: rotate(-10deg);
+        opacity: 0;
+        z-index: 7;
+      }
+      .stamp.win {
+        border-color: var(--green);
+        color: var(--green);
+        font-size: 100px;
+      }
+      .stamp small {
+        display: block;
+        font-size: 36px;
+        text-align: center;
+        color: #2a0c3e;
+      }
+      .confetti {
+        position: absolute;
+        width: 18px;
+        height: 30px;
+        border-radius: 4px;
+        opacity: 0;
+        z-index: 6;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.96;
+      }
+      #end-title .y {
+        color: var(--gold);
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(255, 207, 58, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="casino" class="clip" data-start="0" data-duration="24" data-track-index="0">
+        <div class="cap" id="cap0">J'ai acheté mon appart…<br /><span class="y">au ticket à gratter.</span></div>
+        <div class="cap" id="cap1" style="visibility: hidden">Acheter sans analyse,<br /><span class="r">c'est jouer.</span></div>
+        <div class="cap" id="cap2" style="visibility: hidden">Avec une analyse,<br /><span class="g">rien à gratter.</span></div>
+
+        <div class="ticket" id="tk1">
+          <div class="h">SUPER COPRO<small>GRATTEZ LES 3 CASES</small></div>
+          <div class="stars">★ ★ ★</div>
+          <div class="zone" data-layout-allow-overlap id="z0"><span class="good">FAÇADE : RAS ✓</span><div class="silver" data-layout-allow-overlap>GRATTEZ</div></div>
+          <div class="zone" data-layout-allow-overlap id="z1"><span class="good">CAVES : RAS ✓</span><div class="silver" data-layout-allow-overlap>GRATTEZ</div></div>
+          <div class="zone" data-layout-allow-overlap id="z2"><span class="bad">VMC collective à refaire<br />−8&nbsp;200&nbsp;€</span><div class="silver" data-layout-allow-overlap>GRATTEZ</div></div>
+          <div class="zone small" data-layout-allow-overlap id="z3"><span class="bad">BONUS : dégâts des eaux à répétition<br />assurance +40&nbsp;%</span><div class="silver" data-layout-allow-overlap>BONUS</div></div>
+        </div>
+        <div class="coin" id="coin" data-layout-allow-overlap>€</div>
+        <div class="stamp" id="lose" style="left: 230px; top: 820px" data-layout-allow-overlap>PERDU</div>
+
+        <div class="ticket ok" id="tk2" style="visibility: hidden">
+          <div class="h">ANALYSETACOPRO<small>RIEN À GRATTER : TOUT EST RÉVÉLÉ</small></div>
+          <div class="stars">✓ ✓ ✓</div>
+          <div class="zone"><span class="good">FAÇADE : RAS ✓</span></div>
+          <div class="zone"><span class="good">CAVES : RAS ✓</span></div>
+          <div class="zone"><span class="good">VMC refaite en 2024 ✓</span></div>
+          <div class="zone small"><span class="good">Assurance stable, 0 sinistre ✓</span></div>
+        </div>
+        <div class="stamp win" id="win" style="left: 150px; top: 760px" data-layout-allow-overlap>GAGNÉ<small>0 surprise · score 8.6/10</small></div>
+        <div id="conf"></div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Ton appart,</span></span>
+          <span class="mask"><span>c'est pas</span></span>
+          <span class="mask"><span class="y">un jeu de hasard.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 118,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+      const cols = ["#ffcf3a", "#19c37d", "#3d8bff", "#ff5a8a", "#ffffff"];
+      document.getElementById("conf").innerHTML = Array.from({ length: 36 }, (_, i) => `<div class="confetti" style="left:${Math.round(100 + rnd(i, 1) * 860)}px; top:420px; background:${cols[i % 5]}"></div>`).join("");
+      gsap.set(".silver", { clipPath: "inset(0 0 0 0%)" });
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const swapCap = (from, to, t) => {
+        tl.set(from, { visibility: "hidden" }, t);
+        tl.set(to, { visibility: "visible" }, t);
+        tl.fromTo(to, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+      };
+      // Gratter une case : la pièce zigzague, l'argent part par bandes
+      const ZY = { z0: 668, z1: 860, z2: 1052, z3: 1230 };
+      const scratch = (id, t, d) => {
+        const n = 7;
+        tl.set("#coin", { opacity: 1 }, t);
+        for (let k = 0; k <= n; k++) {
+          tl.to("#coin", { x: 150 + (k % 2 ? 560 : 0), y: ZY[id] - 65 + (k / n) * 60 - 30, rotation: k * 40, duration: d / n, ease: "sine.inOut" }, t + (k * d) / n);
+          tl.to(`#${id} .silver`, { clipPath: `inset(0 0 0 ${Math.round(((k + 1) / (n + 1)) * 100)}%)`, duration: d / n, ease: "none" }, t + (k * d) / n);
+        }
+        tl.set("#coin", { opacity: 0 }, t + d + 0.05);
+        tl.fromTo(`#${id} span`, { scale: 1.25 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t + d);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      tl.to("#tk1", { rotation: 1.2, duration: BAR / 2, yoyo: true, repeat: 5, ease: "sine.inOut" }, 0);
+
+      scratch("z0", 1.0, 1.6);
+      scratch("z1", 3.4, 1.6);
+      scratch("z2", 5.8, 2.2);
+      tl.fromTo("#lose", { scale: 2.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, 8.3);
+      shake("#casino", 8.46, 18, 6);
+      flash(8.46, 0.4, 0.25);
+      tl.to("#lose", { opacity: 0, duration: 0.2 }, 9.5);
+      scratch("z3", 9.7, 1.4);
+      shake("#tk1", 11.15, 10, 5);
+
+      // 12,2 s : le ticket est jeté
+      const J = 12.2;
+      swapCap("#cap0", "#cap1", J);
+      tl.to("#tk1", { scale: 0.3, rotation: -60, x: -700, y: 500, opacity: 0, duration: 0.6, ease: "power3.in" }, J + 1.2);
+
+      // 14 s : le ticket AnalyseTaCopro
+      const G = 14.0;
+      swapCap("#cap1", "#cap2", G);
+      flash(G, 0.6, 0.3);
+      tl.set("#tk2", { visibility: "visible" }, G);
+      tl.fromTo("#tk2", { y: 900, rotation: 12 }, { y: 0, rotation: 0, duration: 0.5, ease: "back.out(1.4)", immediateRender: false }, G);
+      tl.fromTo("#tk2 .zone", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: "back.out(2)", stagger: BEAT, immediateRender: false }, G + 0.6);
+      const W = G + 0.6 + 4 * BEAT + 0.4;
+      tl.fromTo("#win", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, W - 0.16);
+      flash(W, 0.5, 0.3);
+      tl.fromTo(".confetti", { y: 0, opacity: 1, rotation: 0 }, { y: (i) => 900 + rnd(i, 5) * 500, x: (i) => (rnd(i, 6) - 0.5) * 300, rotation: (i) => rnd(i, 7) * 720, opacity: 0.9, duration: 2.4, ease: "power1.in", stagger: 0.02, immediateRender: false }, W);
+      tl.to("#win", { scale: 1.05, duration: BEAT / 2, yoyo: true, repeat: 9, ease: "sine.inOut" }, W + 0.3);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 7 }, E0 + BEAT * 4.5);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
