@@ -186,12 +186,12 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 > 24,2 — Suis la bonne recette avant de signer.
 
 ## Le détecteur de mensonges
-> 0,2 — J'ai mis le vendeur au détecteur de mensonges.
-> 2,5 — Aucuns travaux ?
-> 3,8 — Mensonge : six mille neuf cents euros votés.
-> 7,3 — Charges stables ?
+> 0,1 — Détecteur de mensonges.
+> 1,8 — Des travaux ?
+> 3,8 — Mensonge : six mille neuf cents euros.
+> 6,1 — Charges stables ?
 > 8,6 — Mensonge : plus vingt-deux pour cent.
-> 12,1 — Voisinage calme ?
+> 10,9 — Voisinage calme ?
 > 13,4 — Six locations courte durée.
 > 17,0 — Et là… la machine lâche.
 > 19,6 — Le vrai détecteur, c'est les PV.
