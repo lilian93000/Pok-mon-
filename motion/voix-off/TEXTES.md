@@ -199,11 +199,11 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 
 ## Le ticket à gratter
 > 0,2 — J'ai acheté mon appart au ticket à gratter.
-> 2,6 — Façade, rien. Caves, rien.
+> 2,7 — Façade : rien. Caves : rien.
 > 6,0 — Et la VMC…
-> 8,5 — Perdu. Huit mille deux cents euros.
-> 10,0 — Bonus : l'assurance qui flambe.
-> 12,3 — Acheter sans analyse, c'est jouer.
+> 8,5 — Perdu : huit mille deux cents.
+> 10,4 — Bonus : l'assurance flambe.
+> 12,6 — Sans analyse, tu joues.
 > 14,2 — Avec Analyse ta copro, rien à gratter.
 > 18,2 — Gagné : zéro surprise.
 > 24,2 — Ton appart, c'est pas un jeu de hasard.
