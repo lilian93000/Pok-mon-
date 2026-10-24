@@ -1,9 +1,11 @@
+Adrienn Nagy
 Akasha Urhobo
 Alevtina Ibragimova
 Alexandra Eala
 Alexandra Panova
 Alexandra Shubladze
 Aliaksandra Sasnovich
+Alice Rame
 Alice Tubello
 Alicia Herrero Linana
 Alina Charaeva
@@ -12,7 +14,10 @@ Aliona Falei
 Alja Senica
 Alycia Parks
 Amanda Anisimova
+Amandine Hesse
 Amelia Rajecki
+Ana Filipa Santos
+Analu Freitas
 Anastasia Gasanova
 Anastasia Kulikova
 Anastasia Tikhonova
@@ -23,6 +28,7 @@ Aneta Laboutkova
 Angela Fita Boluda
 Angelina Voloshchuk
 Anhelina Kalinina
+Ankita Raina
 Ann Li
 Anna Blinkova
 Anna Bondar
@@ -55,6 +61,7 @@ Boyoung Jeong
 Cadence Brace
 Cagla Buyukakcay
 Camila Osorio
+Camilla Zanolini
 Capucine Jauffret
 Carla Tomai
 Carlota Martinez Cirez
@@ -69,12 +76,14 @@ Caty Mcnally
 Celia Cervino Ruiz
 Chengyiyi Yuan
 Chenting Zhu
+Cheuk Ying Shek
 Chloe Paquet
 Claire Liu
 Clara Burel
 Clara Tauson
 Coco Gauff
 Cristina Bucsa
+Cristina Diaz Adrover
 Dalila Jakupovic
 Dalila Spiteri
 Dalma Galfi
@@ -82,6 +91,7 @@ Daria Egorova
 Daria Kasatkina
 Daria Khomutsianskaya
 Daria Snigur
+Daria Yesypchuk
 Darja Semenistaja
 Darja Vidmanova
 Darya Astakhova
@@ -109,7 +119,9 @@ Elena Pridankina
 Elena Ruxandra Bertea
 Elena Rybakina
 Elina Avanesyan
+Elina Nepliy
 Elina Svitolina
+Elisa Visentin
 Elise Mertens
 Elizabeth Mandlik
 Elizara Yaneva
@@ -122,6 +134,7 @@ Emiliana Arango
 Emma Navarro
 Emma Raducanu
 En Shuo Liang
+Ena Shibahara
 Enola Chiesa
 Erika Andreeva
 Eva Bennemann
@@ -140,6 +153,7 @@ Gabriela Andrea Knutson
 Gabriela Ce
 Gabriella Da Silva Fick
 Gabriella Price
+Gaia Maduzzi
 Georgia Pedone
 Gina Feistel
 Giulia Alessia Monteleone
@@ -155,6 +169,8 @@ Hayu Kinoshita
 Heather Watson
 Himeno Sakatsume
 Hiroko Kuwata
+Hong Yi Cody Wong
+Ida Wobker
 Iga Swiatek
 Ilay Yoruk
 Irene Burillo Escorihuela
@@ -174,6 +190,7 @@ Jennifer Ruggeri
 Jessica Bouzas Maneiro
 Jessica Pegula
 Jessica Pieri
+Jil Teichmann
 Joanna Garland
 Jodie Burrage
 Jordyn Hazelitt
@@ -213,6 +230,7 @@ Kylie Collins
 Kyoka Okamura
 Lanlana Tararudee
 Laura Boehner
+Laura Mair
 Laura Pigossi
 Laura Samson
 Lea Boskovic
@@ -220,21 +238,26 @@ Lea Ma
 Leolia Jeanjean
 Leylah Fernandez
 Leyre Romero Gormaz
+Lia Karatancheva
+Lidia Encheva
 Lilli Tagger
 Lin Zhu
 Lina Gjorcheska
 Linda Fruhvirtova
 Linda Klimovicova
 Linda Noskova
+Lisa Peer
 Lisa Pigato
 Lisa Zaar
 Liudmila Samsonova
 Lizette Cabrera
+Loes Ebeling Koning
 Lois Boisson
 Lola Radivojevic
 Lucia Bronzetti
 Lucia Cortez Llorca
 Lucie Havlickova
+Lucie Nguyen Tan
 Lucija Ciric Bagaric
 Lucrezia Stefanini
 Madalena Matias
@@ -258,15 +281,18 @@ Maria Timofeeva
 Maria Toma
 Mariam Bolkvadze
 Marie Bouzkova
+Marie Mettraux
 Marie Vogt
 Mariia Nozdrachova
 Marina Bassols Ribera
 Marta Kostyuk
 Marta Lombardini
+Martha Matoula
 Martina Colmegna
 Martina Trevisan
 Martyna Kubka
 Mary Stoiana
+Mathilde Lollia
 Matilde Jorge
 Maya Joint
 Mayar Sherif
@@ -277,7 +303,9 @@ Mell Elizabeth Reasco Gonzalez
 Mia Pohankova
 Mia Ristic
 Miho Kuramochi
+Milana Ivantsiv
 Mina Hodzic
+Mireia Sagrista Bermejo
 Miriam Bianca Bulgaru
 Mirra Andreeva
 Mona Barthel
@@ -328,10 +356,16 @@ Ruth Roura Llaverias
 Sahaja Yamalapalli
 Samira De Stefano
 Sana Garakani
+Sapfo Sakellaridi
 Sara Bejlek
+Sara Cakarevic
 Sara Saito
 Sara Sorribes Tormo
+Sarah Van Emst
+Sayaka Ishii
+Selena Janicijevic
 Semra Aksu
+Shiho Tsujioka
 Shiyu Ye
 Shuai Zhang
 Sijia Wei
@@ -359,11 +393,13 @@ Tatjana Maria
 Tayisiya Morderger
 Taylah Preston
 Taylor Townsend
+Tea Kovacevic
 Tena Lukas
 Teodora Kostovic
 Teresa Franco Dias
 Tereza Mihalikova
 Tereza Valentova
+Tessa Johanna Brockmann
 Tyra Caterina Grant
 Ulrikke Eikeri
 Valentina Steiner
@@ -395,6 +431,7 @@ Yiming Dang
 Yue Yuan
 Yufei Ren
 Yuki Naito
+Yulia Putintseva
 Yuliia Starodubtseva
 Yushan Shao
 Zeynep Sonmez
@@ -402,36 +439,3 @@ Zhibek Kulambayeva
 Zhuoxuan Bai
 Zongyu Li
 Zuzanna Pawlikowska
-Yulia Putintseva
-Amandine Hesse
-Lisa Peer
-Daria Yesypchuk
-Ankita Raina
-Ana Filipa Santos
-Loes Ebeling Koning
-Lucie Nguyen Tan
-Mireia Sagrista Bermejo
-Camilla Zanolini
-Adrienn Nagy
-Lidia Encheva
-Marie Mettraux
-Elina Nepliy
-Sara Cakarevic
-Lia Karatancheva
-Ida Wobker
-Sarah Van Emst
-Cristina Diaz Adrover
-Sapfo Sakellaridi
-Tessa Johanna Brockmann
-Mathilde Lollia
-Gaia Maduzzi
-Alice Rame
-Jil Teichmann
-Selena Janicijevic
-Tea Kovacevic
-Analu Freitas
-Martha Matoula
-Laura Mair
-Milana Ivantsiv
-Elisa Visentin
-Ena Shibahara
