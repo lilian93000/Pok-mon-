@@ -220,13 +220,12 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 > 24,2 — Compare l'annonce et les PV avant de signer.
 
 ## L'iceberg
-> 0,2 — Ton futur appart ? C'est un iceberg.
-> 2,4 — On plonge.
+> 0,2 — Ton appart ? Un iceberg.
 > 3,2 — Charges : plus dix-huit pour cent.
 > 5,8 — Fonds de travaux : zéro.
 > 8,4 — Ravalement voté : vingt-sept mille euros.
 > 11,0 — Ascenseur à changer.
-> 13,6 — Et un procès avec le syndic.
+> 13,6 — Et un procès.
 > 15,6 — Ça, l'annonce te le montre jamais.
 > 17,6 — Nous, on plonge dans les trois cents pages.
 > 20,8 — Et on te trouve la bonne copro.
