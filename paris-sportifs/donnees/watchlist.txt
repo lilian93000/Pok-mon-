@@ -2,6 +2,7 @@ Adrienn Nagy
 Akasha Urhobo
 Alevtina Ibragimova
 Alexandra Eala
+Alexandra Osborne
 Alexandra Panova
 Alexandra Shubladze
 Aliaksandra Sasnovich
@@ -16,6 +17,7 @@ Alycia Parks
 Amanda Anisimova
 Amandine Hesse
 Amelia Rajecki
+Amelie Van Impe
 Ana Filipa Santos
 Analu Freitas
 Anastasia Gasanova
@@ -56,7 +58,9 @@ Barbora Palicova
 Beatriz Haddad Maia
 Belinda Bencic
 Berfu Cengiz
+Berta Bonardi
 Bianca Andreescu
+Bianca Mendonca Bernardes Bia Bernardes
 Boyoung Jeong
 Cadence Brace
 Cagla Buyukakcay
@@ -72,6 +76,7 @@ Carolina Alves
 Caroline Dolehide
 Carolyn Ansari
 Carson Branstine
+Catarina Melleiro Ibiraba Melleiro Junior
 Caty Mcnally
 Celia Cervino Ruiz
 Chengyiyi Yuan
@@ -95,9 +100,11 @@ Daria Yesypchuk
 Darja Semenistaja
 Darja Vidmanova
 Darya Astakhova
+Dasha Plekhanova
 Dayana Yastremska
 Dayeon Back
 Deborah Chiesa
+Demi Tran
 Denisa Zoldakova
 Deniz Dilek
 Desirae Krawczyk
@@ -144,6 +151,7 @@ Eva Vedder
 Fangran Tian
 Federica Urgesi
 Fernanda Labrana
+Finja Matuella
 Fiona Crawley
 Fiona Ferro
 Francesca Curmi
@@ -151,6 +159,7 @@ Francesca Jones
 Francisca Jorge
 Gabriela Andrea Knutson
 Gabriela Ce
+Gabriela Vilar
 Gabriella Da Silva Fick
 Gabriella Price
 Gaia Maduzzi
@@ -188,6 +197,7 @@ Jelena Ostapenko
 Jeline Vandromme
 Jennifer Ruggeri
 Jessica Bouzas Maneiro
+Jessica Hinojosa Gomez
 Jessica Pegula
 Jessica Pieri
 Jil Teichmann
@@ -272,6 +282,9 @@ Maja Chwalinska
 Malaika Rapolu
 Mananchaya Sawangkaew
 Margaux Rouvroy
+Maria Camila Torres Murcia
+Maria Fernanda Herazo Gonzalez
+Maria Fernanda Navarro Oliva
 Maria Florencia Urrutia
 Maria Garcia Cid
 Maria Lourdes Carle
@@ -317,6 +330,7 @@ Nao Hibino
 Naoko Eto
 Naomi Osaka
 Nastasja Schunk
+Natalia Sousa Salazar
 Natsumi Kawaguchi
 Nauhany Vitoria Leme Da Silva
 Nika Radisic
@@ -379,6 +393,7 @@ Sofya Lansere
 Sohyun Park
 Solana Sierra
 Sonay Kartal
+Sophie Llewellyn
 Sorana Cirstea
 Stephanie Judith Visscher
 Storm Hunter
@@ -404,11 +419,13 @@ Tyra Caterina Grant
 Ulrikke Eikeri
 Valentina Steiner
 Valeria Savinykh
+Valeriya Strakhova
 Varvara Lepchenko
 Vendula Valdmannova
 Veronika Erjavec
 Veronika Podrez
 Victoria Bosio
+Victoria Hu
 Victoria Jimenez Kasintseva
 Victoria Luiza Barros
 Victoria Mboko
