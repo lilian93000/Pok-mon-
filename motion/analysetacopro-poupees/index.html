@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « LES POUPÉES RUSSES » — chaque poupée ouverte cache un problème plus petit… jusqu'au dernier : ton épargne.
+         150 BPM (hardbass + balalaïka de synthé) : 1 mesure = 1,6 s. Composé en 1080×1920, rendu en 2160×3840 à 60 i/s.
+         Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --red: #ff4d5e;
+        --green: #2ee08a;
+        --gold: #ffcf4a;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #3a0610;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #fff;
+        background: radial-gradient(70% 50% at 50% 50%, #8e1626 0%, #4d0a15 60%, #24030a 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 215px;
+        font-size: 60px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        z-index: 6;
+      }
+      .cap .y {
+        color: var(--gold);
+      }
+      .cap .g {
+        color: var(--green);
+      }
+      #pattern {
+        opacity: 0.16;
+      }
+      #stage {
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      .doll {
+        position: absolute;
+        left: 280px;
+        top: 500px;
+        width: 520px;
+        height: 780px;
+      }
+      .doll svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      #layer {
+        left: 70px;
+        top: 372px;
+        padding: 10px 26px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.35);
+        border: 3px solid rgba(255, 207, 74, 0.7);
+        color: var(--gold);
+        font-size: 40px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        z-index: 6;
+      }
+      .pill {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 1340px;
+        padding: 20px 26px 22px;
+        border-radius: 26px;
+        background: #fff;
+        color: #2a0710;
+        font-size: 46px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.08;
+        text-align: center;
+        opacity: 0;
+        z-index: 5;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+      }
+      .pill b {
+        color: #d0142c;
+      }
+      .pill small {
+        display: block;
+        font-size: 28px;
+        color: #6b4a52;
+        letter-spacing: 0.02em;
+      }
+      /* Vérification */
+      #check {
+        background: radial-gradient(70% 50% at 50% 50%, #12305e 0%, #0b1530 60%, #050813 100%);
+      }
+      .mini {
+        position: absolute;
+        top: 760px;
+        width: 150px;
+        height: 225px;
+      }
+      .mini svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .mini .x {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 250px;
+        text-align: center;
+        font-size: 30px;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1.05;
+        opacity: 0;
+      }
+      .mini .x b {
+        display: block;
+        margin: 0 auto 8px;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: var(--red);
+        font-size: 44px;
+        line-height: 64px;
+      }
+      #check-pill {
+        left: 70px;
+        right: 160px;
+        top: 1330px;
+        padding: 20px 26px;
+        border-radius: 24px;
+        background: #fff;
+        color: #0b1530;
+        text-align: center;
+        font-size: 42px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        opacity: 0;
+      }
+      #check-pill b {
+        color: #d0142c;
+      }
+      /* Bonne copro */
+      #good {
+        background: radial-gradient(70% 50% at 50% 50%, #157a52 0%, #0a4a31 60%, #04251a 100%);
+      }
+      .stamp {
+        position: absolute;
+        left: 170px;
+        top: 1330px;
+        padding: 18px 36px;
+        border: 14px solid var(--green);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.97);
+        color: #0a7a48;
+        font-size: 76px;
+        font-weight: 900;
+        text-align: center;
+        line-height: 1;
+        transform: rotate(-6deg);
+        opacity: 0;
+        z-index: 7;
+      }
+      .stamp small {
+        display: block;
+        margin-top: 10px;
+        font-size: 34px;
+        color: #0b2440;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+        color: #fff;
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 120px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.97;
+      }
+      #end-title .y {
+        color: var(--gold);
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(255, 207, 74, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="open" class="clip" data-start="0" data-duration="17.4" data-track-index="0">
+        <svg id="pattern" class="clip" viewBox="0 0 1080 1920" data-layout-allow-overlap></svg>
+        <div id="stage" class="abs" data-layout-allow-overlap></div>
+        <div class="cap" id="cap0">Ton futur appart,<br /><span class="y">c'est une poupée russe.</span></div>
+        <div class="cap" id="cap1" style="visibility: hidden">Chaque fois que tu l'ouvres,<br /><span class="y">une surprise.</span></div>
+        <div class="cap" id="cap2" style="visibility: hidden">Et tout au fond…<br /><span class="y">ton épargne.</span></div>
+        <div id="layer" class="abs">Poupée 1/5</div>
+        <div class="pill" id="p0"><small>L'ANNONCE</small>T2 lumineux · <b>245&nbsp;000&nbsp;€</b></div>
+        <div class="pill" id="p1"><small>PV D'AG 2025</small>Ravalement voté&nbsp;: <b>18&nbsp;000&nbsp;€</b></div>
+        <div class="pill" id="p2"><small>ANNEXE COMPTABLE</small><b>15&nbsp;%</b> d'impayés dans l'immeuble</div>
+        <div class="pill" id="p3"><small>CARNET D'ENTRETIEN</small>Toiture&nbsp;: <b>3 fuites</b> signalées</div>
+        <div class="pill" id="p4"><small>PV D'AG 2024</small><b>Procès en cours</b> avec le syndic</div>
+        <div class="pill" id="p5"><small>ET À LA FIN</small>Ton épargne&nbsp;: <b>0&nbsp;€</b></div>
+      </section>
+
+      <section id="check" class="clip" data-start="17.4" data-duration="3.2" data-track-index="0">
+        <div class="cap">Nous, on ouvre toutes<br /><span class="g">les poupées avant toi.</span></div>
+        <div id="minis" class="clip" data-layout-allow-overlap></div>
+        <div id="check-pill" class="abs"><b>5 surprises</b> trouvées · rapport en 72&nbsp;h</div>
+      </section>
+
+      <section id="good" class="clip" data-start="20.6" data-duration="3.4" data-track-index="0">
+        <div class="cap">Et quand on trouve<br /><span class="y">la bonne&nbsp;:</span></div>
+        <div id="gstage" class="abs" style="left: 0; top: 0; width: 1080px; height: 1920px" data-layout-allow-overlap></div>
+        <div class="stamp" id="ok" data-layout-allow-overlap>RIEN DE CACHÉ<small>Résidence Les Acacias · 8.9/10</small></div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Ouvre tout</span></span>
+          <span class="mask"><span class="y">avant de signer.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 150,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      // ---------- La poupée (deux moitiés : haut / bas, coupe à y = 318) ----------
+      const SIL = "M200 18 C122 18 92 80 96 150 C99 202 58 242 54 334 C50 456 82 562 200 582 C318 562 350 456 346 334 C342 242 301 202 304 150 C308 80 278 18 200 18 Z";
+      const CUT = 318;
+      const body = (id, c, dk, sad) => {
+        let s = `<path d="${SIL}" fill="${c}" stroke="#2a0710" stroke-width="6"/>`;
+        // foulard + visage
+        s += `<ellipse cx="200" cy="150" rx="86" ry="96" fill="${dk}"/><ellipse cx="200" cy="156" rx="64" ry="70" fill="#ffe2c9"/>`;
+        s += `<path d="M138 132 C150 90 250 90 262 132 C240 112 160 112 138 132 Z" fill="#7a3b1c"/>`;
+        s += `<circle cx="176" cy="152" r="7" fill="#2a0710"/><circle cx="224" cy="152" r="7" fill="#2a0710"/>`;
+        s += `<circle cx="160" cy="180" r="12" fill="#ff8a9a" opacity="0.7"/><circle cx="240" cy="180" r="12" fill="#ff8a9a" opacity="0.7"/>`;
+        s += sad ? `<path d="M184 196 Q200 184 216 196" stroke="#2a0710" stroke-width="5" fill="none" stroke-linecap="round"/>` : `<path d="M184 188 Q200 204 216 188" stroke="#2a0710" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+        // tablier fleuri
+        s += `<path d="M120 300 C110 400 120 500 200 540 C280 500 290 400 280 300 Z" fill="#fff6e6" stroke="#2a0710" stroke-width="4"/>`;
+        s += `<circle cx="200" cy="410" r="44" fill="${dk}"/>`;
+        for (let k = 0; k < 6; k++) {
+          const a = (k / 6) * Math.PI * 2;
+          s += `<circle cx="${(200 + Math.cos(a) * 44).toFixed(1)}" cy="${(410 + Math.sin(a) * 44).toFixed(1)}" r="20" fill="${c}"/>`;
+        }
+        s += `<circle cx="200" cy="410" r="18" fill="#ffcf4a"/>`;
+        s += `<path d="M150 480 q12 -22 24 0 M226 480 q12 -22 24 0" stroke="#2f9a5a" stroke-width="6" fill="none"/>`;
+        return s;
+      };
+      const doll = (id, c, dk, cls = "doll", sad = false) => {
+        const b = body(id, c, dk, sad);
+        return `<div class="${cls}" id="${id}">
+          <svg viewBox="0 0 400 600" id="${id}-bot"><defs><clipPath id="${id}-cb"><rect y="${CUT}" width="400" height="300"/></clipPath></defs><g clip-path="url(#${id}-cb)">${b}</g></svg>
+          <svg viewBox="0 0 400 600" id="${id}-top"><defs><clipPath id="${id}-ct"><rect y="-20" width="400" height="${CUT + 20}"/></clipPath></defs><g clip-path="url(#${id}-ct)">${b}</g><path d="M60 ${CUT}H340" stroke="#ffcf4a" stroke-width="8"/></svg>
+        </div>`;
+      };
+      const COL = [
+        ["#e0233a", "#9c0f22"],
+        ["#2b6fe8", "#163f94"],
+        ["#f08a1c", "#a8540a"],
+        ["#8a46e8", "#4e1e9c"],
+        ["#13a3b3", "#0a5f69"],
+      ];
+      // pièce finale : « ton épargne » (une pièce vide, fissurée)
+      const coin = `<div class="doll" id="d5"><svg viewBox="0 0 400 600"><circle cx="200" cy="330" r="120" fill="#ffcf4a" stroke="#2a0710" stroke-width="8"/><circle cx="200" cy="330" r="92" fill="none" stroke="#c99a1e" stroke-width="6"/><path d="M240 222 L222 280 L250 300 L226 360" stroke="#2a0710" stroke-width="6" fill="none" stroke-linejoin="round"/></svg><div style="position: absolute; left: 0; right: 0; top: 362px; text-align: center; font-size: 128px; font-weight: 900; letter-spacing: -0.06em; line-height: 1; color: #2a0710">0&nbsp;€</div></div>`;
+      // empilement : la plus grande devant
+      let st = coin;
+      for (let k = 4; k >= 0; k--) st += doll(`d${k}`, COL[k][0], COL[k][1], "doll", k === 4);
+      document.getElementById("stage").innerHTML = st;
+
+      // motif folk en fond
+      let pt = "";
+      for (let r = 0; r < 12; r++)
+        for (let c = 0; c < 7; c++) {
+          const x = c * 170 + (r % 2 ? 85 : 0),
+            y = r * 170;
+          pt += `<g transform="translate(${x} ${y})"><circle r="14" fill="#ffcf4a"/>${[0, 1, 2, 3].map((k) => `<ellipse cx="${Math.cos((k * Math.PI) / 2) * 30}" cy="${Math.sin((k * Math.PI) / 2) * 30}" rx="12" ry="12" fill="none" stroke="#ffcf4a" stroke-width="4"/>`).join("")}</g>`;
+        }
+      document.getElementById("pattern").innerHTML = pt;
+
+      // vérification : 5 mini-poupées
+      const LBL = ["Ravalement", "Impayés", "Toiture", "Procès", "Épargne"];
+      document.getElementById("minis").innerHTML = COL.map((cc, k) => doll(`m${k}`, cc[0], cc[1], "mini").replace('class="mini"', `class="mini" style="left: ${70 + k * 170}px"`)).join("");
+      document.querySelectorAll(".mini").forEach((m, k) => {
+        const x = document.createElement("div");
+        x.className = "x";
+        x.id = `x${k}`;
+        x.innerHTML = `<b>✕</b>${LBL[k]}`;
+        m.appendChild(x);
+      });
+      // la bonne copro
+      document.getElementById("gstage").innerHTML =
+        `<div class="doll" id="h0" style="left: 340px; top: 640px; width: 400px; height: 600px"><svg viewBox="0 0 400 600"><circle cx="200" cy="330" r="130" fill="#2ee08a" stroke="#04251a" stroke-width="8"/><path d="M140 332 L185 378 L268 284" stroke="#fff" stroke-width="30" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>` +
+        doll("gd", "#ffcf4a", "#c48a0a");
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const swapCap = (from, to, t) => {
+        tl.set(from, { visibility: "hidden" }, t);
+        tl.set(to, { visibility: "visible" }, t);
+        tl.fromTo(to, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+      };
+      // ouvre la poupée « id » : le haut s'envole, le bas tombe, « next » grandit
+      const openDoll = (id, next, t, big = 1) => {
+        tl.to(`#${id}-top`, { y: -1150, rotation: -18, transformOrigin: "50% 60%", duration: 0.5, ease: "power2.in" }, t);
+        tl.to(`#${id}-bot`, { y: 900, opacity: 0, duration: 0.5, ease: "power2.in" }, t + 0.12);
+        tl.fromTo(`#${next}`, { scale: 0.62, opacity: 0 }, { scale: big, opacity: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, t + 0.1);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      gsap.set("#d1, #d2, #d3, #d4, #d5", { opacity: 0, scale: 0.62 });
+      tl.to("#pattern", { y: -170, duration: 17.4, ease: "none" }, 0);
+
+      // 0–2,4 s : la poupée « annonce »
+      tl.fromTo("#p0", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 0.1);
+      tl.to("#d0", { rotation: 4, duration: BEAT, yoyo: true, repeat: 4, ease: "sine.inOut", transformOrigin: "50% 100%" }, 0.0);
+
+      // les ouvertures
+      const O = [2.4, 5.6, 8.8, 12.0, 14.4];
+      swapCap("#cap0", "#cap1", O[0]);
+      O.forEach((t, k) => {
+        const nxt = O[k + 1] || 17.4;
+        openDoll(`d${k}`, `d${k + 1}`, t, k === 4 ? 1.15 : 1);
+        flash(t + 0.1, 0.35, 0.2);
+        shake("#stage", t + 0.15, 10, 4);
+        tl.to(`#p${k}`, { opacity: 0, duration: 0.12 }, t);
+        tl.fromTo(`#p${k + 1}`, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.2);
+        tl.set("#layer", { textContent: k < 4 ? `Poupée ${k + 2}/5` : "Le fond" }, t + 0.1);
+        tl.fromTo("#layer", { scale: 1.3 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t + 0.1);
+        if (k < 4) tl.to(`#d${k + 1}`, { rotation: 3, duration: BEAT, yoyo: true, repeat: Math.floor((nxt - t - 0.8) / BEAT), ease: "sine.inOut", transformOrigin: "50% 100%" }, t + 0.6);
+      });
+      swapCap("#cap1", "#cap2", O[4]);
+      tl.to("#d5", { rotation: 360, duration: 1.2, ease: "power2.out" }, O[4] + 0.3);
+      tl.to("#d5", { y: 40, duration: 0.5, ease: "bounce.out" }, 16.0);
+
+      // 17,4 s : on ouvre tout
+      const P = 17.4;
+      flash(P, 0.5, 0.25);
+      tl.fromTo(".mini", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", stagger: 0.06, immediateRender: false }, P);
+      for (let k = 0; k < 5; k++) {
+        const t = P + 0.6 + k * 0.3;
+        tl.to(`#m${k}-top`, { y: -120, rotation: -14, duration: 0.18, ease: "power2.out" }, t);
+        tl.fromTo(`#x${k}`, { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.2, ease: "back.out(3)", immediateRender: false }, t + 0.05);
+      }
+      tl.fromTo("#check-pill", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, P + 1.5);
+
+      // 20,6 s : la bonne copro
+      const G = 20.6;
+      flash(G, 0.6, 0.3);
+      gsap.set("#h0", { opacity: 0, scale: 0.5 });
+      tl.fromTo("#gd", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, G);
+      tl.to("#gd-top", { y: -1150, rotation: 16, transformOrigin: "50% 60%", duration: 0.5, ease: "power2.in" }, G + 0.7);
+      tl.to("#gd-bot", { y: 900, opacity: 0, duration: 0.5, ease: "power2.in" }, G + 0.82);
+      tl.to("#h0", { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.5)" }, G + 0.8);
+      tl.fromTo("#ok", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, G + 1.3);
+      flash(G + 1.46, 0.4, 0.25);
+      tl.to("#ok", { scale: 1.05, duration: BEAT / 2, yoyo: true, repeat: 7, ease: "sine.inOut" }, G + 1.7);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 9 }, E0 + BEAT * 4.5);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

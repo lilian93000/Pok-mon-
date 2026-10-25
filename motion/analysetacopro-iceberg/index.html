@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « L'ICEBERG » — ce que l'annonce montre, et ce qu'il y a sous l'eau. 140 BPM (trap ciné, demi-temps) : 1 mesure ≈ 1,71 s.
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --red: #ff3b4f;
+        --green: #19c27a;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #062a4d;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #fff;
+        background: #062a4d;
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 215px;
+        font-size: 60px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        z-index: 6;
+        text-shadow: 0 4px 24px rgba(0, 20, 50, 0.55);
+      }
+      #cap1,
+      #cap2 {
+        right: auto;
+        padding: 14px 26px 18px;
+        border-radius: 26px;
+        background: rgba(2, 12, 28, 0.82);
+      }
+      #gauge {
+        top: 400px;
+      }
+      .cap.dark {
+        color: #0b2440;
+        text-shadow: none;
+      }
+      .cap .r {
+        color: var(--red);
+      }
+      .cap .g {
+        color: var(--green);
+      }
+      .cap .b {
+        color: #0b5fff;
+      }
+      #world {
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 6000px;
+      }
+      #world > svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 6000px;
+      }
+      .tag {
+        position: absolute;
+        padding: 14px 24px;
+        border-radius: 999px;
+        background: #fff;
+        color: #0b2440;
+        font-size: 36px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 12px 30px rgba(0, 40, 80, 0.25);
+        white-space: nowrap;
+      }
+      .tag i {
+        font-style: normal;
+        color: #0f8a55;
+      }
+      .card {
+        position: absolute;
+        left: 110px;
+        width: 760px;
+        padding: 22px 30px 24px;
+        border-radius: 26px;
+        background: rgba(255, 255, 255, 0.97);
+        border-left: 16px solid var(--red);
+        color: #0b2440;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      }
+      .card .dep {
+        font-size: 28px;
+        font-weight: 900;
+        color: #4a6a8a;
+        letter-spacing: 0.04em;
+      }
+      .card .txt {
+        margin-top: 4px;
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+        line-height: 1.05;
+      }
+      .card .txt b {
+        color: #e5243b;
+      }
+      #gauge {
+        left: 70px;
+        top: 372px;
+        padding: 10px 26px;
+        border-radius: 999px;
+        background: rgba(2, 12, 28, 0.75);
+        border: 3px solid rgba(255, 255, 255, 0.5);
+        color: #7fe3ff;
+        font-size: 44px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        z-index: 6;
+      }
+      #dark {
+        background: radial-gradient(75% 60% at 50% 45%, rgba(0, 0, 0, 0) 55%, rgba(0, 4, 12, 0.85) 100%);
+        opacity: 0;
+        z-index: 3;
+      }
+      #total {
+        left: 70px;
+        right: 160px;
+        top: 1080px;
+        padding: 30px 30px 34px;
+        border-radius: 30px;
+        background: var(--red);
+        text-align: center;
+        font-size: 104px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        line-height: 1;
+        opacity: 0;
+        z-index: 7;
+        box-shadow: 0 0 120px rgba(255, 59, 79, 0.5);
+      }
+      #total small {
+        display: block;
+        margin-top: 8px;
+        font-size: 44px;
+        letter-spacing: -0.02em;
+      }
+      /* Sonar */
+      #sonar {
+        background: radial-gradient(70% 50% at 50% 50%, #06304a 0%, #021624 70%, #010a12 100%);
+      }
+      #sonar svg {
+        position: absolute;
+        left: 90px;
+        top: 560px;
+        width: 760px;
+        height: 760px;
+      }
+      .blip-l {
+        position: absolute;
+        width: 300px;
+        text-align: center;
+        font-weight: 900;
+        font-size: 30px;
+        color: #fff;
+        opacity: 0;
+      }
+      #sonar-pill {
+        left: 70px;
+        right: 160px;
+        top: 1360px;
+        padding: 20px 26px;
+        border-radius: 24px;
+        background: #fff;
+        color: #0b2440;
+        text-align: center;
+        font-size: 42px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+      }
+      #sonar-pill b {
+        color: #e5243b;
+      }
+      /* Bonne copro */
+      #good {
+        background: linear-gradient(#bfe9ff 0%, #e9f8ff 47%, #2fa3e0 47.2%, #0b5a92 100%);
+      }
+      #good svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      .gtag {
+        position: absolute;
+        padding: 14px 24px;
+        border-radius: 999px;
+        background: #fff;
+        color: #0b2440;
+        font-size: 36px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        border: 4px solid var(--green);
+        white-space: nowrap;
+      }
+      .gtag i {
+        font-style: normal;
+        color: #0f9d63;
+      }
+      .stamp {
+        position: absolute;
+        left: 150px;
+        top: 1380px;
+        padding: 18px 36px;
+        border: 14px solid var(--green);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.96);
+        color: #0f9d63;
+        font-size: 80px;
+        font-weight: 900;
+        text-align: center;
+        line-height: 1;
+        transform: rotate(-6deg);
+        opacity: 0;
+        z-index: 7;
+      }
+      .stamp small {
+        display: block;
+        margin-top: 10px;
+        font-size: 34px;
+        color: #0b2440;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+        color: #fff;
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.97;
+      }
+      #end-title .y {
+        color: #7fe3ff;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(127, 227, 255, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="dive" class="clip" data-start="0" data-duration="17.4" data-track-index="0">
+        <div id="world" class="abs" data-layout-allow-overlap>
+          <svg viewBox="0 0 1080 6000" id="wsvg"></svg>
+          <div class="tag" id="t0" style="left: 70px; top: 600px">Lumineux <i>✓</i></div>
+          <div class="tag" id="t1" style="left: 700px; top: 560px">Balcon <i>✓</i></div>
+          <div class="tag" id="t2" style="left: 70px; top: 740px">Métro à 2&nbsp;min <i>✓</i></div>
+          <div class="card" id="c0" style="top: 1170px"><div class="dep">−5 M</div><div class="txt">Charges&nbsp;: <b>+18&nbsp;%</b> en 2&nbsp;ans</div></div>
+          <div class="card" id="c1" style="top: 1970px"><div class="dep">−40 M</div><div class="txt">Fonds de travaux&nbsp;: <b>0&nbsp;€</b></div></div>
+          <div class="card" id="c2" style="top: 2770px"><div class="dep">−150 M · PV D'AG P.&nbsp;31</div><div class="txt">Ravalement voté&nbsp;: <b>27&nbsp;000&nbsp;€</b></div></div>
+          <div class="card" id="c3" style="top: 3570px"><div class="dep">−400 M · PV D'AG P.&nbsp;58</div><div class="txt">Ascenseur à remplacer&nbsp;: <b>14&nbsp;000&nbsp;€</b></div></div>
+          <div class="card" id="c4" style="top: 4520px"><div class="dep">−900 M · ANNEXE 4</div><div class="txt"><b>Procès en cours</b> avec l'ancien syndic</div></div>
+        </div>
+        <div id="dark" class="clip" data-layout-allow-overlap></div>
+        <div class="cap dark" id="cap0">Ton futur appart,<br /><span class="b">c'est un iceberg.</span></div>
+        <div class="cap" id="cap1" style="visibility: hidden">Ce qu'il y a<br /><span class="r">sous l'eau&nbsp;:</span></div>
+        <div class="cap" id="cap2" style="visibility: hidden">Ça, l'annonce te le<br /><span class="r">montre jamais.</span></div>
+        <div id="gauge" class="abs">0 m</div>
+        <div id="total" class="abs">41&nbsp;000&nbsp;€<small>cachés sous l'annonce</small></div>
+      </section>
+
+      <section id="sonar" class="clip" data-start="17.4" data-duration="3.2" data-track-index="0">
+        <div class="cap">Nous, on plonge dans<br /><span class="g">les 300 pages.</span></div>
+        <svg viewBox="-380 -380 760 760" id="ssvg"></svg>
+        <div id="blips" class="clip" data-layout-allow-overlap></div>
+        <div id="sonar-pill" class="abs"><b>5 problèmes</b> repérés · rapport en 72&nbsp;h</div>
+      </section>
+
+      <section id="good" class="clip" data-start="20.6" data-duration="3.4" data-track-index="0">
+        <svg viewBox="0 0 1080 1920" id="gsvg"></svg>
+        <div class="cap dark">Et on te trouve<br /><span style="color: #0a6e43">la bonne copro.</span></div>
+        <div class="gtag" id="g0" style="left: 70px; top: 520px">Toiture refaite en 2023 <i>✓</i></div>
+        <div class="gtag" id="g1" style="left: 70px; top: 1000px">Fonds travaux&nbsp;: 48&nbsp;000&nbsp;€ <i>✓</i></div>
+        <div class="gtag" id="g2" style="left: 230px; top: 1140px">0&nbsp;% d'impayés <i>✓</i></div>
+        <div class="stamp" id="ok" data-layout-allow-overlap>RIEN SOUS L'EAU<small>Résidence Les Tilleuls · 8.7/10</small></div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Regarde sous</span></span>
+          <span class="mask"><span>l'annonce</span></span>
+          <span class="mask"><span class="y">avant de signer.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 140,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      const SEA = 900;
+      // ---------- Le monde (ciel, mer, iceberg) ----------
+      let w = `<defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fdcff"/><stop offset="1" stop-color="#eaf8ff"/></linearGradient>
+        <linearGradient id="sea" gradientUnits="userSpaceOnUse" x1="0" y1="${SEA}" x2="0" y2="6000">
+          <stop offset="0" stop-color="#36a8e4"/><stop offset="0.18" stop-color="#0f5a92"/><stop offset="0.45" stop-color="#05284a"/><stop offset="1" stop-color="#01060f"/></linearGradient>
+        <linearGradient id="ice" gradientUnits="userSpaceOnUse" x1="0" y1="${SEA}" x2="0" y2="5400">
+          <stop offset="0" stop-color="#bfeeff"/><stop offset="0.35" stop-color="#4f9fc8"/><stop offset="1" stop-color="#123a5c"/></linearGradient>
+        <linearGradient id="ray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      </defs>`;
+      w += `<rect width="1080" height="${SEA}" fill="url(#sky)"/><circle cx="880" cy="430" r="70" fill="#fff6c2"/>`;
+      w += `<rect y="${SEA}" width="1080" height="${6000 - SEA}" fill="url(#sea)"/>`;
+      for (let k = 0; k < 5; k++) {
+        const x = 80 + k * 230;
+        w += `<path d="M${x} ${SEA}L${x + 70} ${SEA}L${x + 260} ${SEA + 900}L${x + 120} ${SEA + 900}Z" fill="url(#ray)" opacity="0.5"/>`;
+      }
+      // partie immergée (énorme)
+      w += `<path d="M700 ${SEA} L860 1300 L1000 2000 L1120 3000 L1100 4200 L900 5000 L600 5300 L300 5100 L-60 4300 L-80 3100 L40 2000 L250 1300 L430 ${SEA} Z" fill="url(#ice)"/>`;
+      w += `<path d="M700 ${SEA} L860 1300 L1000 2000 L1120 3000 L1100 4200 L900 5000 L600 5300 L640 4200 L720 2800 L640 1500 Z" fill="#000" opacity="0.14"/>`;
+      // pointe visible (petite)
+      w += `<path d="M430 ${SEA} L480 720 L530 560 L565 520 L600 590 L650 720 L700 ${SEA} Z" fill="#ffffff"/><path d="M565 520 L600 590 L650 720 L700 ${SEA} L590 ${SEA} L585 700 Z" fill="#cfeefc"/>`;
+      // surface
+      let wave = `M0 ${SEA}`;
+      for (let x = 0; x <= 1080; x += 60) wave += ` Q${x + 30} ${SEA - 10} ${x + 60} ${SEA}`;
+      w += `<path d="${wave}" stroke="#ffffff" stroke-width="6" fill="none" opacity="0.8"/>`;
+      // bulles
+      w += `<g id="bub">`;
+      for (let i = 0; i < 70; i++) w += `<circle cx="${(rnd(i, 1) * 1080).toFixed(0)}" cy="${(SEA + 80 + rnd(i, 2) * 5000).toFixed(0)}" r="${(3 + rnd(i, 3) * 9).toFixed(1)}" fill="none" stroke="#bfefff" stroke-width="2" opacity="${(0.25 + rnd(i, 4) * 0.4).toFixed(2)}"/>`;
+      w += `</g>`;
+      document.getElementById("wsvg").innerHTML = w;
+
+      // ---------- Sonar ----------
+      const BL = [
+        [-150, -190, "Charges"],
+        [170, -120, "Fonds travaux"],
+        [210, 130, "Ravalement"],
+        [-40, 230, "Ascenseur"],
+        [-230, 60, "Procès"],
+      ];
+      let bl = "";
+      let s = `<defs><linearGradient id="sw" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#19c27a" stop-opacity="0"/><stop offset="1" stop-color="#19c27a" stop-opacity="0.55"/></linearGradient></defs>`;
+      for (const r of [120, 240, 360]) s += `<circle r="${r}" fill="none" stroke="#19c27a" stroke-opacity="0.45" stroke-width="3"/>`;
+      s += `<path d="M-360 0H360M0 -360V360" stroke="#19c27a" stroke-opacity="0.3" stroke-width="2"/>`;
+      s += `<path id="sweep" d="M0 0 L360 0 A360 360 0 0 0 254.6 -254.6 Z" fill="url(#sw)"/>`;
+      BL.forEach(([x, y, l], k) => {
+        s += `<g id="b${k}" opacity="0"><circle cx="${x}" cy="${y}" r="16" fill="#ff3b4f"/><circle cx="${x}" cy="${y}" r="30" fill="none" stroke="#ff3b4f" stroke-width="4"/></g>`;
+        bl += `<div class="blip-l" id="bl${k}" style="left: ${x + 470 - 150}px; top: ${y + 940 + 34}px">${l}</div>`;
+      });
+      document.getElementById("ssvg").innerHTML = s;
+      document.getElementById("blips").innerHTML = bl;
+
+      // ---------- La bonne copro (petit iceberg, rien dessous) ----------
+      const GS = 903;
+      let g = `<circle cx="880" cy="480" r="70" fill="#fff6c2"/>`;
+      g += `<path d="M330 ${GS} L420 760 L480 650 L540 610 L600 680 L680 790 L760 ${GS} Z" fill="#fff"/><path d="M540 610 L600 680 L680 790 L760 ${GS} L620 ${GS} Z" fill="#d6f2ff"/>`;
+      g += `<path d="M330 ${GS} L760 ${GS} L700 960 L560 990 L400 960 Z" fill="#bfeeff" opacity="0.85"/>`;
+      for (let i = 0; i < 18; i++) g += `<circle cx="${(rnd(i, 7) * 1080).toFixed(0)}" cy="${(1000 + rnd(i, 8) * 900).toFixed(0)}" r="${(4 + rnd(i, 9) * 8).toFixed(1)}" fill="none" stroke="#dff6ff" stroke-width="2" opacity="0.5"/>`;
+      document.getElementById("gsvg").innerHTML = g;
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const swapCap = (from, to, t) => {
+        tl.set(from, { visibility: "hidden" }, t);
+        tl.set(to, { visibility: "visible" }, t);
+        tl.fromTo(to, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      gsap.set(".card", { opacity: 0 });
+
+      // 0–2,4 s : la pointe et ses atouts
+      [0.15, 0.15 + BEAT, 0.15 + 2 * BEAT].forEach((t, k) => tl.fromTo(`#t${k}`, { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.5)" }, t));
+      tl.to("#world", { y: -40, duration: 2.2, ease: "sine.inOut" }, 0);
+
+      // 2,4 s : plongée
+      const D0 = 2.4;
+      swapCap("#cap0", "#cap1", D0);
+      flash(D0, 0.5, 0.25);
+      tl.to(".tag", { opacity: 0, duration: 0.3 }, D0);
+      tl.to("#bub", { y: -500, duration: 15, ease: "none" }, D0);
+      const STOP = [1250, 2050, 2850, 3650, 4600];
+      const DEP = [5, 40, 150, 400, 900];
+      const T = [3.2, 5.8, 8.4, 11.0, 13.6];
+      const depth = { v: 0 };
+      const gauge = document.getElementById("gauge");
+      const show = () => (gauge.textContent = depth.v < 0.5 ? "0 m" : `−${Math.round(depth.v)} m`);
+      T.forEach((t, k) => {
+        const from = k ? T[k - 1] + 1.4 : D0;
+        tl.to("#world", { y: -(STOP[k] - 820), duration: t - from, ease: k ? "power2.inOut" : "power2.in" }, from);
+        if (k) tl.to(`#c${k - 1}`, { opacity: 0, duration: 0.5 }, from + 0.3);
+        tl.to(depth, { v: DEP[k], duration: t - from, ease: "power2.inOut", onUpdate: show }, from);
+        tl.fromTo(`#c${k}`, { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t);
+        tl.fromTo("#gauge", { scale: 1.25 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        shake(`#c${k}`, t + 0.05, 10, 4);
+      });
+      tl.to("#dark", { opacity: 1, duration: 13, ease: "power1.in" }, D0);
+
+      // 15,6 s : le total
+      const S0 = 15.6;
+      swapCap("#cap1", "#cap2", S0);
+      tl.fromTo("#total", { scale: 2.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, S0 + 0.1);
+      flash(S0 + 0.26, 0.35, 0.25);
+      shake("#dive", S0 + 0.26, 16, 6);
+      tl.to("#total", { scale: 1.04, duration: BEAT / 2, yoyo: true, repeat: 3, ease: "sine.inOut" }, S0 + 0.5);
+
+      // 17,4 s : le sonar
+      const P = 17.4;
+      flash(P, 0.5, 0.25);
+      tl.fromTo("#sweep", { rotation: 0 }, { rotation: 720, svgOrigin: "0 0", duration: 3.2, ease: "none", immediateRender: false }, P);
+      BL.forEach((b, k) => {
+        const t = P + 0.25 + k * 0.42;
+        tl.fromTo(`#b${k}`, { opacity: 0, scale: 0.2, svgOrigin: `${b[0]} ${b[1]}` }, { opacity: 1, scale: 1, duration: 0.2, ease: "back.out(3)", immediateRender: false }, t);
+        tl.to(`#bl${k}`, { opacity: 1, duration: 0.2 }, t + 0.05);
+      });
+      tl.fromTo("#sonar-pill", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, P + 2.4);
+
+      // 20,6 s : la bonne copro
+      const G = 20.6;
+      flash(G, 0.6, 0.3);
+      [0.15, 0.4, 0.65].forEach((d, k) => tl.fromTo(`#g${k}`, { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.5)", immediateRender: false }, G + d));
+      tl.fromTo("#ok", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, G + 1.2);
+      flash(G + 1.36, 0.4, 0.25);
+      tl.to("#ok", { scale: 1.05, duration: BEAT / 2, yoyo: true, repeat: 5, ease: "sine.inOut" }, G + 1.6);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 9 }, E0 + BEAT * 4.5);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -218,3 +218,27 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 > 16,0 — T'en as trouvé combien ?
 > 17,6 — Nous, on les trouve dans les PV.
 > 24,2 — Compare l'annonce et les PV avant de signer.
+
+## L'iceberg
+> 0,2 — Ton futur appart ? C'est un iceberg.
+> 2,4 — On plonge.
+> 3,2 — Charges : plus dix-huit pour cent.
+> 5,8 — Fonds de travaux : zéro.
+> 8,4 — Ravalement voté : vingt-sept mille euros.
+> 11,0 — Ascenseur à changer.
+> 13,6 — Et un procès avec le syndic.
+> 15,6 — Ça, l'annonce te le montre jamais.
+> 17,6 — Nous, on plonge dans les trois cents pages.
+> 20,8 — Et on te trouve la bonne copro.
+> 24,2 — Regarde sous l'annonce avant de signer.
+
+## Les poupées russes
+> 0,2 — Ton futur appart, c'est une poupée russe.
+> 2,5 — Tu l'ouvres : ravalement voté.
+> 5,7 — Encore une : quinze pour cent d'impayés.
+> 8,9 — La toiture fuit.
+> 12,1 — Un procès avec le syndic.
+> 14,5 — Et tout au fond… ton épargne. Zéro.
+> 17,6 — Nous, on ouvre toutes les poupées avant toi.
+> 21,0 — Celle-là ? Rien de caché.
+> 24,2 — Ouvre tout avant de signer.

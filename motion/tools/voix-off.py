@@ -45,6 +45,8 @@ FILES = {
     "Le détecteur de mensonges": "mensonge",
     "Le ticket à gratter": "grattage",
     "Le jeu des 5 erreurs": "erreurs",
+    "L'iceberg": "iceberg",
+    "Les poupées russes": "poupees",
 }
 
 NUM = {"0": "zéro", "1": "un", "2": "deux", "3": "trois", "4": "quatre", "5": "cinq", "6": "six", "7": "sept", "8": "huit", "9": "neuf"}
