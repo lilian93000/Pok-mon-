@@ -19,12 +19,14 @@ Amandine Hesse
 Amelia Rajecki
 Amelie Van Impe
 Ana Filipa Santos
+Ana Grubor
 Analu Freitas
 Anastasia Gasanova
 Anastasia Kulikova
 Anastasia Tikhonova
 Anastasia Zakharova
 Andrea Lazaro Garcia
+Andressa Silva Gomes
 Ane Mintegi Del Olmo
 Aneta Laboutkova
 Angela Fita Boluda
@@ -40,6 +42,7 @@ Anna Siskova
 Annika Penickova
 Anouk Koevermans
 Antonia Ruzic
+Antonia Vergara Rivera
 Aoi Ito
 Arantxa Rus
 Ariana Arseneault
@@ -92,6 +95,7 @@ Cristina Diaz Adrover
 Dalila Jakupovic
 Dalila Spiteri
 Dalma Galfi
+Danka Kovinic
 Daria Egorova
 Daria Kasatkina
 Daria Khomutsianskaya
@@ -206,6 +210,7 @@ Jodie Burrage
 Jordyn Hazelitt
 Julia Avdeeva
 Julia Grabher
+Julia Konishi Camargo Silva
 Julia Riera
 Julie Struplova
 Julieta Pareja
@@ -264,12 +269,15 @@ Lizette Cabrera
 Loes Ebeling Koning
 Lois Boisson
 Lola Radivojevic
+Lourdes Ayala
 Lucia Bronzetti
 Lucia Cortez Llorca
 Lucie Havlickova
 Lucie Nguyen Tan
 Lucija Ciric Bagaric
 Lucrezia Stefanini
+Luisina Giovannini
+Luiza Fullana
 Madalena Matias
 Maddison Inglis
 Madison Brengle
@@ -316,6 +324,7 @@ Mell Elizabeth Reasco Gonzalez
 Mia Pohankova
 Mia Ristic
 Miho Kuramochi
+Mika Stojsavljevic
 Milana Ivantsiv
 Mina Hodzic
 Mireia Sagrista Bermejo
@@ -443,6 +452,7 @@ Yafan Wang
 Yana Morderger
 Yasmine Kabbaj
 Ye Xin Ma
+Yelyzaveta Kotliar
 Yeon Woo Ku
 Yiming Dang
 Yue Yuan
