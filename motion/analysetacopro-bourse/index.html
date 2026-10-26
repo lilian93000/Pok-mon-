@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « LA BOURSE » — ton épargne en direct, et le krach à chaque info cachée dans les PV. 140 BPM (jersey club) : 1 mesure ≈ 1,71 s.
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --red: #ff3d57;
+        --green: #22e38c;
+        --y: #ffd23f;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #070b14;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #fff;
+        background: radial-gradient(80% 55% at 50% 45%, #121c30 0%, #0a101d 60%, #05080f 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 215px;
+        font-size: 58px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        z-index: 6;
+      }
+      .cap .r {
+        color: var(--red);
+      }
+      .cap .g {
+        color: var(--green);
+      }
+      .ticker {
+        left: 70px;
+        top: 372px;
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: #8ea3c7;
+      }
+      .price {
+        left: 70px;
+        top: 408px;
+        font-size: 104px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+      .chg {
+        left: 70px;
+        top: 522px;
+        padding: 6px 18px;
+        border-radius: 12px;
+        background: rgba(34, 227, 140, 0.16);
+        color: var(--green);
+        font-size: 34px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+      }
+      .chart {
+        left: 70px;
+        top: 600px;
+        width: 850px;
+        height: 640px;
+      }
+      .zl {
+        right: 160px;
+        font-size: 28px;
+        font-weight: 800;
+        color: #8ea3c7;
+      }
+      .news {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 1270px;
+        display: flex;
+        gap: 22px;
+        align-items: center;
+        padding: 22px 26px;
+        border-radius: 30px;
+        background: rgba(245, 247, 252, 0.97);
+        color: #0b1530;
+        opacity: 0;
+        z-index: 5;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+      }
+      .news .ic {
+        flex: none;
+        width: 84px;
+        height: 84px;
+        border-radius: 22px;
+        background: #e5243b;
+        color: #fff;
+        font-size: 30px;
+        font-weight: 900;
+        line-height: 84px;
+        text-align: center;
+      }
+      .news .h {
+        font-size: 24px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        color: #5a6a86;
+      }
+      .news .t {
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.08;
+      }
+      .news .t b {
+        color: #d0142c;
+      }
+      #krach {
+        left: 170px;
+        top: 760px;
+        padding: 10px 40px 18px;
+        border: 16px solid var(--red);
+        border-radius: 26px;
+        background: rgba(7, 11, 20, 0.85);
+        color: var(--red);
+        font-size: 150px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        transform: rotate(-8deg);
+        opacity: 0;
+        z-index: 7;
+      }
+      /* Lecture des documents */
+      #scan {
+        background: radial-gradient(80% 55% at 50% 45%, #0e2a3a 0%, #08151f 60%, #04090e 100%);
+      }
+      #rows {
+        left: 70px;
+        right: 160px;
+        top: 440px;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 26px;
+        margin-bottom: 14px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 2px solid rgba(255, 255, 255, 0.14);
+        font-size: 40px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        opacity: 0;
+      }
+      .row i {
+        font-style: normal;
+        font-weight: 900;
+        color: var(--green);
+        opacity: 0;
+      }
+      .row i.al {
+        color: #ff7385;
+      }
+      #scan-pill {
+        left: 70px;
+        right: 160px;
+        top: 1340px;
+        padding: 20px 26px;
+        border-radius: 24px;
+        background: #fff;
+        color: #0b1530;
+        text-align: center;
+        font-size: 42px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        opacity: 0;
+      }
+      #scan-pill b {
+        color: #d0142c;
+      }
+      .stamp {
+        position: absolute;
+        left: 150px;
+        top: 1300px;
+        padding: 18px 36px;
+        border: 14px solid var(--green);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.97);
+        color: #0a7a48;
+        font-size: 70px;
+        font-weight: 900;
+        text-align: center;
+        line-height: 1;
+        transform: rotate(-6deg);
+        opacity: 0;
+        z-index: 7;
+      }
+      .stamp small {
+        display: block;
+        margin-top: 10px;
+        font-size: 34px;
+        color: #0b2440;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+        color: #fff;
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.97;
+      }
+      #end-title .y {
+        color: #22e38c;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(34, 227, 140, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="mkt" class="clip" data-start="0" data-duration="17.4" data-track-index="0">
+        <div class="cap" id="cap0">J'ai mis toute mon épargne<br /><span class="g">dans un appart.</span></div>
+        <div class="cap" id="cap1" style="visibility: hidden">Et puis les infos<br /><span class="r">sont tombées.</span></div>
+        <div class="cap" id="cap2" style="visibility: hidden">Tout était écrit<br /><span class="r">dans les PV.</span></div>
+        <div class="ticker abs">MON ÉPARGNE · APPT T3 RUE DES LILAS</div>
+        <div class="price abs" id="price">36 000 €</div>
+        <div class="chg abs" id="chg">+0,0 %</div>
+        <svg class="chart abs" viewBox="0 0 850 640" id="chart"></svg>
+        <div class="zl abs" style="top: 948px">0&nbsp;€</div>
+        <div class="news" id="n0"><div class="ic">PV</div><div><div class="h">FLASH · PV D'AG 2025</div><div class="t">Ravalement voté&nbsp;: <b>−18&nbsp;000&nbsp;€</b></div></div></div>
+        <div class="news" id="n1"><div class="ic">€</div><div><div class="h">FLASH · BUDGET COPRO</div><div class="t">Charges <b>+22&nbsp;%</b> cette année</div></div></div>
+        <div class="news" id="n2"><div class="ic">PV</div><div><div class="h">FLASH · PV D'AG 2024</div><div class="t">Ascenseur à remplacer&nbsp;: <b>−9&nbsp;000&nbsp;€</b></div></div></div>
+        <div class="news" id="n3"><div class="ic">G</div><div><div class="h">FLASH · DPE COLLECTIF</div><div class="t">Étiquette G, isolation&nbsp;: <b>−24&nbsp;000&nbsp;€</b></div></div></div>
+        <div class="news" id="n4"><div class="ic">⚖</div><div><div class="h">FLASH · ANNEXE 4</div><div class="t">Procès en cours&nbsp;: <b>−6&nbsp;000&nbsp;€</b></div></div></div>
+        <div class="news" id="n5"><div class="ic">5</div><div><div class="h">BILAN · 5 INFOS</div><div class="t"><b>−61&nbsp;000&nbsp;€</b> que l'annonce ne disait pas</div></div></div>
+        <div id="krach" class="abs" data-layout-allow-overlap>KRACH</div>
+      </section>
+
+      <section id="scan" class="clip" data-start="17.4" data-duration="3.2" data-track-index="0">
+        <div class="cap">Nous, on lit les infos<br /><span class="g">avant que tu achètes.</span></div>
+        <div id="rows" class="abs">
+          <div class="row">PV d'AG 2023 <i>✓</i></div>
+          <div class="row">PV d'AG 2024 <i class="al">2 alertes</i></div>
+          <div class="row">PV d'AG 2025 <i class="al">1 alerte</i></div>
+          <div class="row">Carnet d'entretien <i>✓</i></div>
+          <div class="row">DPE collectif <i class="al">1 alerte</i></div>
+          <div class="row">Comptes du syndic <i class="al">1 alerte</i></div>
+        </div>
+        <div id="scan-pill" class="abs"><b>5 alertes</b> repérées · rapport en 72&nbsp;h</div>
+      </section>
+
+      <section id="good" class="clip" data-start="20.6" data-duration="3.4" data-track-index="0">
+        <div class="cap">Et la bonne copro&nbsp;?<br /><span class="g">Courbe stable.</span></div>
+        <div class="ticker abs">RÉSIDENCE LES CHARMES · ANALYSÉE</div>
+        <div class="price abs" id="gprice">40 000 €</div>
+        <div class="chg abs">0 € de surprise</div>
+        <svg class="chart abs" viewBox="0 0 850 640" id="gchart"></svg>
+        <div class="zl abs" style="top: 948px">0&nbsp;€</div>
+        <div class="stamp" id="ok" data-layout-allow-overlap>ACHAT SÉCURISÉ<small>Résidence Les Charmes · 9.0/10</small></div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Lis les infos</span></span>
+          <span class="mask"><span class="y">avant d'acheter.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 140,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      const fmt = (v) => {
+        const n = Math.round(Math.abs(v) / 100) * 100;
+        return (v < -50 ? "−" : "") + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " €";
+      };
+      // ---------- La courbe (valeur de l'épargne dans le temps) ----------
+      const T = [3.0, 5.6, 8.2, 10.8, 13.4];
+      const DROP = [18000, 4000, 9000, 24000, 6000];
+      const END = 15.6;
+      const ease = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : 1 - Math.pow(1 - x, 3));
+      const val = (t) => {
+        let v = 36000 + 1700 * Math.min(t, 2.4) + 250 * Math.sin(t * 3.1) + 180 * Math.sin(t * 7.3 + 1);
+        T.forEach((tk, k) => (v -= DROP[k] * ease((t - tk) / 0.35)));
+        return v;
+      };
+      const X = (t) => (t / END) * 820 + 10;
+      const Y = (v) => 40 + ((50000 - v) / 80000) * 560;
+      const chartSvg = (fn, dur, id, col) => {
+        let pts = [];
+        for (let t = 0; t <= dur + 1e-6; t += 0.05) pts.push(`${((t / dur) * 820 + 10).toFixed(1)},${Y(fn(t)).toFixed(1)}`);
+        let s = `<defs><clipPath id="${id}-c"><rect id="${id}-r" x="0" y="0" width="0" height="640"/></clipPath>
+          <linearGradient id="${id}-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity="0.35"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>`;
+        for (const v of [40000, 20000, 0, -20000]) s += `<path d="M0 ${Y(v)}H850" stroke="${v === 0 ? "#8ea3c7" : "#1f2c45"}" stroke-width="${v === 0 ? 3 : 2}" stroke-dasharray="${v === 0 ? "10 8" : "none"}"/>`;
+        s += `<g clip-path="url(#${id}-c)"><path d="M10,${Y(0)} L${pts.join(" L")} L830,${Y(0)} Z" fill="url(#${id}-g)"/><polyline points="${pts.join(" ")}" fill="none" stroke="${col}" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></g>`;
+        s += `<circle id="${id}-dot" cx="10" cy="${Y(fn(0))}" r="13" fill="#fff" stroke="${col}" stroke-width="6"/>`;
+        return s;
+      };
+      document.getElementById("chart").innerHTML = chartSvg(val, END, "c", "#ff3d57");
+      const gval = (t) => 40000 + 1800 * t + 350 * Math.sin(t * 4.2) + 200 * Math.sin(t * 9.1);
+      document.getElementById("gchart").innerHTML = chartSvg(gval, 3.4, "g", "#22e38c");
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const swapCap = (from, to, t) => {
+        tl.set(from, { visibility: "hidden" }, t);
+        tl.set(to, { visibility: "visible" }, t);
+        tl.fromTo(to, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+
+      // la courbe avance en direct (prix, variation, point)
+      const price = document.getElementById("price"),
+        chg = document.getElementById("chg"),
+        dot = document.getElementById("c-dot"),
+        rect = document.getElementById("c-r");
+      const live = { t: 0 };
+      const draw = () => {
+        const v = val(live.t);
+        price.textContent = fmt(v);
+        const p = ((v - 36000) / 36000) * 100;
+        chg.textContent = (p >= 0 ? "+" : "−") + Math.abs(p).toFixed(1).replace(".", ",") + " %";
+        const bad = p < -0.5;
+        chg.style.color = bad ? "#ff3d57" : "#22e38c";
+        chg.style.background = bad ? "rgba(255,61,87,0.16)" : "rgba(34,227,140,0.16)";
+        price.style.color = v < 0 ? "#ff3d57" : "#ffffff";
+        dot.setAttribute("cx", X(live.t).toFixed(1));
+        dot.setAttribute("cy", Y(v).toFixed(1));
+        rect.setAttribute("width", (X(live.t) + 4).toFixed(1));
+      };
+      tl.to(live, { t: END, duration: END, ease: "none", onUpdate: draw }, 0);
+
+      // 2,4 s : les infos tombent
+      swapCap("#cap0", "#cap1", 2.4);
+      T.forEach((t, k) => {
+        tl.fromTo(`#n${k}`, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "back.out(2)", immediateRender: false }, t - 0.15);
+        tl.to(`#n${k}`, { opacity: 0, y: -20, duration: 0.15 }, (T[k + 1] || END) - 0.3);
+        flash(t, 0.25, 0.2);
+        shake("#chart", t + 0.05, 12, 5);
+        tl.fromTo("#price", { scale: 1.12 }, { scale: 1, duration: 0.3, ease: "back.out(3)", transformOrigin: "0% 50%", immediateRender: false }, t + 0.05);
+      });
+
+      // 15,6 s : krach
+      swapCap("#cap1", "#cap2", END);
+      tl.fromTo("#n5", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "back.out(2)", immediateRender: false }, END);
+      tl.fromTo("#krach", { scale: 2.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, END + 0.1);
+      flash(END + 0.26, 0.4, 0.25);
+      shake("#mkt", END + 0.26, 16, 6);
+
+      // 17,4 s : on lit tout
+      const P = 17.4;
+      flash(P, 0.5, 0.25);
+      tl.fromTo(".row", { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 0.2, ease: "power3.out", stagger: 0.12, immediateRender: false }, P + 0.1);
+      tl.fromTo(".row i", { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "back.out(3)", stagger: 0.18, immediateRender: false }, P + 0.5);
+      tl.fromTo("#scan-pill", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, P + 1.6);
+
+      // 20,6 s : la bonne copro
+      const G = 20.6;
+      flash(G, 0.6, 0.3);
+      const gp = document.getElementById("gprice"),
+        gdot = document.getElementById("g-dot"),
+        grect = document.getElementById("g-r");
+      const glive = { t: 0 };
+      const gdraw = () => {
+        gp.textContent = fmt(gval(glive.t));
+        const x = (glive.t / 3.4) * 820 + 10;
+        gdot.setAttribute("cx", x.toFixed(1));
+        gdot.setAttribute("cy", Y(gval(glive.t)).toFixed(1));
+        grect.setAttribute("width", (x + 4).toFixed(1));
+      };
+      tl.to(glive, { t: 3.4, duration: 3.4, ease: "none", onUpdate: gdraw }, G);
+      tl.fromTo("#ok", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, G + 1.3);
+      flash(G + 1.46, 0.4, 0.25);
+      tl.to("#ok", { scale: 1.05, duration: BEAT / 2, yoyo: true, repeat: 7, ease: "sine.inOut" }, G + 1.7);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 9 }, E0 + BEAT * 4.5);
+
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -241,3 +241,29 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 > 17,6 — Nous, on ouvre toutes les poupées avant toi.
 > 21,0 — Celle-là ? Rien de caché.
 > 24,2 — Ouvre tout avant de signer.
+
+## La Bourse
+> 0,2 — J'ai mis toute mon épargne dans un appart.
+> 2,4 — Et puis les infos sont tombées.
+> 3,6 — Ravalement voté.
+> 5,6 — Charges : plus vingt-deux pour cent.
+> 8,2 — Ascenseur à remplacer.
+> 10,8 — DPE G : isolation obligatoire.
+> 13,4 — Un procès.
+> 15,6 — Krach. Tout était dans les PV.
+> 17,6 — Nous, on lit les infos avant que tu achètes.
+> 21,0 — Courbe stable. Achat sécurisé.
+> 24,2 — Lis les infos avant d'acheter.
+
+## La tour en bois
+> 0,2 — Ta copro, c'est une tour en bois.
+> 2,4 — Chaque bloc qui manque, elle vacille.
+> 4,6 — Fonds de travaux : vide.
+> 6,6 — Trois syndics en quatre ans.
+> 8,6 — Quatorze pour cent d'impayés.
+> 10,9 — Des fissures en façade.
+> 13,6 — Et tout s'effondre.
+> 15,0 — C'était écrit dans les documents.
+> 17,6 — Nous, on teste chaque bloc avant que tu achètes.
+> 21,0 — Elle tient debout.
+> 24,2 — Teste chaque bloc avant de signer.

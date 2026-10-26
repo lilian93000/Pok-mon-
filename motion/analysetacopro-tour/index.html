@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « LA TOUR EN BOIS » — ta copro est une tour de blocs : chaque problème caché est un bloc qui manque… jusqu'à l'effondrement.
+         124 BPM (techno minimale, percussions bois) : 1 mesure ≈ 1,94 s. Composé en 1080×1920, rendu en 2160×3840 à 60 i/s.
+         Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --red: #d0142c;
+        --green: #0f8a55;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #efe2c8;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #2b1a0c;
+        background: radial-gradient(80% 50% at 50% 40%, #fbf3e3 0%, #efe0c2 60%, #dcc59a 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 215px;
+        font-size: 60px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        z-index: 6;
+      }
+      .cap .r {
+        color: var(--red);
+      }
+      .cap .g {
+        color: var(--green);
+      }
+      .cap .w {
+        color: #a0581c;
+      }
+      .table {
+        left: 0;
+        right: 0;
+        top: 1240px;
+        bottom: 0;
+        background: linear-gradient(#7a4a22 0, #5e3716 14px, #4a2a10 100%);
+      }
+      .tower {
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      .layer {
+        position: absolute;
+        left: 330px;
+        width: 420px;
+        height: 56px;
+      }
+      .blk {
+        position: absolute;
+        top: 0;
+        height: 56px;
+        border-radius: 6px;
+        border: 3px solid #8a5a2b;
+        background: radial-gradient(circle at 50% 50%, #e9b77d 0 12%, #d9a066 13% 25%, #e6b273 26% 40%, #d39a5e 41% 60%, #e3ad70 61%);
+      }
+      .plank {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 420px;
+        height: 56px;
+        border-radius: 6px;
+        border: 3px solid #8a5a2b;
+        background: repeating-linear-gradient(90deg, #e2ab6d 0 38px, #d69d60 38px 41px, #e6b376 41px 70px, #cf955a 70px 72px), #e2ab6d;
+      }
+      .blk.out {
+        background: radial-gradient(circle at 50% 50%, #ff8a8a 0 12%, #e5243b 13% 25%, #ff6b6b 26% 40%, #d0142c 41% 60%, #ff7a7a 61%);
+        border-color: #7a0a17;
+      }
+      .tick {
+        position: absolute;
+        left: 770px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--green);
+        color: #fff;
+        font-size: 32px;
+        font-weight: 900;
+        line-height: 50px;
+        text-align: center;
+        opacity: 0;
+      }
+      .pill {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 1300px;
+        padding: 20px 26px 22px;
+        border-radius: 26px;
+        background: #fff;
+        border: 5px solid var(--red);
+        color: #2b1a0c;
+        font-size: 46px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.08;
+        text-align: center;
+        opacity: 0;
+        z-index: 5;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      }
+      .pill b {
+        color: var(--red);
+      }
+      .pill small {
+        display: block;
+        font-size: 28px;
+        color: #6b5040;
+        letter-spacing: 0.04em;
+      }
+      #count {
+        left: 70px;
+        top: 372px;
+        padding: 10px 26px;
+        border-radius: 999px;
+        background: #2b1a0c;
+        color: #ffd23f;
+        font-size: 40px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        z-index: 6;
+      }
+      #b-pill {
+        left: 70px;
+        right: 160px;
+        top: 1300px;
+        padding: 20px 26px;
+        border-radius: 24px;
+        background: #fff;
+        border: 5px solid var(--green);
+        text-align: center;
+        font-size: 42px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        opacity: 0;
+        z-index: 5;
+      }
+      .stamp {
+        position: absolute;
+        left: 170px;
+        top: 760px;
+        padding: 18px 36px;
+        border: 14px solid var(--green);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.97);
+        color: var(--green);
+        font-size: 80px;
+        font-weight: 900;
+        text-align: center;
+        line-height: 1;
+        transform: rotate(-6deg);
+        opacity: 0;
+        z-index: 7;
+      }
+      .stamp small {
+        display: block;
+        margin-top: 10px;
+        font-size: 34px;
+        color: #0b2440;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+        color: #fff;
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.97;
+      }
+      #end-title .y {
+        color: #ffb86b;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(255, 184, 107, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="play" class="clip" data-start="0" data-duration="17.4" data-track-index="0">
+        <div class="table abs"></div>
+        <div class="tower abs" id="tw" data-layout-allow-overlap></div>
+        <div class="cap" id="cap0">Ta copro, c'est<br /><span class="w">une tour en bois.</span></div>
+        <div class="cap" id="cap1" style="visibility: hidden">Chaque bloc qui manque…<br /><span class="r">elle vacille.</span></div>
+        <div class="cap" id="cap2" style="visibility: hidden">Tout ça était écrit<br /><span class="r">dans les documents.</span></div>
+        <div id="count" class="abs">12 étages · solide&nbsp;?</div>
+        <div class="pill" id="p0"><small>PV D'AG 2025</small>Fonds de travaux&nbsp;: <b>vide</b></div>
+        <div class="pill" id="p1"><small>HISTORIQUE</small><b>3 syndics</b> en 4&nbsp;ans</div>
+        <div class="pill" id="p2"><small>ANNEXE COMPTABLE</small><b>14&nbsp;%</b> d'impayés</div>
+        <div class="pill" id="p3"><small>CARNET D'ENTRETIEN</small><b>Fissures</b> en façade</div>
+        <div class="pill" id="p4"><small>RÉSULTAT</small>Ravalement + toiture&nbsp;: <b>38&nbsp;000&nbsp;€</b></div>
+      </section>
+
+      <section id="build" class="clip" data-start="17.4" data-duration="6.6" data-track-index="0">
+        <div class="table abs"></div>
+        <div class="tower abs" id="tw2" data-layout-allow-overlap></div>
+        <div class="cap">Nous, on teste chaque bloc<br /><span class="g">avant que tu achètes.</span></div>
+        <div id="b-pill" class="abs">12 points contrôlés · rapport en 72&nbsp;h</div>
+        <div class="stamp" id="ok" data-layout-allow-overlap>TIENT DEBOUT<small>Résidence Le Parc · 9.1/10</small></div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Teste chaque bloc</span></span>
+          <span class="mask"><span class="y">avant de signer.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 124,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      // ---------- La tour : 12 étages de 60 px, posée sur la table (y = 1240) ----------
+      const N = 12;
+      const LY = (i) => 1240 - (i + 1) * 60 + 2;
+      const tower = (p) => {
+        let s = "";
+        for (let i = 0; i < N; i++) {
+          s += `<div class="layer" id="${p}l${i}" style="top: ${LY(i)}px">`;
+          if (i % 2 === 0) for (let k = 0; k < 3; k++) s += `<div class="blk" id="${p}b${i}_${k}" style="left: ${k * 146}px; width: 128px"></div>`;
+          else s += `<div class="plank"></div>`;
+          s += `</div>`;
+          if (p === "u") s += `<div class="tick" id="tk${i}" style="top: ${LY(i) + 3}px">✓</div>`;
+        }
+        return s;
+      };
+      document.getElementById("tw").innerHTML = tower("t");
+      document.getElementById("tw2").innerHTML = tower("u");
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const swapCap = (from, to, t) => {
+        tl.set(from, { visibility: "hidden" }, t);
+        tl.set(to, { visibility: "visible" }, t);
+        tl.fromTo(to, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      gsap.set("#tw", { transformOrigin: "540px 1240px" });
+
+      // 0–2,4 s : la tour, intacte
+      tl.fromTo("#tw .layer", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.18, ease: "bounce.out", stagger: 0.06 }, 0.0);
+
+      // les blocs retirés (bloc du milieu d'un étage pair) + la tour qui penche de plus en plus
+      const T = [3.0, 5.6, 8.2, 10.8];
+      const L = [8, 4, 6, 2];
+      const TILT = [1.5, -2.5, 3.5, -5];
+      swapCap("#cap0", "#cap1", 2.4);
+      T.forEach((t, k) => {
+        const b = `#tb${L[k]}_1`;
+        tl.set(b, { className: "blk out" }, t - 0.5);
+        tl.fromTo(b, { x: 0 }, { x: -12, duration: 0.08, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false }, t - 0.45);
+        tl.to(b, { x: 760, rotation: 8, duration: 0.45, ease: "power2.in" }, t - 0.1);
+        tl.to(b, { opacity: 0, duration: 0.1 }, t + 0.35);
+        tl.to("#tw", { rotation: TILT[k], duration: 0.5, ease: "elastic.out(1.4, 0.35)" }, t + 0.25);
+        if (k) tl.to(`#p${k - 1}`, { opacity: 0, duration: 0.12 }, t - 0.1);
+        tl.fromTo(`#p${k}`, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.2);
+        tl.set("#count", { textContent: `${4 - k - 1 > 0 ? "Ça penche…" : "Ça va tomber…"}` }, t + 0.2);
+        shake("#play", t + 0.3, 6, 4);
+      });
+      // oscillation entre deux retraits
+      T.forEach((t, k) => {
+        const nxt = T[k + 1] || 13.4;
+        tl.to("#tw", { rotation: TILT[k] * 1.25, duration: BEAT, yoyo: true, repeat: Math.max(0, Math.floor((nxt - t - 1.0) / BEAT) - 1), ease: "sine.inOut" }, t + 0.8);
+      });
+
+      // 13,4 s : effondrement
+      const C = 13.4;
+      tl.to("#p3", { opacity: 0, duration: 0.12 }, C - 0.1);
+      tl.to("#tw", { rotation: -9, duration: 0.25, ease: "power2.in" }, C - 0.3);
+      for (let i = N - 1; i >= 0; i--) {
+        const d = (N - 1 - i) * 0.05;
+        tl.to(`#tl${i}`, { x: (rnd(i, 3) - 0.5) * 900, y: 1500 - LY(i) + rnd(i, 4) * 200, rotation: (rnd(i, 5) - 0.5) * 220, duration: 0.9, ease: "power2.in" }, C + d);
+      }
+      tl.fromTo("#p4", { scale: 2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, C + 0.6);
+      flash(C + 0.76, 0.5, 0.25);
+      shake("#play", C + 0.76, 18, 7);
+      tl.set("#count", { textContent: "Effondrée" }, C + 0.6);
+      swapCap("#cap1", "#cap2", 14.8);
+
+      // 17,4 s : on reconstruit, on teste chaque bloc
+      const P = 17.4;
+      flash(P, 0.5, 0.25);
+      for (let i = 0; i < N; i++) tl.fromTo(`#ul${i}`, { y: -1500 }, { y: 0, duration: 0.22, ease: "power2.in", immediateRender: false }, P + 0.15 + i * 0.1);
+      for (let i = 0; i < N; i++) tl.fromTo(`#tk${i}`, { scale: 0.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "back.out(3)", immediateRender: false }, P + 1.6 + i * 0.1);
+      tl.fromTo("#b-pill", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, P + 1.9);
+      tl.fromTo("#ok", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, 20.8);
+      flash(20.96, 0.4, 0.25);
+      tl.to("#ok", { scale: 1.05, duration: BEAT / 2, yoyo: true, repeat: 9, ease: "sine.inOut" }, 21.2);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 9 }, E0 + BEAT * 4.5);
+
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
