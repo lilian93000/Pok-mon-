@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « IDÉES REÇUES » — vidéo utile : 4 post-its sur un tableau de liège, VRAI ou FAUX, et la vraie règle.
+         112 BPM (pizzicato pop) : 1 mesure ≈ 2,14 s. Composé en 1080×1920, rendu en 2160×3840 à 60 i/s.
+         Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --red: #d0142c;
+        --green: #0f8a55;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #c99a62;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #2b1a0c;
+        background: radial-gradient(80% 55% at 50% 40%, #e2bc87 0%, #cfa36b 65%, #b4854f 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      #cork {
+        opacity: 0.5;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 215px;
+        font-size: 60px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        z-index: 6;
+      }
+      .cap .r {
+        color: #a10f22;
+      }
+      #count {
+        left: 70px;
+        top: 372px;
+        padding: 8px 24px;
+        border-radius: 999px;
+        background: #2b1a0c;
+        color: #ffe066;
+        font-size: 36px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        z-index: 6;
+      }
+      .note {
+        position: absolute;
+        left: 150px;
+        top: 470px;
+        width: 640px;
+        height: 520px;
+        padding: 80px 50px 40px;
+        background: linear-gradient(160deg, #fff27a 0%, #ffe14d 100%);
+        box-shadow: 0 30px 50px rgba(60, 30, 0, 0.35);
+        font-size: 56px;
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        line-height: 1.1;
+        opacity: 0;
+      }
+      .note.b {
+        background: linear-gradient(160deg, #ffd0e0 0%, #ffb3cc 100%);
+      }
+      .note.c {
+        background: linear-gradient(160deg, #c9f2ff 0%, #9ee6ff 100%);
+      }
+      .note.d {
+        background: linear-gradient(160deg, #d6ffc9 0%, #b6f59e 100%);
+      }
+      .note .pin {
+        position: absolute;
+        left: 296px;
+        top: 18px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #ff7a7a 0%, #d0142c 60%, #7a0a17 100%);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.35);
+      }
+      .note .q {
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: #6b4a1c;
+        margin-bottom: 16px;
+      }
+      .verdict {
+        position: absolute;
+        left: 560px;
+        top: 860px;
+        padding: 12px 34px 16px;
+        border: 12px solid;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        font-size: 96px;
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -0.03em;
+        opacity: 0;
+        z-index: 4;
+      }
+      .verdict.f {
+        color: var(--red);
+        border-color: var(--red);
+      }
+      .verdict.v {
+        color: #0a7a48;
+        border-color: #0a7a48;
+      }
+      .rule {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 1080px;
+        padding: 24px 30px 28px;
+        border-radius: 8px;
+        background: #fffdf6;
+        box-shadow: 0 20px 40px rgba(60, 30, 0, 0.3);
+        opacity: 0;
+        z-index: 5;
+      }
+      .rule .h {
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: var(--brand);
+      }
+      .rule .x {
+        margin-top: 6px;
+        font-size: 42px;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.12;
+      }
+      .rule .x b {
+        color: var(--brand);
+      }
+      .rule .s {
+        margin-top: 10px;
+        font-size: 28px;
+        font-weight: 700;
+        color: #6b5a40;
+      }
+      .tape {
+        position: absolute;
+        left: 50%;
+        top: -22px;
+        width: 160px;
+        height: 40px;
+        margin-left: -80px;
+        background: rgba(255, 255, 255, 0.6);
+        transform: rotate(-3deg);
+      }
+      /* Ton score */
+      #score {
+        background: radial-gradient(80% 55% at 50% 40%, #fff8d6 0%, #ffe98a 65%, #ffd84d 100%);
+      }
+      .card {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        padding: 34px 36px 38px;
+        border-radius: 30px;
+        background: #fff;
+        box-shadow: 0 30px 70px rgba(80, 60, 0, 0.25);
+        opacity: 0;
+      }
+      .card .h {
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: var(--brand);
+      }
+      .card .x {
+        margin-top: 10px;
+        font-size: 56px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+      }
+      .card .s {
+        margin-top: 14px;
+        font-size: 30px;
+        font-weight: 700;
+        color: #51617f;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+        color: #fff;
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.97;
+      }
+      #end-title .y {
+        color: #ffe066;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(255, 224, 102, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="board" class="clip" data-start="0" data-duration="20" data-track-index="0">
+        <svg id="cork" class="clip" viewBox="0 0 1080 1920" data-layout-allow-overlap></svg>
+        <div class="cap">Achat en copro&nbsp;:<br /><span class="r">4 idées reçues.</span></div>
+        <div id="count" class="abs">Vrai ou faux&nbsp;?</div>
+
+        <div class="note" id="n0" data-layout-allow-overlap><div class="pin"></div><div class="q">IDÉE REÇUE N°1</div>Le vendeur paie toujours les travaux votés avant la vente.</div>
+        <div class="note b" id="n1" data-layout-allow-overlap><div class="pin"></div><div class="q">IDÉE REÇUE N°2</div>Après le compromis, j'ai 10 jours pour me rétracter.</div>
+        <div class="note c" id="n2" data-layout-allow-overlap><div class="pin"></div><div class="q">IDÉE REÇUE N°3</div>Le fonds de travaux, c'est facultatif.</div>
+        <div class="note d" id="n3" data-layout-allow-overlap><div class="pin"></div><div class="q">IDÉE REÇUE N°4</div>Un logement classé G, je peux encore le louer.</div>
+
+        <div class="verdict f" id="v0" data-layout-allow-overlap>FAUX</div>
+        <div class="verdict v" id="v1" data-layout-allow-overlap>VRAI</div>
+        <div class="verdict f" id="v2" data-layout-allow-overlap>FAUX</div>
+        <div class="verdict f" id="v3" data-layout-allow-overlap>FAUX</div>
+
+        <div class="rule" id="r0"><div class="tape"></div><div class="h">LA VRAIE RÈGLE</div><div class="x">Paie le propriétaire <b>à la date de l'appel de fonds</b>. Sauf accord dans l'acte.</div></div>
+        <div class="rule" id="r1"><div class="tape"></div><div class="h">LA VRAIE RÈGLE</div><div class="x"><b>10 jours</b> dès le lendemain de la remise du compromis signé, sans te justifier.</div></div>
+        <div class="rule" id="r2"><div class="tape"></div><div class="h">LA VRAIE RÈGLE</div><div class="x">Obligatoire dans la plupart des copros&nbsp;: <b>au moins 5&nbsp;% du budget annuel</b>.</div></div>
+        <div class="rule" id="r3"><div class="tape"></div><div class="h">LA VRAIE RÈGLE</div><div class="x">Depuis 2025, <b>plus de nouveau bail</b> pour un logement G. Les F suivent en 2028.</div></div>
+      </section>
+
+      <section id="score" class="clip" data-start="20" data-duration="4" data-track-index="0">
+        <div class="cap">Ton score&nbsp;?</div>
+        <div class="card" id="k0" style="top: 420px"><div class="h">EN COMMENTAIRE</div><div class="x">Dis-nous combien tu en avais <span style="color: #0b5fff">sur 4</span>.</div></div>
+        <div class="card" id="k1" style="top: 860px"><div class="h">POUR TON FUTUR APPART</div><div class="x">On vérifie tout le dossier. <span style="color: #0b5fff">Rapport en 72&nbsp;h.</span></div><div class="s">Travaux, charges, fonds de travaux, DPE.</div></div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Ne crois pas.</span></span>
+          <span class="mask"><span class="y">Vérifie.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 112,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      // texture de liège
+      let c = "";
+      for (let i = 0; i < 900; i++)
+        c += `<circle cx="${(rnd(i, 1) * 1080).toFixed(0)}" cy="${(rnd(i, 2) * 1920).toFixed(0)}" r="${(1.5 + rnd(i, 3) * 4).toFixed(1)}" fill="${rnd(i, 4) > 0.5 ? "#8a5a2b" : "#f0d2a0"}" opacity="${(0.25 + rnd(i, 5) * 0.4).toFixed(2)}"/>`;
+      document.getElementById("cork").innerHTML = c;
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+
+      // le premier post-it est là dès la première image
+      gsap.set("#n0", { opacity: 1, rotation: -2 });
+      const T = [2.0, 6.5, 11.0, 15.5];
+      const ROT = [-2, 2.5, -1.5, 2];
+      T.forEach((t, k) => {
+        if (k) {
+          // l'ancien post-it est arraché, le nouveau est punaisé
+          tl.to(`#n${k - 1}`, { y: 1600, rotation: ROT[k - 1] * 10, duration: 0.5, ease: "power2.in" }, t - 0.8);
+          tl.to([`#v${k - 1}`, `#r${k - 1}`], { opacity: 0, y: 40, duration: 0.2 }, t - 0.8);
+          tl.fromTo(`#n${k}`, { y: -900, rotation: ROT[k] * 6, opacity: 1 }, { y: 0, rotation: ROT[k], duration: 0.4, ease: "back.out(1.6)", immediateRender: false }, t - 0.55);
+        }
+        tl.set("#count", { textContent: `Idée reçue ${k + 1}/4 · vrai ou faux ?` }, k ? t - 0.55 : 0.6);
+        // verdict + vraie règle
+        tl.fromTo(`#v${k}`, { scale: 2.6, rotation: -14, opacity: 0 }, { scale: 1, rotation: -10, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, t);
+        flash(t + 0.16, 0.3, 0.2);
+        shake(`#n${k}`, t + 0.16, 8, 4);
+        tl.fromTo(`#r${k}`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.3);
+      });
+
+      // 20 s : ton score
+      const P = 20.0;
+      flash(P, 0.5, 0.25);
+      tl.fromTo("#k0", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, P + 0.2);
+      tl.fromTo("#k1", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, P + 1.2);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 9 }, E0 + BEAT * 4.5);
+
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
