@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « LE TEST DE FUITE » — vidéo utile : repérer une fuite cachée avec le compteur d'eau. 100 BPM (gospel).
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --bg1: #f0f9ff;
+        --bg2: #d6ecfb;
+        --bg3: #a5d3f3;
+        --ink: #04213a;
+        --acc: #0284c7;
+        --pill: #04213a;
+        --pillt: #7dd3fc;
+        --tipbg: #04213a;
+        --tiph: #7dd3fc;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--bg2);
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(80% 55% at 50% 40%, var(--bg1) 0%, var(--bg2) 65%, var(--bg3) 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 215px;
+        font-size: 60px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        z-index: 6;
+      }
+      .cap .a {
+        color: var(--acc);
+      }
+      #count {
+        left: 70px;
+        top: 372px;
+        padding: 8px 24px;
+        border-radius: 999px;
+        background: var(--pill);
+        color: var(--pillt);
+        font-size: 36px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        z-index: 6;
+      }
+      .tip {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 1225px;
+        padding: 22px 28px 26px;
+        border-radius: 26px;
+        background: var(--tipbg);
+        color: #fff;
+        opacity: 0;
+        z-index: 5;
+      }
+      .tip .h {
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: var(--tiph);
+      }
+      .tip .x {
+        margin-top: 6px;
+        font-size: 40px;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.12;
+      }
+      .tip .x b {
+        color: var(--tiph);
+      }
+      #know {
+        background: radial-gradient(80% 55% at 50% 40%, #fff8d6 0%, #ffe98a 65%, #ffd84d 100%);
+        color: #14213a;
+      }
+      .card {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        padding: 34px 36px 38px;
+        border-radius: 30px;
+        background: #fff;
+        box-shadow: 0 30px 70px rgba(80, 60, 0, 0.25);
+        opacity: 0;
+      }
+      .card .h {
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: var(--brand);
+      }
+      .card .x {
+        margin-top: 10px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1.06;
+      }
+      .card .x b {
+        color: var(--brand);
+      }
+      .card .s {
+        margin-top: 14px;
+        font-size: 30px;
+        font-weight: 700;
+        color: #51617f;
+      }
+      #meter {
+        left: 190px;
+        top: 450px;
+        width: 610px;
+        height: 610px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 50% 40%, #ffffff 0%, #e2e8f0 70%, #94a3b8 100%);
+        border: 18px solid #1e3a5f;
+        box-shadow: 0 30px 60px rgba(4, 33, 58, 0.25);
+      }
+      #odo {
+        position: absolute;
+        left: 95px;
+        top: 150px;
+        width: 384px;
+        height: 96px;
+        display: flex;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 5px solid #04213a;
+      }
+      .dg {
+        flex: 1;
+        height: 86px;
+        overflow: hidden;
+        background: #04213a;
+        color: #f8fafc;
+        border-right: 2px solid #334155;
+      }
+      .dg.r {
+        background: #dc2626;
+      }
+      .dg div {
+        height: 86px;
+        line-height: 86px;
+        text-align: center;
+        font-size: 60px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+      #unit {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 262px;
+        text-align: center;
+        font-size: 30px;
+        font-weight: 800;
+        color: #334155;
+      }
+      #star {
+        position: absolute;
+        left: 255px;
+        top: 340px;
+        width: 64px;
+        height: 64px;
+      }
+      #clock {
+        left: 70px;
+        top: 450px;
+        width: 150px;
+        height: 150px;
+        opacity: 0;
+      }
+      #drip {
+        left: 120px;
+        top: 700px;
+        width: 760px;
+        padding: 22px 28px;
+        border-radius: 22px;
+        background: #fff;
+        text-align: center;
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 20px 40px rgba(4, 33, 58, 0.18);
+        opacity: 0;
+      }
+      #drip b {
+        color: #0284c7;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+        color: #fff;
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.97;
+      }
+      #end-title .y {
+        color: #7dd3fc;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(125, 211, 252, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="main" class="clip" data-start="0" data-duration="20" data-track-index="0">
+        <div id="meter" class="abs">
+          <div id="odo"></div>
+          <div id="unit">m³ · litres en rouge</div>
+          <svg id="star" viewBox="-32 -32 64 64"><g id="wheel"><path d="M0 -28 L8 -8 L28 0 L8 8 L0 28 L-8 8 L-28 0 L-8 -8 Z" fill="#dc2626"/><circle r="6" fill="#04213a"/></g></svg>
+        </div>
+        <svg id="clock" class="abs" viewBox="0 0 180 180"><circle cx="90" cy="90" r="80" fill="#fff" stroke="#04213a" stroke-width="10"/><path id="hand" d="M90 90 V30" stroke="#0284c7" stroke-width="10" stroke-linecap="round"/><circle cx="90" cy="90" r="9" fill="#04213a"/></svg>
+        <div id="drip" class="abs" data-layout-allow-overlap>Chasse d'eau&nbsp;: <b>2 gouttes de colorant</b> dans le réservoir</div>
+        <div class="cap">Une fuite cachée&nbsp;?<br /><span class="a">Le test du compteur.</span></div>
+        <div id="count" class="abs">Compteur d'eau</div>
+        <div class="tip" id="tp0"><div class="h">ÉTAPE 1</div><div class="x">Ferme tous les robinets et <b>note l'index</b> du compteur.</div></div>
+        <div class="tip" id="tp1"><div class="h">ÉTAPE 2</div><div class="x">Attends <b>1 à 2 heures</b> sans utiliser d'eau.</div></div>
+        <div class="tip" id="tp2"><div class="h">ÉTAPE 3</div><div class="x">L'index a bougé ou <b>la petite roue tourne</b>&nbsp;? Il y a une fuite.</div></div>
+        <div class="tip" id="tp3"><div class="h">LA CHASSE D'EAU</div><div class="x">La cuvette se colore <b>sans tirer la chasse</b>&nbsp;? Elle fuit.</div></div>
+        <div class="tip" id="tp4"><div class="h">LE ROBINET QUI GOUTTE</div><div class="x">Environ <b>120 litres par jour</b>&nbsp;: à réparer vite.</div></div>
+      </section>
+
+      <section id="know" class="clip" data-start="20" data-duration="4" data-track-index="0">
+        <div class="cap">Bon à savoir&nbsp;:</div>
+        <div class="card" id="k0" style="top: 420px"><div class="h">ABONNÉ EN DIRECT&nbsp;?</div><div class="x">Fuite sur une canalisation après compteur&nbsp;: la facture peut être <b>plafonnée</b> si tu répares.</div></div>
+        <div class="card" id="k1" style="top: 900px"><div class="h">EN COPRO</div><div class="x">Demande s'il y a <b>un compteur individuel</b> ou si l'eau est dans les charges.</div></div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Une fuite cachée</span></span>
+          <span class="mask"><span class="y">se voit au compteur.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 100,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      const T = [2.0, 5.6, 9.2, 12.8, 16.4];
+      const A = "00412", B = "318", C = "341";
+      let h = "";
+      for (let i = 0; i < 8; i++) {
+        const red = i >= 5;
+        const d0 = (A + B)[i], d1 = (A + C)[i];
+        h += `<div class="dg${red ? " r" : ""}"><div class="rl" id="d${i}"><div>${d0}</div><div>${d1}</div></div></div>`;
+      }
+      document.getElementById("odo").innerHTML = h;
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+
+      // les étapes : compteur + explication
+      T.forEach((t, k) => {
+        tl.set("#count", { textContent: `Étape ${k + 1}/5` }, t);
+        tl.fromTo("#count", { scale: 1.25 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        if (document.getElementById(`tp${k}`)) {
+          tl.fromTo(`#tp${k}`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.3);
+          tl.to(`#tp${k}`, { opacity: 0, y: -10, duration: 0.15 }, (T[k + 1] || 20) - 0.25);
+        }
+      });
+      tl.fromTo("#odo", { scale: 1 }, { scale: 1.08, duration: 0.25, yoyo: true, repeat: 1, ease: "power2.inOut", immediateRender: false }, T[0]);
+      tl.fromTo("#clock", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, T[1]);
+      tl.fromTo("#hand", { rotation: 0, svgOrigin: "90 90" }, { rotation: 720, svgOrigin: "90 90", duration: 3.2, ease: "power1.inOut", immediateRender: false }, T[1] + 0.2);
+      tl.to("#clock", { opacity: 0, duration: 0.2 }, T[2]);
+      [6, 7].forEach((i) => tl.to(`#d${i}`, { y: -86, duration: 0.5, ease: "power2.inOut" }, T[2] + 0.1 * (i - 5)));
+      tl.fromTo("#wheel", { rotation: 0, svgOrigin: "0 0" }, { rotation: 1080, svgOrigin: "0 0", duration: 3.4, ease: "none", immediateRender: false }, T[2]);
+      shake("#meter", T[2] + 0.6, 6, 3);
+      tl.to("#meter", { opacity: 0.2, duration: 0.25 }, T[3]);
+      tl.to("#meter", { opacity: 1, duration: 0.25 }, T[4]);
+      tl.fromTo("#drip", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, T[3]);
+      tl.to("#drip", { opacity: 0, duration: 0.2 }, T[4]);
+      // 20 s : bon à savoir
+      flash(20, 0.5, 0.25);
+      tl.fromTo("#k0", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 20.2);
+      tl.fromTo("#k1", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 21.3);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 9 }, E0 + BEAT * 4.5);
+
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

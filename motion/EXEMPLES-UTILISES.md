@@ -46,7 +46,12 @@ pièce sans fenêtre · logement décent 9 m² / 2,20 m / 20 m³ · couloirs · 
 tapage nocturne 22 h–7 h · bruit de comportement (durée, répétition, intensité) · horaires de bricolage par arrêté · conciliateur de justice ·
 RC du syndicat · RC du copropriétaire · risques locatifs · IRSI 5 000 € HT · PNO · franchises ·
 assurance au jour de l'acte · relevé des compteurs · accès à l'espace syndic · taxe foncière au prorata · première AG ·
-condensation · remontées capillaires · infiltration · grilles d'aération bouchées.
+condensation · remontées capillaires · infiltration · grilles d'aération bouchées ·
+clause « animaux interdits » non écrite · chiens de 1ʳᵉ catégorie · aboiements / odeurs · laisse dans les parties communes · maître qui paie (ascenseur rayé) ·
+intercalaire daté 04/2009 · 4/16/4 · buée entre les vitres · Uw 1,3 · survitrage · fenêtre qui ferme sans forcer ·
+carte Arcep · boîtier fibre sur le palier · prise optique · vote AG pour la fibre · couverture 4G/5G ·
+index 00412,318 → 341 · petite roue du compteur · colorant dans la chasse d'eau · robinet 120 L/jour · loi Warsmann ·
+ballon 200 L / 50 L par personne · plaque 2009 · groupe de sécurité · heures creuses · thermodynamique · eau chaude collective.
 
 ## Résidences fictives déjà nommées
-Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas.
+Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas · Vitrerie Nord (fabricant fictif).

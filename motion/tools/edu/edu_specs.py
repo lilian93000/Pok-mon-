@@ -2784,3 +2784,543 @@ SPECS["humidite"] = dict(
     endacc="#7dd3fc",
     endrgb="125, 211, 252",
 )
+
+# ---------------------------------------------------------------- 31. LES ANIMAUX EN COPRO
+SPECS["animaux"] = dict(
+    comment="« LES ANIMAUX EN COPRO » — vidéo utile : ce que le règlement peut (ou pas) interdire. 82 BPM (lo-fi).",
+    bpm=82,
+    T=T4,
+    vars="""        --bg1: #fff7ed;
+        --bg2: #fde7cf;
+        --bg3: #f5c79a;
+        --ink: #2a1606;
+        --acc: #c2410c;
+        --pill: #2a1606;
+        --pillt: #fdba74;
+        --tipbg: #2a1606;
+        --tiph: #fdba74;""",
+    css="""      #doc {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        padding: 40px 44px 30px;
+        border-radius: 26px;
+        background: #fffdf8;
+        box-shadow: 0 30px 60px rgba(42, 22, 6, 0.18);
+      }
+      #doc .t {
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: #9a3412;
+        margin-bottom: 22px;
+      }
+      .cl {
+        position: relative;
+        padding: 20px 22px;
+        margin-bottom: 14px;
+        border-radius: 16px;
+        background: #f5efe6;
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        opacity: 0.4;
+      }
+      .cl s {
+        text-decoration: none;
+      }
+      .cl .bar {
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        top: 50%;
+        height: 6px;
+        border-radius: 3px;
+        background: #dc2626;
+        transform: scaleX(0);
+        transform-origin: left center;
+      }
+      .st {
+        position: absolute;
+        right: 14px;
+        bottom: -16px;
+        padding: 6px 14px;
+        border: 5px solid;
+        border-radius: 12px;
+        background: #fffdf8;
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        opacity: 0;
+      }
+      .st.no {
+        color: #dc2626;
+      }
+      .st.ok {
+        color: #15803d;
+      }
+""",
+    html="""        <div id="doc" class="abs" data-layout-allow-overlap>
+          <div class="t">RÈGLEMENT DE COPROPRIÉTÉ · ART. 12</div>
+          <div class="cl" id="c0">« Les animaux sont interdits dans les appartements. »<div class="bar"></div><div class="st no">NON ÉCRITE</div></div>
+          <div class="cl" id="c1">« Les chiens d'attaque (1ʳᵉ catégorie) sont interdits. »<div class="st ok">VALABLE</div></div>
+          <div class="cl" id="c2">« Aucune nuisance : aboiements, odeurs, dégâts. »<div class="st ok">VALABLE</div></div>
+          <div class="cl" id="c3">« Chiens tenus en laisse dans les parties communes. »<div class="st ok">VALABLE</div></div>
+        </div>""",
+    cap="Ton chat, ton chien&nbsp;:<br /><span class=\"a\">la copro peut-elle dire non&nbsp;?</span>",
+    count0="4 clauses",
+    countk="Clause ${k + 1}/4",
+    tips=[
+        ("INTERDIRE LES ANIMAUX", "Une clause qui interdit les animaux familiers est <b>réputée non écrite</b>."),
+        ("L'EXCEPTION", "Les <b>chiens de 1ʳᵉ catégorie</b> (dits d'attaque) peuvent être interdits."),
+        ("LES NUISANCES", "Aboiements, odeurs, dégâts&nbsp;: <b>tu en restes responsable</b>."),
+        ("LES PARTIES COMMUNES", "Le règlement peut imposer <b>la laisse et la propreté</b>."),
+    ],
+    know=[
+        ("TU LOUES&nbsp;?", "Le bail ne peut pas interdire <b>un animal familier</b> à ton locataire."),
+        ("UN DÉGÂT&nbsp;?", "Ascenseur rayé, moquette abîmée&nbsp;: <b>c'est le maître qui paie</b>."),
+    ],
+    setup="",
+    js="""      T.forEach((t, k) => {
+        if (k) tl.to(`#c${k - 1}`, { opacity: 0.55, duration: 0.2 }, t);
+        tl.to(`#c${k}`, { opacity: 1, backgroundColor: "#ffedd5", duration: 0.25 }, t);
+        if (k === 0) tl.to("#c0 .bar", { scaleX: 1, duration: 0.4, ease: "power2.inOut" }, t + 0.3);
+        tl.fromTo(`#c${k} .st`, { scale: 2.2, opacity: 0, rotation: -14 }, { scale: 1, opacity: 1, rotation: -6, duration: 0.35, ease: "back.out(2)", immediateRender: false }, t + 0.6);
+        shake("#doc", t + 0.6, 6, 3);
+      });""",
+    endtitle=["Ton animal", "a sa place."],
+    endacc="#fdba74",
+    endrgb="253, 186, 116",
+)
+
+# ---------------------------------------------------------------- 32. LIRE UN DOUBLE VITRAGE
+SPECS["vitrage"] = dict(
+    comment="« LIRE UN DOUBLE VITRAGE » — vidéo utile : date, composition, buée, performance. 118 BPM (disco).",
+    bpm=118,
+    T=T4,
+    vars="""        --bg1: #f0fdfa;
+        --bg2: #cdf3ea;
+        --bg3: #99e0d0;
+        --ink: #052e2a;
+        --acc: #0f766e;
+        --pill: #052e2a;
+        --pillt: #5eead4;
+        --tipbg: #052e2a;
+        --tiph: #5eead4;""",
+    css="""      #win {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+      }
+      #stamp {
+        left: 210px;
+        top: 882px;
+        width: 570px;
+        height: 34px;
+        line-height: 34px;
+        text-align: center;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: #f1f5f9;
+        border-radius: 6px;
+      }
+      #sect {
+        left: 70px;
+        top: 1000px;
+        width: 850px;
+        height: 180px;
+        border-radius: 22px;
+        background: #fff;
+        box-shadow: 0 20px 40px rgba(5, 46, 42, 0.15);
+        opacity: 0;
+      }
+      .lay {
+        position: absolute;
+        top: 30px;
+        height: 80px;
+        border-radius: 6px;
+      }
+      .ln {
+        position: absolute;
+        top: 122px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+      }
+      #uw {
+        left: 640px;
+        top: 500px;
+        width: 240px;
+        padding: 18px 10px;
+        border-radius: 22px;
+        background: #052e2a;
+        color: #5eead4;
+        text-align: center;
+        font-size: 54px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        opacity: 0;
+      }
+      #uw small {
+        display: block;
+        margin-top: 8px;
+        font-size: 24px;
+        color: #ccfbf1;
+        letter-spacing: 0;
+      }
+""",
+    html="""        <svg id="win" class="abs" viewBox="0 0 850 720"></svg>
+        <div id="stamp" class="abs" data-layout-allow-overlap>04/2009 · VITRERIE NORD · 4/16/4</div>
+        <div id="sect" class="abs">
+          <div class="lay" style="left: 150px; width: 70px; background: #67e8f9"></div>
+          <div class="lay" style="left: 220px; width: 410px; background: #ecfeff; border: 4px dashed #94a3b8"></div>
+          <div class="lay" style="left: 630px; width: 70px; background: #67e8f9"></div>
+          <div class="ln" style="left: 95px; width: 180px">4 mm verre</div>
+          <div class="ln" style="left: 275px; width: 300px">16 mm d'air ou de gaz</div>
+          <div class="ln" style="left: 575px; width: 180px">4 mm verre</div>
+        </div>
+        <div id="uw" class="abs" data-layout-allow-overlap>Uw 1,3<small>W/m².K</small></div>""",
+    cap="Ton double vitrage&nbsp;:<br /><span class=\"a\">ce qu'il te dit.</span>",
+    count0="Une fenêtre",
+    countk="Indice ${k + 1}/4",
+    tips=[
+        ("L'INTERCALAIRE", "La barrette entre les vitres porte <b>la date de fabrication</b>."),
+        ("4/16/4", "<b>Verre 4 mm, lame de 16 mm, verre 4 mm</b>&nbsp;: la composition du vitrage."),
+        ("DE LA BUÉE ENTRE LES VITRES", "Le vitrage n'est <b>plus étanche</b>&nbsp;: il est à changer."),
+        ("LE COEFFICIENT Uw", "<b>Plus il est bas, mieux la fenêtre isole</b>. 1,3 ou moins, c'est performant."),
+    ],
+    know=[
+        ("LE SURVITRAGE", "Une 2ᵉ vitre ajoutée sur un vieux châssis&nbsp;: <b>moins efficace</b> qu'un vrai double vitrage."),
+        ("À LA VISITE", "Ouvre chaque fenêtre&nbsp;: elle doit <b>fermer sans forcer</b>, joints souples."),
+    ],
+    setup="""      let w = `<rect x="40" y="0" width="770" height="520" rx="18" fill="#f8fafc" stroke="#052e2a" stroke-width="6"/>`;
+      w += `<rect x="100" y="50" width="650" height="420" fill="#475569"/>`;
+      w += `<rect x="122" y="72" width="606" height="358" fill="#bfeff5"/>`;
+      w += `<path d="M170 110 L300 110 L170 240 Z" fill="#fff" opacity="0.55"/><path d="M560 380 L690 260 L690 300 L600 380 Z" fill="#fff" opacity="0.4"/>`;
+      w += `<g id="fog" opacity="0"><ellipse cx="330" cy="300" rx="170" ry="90" fill="#fff" opacity="0.75"/><ellipse cx="520" cy="230" rx="150" ry="70" fill="#fff" opacity="0.6"/><ellipse cx="420" cy="380" rx="200" ry="50" fill="#fff" opacity="0.65"/></g>`;
+      w += `<rect id="hl" x="136" y="431" width="578" height="38" rx="8" fill="#facc15" opacity="0"/>`;
+      document.getElementById("win").innerHTML = w;""",
+    js="""      tl.to("#hl", { opacity: 0.9, duration: 0.2 }, T[0]);
+      tl.to("#stamp", { color: "#052e2a", duration: 0.2 }, T[0]);
+      tl.fromTo("#stamp", { scale: 1 }, { scale: 1.08, duration: 0.25, yoyo: true, repeat: 1, ease: "power2.inOut", immediateRender: false }, T[0] + 0.1);
+      tl.fromTo("#sect", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, T[1]);
+      tl.to("#sect", { opacity: 0.3, duration: 0.2 }, T[2]);
+      tl.to("#hl", { opacity: 0, duration: 0.2 }, T[2]);
+      tl.to("#stamp", { color: "#f1f5f9", duration: 0.2 }, T[2]);
+      tl.to("#fog", { opacity: 1, duration: 1.2, ease: "power1.inOut" }, T[2]);
+      tl.to("#fog", { opacity: 0.25, duration: 0.3 }, T[3]);
+      tl.fromTo("#uw", { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)", immediateRender: false }, T[3]);""",
+    endtitle=["Lis tes fenêtres", "avant d'acheter."],
+    endacc="#5eead4",
+    endrgb="94, 234, 212",
+)
+
+# ---------------------------------------------------------------- 33. LA FIBRE DANS L'IMMEUBLE
+SPECS["fibre"] = dict(
+    comment="« LA FIBRE DANS L'IMMEUBLE » — vidéo utile : vérifier, repérer, faire installer. 172 BPM (drum & bass).",
+    bpm=172,
+    T=T4,
+    vars="""        --bg1: #1a1240;
+        --bg2: #100a2e;
+        --bg3: #07041a;
+        --ink: #f5f3ff;
+        --acc: #22d3ee;
+        --pill: #22d3ee;
+        --pillt: #07041a;
+        --tipbg: #22d3ee;
+        --tiph: #4c1d95;""",
+    css="""      #bld {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+      }
+      #map {
+        left: 560px;
+        top: 470px;
+        padding: 14px 20px;
+        border-radius: 16px;
+        background: #f5f3ff;
+        color: #07041a;
+        font-size: 30px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      .tip {
+        color: #07041a;
+      }
+""",
+    html="""        <svg id="bld" class="abs" viewBox="0 0 850 720"></svg>
+        <div id="map" class="abs">Éligible fibre ?</div>""",
+    cap="La fibre dans l'immeuble&nbsp;:<br /><span class=\"a\">vérifie avant d'acheter.</span>",
+    count0="Ton immeuble",
+    countk="Étape ${k + 1}/4",
+    tips=[
+        ("LA CARTE", "Tape l'adresse sur la carte <b>« Ma connexion internet »</b> de l'Arcep."),
+        ("SUR LE PALIER", "Un <b>boîtier fibre</b> sur le palier ou dans la gaine&nbsp;: l'immeuble est câblé."),
+        ("DANS L'APPART", "Une <b>prise optique</b> au mur&nbsp;: le logement est déjà raccordé."),
+        ("PAS ENCORE FIBRÉ&nbsp;?", "La proposition d'un opérateur est <b>votée en AG</b>&nbsp;: l'installation est à ses frais."),
+    ],
+    know=[
+        ("TON DROIT", "On ne peut pas t'empêcher de te raccorder <b>sans motif sérieux</b>."),
+        ("LE MOBILE", "Regarde aussi la <b>couverture 4G/5G</b> sur la carte de l'Arcep."),
+    ],
+    setup="""      let w = `<rect x="140" y="80" width="460" height="560" fill="#2a2160" stroke="#a78bfa" stroke-width="5"/><path d="M120 80 L370 10 L620 80 Z" fill="#3b2f7a" stroke="#a78bfa" stroke-width="5"/>`;
+      for (let f = 0; f < 4; f++) {
+        const y = 100 + f * 135;
+        w += `<path d="M140 ${y + 125} H600" stroke="#a78bfa" stroke-width="3" opacity="0.6"/>`;
+        for (let i = 0; i < 3; i++) w += `<rect x="${175 + i * 140}" y="${y + 20}" width="90" height="70" rx="6" fill="#4c3f99"/>`;
+      }
+      w += `<rect x="0" y="640" width="850" height="80" fill="#1e1a3a"/>`;
+      w += `<path id="cable" d="M0 690 H360 V560 V290" stroke="#22d3ee" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="760" stroke-dashoffset="760"/>`;
+      w += `<path id="drop" d="M380 290 H470 V250" stroke="#22d3ee" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="140" stroke-dashoffset="140"/>`;
+      w += `<g id="pb" opacity="0.3"><rect x="345" y="270" width="50" height="40" rx="6" fill="#f5f3ff"/><circle cx="370" cy="290" r="8" fill="#22d3ee"/></g>`;
+      w += `<g id="pto" opacity="0.3"><rect x="452" y="222" width="36" height="36" rx="6" fill="#f5f3ff"/><circle cx="470" cy="240" r="7" fill="#22d3ee"/></g>`;
+      w += `<g id="pin" opacity="0"><path d="M700 230 c-40 -50 -40 -110 0 -110 c40 0 40 60 0 110 Z" fill="#22d3ee"/><circle cx="700" cy="155" r="16" fill="#07041a"/></g>`;
+      w += `<g id="ag" opacity="0"><rect x="640" y="380" width="190" height="130" rx="16" fill="#f5f3ff"/><path d="M690 445 l25 25 l55 -55" stroke="#16a34a" stroke-width="14" fill="none" stroke-linecap="round"/></g>`;
+      document.getElementById("bld").innerHTML = w;""",
+    js="""      tl.fromTo("#pin", { opacity: 0, y: -60 }, { opacity: 1, y: 0, duration: 0.45, ease: "bounce.out", immediateRender: false }, T[0]);
+      tl.fromTo("#map", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.3, immediateRender: false }, T[0] + 0.3);
+      tl.to("#map", { opacity: 0, duration: 0.2 }, T[1]);
+      tl.to("#cable", { strokeDashoffset: 0, duration: 1.0, ease: "power2.inOut" }, T[1]);
+      tl.to("#pb", { opacity: 1, duration: 0.2 }, T[1] + 0.9);
+      tl.fromTo("#pb", { scale: 1 }, { scale: 1.4, svgOrigin: "370 290", duration: 0.2, yoyo: true, repeat: 1, immediateRender: false }, T[1] + 0.9);
+      tl.to("#drop", { strokeDashoffset: 0, duration: 0.5, ease: "power2.out" }, T[2]);
+      tl.to("#pto", { opacity: 1, duration: 0.2 }, T[2] + 0.4);
+      tl.fromTo("#pto", { scale: 1 }, { scale: 1.5, svgOrigin: "470 240", duration: 0.2, yoyo: true, repeat: 1, immediateRender: false }, T[2] + 0.4);
+      tl.fromTo("#ag", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, svgOrigin: "735 445", duration: 0.4, ease: "back.out(2)", immediateRender: false }, T[3]);
+      T.forEach((t) => shake("#bld", t, 4, 3));""",
+    endtitle=["Vérifie la fibre", "avant de signer."],
+    endacc="#22d3ee",
+    endrgb="34, 211, 238",
+)
+
+# ---------------------------------------------------------------- 34. LE TEST DE FUITE AU COMPTEUR
+SPECS["fuite"] = dict(
+    comment="« LE TEST DE FUITE » — vidéo utile : repérer une fuite cachée avec le compteur d'eau. 100 BPM (gospel).",
+    bpm=100,
+    T=T5,
+    vars="""        --bg1: #f0f9ff;
+        --bg2: #d6ecfb;
+        --bg3: #a5d3f3;
+        --ink: #04213a;
+        --acc: #0284c7;
+        --pill: #04213a;
+        --pillt: #7dd3fc;
+        --tipbg: #04213a;
+        --tiph: #7dd3fc;""",
+    css="""      #meter {
+        left: 190px;
+        top: 450px;
+        width: 610px;
+        height: 610px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 50% 40%, #ffffff 0%, #e2e8f0 70%, #94a3b8 100%);
+        border: 18px solid #1e3a5f;
+        box-shadow: 0 30px 60px rgba(4, 33, 58, 0.25);
+      }
+      #odo {
+        position: absolute;
+        left: 95px;
+        top: 150px;
+        width: 384px;
+        height: 96px;
+        display: flex;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 5px solid #04213a;
+      }
+      .dg {
+        flex: 1;
+        height: 86px;
+        overflow: hidden;
+        background: #04213a;
+        color: #f8fafc;
+        border-right: 2px solid #334155;
+      }
+      .dg.r {
+        background: #dc2626;
+      }
+      .dg div {
+        height: 86px;
+        line-height: 86px;
+        text-align: center;
+        font-size: 60px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+      #unit {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 262px;
+        text-align: center;
+        font-size: 30px;
+        font-weight: 800;
+        color: #334155;
+      }
+      #star {
+        position: absolute;
+        left: 255px;
+        top: 340px;
+        width: 64px;
+        height: 64px;
+      }
+      #clock {
+        left: 70px;
+        top: 450px;
+        width: 150px;
+        height: 150px;
+        opacity: 0;
+      }
+      #drip {
+        left: 120px;
+        top: 700px;
+        width: 760px;
+        padding: 22px 28px;
+        border-radius: 22px;
+        background: #fff;
+        text-align: center;
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 20px 40px rgba(4, 33, 58, 0.18);
+        opacity: 0;
+      }
+      #drip b {
+        color: #0284c7;
+      }
+""",
+    html="""        <div id="meter" class="abs">
+          <div id="odo"></div>
+          <div id="unit">m³ · litres en rouge</div>
+          <svg id="star" viewBox="-32 -32 64 64"><g id="wheel"><path d="M0 -28 L8 -8 L28 0 L8 8 L0 28 L-8 8 L-28 0 L-8 -8 Z" fill="#dc2626"/><circle r="6" fill="#04213a"/></g></svg>
+        </div>
+        <svg id="clock" class="abs" viewBox="0 0 180 180"><circle cx="90" cy="90" r="80" fill="#fff" stroke="#04213a" stroke-width="10"/><path id="hand" d="M90 90 V30" stroke="#0284c7" stroke-width="10" stroke-linecap="round"/><circle cx="90" cy="90" r="9" fill="#04213a"/></svg>
+        <div id="drip" class="abs" data-layout-allow-overlap>Chasse d'eau&nbsp;: <b>2 gouttes de colorant</b> dans le réservoir</div>""",
+    cap="Une fuite cachée&nbsp;?<br /><span class=\"a\">Le test du compteur.</span>",
+    count0="Compteur d'eau",
+    countk="Étape ${k + 1}/5",
+    tips=[
+        ("ÉTAPE 1", "Ferme tous les robinets et <b>note l'index</b> du compteur."),
+        ("ÉTAPE 2", "Attends <b>1 à 2 heures</b> sans utiliser d'eau."),
+        ("ÉTAPE 3", "L'index a bougé ou <b>la petite roue tourne</b>&nbsp;? Il y a une fuite."),
+        ("LA CHASSE D'EAU", "La cuvette se colore <b>sans tirer la chasse</b>&nbsp;? Elle fuit."),
+        ("LE ROBINET QUI GOUTTE", "Environ <b>120 litres par jour</b>&nbsp;: à réparer vite."),
+    ],
+    know=[
+        ("ABONNÉ EN DIRECT&nbsp;?", "Fuite sur une canalisation après compteur&nbsp;: la facture peut être <b>plafonnée</b> si tu répares."),
+        ("EN COPRO", "Demande s'il y a <b>un compteur individuel</b> ou si l'eau est dans les charges."),
+    ],
+    setup="""      const A = "00412", B = "318", C = "341";
+      let h = "";
+      for (let i = 0; i < 8; i++) {
+        const red = i >= 5;
+        const d0 = (A + B)[i], d1 = (A + C)[i];
+        h += `<div class="dg${red ? " r" : ""}"><div class="rl" id="d${i}"><div>${d0}</div><div>${d1}</div></div></div>`;
+      }
+      document.getElementById("odo").innerHTML = h;""",
+    js="""      tl.fromTo("#odo", { scale: 1 }, { scale: 1.08, duration: 0.25, yoyo: true, repeat: 1, ease: "power2.inOut", immediateRender: false }, T[0]);
+      tl.fromTo("#clock", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, T[1]);
+      tl.fromTo("#hand", { rotation: 0, svgOrigin: "90 90" }, { rotation: 720, svgOrigin: "90 90", duration: 3.2, ease: "power1.inOut", immediateRender: false }, T[1] + 0.2);
+      tl.to("#clock", { opacity: 0, duration: 0.2 }, T[2]);
+      [6, 7].forEach((i) => tl.to(`#d${i}`, { y: -86, duration: 0.5, ease: "power2.inOut" }, T[2] + 0.1 * (i - 5)));
+      tl.fromTo("#wheel", { rotation: 0, svgOrigin: "0 0" }, { rotation: 1080, svgOrigin: "0 0", duration: 3.4, ease: "none", immediateRender: false }, T[2]);
+      shake("#meter", T[2] + 0.6, 6, 3);
+      tl.to("#meter", { opacity: 0.2, duration: 0.25 }, T[3]);
+      tl.to("#meter", { opacity: 1, duration: 0.25 }, T[4]);
+      tl.fromTo("#drip", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, T[3]);
+      tl.to("#drip", { opacity: 0, duration: 0.2 }, T[4]);""",
+    endtitle=["Une fuite cachée", "se voit au compteur."],
+    endacc="#7dd3fc",
+    endrgb="125, 211, 252",
+)
+
+# ---------------------------------------------------------------- 35. LE CHAUFFE-EAU
+SPECS["ballon"] = dict(
+    comment="« LE CHAUFFE-EAU » — vidéo utile : capacité, âge, groupe de sécurité, heures creuses. 104 BPM (mambo).",
+    bpm=104,
+    T=T4,
+    vars="""        --bg1: #fdf2f8;
+        --bg2: #f9d9ea;
+        --bg3: #f0a8cc;
+        --ink: #34061d;
+        --acc: #be185d;
+        --pill: #34061d;
+        --pillt: #f9a8d4;
+        --tipbg: #34061d;
+        --tiph: #f9a8d4;""",
+    css="""      #tank {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 760px;
+      }
+      .lab {
+        position: absolute;
+        padding: 12px 18px;
+        border-radius: 16px;
+        background: #34061d;
+        color: #f9a8d4;
+        font-size: 34px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+        opacity: 0;
+      }
+""",
+    html="""        <svg id="tank" class="abs" viewBox="0 0 850 760"></svg>
+        <div class="lab" id="l0" style="left: 600px; top: 560px">200 L · 4 pers.</div>
+        <div class="lab" id="l1" style="left: 600px; top: 750px">Année : 2009</div>
+        <div class="lab" id="l2" style="left: 600px; top: 1082px">Goutte : normal</div>
+        <div class="lab" id="l3" style="left: 600px; top: 660px">Chauffe la nuit</div>""",
+    cap="Le chauffe-eau&nbsp;:<br /><span class=\"a\">4 choses à regarder.</span>",
+    count0="Le ballon",
+    countk="Point ${k + 1}/4",
+    tips=[
+        ("LA CAPACITÉ", "Compte environ <b>50 litres par personne</b>&nbsp;: 200 L pour 4."),
+        ("L'ÂGE", "Il dure en général <b>10 à 15 ans</b>&nbsp;: lis l'année sur la plaque."),
+        ("LE GROUPE DE SÉCURITÉ", "Il <b>goutte un peu pendant la chauffe</b>&nbsp;: c'est normal. Fais-le jouer chaque mois."),
+        ("LES HEURES CREUSES", "Vérifie qu'il <b>chauffe la nuit</b>&nbsp;: c'est moins cher."),
+    ],
+    know=[
+        ("THERMODYNAMIQUE", "Un chauffe-eau thermodynamique consomme <b>2 à 3 fois moins</b>."),
+        ("EAU CHAUDE COLLECTIVE&nbsp;?", "Elle est dans les charges&nbsp;: demande <b>le relevé de ton compteur</b>."),
+    ],
+    setup="""      let w = `<defs><clipPath id="tc"><rect x="170" y="60" width="300" height="560" rx="150"/></clipPath></defs>`;
+      w += `<rect x="170" y="60" width="300" height="560" rx="150" fill="#fff" stroke="#34061d" stroke-width="8"/>`;
+      w += `<g clip-path="url(#tc)"><rect id="lvl" x="170" y="620" width="300" height="560" fill="#fb7185" opacity="0.8"/></g>`;
+      w += `<g id="plate" opacity="0.5"><rect x="240" y="290" width="160" height="90" rx="8" fill="#e5e7eb" stroke="#34061d" stroke-width="4"/><path d="M258 315 h124 M258 335 h90 M258 355 h110" stroke="#34061d" stroke-width="5"/></g>`;
+      w += `<path d="M260 620 V670 M380 620 V650" stroke="#34061d" stroke-width="12"/>`;
+      w += `<g id="grp" opacity="0.5"><rect x="350" y="640" width="60" height="50" rx="8" fill="#be185d" stroke="#34061d" stroke-width="4"/><path d="M380 690 V705" stroke="#34061d" stroke-width="8"/><path id="drop" d="M380 712 c-10 14 -10 24 0 24 c10 0 10 -10 0 -24 Z" fill="#0ea5e9" opacity="0"/></g>`;
+      w += `<g id="moon" opacity="0"><circle cx="640" cy="120" r="44" fill="#34061d"/><circle cx="660" cy="106" r="40" fill="#f9d9ea"/></g>`;
+      w += `<path id="p0" d="M470 150 H520" stroke="#34061d" stroke-width="5" opacity="0"/><path id="p1" d="M400 335 H520" stroke="#34061d" stroke-width="5" opacity="0"/><path id="p2" d="M410 665 H520" stroke="#34061d" stroke-width="5" opacity="0"/>`;
+      document.getElementById("tank").innerHTML = w;""",
+    js="""      tl.to("#lvl", { attr: { y: 120 }, duration: 1.4, ease: "power2.out" }, T[0]);
+      tl.to("#p0", { opacity: 1, duration: 0.2 }, T[0] + 0.4);
+      tl.fromTo("#l0", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.3, immediateRender: false }, T[0] + 0.4);
+      tl.to(["#l0", "#p0"], { opacity: 0.35, duration: 0.2 }, T[1]);
+      tl.to("#plate", { opacity: 1, duration: 0.2 }, T[1]);
+      tl.to("#p1", { opacity: 1, duration: 0.2 }, T[1] + 0.2);
+      tl.fromTo("#l1", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.3, immediateRender: false }, T[1] + 0.2);
+      tl.to(["#l1", "#p1", "#plate"], { opacity: 0.35, duration: 0.2 }, T[2]);
+      tl.to("#grp", { opacity: 1, duration: 0.2 }, T[2]);
+      tl.to("#p2", { opacity: 1, duration: 0.2 }, T[2] + 0.2);
+      tl.fromTo("#l2", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.3, immediateRender: false }, T[2] + 0.2);
+      for (let i = 0; i < 3; i++) tl.fromTo("#drop", { opacity: 1, y: 0 }, { opacity: 0, y: 18, duration: 0.8, ease: "power2.in", immediateRender: false }, T[2] + 0.4 + i * 1.2);
+      tl.to(["#l0", "#l1", "#l2", "#p0", "#p1", "#p2"], { opacity: 0, duration: 0.2 }, T[3]);
+      tl.to("#grp", { opacity: 0.35, duration: 0.2 }, T[3]);
+      tl.fromTo("#moon", { opacity: 0, rotation: -40, svgOrigin: "640 120" }, { opacity: 1, rotation: 0, svgOrigin: "640 120", duration: 0.5, ease: "back.out(2)", immediateRender: false }, T[3]);
+      tl.fromTo("#l3", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.3, immediateRender: false }, T[3] + 0.2);
+      T.forEach((t) => shake("#tank", t, 4, 3));""",
+    endtitle=["Regarde le ballon", "à la visite."],
+    endacc="#f9a8d4",
+    endrgb="249, 168, 212",
+)
