@@ -36,7 +36,12 @@ Carrez (42 → 37,6 m², sous 1,80 m, caves et parkings exclus, 230 000 € → 
 votes en AG (art. 24 : 35/25, art. 25 : 45/100, passerelle 1/3, art. 26 : 70/100) ·
 étages (RDC, 1ᵉʳ–2ᵉ, milieu, dernier, sous les toits) · jouissance exclusive · habitation bourgeoise · droit de surélévation · usage du lot (grenier, cellier) ·
 syndic pro / bénévole / coopératif, prestations hors forfait · époques de construction (<1948, 48–74, 75–99, 00–12, 2012+, RT 1974 / RT 2012 / RE 2020) ·
-colonne d'eau / tuyau après la vanne · dalle vs carrelage du balcon · porte palière · dégât des eaux.
+colonne d'eau / tuyau après la vanne · dalle vs carrelage du balcon · porte palière · dégât des eaux ·
+bruits aériens / d'impact · cloison creuse · sous-couche acoustique · canalisations · réglementation acoustique 1996 ·
+convecteurs « grille-pain » · radiateurs à inertie / pompe à chaleur · entretien annuel de la chaudière gaz · répartiteurs de chauffage ·
+vue droite 1,90 m · vue oblique 0,60 m · jour de souffrance · PLU du terrain d'en face ·
+détecteur de fumée (2015) · ramonage · date limite du tuyau de gaz · différentiel 30 mA ·
+pièce sans fenêtre · logement décent 9 m² / 2,20 m / 20 m³ · couloirs · pièces en enfilade · plan coté.
 
 ## Résidences fictives déjà nommées
 Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas.

@@ -2066,3 +2066,361 @@ SPECS["reparer"] = dict(
     endacc="#f0abfc",
     endrgb="240, 171, 252",
 )
+
+# ================================================================ SÉRIE 5 « L'APPART ET L'IMMEUBLE »
+
+# ---------------------------------------------------------------- 21. LES BRUITS DANS L'IMMEUBLE
+SPECS["bruits"] = dict(
+    comment="« LES BRUITS » — vidéo utile pendant la visite : repérer une mauvaise isolation phonique. 96 BPM (chillwave).",
+    bpm=96,
+    T=T4,
+    vars="""        --bg1: #f5f3ff;
+        --bg2: #dcd6fb;
+        --bg3: #b7aaf0;
+        --ink: #1b1440;
+        --acc: #6d28d9;
+        --pill: #1b1440;
+        --pillt: #c4b5fd;
+        --tipbg: #1b1440;
+        --tiph: #c4b5fd;""",
+    css="""      #sec {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+      }
+      .wave {
+        fill: none;
+        stroke: #6d28d9;
+        stroke-width: 7;
+        opacity: 0;
+      }
+""",
+    html="""        <svg id="sec" class="abs" viewBox="0 0 850 720"></svg>""",
+    cap="Les bruits de l'immeuble&nbsp;:<br /><span class=\"a\">teste avant d'acheter.</span>",
+    count0="Coupe de deux étages",
+    countk="Test ${k + 1}/4",
+    tips=[
+        ("2 TYPES DE BRUIT", "<b>Aériens</b>&nbsp;: voix, télé. <b>D'impact</b>&nbsp;: pas, chaises, talons."),
+        ("TAPE SUR LA CLOISON", "Son creux&nbsp;? C'est une <b>cloison légère</b>&nbsp;: tu entendras la pièce d'à côté."),
+        ("LE SOL DU DESSUS", "Parquet ou carrelage chez le voisin&nbsp;? Demande s'il y a une <b>sous-couche acoustique</b>."),
+        ("LES CANALISATIONS", "Chasse d'eau, descente d'eaux usées&nbsp;: <b>écoute les murs</b> de la salle de bain."),
+    ],
+    know=[
+        ("LE REPÈRE", "Immeubles neufs&nbsp;: une <b>réglementation acoustique</b> s'applique depuis 1996."),
+        ("LE TEST", "Demande à quelqu'un de <b>marcher à l'étage</b> pendant ta visite."),
+    ],
+    setup="""      let s = `<rect x="20" y="20" width="810" height="680" fill="#ffffff" stroke="#1b1440" stroke-width="6"/>`;
+      s += `<rect x="20" y="340" width="810" height="36" fill="#a5a0c2"/>`;
+      s += `<rect x="420" y="20" width="14" height="320" fill="#d6d3e8" stroke="#1b1440" stroke-width="3"/><rect x="420" y="376" width="14" height="324" fill="#d6d3e8" stroke="#1b1440" stroke-width="3"/>`;
+      s += `<rect x="760" y="20" width="40" height="680" fill="#cbd5e1" stroke="#1b1440" stroke-width="3"/>`;
+      // TV + personnage (haut), chaise (haut), WC (haut droite)
+      s += `<rect x="80" y="210" width="120" height="80" rx="8" fill="#1b1440"/><rect x="92" y="222" width="96" height="56" fill="#818cf8"/>`;
+      s += `<circle cx="300" cy="230" r="22" fill="#1b1440"/><rect x="284" y="254" width="32" height="70" rx="12" fill="#1b1440"/>`;
+      s += `<rect x="620" y="270" width="80" height="60" rx="14" fill="#e5e7eb" stroke="#1b1440" stroke-width="4"/>`;
+      // pièce du bas : toi
+      s += `<circle cx="600" cy="560" r="24" fill="#6d28d9"/><rect x="583" y="586" width="34" height="80" rx="12" fill="#6d28d9"/>`;
+      const W = [[140, 250], [300, 330], [427, 500], [780, 520]];
+      W.forEach(([x, y], k) => {
+        for (let r = 0; r < 3; r++) s += `<circle class="wave w${k}" cx="${x}" cy="${y}" r="${30 + r * 35}"/>`;
+      });
+      document.getElementById("sec").innerHTML = s;""",
+    js="""      T.forEach((t, k) => {
+        const g = k === 0 ? ".w0, .w1" : `.w${k + 1 > 3 ? 3 : k + 1}`;
+        if (k) tl.to(".wave", { opacity: 0, duration: 0.2 }, t - 0.2);
+        tl.fromTo(g, { scale: 0.4, opacity: 0.9, transformOrigin: "50% 50%" }, { scale: 1.3, opacity: 0, duration: 0.9, ease: "power1.out", stagger: 0.12, repeat: 3, immediateRender: false }, t);
+        shake("#sec", t, 4, 3);
+      });""",
+    endtitle=["Écoute l'immeuble", "avant de signer."],
+    endacc="#c4b5fd",
+    endrgb="196, 181, 253",
+)
+
+# ---------------------------------------------------------------- 22. LE CHAUFFAGE DE L'APPART
+SPECS["chauffage"] = dict(
+    comment="« LE CHAUFFAGE » — vidéo utile : reconnaître le système de chauffage et ce qu'il implique. 108 BPM (flamenco).",
+    bpm=108,
+    T=T4,
+    vars="""        --bg1: #fff1f2;
+        --bg2: #fecdd3;
+        --bg3: #fca5b0;
+        --ink: #3b0711;
+        --acc: #be123c;
+        --pill: #3b0711;
+        --pillt: #fda4af;
+        --tipbg: #3b0711;
+        --tiph: #fda4af;""",
+    css="""      .hc {
+        position: absolute;
+        left: 70px;
+        width: 850px;
+        height: 150px;
+        border-radius: 24px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        padding: 0 30px;
+        box-shadow: 0 20px 40px rgba(59, 7, 17, 0.15);
+        opacity: 0.35;
+      }
+      .hc .nm {
+        flex: 1;
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.05;
+      }
+      .hc .gauge {
+        flex: none;
+        width: 230px;
+        height: 30px;
+        border-radius: 15px;
+        background: #fde2e5;
+        overflow: hidden;
+      }
+      .hc .gauge i {
+        display: block;
+        height: 100%;
+        border-radius: 15px;
+        transform-origin: 0% 50%;
+        transform: scaleX(0);
+      }
+      #glab {
+        left: 640px;
+        top: 452px;
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        color: #3b0711;
+      }
+""",
+    html="""        <div id="glab" class="abs">COÛT D'USAGE</div>
+        <div class="hc" id="hc0" style="top: 500px"><svg width="90" height="90" viewBox="0 0 90 90"><rect x="8" y="20" width="74" height="50" rx="8" fill="#94a3b8"/><path d="M18 34 h54 M18 46 h54 M18 58 h54" stroke="#fff" stroke-width="4"/></svg><div class="nm">Convecteurs électriques</div><div class="gauge"><i style="width: 95%; background: #dc2626"></i></div></div>
+        <div class="hc" id="hc1" style="top: 670px"><svg width="90" height="90" viewBox="0 0 90 90"><rect x="8" y="16" width="74" height="58" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="4"/><path d="M22 28 v34 M34 28 v34 M46 28 v34 M58 28 v34 M70 28 v34" stroke="#94a3b8" stroke-width="5"/></svg><div class="nm">Radiateurs à inertie, pompe à chaleur</div><div class="gauge"><i style="width: 45%; background: #16a34a"></i></div></div>
+        <div class="hc" id="hc2" style="top: 840px"><svg width="90" height="90" viewBox="0 0 90 90"><rect x="20" y="8" width="50" height="74" rx="8" fill="#e2e8f0" stroke="#64748b" stroke-width="4"/><path d="M45 52 q-10 -10 0 -24 q10 14 0 24z" fill="#f97316"/></svg><div class="nm">Chaudière gaz individuelle</div><div class="gauge"><i style="width: 60%; background: #f59e0b"></i></div></div>
+        <div class="hc" id="hc3" style="top: 1010px"><svg width="90" height="90" viewBox="0 0 90 90"><rect x="10" y="20" width="70" height="50" rx="8" fill="#f8fafc" stroke="#be123c" stroke-width="4"/><rect x="34" y="6" width="22" height="22" rx="4" fill="#be123c"/><text x="45" y="23" font-size="14" text-anchor="middle" fill="#fff"></text></svg><div class="nm">Collectif avec répartiteurs</div><div class="gauge"><i style="width: 55%; background: #f59e0b"></i></div></div>""",
+    cap="Ton futur chauffage&nbsp;:<br /><span class=\"a\">reconnais-le.</span>",
+    count0="4 systèmes",
+    countk="Système ${k + 1}/4",
+    tips=[
+        ("CONVECTEURS « GRILLE-PAIN »", "Pas chers à installer, <b>chers à l'usage</b>. Souvent signe d'un mauvais DPE."),
+        ("INERTIE OU POMPE À CHALEUR", "Plus <b>économes</b>&nbsp;: demande leur âge et la facture d'un hiver."),
+        ("CHAUDIÈRE GAZ INDIVIDUELLE", "<b>Entretien obligatoire chaque année</b>&nbsp;: demande la dernière attestation."),
+        ("COLLECTIF + RÉPARTITEURS", "Petits boîtiers sur les radiateurs&nbsp;: tu paies <b>selon ta consommation</b>."),
+    ],
+    know=[
+        ("À DEMANDER", "Les <b>factures d'énergie</b> d'une année complète, hiver compris."),
+        ("À REGARDER", "L'<b>âge</b> de la chaudière ou des radiateurs&nbsp;: un remplacement coûte cher."),
+    ],
+    setup="",
+    js="""      T.forEach((t, k) => {
+        if (k) tl.to(`#hc${k - 1}`, { opacity: 0.55, scale: 1, duration: 0.3 }, t);
+        tl.to(`#hc${k}`, { opacity: 1, scale: 1.03, duration: 0.3, ease: "back.out(2)" }, t);
+        tl.to(`#hc${k} .gauge i`, { scaleX: 1, duration: 0.8, ease: "power2.out" }, t + 0.2);
+      });""",
+    endtitle=["Vérifie le chauffage", "avant de signer."],
+    endacc="#fda4af",
+    endrgb="253, 164, 175",
+)
+
+# ---------------------------------------------------------------- 23. LE VIS-À-VIS ET LA LOI
+SPECS["visavis"] = dict(
+    comment="« LE VIS-À-VIS » — vidéo utile : distances de vue, jours de souffrance et terrain d'en face. 80 BPM (dub).",
+    bpm=80,
+    T=T4,
+    vars="""        --bg1: #f0fdf4;
+        --bg2: #cdeed8;
+        --bg3: #9bd8b0;
+        --ink: #062b16;
+        --acc: #15803d;
+        --pill: #062b16;
+        --pillt: #86efac;
+        --tipbg: #062b16;
+        --tiph: #86efac;""",
+    css="""      #top {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+        border-radius: 26px;
+        background: #f7fdf9;
+        box-shadow: 0 30px 60px rgba(6, 43, 22, 0.2);
+      }
+      .ms {
+        position: absolute;
+        padding: 8px 16px;
+        border-radius: 12px;
+        background: #15803d;
+        color: #fff;
+        font-size: 34px;
+        font-weight: 900;
+        opacity: 0;
+        z-index: 3;
+      }
+""",
+    html="""        <svg id="top" class="abs" viewBox="0 0 850 720"></svg>
+        <div class="ms" id="m0" style="left: 340px; top: 780px">1,90&nbsp;m</div>
+        <div class="ms" id="m1" style="left: 560px; top: 640px">0,60&nbsp;m</div>
+        <div class="ms" id="m2" style="left: 150px; top: 1000px">verre fixe</div>
+        <div class="ms" id="m3" style="left: 600px; top: 1040px">constructible&nbsp;?</div>""",
+    cap="Le vis-à-vis&nbsp;:<br /><span class=\"a\">ce que dit la loi.</span>",
+    count0="Vue du dessus",
+    countk="Règle ${k + 1}/4",
+    tips=[
+        ("VUE DROITE", "Fenêtre face au voisin&nbsp;: au moins <b>1,90&nbsp;m</b> de la limite de propriété."),
+        ("VUE OBLIQUE", "Fenêtre en biais&nbsp;: au moins <b>0,60&nbsp;m</b>."),
+        ("JOUR DE SOUFFRANCE", "Une ouverture qui laisse passer <b>la lumière, pas la vue</b>&nbsp;: verre fixe et opaque."),
+        ("LE TERRAIN EN FACE", "Vide aujourd'hui&nbsp;? Le <b>plan local d'urbanisme</b> dit si on peut y construire."),
+    ],
+    know=[
+        ("À LA MAIRIE", "Le <b>PLU</b> se consulte en mairie ou en ligne."),
+        ("À REGARDER", "La <b>hauteur</b> des immeubles voisins et leur distance à tes fenêtres."),
+    ],
+    setup="""      let p = `<rect x="40" y="60" width="380" height="260" fill="#d1fae5" stroke="#062b16" stroke-width="6"/>`;
+      p += `<rect x="40" y="440" width="380" height="240" fill="#e5e7eb" stroke="#062b16" stroke-width="6"/>`;
+      p += `<path d="M20 380 H830" stroke="#dc2626" stroke-width="5" stroke-dasharray="16 10"/>`;
+      p += `<rect x="460" y="420" width="360" height="270" fill="#fef9c3" stroke="#a16207" stroke-width="4" stroke-dasharray="12 8"/>`;
+      p += `<rect x="200" y="314" width="90" height="12" fill="#38bdf8"/><rect x="414" y="140" width="12" height="80" fill="#38bdf8"/><rect x="100" y="434" width="70" height="12" fill="#94a3b8"/>`;
+      p += `<path id="a0" d="M245 330 V375" stroke="#15803d" stroke-width="6" opacity="0"/><path id="a1" d="M426 180 L470 372" stroke="#15803d" stroke-width="6" opacity="0"/>`;
+      document.getElementById("top").innerHTML = p;""",
+    js="""      T.forEach((t, k) => {
+        if (k) tl.to(`#m${k - 1}`, { opacity: 0.35, duration: 0.2 }, t);
+        tl.fromTo(`#m${k}`, { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(3)", immediateRender: false }, t + 0.2);
+        if (k < 2) tl.to(`#a${k}`, { opacity: 1, duration: 0.3 }, t);
+      });""",
+    endtitle=["Regarde en face", "avant de signer."],
+    endacc="#86efac",
+    endrgb="134, 239, 172",
+)
+
+# ---------------------------------------------------------------- 24. LA SÉCURITÉ DANS LE LOGEMENT
+SPECS["securite"] = dict(
+    comment="« LA SÉCURITÉ DANS LE LOGEMENT » — vidéo utile : 4 points de sécurité à vérifier. 118 BPM (highlife).",
+    bpm=118,
+    T=T4,
+    vars="""        --bg1: #fffbeb;
+        --bg2: #fde9b0;
+        --bg3: #f8cf6a;
+        --ink: #2a1c02;
+        --acc: #b45309;
+        --pill: #2a1c02;
+        --pillt: #fcd34d;
+        --tipbg: #2a1c02;
+        --tiph: #fcd34d;""",
+    css="""      #room {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 60px rgba(42, 28, 2, 0.2);
+      }
+      .hs {
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        margin: -65px 0 0 -65px;
+        border-radius: 50%;
+        border: 10px solid #b45309;
+        opacity: 0;
+        z-index: 2;
+      }
+""",
+    html="""        <svg id="room" class="abs" viewBox="0 0 850 720"></svg>
+        <div class="hs" id="h0" style="left: 495px; top: 500px"></div>
+        <div class="hs" id="h1" style="left: 205px; top: 970px"></div>
+        <div class="hs" id="h2" style="left: 860px; top: 1000px"></div>
+        <div class="hs" id="h3" style="left: 210px; top: 570px"></div>""",
+    cap="La sécurité chez toi&nbsp;:<br /><span class=\"a\">4 points à vérifier.</span>",
+    count0="Inspection",
+    countk="Point ${k + 1}/4",
+    tips=[
+        ("DÉTECTEUR DE FUMÉE", "<b>Obligatoire</b> dans chaque logement depuis 2015. Il y en a un&nbsp;?"),
+        ("CHEMINÉE", "Un conduit utilisé doit être <b>ramoné régulièrement</b>, souvent au moins une fois par an."),
+        ("TUYAU DE GAZ", "Sur la gazinière&nbsp;: lis sa <b>date limite</b>. Périmé&nbsp;? À changer."),
+        ("TABLEAU ÉLECTRIQUE", "Cherche un <b>différentiel 30 mA</b> avec un bouton test&nbsp;: il protège des électrocutions."),
+    ],
+    know=[
+        ("À DEMANDER", "Les <b>diagnostics électricité et gaz</b> s'ils existent&nbsp;: ils listent les anomalies."),
+        ("À PRÉVOIR", "Une mise en sécurité électrique peut coûter <b>plusieurs milliers d'euros</b>."),
+    ],
+    setup="""      let r = `<rect x="0" y="0" width="850" height="720" fill="#fffdf6"/><rect x="0" y="600" width="850" height="120" fill="#e7d7b6"/>`;
+      r += `<circle cx="425" cy="50" r="30" fill="#f8fafc" stroke="#2a1c02" stroke-width="5"/><circle cx="425" cy="50" r="6" fill="#dc2626"/>`;
+      r += `<rect x="60" y="260" width="150" height="340" fill="#d6c3a0" stroke="#2a1c02" stroke-width="5"/><rect x="80" y="440" width="110" height="160" fill="#2a1c02"/><path d="M100 520 q15 -30 30 0 q15 -30 30 0" stroke="#f97316" stroke-width="8" fill="none"/>`;
+      r += `<rect x="600" y="400" width="200" height="200" fill="#e5e7eb" stroke="#2a1c02" stroke-width="5"/><circle cx="650" cy="430" r="14" fill="#2a1c02"/><circle cx="700" cy="430" r="14" fill="#2a1c02"/><path d="M800 520 q40 0 40 60" stroke="#f59e0b" stroke-width="10" fill="none"/>`;
+      r += `<rect x="70" y="40" width="140" height="160" rx="10" fill="#f1f5f9" stroke="#2a1c02" stroke-width="5"/>`;
+      for (let i = 0; i < 4; i++) r += `<rect x="${86 + i * 30}" y="70" width="20" height="44" rx="4" fill="${i ? "#94a3b8" : "#2563eb"}"/>`;
+      r += `<rect x="86" y="140" width="56" height="40" rx="6" fill="#16a34a"/>`;
+      document.getElementById("room").innerHTML = r;""",
+    js="""      T.forEach((t, k) => {
+        if (k) tl.to(`#h${k - 1}`, { opacity: 0, duration: 0.2 }, t - 0.2);
+        tl.fromTo(`#h${k}`, { scale: 2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, t);
+        tl.to(`#h${k}`, { scale: 1.12, duration: BEAT / 2, yoyo: true, repeat: 5, ease: "sine.inOut" }, t + 0.4);
+      });""",
+    endtitle=["Vérifie la sécurité", "dès la visite."],
+    endacc="#fcd34d",
+    endrgb="252, 211, 77",
+)
+
+# ---------------------------------------------------------------- 25. LES PIÈGES D'UN PLAN
+SPECS["plan"] = dict(
+    comment="« LES PIÈGES D'UN PLAN » — vidéo utile : lire un plan d'appartement avant la visite. 100 BPM (klezmer).",
+    bpm=100,
+    T=T4,
+    vars="""        --bg1: #eff6ff;
+        --bg2: #cfe0fb;
+        --bg3: #9fbff0;
+        --ink: #0b1d3a;
+        --acc: #1d4ed8;
+        --pill: #0b1d3a;
+        --pillt: #93c5fd;
+        --tipbg: #0b1d3a;
+        --tiph: #93c5fd;""",
+    css="""      #fp {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 60px rgba(11, 29, 58, 0.2);
+      }
+      .zn {
+        opacity: 0;
+      }
+""",
+    html="""        <svg id="fp" class="abs" viewBox="0 0 850 720"></svg>""",
+    cap="Un plan d'appart&nbsp;:<br /><span class=\"a\">4 pièges à repérer.</span>",
+    count0="Plan de l'annonce",
+    countk="Piège ${k + 1}/4",
+    tips=[
+        ("PIÈCE SANS FENÊTRE", "Une « chambre » sans ouverture sur l'extérieur <b>n'en est pas une</b>."),
+        ("LA SURFACE MINIMALE", "Un logement décent a au moins une pièce de <b>9&nbsp;m² et 2,20&nbsp;m</b> sous plafond (ou 20&nbsp;m³)."),
+        ("LES COULOIRS", "Ils comptent dans la surface mais <b>ne servent à rien</b>&nbsp;: compare les m² utiles."),
+        ("PIÈCES EN ENFILADE", "Passer par une chambre pour aller dans une autre&nbsp;: <b>zéro intimité</b>."),
+    ],
+    know=[
+        ("À DEMANDER", "Un <b>plan coté</b>, avec les mesures de chaque pièce."),
+        ("À FAIRE", "Repère où sont <b>les fenêtres</b> sur le plan avant de visiter."),
+    ],
+    setup="""      let f = `<rect x="40" y="40" width="770" height="640" fill="none" stroke="#0b1d3a" stroke-width="12"/>`;
+      f += `<path d="M40 300 H330 V680 M330 40 V230 M330 300 H560 M560 40 V680 M560 360 H810" stroke="#0b1d3a" stroke-width="8" fill="none"/>`;
+      f += `<rect x="120" y="32" width="140" height="16" fill="#38bdf8"/><rect x="620" y="32" width="140" height="16" fill="#38bdf8"/><rect x="802" y="440" width="16" height="160" fill="#38bdf8"/><rect x="32" y="400" width="16" height="160" fill="#38bdf8"/>`;
+      f += `<rect class="zn" id="z0" x="336" y="306" width="218" height="368" fill="#0b1d3a" opacity="0"/>`;
+      f += `<rect class="zn" id="z1" x="566" y="366" width="238" height="308" fill="#22c55e" opacity="0"/>`;
+      f += `<rect class="zn" id="z2" x="336" y="46" width="218" height="248" fill="url(#hatch)" opacity="0"/>`;
+      f += `<defs><pattern id="hatch" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="20" height="20" fill="#fde68a"/><path d="M0 0 V20" stroke="#f59e0b" stroke-width="8"/></pattern></defs>`;
+      f += `<path class="zn" id="z3" d="M180 170 C 300 170, 400 200, 680 200" stroke="#dc2626" stroke-width="12" fill="none" stroke-dasharray="20 14" opacity="0"/><path class="zn" id="z3b" d="M660 180 l30 20 l-30 20" stroke="#dc2626" stroke-width="12" fill="none" opacity="0"/>`;
+      document.getElementById("fp").innerHTML = f;""",
+    js="""      const OP = [0.55, 0.45, 0.8, 1];
+      T.forEach((t, k) => {
+        if (k) tl.to(k === 4 ? [] : `#z${k - 1}${k - 1 === 3 ? ", #z3b" : ""}`, { opacity: 0.12, duration: 0.25 }, t);
+        tl.to(k === 3 ? "#z3, #z3b" : `#z${k}`, { opacity: OP[k], duration: 0.35 }, t);
+        shake("#fp", t, 4, 3);
+      });""",
+    endtitle=["Lis le plan", "avant de visiter."],
+    endacc="#93c5fd",
+    endrgb="147, 197, 253",
+)
