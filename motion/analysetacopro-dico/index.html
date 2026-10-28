@@ -315,8 +315,8 @@
           <div class="entry cover" id="e0"><div class="w">Le petit dico<br />de la copro</div><div class="g">5 mots à connaître avant d'acheter</div></div>
           <div class="entry" id="e1"><div class="w">Syndic</div><div class="g">n. m.</div><div class="d">Le gestionnaire de la copro&nbsp;: comptes, entretien, assemblées.</div><div class="e">Élu par l'AG, pour 3&nbsp;ans maximum.</div></div>
           <div class="entry" id="e2"><div class="w">Conseil syndical</div><div class="g">n. m.</div><div class="d">Des copropriétaires élus qui assistent et contrôlent le syndic.</div><div class="e">Bénévoles, ils sont tes alliés&nbsp;: pose-leur tes questions.</div></div>
-          <div class="entry" id="e3"><div class="w">Tantièmes</div><div class="g">n. m. pl.</div><div class="d">Ta part de l'immeuble. Elle fixe ta part des charges et le poids de ta voix en AG.</div><div class="e">Ex.&nbsp;: 250&nbsp;/&nbsp;10&nbsp;000 = 2,5&nbsp;%.</div></div>
-          <div class="entry" id="e4"><div class="w">Fonds de travaux</div><div class="g">n. m.</div><div class="d">L'épargne obligatoire de la copro, alimentée chaque année pour les gros travaux.</div><div class="e">Au moins 5&nbsp;% du budget annuel.</div></div>
+          <div class="entry" id="e3"><div class="w">Parties communes</div><div class="g">n. f. pl.</div><div class="d">Ce qui appartient à tous les copropriétaires&nbsp;: toit, façade, hall, escaliers, canalisations communes.</div><div class="e">Leur entretien est payé par tous.</div></div>
+          <div class="entry" id="e4"><div class="w">Appel de fonds</div><div class="g">n. m.</div><div class="d">La demande de paiement envoyée par le syndic pour couvrir le budget ou des travaux.</div><div class="e">Pour le budget, en général un par trimestre.</div></div>
           <div class="entry" id="e5"><div class="w">PPPT</div><div class="g">n. m. · plan pluriannuel de travaux</div><div class="d">La liste des travaux à prévoir sur 10&nbsp;ans, avec leur coût estimé.</div><div class="e">Obligatoire progressivement depuis 2023.</div></div>
         </div>
         <div class="cap">La copro<br /><span class="a">en 5 mots.</span></div>
@@ -327,7 +327,7 @@
       <section id="know" class="clip" data-start="20" data-duration="4" data-track-index="0">
         <div class="cap">Bon à savoir&nbsp;:</div>
         <div class="card" id="k0" style="top: 420px"><div class="h">UN MOT PAS CLAIR&nbsp;?</div><div class="x">Dans notre rapport, <b>tout est expliqué simplement</b>.</div></div>
-        <div class="card" id="k1" style="top: 900px"><div class="h">RAPPORT EN 72&nbsp;H</div><div class="x">Travaux, charges, risques&nbsp;: <b>ton dossier décodé.</b></div></div>
+        <div class="card" id="k1" style="top: 900px"><div class="h">LE RÉFLEXE</div><div class="x">Garde ces 5 mots en tête pour <b>ta prochaine visite</b>.</div></div>
       </section>
 
       <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
@@ -384,7 +384,7 @@
           tl.to(`#tp${k}`, { opacity: 0, y: -10, duration: 0.15 }, (T[k + 1] || 20) - 0.25);
         }
       });
-      const LET = ["S", "C", "T", "F", "P"];
+      const LET = ["S", "C", "P", "A", "P"];
       T.forEach((t, k) => {
         tl.to(`#e${k}`, { x: -260, opacity: 0, duration: 0.3, ease: "power2.in" }, t - 0.3);
         tl.fromTo(`#e${k + 1}`, { x: 260, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, t);

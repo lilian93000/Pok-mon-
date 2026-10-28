@@ -6,12 +6,12 @@ Vidéo utile : les 5 questions à poser avant d'acheter, et pourquoi.
 | Temps | Image | Son |
 |---|---|---|
 | 0 s (1ʳᵉ image) | « 5 questions à poser avant d'acheter. » Micro sous le projecteur | Piano électrique seul |
-| 2 s | Des travaux sont-ils votés ou prévus ? → PV d'AG et plan pluriannuel de travaux | Néo-soul 84 BPM |
-| 5,6 s | Combien de charges par an ? → montants des 2 derniers exercices | |
-| 9,2 s | Y a-t-il une procédure en cours ? → un procès coûte à tous | |
-| 12,8 s | Combien dans le fonds de travaux ? → l'argent reste à la copro à la vente | |
-| 16,4 s | Le syndic : pro ou bénévole ? Depuis quand ? → beaucoup de changements = alerte | |
-| 20 s | Bon à savoir : note les réponses puis vérifie-les · on contrôle tout en 72 h | Carillon |
+| 2 s | Le chauffage est-il collectif ? → il est dans tes charges, demande son coût annuel | Néo-soul 84 BPM |
+| 5,6 s | La cave et le parking font-ils partie du lot ? → vérifie leurs numéros de lot dans le compromis | |
+| 9,2 s | Quand a eu lieu la dernière AG ? → au moins une par an, sinon copro mal tenue | |
+| 12,8 s | Que permet le règlement de copro ? → activité pro, store, enseigne : tout y est écrit | |
+| 16,4 s | Combien de lots dans l'immeuble ? → peu de lots = chaque chantier pèse plus lourd | |
+| 20 s | Bon à savoir : demande des réponses écrites · on recoupe chaque réponse avec les documents | Carillon |
 | 24–30 s | « Pose les bonnes questions. », bouton, analysetacopro.fr | Fin |
 
-Sources : Code de la construction et de l'habitation, art. L721-2 (documents remis à l'acquéreur, dont charges des 2 exercices précédents) ; loi du 10 juillet 1965, art. 14-2-1 (sommes du fonds de travaux attachées aux lots, non remboursées à la vente). Le signal « changements de syndic » est un repère de prudence.
+Sources : loi du 10 juillet 1965, art. 7 et décret du 17 mars 1967, art. 7 (AG au moins une fois par an) ; le règlement de copropriété fixe la destination de l'immeuble et l'usage des lots (loi de 1965, art. 8). Le poids des chantiers selon le nombre de lots est un repère, pas une règle.

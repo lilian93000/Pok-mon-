@@ -71,21 +71,21 @@ SPECS["calcul"] = dict(
       }
 """,
     html="""        <div id="calc" class="abs">
-          <div id="screen"><div id="lab">RAVALEMENT VOTÉ</div><div id="num">180&nbsp;000&nbsp;€</div></div>
+          <div id="screen"><div id="lab">COUR INTÉRIEURE À REFAIRE</div><div id="num">75&nbsp;000&nbsp;€</div></div>
           <div id="keys"></div>
         </div>""",
     cap="Travaux votés&nbsp;:<br /><span class=\"a\">combien tu paies&nbsp;?</span>",
-    count0="Exemple · ravalement",
+    count0="Exemple · cour intérieure",
     countk="Étape ${k + 1}/4",
     tips=[
-        ("1 · TES TANTIÈMES", "Ta part de l'immeuble. Elle est écrite dans le <b>règlement de copropriété</b>."),
-        ("2 · TON POURCENTAGE", "250 sur 10&nbsp;000, c'est <b>2,5&nbsp;%</b> des charges générales."),
-        ("3 · TA FACTURE", "180&nbsp;000&nbsp;€ × 2,5&nbsp;% = <b>4&nbsp;500&nbsp;€</b> pour toi."),
-        ("4 · ATTENTION", "Ascenseur, chauffage&nbsp;: réparti <b>selon l'utilité</b> pour ton lot. Pas forcément 2,5&nbsp;%."),
+        ("1 · TES TANTIÈMES", "Ta part de l'immeuble, en millièmes ou dix-millièmes. Ici&nbsp;: <b>380 / 10&nbsp;000</b>."),
+        ("2 · TON POURCENTAGE", "380 sur 10&nbsp;000, c'est <b>3,8&nbsp;%</b> des charges générales."),
+        ("3 · TA FACTURE", "75&nbsp;000&nbsp;€ × 3,8&nbsp;% = <b>2&nbsp;850&nbsp;€</b> pour toi."),
+        ("4 · CHARGES SPÉCIALES", "Travaux d'un seul bâtiment&nbsp;: si le règlement le prévoit, <b>seuls ses lots paient</b>."),
     ],
     know=[
-        ("OÙ LES TROUVER", "Tes tantièmes sont dans <b>l'état descriptif de division</b>.", "Il est annexé au règlement de copropriété."),
-        ("ON LE FAIT POUR TOI", "Ta vraie part des travaux votés et à venir. <b>Rapport en 72&nbsp;h.</b>"),
+        ("OÙ LES TROUVER", "Tes tantièmes sont dans <b>l'état descriptif de division</b>.", "Le numéro de ton lot y figure aussi."),
+        ("LE RÉFLEXE", "Pour chaque chantier annoncé, <b>multiplie par tes tantièmes</b>. Tu connais ta facture."),
     ],
     setup="""      const KEYS = ["7", "8", "9", "÷", "4", "5", "6", "×", "1", "2", "3", "−", "0", ",", "=", "+"];
       document.getElementById("keys").innerHTML = KEYS.map((k, i) => `<div class="key${"÷×−=+".includes(k) ? " op" : ""}" id="key${i}" style="left: ${40 + (i % 4) * 160}px; top: ${310 + Math.floor(i / 4) * 106}px">${k}</div>`).join("");
@@ -93,10 +93,10 @@ SPECS["calcul"] = dict(
         num = document.getElementById("num");
       const sp = (n) => String(n).replace(/\\B(?=(\\d{3})+(?!\\d))/g, "\\u00a0");""",
     js="""      const SCR = [
-        ["TES TANTIÈMES", "250 / 10\\u00a0000", [10, 2, 12, 3]],
-        ["TA PART", "2,5\\u00a0%", [14]],
+        ["TES TANTIÈMES", "380 / 10\\u00a0000", [10, 5, 12, 3]],
+        ["TA PART", "3,8\\u00a0%", [14]],
         ["TA FACTURE", null, [7, 14]],
-        ["ASCENSEUR, CHAUFFAGE", "≠ 2,5\\u00a0%", [15]],
+        ["TRAVAUX DU BÂT. B · TOI AU A", "0\\u00a0€", [15]],
       ];
       T.forEach((t, k) => {
         SCR[k][2].forEach((ki, j) => {
@@ -109,7 +109,7 @@ SPECS["calcul"] = dict(
         shake("#calc", t, 6, 4);
       });
       const cnt = { v: 0 };
-      tl.fromTo(cnt, { v: 0 }, { v: 4500, duration: 0.9, ease: "power2.out", immediateRender: false, onUpdate: () => (num.textContent = sp(Math.round(cnt.v / 10) * 10) + "\\u00a0€") }, T[2]);""",
+      tl.fromTo(cnt, { v: 0 }, { v: 2850, duration: 0.9, ease: "power2.out", immediateRender: false, onUpdate: () => (num.textContent = sp(Math.round(cnt.v / 10) * 10) + "\\u00a0€") }, T[2]);""",
     endtitle=["Calcule ta part", "avant de signer."],
     endacc="#7dffc0",
     endrgb="125, 255, 192",
@@ -219,7 +219,7 @@ SPECS["dpe"] = dict(
     ],
     know=[
         ("DPE COLLECTIF", "Obligatoire en copro&nbsp;: <b>2024</b> (+ de 200 lots), <b>2025</b> (50 à 200), <b>2026</b> (moins de 50).", "Il montre si l'immeuble entier est une passoire."),
-        ("ON VÉRIFIE", "Le DPE de l'immeuble et les travaux d'isolation prévus. <b>72&nbsp;h.</b>"),
+        ("AVANT D'ACHETER POUR LOUER", "Regarde la lettre du DPE <b>et l'année</b> où elle sera interdite."),
     ],
     k0style=' style="font-size: 44px"',
     k1top=980,
@@ -345,8 +345,8 @@ SPECS["dico"] = dict(
           <div class="entry cover" id="e0"><div class="w">Le petit dico<br />de la copro</div><div class="g">5 mots à connaître avant d'acheter</div></div>
           <div class="entry" id="e1"><div class="w">Syndic</div><div class="g">n. m.</div><div class="d">Le gestionnaire de la copro&nbsp;: comptes, entretien, assemblées.</div><div class="e">Élu par l'AG, pour 3&nbsp;ans maximum.</div></div>
           <div class="entry" id="e2"><div class="w">Conseil syndical</div><div class="g">n. m.</div><div class="d">Des copropriétaires élus qui assistent et contrôlent le syndic.</div><div class="e">Bénévoles, ils sont tes alliés&nbsp;: pose-leur tes questions.</div></div>
-          <div class="entry" id="e3"><div class="w">Tantièmes</div><div class="g">n. m. pl.</div><div class="d">Ta part de l'immeuble. Elle fixe ta part des charges et le poids de ta voix en AG.</div><div class="e">Ex.&nbsp;: 250&nbsp;/&nbsp;10&nbsp;000 = 2,5&nbsp;%.</div></div>
-          <div class="entry" id="e4"><div class="w">Fonds de travaux</div><div class="g">n. m.</div><div class="d">L'épargne obligatoire de la copro, alimentée chaque année pour les gros travaux.</div><div class="e">Au moins 5&nbsp;% du budget annuel.</div></div>
+          <div class="entry" id="e3"><div class="w">Parties communes</div><div class="g">n. f. pl.</div><div class="d">Ce qui appartient à tous les copropriétaires&nbsp;: toit, façade, hall, escaliers, canalisations communes.</div><div class="e">Leur entretien est payé par tous.</div></div>
+          <div class="entry" id="e4"><div class="w">Appel de fonds</div><div class="g">n. m.</div><div class="d">La demande de paiement envoyée par le syndic pour couvrir le budget ou des travaux.</div><div class="e">Pour le budget, en général un par trimestre.</div></div>
           <div class="entry" id="e5"><div class="w">PPPT</div><div class="g">n. m. · plan pluriannuel de travaux</div><div class="d">La liste des travaux à prévoir sur 10&nbsp;ans, avec leur coût estimé.</div><div class="e">Obligatoire progressivement depuis 2023.</div></div>
         </div>""",
     cap="La copro<br /><span class=\"a\">en 5 mots.</span>",
@@ -355,10 +355,10 @@ SPECS["dico"] = dict(
     tips=[],
     know=[
         ("UN MOT PAS CLAIR&nbsp;?", "Dans notre rapport, <b>tout est expliqué simplement</b>."),
-        ("RAPPORT EN 72&nbsp;H", "Travaux, charges, risques&nbsp;: <b>ton dossier décodé.</b>"),
+        ("LE RÉFLEXE", "Garde ces 5 mots en tête pour <b>ta prochaine visite</b>."),
     ],
     setup="",
-    js="""      const LET = ["S", "C", "T", "F", "P"];
+    js="""      const LET = ["S", "C", "P", "A", "P"];
       T.forEach((t, k) => {
         tl.to(`#e${k}`, { x: -260, opacity: 0, duration: 0.3, ease: "power2.in" }, t - 0.3);
         tl.fromTo(`#e${k + 1}`, { x: 260, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, t);
@@ -436,24 +436,24 @@ SPECS["questions"] = dict(
           <path d="M24 90 Q24 150 70 150 Q116 150 116 90" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" />
           <path d="M70 150 V200 M40 205 H100" stroke="#fff" stroke-width="8" stroke-linecap="round" />
         </svg>
-        <div class="q" id="q0"><small>QUESTION 1</small>Des travaux sont-ils votés ou prévus&nbsp;?</div>
-        <div class="q" id="q1"><small>QUESTION 2</small>Combien de charges par an&nbsp;?</div>
-        <div class="q" id="q2"><small>QUESTION 3</small>Y a-t-il une procédure en cours&nbsp;?</div>
-        <div class="q" id="q3"><small>QUESTION 4</small>Combien dans le fonds de travaux&nbsp;?</div>
-        <div class="q" id="q4"><small>QUESTION 5</small>Le syndic&nbsp;: pro ou bénévole&nbsp;? Depuis quand&nbsp;?</div>""",
+        <div class="q" id="q0"><small>QUESTION 1</small>Le chauffage est-il collectif&nbsp;?</div>
+        <div class="q" id="q1"><small>QUESTION 2</small>La cave et le parking font-ils partie du lot&nbsp;?</div>
+        <div class="q" id="q2"><small>QUESTION 3</small>Quand a eu lieu la dernière AG&nbsp;?</div>
+        <div class="q" id="q3"><small>QUESTION 4</small>Que permet le règlement de copro&nbsp;?</div>
+        <div class="q" id="q4"><small>QUESTION 5</small>Combien de lots dans l'immeuble&nbsp;?</div>""",
     cap="5 questions à poser<br /><span class=\"a\">avant d'acheter.</span>",
     count0="Micro ouvert",
     countk="Question ${k + 1}/5",
     tips=[
-        ("POURQUOI", "Demande les PV d'AG et le <b>plan pluriannuel de travaux</b>."),
-        ("POURQUOI", "Le vendeur doit te donner les montants des <b>2 derniers exercices</b>."),
-        ("POURQUOI", "Un procès peut coûter cher à <b>tous les copropriétaires</b>."),
-        ("POURQUOI", "Cet argent <b>reste à la copro</b>, même quand le lot est vendu."),
-        ("POURQUOI", "Beaucoup de changements de syndic = <b>signal d'alerte</b>."),
+        ("POURQUOI", "Collectif = il est <b>dans tes charges</b>. Demande son coût sur la dernière année."),
+        ("POURQUOI", "Vérifie leurs <b>numéros de lot</b> dans le compromis. Sinon, ils ne sont pas vendus avec."),
+        ("POURQUOI", "L'AG doit se tenir <b>au moins une fois par an</b>. Sinon, la copro est mal tenue."),
+        ("POURQUOI", "Activité pro, store, enseigne&nbsp;: <b>ce qui est permis y est écrit</b>."),
+        ("POURQUOI", "Peu de lots = chaque chantier <b>pèse plus lourd</b> sur ta part."),
     ],
     know=[
-        ("ET ENSUITE&nbsp;?", "Note les réponses… puis <b>vérifie-les dans les documents</b>."),
-        ("ON S'EN CHARGE", "Chaque réponse contrôlée dans les PV et les comptes. <b>72&nbsp;h.</b>"),
+        ("ET ENSUITE&nbsp;?", "Demande des <b>réponses écrites</b>, pas seulement à l'oral."),
+        ("ON S'EN CHARGE", "On <b>recoupe chaque réponse</b> avec les documents de la copro."),
     ],
     setup="",
     js="""      tl.to("#mic", { rotation: 6, duration: BEAT, yoyo: true, repeat: 20, ease: "sine.inOut", transformOrigin: "50% 100%" }, 0);
@@ -557,7 +557,7 @@ SPECS["etapes"] = dict(
     ],
     know=[
         ("LE BON MOMENT", "Fais analyser la copro <b>avant le compromis</b>… ou pendant les 10 jours."),
-        ("RAPPORT EN 72&nbsp;H", "Assez rapide pour <b>décider à temps</b>."),
+        ("ASTUCE", "Demande les documents de la copro <b>dès l'offre acceptée</b>&nbsp;: tu gagnes des jours."),
     ],
     setup="""      const SY = [500, 640, 780, 920, 1060];
       const SN = ["Offre d'achat", "Compromis de vente", "10 jours de rétractation", "Accord du prêt", "Acte chez le notaire"];

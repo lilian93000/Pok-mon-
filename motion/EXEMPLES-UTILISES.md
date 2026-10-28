@@ -1,0 +1,29 @@
+# Exemples déjà utilisés — à ne pas réutiliser
+
+À relire **avant chaque nouvelle vidéo** : chaque vidéo doit avoir ses propres exemples (travaux, chiffres, noms, phrases d'appel).
+
+## Déjà trop vus (à éviter désormais)
+- Ravalement (voté, 18 000 €, 27 000 €, 45 000 €, 180 000 €…)
+- Procès / procédure en cours (contre le syndic, l'entreprise de toiture…)
+- Impayés (12 %, 14 %, 15 %, 38 000 €…)
+- Fonds de travaux vide / 0 € / « au moins 5 % »
+- « 3 syndics en 4 ans » / changements de syndic
+- Toiture (fuites, réfection, vote reporté)
+- Ascenseur (à remplacer, 9 000 €, 14 000 €)
+- Charges en hausse (+18 %, +22 %)
+- DPE G / location interdite
+- « Rapport en 72 h », « PV d'AG des 3 dernières années »
+
+## Déjà utilisés une fois
+Chaudière collective · parking fissuré · normes incendie · assurance résiliée ou qui flambe · orage électrique ·
+mérule · colonnes en plomb · fondations fissurées · amiante · fissures en façade · balcons à refaire · bar en bas ·
+chauffage hors de prix · cafards · portail à 18 000 € · infiltrations au parking · clim interdite · gardiennage ·
+fenêtres des parties communes · VMC · gaz · platanes · locations courte durée · permis de construire R+7 ·
+antenne relais · local vélos → poubelles · digicode 2 900 € · volets imposés · rétractation 10 jours ·
+travaux votés : qui paie (appel de fonds) · cour intérieure 75 000 € (380/10 000) · charges spéciales d'un bâtiment ·
+parties communes · appel de fonds trimestriel · PPPT · conseil syndical · chauffage collectif · cave / parking dans le lot ·
+date de la dernière AG · ce que permet le règlement · nombre de lots · étapes de l'achat (offre → acte) ·
+gel des loyers F/G 2022, F 2028, E 2034, DPE collectif.
+
+## Résidences fictives déjà nommées
+Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas.

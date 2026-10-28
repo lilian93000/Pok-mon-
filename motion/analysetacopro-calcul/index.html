@@ -292,21 +292,21 @@
 
       <section id="main" class="clip" data-start="0" data-duration="20" data-track-index="0">
         <div id="calc" class="abs">
-          <div id="screen"><div id="lab">RAVALEMENT VOTÉ</div><div id="num">180&nbsp;000&nbsp;€</div></div>
+          <div id="screen"><div id="lab">COUR INTÉRIEURE À REFAIRE</div><div id="num">75&nbsp;000&nbsp;€</div></div>
           <div id="keys"></div>
         </div>
         <div class="cap">Travaux votés&nbsp;:<br /><span class="a">combien tu paies&nbsp;?</span></div>
-        <div id="count" class="abs">Exemple · ravalement</div>
-        <div class="tip" id="tp0"><div class="h">1 · TES TANTIÈMES</div><div class="x">Ta part de l'immeuble. Elle est écrite dans le <b>règlement de copropriété</b>.</div></div>
-        <div class="tip" id="tp1"><div class="h">2 · TON POURCENTAGE</div><div class="x">250 sur 10&nbsp;000, c'est <b>2,5&nbsp;%</b> des charges générales.</div></div>
-        <div class="tip" id="tp2"><div class="h">3 · TA FACTURE</div><div class="x">180&nbsp;000&nbsp;€ × 2,5&nbsp;% = <b>4&nbsp;500&nbsp;€</b> pour toi.</div></div>
-        <div class="tip" id="tp3"><div class="h">4 · ATTENTION</div><div class="x">Ascenseur, chauffage&nbsp;: réparti <b>selon l'utilité</b> pour ton lot. Pas forcément 2,5&nbsp;%.</div></div>
+        <div id="count" class="abs">Exemple · cour intérieure</div>
+        <div class="tip" id="tp0"><div class="h">1 · TES TANTIÈMES</div><div class="x">Ta part de l'immeuble, en millièmes ou dix-millièmes. Ici&nbsp;: <b>380 / 10&nbsp;000</b>.</div></div>
+        <div class="tip" id="tp1"><div class="h">2 · TON POURCENTAGE</div><div class="x">380 sur 10&nbsp;000, c'est <b>3,8&nbsp;%</b> des charges générales.</div></div>
+        <div class="tip" id="tp2"><div class="h">3 · TA FACTURE</div><div class="x">75&nbsp;000&nbsp;€ × 3,8&nbsp;% = <b>2&nbsp;850&nbsp;€</b> pour toi.</div></div>
+        <div class="tip" id="tp3"><div class="h">4 · CHARGES SPÉCIALES</div><div class="x">Travaux d'un seul bâtiment&nbsp;: si le règlement le prévoit, <b>seuls ses lots paient</b>.</div></div>
       </section>
 
       <section id="know" class="clip" data-start="20" data-duration="4" data-track-index="0">
         <div class="cap">Bon à savoir&nbsp;:</div>
-        <div class="card" id="k0" style="top: 420px"><div class="h">OÙ LES TROUVER</div><div class="x">Tes tantièmes sont dans <b>l'état descriptif de division</b>.</div><div class="s">Il est annexé au règlement de copropriété.</div></div>
-        <div class="card" id="k1" style="top: 900px"><div class="h">ON LE FAIT POUR TOI</div><div class="x">Ta vraie part des travaux votés et à venir. <b>Rapport en 72&nbsp;h.</b></div></div>
+        <div class="card" id="k0" style="top: 420px"><div class="h">OÙ LES TROUVER</div><div class="x">Tes tantièmes sont dans <b>l'état descriptif de division</b>.</div><div class="s">Le numéro de ton lot y figure aussi.</div></div>
+        <div class="card" id="k1" style="top: 900px"><div class="h">LE RÉFLEXE</div><div class="x">Pour chaque chantier annoncé, <b>multiplie par tes tantièmes</b>. Tu connais ta facture.</div></div>
       </section>
 
       <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
@@ -368,10 +368,10 @@
         }
       });
       const SCR = [
-        ["TES TANTIÈMES", "250 / 10\u00a0000", [10, 2, 12, 3]],
-        ["TA PART", "2,5\u00a0%", [14]],
+        ["TES TANTIÈMES", "380 / 10\u00a0000", [10, 5, 12, 3]],
+        ["TA PART", "3,8\u00a0%", [14]],
         ["TA FACTURE", null, [7, 14]],
-        ["ASCENSEUR, CHAUFFAGE", "≠ 2,5\u00a0%", [15]],
+        ["TRAVAUX DU BÂT. B · TOI AU A", "0\u00a0€", [15]],
       ];
       T.forEach((t, k) => {
         SCR[k][2].forEach((ki, j) => {
@@ -384,7 +384,7 @@
         shake("#calc", t, 6, 4);
       });
       const cnt = { v: 0 };
-      tl.fromTo(cnt, { v: 0 }, { v: 4500, duration: 0.9, ease: "power2.out", immediateRender: false, onUpdate: () => (num.textContent = sp(Math.round(cnt.v / 10) * 10) + "\u00a0€") }, T[2]);
+      tl.fromTo(cnt, { v: 0 }, { v: 2850, duration: 0.9, ease: "power2.out", immediateRender: false, onUpdate: () => (num.textContent = sp(Math.round(cnt.v / 10) * 10) + "\u00a0€") }, T[2]);
       // 20 s : bon à savoir
       flash(20, 0.5, 0.25);
       tl.fromTo("#k0", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 20.2);

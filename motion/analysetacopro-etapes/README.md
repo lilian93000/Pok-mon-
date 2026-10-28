@@ -11,7 +11,7 @@ Vidéo utile : de l'offre à l'acte, les 5 étapes d'un achat immobilier.
 | 9,2 s | Station 3 · 10 jours de rétractation, sans te justifier | |
 | 12,8 s | Station 4 · Prêt : condition suspensive d'au moins 1 mois, prêt refusé = dépôt rendu | |
 | 16,4 s | Station 5 · Acte chez le notaire, en général environ 3 mois après le compromis | |
-| 20 s | Bon à savoir : fais analyser la copro avant le compromis ou pendant les 10 jours · 72 h | Carillon |
+| 20 s | Bon à savoir : fais analyser la copro avant le compromis ou pendant les 10 jours · astuce : demande les documents dès l'offre acceptée | Carillon |
 | 24–30 s | « Analyse la copro au bon moment. », bouton, analysetacopro.fr | Fin |
 
 Sources : Code de la construction et de l'habitation, art. L271-1 (rétractation 10 jours) et L721-2 (documents de copropriété) ; Code de la consommation, art. L313-41 (condition suspensive de prêt, au moins 1 mois). Le délai de 3 mois jusqu'à l'acte est une moyenne courante, pas une règle.
