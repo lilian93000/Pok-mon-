@@ -2424,3 +2424,363 @@ SPECS["plan"] = dict(
     endacc="#93c5fd",
     endrgb="147, 197, 253",
 )
+
+# ================================================================ SÉRIE 6
+
+# ---------------------------------------------------------------- 26. DÉCODER UNE ANNONCE
+SPECS["annonce"] = dict(
+    comment="« DÉCODER UNE ANNONCE » — vidéo utile : les mots qui cachent quelque chose et les mentions obligatoires. 98 BPM (zouk).",
+    bpm=98,
+    T=T5,
+    vars="""        --bg1: #fff7ed;
+        --bg2: #ffe4cc;
+        --bg3: #fdc79b;
+        --ink: #2b1405;
+        --acc: #ea580c;
+        --pill: #2b1405;
+        --pillt: #fdba74;
+        --tipbg: #2b1405;
+        --tiph: #fdba74;""",
+    css="""      #ad {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        padding: 0 0 26px;
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 60px rgba(43, 20, 5, 0.2);
+        overflow: hidden;
+      }
+      #ad .ph {
+        height: 230px;
+        background: linear-gradient(135deg, #fbbf8a, #f97316);
+      }
+      #ad .pr {
+        padding: 22px 30px 0;
+        font-size: 56px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+      #ad .ln {
+        padding: 8px 30px 0;
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: #4b3221;
+      }
+      #ad mark {
+        background: transparent;
+        color: inherit;
+        border-radius: 8px;
+        padding: 0 6px;
+      }
+""",
+    html="""        <div id="ad" class="abs">
+          <div class="ph"></div>
+          <div class="pr">T3 · 61 m² · 4e étage</div>
+          <div class="ln"><mark id="w0">À rafraîchir</mark>, <mark id="w1">idéal investisseur</mark>, quartier <mark id="w2">calme</mark>.</div>
+          <div class="ln"><mark id="w3">Copropriété de 24 lots, charges 1&nbsp;680&nbsp;€/an</mark>.</div>
+          <div class="ln"><mark id="w4">DPE&nbsp;D · dépenses estimées 1&nbsp;100 à 1&nbsp;500&nbsp;€/an</mark>.</div>
+        </div>""",
+    cap="Une annonce&nbsp;:<br /><span class=\"a\">ce qu'elle veut dire.</span>",
+    count0="Annonce type",
+    countk="Mot ${k + 1}/5",
+    tips=[
+        ("« À RAFRAÎCHIR »", "Des travaux à prévoir&nbsp;: <b>peinture… ou beaucoup plus</b>. Visite avec un devis en tête."),
+        ("« IDÉAL INVESTISSEUR »", "Souvent <b>déjà loué</b>&nbsp;: tu achètes avec le locataire et son bail."),
+        ("« CALME »", "Parfois <b>loin des commerces et des transports</b>. Vérifie le trajet."),
+        ("OBLIGATOIRE · LA COPRO", "L'annonce doit dire <b>copro, nombre de lots et charges annuelles</b>."),
+        ("OBLIGATOIRE · LE DPE", "La <b>classe énergie</b> et une estimation des dépenses d'énergie par an."),
+    ],
+    know=[
+        ("SI ÇA MANQUE", "Une mention obligatoire absente&nbsp;? <b>Demande-la</b> avant de visiter."),
+        ("LE RÉFLEXE", "Fais une capture de l'annonce&nbsp;: elle peut <b>disparaître ou changer</b>."),
+    ],
+    setup="",
+    js="""      const HL = ["#fed7aa", "#fde68a", "#bbf7d0", "#bfdbfe", "#fbcfe8"];
+      T.forEach((t, k) => {
+        tl.to(`#w${k}`, { backgroundColor: HL[k], duration: 0.3 }, t);
+        tl.fromTo(`#w${k}`, { scale: 1.15 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+      });""",
+    endtitle=["Lis entre les lignes", "de l'annonce."],
+    endacc="#fdba74",
+    endrgb="253, 186, 116",
+)
+
+# ---------------------------------------------------------------- 27. TES DROITS FACE AUX VOISINS
+SPECS["voisins"] = dict(
+    comment="« TES DROITS FACE AUX VOISINS » — vidéo utile : bruit de nuit, de jour, bricolage, conciliateur. 138 BPM (trance).",
+    bpm=138,
+    T=T4,
+    vars="""        --bg1: #1e1b4b;
+        --bg2: #13103a;
+        --bg3: #070520;
+        --ink: #ffffff;
+        --acc: #a5b4fc;
+        --pill: #a5b4fc;
+        --pillt: #13103a;
+        --tipbg: #a5b4fc;
+        --tiph: #13103a;""",
+    css="""      #meter {
+        left: 120px;
+        top: 470px;
+        width: 760px;
+        height: 560px;
+      }
+      #when {
+        left: 70px;
+        right: 160px;
+        top: 1060px;
+        text-align: center;
+        font-size: 60px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+      .tip {
+        color: #13103a;
+      }
+""",
+    html="""        <svg id="meter" class="abs" viewBox="0 0 760 560"></svg>
+        <div id="when" class="abs">Le bruit des voisins</div>""",
+    cap="Tes voisins font du bruit&nbsp;?<br /><span class=\"a\">Tes droits.</span>",
+    count0="Décibels",
+    countk="Règle ${k + 1}/4",
+    tips=[
+        ("LA NUIT", "Entre <b>22&nbsp;h et 7&nbsp;h</b>, un bruit qui te gêne est du tapage nocturne&nbsp;: sanctionné."),
+        ("LE JOUR AUSSI", "Un bruit <b>répétitif, long ou intense</b> peut être sanctionné, même en journée."),
+        ("LE BRICOLAGE", "Les horaires autorisés sont fixés par <b>arrêté de la mairie ou de la préfecture</b>."),
+        ("LA SOLUTION", "Le <b>conciliateur de justice</b>&nbsp;: gratuit, avant toute procédure."),
+    ],
+    know=[
+        ("EN COPRO", "Le <b>règlement de copropriété</b> peut ajouter ses propres règles sur le bruit."),
+        ("D'ABORD", "Un mot ou une visite au voisin règle <b>souvent tout</b>."),
+    ],
+    setup="""      let m = "";
+      for (let i = 0; i < 12; i++) {
+        const h = 60 + i * 38;
+        const c = i < 5 ? "#34d399" : i < 9 ? "#fbbf24" : "#f87171";
+        m += `<rect id="b${i}" x="${20 + i * 62}" y="${540 - h}" width="46" height="${h}" rx="10" fill="${c}" opacity="0.18"/>`;
+      }
+      document.getElementById("meter").innerHTML = m;
+      const when = document.getElementById("when");""",
+    js="""      const LV = [11, 8, 6, 2];
+      const W = ["22 h → 7 h", "En journée", "Perceuse, marteau", "Conciliateur gratuit"];
+      T.forEach((t, k) => {
+        for (let i = 0; i < 12; i++) tl.to(`#b${i}`, { opacity: i <= LV[k] ? 1 : 0.18, duration: 0.15 }, t + i * 0.03);
+        tl.set(when, { textContent: W[k] }, t);
+        tl.fromTo("#when", { scale: 1.15 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        flash(t, 0.15, 0.2);
+      });""",
+    endtitle=["Connais tes droits", "avant d'emménager."],
+    endacc="#a5b4fc",
+    endrgb="165, 180, 252",
+)
+
+# ---------------------------------------------------------------- 28. LES ASSURANCES EN COPRO
+SPECS["assurances"] = dict(
+    comment="« LES ASSURANCES EN COPRO » — vidéo utile : qui doit assurer quoi. 130 BPM (breakbeat).",
+    bpm=130,
+    T=T4,
+    vars="""        --bg1: #ecfeff;
+        --bg2: #c9f1f7;
+        --bg3: #93dbe8;
+        --ink: #062a33;
+        --acc: #0e7490;
+        --pill: #062a33;
+        --pillt: #67e8f9;
+        --tipbg: #062a33;
+        --tiph: #67e8f9;""",
+    css="""      .um {
+        position: absolute;
+        top: 470px;
+        width: 260px;
+        text-align: center;
+        opacity: 0.25;
+      }
+      .um svg {
+        width: 260px;
+        height: 220px;
+      }
+      .um .n {
+        margin-top: 8px;
+        font-size: 36px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.05;
+      }
+      #drop {
+        left: 300px;
+        top: 860px;
+        width: 480px;
+        padding: 24px 30px;
+        border-radius: 24px;
+        background: #fff;
+        text-align: center;
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        box-shadow: 0 20px 40px rgba(6, 42, 51, 0.2);
+        opacity: 0;
+      }
+""",
+    html="""        <div class="um" id="u0" style="left: 70px"><svg viewBox="0 0 260 220"><path d="M20 120 Q130 0 240 120 Z" fill="#0e7490"/><path d="M130 120 V190 q0 20 -20 20" stroke="#062a33" stroke-width="10" fill="none"/></svg><div class="n">La copro</div></div>
+        <div class="um" id="u1" style="left: 365px"><svg viewBox="0 0 260 220"><path d="M20 120 Q130 0 240 120 Z" fill="#f97316"/><path d="M130 120 V190 q0 20 -20 20" stroke="#062a33" stroke-width="10" fill="none"/></svg><div class="n">Toi, propriétaire</div></div>
+        <div class="um" id="u2" style="left: 660px"><svg viewBox="0 0 260 220"><path d="M20 120 Q130 0 240 120 Z" fill="#8b5cf6"/><path d="M130 120 V190 q0 20 -20 20" stroke="#062a33" stroke-width="10" fill="none"/></svg><div class="n">Ton locataire</div></div>
+        <div id="drop" class="abs">Dégât des eaux<br />jusqu'à 5&nbsp;000&nbsp;€ HT</div>""",
+    cap="Les assurances en copro&nbsp;:<br /><span class=\"a\">qui assure quoi&nbsp;?</span>",
+    count0="3 parapluies",
+    countk="Règle ${k + 1}/4",
+    tips=[
+        ("LA COPRO", "Le syndicat doit assurer l'immeuble <b>en responsabilité civile</b>."),
+        ("TOI, PROPRIÉTAIRE", "<b>Responsabilité civile obligatoire</b>, que tu habites l'appart ou que tu le loues."),
+        ("TON LOCATAIRE", "Il doit s'assurer contre <b>les risques locatifs</b> et te donner l'attestation."),
+        ("DÉGÂT DES EAUX", "Jusqu'à 5&nbsp;000&nbsp;€ HT, c'est en général <b>l'assureur du logement touché</b> qui gère."),
+    ],
+    know=[
+        ("SI TU LOUES", "Une assurance <b>propriétaire non occupant</b> couvre ce que celle du locataire ne couvre pas."),
+        ("TON CONTRAT", "Compare les <b>franchises</b>&nbsp;: c'est ce qui reste à ta charge."),
+    ],
+    setup="",
+    js="""      T.forEach((t, k) => {
+        if (k < 3) {
+          tl.to(`#u${k}`, { opacity: 1, duration: 0.25 }, t);
+          tl.fromTo(`#u${k} svg`, { y: -40, rotation: -10 }, { y: 0, rotation: 0, duration: 0.5, ease: "bounce.out", immediateRender: false }, t);
+        } else {
+          tl.fromTo("#drop", { y: -80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(2)", immediateRender: false }, t);
+        }
+      });""",
+    endtitle=["Assure-toi bien", "dès la signature."],
+    endacc="#67e8f9",
+    endrgb="103, 232, 249",
+)
+
+# ---------------------------------------------------------------- 29. APRÈS LA SIGNATURE
+SPECS["apres"] = dict(
+    comment="« APRÈS LA SIGNATURE » — vidéo utile : 5 choses à faire quand tu as les clés. 108 BPM (soul).",
+    bpm=108,
+    T=T5,
+    vars="""        --bg1: #fefce8;
+        --bg2: #fdf1b0;
+        --bg3: #f6dc5f;
+        --ink: #262003;
+        --acc: #a16207;
+        --pill: #262003;
+        --pillt: #fde047;
+        --tipbg: #262003;
+        --tiph: #fde047;""",
+    css="""      #ring {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+      }
+      .ktag {
+        position: absolute;
+        padding: 10px 18px;
+        border-radius: 14px;
+        background: #fff;
+        border: 4px solid #a16207;
+        font-size: 30px;
+        font-weight: 900;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        opacity: 0.4;
+      }
+""",
+    html="""        <svg id="ring" class="abs" viewBox="0 0 850 720"></svg>
+        <div id="tags"></div>""",
+    cap="Tu as les clés&nbsp;!<br /><span class=\"a\">5 choses à faire.</span>",
+    count0="Trousseau",
+    countk="Clé ${k + 1}/5",
+    tips=[
+        ("L'ASSURANCE", "Ton assurance habitation doit <b>démarrer le jour de l'acte</b>."),
+        ("LES COMPTEURS", "Relève <b>eau, électricité, gaz</b> à la remise des clés et ouvre tes contrats."),
+        ("LE SYNDIC", "Le notaire le prévient&nbsp;: demande ton <b>accès à l'espace en ligne</b>."),
+        ("LA TAXE FONCIÈRE", "Celle de l'année est due par le vendeur, souvent <b>remboursée au prorata</b> dans l'acte."),
+        ("LA PROCHAINE AG", "Tu votes dès la prochaine&nbsp;: <b>lis l'ordre du jour</b> en avance."),
+    ],
+    know=[
+        ("À GARDER", "L'<b>acte de vente</b> et tous les documents de la copro, même après."),
+        ("À FAIRE VITE", "Change ton adresse&nbsp;: <b>impôts, banque, assurance</b>."),
+    ],
+    setup="""      let r = `<circle cx="425" cy="150" r="70" fill="none" stroke="#a16207" stroke-width="18"/>`;
+      const KX = [130, 270, 425, 580, 720];
+      KX.forEach((x, k) => {
+        r += `<g id="key${k}" opacity="0.35"><path d="M425 210 L${x} 330" stroke="#a16207" stroke-width="6"/><circle cx="${x}" cy="360" r="34" fill="#facc15" stroke="#262003" stroke-width="5"/><rect x="${x - 9}" y="390" width="18" height="170" fill="#facc15" stroke="#262003" stroke-width="5"/><rect x="${x + 9}" y="500" width="26" height="14" fill="#facc15" stroke="#262003" stroke-width="4"/><rect x="${x + 9}" y="530" width="18" height="14" fill="#facc15" stroke="#262003" stroke-width="4"/></g>`;
+      });
+      document.getElementById("ring").innerHTML = r;
+      const TG = ["Assurance", "Compteurs", "Syndic", "Taxe foncière", "AG"];
+      document.getElementById("tags").innerHTML = TG.map((t, k) => `<div class="ktag" id="kt${k}" style="left: ${70 + KX[k] - 70}px; top: ${450 + 600 + (k % 2) * 60}px">${t}</div>`).join("");""",
+    js="""      T.forEach((t, k) => {
+        tl.to(`#key${k}`, { opacity: 1, duration: 0.2 }, t);
+        tl.fromTo(`#key${k}`, { rotation: -20, svgOrigin: "425 210" }, { rotation: 0, svgOrigin: "425 210", duration: 0.6, ease: "elastic.out(1.2, 0.4)", immediateRender: false }, t);
+        tl.to(`#kt${k}`, { opacity: 1, backgroundColor: "#fde047", duration: 0.2 }, t + 0.1);
+      });""",
+    endtitle=["Bien acheter,", "jusqu'au bout."],
+    endacc="#fde047",
+    endrgb="253, 224, 71",
+)
+
+# ---------------------------------------------------------------- 30. LES 3 TYPES D'HUMIDITÉ
+SPECS["humidite"] = dict(
+    comment="« LES 3 TYPES D'HUMIDITÉ » — vidéo utile : condensation, remontées capillaires, infiltration, ventilation. 130 BPM (baile funk).",
+    bpm=130,
+    T=T4,
+    vars="""        --bg1: #eff6ff;
+        --bg2: #d4e6fb;
+        --bg3: #a7c9f2;
+        --ink: #0a1c33;
+        --acc: #0369a1;
+        --pill: #0a1c33;
+        --pillt: #7dd3fc;
+        --tipbg: #0a1c33;
+        --tiph: #7dd3fc;""",
+    css="""      #wall {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 60px rgba(10, 28, 51, 0.2);
+      }
+      .arr {
+        opacity: 0;
+      }
+""",
+    html="""        <svg id="wall" class="abs" viewBox="0 0 850 720"></svg>""",
+    cap="L'humidité&nbsp;:<br /><span class=\"a\">d'où vient-elle&nbsp;?</span>",
+    count0="Coupe d'un mur",
+    countk="Type ${k + 1}/4",
+    tips=[
+        ("CONDENSATION", "Buée sur les vitres, moisissures dans les angles&nbsp;: <b>logement mal aéré</b>."),
+        ("REMONTÉES CAPILLAIRES", "Bas des murs abîmés, <b>traces blanches</b>&nbsp;: souvent au rez-de-chaussée ancien."),
+        ("INFILTRATION", "Une tache qui <b>apparaît après la pluie</b>&nbsp;: façade, toit ou fenêtre."),
+        ("LA VENTILATION", "Grilles d'aération bouchées&nbsp;? <b>Ne les bouche jamais</b>&nbsp;: l'humidité reste."),
+    ],
+    know=[
+        ("LE TEST", "Un <b>humidimètre</b> à quelques euros mesure l'humidité d'un mur."),
+        ("À DEMANDER", "Y a-t-il eu des <b>sinistres liés à l'eau</b> ces dernières années&nbsp;?"),
+    ],
+    setup="""      let w = `<rect x="0" y="0" width="850" height="720" fill="#f8fafc"/><rect x="0" y="620" width="850" height="100" fill="#a8a29e"/>`;
+      w += `<rect x="560" y="40" width="70" height="580" fill="#d6d3d1" stroke="#0a1c33" stroke-width="5"/>`;
+      w += `<rect x="630" y="40" width="220" height="580" fill="#bae6fd"/>`;
+      w += `<rect x="150" y="160" width="220" height="180" fill="#e0f2fe" stroke="#0a1c33" stroke-width="5"/>`;
+      w += `<rect x="410" y="110" width="80" height="40" rx="6" fill="#e5e7eb" stroke="#0a1c33" stroke-width="4"/><path d="M420 122 h60 M420 132 h60 M420 142 h60" stroke="#0a1c33" stroke-width="3"/>`;
+      // flèches : intérieur (condensation), sol (capillaires), extérieur (infiltration), grille (ventilation)
+      w += `<g class="arr" id="r0"><circle cx="200" cy="200" r="10" fill="#0369a1"/><circle cx="240" cy="230" r="8" fill="#0369a1"/><circle cx="300" cy="190" r="9" fill="#0369a1"/><circle cx="330" cy="260" r="7" fill="#0369a1"/></g>`;
+      w += `<g class="arr" id="r1"><path d="M595 610 V470" stroke="#0369a1" stroke-width="12" marker-end="url(#ah)"/><path d="M20 610 V500" stroke="#0369a1" stroke-width="12" marker-end="url(#ah)"/></g>`;
+      w += `<g class="arr" id="r2"><path d="M800 220 H640" stroke="#0369a1" stroke-width="12" marker-end="url(#ah)"/><path d="M700 140 l-14 30 M740 120 l-14 30 M780 150 l-14 30" stroke="#0369a1" stroke-width="5"/></g>`;
+      w += `<g class="arr" id="r3"><path d="M450 170 V260" stroke="#16a34a" stroke-width="12" marker-end="url(#ahg)"/><path d="M450 100 V40" stroke="#16a34a" stroke-width="12" marker-end="url(#ahg)"/></g>`;
+      w += `<defs><marker id="ah" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto"><path d="M0 0 L4 2 L0 4 Z" fill="#0369a1"/></marker><marker id="ahg" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto"><path d="M0 0 L4 2 L0 4 Z" fill="#16a34a"/></marker></defs>`;
+      document.getElementById("wall").innerHTML = w;""",
+    js="""      T.forEach((t, k) => {
+        if (k) tl.to(`#r${k - 1}`, { opacity: 0.25, duration: 0.2 }, t);
+        tl.fromTo(`#r${k}`, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, t);
+        shake("#wall", t, 4, 3);
+      });""",
+    endtitle=["Traque l'humidité", "avant d'acheter."],
+    endacc="#7dd3fc",
+    endrgb="125, 211, 252",
+)

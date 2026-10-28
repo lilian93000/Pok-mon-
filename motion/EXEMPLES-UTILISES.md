@@ -41,7 +41,12 @@ bruits aériens / d'impact · cloison creuse · sous-couche acoustique · canali
 convecteurs « grille-pain » · radiateurs à inertie / pompe à chaleur · entretien annuel de la chaudière gaz · répartiteurs de chauffage ·
 vue droite 1,90 m · vue oblique 0,60 m · jour de souffrance · PLU du terrain d'en face ·
 détecteur de fumée (2015) · ramonage · date limite du tuyau de gaz · différentiel 30 mA ·
-pièce sans fenêtre · logement décent 9 m² / 2,20 m / 20 m³ · couloirs · pièces en enfilade · plan coté.
+pièce sans fenêtre · logement décent 9 m² / 2,20 m / 20 m³ · couloirs · pièces en enfilade · plan coté ·
+« à rafraîchir » · « idéal investisseur » · « calme » · T3 61 m² 4ᵉ étage · 24 lots 1 680 €/an · DPE D 1 100–1 500 €/an ·
+tapage nocturne 22 h–7 h · bruit de comportement (durée, répétition, intensité) · horaires de bricolage par arrêté · conciliateur de justice ·
+RC du syndicat · RC du copropriétaire · risques locatifs · IRSI 5 000 € HT · PNO · franchises ·
+assurance au jour de l'acte · relevé des compteurs · accès à l'espace syndic · taxe foncière au prorata · première AG ·
+condensation · remontées capillaires · infiltration · grilles d'aération bouchées.
 
 ## Résidences fictives déjà nommées
 Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas.

@@ -27,6 +27,11 @@ Chaque style pose `nbars` mesures à partir de t0 sur un Bus, et ajoute ses gros
   highlife    — highlife : guitares en arpèges croisés, cloche, congas
   klezmer     — klezmer : clarinette de synthé en mineur harmonique, oum-pa, tambour
   chillwave   — chillwave : nappes floues, batterie douce, arpège filtré
+  zouk        — zouk : « tic-ta-tac » de rim, basse chaloupée, nappes de synthé
+  trance      — trance : arpège en doubles croches, supersaw, grosse caisse à la noire
+  breakbeat   — breakbeat : batterie cassée syncopée, basse acide, stabs
+  soul        — soul : piano électrique, basse Motown, tambourin, claps sur 2 et 4
+  baile       — baile funk : tamborzão (grosse caisse et toms en rafales), voix découpées
 """
 import numpy as np
 
@@ -80,6 +85,8 @@ def ding(note=86, L=0.6):
 
 
 def style(name, bus, kicks, t0, nbars, BAR, prog, gain=1.0, drums=True):
+    if name in ("zouk", "trance", "breakbeat", "soul", "baile"):
+        return style6(name, bus, kicks, t0, nbars, BAR, prog, gain, drums)
     if name in ("flamenco", "dub", "highlife", "klezmer", "chillwave"):
         return style5(name, bus, kicks, t0, nbars, BAR, prog, gain, drums)
     if name in ("bhangra", "jazz", "celtic", "electropop", "samba"):
@@ -581,3 +588,86 @@ def style5(name, bus, kicks, t0, nbars, BAR, prog, gain=1.0, drums=True):
                 for s in range(0, 16, 2):
                     bus.add(E.hat(0.04), at(s), 0.1 * gain, pan=0.25)
             bus.add(E.bass808(ch[0] - 24, STEP * 14, drive=1.2), at(0), 0.45 * gain)
+
+
+def acid(note, L=0.2):
+    t = E.secs(L)
+    s = E.saw(E.midi(note), t)
+    return E.sweep_filter(s, 2800, 300, 8) * np.exp(-t * 8) * 0.4
+
+
+def style6(name, bus, kicks, t0, nbars, BAR, prog, gain=1.0, drums=True):
+    STEP = BAR / 16
+    K = E.kick(top=160, low=48, drive=2.0)
+    for b in range(nbars):
+        tb = t0 + b * BAR
+        ch = prog[b % len(prog)]
+        at = lambda s: tb + s * STEP  # noqa: E731
+        if name == "zouk":
+            bus.add(E.pad([n + 12 for n in ch], BAR, cutoff=2200, attack=0.2), tb, 0.25 * gain, rev=0.4, duck=True)
+            for s in (0, 3, 6, 10, 12):
+                bus.add(E.ep(ch[(s // 3) % len(ch)] + 24, STEP * 2), at(s), 0.22 * gain, pan=0.2, rev=0.3)
+            if drums:
+                for s in (0, 3, 4, 8, 11, 12):
+                    bus.add(rim(), at(s), 0.35 * gain, pan=-0.2)
+                for s in (0, 8):
+                    bus.add(K, at(s), 0.7 * gain)
+                    kicks.append(at(s))
+                bus.add(E.snare(L=0.2, tone=220, crack=0.6), at(12), 0.35 * gain, rev=0.2)
+            for s, d in ((0, 0), (3, 0), (6, 7), (8, 0), (11, 0), (14, 5)):
+                bus.add(E.bass808(ch[0] - 24 + d, STEP * 2.5, drive=1.6), at(s), 0.5 * gain)
+        elif name == "trance":
+            for k in range(16):
+                bus.add(E.pluck(ch[k % len(ch)] + 24 + (12 if k % 4 == 3 else 0), STEP * 0.9, bright=8000), at(k), 0.25 * gain, pan=0.25 * (-1) ** k, rev=0.35, duck=True)
+            bus.add(E.supersaw([n + 12 for n in ch], BAR, cutoff=5000, attack=0.05), tb, 0.2 * gain, rev=0.4, duck=True)
+            if drums:
+                for q in range(4):
+                    bus.add(K, at(q * 4), 0.8 * gain)
+                    kicks.append(at(q * 4))
+                    bus.add(E.hat(0.08, open_=True), at(q * 4 + 2), 0.18 * gain, pan=0.25)
+                for s in (4, 12):
+                    bus.add(E.clap(), at(s), 0.35 * gain, rev=0.3)
+            for q in range(4):
+                bus.add(E.bass808(ch[0] - 24, STEP * 1.6, drive=1.8), at(q * 4 + 2), 0.45 * gain)
+        elif name == "breakbeat":
+            for s in (0, 10):
+                bus.add(K, at(s), 0.85 * gain)
+                kicks.append(at(s))
+            if drums:
+                for s in (4, 12):
+                    bus.add(E.snare(L=0.25, tone=200, crack=1.0), at(s), 0.55 * gain, rev=0.2)
+                bus.add(E.snare(L=0.15, tone=200, crack=0.8), at(7), 0.3 * gain)
+                bus.add(E.snare(L=0.15, tone=200, crack=0.8), at(15), 0.25 * gain)
+                for s in range(0, 16, 2):
+                    bus.add(E.hat(0.03), at(s), 0.16 * gain, pan=0.25)
+            for s in (0, 2, 3, 6, 8, 11, 14):
+                bus.add(acid(ch[0] - 12 + (12 if s in (3, 11) else 0), STEP * 1.5), at(s), 0.4 * gain, pan=-0.1, duck=True)
+            bus.add(bando([n + 12 for n in ch], STEP * 1.2), at(6), 0.4 * gain, rev=0.3)
+        elif name == "soul":
+            for s in (0, 6, 10):
+                for n in ch:
+                    bus.add(E.ep(n + 12, STEP * 4), at(s), 0.26 * gain / len(ch) * 2.5, pan=-0.1, rev=0.3, duck=True)
+            if drums:
+                for s in (0, 8, 10):
+                    bus.add(K, at(s), 0.65 * gain)
+                    kicks.append(at(s))
+                for s in (4, 12):
+                    bus.add(E.clap(), at(s), 0.45 * gain, rev=0.25)
+                    bus.add(E.snare(L=0.2, tone=210, crack=0.6), at(s), 0.35 * gain)
+                for s in range(0, 16, 2):
+                    bus.add(tamb(), at(s), 0.14 * gain, pan=0.3)
+            for s, d in ((0, 0), (2, 12), (4, 7), (6, 0), (8, 5), (10, 7), (12, 0), (14, 12)):
+                bus.add(E.bass808(ch[0] - 24 + d, STEP * 1.6, drive=1.4), at(s), 0.4 * gain)
+        elif name == "baile":
+            if drums:
+                for s in (0, 3, 6, 10, 13):
+                    bus.add(E.kick(L=0.35, top=180, low=50, drive=2.6), at(s), 0.85 * gain)
+                    kicks.append(at(s))
+                for s in (7, 11, 14, 15):
+                    bus.add(tom(47 + (s % 3) * 3, 0.2), at(s), 0.45 * gain)
+                for s in (4, 12):
+                    bus.add(E.clap(), at(s), 0.45 * gain, rev=0.2)
+            for k, s in enumerate((2, 8)):
+                bus.add(E.vox("aoei"[(b + k) % 4], ch[2], STEP * 1.2), at(s), 0.3 * gain, pan=0.2, rev=0.3)
+            bus.add(E.supersaw([n + 12 for n in ch], STEP * 3, cutoff=4000), at(0), 0.25 * gain, duck=True)
+            bus.add(E.bass808(ch[0] - 24, STEP * 6, drive=2.4), at(0), 0.55 * gain)
