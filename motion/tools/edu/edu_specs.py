@@ -3324,3 +3324,547 @@ SPECS["ballon"] = dict(
     endacc="#f9a8d4",
     endrgb="249, 168, 212",
 )
+
+# ---------------------------------------------------------------- 36. CONTESTER UNE DÉCISION D'AG
+SPECS["contester"] = dict(
+    comment="« CONTESTER UNE DÉCISION D'AG » — vidéo utile : qui peut, quel délai, où, pourquoi. 122 BPM (deep house).",
+    bpm=122,
+    T=T4,
+    vars="""        --bg1: #eef2ff;
+        --bg2: #d9defc;
+        --bg3: #b2bcf5;
+        --ink: #14123a;
+        --acc: #4338ca;
+        --pill: #14123a;
+        --pillt: #a5b4fc;
+        --tipbg: #14123a;
+        --tiph: #a5b4fc;""",
+    css="""      .vt {
+        position: absolute;
+        top: 450px;
+        width: 195px;
+        height: 130px;
+        border-radius: 22px;
+        background: #fff;
+        border: 5px solid #c7cdf5;
+        text-align: center;
+        line-height: 120px;
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        opacity: 0.45;
+      }
+      .vt.on {
+        border-color: #4338ca;
+      }
+      #tline {
+        left: 70px;
+        top: 630px;
+        width: 850px;
+        height: 180px;
+        padding: 26px 34px;
+        border-radius: 24px;
+        background: #fff;
+        box-shadow: 0 20px 40px rgba(20, 18, 58, 0.14);
+        opacity: 0;
+      }
+      #tline .rail {
+        position: absolute;
+        left: 34px;
+        right: 34px;
+        top: 80px;
+        height: 22px;
+        border-radius: 11px;
+        background: #e0e4fb;
+      }
+      #fill {
+        position: absolute;
+        left: 34px;
+        right: 34px;
+        top: 80px;
+        height: 22px;
+        border-radius: 11px;
+        background: #4338ca;
+        transform-origin: left center;
+      }
+      .tk {
+        position: absolute;
+        top: 116px;
+        font-size: 30px;
+        font-weight: 800;
+      }
+      #dl {
+        position: absolute;
+        right: 34px;
+        top: 18px;
+        font-size: 44px;
+        font-weight: 900;
+        color: #4338ca;
+        letter-spacing: -0.03em;
+      }
+      #court {
+        left: 70px;
+        top: 850px;
+        width: 850px;
+        padding: 26px 34px;
+        border-radius: 24px;
+        background: #14123a;
+        color: #fff;
+        font-size: 44px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        opacity: 0;
+      }
+      #court b {
+        color: #a5b4fc;
+      }
+      .why {
+        position: absolute;
+        padding: 16px 24px;
+        border-radius: 999px;
+        background: #fff;
+        border: 5px solid #4338ca;
+        font-size: 34px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+        opacity: 0;
+      }
+""",
+    html="""        <div class="vt" id="v0" style="left: 70px">Pour</div>
+        <div class="vt" id="v1" style="left: 288px">Abstention</div>
+        <div class="vt on" id="v2" style="left: 506px">Contre</div>
+        <div class="vt on" id="v3" style="left: 724px">Absent</div>
+        <div id="tline" class="abs"><div class="rail"></div><div id="fill"></div><div class="tk" style="left: 34px">PV notifié</div><div class="tk" style="right: 34px">Trop tard</div><div id="dl">2 mois</div></div>
+        <div id="court" class="abs">Tribunal judiciaire <b>+ avocat</b></div>
+        <div class="why" id="w0" style="left: 70px; top: 990px">Mauvaise majorité</div>
+        <div class="why" id="w1" style="left: 470px; top: 990px">Convocation irrégulière</div>
+        <div class="why" id="w2" style="left: 70px; top: 1095px">Abus de majorité</div>""",
+    cap="Une décision d'AG injuste&nbsp;?<br /><span class=\"a\">Tu peux la contester.</span>",
+    count0="Ton vote",
+    countk="Règle ${k + 1}/4",
+    tips=[
+        ("QUI PEUT", "Seuls ceux qui ont <b>voté contre</b>, ou qui étaient <b>absents et non représentés</b>."),
+        ("LE DÉLAI", "<b>2 mois</b> à partir de la notification du procès-verbal. Après, c'est fini."),
+        ("OÙ", "Devant le <b>tribunal judiciaire</b>, avec un avocat."),
+        ("POURQUOI", "Une majorité mal appliquée, une convocation irrégulière ou <b>un abus de majorité</b>."),
+    ],
+    know=[
+        ("LE PV", "Le syndic doit te le notifier <b>dans le mois</b> qui suit l'AG."),
+        ("LES TRAVAUX", "Sauf urgence, les gros travaux votés <b>attendent la fin des 2 mois</b>."),
+    ],
+    setup="",
+    js="""      tl.to(["#v2", "#v3"], { opacity: 1, backgroundColor: "#e0e7ff", duration: 0.25 }, T[0]);
+      tl.fromTo(["#v2", "#v3"], { y: 0 }, { y: -18, duration: 0.2, yoyo: true, repeat: 1, ease: "power2.out", stagger: 0.1, immediateRender: false }, T[0]);
+      tl.to(["#v0", "#v1"], { opacity: 0.2, duration: 0.25 }, T[0] + 0.3);
+      tl.fromTo("#tline", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, T[1]);
+      tl.fromTo("#fill", { scaleX: 0 }, { scaleX: 1, duration: 2.4, ease: "power1.inOut" }, T[1] + 0.3);
+      tl.to("#fill", { backgroundColor: "#dc2626", duration: 0.3 }, T[1] + 2.5);
+      tl.fromTo("#court", { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, T[2]);
+      shake("#court", T[2] + 0.35, 6, 3);
+      [0, 1, 2].forEach((i) => tl.fromTo(`#w${i}`, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, T[3] + i * 0.35));""",
+    endtitle=["Connais le délai,", "garde ta voix."],
+    endacc="#a5b4fc",
+    endrgb="165, 180, 252",
+)
+
+# ---------------------------------------------------------------- 37. LE PALIER ANNEXÉ
+SPECS["annexion"] = dict(
+    comment="« LE PALIER ANNEXÉ » — vidéo utile : une partie commune privatisée sans vote. 132 BPM (UK garage).",
+    bpm=132,
+    T=T4,
+    vars="""        --bg1: #fef2f2;
+        --bg2: #fbd9d9;
+        --bg3: #f2a9a9;
+        --ink: #3b0a0a;
+        --acc: #b91c1c;
+        --pill: #3b0a0a;
+        --pillt: #fca5a5;
+        --tipbg: #3b0a0a;
+        --tiph: #fca5a5;""",
+    css="""      #plan {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 60px rgba(59, 10, 10, 0.16);
+      }
+      .pl {
+        position: absolute;
+        text-align: center;
+        font-size: 34px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        color: #3b0a0a;
+      }
+      .bd {
+        position: absolute;
+        left: 590px;
+        width: 290px;
+        padding: 14px 18px;
+        border-radius: 16px;
+        text-align: center;
+        font-size: 30px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        opacity: 0;
+      }
+""",
+    html="""        <svg id="plan" class="abs" viewBox="0 0 850 720"></svg>
+        <div class="pl" style="left: 110px; top: 690px; width: 380px">Lot 12</div>
+        <div class="pl" style="left: 570px; top: 890px; width: 310px">Lot 13</div>
+        <div class="pl" style="left: 400px; top: 1030px; width: 400px">Palier commun</div>
+        <div class="pl" id="q" style="left: 110px; top: 1025px; width: 220px; color: #b91c1c; opacity: 0; font-size: 60px">?</div>
+        <div class="bd" id="b0" style="top: 520px; background: #b91c1c; color: #fff" data-layout-allow-overlap>Sans vote&nbsp;: à remettre en état</div>
+        <div class="bd" id="b1" style="top: 650px; background: #3b0a0a; color: #fca5a5" data-layout-allow-overlap>Vote art.&nbsp;26 + notaire</div>
+        <div class="bd" id="b2" style="top: 780px; background: #15803d; color: #fff" data-layout-allow-overlap>Inscrit dans ton lot&nbsp;?</div>""",
+    cap="Le bout de palier fermé&nbsp;:<br /><span class=\"a\">à qui est-il vraiment&nbsp;?</span>",
+    count0="Plan d'étage",
+    countk="Règle ${k + 1}/4",
+    tips=[
+        ("LE PIÈGE", "Bout de palier fermé, combles aménagés&nbsp;: <b>souvent des parties communes</b>."),
+        ("SANS VOTE", "C'est une appropriation&nbsp;: la copro peut exiger <b>la remise en état</b>."),
+        ("RÉGULARISER", "Vente votée en AG (art.&nbsp;26), <b>acte chez le notaire</b>, état descriptif modifié."),
+        ("À LA VISITE", "Vérifie que chaque mètre carré figure <b>dans ton lot</b>, sur l'état descriptif."),
+    ],
+    know=[
+        ("30 ANS", "Après 30 ans d'occupation paisible et publique, <b>la prescription</b> peut jouer."),
+        ("L'ACTE", "Ce qui n'est pas dans ton acte <b>ne t'appartient pas</b>, même si le vendeur l'utilisait."),
+    ],
+    setup="""      let w = `<defs><pattern id="hz" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="18" height="18" fill="#fee2e2"/><path d="M0 0 V18" stroke="#b91c1c" stroke-width="7"/></pattern></defs>`;
+      w += `<rect x="40" y="40" width="440" height="480" fill="#fafaf9"/><rect x="500" y="40" width="310" height="480" fill="#fafaf9"/><rect x="40" y="520" width="770" height="160" fill="#f5f5f4"/>`;
+      w += `<g id="zone" opacity="0"><rect x="40" y="520" width="220" height="160" fill="url(#hz)"/></g>`;
+      w += `<path d="M40 40 H810 V680 H40 Z M480 40 V520 M500 40 V520 M40 520 H120 M190 520 H600 M670 520 H810" stroke="#3b0a0a" stroke-width="10" fill="none"/>`;
+      for (let i = 0; i < 6; i++) w += `<path d="M${700 + i * 18} 560 V660" stroke="#a8a29e" stroke-width="5"/>`;
+      w += `<path id="nw" d="M260 520 V680" stroke="#b91c1c" stroke-width="14" fill="none" stroke-dasharray="160" stroke-dashoffset="160"/>`;
+      w += `<path id="door" d="M260 600 L330 600" stroke="#b91c1c" stroke-width="8" opacity="0"/>`;
+      document.getElementById("plan").innerHTML = w;""",
+    js="""      tl.to("#nw", { strokeDashoffset: 0, duration: 0.6, ease: "power2.inOut" }, T[0]);
+      tl.to("#door", { opacity: 1, duration: 0.2 }, T[0] + 0.5);
+      tl.to("#zone", { opacity: 1, duration: 0.4 }, T[0] + 0.6);
+      tl.fromTo("#q", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(3)", immediateRender: false }, T[0] + 0.8);
+      [0, 1, 2].forEach((i) => {
+        tl.fromTo(`#b${i}`, { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, T[i + 1]);
+        if (i) tl.to(`#b${i - 1}`, { opacity: 0.35, duration: 0.2 }, T[i + 1]);
+      });
+      tl.fromTo("#zone", { opacity: 1 }, { opacity: 0.4, duration: 0.25, yoyo: true, repeat: 3, immediateRender: false }, T[1]);
+      shake("#plan", T[1], 8, 4);""",
+    endtitle=["Chaque mètre carré", "doit être dans l'acte."],
+    endacc="#fca5a5",
+    endrgb="252, 165, 165",
+)
+
+# ---------------------------------------------------------------- 38. LES SERVITUDES
+SPECS["servitudes"] = dict(
+    comment="« LES SERVITUDES » — vidéo utile : des droits invisibles sur ton terrain. 100 BPM (cumbia).",
+    bpm=100,
+    T=T4,
+    vars="""        --bg1: #f0fdf4;
+        --bg2: #d3f5de;
+        --bg3: #9fe0b5;
+        --ink: #052e16;
+        --acc: #15803d;
+        --pill: #052e16;
+        --pillt: #86efac;
+        --tipbg: #052e16;
+        --tiph: #86efac;""",
+    css="""      #site {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+        border-radius: 26px;
+        overflow: hidden;
+        box-shadow: 0 30px 60px rgba(5, 46, 22, 0.16);
+      }
+      .sl {
+        position: absolute;
+        text-align: center;
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        color: #052e16;
+      }
+      #mon {
+        left: 500px;
+        top: 470px;
+        padding: 12px 18px;
+        border-radius: 16px;
+        background: #052e16;
+        color: #86efac;
+        font-size: 30px;
+        font-weight: 900;
+        white-space: nowrap;
+        opacity: 0;
+      }
+""",
+    html="""        <svg id="site" class="abs" viewBox="0 0 850 720"></svg>
+        <div class="sl" style="left: 110px; top: 540px; width: 400px">Voisin</div>
+        <div class="sl" style="left: 120px; top: 850px; width: 300px; color: #fff">Ton immeuble</div>
+        <div class="sl" style="left: 445px; top: 1102px; width: 100px; color: #fff; background: #57534e; border-radius: 10px">Rue</div>
+        <div id="mon" class="abs" data-layout-allow-overlap>Monument à 500 m</div>""",
+    cap="Les servitudes&nbsp;:<br /><span class=\"a\">des droits invisibles.</span>",
+    count0="Vue du ciel",
+    countk="Servitude ${k + 1}/4",
+    tips=[
+        ("LE PASSAGE", "Le voisin peut avoir <b>le droit de traverser ta cour</b> pour rejoindre la rue."),
+        ("LES CANALISATIONS", "Ses tuyaux peuvent <b>passer sous ton terrain</b>&nbsp;: c'est une servitude."),
+        ("L'ÉCHELLE", "Un acte peut lui permettre de <b>poser son échelle chez toi</b> pour réparer son mur."),
+        ("LE MONUMENT", "Près d'un monument historique, les travaux extérieurs passent par <b>l'architecte des Bâtiments de France</b>."),
+    ],
+    know=[
+        ("OÙ LES TROUVER", "Dans <b>l'acte de vente</b> et au service de la publicité foncière."),
+        ("LE PLU", "Il liste les <b>servitudes d'utilité publique</b> de la parcelle."),
+    ],
+    setup="""      let w = `<rect width="850" height="720" fill="#bbf7d0"/><rect x="0" y="0" width="850" height="190" fill="#dcfce7"/><path d="M0 190 H850" stroke="#052e16" stroke-width="6" stroke-dasharray="20 12"/>`;
+      w += `<rect x="150" y="40" width="300" height="120" rx="10" fill="#86efac" stroke="#052e16" stroke-width="5"/>`;
+      w += `<rect x="40" y="230" width="380" height="360" rx="10" fill="#166534" stroke="#052e16" stroke-width="5"/>`;
+      w += `<rect x="0" y="630" width="850" height="90" fill="#57534e"/><path d="M0 675 H850" stroke="#fafaf9" stroke-width="6" stroke-dasharray="40 30"/>`;
+      w += `<path id="pass" d="M300 160 C300 220 600 230 600 330 S600 560 600 630" stroke="#f97316" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="26 18" opacity="0"/>`;
+      w += `<path id="pipe" d="M420 160 V200 H760 V630" stroke="#0284c7" stroke-width="12" fill="none" stroke-dasharray="810" stroke-dashoffset="810"/>`;
+      w += `<g id="lad" opacity="0"><path d="M470 196 L520 330 M500 190 L550 324" stroke="#a16207" stroke-width="7"/>`;
+      for (let i = 0; i < 5; i++) w += `<path d="M${477 + i * 9} ${215 + i * 25} L${507 + i * 9} ${209 + i * 25}" stroke="#a16207" stroke-width="6"/>`;
+      w += `</g><g id="zone" opacity="0"><circle cx="850" cy="0" r="700" fill="#15803d" opacity="0.18"/><circle cx="850" cy="0" r="700" fill="none" stroke="#052e16" stroke-width="6" stroke-dasharray="18 12"/><rect x="760" y="20" width="60" height="70" fill="#052e16"/><path d="M752 20 L790 -8 L828 20 Z" fill="#052e16"/></g>`;
+      document.getElementById("site").innerHTML = w;""",
+    js="""      tl.to("#pass", { opacity: 1, duration: 0.3 }, T[0]);
+      tl.fromTo("#pass", { strokeDashoffset: 0 }, { strokeDashoffset: -176, duration: 4, ease: "none", immediateRender: false }, T[0]);
+      tl.to("#pass", { opacity: 0.35, duration: 0.2 }, T[1]);
+      tl.to("#pipe", { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut" }, T[1]);
+      tl.to("#pipe", { opacity: 0.35, duration: 0.2 }, T[2]);
+      tl.fromTo("#lad", { opacity: 0, rotation: -30, svgOrigin: "520 330" }, { opacity: 1, rotation: 0, svgOrigin: "520 330", duration: 0.5, ease: "back.out(2)", immediateRender: false }, T[2]);
+      tl.to("#lad", { opacity: 0.35, duration: 0.2 }, T[3]);
+      tl.fromTo("#zone", { opacity: 0, scale: 0.3, svgOrigin: "850 0" }, { opacity: 1, scale: 1, svgOrigin: "850 0", duration: 0.8, ease: "power3.out", immediateRender: false }, T[3]);
+      tl.fromTo("#mon", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.3, immediateRender: false }, T[3] + 0.5);""",
+    endtitle=["Lis les servitudes", "dans l'acte."],
+    endacc="#86efac",
+    endrgb="134, 239, 172",
+)
+
+# ---------------------------------------------------------------- 39. LE REGISTRE DES COPROPRIÉTÉS
+SPECS["registre"] = dict(
+    comment="« LE REGISTRE DES COPROPRIÉTÉS » — vidéo utile : la fiche publique de chaque copro. 126 BPM (électro-swing).",
+    bpm=126,
+    T=T4,
+    vars="""        --bg1: #f8fafc;
+        --bg2: #e2e8f0;
+        --bg3: #c4cfdd;
+        --ink: #0f172a;
+        --acc: #2563eb;
+        --pill: #0f172a;
+        --pillt: #93c5fd;
+        --tipbg: #0f172a;
+        --tiph: #93c5fd;""",
+    css="""      #bar {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 100px;
+        border-radius: 50px;
+        background: #fff;
+        box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14);
+      }
+      #bar svg {
+        position: absolute;
+        left: 30px;
+        top: 28px;
+        width: 44px;
+        height: 44px;
+      }
+      #qw {
+        position: absolute;
+        left: 96px;
+        top: 26px;
+        height: 50px;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 38px;
+        font-weight: 800;
+        line-height: 50px;
+        width: 0;
+      }
+      #card {
+        left: 70px;
+        top: 590px;
+        width: 850px;
+        padding: 26px 34px 14px;
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 60px rgba(15, 23, 42, 0.16);
+        opacity: 0;
+      }
+      .rw {
+        display: flex;
+        justify-content: space-between;
+        padding: 18px 16px;
+        margin: 0 -16px;
+        border-radius: 14px;
+        border-bottom: 3px solid #e2e8f0;
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .rw b {
+        font-weight: 900;
+      }
+      #ok {
+        left: 600px;
+        top: 1080px;
+        padding: 12px 22px;
+        border: 6px solid #15803d;
+        border-radius: 14px;
+        background: #fff;
+        color: #15803d;
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+        opacity: 0;
+      }
+""",
+    html="""        <div id="bar" class="abs"><svg viewBox="0 0 44 44"><circle cx="18" cy="18" r="13" fill="none" stroke="#2563eb" stroke-width="6"/><path d="M28 28 L40 40" stroke="#2563eb" stroke-width="7" stroke-linecap="round"/></svg><div id="qw">8 rue des Glycines, Lyon</div></div>
+        <div id="card" class="abs">
+          <div class="rw" id="r0"><span>N° d'immatriculation</span><b>AC9512874</b></div>
+          <div class="rw" id="r1"><span>Type de syndic</span><b>Professionnel</b></div>
+          <div class="rw" id="r2"><span>Nombre de lots</span><b>31</b></div>
+          <div class="rw" id="r3"><span>Plan de sauvegarde</span><b>Non</b></div>
+          <div class="rw" id="r4" style="border-bottom: 0"><span>Arrêté de mise en sécurité</span><b>Non</b></div>
+        </div>
+        <div id="ok" class="abs" data-layout-allow-overlap>VÉRIFIÉ ✓</div>""",
+    cap="Chaque copro a une fiche&nbsp;:<br /><span class=\"a\">le registre national.</span>",
+    count0="Recherche",
+    countk="Info ${k + 1}/4",
+    tips=[
+        ("L'OBLIGATION", "Toute copro d'habitation doit être <b>immatriculée</b> au registre national."),
+        ("EN LIGNE", "Tape l'adresse&nbsp;: <b>type de syndic, nombre de lots</b>, et plus."),
+        ("LES ALERTES", "Plan de sauvegarde, arrêté de mise en sécurité&nbsp;: <b>des signaux à connaître</b>."),
+        ("À LA VENTE", "Le notaire <b>vérifie l'immatriculation</b> avant de signer."),
+    ],
+    know=[
+        ("C'EST GRATUIT", "Sur <b>registre-coproprietes.gouv.fr</b>, rubrique annuaire."),
+        ("MIS À JOUR", "Le syndic doit actualiser la fiche <b>chaque année</b>, après l'AG."),
+    ],
+    setup="",
+    js="""      tl.to("#qw", { width: 720, duration: 1.2, ease: "steps(24)" }, 0.6);
+      tl.fromTo("#card", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, T[0]);
+      const HL = [[0], [1, 2], [3, 4]];
+      HL.forEach((rows, k) => {
+        rows.forEach((r) => tl.to(`#r${r}`, { backgroundColor: "#dbeafe", duration: 0.25 }, T[k] + 0.2));
+        if (k) HL[k - 1].forEach((r) => tl.to(`#r${r}`, { backgroundColor: "rgba(219, 234, 254, 0)", duration: 0.25 }, T[k]));
+      });
+      HL[2].forEach((r) => tl.to(`#r${r}`, { backgroundColor: "rgba(219, 234, 254, 0)", duration: 0.25 }, T[3]));
+      tl.fromTo("#ok", { opacity: 0, scale: 2, rotation: -16 }, { opacity: 1, scale: 1, rotation: -6, duration: 0.35, ease: "back.out(2)", immediateRender: false }, T[3] + 0.3);
+      shake("#card", T[3] + 0.6, 6, 3);""",
+    endtitle=["Cherche la copro", "avant de visiter."],
+    endacc="#93c5fd",
+    endrgb="147, 197, 253",
+)
+
+# ---------------------------------------------------------------- 40. LE MUR MITOYEN
+SPECS["mitoyen"] = dict(
+    comment="« LE MUR MITOYEN » — vidéo utile : à qui il est, comment le savoir, qui l'entretient. 112 BPM (amapiano).",
+    bpm=112,
+    T=T4,
+    vars="""        --bg1: #faf7f2;
+        --bg2: #efe4d2;
+        --bg3: #dcc6a3;
+        --ink: #2b1d0e;
+        --acc: #92400e;
+        --pill: #2b1d0e;
+        --pillt: #fcd34d;
+        --tipbg: #2b1d0e;
+        --tiph: #fcd34d;""",
+    css="""      #bld {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+      }
+      .ml {
+        position: absolute;
+        padding: 10px 18px;
+        border-radius: 14px;
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+      }
+      #heb {
+        left: 600px;
+        top: 650px;
+        background: #2b1d0e;
+        color: #fcd34d;
+        opacity: 0;
+      }
+      #ins {
+        left: 560px;
+        top: 760px;
+        width: 330px;
+        height: 230px;
+        border-radius: 22px;
+        background: #fff;
+        box-shadow: 0 20px 40px rgba(43, 29, 14, 0.2);
+        opacity: 0;
+      }
+      #ins .c {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 14px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: 900;
+      }
+      #half {
+        left: 600px;
+        top: 1030px;
+        background: #92400e;
+        color: #fff;
+        opacity: 0;
+      }
+""",
+    html="""        <svg id="bld" class="abs" viewBox="0 0 850 720"></svg>
+        <div class="ml" style="left: 170px; top: 1080px; background: #fff">Toi</div>
+        <div class="ml" style="left: 600px; top: 1080px; background: #fff">Voisin</div>
+        <div id="heb" class="ml abs" data-layout-allow-overlap>Héberge</div>
+        <div id="ins" class="abs" data-layout-allow-overlap><svg viewBox="0 0 330 180" width="330" height="180"><rect x="60" y="80" width="210" height="90" fill="#d6b48a" stroke="#2b1d0e" stroke-width="5"/><path d="M50 80 L280 50 L280 80 Z" fill="#92400e" stroke="#2b1d0e" stroke-width="5"/><path d="M300 60 l14 0 m-7 -7 l7 7 l-7 7" stroke="#2b1d0e" stroke-width="5" fill="none"/></svg><div class="c">Penche côté voisin&nbsp;: à lui</div></div>
+        <div id="half" class="ml abs" data-layout-allow-overlap>Entretien&nbsp;: à deux</div>""",
+    cap="Le mur mitoyen&nbsp;:<br /><span class=\"a\">à qui est-il&nbsp;?</span>",
+    count0="Deux immeubles",
+    countk="Règle ${k + 1}/4",
+    tips=[
+        ("LA RÈGLE", "Entre deux bâtiments, le mur est <b>présumé mitoyen</b> jusqu'au toit le plus bas."),
+        ("LES SIGNES", "Un sommet qui <b>penche d'un seul côté</b>&nbsp;: le mur est à celui de ce côté."),
+        ("L'ENTRETIEN", "Les réparations se font <b>à frais partagés</b> entre les deux propriétaires."),
+        ("Y TOUCHER", "Encastrer une poutre&nbsp;: <b>jusqu'à la moitié de l'épaisseur</b>, avec l'accord du voisin."),
+    ],
+    know=[
+        ("LE RACHAT", "Tu peux rendre mitoyen le mur du voisin en lui <b>payant la moitié</b> de sa valeur."),
+        ("LES FENÊTRES", "On ne perce pas <b>une fenêtre</b> dans un mur mitoyen sans accord."),
+    ],
+    setup="""      let w = `<rect x="40" y="40" width="360" height="600" fill="#e7d5bb" stroke="#2b1d0e" stroke-width="5"/>`;
+      w += `<rect x="450" y="250" width="360" height="390" fill="#e7d5bb" stroke="#2b1d0e" stroke-width="5"/>`;
+      for (let f = 0; f < 6; f++) for (let i = 0; i < 3; i++) w += `<rect x="${80 + i * 105}" y="${70 + f * 95}" width="65" height="55" rx="4" fill="#fff" stroke="#2b1d0e" stroke-width="3"/>`;
+      for (let f = 0; f < 4; f++) for (let i = 0; i < 3; i++) w += `<rect x="${490 + i * 105}" y="${280 + f * 90}" width="65" height="50" rx="4" fill="#fff" stroke="#2b1d0e" stroke-width="3"/>`;
+      w += `<rect x="400" y="40" width="50" height="210" fill="#b45309" stroke="#2b1d0e" stroke-width="5"/>`;
+      w += `<g id="wall"><rect x="400" y="250" width="25" height="390" fill="#b45309"/><rect x="425" y="250" width="25" height="390" fill="#f59e0b"/><rect x="400" y="250" width="50" height="390" fill="none" stroke="#2b1d0e" stroke-width="5"/></g>`;
+      w += `<path id="hl" d="M380 250 H560" stroke="#2b1d0e" stroke-width="5" stroke-dasharray="14 10" opacity="0"/>`;
+      w += `<rect id="beam" x="250" y="420" width="0" height="30" fill="#78350f"/>`;
+      w += `<rect x="0" y="640" width="850" height="80" fill="#a8a29e"/>`;
+      document.getElementById("bld").innerHTML = w;""",
+    js="""      tl.fromTo("#wall", { opacity: 0.3 }, { opacity: 1, duration: 0.3, immediateRender: false }, T[0]);
+      tl.to("#hl", { opacity: 1, duration: 0.3 }, T[0] + 0.3);
+      tl.fromTo("#heb", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.3, immediateRender: false }, T[0] + 0.4);
+      tl.to("#heb", { opacity: 0, duration: 0.2 }, T[1]);
+      tl.fromTo("#ins", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)", immediateRender: false }, T[1]);
+      tl.to("#ins", { opacity: 0, duration: 0.2 }, T[2]);
+      tl.fromTo("#half", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.3, immediateRender: false }, T[2]);
+      tl.fromTo("#wall", { scaleX: 1, svgOrigin: "425 445" }, { scaleX: 1.25, svgOrigin: "425 445", duration: 0.2, yoyo: true, repeat: 1, immediateRender: false }, T[2] + 0.2);
+      tl.to("#half", { opacity: 0.35, duration: 0.2 }, T[3]);
+      tl.to("#beam", { attr: { width: 162 }, duration: 0.9, ease: "power2.out" }, T[3]);
+      shake("#bld", T[3] + 0.9, 6, 3);""",
+    endtitle=["Un mur partagé,", "des règles partagées."],
+    endacc="#fcd34d",
+    endrgb="252, 211, 77",
+)

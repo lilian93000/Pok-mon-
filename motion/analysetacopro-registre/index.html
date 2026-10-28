@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « LE REGISTRE DES COPROPRIÉTÉS » — vidéo utile : la fiche publique de chaque copro. 126 BPM (électro-swing).
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --bg1: #f8fafc;
+        --bg2: #e2e8f0;
+        --bg3: #c4cfdd;
+        --ink: #0f172a;
+        --acc: #2563eb;
+        --pill: #0f172a;
+        --pillt: #93c5fd;
+        --tipbg: #0f172a;
+        --tiph: #93c5fd;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--bg2);
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(80% 55% at 50% 40%, var(--bg1) 0%, var(--bg2) 65%, var(--bg3) 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 215px;
+        font-size: 60px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        z-index: 6;
+      }
+      .cap .a {
+        color: var(--acc);
+      }
+      #count {
+        left: 70px;
+        top: 372px;
+        padding: 8px 24px;
+        border-radius: 999px;
+        background: var(--pill);
+        color: var(--pillt);
+        font-size: 36px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        z-index: 6;
+      }
+      .tip {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 1225px;
+        padding: 22px 28px 26px;
+        border-radius: 26px;
+        background: var(--tipbg);
+        color: #fff;
+        opacity: 0;
+        z-index: 5;
+      }
+      .tip .h {
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: var(--tiph);
+      }
+      .tip .x {
+        margin-top: 6px;
+        font-size: 40px;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.12;
+      }
+      .tip .x b {
+        color: var(--tiph);
+      }
+      #know {
+        background: radial-gradient(80% 55% at 50% 40%, #fff8d6 0%, #ffe98a 65%, #ffd84d 100%);
+        color: #14213a;
+      }
+      .card {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        padding: 34px 36px 38px;
+        border-radius: 30px;
+        background: #fff;
+        box-shadow: 0 30px 70px rgba(80, 60, 0, 0.25);
+        opacity: 0;
+      }
+      .card .h {
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: var(--brand);
+      }
+      .card .x {
+        margin-top: 10px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1.06;
+      }
+      .card .x b {
+        color: var(--brand);
+      }
+      .card .s {
+        margin-top: 14px;
+        font-size: 30px;
+        font-weight: 700;
+        color: #51617f;
+      }
+      #bar {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 100px;
+        border-radius: 50px;
+        background: #fff;
+        box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14);
+      }
+      #bar svg {
+        position: absolute;
+        left: 30px;
+        top: 28px;
+        width: 44px;
+        height: 44px;
+      }
+      #qw {
+        position: absolute;
+        left: 96px;
+        top: 26px;
+        height: 50px;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 38px;
+        font-weight: 800;
+        line-height: 50px;
+        width: 0;
+      }
+      #card {
+        left: 70px;
+        top: 590px;
+        width: 850px;
+        padding: 26px 34px 14px;
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 60px rgba(15, 23, 42, 0.16);
+        opacity: 0;
+      }
+      .rw {
+        display: flex;
+        justify-content: space-between;
+        padding: 18px 16px;
+        margin: 0 -16px;
+        border-radius: 14px;
+        border-bottom: 3px solid #e2e8f0;
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .rw b {
+        font-weight: 900;
+      }
+      #ok {
+        left: 600px;
+        top: 1080px;
+        padding: 12px 22px;
+        border: 6px solid #15803d;
+        border-radius: 14px;
+        background: #fff;
+        color: #15803d;
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+        opacity: 0;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+        color: #fff;
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.97;
+      }
+      #end-title .y {
+        color: #93c5fd;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(147, 197, 253, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="main" class="clip" data-start="0" data-duration="20" data-track-index="0">
+        <div id="bar" class="abs"><svg viewBox="0 0 44 44"><circle cx="18" cy="18" r="13" fill="none" stroke="#2563eb" stroke-width="6"/><path d="M28 28 L40 40" stroke="#2563eb" stroke-width="7" stroke-linecap="round"/></svg><div id="qw">8 rue des Glycines, Lyon</div></div>
+        <div id="card" class="abs">
+          <div class="rw" id="r0"><span>N° d'immatriculation</span><b>AC9512874</b></div>
+          <div class="rw" id="r1"><span>Type de syndic</span><b>Professionnel</b></div>
+          <div class="rw" id="r2"><span>Nombre de lots</span><b>31</b></div>
+          <div class="rw" id="r3"><span>Plan de sauvegarde</span><b>Non</b></div>
+          <div class="rw" id="r4" style="border-bottom: 0"><span>Arrêté de mise en sécurité</span><b>Non</b></div>
+        </div>
+        <div id="ok" class="abs" data-layout-allow-overlap>VÉRIFIÉ ✓</div>
+        <div class="cap">Chaque copro a une fiche&nbsp;:<br /><span class="a">le registre national.</span></div>
+        <div id="count" class="abs">Recherche</div>
+        <div class="tip" id="tp0"><div class="h">L'OBLIGATION</div><div class="x">Toute copro d'habitation doit être <b>immatriculée</b> au registre national.</div></div>
+        <div class="tip" id="tp1"><div class="h">EN LIGNE</div><div class="x">Tape l'adresse&nbsp;: <b>type de syndic, nombre de lots</b>, et plus.</div></div>
+        <div class="tip" id="tp2"><div class="h">LES ALERTES</div><div class="x">Plan de sauvegarde, arrêté de mise en sécurité&nbsp;: <b>des signaux à connaître</b>.</div></div>
+        <div class="tip" id="tp3"><div class="h">À LA VENTE</div><div class="x">Le notaire <b>vérifie l'immatriculation</b> avant de signer.</div></div>
+      </section>
+
+      <section id="know" class="clip" data-start="20" data-duration="4" data-track-index="0">
+        <div class="cap">Bon à savoir&nbsp;:</div>
+        <div class="card" id="k0" style="top: 420px"><div class="h">C'EST GRATUIT</div><div class="x">Sur <b>registre-coproprietes.gouv.fr</b>, rubrique annuaire.</div></div>
+        <div class="card" id="k1" style="top: 900px"><div class="h">MIS À JOUR</div><div class="x">Le syndic doit actualiser la fiche <b>chaque année</b>, après l'AG.</div></div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Cherche la copro</span></span>
+          <span class="mask"><span class="y">avant de visiter.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 126,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      const T = [2.0, 6.5, 11.0, 15.5];
+
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+
+      // les étapes : compteur + explication
+      T.forEach((t, k) => {
+        tl.set("#count", { textContent: `Info ${k + 1}/4` }, t);
+        tl.fromTo("#count", { scale: 1.25 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        if (document.getElementById(`tp${k}`)) {
+          tl.fromTo(`#tp${k}`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.3);
+          tl.to(`#tp${k}`, { opacity: 0, y: -10, duration: 0.15 }, (T[k + 1] || 20) - 0.25);
+        }
+      });
+      tl.to("#qw", { width: 720, duration: 1.2, ease: "steps(24)" }, 0.6);
+      tl.fromTo("#card", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, T[0]);
+      const HL = [[0], [1, 2], [3, 4]];
+      HL.forEach((rows, k) => {
+        rows.forEach((r) => tl.to(`#r${r}`, { backgroundColor: "#dbeafe", duration: 0.25 }, T[k] + 0.2));
+        if (k) HL[k - 1].forEach((r) => tl.to(`#r${r}`, { backgroundColor: "rgba(219, 234, 254, 0)", duration: 0.25 }, T[k]));
+      });
+      HL[2].forEach((r) => tl.to(`#r${r}`, { backgroundColor: "rgba(219, 234, 254, 0)", duration: 0.25 }, T[3]));
+      tl.fromTo("#ok", { opacity: 0, scale: 2, rotation: -16 }, { opacity: 1, scale: 1, rotation: -6, duration: 0.35, ease: "back.out(2)", immediateRender: false }, T[3] + 0.3);
+      shake("#card", T[3] + 0.6, 6, 3);
+      // 20 s : bon à savoir
+      flash(20, 0.5, 0.25);
+      tl.fromTo("#k0", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 20.2);
+      tl.fromTo("#k1", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 21.3);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 9 }, E0 + BEAT * 4.5);
+
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

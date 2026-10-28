@@ -51,7 +51,12 @@ clause « animaux interdits » non écrite · chiens de 1ʳᵉ catégorie · abo
 intercalaire daté 04/2009 · 4/16/4 · buée entre les vitres · Uw 1,3 · survitrage · fenêtre qui ferme sans forcer ·
 carte Arcep · boîtier fibre sur le palier · prise optique · vote AG pour la fibre · couverture 4G/5G ·
 index 00412,318 → 341 · petite roue du compteur · colorant dans la chasse d'eau · robinet 120 L/jour · loi Warsmann ·
-ballon 200 L / 50 L par personne · plaque 2009 · groupe de sécurité · heures creuses · thermodynamique · eau chaude collective.
+ballon 200 L / 50 L par personne · plaque 2009 · groupe de sécurité · heures creuses · thermodynamique · eau chaude collective ·
+contester une AG (opposants / défaillants, 2 mois, tribunal judiciaire, abus de majorité, PV notifié dans le mois, travaux suspendus) ·
+palier annexé (lots 12 et 13, remise en état, art. 26, prescription 30 ans) ·
+servitudes (passage, canalisation, tour d'échelle, abords d'un monument 500 m, ABF) ·
+registre des copropriétés (AC9512874, 31 lots, plan de sauvegarde, arrêté de mise en sécurité) ·
+mur mitoyen (héberge, chaperon, frais partagés, poutre à mi-épaisseur, rachat de mitoyenneté, fenêtre interdite).
 
 ## Résidences fictives déjà nommées
-Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas · Vitrerie Nord (fabricant fictif).
+Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas · Vitrerie Nord (fabricant fictif) · 8 rue des Glycines, Lyon.
