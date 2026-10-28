@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « LE PETIT DICO DE LA COPRO » — vidéo utile : 5 mots à connaître avant d'acheter. 100 BPM (pop baroque, clavecin).
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --brand: #0b5fff;
+        --bg1: #4a3a2a;
+        --bg2: #33271b;
+        --bg3: #1e160e;
+        --ink: #fff7e6;
+        --acc: #ffc94d;
+        --pill: #ffc94d;
+        --pillt: #2b1d0f;
+        --tipbg: #2b1d0f;
+        --tiph: #ffc94d;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--bg2);
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(80% 55% at 50% 40%, var(--bg1) 0%, var(--bg2) 65%, var(--bg3) 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 215px;
+        font-size: 60px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        z-index: 6;
+      }
+      .cap .a {
+        color: var(--acc);
+      }
+      #count {
+        left: 70px;
+        top: 372px;
+        padding: 8px 24px;
+        border-radius: 999px;
+        background: var(--pill);
+        color: var(--pillt);
+        font-size: 36px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        z-index: 6;
+      }
+      .tip {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 1225px;
+        padding: 22px 28px 26px;
+        border-radius: 26px;
+        background: var(--tipbg);
+        color: #fff;
+        opacity: 0;
+        z-index: 5;
+      }
+      .tip .h {
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: var(--tiph);
+      }
+      .tip .x {
+        margin-top: 6px;
+        font-size: 40px;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.12;
+      }
+      .tip .x b {
+        color: var(--tiph);
+      }
+      #know {
+        background: radial-gradient(80% 55% at 50% 40%, #fff8d6 0%, #ffe98a 65%, #ffd84d 100%);
+        color: #14213a;
+      }
+      .card {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        padding: 34px 36px 38px;
+        border-radius: 30px;
+        background: #fff;
+        box-shadow: 0 30px 70px rgba(80, 60, 0, 0.25);
+        opacity: 0;
+      }
+      .card .h {
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: var(--brand);
+      }
+      .card .x {
+        margin-top: 10px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1.06;
+      }
+      .card .x b {
+        color: var(--brand);
+      }
+      .card .s {
+        margin-top: 14px;
+        font-size: 30px;
+        font-weight: 700;
+        color: #51617f;
+      }
+      #page {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 830px;
+        border-radius: 10px 26px 26px 10px;
+        background: linear-gradient(90deg, #efe3c8 0%, #fbf5e6 6%, #fbf5e6 100%);
+        border-left: 22px solid #a3241c;
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+        color: #2b1d0f;
+        overflow: hidden;
+      }
+      .entry {
+        position: absolute;
+        left: 56px;
+        right: 50px;
+        top: 60px;
+        opacity: 0;
+      }
+      .entry .w {
+        font-size: 92px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        line-height: 0.95;
+      }
+      .entry .g {
+        margin-top: 12px;
+        font-size: 34px;
+        font-weight: 700;
+        font-style: italic;
+        color: #a3241c;
+      }
+      .entry .d {
+        margin-top: 28px;
+        padding-top: 26px;
+        border-top: 3px solid #2b1d0f;
+        font-size: 46px;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.14;
+      }
+      .entry .e {
+        margin-top: 26px;
+        font-size: 32px;
+        font-weight: 700;
+        font-style: italic;
+        color: #6b5a40;
+        line-height: 1.2;
+      }
+      .entry.cover {
+        top: 200px;
+        text-align: center;
+        opacity: 1;
+      }
+      .entry.cover .w {
+        font-size: 84px;
+      }
+      #tab {
+        left: 870px;
+        top: 560px;
+        width: 70px;
+        height: 120px;
+        border-radius: 0 18px 18px 0;
+        background: #a3241c;
+        color: #fff;
+        font-size: 52px;
+        font-weight: 900;
+        line-height: 120px;
+        text-align: center;
+        z-index: 2;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+        color: #fff;
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.97;
+      }
+      #end-title .y {
+        color: #ffc94d;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(255, 201, 77, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="main" class="clip" data-start="0" data-duration="20" data-track-index="0">
+        <div id="tab" class="abs">A</div>
+        <div id="page" class="abs" data-layout-allow-overlap>
+          <div class="entry cover" id="e0"><div class="w">Le petit dico<br />de la copro</div><div class="g">5 mots à connaître avant d'acheter</div></div>
+          <div class="entry" id="e1"><div class="w">Syndic</div><div class="g">n. m.</div><div class="d">Le gestionnaire de la copro&nbsp;: comptes, entretien, assemblées.</div><div class="e">Élu par l'AG, pour 3&nbsp;ans maximum.</div></div>
+          <div class="entry" id="e2"><div class="w">Conseil syndical</div><div class="g">n. m.</div><div class="d">Des copropriétaires élus qui assistent et contrôlent le syndic.</div><div class="e">Bénévoles, ils sont tes alliés&nbsp;: pose-leur tes questions.</div></div>
+          <div class="entry" id="e3"><div class="w">Tantièmes</div><div class="g">n. m. pl.</div><div class="d">Ta part de l'immeuble. Elle fixe ta part des charges et le poids de ta voix en AG.</div><div class="e">Ex.&nbsp;: 250&nbsp;/&nbsp;10&nbsp;000 = 2,5&nbsp;%.</div></div>
+          <div class="entry" id="e4"><div class="w">Fonds de travaux</div><div class="g">n. m.</div><div class="d">L'épargne obligatoire de la copro, alimentée chaque année pour les gros travaux.</div><div class="e">Au moins 5&nbsp;% du budget annuel.</div></div>
+          <div class="entry" id="e5"><div class="w">PPPT</div><div class="g">n. m. · plan pluriannuel de travaux</div><div class="d">La liste des travaux à prévoir sur 10&nbsp;ans, avec leur coût estimé.</div><div class="e">Obligatoire progressivement depuis 2023.</div></div>
+        </div>
+        <div class="cap">La copro<br /><span class="a">en 5 mots.</span></div>
+        <div id="count" class="abs">Ouvre le dico</div>
+
+      </section>
+
+      <section id="know" class="clip" data-start="20" data-duration="4" data-track-index="0">
+        <div class="cap">Bon à savoir&nbsp;:</div>
+        <div class="card" id="k0" style="top: 420px"><div class="h">UN MOT PAS CLAIR&nbsp;?</div><div class="x">Dans notre rapport, <b>tout est expliqué simplement</b>.</div></div>
+        <div class="card" id="k1" style="top: 900px"><div class="h">RAPPORT EN 72&nbsp;H</div><div class="x">Travaux, charges, risques&nbsp;: <b>ton dossier décodé.</b></div></div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Comprends tout</span></span>
+          <span class="mask"><span class="y">avant de signer.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const BEAT = 60 / 100,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      const T = [2.0, 5.6, 9.2, 12.8, 16.4];
+
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+
+      // les étapes : compteur + explication
+      T.forEach((t, k) => {
+        tl.set("#count", { textContent: `Mot ${k + 1}/5` }, t);
+        tl.fromTo("#count", { scale: 1.25 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        if (document.getElementById(`tp${k}`)) {
+          tl.fromTo(`#tp${k}`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.3);
+          tl.to(`#tp${k}`, { opacity: 0, y: -10, duration: 0.15 }, (T[k + 1] || 20) - 0.25);
+        }
+      });
+      const LET = ["S", "C", "T", "F", "P"];
+      T.forEach((t, k) => {
+        tl.to(`#e${k}`, { x: -260, opacity: 0, duration: 0.3, ease: "power2.in" }, t - 0.3);
+        tl.fromTo(`#e${k + 1}`, { x: 260, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, t);
+        tl.fromTo("#page", { rotationY: -10, transformPerspective: 1600, transformOrigin: "0% 50%" }, { rotationY: 0, duration: 0.4, ease: "power2.out", immediateRender: false }, t - 0.1);
+        tl.set("#tab", { textContent: LET[k] }, t);
+        tl.fromTo("#tab", { y: -30 }, { y: k * 90, duration: 0.35, ease: "back.out(2)", immediateRender: false }, t);
+      });
+      // 20 s : bon à savoir
+      flash(20, 0.5, 0.25);
+      tl.fromTo("#k0", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 20.2);
+      tl.fromTo("#k1", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 21.3);
+
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 9 }, E0 + BEAT * 4.5);
+
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
