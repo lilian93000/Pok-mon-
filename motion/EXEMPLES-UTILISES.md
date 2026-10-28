@@ -23,7 +23,12 @@ antenne relais · local vélos → poubelles · digicode 2 900 € · volets imp
 travaux votés : qui paie (appel de fonds) · cour intérieure 75 000 € (380/10 000) · charges spéciales d'un bâtiment ·
 parties communes · appel de fonds trimestriel · PPPT · conseil syndical · chauffage collectif · cave / parking dans le lot ·
 date de la dernière AG · ce que permet le règlement · nombre de lots · étapes de l'achat (offre → acte) ·
-gel des loyers F/G 2022, F 2028, E 2034, DPE collectif.
+gel des loyers F/G 2022, F 2028, E 2034, DPE collectif ·
+restaurant et gaine d'extraction · boulangerie (fournil avant l'aube) · supérette (livraisons, rideau) · poubelles du commerce ·
+destination de l'immeuble · boîtes aux lettres aux noms scotchés · « À louer » · propriétaires bailleurs absents en AG (34 % des tantièmes) ·
+ampoules grillées · tableau d'affichage du syndic · extincteur (date de vérification) · taches au plafond de l'escalier ·
+monter au dernier étage · contrat de ménage · visiter à 8 h, 13 h, 20 h, samedi 23 h, jour de pluie · boussole plein sud ·
+pression des robinets · fusibles à broches · flamme devant la vitre (reflets) · taches noires derrière les meubles · odeur d'égout.
 
 ## Résidences fictives déjà nommées
 Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas.

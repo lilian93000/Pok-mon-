@@ -577,3 +577,581 @@ SPECS["etapes"] = dict(
     endacc="#c9a8ff",
     endrgb="201, 168, 255",
 )
+
+# ================================================================ SÉRIE « PENDANT LA VISITE »
+
+# ---------------------------------------------------------------- 6. LE REZ-DE-CHAUSSÉE COMMERÇANT
+SPECS["rdc"] = dict(
+    comment="« LE REZ-DE-CHAUSSÉE » — vidéo utile pendant la visite : un commerce en bas, ce qu'il faut regarder. 98 BPM (dembow).",
+    bpm=98,
+    T=T4,
+    vars="""        --bg1: #fff4ec;
+        --bg2: #ffd9c2;
+        --bg3: #f2b08c;
+        --ink: #2a1206;
+        --acc: #c2410c;
+        --pill: #2a1206;
+        --pillt: #ffb27a;
+        --tipbg: #2a1206;
+        --tiph: #ffb27a;""",
+    css="""      #fac {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 750px;
+      }
+      #sign {
+        left: 230px;
+        top: 966px;
+        width: 530px;
+        height: 48px;
+        border-radius: 8px;
+        background: #2a1206;
+        color: #fff;
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        line-height: 48px;
+        text-align: center;
+        z-index: 2;
+      }
+      #clock {
+        left: 120px;
+        top: 470px;
+        padding: 10px 22px;
+        border-radius: 16px;
+        background: #14213a;
+        color: #ffd23f;
+        font-size: 44px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        opacity: 0;
+        z-index: 3;
+      }
+""",
+    html="""        <svg id="fac" class="abs" viewBox="0 0 850 750" data-layout-allow-overlap></svg>
+        <div id="sign" class="abs">À VENDRE · T3 AU 1ᵉʳ</div>
+        <div id="clock" class="abs">4&nbsp;h&nbsp;00</div>""",
+    cap="Un commerce en bas&nbsp;?<br /><span class=\"a\">Regarde ça.</span>",
+    count0="Visite · façade",
+    countk="Commerce ${k + 1}/4",
+    tips=[
+        ("RESTAURANT", "Odeurs et <b>gaine d'extraction</b>&nbsp;: regarde par où elle monte, façade ou cour."),
+        ("BOULANGERIE", "Le fournil démarre souvent <b>avant l'aube</b>&nbsp;: bruit et chaleur au 1ᵉʳ étage."),
+        ("SUPÉRETTE", "<b>Livraisons et rideau métallique</b> tôt le matin, parfois tous les jours."),
+        ("LES POUBELLES DU COMMERCE", "Où sont-elles stockées&nbsp;? Souvent <b>dans la cour</b>, sous les fenêtres."),
+    ],
+    know=[
+        ("LE RÈGLEMENT", "Il fixe la <b>destination de l'immeuble</b>&nbsp;: les activités admises y sont écrites."),
+        ("LE TEST", "Repasse devant <b>un samedi soir et un matin tôt</b>."),
+    ],
+    setup="""      let f = `<rect x="120" y="40" width="610" height="710" fill="#f3e1c6" stroke="#2a1206" stroke-width="5"/>`;
+      for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) f += `<rect x="${160 + c * 140}" y="${80 + r * 112}" width="90" height="76" rx="6" fill="#bfe3ff" stroke="#2a1206" stroke-width="4"/>`;
+      f += `<rect x="160" y="580" width="530" height="170" fill="#9fd3ff" stroke="#2a1206" stroke-width="5"/><path d="M425 580V750" stroke="#2a1206" stroke-width="5"/>`;
+      const AW = ["#c2410c", "#b45309", "#15803d", "#475569"];
+      AW.forEach((c, k) => {
+        let a = "";
+        for (let i = 0; i < 8; i++) a += `<path d="M${150 + i * 69} 528 h69 l-8 44 h-53 z" fill="${i % 2 ? "#fff" : c}" stroke="#2a1206" stroke-width="3"/>`;
+        f += `<g id="aw${k}" opacity="${k ? 0 : 1}">${a}</g>`;
+      });
+      // restaurant : gaine + fumée
+      f += `<g id="fx0" opacity="0"><rect x="736" y="20" width="40" height="560" fill="#9aa3ad" stroke="#2a1206" stroke-width="4"/>`;
+      for (let i = 0; i < 3; i++) f += `<path id="sm${i}" d="M${745 + i * 10} 10 q-20 -30 0 -60 q20 -30 0 -60" stroke="#8a8f99" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.7"/>`;
+      f += `</g>`;
+      // boulangerie : lune + chaleur
+      f += `<g id="fx1" opacity="0"><circle cx="790" cy="90" r="40" fill="#fff6c2"/><circle cx="805" cy="80" r="36" fill="#ffd9c2"/>`;
+      for (let i = 0; i < 4; i++) f += `<path d="M${220 + i * 120} 520 q-12 -24 0 -48 q12 -24 0 -48" stroke="#ef4444" stroke-width="6" fill="none" opacity="0.6"/>`;
+      f += `</g>`;
+      // supérette : camion + rideau
+      f += `<g id="fx2" opacity="0"><g id="truck"><rect x="-10" y="610" width="300" height="120" rx="12" fill="#e5e7eb" stroke="#2a1206" stroke-width="4"/><rect x="290" y="650" width="90" height="80" rx="10" fill="#cbd5e1" stroke="#2a1206" stroke-width="4"/><circle cx="70" cy="738" r="22" fill="#2a1206"/><circle cx="320" cy="738" r="22" fill="#2a1206"/></g>`;
+      for (let i = 0; i < 7; i++) f += `<rect x="430" y="${585 + i * 24}" width="255" height="16" fill="#94a3b8"/>`;
+      f += `</g>`;
+      // poubelles
+      f += `<g id="fx3" opacity="0">`;
+      for (let i = 0; i < 4; i++) f += `<rect x="${200 + i * 120}" y="640" width="90" height="110" rx="8" fill="${["#15803d", "#ca8a04", "#475569", "#15803d"][i]}" stroke="#2a1206" stroke-width="4"/><rect x="${194 + i * 120}" y="628" width="102" height="18" rx="6" fill="#2a1206"/>`;
+      f += `</g>`;
+      document.getElementById("fac").innerHTML = f;""",
+    js="""      const SIGN = ["RESTAURANT", "BOULANGERIE", "SUPÉRETTE", "LA COUR · POUBELLES"];
+      T.forEach((t, k) => {
+        if (k) {
+          tl.to(`#aw${k - 1}`, { opacity: 0, duration: 0.2 }, t - 0.2);
+          tl.to(`#fx${k - 1}`, { opacity: 0, duration: 0.2 }, t - 0.2);
+        }
+        tl.to(`#aw${k}`, { opacity: 1, duration: 0.2 }, t);
+        tl.to(`#fx${k}`, { opacity: 1, duration: 0.3 }, t);
+        tl.set("#sign", { textContent: SIGN[k] }, t);
+        tl.fromTo("#sign", { scale: 1.2 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        shake("#fac", t, 6, 4);
+      });
+      for (let i = 0; i < 3; i++) tl.fromTo(`#sm${i}`, { y: 20, opacity: 0.8 }, { y: -40, opacity: 0, duration: 1.2, repeat: 2, ease: "none", immediateRender: false }, T[0] + 0.2 + i * 0.35);
+      tl.to("#clock", { opacity: 1, duration: 0.2 }, T[1]);
+      tl.to("#clock", { opacity: 0, duration: 0.2 }, T[2] - 0.2);
+      tl.fromTo("#truck", { x: -420 }, { x: 0, duration: 0.6, ease: "power2.out", immediateRender: false }, T[2]);""",
+    endtitle=["Regarde le rez-de-chaussée", "avant de signer."],
+    endacc="#ffb27a",
+    endrgb="255, 178, 122",
+)
+
+# ---------------------------------------------------------------- 7. LES BOÎTES AUX LETTRES
+SPECS["boites"] = dict(
+    comment="« LES BOÎTES AUX LETTRES » — vidéo utile pendant la visite : un immeuble plein de locataires, ce que ça change. 112 BPM (city pop).",
+    bpm=112,
+    T=T4,
+    vars="""        --bg1: #f5f3ff;
+        --bg2: #e2ddf7;
+        --bg3: #c6bde8;
+        --ink: #1e1640;
+        --acc: #6d28d9;
+        --pill: #1e1640;
+        --pillt: #c4b5fd;
+        --tipbg: #1e1640;
+        --tiph: #c4b5fd;""",
+    css="""      #wall {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 700px;
+      }
+      .mb {
+        position: absolute;
+        width: 196px;
+        height: 152px;
+        border-radius: 10px;
+        background: linear-gradient(#b9bfcc, #9aa1b1);
+        border: 4px solid #4b5163;
+      }
+      .mb .slot {
+        position: absolute;
+        left: 30px;
+        right: 30px;
+        top: 26px;
+        height: 14px;
+        border-radius: 7px;
+        background: #2b2f3a;
+      }
+      .mb .lb {
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        bottom: 22px;
+        height: 48px;
+        border-radius: 4px;
+        background: #e9e4d8;
+        color: #2b2f3a;
+        font-size: 26px;
+        font-weight: 800;
+        line-height: 48px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .mb .lb.tape {
+        background: #fff3a6;
+        transform: rotate(-4deg);
+        font-style: italic;
+      }
+      .mb.hot {
+        box-shadow: 0 0 0 6px #6d28d9;
+      }
+      #alouer {
+        left: 560px;
+        top: 1040px;
+        padding: 14px 26px;
+        border-radius: 10px;
+        background: #dc2626;
+        color: #fff;
+        font-size: 46px;
+        font-weight: 900;
+        transform: rotate(-6deg);
+        opacity: 0;
+        z-index: 3;
+      }
+      #ratio {
+        left: 120px;
+        top: 760px;
+        padding: 24px 40px;
+        border-radius: 26px;
+        background: #1e1640;
+        color: #fff;
+        font-size: 84px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        text-align: center;
+        opacity: 0;
+        z-index: 3;
+      }
+      #ratio small {
+        display: block;
+        margin-top: 8px;
+        font-size: 32px;
+        letter-spacing: 0;
+        color: #c4b5fd;
+      }
+      #vote {
+        left: 150px;
+        top: 700px;
+        width: 700px;
+        padding: 30px 36px;
+        border-radius: 26px;
+        background: #fff;
+        color: #1e1640;
+        opacity: 0;
+        z-index: 4;
+        box-shadow: 0 30px 70px rgba(30, 22, 64, 0.35);
+      }
+      #vote .h {
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: #6d28d9;
+      }
+      #vote .bar {
+        margin-top: 18px;
+        height: 44px;
+        border-radius: 22px;
+        background: #e2ddf7;
+        overflow: hidden;
+      }
+      #vote .fill {
+        width: 34%;
+        height: 100%;
+        border-radius: 22px;
+        background: #6d28d9;
+        transform-origin: 0% 50%;
+      }
+      #vote .x {
+        margin-top: 14px;
+        font-size: 44px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+      }
+""",
+    html="""        <div id="wall" class="abs" data-layout-allow-occlusion data-layout-allow-overlap></div>
+        <div id="alouer" class="abs" data-layout-allow-overlap>À LOUER</div>
+        <div id="ratio" class="abs" data-layout-allow-overlap data-layout-allow-occlusion>9 / 16<small>boîtes aux noms scotchés</small></div>
+        <div id="vote" class="abs" data-layout-allow-overlap data-layout-allow-occlusion><div class="h">EXEMPLE · DERNIÈRE AG</div><div class="bar"><div class="fill" id="vfill"></div></div><div class="x">34&nbsp;% des tantièmes représentés</div></div>""",
+    cap="Un immeuble<br /><span class=\"a\">plein de locataires&nbsp;?</span>",
+    count0="Hall · boîtes aux lettres",
+    countk="Indice ${k + 1}/4",
+    tips=[
+        ("NOMS SCOTCHÉS", "Étiquettes à la main, plusieurs noms&nbsp;: souvent des <b>locataires qui changent</b>."),
+        ("« À LOUER »", "Annonces dans le hall ou aux fenêtres&nbsp;: <b>beaucoup de logements loués</b>."),
+        ("PROPRIÉTAIRES ABSENTS", "Des bailleurs qui vivent loin <b>viennent moins aux AG</b> et suivent moins l'immeuble."),
+        ("CONSÉQUENCE", "Peu de votants&nbsp;: <b>décisions plus dures à prendre</b>, entretien qui traîne."),
+    ],
+    know=[
+        ("LA PREUVE", "Le procès-verbal d'AG indique <b>qui était présent ou représenté</b>&nbsp;: regarde le total."),
+        ("BON SIGNE", "Beaucoup de propriétaires <b>qui habitent sur place</b>&nbsp;: immeuble souvent mieux suivi."),
+    ],
+    setup="""      const NAMES = ["Martin", "Petit / Ba", "Leroy", "Colin + Kaya", "Faure", "Nguyen ?", "Ap. 7 · Sam", "Morel", "Diallo / W.", "Ap. 10", "Garnier", "Lucie & Tom", "Chevalier", "Ap. 14 · ?", "R. + J.", "Lemoine"];
+      const TAPE = [1, 3, 5, 6, 8, 9, 11, 13, 14];
+      document.getElementById("wall").innerHTML = NAMES.map((n, i) => `<div class="mb" id="mb${i}" style="left: ${(i % 4) * 218}px; top: ${Math.floor(i / 4) * 172}px"><div class="slot"></div><div class="lb${TAPE.includes(i) ? " tape" : ""}">${n}</div></div>`).join("");""",
+    js="""      T.forEach((t, k) => shake("#wall", t, 5, 3));
+      TAPE.forEach((i, j) => {
+        tl.set(`#mb${i}`, { className: "mb hot" }, T[0] + j * 0.08);
+        tl.fromTo(`#mb${i}`, { scale: 1.08 }, { scale: 1, duration: 0.25, ease: "back.out(3)", immediateRender: false }, T[0] + j * 0.08);
+      });
+      tl.fromTo("#alouer", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in", immediateRender: false }, T[1]);
+      tl.to("#alouer", { opacity: 0, duration: 0.2 }, T[2] - 0.2);
+      tl.to("#wall", { opacity: 0.3, duration: 0.3 }, T[2]);
+      tl.fromTo("#ratio", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.2)", immediateRender: false }, T[2]);
+      tl.to("#ratio", { opacity: 0, duration: 0.2 }, T[3] - 0.2);
+      tl.fromTo("#vote", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, T[3]);
+      tl.fromTo("#vfill", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power2.out", immediateRender: false }, T[3] + 0.3);""",
+    endtitle=["Regarde qui vit là", "avant de signer."],
+    endacc="#c4b5fd",
+    endrgb="196, 181, 253",
+)
+
+# ---------------------------------------------------------------- 8. LES PARTIES COMMUNES PARLENT
+SPECS["escalier"] = dict(
+    comment="« LES PARTIES COMMUNES PARLENT » — vidéo utile pendant la visite : 4 détails de la cage d'escalier. 160 BPM (ska).",
+    bpm=160,
+    T=T4,
+    vars="""        --bg1: #f7faf5;
+        --bg2: #dfe9d8;
+        --bg3: #bccdb1;
+        --ink: #17260f;
+        --acc: #0f5f2d;
+        --pill: #17260f;
+        --pillt: #bef264;
+        --tipbg: #17260f;
+        --tiph: #bef264;""",
+    css="""      #scene {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 750px;
+        border-radius: 26px;
+        overflow: hidden;
+        box-shadow: 0 30px 70px rgba(23, 38, 15, 0.3);
+      }
+      #loupe {
+        left: 0;
+        top: 0;
+        width: 200px;
+        height: 200px;
+        margin: -100px 0 0 -100px;
+        border-radius: 50%;
+        border: 14px solid #17260f;
+        box-shadow: 0 0 0 9999px rgba(23, 38, 15, 0.18), inset 0 0 0 6px rgba(255, 255, 255, 0.6);
+        opacity: 0;
+        z-index: 3;
+      }
+      #note {
+        left: 470px;
+        top: 690px;
+        width: 150px;
+        padding: 8px 10px;
+        background: #fff;
+        color: #17260f;
+        font-size: 28px;
+        font-weight: 800;
+        line-height: 1.1;
+        text-align: center;
+        transform: rotate(3deg);
+        z-index: 2;
+      }
+""",
+    html="""        <svg id="scene" class="abs" viewBox="0 0 850 750" data-layout-allow-overlap></svg>
+        <div id="note" class="abs">Note syndic<br />mars 2023</div>
+        <div id="loupe" class="abs" data-layout-allow-overlap></div>""",
+    cap="Les parties communes<br /><span class=\"a\">parlent.</span>",
+    count0="Cage d'escalier",
+    countk="Détail ${k + 1}/4",
+    tips=[
+        ("AMPOULES GRILLÉES", "Grillées depuis longtemps&nbsp;? <b>L'entretien courant n'est pas suivi.</b>"),
+        ("LE TABLEAU D'AFFICHAGE", "Dernière note du syndic il y a 2&nbsp;ans&nbsp;? <b>Il est peu présent.</b>"),
+        ("L'EXTINCTEUR", "S'il y en a un, lis <b>la date de sa dernière vérification</b> sur l'étiquette."),
+        ("TACHES AU PLAFOND", "Trace d'eau dans l'escalier&nbsp;: demande <b>si la fuite a été réparée</b>."),
+    ],
+    know=[
+        ("LE RÉFLEXE", "Monte <b>jusqu'au dernier étage</b>, même si l'appart est au 1ᵉʳ."),
+        ("À DEMANDER", "Le <b>contrat de ménage</b> de l'immeuble&nbsp;: qui nettoie, et à quel rythme&nbsp;?"),
+    ],
+    setup="""      let e = `<rect width="850" height="750" fill="#efe6d6"/><rect width="850" height="60" fill="#f7f1e6"/>`;
+      e += `<path d="M180 30 q40 -14 90 6 q40 20 70 0 q-10 30 -60 34 q-60 6 -100 -40z" fill="#b08a5a" opacity="0.55"/>`;
+      // escalier en zigzag
+      for (let i = 0; i < 9; i++) e += `<rect x="${380 + i * 52}" y="${700 - i * 46}" width="52" height="${50 + i * 46}" fill="#c9b9a0" stroke="#8a7458" stroke-width="3"/>`;
+      e += `<path d="M380 640 L848 230" stroke="#5a4636" stroke-width="10"/>`;
+      for (let i = 0; i < 9; i++) e += `<path d="M${400 + i * 52} ${626 - i * 46} v70" stroke="#5a4636" stroke-width="5"/>`;
+      // lampe
+      e += `<path d="M640 60 v40" stroke="#17260f" stroke-width="5"/><circle cx="640" cy="118" r="24" fill="#d1d5db" stroke="#17260f" stroke-width="4"/><path d="M628 106 l24 24 M652 106 l-24 24" stroke="#17260f" stroke-width="4"/>`;
+      // extincteur
+      e += `<rect x="96" y="380" width="56" height="130" rx="18" fill="#dc2626" stroke="#17260f" stroke-width="4"/><rect x="108" y="360" width="32" height="26" fill="#17260f"/><rect x="104" y="430" width="40" height="34" fill="#fff"/>`;
+      // tableau d'affichage
+      e += `<rect x="370" y="210" width="230" height="170" rx="8" fill="#c08a52" stroke="#5a4636" stroke-width="5"/>`;
+      // porte
+      e += `<rect x="190" y="420" width="150" height="330" fill="#8a5a2b" stroke="#17260f" stroke-width="4"/><circle cx="316" cy="590" r="8" fill="#ffd23f"/>`;
+      document.getElementById("scene").innerHTML = e;""",
+    js="""      const SPOT = [[640 + 70, 118 + 450], [485 + 70, 300 + 450], [124 + 70, 445 + 450], [250 + 70, 40 + 450]];
+      tl.set("#loupe", { opacity: 1, x: SPOT[0][0], y: SPOT[0][1] }, T[0] - 0.3);
+      T.forEach((t, k) => {
+        if (k) tl.to("#loupe", { x: SPOT[k][0], y: SPOT[k][1], duration: 0.5, ease: "power2.inOut" }, t - 0.5);
+        tl.fromTo("#loupe", { scale: 1.3 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+      });
+      tl.to("#loupe", { opacity: 0, duration: 0.2 }, 19.6);""",
+    endtitle=["Écoute les parties", "communes."],
+    endacc="#bef264",
+    endrgb="190, 242, 100",
+)
+
+# ---------------------------------------------------------------- 9. VISITER À 5 MOMENTS
+SPECS["moments"] = dict(
+    comment="« VISITER À 5 MOMENTS » — vidéo utile : ce qu'on découvre selon l'heure de la visite. 76 BPM (reggae one drop).",
+    bpm=76,
+    T=T5,
+    vars="""        --bg1: #fffbea;
+        --bg2: #fde9a8;
+        --bg3: #f5cf63;
+        --ink: #241a03;
+        --acc: #b45309;
+        --pill: #241a03;
+        --pillt: #fde68a;
+        --tipbg: #241a03;
+        --tiph: #fde68a;""",
+    css="""      #tint {
+        background: #0b1530;
+        opacity: 0;
+      }
+      #clk {
+        left: 240px;
+        top: 470px;
+        width: 600px;
+        height: 600px;
+        z-index: 2;
+      }
+      #when {
+        left: 70px;
+        right: 160px;
+        top: 1100px;
+        text-align: center;
+        font-size: 64px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        z-index: 2;
+      }
+      #rain {
+        opacity: 0;
+        z-index: 1;
+      }
+      #main .cap,
+      #count {
+        z-index: 6;
+      }
+""",
+    html="""        <div id="tint" class="clip" data-layout-allow-overlap></div>
+        <svg id="rain" class="clip" viewBox="0 0 1080 1920" data-layout-allow-overlap></svg>
+        <svg id="clk" class="abs" viewBox="-300 -300 600 600"></svg>
+        <div id="when" class="abs">Quand visiter&nbsp;?</div>""",
+    cap="Visite un appart<br /><span class=\"a\">à 5 moments.</span>",
+    count0="Horloge",
+    countk="Moment ${k + 1}/5",
+    tips=[
+        ("8 H EN SEMAINE", "Trafic, école, bus&nbsp;: <b>écoute la rue</b> fenêtres fermées."),
+        ("13 H", "Regarde la <b>vraie lumière</b> dans chaque pièce."),
+        ("20 H", "Les voisins sont rentrés&nbsp;: pas, voix, télé. <b>Ça teste l'isolation.</b>"),
+        ("SAMEDI 23 H", "Terrasses, fêtes, stationnement&nbsp;: <b>le vrai bruit du week-end</b>."),
+        ("UN JOUR DE PLUIE", "Regarde le bas des fenêtres et les murs&nbsp;: <b>traces d'eau&nbsp;?</b>"),
+    ],
+    know=[
+        ("ASTUCE", "Demande une <b>2ᵉ visite à une autre heure</b>&nbsp;: un vendeur serein accepte."),
+        ("LA BOUSSOLE", "Sors la boussole du téléphone&nbsp;: <b>plein sud = plus de soleil</b>."),
+    ],
+    setup="""      let c = `<circle r="280" fill="#fff" stroke="#241a03" stroke-width="16"/>`;
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * Math.PI * 2;
+        c += `<path d="M${(Math.sin(a) * 240).toFixed(1)} ${(-Math.cos(a) * 240).toFixed(1)} L${(Math.sin(a) * 265).toFixed(1)} ${(-Math.cos(a) * 265).toFixed(1)}" stroke="#241a03" stroke-width="${i % 3 ? 6 : 12}" stroke-linecap="round"/>`;
+      }
+      c += `<path id="hh" d="M0 20 V-150" stroke="#241a03" stroke-width="20" stroke-linecap="round"/><path id="mh" d="M0 30 V-220" stroke="#b45309" stroke-width="10" stroke-linecap="round"/><circle r="16" fill="#241a03"/>`;
+      document.getElementById("clk").innerHTML = c;
+      let r = "";
+      for (let i = 0; i < 80; i++) r += `<path d="M${(rnd(i, 1) * 1080).toFixed(0)} ${(rnd(i, 2) * 1920).toFixed(0)} l-18 54" stroke="#93c5fd" stroke-width="4" opacity="0.7"/>`;
+      document.getElementById("rain").innerHTML = r;""",
+    js="""      const H = [8, 13, 20, 23, 16];
+      const WHEN = ["8 h · semaine", "13 h", "20 h", "Samedi 23 h", "Un jour de pluie"];
+      const NIGHT = [0, 0, 0.55, 0.75, 0.25];
+      let prev = 0;
+      T.forEach((t, k) => {
+        const hourDeg = 360 * Math.ceil(prev / 360) + ((H[k] % 12) / 12) * 360;
+        tl.to("#hh", { rotation: hourDeg, svgOrigin: "0 0", duration: 0.6, ease: "power2.inOut" }, t - 0.6);
+        tl.to("#mh", { rotation: 360 * (k + 1) * 3, svgOrigin: "0 0", duration: 0.6, ease: "power2.inOut" }, t - 0.6);
+        prev = hourDeg;
+        tl.to("#tint", { opacity: NIGHT[k], duration: 0.5 }, t - 0.5);
+        tl.set("#when", { textContent: WHEN[k], color: NIGHT[k] > 0.4 ? "#ffffff" : "#241a03" }, t);
+        tl.fromTo("#when", { scale: 1.2 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        tl.set("#main .cap", { color: NIGHT[k] > 0.4 ? "#ffffff" : "#241a03" }, t - 0.2);
+        tl.set("#main .cap .a", { color: NIGHT[k] > 0.4 ? "#fde68a" : "#b45309" }, t - 0.2);
+      });
+      tl.to("#rain", { opacity: 1, duration: 0.3 }, T[4]);
+      tl.fromTo("#rain", { y: -60 }, { y: 60, duration: 0.5, repeat: 6, ease: "none", immediateRender: false }, T[4]);""",
+    endtitle=["Visite à plusieurs", "moments."],
+    endacc="#fde68a",
+    endrgb="253, 230, 138",
+)
+
+# ---------------------------------------------------------------- 10. LES 5 TESTS DE LA VISITE
+SPECS["tests"] = dict(
+    comment="« LES 5 TESTS DE LA VISITE » — vidéo utile : une note de téléphone qu'on coche pendant la visite. 120 BPM (indie pop).",
+    bpm=120,
+    T=T5,
+    vars="""        --bg1: #fdf2f8;
+        --bg2: #f9d5e7;
+        --bg3: #f0a8cb;
+        --ink: #3b0a24;
+        --acc: #be185d;
+        --pill: #3b0a24;
+        --pillt: #fbcfe8;
+        --tipbg: #3b0a24;
+        --tiph: #fbcfe8;""",
+    css="""      #phone {
+        left: 190px;
+        top: 440px;
+        width: 700px;
+        height: 760px;
+        border-radius: 60px;
+        background: #111;
+        padding: 26px;
+        box-shadow: 0 40px 80px rgba(59, 10, 36, 0.35);
+      }
+      #screen {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 38px;
+        background: #fffdf5;
+        overflow: hidden;
+        color: #1f1f1f;
+      }
+      #screen .top {
+        padding: 34px 36px 10px;
+        font-size: 30px;
+        font-weight: 800;
+        color: #8a6200;
+      }
+      #screen .ttl {
+        padding: 0 36px 18px;
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+        border-bottom: 2px solid #eee4cc;
+      }
+      .it {
+        position: absolute;
+        left: 36px;
+        right: 30px;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+      .ck {
+        flex: none;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        border: 5px solid #c9bfa8;
+        color: #fff;
+        font-size: 30px;
+        font-weight: 900;
+        line-height: 42px;
+        text-align: center;
+      }
+""",
+    html="""        <div id="phone" class="abs">
+          <div id="screen">
+            <div class="top">‹ Notes</div>
+            <div class="ttl">Visite du samedi</div>
+            <div id="items"></div>
+          </div>
+        </div>""",
+    cap="Ta visite&nbsp;:<br /><span class=\"a\">5 tests en 5 minutes.</span>",
+    count0="Note à garder",
+    countk="Test ${k + 1}/5",
+    tips=[
+        ("POURQUOI", "La pression doit tenir. Sinon, <b>plomberie ou colonne fatiguée</b>."),
+        ("POURQUOI", "Vieux fusibles à broches&nbsp;? <b>Une mise aux normes est à prévoir.</b>"),
+        ("POURQUOI", "<b>4 reflets = double vitrage</b>, 2 reflets = simple vitrage."),
+        ("POURQUOI", "Taches noires = <b>humidité ou aération insuffisante</b>."),
+        ("POURQUOI", "Odeur d'égout&nbsp;: <b>siphon sec ou évacuation à revoir</b>."),
+    ],
+    know=[
+        ("À EMPORTER", "Une <b>lampe de poche</b>, un briquet ou ton téléphone, et cette liste."),
+        ("ET LE RESTE&nbsp;?", "Les <b>documents de la copro</b> disent ce que la visite ne montre pas."),
+    ],
+    setup="""      const IT = ["Ouvrir 2 robinets en même temps", "Regarder le tableau électrique", "Une flamme devant la vitre", "Regarder derrière les meubles", "Sentir la salle de bain"];
+      document.getElementById("items").innerHTML = IT.map((t, k) => `<div class="it" id="it${k}" style="top: ${200 + k * 104}px"><div class="ck" id="ck${k}"></div><span>${t}</span></div>`).join("");""",
+    js="""      T.forEach((t, k) => {
+        tl.to(`#ck${k}`, { backgroundColor: "#be185d", borderColor: "#be185d", duration: 0.15 }, t);
+        tl.set(`#ck${k}`, { textContent: "✓" }, t);
+        tl.fromTo(`#ck${k}`, { scale: 1.5 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        tl.fromTo(`#it${k}`, { backgroundColor: "rgba(251,207,232,0.9)" }, { backgroundColor: "rgba(251,207,232,0)", duration: 1.2, immediateRender: false }, t);
+      });""",
+    endtitle=["Teste tout", "pendant la visite."],
+    endacc="#fbcfe8",
+    endrgb="251, 207, 232",
+)
