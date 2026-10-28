@@ -28,7 +28,12 @@ restaurant et gaine d'extraction · boulangerie (fournil avant l'aube) · supér
 destination de l'immeuble · boîtes aux lettres aux noms scotchés · « À louer » · propriétaires bailleurs absents en AG (34 % des tantièmes) ·
 ampoules grillées · tableau d'affichage du syndic · extincteur (date de vérification) · taches au plafond de l'escalier ·
 monter au dernier étage · contrat de ménage · visiter à 8 h, 13 h, 20 h, samedi 23 h, jour de pluie · boussole plein sud ·
-pression des robinets · fusibles à broches · flamme devant la vitre (reflets) · taches noires derrière les meubles · odeur d'égout.
+pression des robinets · fusibles à broches · flamme devant la vitre (reflets) · taches noires derrière les meubles · odeur d'égout ·
+charges récupérables (TEOM, honoraires du syndic, électricité des parties communes, assurance de l'immeuble, gardien 75 %) ·
+mur porteur · changement de fenêtres · revêtement de sol et isolation phonique · borne de recharge (droit à la prise) · balcon fermé ·
+diagnostics (plomb avant 1949, amiante avant juillet 1997, électricité / gaz +15 ans, termites, état des risques) · immeuble de 1938 ·
+Carrez (42 → 37,6 m², sous 1,80 m, caves et parkings exclus, 230 000 € → 24 100 €, 1 an pour agir) ·
+votes en AG (art. 24 : 35/25, art. 25 : 45/100, passerelle 1/3, art. 26 : 70/100).
 
 ## Résidences fictives déjà nommées
 Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas.

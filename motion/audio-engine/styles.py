@@ -12,6 +12,11 @@ Chaque style pose `nbars` mesures à partir de t0 sur un Bus, et ajoute ses gros
   ska         — ska : guitare sur les contretemps, cuivres de synthé, batterie rapide
   reggae      — reggae (one drop) : skank d'orgue, basse ronde, caisse sur le 3
   indie       — indie pop : guitare en arpèges clairs, batterie droite, tambourin
+  calypso     — calypso : steel-drum en rebonds, basse sautillante, shaker
+  country     — country : banjo en roulements, basse alternée, batterie « train »
+  synthpop    — synthpop 80 : arpège de scie brillant, caisse claire « gated », basse en croches
+  triphop     — trip-hop : batterie lente et lourde, nappe sombre, piano électrique feutré
+  tango       — tango : accords staccato (bandonéon de synthé), rythme habanera, basse marquée
 """
 import numpy as np
 
@@ -65,6 +70,8 @@ def ding(note=86, L=0.6):
 
 
 def style(name, bus, kicks, t0, nbars, BAR, prog, gain=1.0, drums=True):
+    if name in ("calypso", "country", "synthpop", "triphop", "tango"):
+        return style3(name, bus, kicks, t0, nbars, BAR, prog, gain, drums)
     if name in ("dembow", "citypop", "ska", "reggae", "indie"):
         return style2(name, bus, kicks, t0, nbars, BAR, prog, gain, drums)
     STEP = BAR / 16
@@ -243,3 +250,108 @@ def style2(name, bus, kicks, t0, nbars, BAR, prog, gain=1.0, drums=True):
                     bus.add(tamb(), at(s), 0.15 * gain, pan=0.3)
             bus.add(E.bass808(ch[0] - 24, STEP * 7, drive=1.3), at(0), 0.5 * gain)
             bus.add(E.bass808(ch[1] - 24, STEP * 7, drive=1.3), at(8), 0.45 * gain)
+
+
+def steel(note, L=0.4):
+    t = E.secs(L)
+    f = E.midi(note)
+    s = np.sin(2 * np.pi * f * t) + 0.6 * np.sin(2 * np.pi * f * 2 * t) * np.exp(-t * 10) + 0.3 * np.sin(2 * np.pi * f * 3.01 * t) * np.exp(-t * 18)
+    return s * np.minimum(t / 0.003, 1) * np.exp(-t * 5) * 0.22
+
+
+def banjo(note, L=0.25):
+    t = E.secs(L)
+    f = E.midi(note)
+    s = E.saw(f, t) * 0.5 + E.sq(f, t) * 0.2
+    return E.bandpass(s, 600, 5000) * np.exp(-t * 16) * 0.5
+
+
+def bando(notes, L=0.18):
+    t = E.secs(L)
+    s = sum(E.saw(E.midi(n), t) + 0.5 * E.sq(E.midi(n) * 0.5, t) for n in notes)
+    env = np.minimum(t / 0.01, 1) * np.exp(-np.maximum(t - L * 0.5, 0) * 30)
+    return E.lowpass(np.tanh(s * 0.6), 2200) * env * 0.35 / len(notes) * 2
+
+
+def gated(L=0.22):
+    t = E.secs(L)
+    n = E.bandpass(E.noise(L), 700, 6000) * (t < 0.15)
+    tone = np.sin(2 * np.pi * 190 * t) * np.exp(-t * 20)
+    return (n * 0.6 + tone * 0.5) * 0.7
+
+
+def style3(name, bus, kicks, t0, nbars, BAR, prog, gain=1.0, drums=True):
+    STEP = BAR / 16
+    K = E.kick(top=150, low=48, drive=1.8)
+    for b in range(nbars):
+        tb = t0 + b * BAR
+        ch = prog[b % len(prog)]
+        at = lambda s: tb + s * STEP  # noqa: E731
+        if name == "calypso":
+            pat = [(0, 2), (3, 1), (6, 0), (8, 2), (10, 1), (12, 2), (14, 3 % len(ch))]
+            for s, i in pat:
+                bus.add(steel(ch[i % len(ch)] + 12), at(s), 0.5 * gain, pan=0.2 * (-1) ** s, rev=0.25, duck=True)
+            if drums:
+                for s in (0, 6, 8, 14):
+                    bus.add(K, at(s), 0.6 * gain)
+                    kicks.append(at(s))
+                for s in (4, 12):
+                    bus.add(rim(), at(s), 0.4 * gain)
+                for s in range(16):
+                    bus.add(shaker(), at(s), (0.16 if s % 2 else 0.08) * gain, pan=0.3)
+            for s, d in ((0, 0), (4, 7), (8, 0), (11, 7), (14, 12)):
+                bus.add(E.bass808(ch[0] - 24 + d, STEP * 2, drive=1.4), at(s), 0.45 * gain)
+        elif name == "country":
+            roll = [0, 1, 2, 1, 0, 2, 1, 2] * 2
+            for k, i in enumerate(roll):
+                bus.add(banjo(ch[i % len(ch)] + 12 + (12 if k % 4 == 3 else 0), STEP * 1.4), at(k), 0.3 * gain, pan=0.25, rev=0.15, duck=True)
+            if drums:
+                for s in (0, 8):
+                    bus.add(K, at(s), 0.65 * gain)
+                    kicks.append(at(s))
+                for s in (4, 12):
+                    bus.add(E.snare(L=0.18, tone=230, crack=0.6), at(s), 0.4 * gain, rev=0.15)
+                for s in range(16):
+                    bus.add(shaker(), at(s), (0.18 if s % 4 == 2 else 0.08) * gain, pan=-0.2)
+            for s, n in ((0, ch[0]), (4, ch[2]), (8, ch[0]), (12, ch[2])):
+                bus.add(E.bass808(n - 24, STEP * 3, drive=1.2), at(s), 0.5 * gain)
+        elif name == "synthpop":
+            arp = [0, 1, 2, 3 % len(ch), 2, 1] * 3
+            for k in range(16):
+                bus.add(E.pluck(ch[arp[k] % len(ch)] + 12 + (12 if k % 8 >= 4 else 0), STEP * 0.9, bright=7000), at(k), 0.3 * gain, pan=0.2 * (-1) ** k, rev=0.3, duck=True)
+            bus.add(E.pad([n + 12 for n in ch], BAR, cutoff=2400, attack=0.1), tb, 0.22 * gain, rev=0.3, duck=True)
+            if drums:
+                for s in (0, 4, 8, 12):
+                    bus.add(K, at(s), 0.7 * gain)
+                    kicks.append(at(s))
+                for s in (4, 12):
+                    bus.add(gated(), at(s), 0.55 * gain, rev=0.4)
+                for s in range(0, 16, 2):
+                    bus.add(E.hat(0.03), at(s), 0.14 * gain, pan=0.25)
+            for k in range(8):
+                bus.add(E.bass808(ch[0] - 24, STEP * 1.6, drive=1.8), at(k * 2), 0.42 * gain)
+        elif name == "triphop":
+            for n in ch:
+                bus.add(E.ep(n + 12, BAR * 0.9), tb, 0.22 * gain / len(ch) * 3, pan=-0.1, rev=0.4, duck=True)
+            bus.add(E.pad([n for n in ch], BAR, cutoff=900, attack=0.3), tb, 0.25 * gain, rev=0.5)
+            if drums:
+                for s in (0, 7, 10):
+                    bus.add(E.kick(L=0.6, top=110, low=42, drive=2.4), at(s), 0.85 * gain)
+                    kicks.append(at(s))
+                for s in (4, 12):
+                    bus.add(E.snare(L=0.45, tone=170, crack=0.9), at(s), 0.6 * gain, rev=0.45)
+                for s in range(0, 16, 2):
+                    bus.add(E.hat(0.05), at(s) + (STEP * 0.3 if s % 4 else 0), 0.12 * gain, pan=0.25)
+            bus.add(E.bass808(ch[0] - 24, STEP * 10, drive=1.5), at(0), 0.55 * gain)
+        elif name == "tango":
+            for s in (0, 3, 4, 6, 8, 11, 12, 14):
+                acc = 1.0 if s in (0, 3, 8, 11) else 0.6
+                bus.add(bando([n + 12 for n in ch], STEP * 1.2), at(s), 0.55 * gain * acc, pan=-0.1, rev=0.2, duck=True)
+            if drums:
+                for s in (0, 3, 8, 11):
+                    bus.add(K, at(s), 0.55 * gain)
+                    kicks.append(at(s))
+                for s in (4, 12):
+                    bus.add(rim(), at(s), 0.35 * gain)
+            for s, d in ((0, 0), (3, 7), (4, 0), (8, 0), (11, 7), (12, 5)):
+                bus.add(E.bass808(ch[0] - 24 + d, STEP * 1.5, drive=1.6), at(s), 0.5 * gain)

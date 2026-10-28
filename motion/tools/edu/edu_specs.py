@@ -1155,3 +1155,496 @@ SPECS["tests"] = dict(
     endacc="#fbcfe8",
     endrgb="251, 207, 232",
 )
+
+# ================================================================ SÉRIE 3 « UTILE »
+
+# ---------------------------------------------------------------- 11. LE TRI DES CHARGES (location)
+SPECS["charges"] = dict(
+    comment="« LE TRI DES CHARGES » — vidéo utile pour qui loue : charges récupérables sur le locataire ou non. 104 BPM (calypso).",
+    bpm=104,
+    T=T5,
+    vars="""        --bg1: #f0fdfa;
+        --bg2: #ccf3ea;
+        --bg3: #99e0d2;
+        --ink: #08332c;
+        --acc: #0f766e;
+        --pill: #08332c;
+        --pillt: #99f6e4;
+        --tipbg: #08332c;
+        --tiph: #99f6e4;""",
+    css="""      .bin {
+        position: absolute;
+        top: 860px;
+        width: 400px;
+        height: 330px;
+        border-radius: 20px 20px 46px 46px;
+        color: #fff;
+        text-align: center;
+        padding-top: 24px;
+        box-shadow: 0 30px 60px rgba(8, 51, 44, 0.3);
+      }
+      .bin .t {
+        font-size: 34px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.05;
+      }
+      .bin .n {
+        margin-top: 18px;
+        font-size: 120px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+      #binA {
+        left: 70px;
+        background: linear-gradient(#0f766e, #115e59);
+      }
+      #binB {
+        left: 520px;
+        background: linear-gradient(#dc2626, #991b1b);
+      }
+      .cc {
+        position: absolute;
+        left: 240px;
+        top: 470px;
+        width: 600px;
+        padding: 30px 34px;
+        border-radius: 26px;
+        background: #fff;
+        color: #08332c;
+        font-size: 48px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+        line-height: 1.05;
+        text-align: center;
+        box-shadow: 0 30px 60px rgba(8, 51, 44, 0.25);
+        opacity: 0;
+        z-index: 3;
+      }
+""",
+    html="""        <div class="bin" id="binA"><div class="t">Récupérable<br />sur le locataire</div><div class="n" id="nA">0</div></div>
+        <div class="bin" id="binB"><div class="t">Reste<br />à ta charge</div><div class="n" id="nB">0</div></div>
+        <div class="cc" id="cc0" data-layout-allow-overlap>Taxe d'ordures ménagères</div>
+        <div class="cc" id="cc1" data-layout-allow-overlap>Honoraires du syndic</div>
+        <div class="cc" id="cc2" data-layout-allow-overlap>Électricité des parties communes</div>
+        <div class="cc" id="cc3" data-layout-allow-overlap>Assurance de l'immeuble</div>
+        <div class="cc" id="cc4" data-layout-allow-overlap>Salaire du gardien</div>""",
+    cap="Tu loues ton appart&nbsp;?<br /><span class=\"a\">Qui paie quoi.</span>",
+    count0="Le tri des charges",
+    countk="Charge ${k + 1}/5",
+    tips=[
+        ("RÉCUPÉRABLE", "La <b>taxe d'enlèvement des ordures ménagères</b> se refacture au locataire."),
+        ("À TA CHARGE", "Les <b>honoraires du syndic</b> ne se refacturent jamais."),
+        ("RÉCUPÉRABLE", "Électricité et <b>entretien courant</b> des parties communes."),
+        ("À TA CHARGE", "L'<b>assurance de l'immeuble</b> n'est pas récupérable."),
+        ("RÉCUPÉRABLE EN PARTIE", "<b>75&nbsp;%</b> s'il fait l'entretien et sort les poubelles, 40&nbsp;% s'il fait l'un des deux."),
+    ],
+    know=[
+        ("LA LISTE OFFICIELLE", "Les charges récupérables sont fixées par <b>un décret de 1987</b>."),
+        ("POUR TON RENDEMENT", "Compte seulement <b>ce qui reste à ta charge</b>, pas toutes les charges."),
+    ],
+    setup="",
+    js="""      const SIDE = ["A", "B", "A", "B", "A"];
+      const cnt = { A: 0, B: 0 };
+      tl.fromTo("#cc0", { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 0.5);
+      T.forEach((t, k) => {
+        if (k) tl.fromTo(`#cc${k}`, { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t - 1.0);
+        const dx = SIDE[k] === "A" ? -230 : 220;
+        tl.to(`#cc${k}`, { x: dx, y: 470, scale: 0.4, rotation: SIDE[k] === "A" ? -12 : 12, duration: 0.5, ease: "power2.in" }, t);
+        tl.to(`#cc${k}`, { opacity: 0, duration: 0.1 }, t + 0.45);
+        cnt[SIDE[k]]++;
+        tl.set(`#n${SIDE[k]}`, { textContent: String(cnt[SIDE[k]]) }, t + 0.5);
+        tl.fromTo(`#bin${SIDE[k]}`, { scaleY: 0.9, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.4, ease: "elastic.out(1.2, 0.4)", immediateRender: false }, t + 0.5);
+      });""",
+    endtitle=["Trie tes charges", "avant d'investir."],
+    endacc="#99f6e4",
+    endrgb="153, 246, 228",
+)
+
+# ---------------------------------------------------------------- 12. TRAVAUX CHEZ TOI : QUI DOIT DIRE OUI ?
+SPECS["travaux"] = dict(
+    comment="« TRAVAUX CHEZ TOI » — vidéo utile : quels travaux dans ton lot demandent l'accord de la copro. 118 BPM (country).",
+    bpm=118,
+    T=T5,
+    vars="""        --bg1: #fffaf0;
+        --bg2: #f6e7c8;
+        --bg3: #e6c98e;
+        --ink: #2b1a07;
+        --acc: #a16207;
+        --pill: #2b1a07;
+        --pillt: #fcd34d;
+        --tipbg: #2b1a07;
+        --tiph: #fcd34d;""",
+    css="""      #plan {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 740px;
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 70px rgba(43, 26, 7, 0.25);
+      }
+      .stk {
+        position: absolute;
+        padding: 12px 22px;
+        border-radius: 16px;
+        color: #fff;
+        font-size: 34px;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        opacity: 0;
+        z-index: 3;
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+      }
+      .stk.ag {
+        background: #dc2626;
+      }
+      .stk.ok {
+        background: #16a34a;
+      }
+      .stk.sy {
+        background: #2563eb;
+      }
+      .ring {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        margin: -75px 0 0 -75px;
+        border-radius: 50%;
+        border: 10px solid #a16207;
+        opacity: 0;
+        z-index: 2;
+      }
+""",
+    html="""        <svg id="plan" class="abs" viewBox="0 0 850 740"></svg>
+        <div class="ring" id="rg0" style="left: 480px; top: 760px"></div>
+        <div class="ring" id="rg1" style="left: 210px; top: 470px"></div>
+        <div class="ring" id="rg2" style="left: 640px; top: 1000px"></div>
+        <div class="ring" id="rg3" style="left: 210px; top: 1120px"></div>
+        <div class="ring" id="rg4" style="left: 800px; top: 640px"></div>
+        <div class="stk ag" id="sk0" style="left: 420px; top: 850px">VOTE EN AG</div>
+        <div class="stk ag" id="sk1" style="left: 270px; top: 510px">VOTE EN AG SI L'ASPECT CHANGE</div>
+        <div class="stk ok" id="sk2" style="left: 470px; top: 1060px">LIBRE (+ RÈGLEMENT)</div>
+        <div class="stk sy" id="sk3" style="left: 300px; top: 1090px">PRÉVENIR LE SYNDIC</div>
+        <div class="stk ag" id="sk4" style="left: 520px; top: 560px">AG + MAIRIE</div>""",
+    cap="Travaux chez toi&nbsp;:<br /><span class=\"a\">qui doit dire oui&nbsp;?</span>",
+    count0="Plan de l'appart",
+    countk="Travaux ${k + 1}/5",
+    tips=[
+        ("ABATTRE UN MUR PORTEUR", "Il fait souvent partie des parties communes&nbsp;: <b>autorisation de l'AG</b>."),
+        ("CHANGER LES FENÊTRES", "Autre couleur ou autre modèle&nbsp;? Ça touche l'aspect extérieur&nbsp;: <b>vote en AG</b>."),
+        ("REFAIRE LE SOL", "Libre, mais respecte <b>l'isolation phonique</b> prévue par le règlement."),
+        ("BORNE DE RECHARGE AU PARKING", "<b>Droit à la prise</b>&nbsp;: tu préviens le syndic, pas besoin de vote."),
+        ("FERMER LE BALCON", "Aspect extérieur&nbsp;: <b>accord de l'AG</b>, et souvent déclaration en mairie."),
+    ],
+    know=[
+        ("AVANT D'ACHETER", "Tu prévois de casser une cloison&nbsp;? <b>Vérifie qu'elle n'est pas porteuse.</b>"),
+        ("LE BON ORDRE", "Demande l'accord <b>avant</b> les travaux, jamais après."),
+    ],
+    setup="""      let p = `<rect x="40" y="40" width="770" height="660" fill="none" stroke="#2b1a07" stroke-width="12"/>`;
+      p += `<path d="M40 340 H460 M460 40 V560 M460 460 H810 M250 340 V700" stroke="#2b1a07" stroke-width="8"/>`;
+      p += `<path d="M410 300 V320" stroke="#2b1a07" stroke-width="20"/>`;
+      p += `<rect x="90" y="32" width="200" height="16" fill="#93c5fd"/><rect x="560" y="32" width="180" height="16" fill="#93c5fd"/>`;
+      p += `<rect x="802" y="120" width="16" height="230" fill="#93c5fd"/><rect x="818" y="120" width="30" height="230" fill="#e7e5e4" stroke="#2b1a07" stroke-width="4"/>`;
+      for (let i = 0; i < 9; i++) p += `<path d="M${470 + i * 37} 470 v220" stroke="#e8d3a6" stroke-width="6"/>`;
+      p += `<rect x="60" y="600" width="170" height="80" rx="8" fill="#e5e7eb" stroke="#2b1a07" stroke-width="4"/><rect x="100" y="618" width="20" height="44" fill="#2563eb"/>`;
+      p += `<path d="M385 330 h50" stroke="#a16207" stroke-width="6" stroke-dasharray="8 6"/>`;
+      document.getElementById("plan").innerHTML = p;""",
+    js="""      T.forEach((t, k) => {
+        if (k) {
+          tl.to(`#rg${k - 1}`, { opacity: 0, duration: 0.2 }, t - 0.2);
+          tl.to(`#sk${k - 1}`, { opacity: 0, duration: 0.2 }, t - 0.2);
+        }
+        tl.fromTo(`#rg${k}`, { scale: 2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, t);
+        tl.fromTo(`#sk${k}`, { scale: 0.3, rotation: -8, opacity: 0 }, { scale: 1, rotation: -3, opacity: 1, duration: 0.35, ease: "back.out(3)", immediateRender: false }, t + 0.2);
+        shake("#plan", t + 0.2, 4, 3);
+      });""",
+    endtitle=["Vérifie avant", "de casser un mur."],
+    endacc="#fcd34d",
+    endrgb="252, 211, 77",
+)
+
+# ---------------------------------------------------------------- 13. LES DIAGNOSTICS SELON L'ÂGE
+SPECS["diags"] = dict(
+    comment="« LES DIAGNOSTICS » — vidéo utile : quels diagnostics obligatoires à la vente, selon l'âge et la situation. 122 BPM (synthpop).",
+    bpm=122,
+    T=T5,
+    vars="""        --bg1: #1f1147;
+        --bg2: #120a2e;
+        --bg3: #07041a;
+        --ink: #ffffff;
+        --acc: #f472b6;
+        --pill: #f472b6;
+        --pillt: #120a2e;
+        --tipbg: #f472b6;
+        --tiph: #120a2e;""",
+    css="""      #year {
+        left: 70px;
+        right: 160px;
+        top: 450px;
+        padding: 26px 30px;
+        border-radius: 26px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        text-align: center;
+      }
+      #year small {
+        display: block;
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        color: #c4b5fd;
+      }
+      #year b {
+        display: block;
+        font-size: 110px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+      .chip {
+        position: absolute;
+        width: 410px;
+        height: 104px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 3px solid rgba(255, 255, 255, 0.18);
+        color: rgba(255, 255, 255, 0.45);
+        font-size: 38px;
+        font-weight: 900;
+        line-height: 98px;
+        text-align: center;
+        letter-spacing: -0.02em;
+      }
+      .tip {
+        color: #120a2e;
+      }
+""",
+    html="""        <div id="year" class="abs"><small>EXEMPLE · IMMEUBLE CONSTRUIT EN</small><b id="yr">2024</b></div>
+        <div id="chips"></div>""",
+    cap="Les diagnostics&nbsp;:<br /><span class=\"a\">lesquels pour ton appart&nbsp;?</span>",
+    count0="Vente en copro",
+    countk="Règle ${k + 1}/5",
+    tips=[
+        ("TOUJOURS", "<b>DPE</b>, <b>état des risques</b> et, en copro, <b>mesure Carrez</b>."),
+        ("CONSTRUIT AVANT 1949", "Constat de risque d'exposition au <b>plomb</b>."),
+        ("PERMIS AVANT JUILLET 1997", "Repérage de l'<b>amiante</b>."),
+        ("INSTALLATION DE + DE 15 ANS", "Diagnostics <b>électricité</b> et <b>gaz</b>."),
+        ("ZONE À TERMITES", "Diagnostic <b>termites</b> si un arrêté préfectoral couvre la commune."),
+    ],
+    know=[
+        ("DURÉE DE VALIDITÉ", "DPE&nbsp;: <b>10 ans</b>. Électricité, gaz&nbsp;: <b>3 ans</b>. Termites, risques&nbsp;: <b>6 mois</b>."),
+        ("LE DOSSIER", "Ils forment le <b>dossier de diagnostic technique</b>, annexé à la promesse."),
+    ],
+    setup="""      const CH = ["DPE", "État des risques", "Carrez", "Plomb", "Amiante", "Électricité", "Gaz", "Termites"];
+      document.getElementById("chips").innerHTML = CH.map((c, i) => `<div class="chip" id="ch${i}" style="left: ${70 + (i % 2) * 440}px; top: ${700 + Math.floor(i / 2) * 124}px">${c}</div>`).join("");
+      const yr = document.getElementById("yr");""",
+    js="""      const ON = [[0, 1, 2], [3], [4], [5, 6], [7]];
+      const COL = ["#f472b6", "#a78bfa", "#60a5fa", "#34d399", "#fbbf24"];
+      const yv = { v: 2024 };
+      tl.to(yv, { v: 1938, duration: 1.4, ease: "power2.inOut", onUpdate: () => (yr.textContent = String(Math.round(yv.v))) }, T[0] - 1.4);
+      T.forEach((t, k) => {
+        ON[k].forEach((i, j) => {
+          tl.to(`#ch${i}`, { backgroundColor: COL[k], borderColor: COL[k], color: "#120a2e", duration: 0.2 }, t + j * 0.12);
+          tl.fromTo(`#ch${i}`, { scale: 1.12 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t + j * 0.12);
+        });
+        flash(t, 0.2, 0.2);
+      });""",
+    endtitle=["Lis les diagnostics", "avant de signer."],
+    endacc="#f472b6",
+    endrgb="244, 114, 182",
+)
+
+# ---------------------------------------------------------------- 14. LA LOI CARREZ
+SPECS["carrez"] = dict(
+    comment="« LA LOI CARREZ » — vidéo utile : ce qui compte dans la surface, et ce que tu peux obtenir en cas d'erreur. 84 BPM (trip-hop).",
+    bpm=84,
+    T=T4,
+    vars="""        --bg1: #eef2ff;
+        --bg2: #d6ddf5;
+        --bg3: #b4bfe6;
+        --ink: #121a3a;
+        --acc: #4338ca;
+        --pill: #121a3a;
+        --pillt: #c7d2fe;
+        --tipbg: #121a3a;
+        --tiph: #c7d2fe;""",
+    css="""      #cut {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 560px;
+      }
+      #surf {
+        left: 70px;
+        right: 160px;
+        top: 1030px;
+        display: flex;
+        gap: 20px;
+      }
+      #surf .s {
+        flex: 1;
+        padding: 18px 20px;
+        border-radius: 22px;
+        background: #fff;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(18, 26, 58, 0.18);
+      }
+      #surf small {
+        display: block;
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: #4338ca;
+      }
+      #surf b {
+        display: block;
+        font-size: 64px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        font-variant-numeric: tabular-nums;
+      }
+      #mlab {
+        left: 140px;
+        top: 735px;
+        padding: 8px 16px;
+        border-radius: 12px;
+        background: #4338ca;
+        color: #fff;
+        font-size: 30px;
+        font-weight: 900;
+        opacity: 0;
+        z-index: 2;
+      }
+      .tip {
+        top: 1190px;
+      }
+""",
+    html="""        <svg id="cut" class="abs" viewBox="0 0 850 560"></svg>
+        <div id="mlab" class="abs">1,80&nbsp;m</div>
+        <div id="surf" class="abs"><div class="s"><small>ANNONCE</small><b>42&nbsp;m²</b></div><div class="s"><small>CARREZ</small><b id="cz">42&nbsp;m²</b></div></div>""",
+    cap="La loi Carrez<br /><span class=\"a\">en 4 règles.</span>",
+    count0="Coupe de l'appart",
+    countk="Règle ${k + 1}/4",
+    tips=[
+        ("CE QUI COMPTE", "La surface au sol, <b>murs et cloisons déduits</b>."),
+        ("SOUS 1,80 M", "Les parties <b>sous 1,80&nbsp;m de hauteur</b> ne comptent pas."),
+        ("HORS CARREZ", "<b>Caves, garages, parkings</b>, et les lots de moins de 8&nbsp;m²."),
+        ("ERREUR DE + DE 5 %", "Surface réelle plus petite&nbsp;? <b>Baisse de prix proportionnelle.</b> Ici&nbsp;: ≈ 24&nbsp;100&nbsp;€ sur 230&nbsp;000&nbsp;€."),
+    ],
+    know=[
+        ("LE DÉLAI", "Pour demander la baisse&nbsp;: <b>1 an après l'acte</b> de vente."),
+        ("À FAIRE", "Compare la surface de l'annonce et <b>celle du certificat Carrez</b>."),
+    ],
+    setup="""      let c = `<path d="M40 520 V420 L320 120 H530 L810 420 V520 Z" fill="#ffffff" stroke="#121a3a" stroke-width="8"/>`;
+      c += `<path id="lowL" d="M40 520 V420 L124 330 V520 Z" fill="#ef4444" opacity="0"/><path id="lowR" d="M810 520 V420 L726 330 V520 Z" fill="#ef4444" opacity="0"/>`;
+      c += `<path id="h180" d="M40 330 H810" stroke="#4338ca" stroke-width="5" stroke-dasharray="14 10" opacity="0"/>`;
+      c += `<rect id="walls" x="420" y="200" width="18" height="320" fill="#121a3a"/><rect x="40" y="512" width="770" height="10" fill="#121a3a"/>`;
+      c += `<rect id="cave" x="600" y="530" width="210" height="30" rx="6" fill="#94a3b8" opacity="0"/>`;
+      document.getElementById("cut").innerHTML = c;
+      const cz = document.getElementById("cz");""",
+    js="""      tl.fromTo("#walls", { attr: { fill: "#121a3a" } }, { attr: { fill: "#f59e0b" }, duration: 0.3, yoyo: true, repeat: 3, immediateRender: false }, T[0]);
+      tl.to("#h180", { opacity: 1, duration: 0.3 }, T[1]);
+      tl.to("#mlab", { opacity: 1, duration: 0.3 }, T[1]);
+      tl.to(["#lowL", "#lowR"], { opacity: 0.35, duration: 0.4 }, T[1] + 0.2);
+      tl.to("#cave", { opacity: 1, duration: 0.3 }, T[2]);
+      const v = { s: 42 };
+      tl.to(v, { s: 37.6, duration: 0.9, ease: "power2.out", onUpdate: () => (cz.textContent = v.s.toFixed(1).replace(".", ",") + "\\u00a0m²") }, T[1] + 0.3);
+      tl.to("#cz", { color: "#dc2626", duration: 0.2 }, T[3]);
+      tl.fromTo("#surf", { scale: 1.06 }, { scale: 1, duration: 0.4, ease: "back.out(3)", immediateRender: false }, T[3]);""",
+    endtitle=["Mesure avant", "de payer."],
+    endacc="#c7d2fe",
+    endrgb="199, 210, 254",
+)
+
+# ---------------------------------------------------------------- 15. LES VOTES EN AG
+SPECS["votes"] = dict(
+    comment="« LES VOTES EN AG » — vidéo utile : articles 24, 25, la passerelle et l'article 26, sur un hémicycle de 100 voix. 112 BPM (tango).",
+    bpm=112,
+    T=T4,
+    vars="""        --bg1: #fff1f2;
+        --bg2: #fbd5da;
+        --bg3: #f2a7b1;
+        --ink: #3a0812;
+        --acc: #be123c;
+        --pill: #3a0812;
+        --pillt: #fecdd3;
+        --tipbg: #3a0812;
+        --tiph: #fecdd3;""",
+    css="""      #hemi {
+        left: 70px;
+        top: 470px;
+        width: 850px;
+        height: 470px;
+      }
+      #verdict {
+        left: 70px;
+        right: 160px;
+        top: 980px;
+        text-align: center;
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+      }
+      #verdict small {
+        display: block;
+        font-size: 30px;
+        font-weight: 800;
+        color: #7f1d1d;
+      }
+""",
+    html="""        <svg id="hemi" class="abs" viewBox="0 0 850 470"></svg>
+        <div id="verdict" class="abs">100 voix = 100&nbsp;%<small>des tantièmes de l'immeuble</small></div>""",
+    cap="Les votes en AG<br /><span class=\"a\">en 30 secondes.</span>",
+    count0="Hémicycle de la copro",
+    countk="Règle ${k + 1}/4",
+    tips=[
+        ("ARTICLE 24", "Majorité des voix <b>des présents et représentés</b>. Ex.&nbsp;: approuver les comptes."),
+        ("ARTICLE 25", "Majorité des voix <b>de tous</b>, absents compris. Ex.&nbsp;: élire le syndic."),
+        ("LA PASSERELLE", "Raté, mais au moins <b>1/3 des voix</b>&nbsp;? Nouveau vote tout de suite, à l'article 24."),
+        ("ARTICLE 26", "Majorité des copropriétaires <b>et 2/3 des voix</b>. Ex.&nbsp;: changer l'usage des parties communes."),
+    ],
+    know=[
+        ("TON POIDS", "Ton nombre de voix dépend de <b>tes tantièmes</b>."),
+        ("À REGARDER", "Dans le PV&nbsp;: <b>à quel article</b> chaque décision a été votée."),
+    ],
+    setup="""      let h = "";
+      const R = [180, 240, 300, 360, 420];
+      const N = [12, 16, 20, 24, 28];
+      let id = 0;
+      const seats = [];
+      R.forEach((r, ri) => {
+        for (let i = 0; i < N[ri]; i++) {
+          const a = Math.PI - (i / (N[ri] - 1)) * Math.PI;
+          seats.push([425 + Math.cos(a) * r, 450 - Math.sin(a) * r, a]);
+        }
+      });
+      seats.sort((p, q) => q[2] - p[2]);
+      seats.forEach(([x, y]) => (h += `<circle id="s${id++}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="13" fill="#e7c3c9"/>`));
+      document.getElementById("hemi").innerHTML = h;
+      const verdict = document.getElementById("verdict");""",
+    js="""      // états : oui (rouge), non (gris foncé), absent (clair)
+      const STATE = [
+        { yes: 35, no: 25, txt: "35 oui · 25 non · 40 absents", sub: "Article 24 : 35 > 25 → <b>ADOPTÉ</b>" },
+        { yes: 45, no: 15, txt: "45 oui sur 100 voix", sub: "Article 25 : il en faut 51 → <b>REJETÉ</b>" },
+        { yes: 45, no: 15, txt: "45 ≥ 1/3 des voix", sub: "Passerelle : revote à l'article 24 → <b>ADOPTÉ</b>" },
+        { yes: 70, no: 10, txt: "70 oui sur 100 voix", sub: "Article 26 : 2/3 atteints (et majorité des copropriétaires) → <b>ADOPTÉ</b>" },
+      ];
+      T.forEach((t, k) => {
+        const st = STATE[k];
+        for (let i = 0; i < 100; i++) {
+          const col = i < st.yes ? "#be123c" : i < st.yes + st.no ? "#4b5563" : "#f3d9dd";
+          tl.to(`#s${i}`, { attr: { fill: col }, duration: 0.15 }, t + (i % 50) * 0.008);
+        }
+        tl.set(verdict, { innerHTML: `${st.txt}<small>${st.sub}</small>` }, t + 0.4);
+        tl.fromTo("#verdict", { scale: 1.1 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t + 0.4);
+      });""",
+    endtitle=["Comprends l'AG", "avant d'y voter."],
+    endacc="#fecdd3",
+    endrgb="254, 205, 211",
+)
