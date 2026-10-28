@@ -1648,3 +1648,421 @@ SPECS["votes"] = dict(
     endacc="#fecdd3",
     endrgb="254, 205, 211",
 )
+
+# ================================================================ SÉRIE 4 « COPRO, BÂTIMENT, APPART »
+
+# ---------------------------------------------------------------- 16. CHOISIR SON ÉTAGE
+SPECS["etages"] = dict(
+    comment="« CHOISIR SON ÉTAGE » — vidéo utile : avantages et pièges de chaque étage. 100 BPM (bhangra).",
+    bpm=100,
+    T=T5,
+    vars="""        --bg1: #fff7ed;
+        --bg2: #fde3c3;
+        --bg3: #f6c48a;
+        --ink: #2d1606;
+        --acc: #c2410c;
+        --pill: #2d1606;
+        --pillt: #fdba74;
+        --tipbg: #2d1606;
+        --tiph: #fdba74;""",
+    css="""      #bld {
+        left: 200px;
+        top: 440px;
+        width: 520px;
+        height: 760px;
+      }
+      #cab {
+        left: 740px;
+        top: 0;
+        width: 160px;
+        padding: 12px 0;
+        border-radius: 18px;
+        background: #2d1606;
+        color: #fdba74;
+        font-size: 34px;
+        font-weight: 900;
+        text-align: center;
+        opacity: 0;
+        z-index: 3;
+      }
+      #hl {
+        left: 200px;
+        top: 0;
+        width: 520px;
+        height: 130px;
+        border-radius: 10px;
+        border: 8px solid #c2410c;
+        background: rgba(194, 65, 12, 0.12);
+        opacity: 0;
+        z-index: 2;
+      }
+""",
+    html="""        <svg id="bld" class="abs" viewBox="0 0 520 760"></svg>
+        <div id="hl" class="abs" data-layout-allow-overlap></div>
+        <div id="cab" class="abs">RDC</div>""",
+    cap="Quel étage choisir&nbsp;?<br /><span class=\"a\">Les pièges de chacun.</span>",
+    count0="Coupe de l'immeuble",
+    countk="Étage ${k + 1}/5",
+    tips=[
+        ("REZ-DE-CHAUSSÉE", "Moins cher, mais <b>vis-à-vis, bruit de la rue</b> et parfois humidité du sol."),
+        ("1ᵉʳ – 2ᵉ ÉTAGE", "Pratique <b>sans ascenseur</b>, mais encore proche du bruit de la rue."),
+        ("ÉTAGES DU MILIEU", "Voisins dessus et dessous&nbsp;: <b>moins de chaleur perdue</b> en hiver."),
+        ("DERNIER ÉTAGE", "Lumineux et calme, mais <b>chaud l'été</b> si le toit est mal isolé."),
+        ("SOUS LES TOITS", "Charme, mais <b>surface Carrez réduite</b> par la pente."),
+    ],
+    know=[
+        ("À DEMANDER", "Les combles sont-ils <b>isolés</b>&nbsp;? Ça change tout au dernier étage."),
+        ("LE PRIX", "Le même appart vaut souvent <b>plus cher en hauteur</b>&nbsp;: compare à étage égal."),
+    ],
+    setup="""      let b = `<path d="M30 160 L260 30 L490 160 Z" fill="#9a3412" stroke="#2d1606" stroke-width="6"/>`;
+      b += `<rect x="40" y="160" width="440" height="600" fill="#f5deb3" stroke="#2d1606" stroke-width="6"/>`;
+      for (let f = 0; f < 5; f++) {
+        const y = 160 + f * 120;
+        b += `<path d="M40 ${y} H480" stroke="#2d1606" stroke-width="3" opacity="0.4"/>`;
+        for (let w = 0; w < 3; w++) b += `<rect x="${80 + w * 140}" y="${y + 28}" width="80" height="64" rx="6" fill="#bfe3ff" stroke="#2d1606" stroke-width="4"/>`;
+      }
+      b += `<rect x="225" y="680" width="70" height="80" fill="#7c2d12"/>`;
+      b += `<rect x="150" y="100" width="80" height="50" rx="6" fill="#bfe3ff" stroke="#2d1606" stroke-width="4" transform="rotate(-29 190 125)"/>`;
+      document.getElementById("bld").innerHTML = b;""",
+    js="""      // 0 = sous les toits … 5 = RDC (y écran)
+      const FY = [440 + 640, 440 + 520, 440 + 400, 440 + 280, 440 + 30];
+      const LBL = ["RDC", "1ᵉʳ", "3ᵉ", "5ᵉ", "Combles"];
+      tl.set("#cab", { opacity: 1, y: FY[0] + 30 }, 0.2);
+      T.forEach((t, k) => {
+        tl.to("#cab", { y: FY[k] + 30, duration: 0.5, ease: "power2.inOut" }, t - 0.5);
+        tl.to("#hl", { y: FY[k], height: k === 4 ? 130 : 120, opacity: 1, duration: 0.5, ease: "power2.inOut" }, t - 0.5);
+        tl.set("#cab", { textContent: LBL[k] }, t);
+        tl.fromTo("#cab", { scale: 1.2 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+      });""",
+    endtitle=["Choisis ton étage", "en connaissance."],
+    endacc="#fdba74",
+    endrgb="253, 186, 116",
+)
+
+# ---------------------------------------------------------------- 17. LES MOTS PIÈGES DU RÈGLEMENT
+SPECS["reglement"] = dict(
+    comment="« LES MOTS PIÈGES DU RÈGLEMENT » — vidéo utile : 4 clauses du règlement de copro à repérer. 132 BPM (jazz).",
+    bpm=132,
+    T=T4,
+    vars="""        --bg1: #fefce8;
+        --bg2: #fbf3b8;
+        --bg3: #f1df6e;
+        --ink: #1c1a05;
+        --acc: #a16207;
+        --pill: #1c1a05;
+        --pillt: #fde047;
+        --tipbg: #1c1a05;
+        --tiph: #fde047;""",
+    css="""      .sign {
+        position: absolute;
+        left: 240px;
+        top: 470px;
+        width: 600px;
+        height: 520px;
+        opacity: 0;
+      }
+      .sign svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .sign .w {
+        position: absolute;
+        left: 120px;
+        right: 120px;
+        top: 250px;
+        text-align: center;
+        font-size: 44px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.05;
+        color: #1c1a05;
+      }
+""",
+    html="""        <div id="signs"></div>""",
+    cap="Le règlement de copro&nbsp;:<br /><span class=\"a\">4 mots pièges.</span>",
+    count0="Panneaux attention",
+    countk="Mot piège ${k + 1}/4",
+    tips=[
+        ("JOUISSANCE EXCLUSIVE", "Le jardin ou la terrasse est à toi d'usage, mais <b>reste une partie commune</b>."),
+        ("HABITATION BOURGEOISE", "Clause stricte&nbsp;: <b>activité pro souvent limitée</b> ou interdite dans les logements."),
+        ("DROIT DE SURÉLÉVATION", "La copro peut vendre le droit de bâtir au-dessus&nbsp;: <b>chantier sur ta tête</b>."),
+        ("USAGE DU LOT", "Grenier, cellier&nbsp;: <b>pas une pièce à vivre</b> sans autorisation."),
+    ],
+    know=[
+        ("OÙ CHERCHER", "Dans le <b>règlement de copropriété</b> et ses modificatifs, demandés avant le compromis."),
+        ("LE RÉFLEXE", "Un mot pas clair&nbsp;? <b>Demande au notaire</b> avant de signer."),
+    ],
+    setup="""      const W = ["Jouissance<br />exclusive", "Habitation<br />bourgeoise", "Droit de<br />surélévation", "Usage<br />du lot"];
+      document.getElementById("signs").innerHTML = W.map((w, k) => `<div class="sign" id="sg${k}"><svg viewBox="0 0 600 520"><path d="M300 30 L570 490 H30 Z" fill="#fde047" stroke="#dc2626" stroke-width="40" stroke-linejoin="round"/></svg><div class="w">${w}</div></div>`).join("");""",
+    js="""      T.forEach((t, k) => {
+        if (k) tl.to(`#sg${k - 1}`, { rotationY: 90, opacity: 0, duration: 0.25, ease: "power2.in", transformPerspective: 1400 }, t - 0.25);
+        tl.fromTo(`#sg${k}`, { rotationY: -90, opacity: 0, transformPerspective: 1400 }, { rotationY: 0, opacity: 1, duration: 0.35, ease: "back.out(1.6)", immediateRender: false }, k ? t : 0.3);
+        tl.to(`#sg${k}`, { rotation: 3, duration: BEAT, yoyo: true, repeat: 5, ease: "sine.inOut", transformOrigin: "50% 100%" }, t + 0.4);
+      });""",
+    endtitle=["Lis le règlement", "avant de signer."],
+    endacc="#fde047",
+    endrgb="253, 224, 71",
+)
+
+# ---------------------------------------------------------------- 18. LES 3 TYPES DE SYNDIC
+SPECS["syndics"] = dict(
+    comment="« LES 3 TYPES DE SYNDIC » — vidéo utile : professionnel, bénévole, coopératif, et le contrat. 96 BPM (celtique).",
+    bpm=96,
+    T=T4,
+    vars="""        --bg1: #ecfdf5;
+        --bg2: #c8f0dc;
+        --bg3: #94dbb7;
+        --ink: #052e1b;
+        --acc: #047857;
+        --pill: #052e1b;
+        --pillt: #6ee7b7;
+        --tipbg: #052e1b;
+        --tiph: #6ee7b7;""",
+    css="""      .pc {
+        position: absolute;
+        top: 470px;
+        width: 260px;
+        height: 380px;
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 60px rgba(5, 46, 27, 0.25);
+        text-align: center;
+        padding-top: 30px;
+        opacity: 0;
+      }
+      .pc .ic {
+        margin: 0 auto;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        font-size: 72px;
+        font-weight: 900;
+        line-height: 140px;
+        color: #fff;
+      }
+      .pc .n {
+        margin-top: 26px;
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.05;
+      }
+      .pc.on {
+        box-shadow: 0 0 0 10px #047857, 0 30px 60px rgba(5, 46, 27, 0.3);
+      }
+      #contract {
+        left: 160px;
+        top: 900px;
+        width: 680px;
+        padding: 26px 30px;
+        border-radius: 20px;
+        background: #fff;
+        border: 4px dashed #047857;
+        text-align: center;
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        opacity: 0;
+      }
+""",
+    html="""        <div class="pc" id="pc0" style="left: 70px"><div class="ic" style="background: #2563eb">€</div><div class="n">Syndic<br />pro</div></div>
+        <div class="pc" id="pc1" style="left: 365px"><div class="ic" style="background: #d97706">1</div><div class="n">Syndic<br />bénévole</div></div>
+        <div class="pc" id="pc2" style="left: 660px"><div class="ic" style="background: #047857">≡</div><div class="n">Syndic<br />coopératif</div></div>
+        <div id="contract" class="abs">Contrat type · mandat de 3&nbsp;ans max.</div>""",
+    cap="Ton futur syndic&nbsp;:<br /><span class=\"a\">lequel des 3&nbsp;?</span>",
+    count0="3 cartes",
+    countk="Carte ${k + 1}/4",
+    tips=[
+        ("SYNDIC PRO", "Une agence payée au forfait. Elle doit offrir un <b>espace en ligne</b> avec les documents."),
+        ("SYNDIC BÉNÉVOLE", "Un <b>copropriétaire</b> qui gère&nbsp;: moins cher, idéal pour les petites copros."),
+        ("SYNDIC COOPÉRATIF", "Le <b>conseil syndical</b> gère lui-même et élit son président syndic."),
+        ("LE CONTRAT", "<b>Contrat type</b> obligatoire, mandat de 3&nbsp;ans max., mise en concurrence régulière."),
+    ],
+    know=[
+        ("À REGARDER", "Les <b>prestations hors forfait</b> du contrat&nbsp;: c'est là que la facture grimpe."),
+        ("À DEMANDER", "Le nom du syndic et <b>depuis quand</b> il gère l'immeuble."),
+    ],
+    setup="",
+    js="""      tl.fromTo(".pc", { y: 80, opacity: 0, rotation: (i) => [-6, 0, 6][i] }, { y: 0, opacity: 1, rotation: 0, duration: 0.4, ease: "back.out(2)", stagger: 0.12, immediateRender: false }, 0.3);
+      T.forEach((t, k) => {
+        if (k < 3) {
+          if (k) tl.set(`#pc${k - 1}`, { className: "pc" }, t);
+          tl.set(`#pc${k}`, { className: "pc on" }, t);
+          tl.fromTo(`#pc${k}`, { y: 0 }, { y: -30, duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+          if (k) tl.to(`#pc${k - 1}`, { y: 0, duration: 0.3 }, t);
+        } else {
+          tl.set("#pc2", { className: "pc" }, t);
+          tl.to("#pc2", { y: 0, duration: 0.3 }, t);
+          tl.fromTo("#contract", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false }, t);
+        }
+      });""",
+    endtitle=["Connais ton syndic", "avant d'acheter."],
+    endacc="#6ee7b7",
+    endrgb="110, 231, 183",
+)
+
+# ---------------------------------------------------------------- 19. L'ÂGE DE L'IMMEUBLE
+SPECS["age"] = dict(
+    comment="« L'ÂGE DE L'IMMEUBLE » — vidéo utile : ce qu'on peut attendre d'un immeuble selon son époque. 124 BPM (électropop).",
+    bpm=124,
+    T=T5,
+    vars="""        --bg1: #f0f9ff;
+        --bg2: #cfe9fb;
+        --bg3: #9fcfef;
+        --ink: #082032;
+        --acc: #0369a1;
+        --pill: #082032;
+        --pillt: #7dd3fc;
+        --tipbg: #082032;
+        --tiph: #7dd3fc;""",
+    css="""      .era {
+        position: absolute;
+        left: 190px;
+        top: 450px;
+        width: 700px;
+        height: 620px;
+        opacity: 0;
+      }
+      #yrs {
+        left: 70px;
+        right: 160px;
+        top: 1100px;
+        height: 90px;
+        display: flex;
+        gap: 10px;
+      }
+      #yrs div {
+        flex: 1;
+        border-radius: 16px;
+        background: rgba(8, 32, 50, 0.08);
+        color: #4a6a80;
+        font-size: 28px;
+        font-weight: 900;
+        line-height: 90px;
+        text-align: center;
+      }
+      .tip {
+        top: 1220px;
+      }
+""",
+    html="""        <svg class="era" id="er0" viewBox="0 0 700 620"></svg>
+        <svg class="era" id="er1" viewBox="0 0 700 620"></svg>
+        <svg class="era" id="er2" viewBox="0 0 700 620"></svg>
+        <svg class="era" id="er3" viewBox="0 0 700 620"></svg>
+        <svg class="era" id="er4" viewBox="0 0 700 620"></svg>
+        <div id="yrs" class="abs"><div id="y0">&lt;1948</div><div id="y1">48–74</div><div id="y2">75–99</div><div id="y3">00–12</div><div id="y4">2012+</div></div>""",
+    cap="L'âge de l'immeuble<br /><span class=\"a\">en dit long.</span>",
+    count0="Remonte le temps",
+    countk="Époque ${k + 1}/5",
+    tips=[
+        ("AVANT 1948", "Pierre, murs épais, beaux volumes. <b>Isolation et électricité</b> souvent à revoir."),
+        ("1948 – 1974", "Béton, construit vite&nbsp;: <b>peu isolé</b>, avant toute norme thermique."),
+        ("1975 – 1999", "Première <b>réglementation thermique</b> (1974)&nbsp;: un peu mieux isolé."),
+        ("2000 – 2012", "Normes renforcées&nbsp;: <b>double vitrage</b> et isolation plus sérieuse."),
+        ("APRÈS 2012", "RT 2012 puis RE 2020&nbsp;: <b>bâtiments basse consommation</b>."),
+    ],
+    know=[
+        ("OÙ TROUVER L'ANNÉE", "Dans le <b>diagnostic technique</b> ou l'acte de propriété du vendeur."),
+        ("ATTENTION", "Un immeuble ancien <b>bien rénové</b> peut battre un récent mal entretenu."),
+    ],
+    setup="""      const E5 = [
+        (() => { let s = `<rect x="80" y="80" width="540" height="540" fill="#e7d3a8" stroke="#082032" stroke-width="6"/><path d="M60 80 h580 l-30 -50 h-520z" fill="#64748b" stroke="#082032" stroke-width="6"/>`; for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) s += `<rect x="${120 + c * 125}" y="${120 + r * 120}" width="70" height="90" rx="35" fill="#bfe3ff" stroke="#082032" stroke-width="4"/><rect x="${112 + c * 125}" y="${205 + r * 120}" width="86" height="10" fill="#082032"/>`; return s; })(),
+        (() => { let s = `<rect x="40" y="140" width="620" height="480" fill="#d1d5db" stroke="#082032" stroke-width="6"/>`; for (let r = 0; r < 6; r++) for (let c = 0; c < 8; c++) s += `<rect x="${60 + c * 76}" y="${160 + r * 76}" width="56" height="50" fill="#94a3b8" stroke="#082032" stroke-width="3"/>`; return s; })(),
+        (() => { let s = `<rect x="100" y="120" width="500" height="500" fill="#fde2c4" stroke="#082032" stroke-width="6"/><path d="M80 120 L350 20 L620 120 Z" fill="#b45309" stroke="#082032" stroke-width="6"/>`; for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) s += `<rect x="${140 + c * 115}" y="${160 + r * 110}" width="80" height="70" fill="#bfe3ff" stroke="#082032" stroke-width="4"/>`; return s; })(),
+        (() => { let s = `<rect x="100" y="90" width="500" height="530" fill="#f8fafc" stroke="#082032" stroke-width="6"/>`; for (let r = 0; r < 5; r++) s += `<rect x="130" y="${120 + r * 100}" width="440" height="70" fill="#7dd3fc" stroke="#082032" stroke-width="4"/><path d="M350 ${120 + r * 100} v70" stroke="#082032" stroke-width="4"/>`; return s; })(),
+        (() => { let s = `<rect x="90" y="70" width="520" height="550" fill="#e2e8f0" stroke="#082032" stroke-width="6"/>`; for (let r = 0; r < 5; r++) { s += `<rect x="120" y="${100 + r * 104}" width="300" height="80" fill="#38bdf8" stroke="#082032" stroke-width="4"/><rect x="440" y="${100 + r * 104}" width="140" height="80" fill="#a3a38a" stroke="#082032" stroke-width="4"/>`; } s += `<rect x="90" y="40" width="520" height="30" fill="#16a34a"/>`; return s; })(),
+      ];
+      E5.forEach((s, k) => (document.getElementById(`er${k}`).innerHTML = s));
+      gsap.set("#er0", { opacity: 1 });""",
+    js="""      T.forEach((t, k) => {
+        if (k) {
+          tl.to(`#er${k - 1}`, { opacity: 0, scale: 0.9, duration: 0.3 }, t - 0.3);
+          tl.to(`#y${k - 1}`, { backgroundColor: "rgba(8,32,50,0.08)", color: "#4a6a80", duration: 0.2 }, t);
+        }
+        tl.fromTo(`#er${k}`, { opacity: k ? 0 : 1, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, t);
+        tl.to(`#y${k}`, { backgroundColor: "#0369a1", color: "#ffffff", duration: 0.2 }, t);
+      });""",
+    endtitle=["Regarde son âge", "avant de signer."],
+    endacc="#7dd3fc",
+    endrgb="125, 211, 252",
+)
+
+# ---------------------------------------------------------------- 20. QUI PAIE LA RÉPARATION ?
+SPECS["reparer"] = dict(
+    comment="« QUI PAIE LA RÉPARATION ? » — vidéo utile : parties communes ou privatives, toi ou la copro. 100 BPM (samba).",
+    bpm=100,
+    T=T4,
+    vars="""        --bg1: #fdf4ff;
+        --bg2: #f3d7fa;
+        --bg3: #e2aef0;
+        --ink: #2e0838;
+        --acc: #86198f;
+        --pill: #2e0838;
+        --pillt: #f0abfc;
+        --tipbg: #2e0838;
+        --tiph: #f0abfc;""",
+    css="""      #flat {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 620px;
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 60px rgba(46, 8, 56, 0.2);
+      }
+      #legend {
+        left: 70px;
+        right: 160px;
+        top: 1090px;
+        display: flex;
+        gap: 16px;
+        font-size: 32px;
+        font-weight: 900;
+      }
+      #legend span {
+        flex: 1;
+        padding: 12px 0;
+        border-radius: 14px;
+        text-align: center;
+        color: #fff;
+      }
+      .tip {
+        top: 1200px;
+      }
+""",
+    html="""        <svg id="flat" class="abs" viewBox="0 0 850 620"></svg>
+        <div id="legend" class="abs"><span style="background: #2563eb">LA COPRO</span><span style="background: #ea580c">TOI</span></div>""",
+    cap="Une réparation&nbsp;:<br /><span class=\"a\">toi ou la copro&nbsp;?</span>",
+    count0="Coupe de l'appart",
+    countk="Cas ${k + 1}/4",
+    tips=[
+        ("LA COLONNE D'EAU", "La grosse canalisation qui monte dans l'immeuble&nbsp;: <b>en général la copro</b>."),
+        ("APRÈS LA VANNE", "Le tuyau qui part vers ton évier et tes robinets&nbsp;: <b>en général toi</b>."),
+        ("LE BALCON", "La dalle et la structure&nbsp;: <b>la copro</b>. Le carrelage&nbsp;: <b>souvent toi</b>."),
+        ("LA PORTE PALIÈRE", "Souvent <b>à toi</b>, mais son aspect côté palier est fixé par le règlement."),
+    ],
+    know=[
+        ("LA RÉPONSE EXACTE", "Elle est dans le <b>règlement de copropriété</b>&nbsp;: chaque immeuble a ses règles."),
+        ("DÉGÂT DES EAUX", "Préviens vite <b>ton assureur et le syndic</b>, même si tu ne sais pas qui paie."),
+    ],
+    setup="""      let f = `<rect x="40" y="60" width="560" height="500" fill="#faf5ff" stroke="#2e0838" stroke-width="8"/>`;
+      f += `<rect id="col" x="70" y="20" width="44" height="580" fill="#cbd5e1" stroke="#2e0838" stroke-width="4"/>`;
+      f += `<circle cx="140" cy="300" r="16" fill="#cbd5e1" stroke="#2e0838" stroke-width="4"/><path id="pipe" d="M114 300 H420 V360" stroke="#cbd5e1" stroke-width="16" fill="none"/>`;
+      f += `<rect x="380" y="360" width="120" height="60" rx="8" fill="#e2e8f0" stroke="#2e0838" stroke-width="4"/>`;
+      f += `<rect id="slab" x="600" y="440" width="210" height="30" fill="#cbd5e1" stroke="#2e0838" stroke-width="4"/><rect id="tile" x="600" y="428" width="210" height="12" fill="#e2e8f0" stroke="#2e0838" stroke-width="3"/><path d="M800 300 V428" stroke="#2e0838" stroke-width="6"/><path d="M610 330 H800" stroke="#2e0838" stroke-width="4"/>`;
+      f += `<rect id="door" x="300" y="420" width="90" height="140" fill="#e2e8f0" stroke="#2e0838" stroke-width="4"/><circle cx="375" cy="495" r="6" fill="#2e0838"/>`;
+      document.getElementById("flat").innerHTML = f;""",
+    js="""      const B = "#2563eb", O = "#ea580c";
+      tl.to("#col", { attr: { fill: B }, duration: 0.3 }, T[0]);
+      tl.fromTo("#col", { scaleX: 1.3, transformOrigin: "50% 50%" }, { scaleX: 1, duration: 0.4, ease: "back.out(3)", immediateRender: false }, T[0]);
+      tl.to("#pipe", { attr: { stroke: O }, duration: 0.4 }, T[1]);
+      tl.to("#slab", { attr: { fill: B }, duration: 0.3 }, T[2]);
+      tl.to("#tile", { attr: { fill: O }, duration: 0.3 }, T[2] + 0.4);
+      tl.to("#door", { attr: { fill: O }, duration: 0.3 }, T[3]);
+      T.forEach((t) => shake("#flat", t, 4, 3));""",
+    endtitle=["Sache qui répare", "avant d'acheter."],
+    endacc="#f0abfc",
+    endrgb="240, 171, 252",
+)

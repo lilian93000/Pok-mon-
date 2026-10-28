@@ -33,7 +33,10 @@ charges récupérables (TEOM, honoraires du syndic, électricité des parties co
 mur porteur · changement de fenêtres · revêtement de sol et isolation phonique · borne de recharge (droit à la prise) · balcon fermé ·
 diagnostics (plomb avant 1949, amiante avant juillet 1997, électricité / gaz +15 ans, termites, état des risques) · immeuble de 1938 ·
 Carrez (42 → 37,6 m², sous 1,80 m, caves et parkings exclus, 230 000 € → 24 100 €, 1 an pour agir) ·
-votes en AG (art. 24 : 35/25, art. 25 : 45/100, passerelle 1/3, art. 26 : 70/100).
+votes en AG (art. 24 : 35/25, art. 25 : 45/100, passerelle 1/3, art. 26 : 70/100) ·
+étages (RDC, 1ᵉʳ–2ᵉ, milieu, dernier, sous les toits) · jouissance exclusive · habitation bourgeoise · droit de surélévation · usage du lot (grenier, cellier) ·
+syndic pro / bénévole / coopératif, prestations hors forfait · époques de construction (<1948, 48–74, 75–99, 00–12, 2012+, RT 1974 / RT 2012 / RE 2020) ·
+colonne d'eau / tuyau après la vanne · dalle vs carrelage du balcon · porte palière · dégât des eaux.
 
 ## Résidences fictives déjà nommées
 Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas.
