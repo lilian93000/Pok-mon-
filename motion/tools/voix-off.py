@@ -64,14 +64,32 @@ FILES = {
 NUM = {"0": "zéro", "1": "un", "2": "deux", "3": "trois", "4": "quatre", "5": "cinq", "6": "six", "7": "sept", "8": "huit", "9": "neuf"}
 
 
+ACRONYMS = ("DPE", "VMC", "PLU", "PNO", "ABF", "TEOM", "PPPT", "RC", "PTO", "ANAH", "HLM")
+SUBS = [
+    (r"(\d)\s*/\s*10\s?000", r"\1 sur 10 000"), (r"(\d)\s*/\s*1000\b", r"\1 sur 1000"),
+    (r"\b1/3\b", "un tiers"), (r"\b2/3\b", "deux tiers"), (r"\b4/16/4\b", "4, 16, 4"), (r"4G/5G", "4G ou 5G"),
+    (r"W/m²\.K", "watts par mètre carré kelvin"), (r"\bUw\b", "U W"), (r"\bHT\b", "hors taxes"),
+    (r"m²", "mètres carrés"), (r"m³", "mètres cubes"), (r"(\d)\s?m\b", r"\1 mètres"), (r"(\d)\s?mm\b", r"\1 millimètres"),
+    (r"(\d)\s?mA\b", r"\1 milliampères"), (r"(\d)\s?dB\b", r"\1 décibels"), (r"(\d)\s?°", r"\1 degrés"),
+    (r"(\d)\s?h\b", r"\1 heures"), (r"(\d)\s?%", r"\1 pour cent"), (r"(\d)\s?€", r"\1 euros"), (r"€", "euros"),
+    (r"\b1ᵉʳ\b", "premier"), (r"\b1ʳᵉ\b", "première"), (r"\b(\d+)ᵉ\b", r"\1ème"),
+    (r"≈\s?", "environ "), (r"\s×\s", " fois "), (r"(\d[^=]*?)\s=\s(\d)", r"\1 égale \2"), (r"\s=\s", " : "), (r"\+ de\b", "plus de"), (r"\bEx\. ?:", "Par exemple :"),
+    (r"\bart\. ?", "article "), (r"\bn°\s?", "numéro "), (r"(\d+)\s?–\s?(\d+)", r"\1 à \2"), (r"…", "..."),
+]
+
+
 def speakable(t):
     """Adapte le texte écrit à la prononciation."""
     t = t.replace("AnalyseTaCopro", "Analyse ta copro")
     t = re.sub(r"\bPV\b", "P.V.", t)
     t = re.sub(r"\bAG\b", "A.G.", t)
-    t = re.sub(r"(\d),(\d)", lambda m: f"{NUM[m.group(1)]} virgule {NUM[m.group(2)]}", t)
-    t = t.replace("« ", "").replace(" »", "")
-    return t
+    for a in ACRONYMS:
+        t = re.sub(rf"\b{a}\b", ".".join(a) + ".", t)
+    for pat, rep in SUBS:
+        t = re.sub(pat, rep, t)
+    t = re.sub(r"(\d),(\d)", r"\1 virgule \2", t)
+    t = t.replace("« ", "").replace(" »", "").replace("«", "").replace("»", "")
+    return re.sub(r"\s+", " ", t).strip()
 
 
 def parse():
@@ -157,13 +175,14 @@ def schedule(lines, offset, end, gap=0.08, max_drift=0.9):
     return best[0], best[1]
 
 
-def build(name, secs):
+def build(name, secs=None, plan=None, out_dir=None, bed=None, gain=None):
+    """plan : liste (début en s dans la vidéo avec accroche, fichier, tempo) déjà calée ; sinon calculée depuis secs."""
     os.makedirs(CACHE, exist_ok=True)
     src = os.path.join(ROOT, "avec-accroche", f"analysetacopro-{name}.mp4")
     orig = os.path.join(ROOT, f"analysetacopro-{name}.mp4")
-    out = os.path.join(ROOT, os.environ.get("VO_OUT", "tiktok-final"), f"analysetacopro-{name}.mp4")
-    bed = os.environ.get("VO_BED")
-    gain = float(os.environ.get("VO_MUSIC_GAIN", "0.55"))
+    out = os.path.join(ROOT, out_dir or os.environ.get("VO_OUT", "tiktok-final"), f"analysetacopro-{name}.mp4")
+    bed = bed or os.environ.get("VO_BED")
+    gain = gain if gain is not None else float(os.environ.get("VO_MUSIC_GAIN", "0.55"))
     offset = dur(src) - dur(orig)
     total = dur(src)
     def gen(lines):
@@ -174,15 +193,16 @@ def build(name, secs):
             out.append((t, p))
         return out
 
-    hook_plan = schedule(gen(secs.get(HOOK_LINES, [])), 0.0, offset + 0.6)[0] if secs.get(HOOK_LINES) else []
-    plan, tempo = schedule(gen(secs[name]), offset, total)
-    plan = hook_plan + plan
+    if plan is None:
+        hook_plan = schedule(gen(secs.get(HOOK_LINES, [])), 0.0, offset + 0.6)[0] if secs.get(HOOK_LINES) else []
+        main, tempo = schedule(gen(secs[name]), offset, total)
+        plan = [(st, p, 1.0) for st, p in hook_plan] + [(st, p, tempo) for st, p in main]
     # Les pistes sont posées échantillon par échantillon (numpy) puis mixées en une fois :
     # adelay + amix + loudnorm décalaient toute la voix (le silence de tête de la 1ʳᵉ phrase était perdu).
     n = int(round(total * SR))
     vo = np.zeros(n, np.float32)
-    tempo_f = f"atempo={tempo:.3f}," if tempo != 1.0 else ""
-    for start, p in plan:
+    for start, p, tempo in plan:
+        tempo_f = f"atempo={tempo:.3f}," if abs(tempo - 1.0) > 1e-3 else ""
         # chaque phrase est ramenée à un niveau voix off clair (≈ −13 LUFS) avant d'être placée
         a = pcm(p, f"{tempo_f}loudnorm=I=-13:TP=-1.5:LRA=7", ch=1)
         i = int(round(start * SR))
@@ -207,7 +227,7 @@ def build(name, secs):
             "-movflags", "+faststart", "-t", f"{total:.3f}", out]
     os.makedirs(os.path.dirname(out), exist_ok=True)
     subprocess.run(args, check=True)
-    print(f"{name}: {len(plan)} phrases, tempo ×{tempo:.2f} → {os.path.relpath(out, ROOT)}")
+    print(f"{name}: {len(plan)} phrases, tempo max ×{max(t for _, _, t in plan):.2f} → {os.path.relpath(out, ROOT)}")
 
 
 if __name__ == "__main__":

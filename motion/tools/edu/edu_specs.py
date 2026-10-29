@@ -352,6 +352,15 @@ SPECS["dico"] = dict(
     cap="La copro<br /><span class=\"a\">en 5 mots.</span>",
     count0="Ouvre le dico",
     countk="Mot ${k + 1}/5",
+    # voix off (tools/voix-utiles.py) : chaque mot est lu quand sa page apparaît
+    vo=[(0.2, "La copro en 5 mots."),
+        (2.1, "Syndic : le gestionnaire de la copro. Comptes, entretien, assemblées."),
+        (5.7, "Conseil syndical : des copropriétaires élus qui contrôlent le syndic."),
+        (9.3, "Parties communes : ce qui appartient à tous. Toit, façade, hall, escaliers."),
+        (12.9, "Appel de fonds : la demande de paiement envoyée par le syndic."),
+        (16.5, "PPPT : la liste des travaux à prévoir sur 10 ans, avec leur coût."),
+        (20.2, "Bon à savoir : garde ces 5 mots en tête pour ta prochaine visite."),
+        (24.3, "Comprends tout avant de signer.")],
     tips=[],
     know=[
         ("UN MOT PAS CLAIR&nbsp;?", "Dans notre rapport, <b>tout est expliqué simplement</b>."),
@@ -3876,6 +3885,13 @@ SPECS["vraifaux"] = dict(
     T=T4,
     # réponses calées sur la voix off (Guillaume) : la question est lue, puis VRAI/FAUX s'allume avec « Faux ! »
     tipat=[4.95, 8.7, 13.35, 17.55],
+    vo=[(0.2, "Vrai ou faux ? Spécial copro."),
+        (2.15, "Des panneaux solaires sur ton balcon, sans rien demander ?"), (4.9, "Faux ! Il faut un vote en AG."),
+        (6.65, "Ta sonnette-caméra peut filmer le palier ?"), (8.65, "Faux ! Il faut l'accord de l'AG."),
+        (11.15, "Le syndic peut entrer chez toi quand il veut ?"), (13.3, "Faux ! Avec huit jours de préavis."),
+        (15.65, "Ton locataire peut voter à ta place ?"), (17.5, "Vrai ! Avec un pouvoir écrit."),
+        (20.2, "Bon à savoir : ce pouvoir, donne-le à qui tu veux, sauf au syndic."),
+        (24.3, "Vrai ou faux ? Maintenant, tu sais.")],
     vars="""        --bg1: #fdf4ff;
         --bg2: #f3d9fb;
         --bg3: #e3a8f5;
