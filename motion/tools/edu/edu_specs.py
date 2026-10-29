@@ -3874,6 +3874,8 @@ SPECS["vraifaux"] = dict(
     comment="« VRAI OU FAUX EN COPRO » — vidéo utile en quiz : 4 idées reçues. 140 BPM (phonk).",
     bpm=140,
     T=T4,
+    # réponses calées sur la voix off (Guillaume) : la question est lue, puis VRAI/FAUX s'allume avec « Faux ! »
+    tipat=[4.95, 8.7, 13.35, 17.55],
     vars="""        --bg1: #fdf4ff;
         --bg2: #f3d9fb;
         --bg3: #e3a8f5;
@@ -3956,15 +3958,16 @@ SPECS["vraifaux"] = dict(
     ],
     setup="",
     js="""      const ANS = [1, 1, 1, 0];
+      const REV = [4.9, 8.65, 13.3, 17.5];
       T.forEach((t, k) => {
         if (k) tl.to(`#q${k - 1}`, { opacity: 0, y: -30, duration: 0.2 }, t - 0.05);
         tl.fromTo(`#q${k}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, t);
         tl.to(["#bv", "#bf"], { backgroundColor: "#ffffff", color: (i) => (i ? "#dc2626" : "#16a34a"), scale: 1, opacity: 1, duration: 0.15 }, t);
         const win = ANS[k] ? "#bf" : "#bv", lose = ANS[k] ? "#bv" : "#bf";
-        tl.to(win, { backgroundColor: ANS[k] ? "#dc2626" : "#16a34a", color: "#ffffff", duration: 0.2 }, t + 0.6);
-        tl.fromTo(win, { scale: 1 }, { scale: 1.1, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, t + 0.6);
-        tl.to(lose, { opacity: 0.3, duration: 0.2 }, t + 0.6);
-        shake("#qcard", t + 0.6, 8, 4);
+        tl.to(win, { backgroundColor: ANS[k] ? "#dc2626" : "#16a34a", color: "#ffffff", duration: 0.2 }, REV[k]);
+        tl.fromTo(win, { scale: 1 }, { scale: 1.1, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, REV[k]);
+        tl.to(lose, { opacity: 0.3, duration: 0.2 }, REV[k]);
+        shake("#qcard", REV[k], 8, 4);
       });""",
     endtitle=["Vrai ou faux&nbsp;?", "Maintenant tu sais."],
     endacc="#f0abfc",

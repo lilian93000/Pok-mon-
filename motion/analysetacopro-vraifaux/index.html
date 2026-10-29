@@ -344,6 +344,7 @@
         return x - Math.floor(x);
       };
       const T = [2.0, 6.5, 11.0, 15.5];
+      const TIP = [4.95, 8.7, 13.35, 17.55];
 
       document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
 
@@ -360,20 +361,21 @@
         tl.set("#count", { textContent: `Question ${k + 1}/4` }, t);
         tl.fromTo("#count", { scale: 1.25 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
         if (document.getElementById(`tp${k}`)) {
-          tl.fromTo(`#tp${k}`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.3);
+          tl.fromTo(`#tp${k}`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, TIP[k]);
           tl.to(`#tp${k}`, { opacity: 0, y: -10, duration: 0.15 }, (T[k + 1] || 20) - 0.25);
         }
       });
       const ANS = [1, 1, 1, 0];
+      const REV = [4.9, 8.65, 13.3, 17.5];
       T.forEach((t, k) => {
         if (k) tl.to(`#q${k - 1}`, { opacity: 0, y: -30, duration: 0.2 }, t - 0.05);
         tl.fromTo(`#q${k}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, t);
         tl.to(["#bv", "#bf"], { backgroundColor: "#ffffff", color: (i) => (i ? "#dc2626" : "#16a34a"), scale: 1, opacity: 1, duration: 0.15 }, t);
         const win = ANS[k] ? "#bf" : "#bv", lose = ANS[k] ? "#bv" : "#bf";
-        tl.to(win, { backgroundColor: ANS[k] ? "#dc2626" : "#16a34a", color: "#ffffff", duration: 0.2 }, t + 0.6);
-        tl.fromTo(win, { scale: 1 }, { scale: 1.1, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, t + 0.6);
-        tl.to(lose, { opacity: 0.3, duration: 0.2 }, t + 0.6);
-        shake("#qcard", t + 0.6, 8, 4);
+        tl.to(win, { backgroundColor: ANS[k] ? "#dc2626" : "#16a34a", color: "#ffffff", duration: 0.2 }, REV[k]);
+        tl.fromTo(win, { scale: 1 }, { scale: 1.1, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, REV[k]);
+        tl.to(lose, { opacity: 0.3, duration: 0.2 }, REV[k]);
+        shake("#qcard", REV[k], 8, 4);
       });
       // 20 s : bon à savoir
       flash(20, 0.5, 0.25);

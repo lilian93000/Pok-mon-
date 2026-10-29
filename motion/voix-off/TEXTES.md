@@ -270,10 +270,15 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 
 ## Vrai ou faux en copro
 Voix : **Guillaume** (`VO_VOICE=guillaume`, modèle `eleven_multilingual_v2`), posée, façon documentaire.
+Question lue à l'apparition de la carte, puis la réponse au moment où VRAI/FAUX s'allume (temps `REV`/`tipat` de la fiche).
 > 0,2 — Vrai ou faux ? Spécial copro.
-> 2,0 — Des panneaux solaires sur ton balcon, sans rien demander ? Faux : vote en AG.
-> 6,5 — Ta sonnette-caméra filme le palier ? Faux : il faut l'accord de l'AG.
-> 11,0 — Le syndic entre chez toi quand il veut ? Faux : huit jours de préavis.
-> 15,5 — Ton locataire vote à ta place ? Vrai, avec un pouvoir écrit.
+> 2,15 — Des panneaux solaires sur ton balcon, sans rien demander ?
+> 4,9 — Faux ! Il faut un vote en AG.
+> 6,65 — Ta sonnette-caméra peut filmer le palier ?
+> 8,65 — Faux ! Il faut l'accord de l'AG.
+> 11,15 — Le syndic peut entrer chez toi quand il veut ?
+> 13,3 — Faux ! Avec huit jours de préavis.
+> 15,65 — Ton locataire peut voter à ta place ?
+> 17,5 — Vrai ! Avec un pouvoir écrit.
 > 20,2 — Bon à savoir : ce pouvoir, donne-le à qui tu veux, sauf au syndic.
 > 24,3 — Vrai ou faux ? Maintenant, tu sais.

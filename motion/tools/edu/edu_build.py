@@ -1,4 +1,5 @@
 """Génère les index.html des 5 vidéos « utiles » à partir d'une base commune (usage : python3 tools/edu/edu_build.py [calcul dpe …])."""
+import json
 import os
 import sys
 
@@ -193,6 +194,7 @@ PAGE = """<!doctype html>
         return x - Math.floor(x);
       };
       const T = %(T)s;
+      const TIP = %(tipat)s;
 %(setup)s
       document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
 
@@ -209,7 +211,7 @@ PAGE = """<!doctype html>
         tl.set("#count", { textContent: `%(countk)s` }, t);
         tl.fromTo("#count", { scale: 1.25 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
         if (document.getElementById(`tp${k}`)) {
-          tl.fromTo(`#tp${k}`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.3);
+          tl.fromTo(`#tp${k}`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, TIP[k]);
           tl.to(`#tp${k}`, { opacity: 0, y: -10, duration: 0.15 }, (T[k + 1] || 20) - 0.25);
         }
       });
@@ -251,6 +253,7 @@ def page(spec):
         end=end,
         bpm=spec["bpm"],
         T=spec["T"],
+        tipat=spec.get("tipat", [round(t + 0.3, 2) for t in json.loads(spec["T"])]),
         setup=spec.get("setup", ""),
         countk=spec["countk"],
         js=spec["js"],
