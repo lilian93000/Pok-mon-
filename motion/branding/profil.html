@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8" />
+<style>
+  html, body { margin: 0; width: 1080px; height: 1080px; }
+  .pf { position: relative; width: 1080px; height: 1080px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .nuit { background: radial-gradient(70% 70% at 50% 35%, #1a3f7a 0%, #0b1530 60%, #070a16 100%); }
+  .bleu { background: radial-gradient(75% 75% at 50% 30%, #3b82ff 0%, #0b5fff 55%, #0645c9 100%); }
+  .halo { position: absolute; width: 760px; height: 760px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 70%); }
+  svg { position: relative; width: 680px; height: 680px; filter: drop-shadow(0 24px 40px rgba(0,0,0,0.35)); }
+</style></head>
+<body>
+<div class="pf" id="v"><div class="halo"></div>
+  <svg viewBox="0 0 48 48" fill="none">
+    <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+    <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+    <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+    <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+    <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+    <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+  </svg>
+</div>
+<script>document.getElementById("v").classList.add(location.hash.slice(1) || "nuit");</script>
+</body></html>
