@@ -7,6 +7,8 @@ la cale sur l'image (temps de la vidéo sans accroche + durée de l'accroche), b
 Usage (depuis motion/) :
   ELEVEN_KEY_FILE=/chemin/vers/cle python3 tools/voix-off.py [gps meteo …]     # sans argument : toutes
   VO_VOICE=guillaume … python3 tools/voix-off.py vraifaux                        # autre voix (voir VOICES)
+  VO_BED=fond.wav VO_MUSIC_GAIN=0.3 VO_OUT=dossier …                             # autre fond sonore (après l'accroche),
+                                                                                 # son volume, et le dossier de sortie
 La clé n'est jamais écrite dans le dépôt ; les phrases générées sont mises en cache hors dépôt (VO_CACHE).
 """
 import hashlib
@@ -137,7 +139,9 @@ def build(name, secs):
     os.makedirs(CACHE, exist_ok=True)
     src = os.path.join(ROOT, "avec-accroche", f"analysetacopro-{name}.mp4")
     orig = os.path.join(ROOT, f"analysetacopro-{name}.mp4")
-    out = os.path.join(ROOT, "tiktok-final", f"analysetacopro-{name}.mp4")
+    out = os.path.join(ROOT, os.environ.get("VO_OUT", "tiktok-final"), f"analysetacopro-{name}.mp4")
+    bed = os.environ.get("VO_BED")
+    gain = float(os.environ.get("VO_MUSIC_GAIN", "0.55"))
     offset = dur(src) - dur(orig)
     total = dur(src)
     def gen(lines):
@@ -154,6 +158,8 @@ def build(name, secs):
     args = ["ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-i", src]
     for _, p in plan:
         args += ["-i", p]
+    if bed:
+        args += ["-i", bed]
     f = []
     for k, (start, _) in enumerate(plan, start=1):
         ms = int(start * 1000)
@@ -164,7 +170,14 @@ def build(name, secs):
     f.append(f"{vo_in}amix=inputs={len(plan)}:normalize=0:duration=longest,atrim=0:{total:.3f},"
              "highpass=f=90,equalizer=f=3500:t=q:w=1.2:g=3,acompressor=threshold=0.2:ratio=3:attack=5:release=120,"
              "aformat=channel_layouts=stereo,asplit=2[vo][key]")
-    f.append("[0:a]aresample=48000,aformat=channel_layouts=stereo,volume=0.55[mus]")
+    if bed:
+        # garde le son de l'accroche, puis le fond choisi à la place de la bande-son d'origine
+        ms = int(offset * 1000)
+        f.append(f"[0:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:{offset:.3f},apad[hk]")
+        f.append(f"[{len(plan) + 1}:a]aresample=48000,aformat=channel_layouts=stereo,adelay={ms}|{ms}[bd]")
+        f.append(f"[hk][bd]amix=inputs=2:normalize=0:duration=longest,atrim=0:{total:.3f},volume={gain}[mus]")
+    else:
+        f.append(f"[0:a]aresample=48000,aformat=channel_layouts=stereo,volume={gain}[mus]")
     f.append("[mus][key]sidechaincompress=threshold=0.015:ratio=20:attack=10:release=300:makeup=1[duck]")
     f.append("[duck][vo]amix=inputs=2:normalize=0:weights='1 1',loudnorm=I=-11:TP=-1:LRA=11,aresample=48000[a]")
     args += ["-filter_complex", ";".join(f), "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k",
