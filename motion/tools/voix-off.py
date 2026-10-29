@@ -66,7 +66,7 @@ FILES = {
 NUM = {"0": "zéro", "1": "un", "2": "deux", "3": "trois", "4": "quatre", "5": "cinq", "6": "six", "7": "sept", "8": "huit", "9": "neuf"}
 
 
-ACRONYMS = ("DPE", "VMC", "PLU", "PNO", "ABF", "TEOM", "PPPT", "RC", "PTO", "ANAH", "HLM")
+ACRONYMS = ("DPE", "VMC", "PLU", "PNO", "ABF", "TEOM", "PPPT", "RC", "PTO", "ANAH", "HLM", "RT", "RE")
 SUBS = [
     (r"(\d)\s*/\s*10\s?000", r"\1 sur 10 000"), (r"(\d)\s*/\s*1000\b", r"\1 sur 1000"),
     (r"\b1/3\b", "un tiers"), (r"\b2/3\b", "deux tiers"), (r"\b4/16/4\b", "4, 16, 4"), (r"4G/5G", "4G ou 5G"),
@@ -76,6 +76,7 @@ SUBS = [
     (r"(\d)\s?h\b", r"\1 heures"), (r"(\d)\s?%", r"\1 pour cent"), (r"(\d)\s?€", r"\1 euros"), (r"€", "euros"),
     (r"\b1ᵉʳ\b", "premier"), (r"\b1ʳᵉ\b", "première"), (r"\b(\d+)ᵉ\b", r"\1ème"),
     (r"≈\s?", "environ "), (r"\s×\s", " fois "), (r"(\d[^=]*?)\s=\s(\d)", r"\1 égale \2"), (r"\s=\s", " : "), (r"\+ de\b", "plus de"), (r"\bEx\. ?:", "Par exemple :"),
+    (r"registre-coproprietes\.gouv\.fr", "registre copropriétés point gouv point F R"),
     (r"\b([Ff])ils\b", r"\1il"),  # « fils électriques » : lu « fisse » et lié en « z » sinon (jamais « le fils de » ici)
     (r"\bart\. ?", "article "), (r"\bn°\s?", "numéro "), (r"(\d+)\s?–\s?(\d+)", r"\1 à \2"), (r"…", "..."),
 ]
