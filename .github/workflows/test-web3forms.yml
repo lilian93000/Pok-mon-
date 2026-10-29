@@ -1,0 +1,20 @@
+name: Test Web3Forms (temporaire)
+on:
+  push:
+    branches: [claude/eager-johnson-h5khu9]
+    paths: [.github/workflows/test-web3forms.yml]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dossier avec pièce jointe, comme le site
+        run: |
+          UA="Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1"
+          printf '%%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%%%%EOF\n' > pv-ag.pdf
+          for t in "E avec pièce jointe" "F sans pièce jointe"; do
+            extra=(); [[ "$t" == E* ]] && extra=(-F "Document 1=@pv-ag.pdf;type=application/pdf")
+            echo "--- TEST $t"
+            curl -sS https://api.web3forms.com/submit -H "Origin: https://analysetacopro.fr" -H "Referer: https://analysetacopro.fr/dashboard/nouveau/" -H "Accept: application/json" -A "$UA" \
+              -F access_key=00c0ecce-d9cb-402d-b589-1d5c155aae05 -F "subject=TEST $t — Nouvelle commande — à ignorer" -F "from_name=AnalyseTaCopro" \
+              -F "replyto=contact@analysetacopro.fr" -F "Nom=TEST" -F "Email=contact@analysetacopro.fr" -F "Téléphone=0600000000" -F "Formule=Premium" -F "Total=249 €" "${extra[@]}" | head -c 400; echo
+          done
