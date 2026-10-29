@@ -65,7 +65,13 @@ téléphone à la visite (niveau 2,1°, lampe rasante, chargeur dans les prises,
 vrai ou faux #2 (syndic sans contrat, factures consultables, porte du hall cassée et charges, garage en studio) ·
 autorisé/interdit (fumer sur le balcon, poussette dans le hall, serrure, tomates dans le jardin commun) ·
 red/green flag visite (peinture fraîche, compteur d'eau par appartement, vendeur qui donne les documents, fils qui pendent) ·
-mot mystère (fiche synthétique, état daté 380 €, lot, budget prévisionnel).
+mot mystère (fiche synthétique, état daté 380 €, lot, budget prévisionnel) ·
+vrai ou faux #3 achat (honoraires affichés, cave vendue seule, cuisine fixée qui reste, compromis sans notaire) ·
+vrai ou faux #4 AG (point hors ordre du jour, ajouter sa question, décision qui s'impose à tous, président de séance élu) ·
+qui fait quoi (notaire rédige l'acte, syndic convoque l'AG, agent fait visiter, syndic encaisse les charges) ·
+red/green flag annonce (pas de photo de salle de bain, grand angle, visite 360°, toutes les pièces même la cave) ·
+autorisé/interdit #2 (parabole sur le balcon, louer sa cave, linge à la fenêtre, moto dans la cour) ·
+mot mystère #2 (feuille de présence, résolution, exercice comptable, clé de répartition).
 
 ## Résidences fictives déjà nommées
 Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas · Vitrerie Nord (fabricant fictif) · 8 rue des Glycines, Lyon.
