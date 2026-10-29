@@ -7,16 +7,23 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Envoi sans pièce jointe
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Navigateur
+        run: npm i playwright@1.48.2 && npx playwright install --with-deps chromium
+      - name: Formulaire Contact du site en ligne
         run: |
-          curl -sS https://api.web3forms.com/submit -H "Accept: application/json" \
-            -F access_key=00c0ecce-d9cb-402d-b589-1d5c155aae05 \
-            -F "subject=TEST 1 sans pièce jointe — à ignorer" -F "from_name=AnalyseTaCopro" \
-            -F "Message=Test automatique de la clé (sans pièce jointe)."; echo
-      - name: Envoi avec pièce jointe
-        run: |
-          printf '%%PDF-1.4 test\n' > test.pdf
-          curl -sS https://api.web3forms.com/submit -H "Accept: application/json" \
-            -F access_key=00c0ecce-d9cb-402d-b589-1d5c155aae05 \
-            -F "subject=TEST 2 avec pièce jointe — à ignorer" -F "from_name=AnalyseTaCopro" \
-            -F "Message=Test automatique de la clé (avec pièce jointe)." -F "Document 1=@test.pdf"; echo
+          cat > t.js <<'JS'
+          const { chromium } = require('playwright');
+          (async () => {
+            const b = await chromium.launch(); const p = await b.newPage();
+            p.on('response', async r => { if (r.url().includes('web3forms')) console.log('WEB3FORMS', r.status(), await r.text()); });
+            await p.goto('https://analysetacopro.fr/contact/');
+            const vals = { name: 'TEST automatique', email: 'contact@analysetacopro.fr', phone: '0600000000', subject: 'TEST', message: 'TEST automatique du formulaire Contact (à ignorer).' };
+            for (const [n, v] of Object.entries(vals)) { const f = p.locator(`[name=${n}]`).first(); if (await f.count()) await f.fill(v).catch(() => f.selectOption({ index: 1 })); }
+            await p.locator('form button[type=submit]').click(); await p.waitForTimeout(6000);
+            console.log('ÉCRAN', (await p.getByText('Message envoyé').count()) ? 'succès' : 'pas de succès', '|', (await p.locator('.text-danger').allTextContents()).join(' '));
+            await b.close();
+          })();
+          JS
+          node t.js
