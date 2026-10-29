@@ -61,7 +61,11 @@ vrai/faux (panneaux solaires sur le balcon, sonnette-caméra, syndic qui entre c
 bruits (coup de bélier, radiateur à purger, VMC qui siffle, évier qui gargouille) ·
 durées de vie (joints 5 ans, peinture 10 ans, robinetterie 15 ans, moteur de volet 15–20 ans, parquet massif 50 ans+) ·
 voix en AG (87/1000, propriétaire à 600 ramené à 400, 3 pouvoirs, vote par correspondance, visio) ·
-téléphone à la visite (niveau 2,1°, lampe rasante, chargeur dans les prises, réseau dans la chambre du fond).
+téléphone à la visite (niveau 2,1°, lampe rasante, chargeur dans les prises, réseau dans la chambre du fond) ·
+vrai ou faux #2 (syndic sans contrat, factures consultables, porte du hall cassée et charges, garage en studio) ·
+autorisé/interdit (fumer sur le balcon, poussette dans le hall, serrure, tomates dans le jardin commun) ·
+red/green flag visite (peinture fraîche, compteur d'eau par appartement, vendeur qui donne les documents, fils qui pendent) ·
+mot mystère (fiche synthétique, état daté 380 €, lot, budget prévisionnel).
 
 ## Résidences fictives déjà nommées
 Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas · Vitrerie Nord (fabricant fictif) · 8 rue des Glycines, Lyon.

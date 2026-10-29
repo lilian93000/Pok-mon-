@@ -4471,3 +4471,124 @@ SPECS["telephone"] = dict(
     endacc="#fde047",
     endrgb="253, 224, 71",
 )
+
+
+# ---------------------------------------------------------------- JEU. vraifaux2
+SPECS['vraifaux2'] = dict(
+    comment='« VRAI OU FAUX #2 » — quiz : 4 idées reçues de copro. 140 BPM (phonk, comme le n°1).',
+    bpm=140,
+    T=T4,
+    tipat=[4.33, 8.67, 14.27, 17.6],
+    vo=[[0.2, "Vrai ou faux, numéro 2 !"], [2.15, "Le syndic peut travailler sans contrat signé ?"], [4.28, "Faux ! Son contrat est voté en AG."], [6.65, "Tu peux consulter les factures de la copro ?"], [8.62, "Vrai ! Avant chaque AG."], [11.15, "La porte du hall est cassée : tu arrêtes de payer tes charges ?"], [14.22, "Faux ! Tu paies quand même."], [15.65, "Tu peux transformer ton garage en studio ?"], [17.55, "Faux ! Pas sans autorisation."], [20.2, "Bon à savoir : une demande au syndic, toujours par écrit."], [24.3, "Vrai ou faux ? Tu as eu combien ?"]],
+    vars="""        --bg1: #fdf4ff;
+        --bg2: #f3d9fb;
+        --bg3: #e3a8f5;
+        --ink: #2e0a3a;
+        --acc: #a21caf;
+        --pill: #2e0a3a;
+        --pillt: #f0abfc;
+        --tipbg: #2e0a3a;
+        --tiph: #f0abfc;""",
+    css='      #qcard {\n        left: 70px;\n        top: 450px;\n        width: 850px;\n        height: 340px;\n        border-radius: 30px;\n        background: #fff;\n        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.14);\n      }\n      .st {\n        position: absolute;\n        left: 44px;\n        right: 44px;\n        top: 50%;\n        transform: translateY(-50%);\n        font-size: 50px;\n        font-weight: 900;\n        letter-spacing: -0.035em;\n        line-height: 1.08;\n        opacity: 0;\n      }\n      .st i {\n        font-style: normal;\n        color: #a21caf;\n      }\n      .btn {\n        position: absolute;\n        top: 830px;\n        width: 415px;\n        height: 150px;\n        border-radius: 30px;\n        background: #fff;\n        border: 8px solid;\n        text-align: center;\n        line-height: 134px;\n        font-size: 66px;\n        font-weight: 900;\n        letter-spacing: -0.03em;\n        white-space: nowrap;\n      }\n',
+    html='        <div id="qcard" class="abs">\n          <div class="st" id="q0">« Le syndic peut travailler <i>sans contrat</i> signé. »</div>\n          <div class="st" id="q1">« Je peux consulter les <i>factures</i> de la copro. »</div>\n          <div class="st" id="q2">« La porte du hall est cassée&nbsp;: j\'arrête de payer mes <i>charges</i>. »</div>\n          <div class="st" id="q3">« Je peux transformer mon <i>garage en studio</i>. »</div>\n        </div>\n        <div class="btn" id="b0" style="left: 70px; border-color: #16a34a; color: #16a34a">VRAI</div>\n        <div class="btn" id="b1" style="left: 505px; border-color: #dc2626; color: #dc2626">FAUX</div>',
+    cap='Vrai ou faux&nbsp;#2&nbsp;?<br /><span class="a">Spécial copro.</span>',
+    count0='Prêt&nbsp;?',
+    countk='Question ${k + 1}/4',
+    tips=[('FAUX', 'Son contrat est <b>voté en AG</b> puis signé, sur un modèle officiel.'), ('VRAI', "Les factures sont <b>consultables avant l'AG</b> qui approuve les comptes."), ('FAUX', 'On ne suspend pas ses charges&nbsp;: <b>signale la panne au syndic</b>.'), ('FAUX', "Changer l'usage d'un lot&nbsp;: <b>règlement, AG et mairie</b> ont leur mot à dire.")],
+    know=[('PAR ÉCRIT', 'Une demande au syndic&nbsp;? <b>Toujours par écrit</b>&nbsp;: mail ou courrier.'), ('LES COMPTES', "Chaque année, l'AG <b>approuve les comptes</b>&nbsp;: lis-les avant.")],
+    setup="",
+    js='      const ANS = [1, 0, 1, 1];\n      const REV = [4.28, 8.62, 14.22, 17.55];\n      const COL = ["#16a34a", "#dc2626"];\n      const B = COL.map((_, i) => `#b${i}`);\n      T.forEach((t, k) => {\n        if (k) tl.to(`#q${k - 1}`, { opacity: 0, y: -30, duration: 0.2 }, t - 0.05);\n        tl.fromTo(`#q${k}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, t);\n        B.forEach((b, i) => tl.to(b, { backgroundColor: "#ffffff", color: COL[i], scale: 1, opacity: 1, duration: 0.15 }, t));\n        const win = B[ANS[k]];\n        tl.to(win, { backgroundColor: COL[ANS[k]], color: "#ffffff", duration: 0.2 }, REV[k]);\n        tl.fromTo(win, { scale: 1 }, { scale: 1.08, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, REV[k]);\n        B.forEach((b, i) => { if (i !== ANS[k]) tl.to(b, { opacity: 0.3, duration: 0.2 }, REV[k]); });\n        shake("#qcard", REV[k], 8, 4);\n      });',
+    endtitle=['Vrai ou faux&nbsp;?', 'Tu as eu combien&nbsp;?'],
+    endacc='#f0abfc',
+    endrgb='240, 171, 252',
+)
+
+# ---------------------------------------------------------------- JEU. autorise
+SPECS['autorise'] = dict(
+    comment='« AUTORISÉ, INTERDIT OU ÇA DÉPEND ? » — quiz : la vie en copro. 140 BPM (jersey club).',
+    bpm=140,
+    T=T4,
+    tipat=[3.42, 8.44, 13.02, 17.63],
+    vo=[[0.2, "Autorisé, interdit, ou ça dépend ?"], [2.15, "Fumer sur ton balcon ?"], [3.37, "Autorisé ! Tant que ça ne gêne pas tes voisins."], [6.65, "Laisser ta poussette dans le hall ?"], [8.39, "Ça dépend du règlement."], [11.15, "Changer la serrure de ta porte d'entrée ?"], [12.97, "Autorisé ! C'est chez toi."], [15.65, "Planter des tomates dans le jardin commun ?"], [17.58, "Interdit, sans l'accord de l'AG."], [20.2, "Bon à savoir : un doute ? Cherche dans le règlement de copro."], [24.3, "Autorisé ou interdit ? Lis le règlement."]],
+    vars="""        --bg1: #f7fee7;
+        --bg2: #e3f8c4;
+        --bg3: #bfe88a;
+        --ink: #1a2e05;
+        --acc: #4d7c0f;
+        --pill: #1a2e05;
+        --pillt: #bef264;
+        --tipbg: #1a2e05;
+        --tiph: #bef264;""",
+    css='      #qcard {\n        left: 70px;\n        top: 450px;\n        width: 850px;\n        height: 340px;\n        border-radius: 30px;\n        background: #fff;\n        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.14);\n      }\n      .st {\n        position: absolute;\n        left: 44px;\n        right: 44px;\n        top: 50%;\n        transform: translateY(-50%);\n        font-size: 50px;\n        font-weight: 900;\n        letter-spacing: -0.035em;\n        line-height: 1.08;\n        opacity: 0;\n      }\n      .st i {\n        font-style: normal;\n        color: #4d7c0f;\n      }\n      .btn {\n        position: absolute;\n        top: 830px;\n        width: 270px;\n        height: 150px;\n        border-radius: 30px;\n        background: #fff;\n        border: 8px solid;\n        text-align: center;\n        line-height: 134px;\n        font-size: 40px;\n        font-weight: 900;\n        letter-spacing: -0.03em;\n        white-space: nowrap;\n      }\n',
+    html='        <div id="qcard" class="abs">\n          <div class="st" id="q0">Fumer sur <i>ton balcon</i></div>\n          <div class="st" id="q1">Laisser ta <i>poussette</i> dans le hall</div>\n          <div class="st" id="q2">Changer la <i>serrure</i> de ta porte d\'entrée</div>\n          <div class="st" id="q3">Planter des <i>tomates</i> dans le jardin commun</div>\n        </div>\n        <div class="btn" id="b0" style="left: 70px; border-color: #16a34a; color: #16a34a">AUTORISÉ</div>\n        <div class="btn" id="b1" style="left: 360px; border-color: #dc2626; color: #dc2626">INTERDIT</div>\n        <div class="btn" id="b2" style="left: 650px; border-color: #c2410c; color: #c2410c">ÇA DÉPEND</div>',
+    cap='Autorisé, interdit<br /><span class="a">ou ça dépend&nbsp;?</span>',
+    count0='Prêt&nbsp;?',
+    countk='Question ${k + 1}/4',
+    tips=[('AUTORISÉ', 'Permis, tant que la fumée ne cause pas de <b>trouble anormal</b> aux voisins.'), ('ÇA DÉPEND', 'Les parties communes ne sont pas un débarras&nbsp;: <b>le règlement décide</b>.'), ('AUTORISÉ', "Ta serrure est à toi&nbsp;: garde juste <b>l'aspect du palier</b> si le règlement l'impose."), ('INTERDIT', "Le jardin est à tous&nbsp;: <b>pas d'usage perso sans accord de l'AG</b>.")],
+    know=[('UN DOUTE&nbsp;?', 'Cherche dans <b>le règlement de copro</b>&nbsp;: tout y est.'), ('TES VOISINS', 'Un trouble <b>anormal</b> reste interdit, même chez toi.')],
+    setup="",
+    js='      const ANS = [0, 2, 0, 1];\n      const REV = [3.37, 8.39, 12.97, 17.58];\n      const COL = ["#16a34a", "#dc2626", "#c2410c"];\n      const B = COL.map((_, i) => `#b${i}`);\n      T.forEach((t, k) => {\n        if (k) tl.to(`#q${k - 1}`, { opacity: 0, y: -30, duration: 0.2 }, t - 0.05);\n        tl.fromTo(`#q${k}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, t);\n        B.forEach((b, i) => tl.to(b, { backgroundColor: "#ffffff", color: COL[i], scale: 1, opacity: 1, duration: 0.15 }, t));\n        const win = B[ANS[k]];\n        tl.to(win, { backgroundColor: COL[ANS[k]], color: "#ffffff", duration: 0.2 }, REV[k]);\n        tl.fromTo(win, { scale: 1 }, { scale: 1.08, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, REV[k]);\n        B.forEach((b, i) => { if (i !== ANS[k]) tl.to(b, { opacity: 0.3, duration: 0.2 }, REV[k]); });\n        shake("#qcard", REV[k], 8, 4);\n      });',
+    endtitle=['Autorisé ou interdit&nbsp;?', 'Lis le règlement.'],
+    endacc='#bef264',
+    endrgb='190, 242, 100',
+)
+
+# ---------------------------------------------------------------- JEU. flags
+SPECS['flags'] = dict(
+    comment='« RED FLAG OU GREEN FLAG : LA VISITE » — quiz : 4 signaux à repérer en visite. 138 BPM (trance).',
+    bpm=138,
+    T=T4,
+    tipat=[4.26, 8.52, 12.88, 17.74],
+    vo=[[0.2, "Red flag ou green flag ?"], [2.15, "Une forte odeur de peinture fraîche partout ?"], [4.21, "Red flag ! Elle peut cacher de l'humidité."], [6.65, "Chaque appartement a son compteur d'eau ?"], [8.47, "Green flag ! Tu paies ce que tu consommes."], [11.15, "Le vendeur te donne tous les documents ?"], [12.83, "Green flag ! Il n'a rien à cacher."], [15.65, "Des fils électriques qui pendent du plafond ?"], [17.69, "Red flag ! Fais vérifier l'électricité."], [20.2, "Tu as trouvé les quatre ? Dis-le en commentaire."], [24.3, "Red ou green ? Ouvre l'œil."]],
+    vars="""        --bg1: #fafaf9;
+        --bg2: #ecebe8;
+        --bg3: #d6d3cd;
+        --ink: #1c1917;
+        --acc: #57534e;
+        --pill: #1c1917;
+        --pillt: #fde68a;
+        --tipbg: #1c1917;
+        --tiph: #fde68a;""",
+    css='      #qcard {\n        left: 70px;\n        top: 450px;\n        width: 850px;\n        height: 340px;\n        border-radius: 30px;\n        background: #fff;\n        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.14);\n      }\n      .st {\n        position: absolute;\n        left: 44px;\n        right: 44px;\n        top: 50%;\n        transform: translateY(-50%);\n        font-size: 50px;\n        font-weight: 900;\n        letter-spacing: -0.035em;\n        line-height: 1.08;\n        opacity: 0;\n      }\n      .st i {\n        font-style: normal;\n        color: #57534e;\n      }\n      .btn {\n        position: absolute;\n        top: 830px;\n        width: 415px;\n        height: 150px;\n        border-radius: 30px;\n        background: #fff;\n        border: 8px solid;\n        text-align: center;\n        line-height: 134px;\n        font-size: 54px;\n        font-weight: 900;\n        letter-spacing: -0.03em;\n        white-space: nowrap;\n      }\n',
+    html='        <div id="qcard" class="abs">\n          <div class="st" id="q0">Une forte odeur de <i>peinture fraîche</i> partout</div>\n          <div class="st" id="q1">Un <i>compteur d\'eau</i> par appartement</div>\n          <div class="st" id="q2">Le vendeur te donne <i>tous les documents</i></div>\n          <div class="st" id="q3">Des <i>fils électriques</i> qui pendent du plafond</div>\n        </div>\n        <div class="btn" id="b0" style="left: 70px; border-color: #dc2626; color: #dc2626">RED FLAG</div>\n        <div class="btn" id="b1" style="left: 505px; border-color: #16a34a; color: #16a34a">GREEN FLAG</div>',
+    cap='Red flag ou green flag&nbsp;?<br /><span class="a">Spécial visite.</span>',
+    count0='Prêt&nbsp;?',
+    countk='Question ${k + 1}/4',
+    tips=[('RED FLAG', "Une peinture toute fraîche peut <b>masquer de l'humidité</b>&nbsp;: demande pourquoi."), ('GREEN FLAG', 'Compteur individuel&nbsp;: <b>tu paies ce que tu consommes</b>.'), ('GREEN FLAG', "Un vendeur transparent <b>n'a rien à cacher</b>."), ('RED FLAG', "Fils apparents&nbsp;: <b>fais vérifier l'électricité</b>, le diagnostic le dira.")],
+    know=[('TON SCORE', 'Tu as trouvé les 4&nbsp;? <b>Dis-le en commentaire</b>.'), ('À LA VISITE', 'Note chaque red flag et <b>demande une explication</b> au vendeur.')],
+    setup="",
+    js='      const ANS = [0, 1, 1, 0];\n      const REV = [4.21, 8.47, 12.83, 17.69];\n      const COL = ["#dc2626", "#16a34a"];\n      const B = COL.map((_, i) => `#b${i}`);\n      T.forEach((t, k) => {\n        if (k) tl.to(`#q${k - 1}`, { opacity: 0, y: -30, duration: 0.2 }, t - 0.05);\n        tl.fromTo(`#q${k}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, t);\n        B.forEach((b, i) => tl.to(b, { backgroundColor: "#ffffff", color: COL[i], scale: 1, opacity: 1, duration: 0.15 }, t));\n        const win = B[ANS[k]];\n        tl.to(win, { backgroundColor: COL[ANS[k]], color: "#ffffff", duration: 0.2 }, REV[k]);\n        tl.fromTo(win, { scale: 1 }, { scale: 1.08, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, REV[k]);\n        B.forEach((b, i) => { if (i !== ANS[k]) tl.to(b, { opacity: 0.3, duration: 0.2 }, REV[k]); });\n        shake("#qcard", REV[k], 8, 4);\n      });',
+    endtitle=['Red ou green&nbsp;?', "Ouvre l'œil."],
+    endacc='#fde68a',
+    endrgb='253, 230, 138',
+)
+
+# ---------------------------------------------------------------- JEU. motmystere
+SPECS['motmystere'] = dict(
+    comment='« LE MOT MYSTÈRE » — devinette : 4 mots de copro, le mot se révèle quand la voix le dit. 126 BPM (électro-swing).',
+    bpm=126,
+    T=T4,
+    tipat=[4.96, 9.52, 14.77, 18.92],
+    vo=[[0.2, "Le mot mystère !"], [2.15, "Je résume la copro en une page. Qui suis-je ?"], [4.91, "La fiche synthétique !"], [6.65, "Je dis ce que le vendeur doit encore. Qui suis-je ?"], [9.47, "L'état daté !"], [11.15, "Je suis ton appart, plus ta part du hall et du toit. Qui suis-je ?"], [14.72, "Le lot !"], [15.65, "Je suis voté chaque année pour l'entretien courant. Qui suis-je ?"], [18.87, "Le budget prévisionnel !"], [20.2, "Bon à savoir : exige-les avant de signer."], [24.3, "Le mot mystère : tu les avais tous ?"]],
+    vars="""        --bg1: #fffbeb;
+        --bg2: #fdefc3;
+        --bg3: #f6d77f;
+        --ink: #2b1d03;
+        --acc: #a16207;
+        --pill: #2b1d03;
+        --pillt: #fde047;
+        --tipbg: #2b1d03;
+        --tiph: #fde047;""",
+    css='      #qcard {\n        left: 70px;\n        top: 450px;\n        width: 850px;\n        height: 330px;\n        border-radius: 30px;\n        background: #fff;\n        box-shadow: 0 30px 60px rgba(43, 29, 3, 0.16);\n      }\n      .st {\n        position: absolute;\n        left: 44px;\n        right: 44px;\n        top: 50%;\n        transform: translateY(-50%);\n        font-size: 48px;\n        font-weight: 900;\n        letter-spacing: -0.035em;\n        line-height: 1.1;\n        opacity: 0;\n      }\n      #tile {\n        left: 70px;\n        top: 820px;\n        width: 850px;\n        height: 200px;\n        border-radius: 30px;\n        background: #2b1d03;\n        border: 6px dashed #a16207;\n      }\n      .w {\n        position: absolute;\n        inset: 0;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        text-align: center;\n        font-size: 66px;\n        font-weight: 900;\n        letter-spacing: -0.02em;\n        color: #fde047;\n        opacity: 0;\n      }\n      #wq {\n        font-size: 120px;\n        opacity: 1;\n      }\n',
+    html='        <div id="qcard" class="abs">\n          <div class="st" id="q0">« Je résume la copro en une page&nbsp;: budget, lots, syndic. »</div>\n          <div class="st" id="q1">« Je dis ce que le vendeur doit encore à la copro. »</div>\n          <div class="st" id="q2">« Je suis ton appart, plus ta part du hall et du toit. »</div>\n          <div class="st" id="q3">« Je suis voté chaque année pour l\'entretien courant. »</div>\n        </div>\n        <div id="tile" class="abs">\n          <div class="w" id="wq">?</div>\n          <div class="w" id="w0">FICHE SYNTHÉTIQUE</div>\n          <div class="w" id="w1">ÉTAT DATÉ</div>\n          <div class="w" id="w2">LOT</div>\n          <div class="w" id="w3">BUDGET PRÉVISIONNEL</div>\n        </div>',
+    cap='Le mot mystère&nbsp;:<br /><span class="a">spécial copro.</span>',
+    count0='Devine&nbsp;!',
+    countk='Mot ${k + 1}/4',
+    tips=[('LA FICHE SYNTHÉTIQUE', 'Le syndic la met à jour <b>chaque année</b>&nbsp;; elle est jointe à la promesse de vente.'), ("L'ÉTAT DATÉ", "Le syndic l'établit pour la vente&nbsp;; ses frais sont <b>plafonnés à 380&nbsp;€</b>."), ('LE LOT', 'Un lot = <b>une partie privative + une part des parties communes</b>.'), ('LE BUDGET PRÉVISIONNEL', "Voté en AG chaque année&nbsp;: <b>regarde s'il augmente</b> d'une année sur l'autre.")],
+    know=[('À DEMANDER', 'Fiche synthétique et état daté&nbsp;: <b>exige-les avant de signer</b>.'), ('TON LOT', "Ton numéro de lot est écrit <b>dans l'acte de vente</b>.")],
+    setup="",
+    js='      const REV = [4.91, 9.47, 14.72, 18.87];\n      T.forEach((t, k) => {\n        if (k) {\n          tl.to(`#q${k - 1}`, { opacity: 0, y: -30, duration: 0.2 }, t - 0.05);\n          tl.to(`#w${k - 1}`, { opacity: 0, duration: 0.15 }, t - 0.05);\n          tl.to("#wq", { opacity: 1, scale: 1, duration: 0.2 }, t);\n          tl.to("#tile", { borderStyle: "dashed", backgroundColor: "#2b1d03", duration: 0.2 }, t);\n        }\n        tl.fromTo(`#q${k}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, t);\n        tl.to("#wq", { opacity: 0, scale: 0.4, duration: 0.15 }, REV[k]);\n        tl.to("#tile", { backgroundColor: "#a16207", duration: 0.2 }, REV[k]);\n        tl.fromTo(`#w${k}`, { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.5)", immediateRender: false }, REV[k]);\n        shake("#tile", REV[k], 8, 4);\n      });',
+    endtitle=['Le mot mystère&nbsp;:', 'tu les avais tous&nbsp;?'],
+    endacc='#fde047',
+    endrgb='253, 224, 71',
+)
