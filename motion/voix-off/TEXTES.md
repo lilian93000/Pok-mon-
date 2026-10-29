@@ -282,3 +282,21 @@ Question lue à l'apparition de la carte, puis la réponse au moment où VRAI/FA
 > 17,5 — Vrai ! Avec un pouvoir écrit.
 > 20,2 — Bon à savoir : ce pouvoir, donne-le à qui tu veux, sauf au syndic.
 > 24,3 — Vrai ou faux ? Maintenant, tu sais.
+
+## Idées reçues
+> 0,2 — Achat en copro : quatre idées reçues.
+> 2,0 — Le vendeur paie toujours les travaux votés ? Faux, sauf accord dans l'acte.
+> 6,5 — Dix jours pour te rétracter après le compromis ? Vrai.
+> 11,0 — Le fonds de travaux, c'est facultatif ? Faux : au moins 5 % du budget.
+> 15,5 — Un logement classé G, je peux encore le louer ? Faux, plus de nouveau bail.
+> 20,2 — Et toi, ton score ? Dis-le en commentaire.
+> 24,3 — Ne crois pas. Vérifie.
+
+## Le surligneur
+> 0,2 — Lire un PV d'AG en trente secondes.
+> 2,0 — Un : les travaux votés. Qui paie ? Ça se négocie dans le compromis.
+> 6,5 — Deux : les procédures. Les frais d'avocat sont partagés entre tous.
+> 11,0 — Trois : les impayés. Au-delà de 10 % du budget, la trésorerie est fragile.
+> 15,5 — Quatre : les travaux reportés. La facture t'attendra.
+> 20,2 — Bon à savoir : le vendeur doit te remettre les PV des trois dernières AG.
+> 24,3 — Lis les PV avant de signer.

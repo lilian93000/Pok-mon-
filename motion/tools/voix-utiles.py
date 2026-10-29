@@ -126,6 +126,22 @@ def lines(name):
     return [(t, v + ([short[round(t, 2)]] if round(t, 2) in short else []), dl) for t, v, dl in out]
 
 
+SHORT_PUB = {
+    "idees": {0.2: "Quatre idées reçues sur la copro."},
+    "match": {0.2: "Acheter, c'est comme un date."},
+    "voyante": {0.2: "J'ai demandé à une voyante."},
+}
+
+
+def lines_pub(name):
+    """Vidéos pub / concept : phrases calées de voix-off/TEXTES.md, chacune doit finir avant la suivante."""
+    v = vo.parse()[name]
+    end = vo.dur(os.path.join(ROOT, f"analysetacopro-{name}.mp4")) - 0.4
+    short = SHORT_PUB.get(name, {})
+    return [(t, [x] + ([short[round(t, 2)]] if round(t, 2) in short else []), (v[i + 1][0] if i + 1 < len(v) else end) - 0.12)
+            for i, (t, x) in enumerate(v)]
+
+
 def tts(text):
     p = os.path.join(vo.CACHE, __import__("hashlib").sha1(f"{vo.VOICE}|{vo.MODEL}|{text}".encode()).hexdigest()[:16] + ".wav")
     vo.tts(text, p)
@@ -135,7 +151,7 @@ def tts(text):
 def plan(name):
     """Calage strict → [(début, fichier, tempo, texte)], alertes."""
     out, warn, prev_end = [], [], 0.0
-    for i, (t, variants, deadline) in enumerate(lines(name)):
+    for i, (t, variants, deadline) in enumerate(lines(name) if name in edu_specs.SPECS else lines_pub(name)):
         start = max(t, prev_end + 0.1)
         if start > t + 0.05:
             warn.append(f"{t:.2f} commence en retard ({start:.2f})")
@@ -201,10 +217,18 @@ def run(name):
     offset = vo.dur(src) - vo.dur(os.path.join(ROOT, f"analysetacopro-{name}.mp4"))
     pl, warn = plan(name)
     shifted = [(st + offset, p, tempo) for st, p, tempo, _ in pl]
-    b = beds(name)
+    if name in edu_specs.SPECS:
+        b = beds(name)
+    else:
+        # pub : sans musique = voix seule (le son de l'accroche est gardé) ; avec musique = sa bande-son d'origine, discrète
+        silent = os.path.join(vo.CACHE, "bed-silence.wav")
+        if not os.path.exists(silent):
+            subprocess.run(["ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo",
+                            "-t", "31", silent], check=True)
+        b = {"sfx": silent, "lofi": None}
     report = []
     for out_dir, out1080, kind, gain in VERSIONS:
-        vo.build(name, plan=shifted, out_dir=out_dir, bed=b[kind], gain=gain)
+        vo.build(name, plan=shifted, out_dir=out_dir, bed=b[kind], gain=gain if b[kind] or kind == "sfx" else 0.3)
         f = os.path.join(ROOT, out_dir, f"analysetacopro-{name}.mp4")
         g = os.path.join(ROOT, out1080, f"analysetacopro-{name}.mp4")
         os.makedirs(os.path.dirname(g), exist_ok=True)

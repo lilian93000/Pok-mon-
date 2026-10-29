@@ -59,6 +59,8 @@ FILES = {
     "La Bourse": "bourse",
     "La tour en bois": "tour",
     "Vrai ou faux en copro": "vraifaux",
+    "Idées reçues": "idees",
+    "Le surligneur": "surligneur",
 }
 
 NUM = {"0": "zéro", "1": "un", "2": "deux", "3": "trois", "4": "quatre", "5": "cinq", "6": "six", "7": "sept", "8": "huit", "9": "neuf"}
