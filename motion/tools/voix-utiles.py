@@ -143,7 +143,7 @@ def lines_pub(name):
 
 
 def tts(text):
-    p = os.path.join(vo.CACHE, __import__("hashlib").sha1(f"{vo.VOICE}|{vo.MODEL}|{text}".encode()).hexdigest()[:16] + ".wav")
+    p = vo.cache_path(text)
     vo.tts(text, p)
     return p
 

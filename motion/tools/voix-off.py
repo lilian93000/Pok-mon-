@@ -76,6 +76,7 @@ SUBS = [
     (r"(\d)\s?h\b", r"\1 heures"), (r"(\d)\s?%", r"\1 pour cent"), (r"(\d)\s?€", r"\1 euros"), (r"€", "euros"),
     (r"\b1ᵉʳ\b", "premier"), (r"\b1ʳᵉ\b", "première"), (r"\b(\d+)ᵉ\b", r"\1ème"),
     (r"≈\s?", "environ "), (r"\s×\s", " fois "), (r"(\d[^=]*?)\s=\s(\d)", r"\1 égale \2"), (r"\s=\s", " : "), (r"\+ de\b", "plus de"), (r"\bEx\. ?:", "Par exemple :"),
+    (r"\b([Ff])ils\b", r"\1il"),  # « fils électriques » : lu « fisse » et lié en « z » sinon (jamais « le fils de » ici)
     (r"\bart\. ?", "article "), (r"\bn°\s?", "numéro "), (r"(\d+)\s?–\s?(\d+)", r"\1 à \2"), (r"…", "..."),
 ]
 
@@ -108,6 +109,11 @@ def parse():
             if m:
                 secs[cur].append((float(m.group(1).replace(",", ".")), m.group(2).strip()))
     return secs
+
+
+def cache_path(text):
+    """Le cache suit le texte prononcé : une nouvelle règle de prononciation régénère la phrase."""
+    return os.path.join(CACHE, hashlib.sha1(f"{VOICE}|{MODEL}|dit|{speakable(text)}".encode()).hexdigest()[:16] + ".wav")
 
 
 def tts(text, out):
@@ -190,7 +196,7 @@ def build(name, secs=None, plan=None, out_dir=None, bed=None, gain=None):
     def gen(lines):
         out = []
         for t, text in lines:
-            p = os.path.join(CACHE, hashlib.sha1(f"{VOICE}|{MODEL}|{text}".encode()).hexdigest()[:16] + ".wav")
+            p = cache_path(text)
             tts(text, p)
             out.append((t, p))
         return out
