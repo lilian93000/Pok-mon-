@@ -7,35 +7,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v4
-        with: { node-version: 20 }
-      - name: Navigateur
-        run: npm i playwright@1.48.2 && npx playwright install --with-deps chromium
-      - name: Formulaire Contact du site en ligne
+      - name: Réponse brute vue par un navigateur
         run: |
-          cat > t.js <<'JS'
-          const { chromium } = require('playwright');
-          (async () => {
-            const b = await chromium.launch(); const p = await b.newPage();
-            p.on('response', async r => { if (r.url().includes('web3forms')) console.log('WEB3FORMS', r.status(), await r.text()); });
-            p.on('requestfailed', r => console.log('ÉCHEC REQUÊTE', r.url(), r.failure() && r.failure().errorText));
-            p.on('console', m => console.log('CONSOLE', m.type(), m.text()));
-            await p.goto('https://analysetacopro.fr/contact/');
-            const vals = { name: 'TEST automatique', email: 'contact@analysetacopro.fr', phone: '0600000000', subject: 'TEST', message: 'TEST automatique du formulaire Contact (à ignorer).' };
-            for (const [n, v] of Object.entries(vals)) { const f = p.locator(`[name=${n}]`).first(); if (await f.count()) await f.fill(v).catch(() => f.selectOption({ index: 1 })); }
-            await p.locator('form button[type=submit]').click(); await p.waitForTimeout(6000);
-            console.log('ÉCRAN', (await p.getByText('Message envoyé').count()) ? 'succès' : 'pas de succès', '|', (await p.locator('.text-danger').allTextContents()).join(' '));
-            const variants = await p.evaluate(async () => {
-              const out = {}; const K = '00c0ecce-d9cb-402d-b589-1d5c155aae05';
-              const mk = (t) => { const f = new FormData(); f.append('access_key', K); f.append('subject', 'TEST ' + t + ' — à ignorer'); f.append('Message', 'Test ' + t); return f; };
-              const run = async (t, opts) => { try { const r = await fetch('https://api.web3forms.com/submit', opts); out[t] = r.status + ' ' + (await r.text()).slice(0, 200); } catch (e) { out[t] = 'ERREUR ' + e.message; } };
-              await run('A formdata+accept', { method: 'POST', headers: { Accept: 'application/json' }, body: mk('A') });
-              await run('B formdata seul', { method: 'POST', body: mk('B') });
-              await run('C json', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ access_key: K, subject: 'TEST C — à ignorer', Message: 'Test C' }) });
-              return out;
-            });
-            console.log('VARIANTES', JSON.stringify(variants, null, 1));
-            await b.close();
-          })();
-          JS
-          node t.js
+          UA="Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1"
+          echo "--- préflight (OPTIONS)"
+          curl -sS -i -X OPTIONS https://api.web3forms.com/submit -H "Origin: https://analysetacopro.fr" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: accept" -A "$UA" | head -20
+          echo "--- POST comme le site"
+          curl -sS -i https://api.web3forms.com/submit -H "Origin: https://analysetacopro.fr" -H "Referer: https://analysetacopro.fr/contact/" -H "Accept: application/json" -A "$UA" \
+            -F access_key=00c0ecce-d9cb-402d-b589-1d5c155aae05 -F "subject=TEST D — à ignorer" -F "Message=Test D" | grep -viE "^(set-cookie|cf-ray|nel|report-to)"
