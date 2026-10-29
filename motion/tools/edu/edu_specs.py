@@ -3868,3 +3868,587 @@ SPECS["mitoyen"] = dict(
     endacc="#fcd34d",
     endrgb="252, 211, 77",
 )
+
+# ---------------------------------------------------------------- 41. VRAI OU FAUX EN COPRO
+SPECS["vraifaux"] = dict(
+    comment="« VRAI OU FAUX EN COPRO » — vidéo utile en quiz : 4 idées reçues. 140 BPM (phonk).",
+    bpm=140,
+    T=T4,
+    vars="""        --bg1: #fdf4ff;
+        --bg2: #f3d9fb;
+        --bg3: #e3a8f5;
+        --ink: #2e0a3a;
+        --acc: #a21caf;
+        --pill: #2e0a3a;
+        --pillt: #f0abfc;
+        --tipbg: #2e0a3a;
+        --tiph: #f0abfc;""",
+    css="""      #qcard {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 340px;
+        border-radius: 30px;
+        background: #fff;
+        box-shadow: 0 30px 60px rgba(46, 10, 58, 0.18);
+      }
+      .st {
+        position: absolute;
+        left: 44px;
+        right: 44px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 48px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+        line-height: 1.08;
+        opacity: 0;
+      }
+      .st i {
+        font-style: normal;
+        color: #a21caf;
+      }
+      .btn {
+        position: absolute;
+        top: 830px;
+        width: 410px;
+        height: 150px;
+        border-radius: 30px;
+        background: #fff;
+        border: 8px solid;
+        text-align: center;
+        line-height: 134px;
+        font-size: 72px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+      }
+      #bv {
+        left: 70px;
+        border-color: #16a34a;
+        color: #16a34a;
+      }
+      #bf {
+        left: 510px;
+        border-color: #dc2626;
+        color: #dc2626;
+      }
+""",
+    html="""        <div id="qcard" class="abs">
+          <div class="st" id="q0">« Je peux poser des <i>panneaux solaires</i> sur mon balcon sans rien demander. »</div>
+          <div class="st" id="q1">« Ma <i>sonnette-caméra</i> peut filmer le palier. »</div>
+          <div class="st" id="q2">« Le syndic peut <i>entrer chez moi</i> quand il veut. »</div>
+          <div class="st" id="q3">« Mon <i>locataire</i> peut voter à l'AG à ma place. »</div>
+        </div>
+        <div class="btn" id="bv">VRAI</div>
+        <div class="btn" id="bf">FAUX</div>""",
+    cap="Vrai ou faux&nbsp;?<br /><span class=\"a\">Spécial copro.</span>",
+    count0="Prêt&nbsp;?",
+    countk="Question ${k + 1}/4",
+    tips=[
+        ("FAUX", "Ça change l'aspect de l'immeuble&nbsp;: il faut <b>l'accord de l'AG</b>."),
+        ("FAUX", "Filmer les parties communes demande <b>l'accord de l'AG</b>, et la vie privée compte."),
+        ("FAUX", "Seulement pour des travaux votés, <b>avec 8 jours de préavis</b> (sauf urgence)."),
+        ("VRAI", "Oui, si tu lui donnes <b>un pouvoir écrit</b>."),
+    ],
+    know=[
+        ("LE POUVOIR", "Tu peux le donner à presque n'importe qui, <b>sauf au syndic</b> et à ses proches."),
+        ("LA RÈGLE D'OR", "Ce qui se voit de l'extérieur&nbsp;: <b>demande avant</b> de le faire."),
+    ],
+    setup="",
+    js="""      const ANS = [1, 1, 1, 0];
+      T.forEach((t, k) => {
+        if (k) tl.to(`#q${k - 1}`, { opacity: 0, y: -30, duration: 0.2 }, t - 0.05);
+        tl.fromTo(`#q${k}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, t);
+        tl.to(["#bv", "#bf"], { backgroundColor: "#ffffff", color: (i) => (i ? "#dc2626" : "#16a34a"), scale: 1, opacity: 1, duration: 0.15 }, t);
+        const win = ANS[k] ? "#bf" : "#bv", lose = ANS[k] ? "#bv" : "#bf";
+        tl.to(win, { backgroundColor: ANS[k] ? "#dc2626" : "#16a34a", color: "#ffffff", duration: 0.2 }, t + 0.6);
+        tl.fromTo(win, { scale: 1 }, { scale: 1.1, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, t + 0.6);
+        tl.to(lose, { opacity: 0.3, duration: 0.2 }, t + 0.6);
+        shake("#qcard", t + 0.6, 8, 4);
+      });""",
+    endtitle=["Vrai ou faux&nbsp;?", "Maintenant tu sais."],
+    endacc="#f0abfc",
+    endrgb="240, 171, 252",
+)
+
+# ---------------------------------------------------------------- 42. CES BRUITS DANS L'IMMEUBLE
+SPECS["sons"] = dict(
+    comment="« CES BRUITS DANS L'IMMEUBLE » — vidéo utile : 4 bruits et ce qu'ils veulent dire. 150 BPM (rockabilly).",
+    bpm=150,
+    T=T4,
+    vars="""        --bg1: #ecfccb;
+        --bg2: #d4f59a;
+        --bg3: #a9e05a;
+        --ink: #1a2e05;
+        --acc: #4d7c0f;
+        --pill: #1a2e05;
+        --pillt: #bef264;
+        --tipbg: #1a2e05;
+        --tiph: #bef264;""",
+    css="""      #spk {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 560px;
+        border-radius: 30px;
+        background: #1a2e05;
+        overflow: hidden;
+        box-shadow: 0 30px 60px rgba(26, 46, 5, 0.25);
+      }
+      .sn {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 44px;
+        text-align: center;
+        font-size: 64px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        color: #bef264;
+        opacity: 0;
+      }
+      .sn small {
+        display: block;
+        margin-top: 6px;
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: 0;
+        color: #ecfccb;
+      }
+      #wv {
+        position: absolute;
+        left: 0;
+        top: 230px;
+        width: 850px;
+        height: 300px;
+      }
+      .dot {
+        position: absolute;
+        top: 1050px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #1a2e05;
+        opacity: 0.2;
+      }
+""",
+    html="""        <div id="spk" class="abs">
+          <div class="sn" id="n0">« Clac&nbsp;! »<small>dans les tuyaux</small></div>
+          <div class="sn" id="n1">« Glou-glou »<small>dans le radiateur</small></div>
+          <div class="sn" id="n2">« Fiiiiii »<small>dans la VMC</small></div>
+          <div class="sn" id="n3">« Gloub »<small>dans l'évier</small></div>
+          <svg id="wv" viewBox="0 0 850 300"></svg>
+        </div>
+        <div class="dot" id="d0" style="left: 405px"></div>
+        <div class="dot" id="d1" style="left: 455px"></div>
+        <div class="dot" id="d2" style="left: 505px"></div>
+        <div class="dot" id="d3" style="left: 555px"></div>""",
+    cap="Ces bruits chez toi&nbsp;:<br /><span class=\"a\">ce qu'ils veulent dire.</span>",
+    count0="Écoute",
+    countk="Bruit ${k + 1}/4",
+    tips=[
+        ("LE COUP DE BÉLIER", "La pression cogne quand tu fermes un robinet&nbsp;: <b>un anti-bélier</b> règle ça."),
+        ("LE RADIATEUR", "De l'air dans le circuit&nbsp;: il faut <b>le purger</b>."),
+        ("LA VMC QUI SIFFLE", "Bouches <b>encrassées ou mal réglées</b>&nbsp;: nettoie-les."),
+        ("L'ÉVIER QUI GARGOUILLE", "L'évacuation respire mal&nbsp;: <b>ventilation bouchée</b>, à signaler au syndic."),
+    ],
+    know=[
+        ("À LA VISITE", "Ouvre et ferme vite un robinet&nbsp;: <b>écoute les tuyaux</b>."),
+        ("LE SOIR", "Quand tout est calme, <b>écoute la VMC et les radiateurs</b>."),
+    ],
+    setup="""      const F = [
+        (x) => { const m = x % 425; return m < 30 ? 120 * Math.sin((m / 30) * Math.PI * 6) * Math.exp(-m / 12) : 3 * Math.sin(x / 6); },
+        (x) => 50 * Math.sin((x * 2 * Math.PI) / 85) * Math.max(0, Math.sin((x * 2 * Math.PI) / 425)),
+        (x) => 22 * Math.sin((x * 2 * Math.PI) / 10.625),
+        (x) => 90 * Math.sin((x * 2 * Math.PI) / 212.5) * Math.sin((x * 2 * Math.PI) / 850) + 20 * Math.sin((x * 2 * Math.PI) / 42.5),
+      ];
+      let w = "";
+      F.forEach((f, k) => {
+        let d = "M0 150";
+        for (let x = 0; x <= 1700; x += 3) d += ` L${x} ${(150 - f(x)).toFixed(1)}`;
+        w += `<path id="w${k}" d="${d}" stroke="#bef264" stroke-width="7" fill="none" stroke-linejoin="round" opacity="0"/>`;
+      });
+      document.getElementById("wv").innerHTML = w;""",
+    js="""      T.forEach((t, k) => {
+        if (k) {
+          tl.to([`#n${k - 1}`, `#w${k - 1}`], { opacity: 0, duration: 0.15 }, t - 0.05);
+          tl.to(`#d${k - 1}`, { opacity: 0.45, scale: 1, duration: 0.15 }, t);
+        }
+        tl.fromTo(`#n${k}`, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false }, t);
+        tl.to(`#w${k}`, { opacity: 1, duration: 0.2 }, t);
+        tl.fromTo(`#w${k}`, { x: 0 }, { x: -850, duration: 2.2, ease: "none", repeat: 1, immediateRender: false }, t);
+        tl.to(`#d${k}`, { opacity: 1, scale: 1.3, duration: 0.2 }, t);
+        shake("#spk", t + 0.1, 6, 3);
+      });
+      tl.to("#d3", { opacity: 0.45, scale: 1, duration: 0.2 }, 19.5);""",
+    endtitle=["Écoute l'immeuble,", "il te parle."],
+    endacc="#bef264",
+    endrgb="190, 242, 100",
+)
+
+# ---------------------------------------------------------------- 43. COMBIEN DE TEMPS ÇA DURE ?
+SPECS["duree"] = dict(
+    comment="« COMBIEN DE TEMPS ÇA DURE ? » — vidéo utile : durée de vie des équipements d'un appart. 110 BPM (ukulélé pop).",
+    bpm=110,
+    T=T5,
+    vars="""        --bg1: #fff7ed;
+        --bg2: #ffe4c4;
+        --bg3: #fdc48a;
+        --ink: #2b1405;
+        --acc: #c2410c;
+        --pill: #2b1405;
+        --pillt: #fdba74;
+        --tipbg: #2b1405;
+        --tiph: #fdba74;""",
+    css="""      .row {
+        position: absolute;
+        left: 70px;
+        width: 850px;
+        height: 130px;
+        opacity: 0.3;
+      }
+      .row .l {
+        font-size: 38px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+      }
+      .row .tr {
+        position: absolute;
+        left: 0;
+        top: 56px;
+        width: 850px;
+        height: 50px;
+        border-radius: 25px;
+        background: rgba(43, 20, 5, 0.1);
+      }
+      .row .fl {
+        position: absolute;
+        left: 0;
+        top: 56px;
+        width: 0;
+        height: 50px;
+        border-radius: 25px;
+        background: #ea580c;
+      }
+      .row .v {
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 38px;
+        font-weight: 900;
+        color: #ea580c;
+        opacity: 0;
+      }
+""",
+    html="""        <div id="rows"></div>""",
+    cap="Combien de temps&nbsp;<br /><span class=\"a\">ça dure&nbsp;?</span>",
+    count0="Durée de vie",
+    countk="Équipement ${k + 1}/5",
+    tips=[
+        ("LES JOINTS", "Environ <b>5 ans</b>. Noirs ou décollés près de la douche&nbsp;? À refaire."),
+        ("LA PEINTURE", "Environ <b>10 ans</b>. Traces et taches partout&nbsp;: à prévoir."),
+        ("LA ROBINETTERIE", "Environ <b>15 ans</b>. Du calcaire, un robinet qui force&nbsp;: bientôt à changer."),
+        ("LE VOLET ROULANT", "Son moteur&nbsp;: <b>15 à 20 ans</b>. Teste chaque volet à la visite."),
+        ("LE PARQUET MASSIF", "<b>50 ans et plus</b>&nbsp;: il se ponce et se vitrifie plusieurs fois."),
+    ],
+    know=[
+        ("EN LOCATION", "Ces durées servent à calculer <b>la vétusté</b> en fin de bail."),
+        ("À LA VISITE", "Demande <b>l'année des derniers travaux</b> de chaque équipement."),
+    ],
+    setup="""      const R = [["Joints en silicone", 5, "≈ 5 ans"], ["Peinture", 10, "≈ 10 ans"], ["Robinetterie", 15, "≈ 15 ans"], ["Volet roulant motorisé", 20, "15–20 ans"], ["Parquet massif", 50, "50 ans et +"]];
+      document.getElementById("rows").innerHTML = R.map((r, k) => `<div class="row" id="w${k}" style="top: ${450 + k * 148}px" data-w="${r[1] * 17}"><div class="l">${r[0]}</div><div class="v">${r[2]}</div><div class="tr"></div><div class="fl"></div></div>`).join("");""",
+    js="""      T.forEach((t, k) => {
+        const w = +document.getElementById(`w${k}`).dataset.w;
+        if (k) tl.to(`#w${k - 1}`, { opacity: 0.55, duration: 0.2 }, t);
+        tl.to(`#w${k}`, { opacity: 1, duration: 0.2 }, t);
+        tl.fromTo(`#w${k} .fl`, { width: 0 }, { width: w, duration: k === 4 ? 1.4 : 0.8, ease: "power3.out", immediateRender: false }, t + 0.1);
+        tl.fromTo(`#w${k} .v`, { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.3, immediateRender: false }, t + 0.5);
+      });
+      shake("#rows", T[4] + 1.4, 8, 4);""",
+    endtitle=["Chaque équipement", "a une date limite."],
+    endacc="#fdba74",
+    endrgb="253, 186, 116",
+)
+
+# ---------------------------------------------------------------- 44. TES VOIX EN AG
+SPECS["voix"] = dict(
+    comment="« TES VOIX EN AG » — vidéo utile : tantièmes, propriétaire majoritaire, pouvoirs. 140 BPM (jersey club).",
+    bpm=140,
+    T=T4,
+    vars="""        --bg1: #ecfeff;
+        --bg2: #c6f2f8;
+        --bg3: #8adbe9;
+        --ink: #082f3a;
+        --acc: #0e7490;
+        --pill: #082f3a;
+        --pillt: #67e8f9;
+        --tipbg: #082f3a;
+        --tiph: #67e8f9;""",
+    css="""      #dn {
+        left: 70px;
+        top: 460px;
+        width: 560px;
+        height: 560px;
+      }
+      .cv {
+        position: absolute;
+        left: 70px;
+        top: 690px;
+        width: 560px;
+        text-align: center;
+        font-size: 66px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        opacity: 0;
+      }
+      .cv small {
+        display: block;
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: 0;
+        color: #0e7490;
+      }
+      .lg {
+        position: absolute;
+        left: 670px;
+        width: 250px;
+        padding: 14px 18px;
+        border-radius: 16px;
+        background: #fff;
+        font-size: 28px;
+        font-weight: 900;
+        line-height: 1.1;
+        opacity: 0.35;
+      }
+      .lg i {
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        margin-right: 8px;
+        border-radius: 6px;
+        vertical-align: -2px;
+      }
+      .env {
+        position: absolute;
+        left: 670px;
+        width: 250px;
+        height: 76px;
+        border-radius: 14px;
+        background: #082f3a;
+        color: #67e8f9;
+        text-align: center;
+        line-height: 76px;
+        font-size: 30px;
+        font-weight: 900;
+        opacity: 0;
+      }
+""",
+    html="""        <svg id="dn" class="abs" viewBox="0 0 560 560"></svg>
+        <div class="cv" id="c0">87 voix<small>tes 87/1000</small></div>
+        <div class="cv" id="c1">600 voix<small>un gros propriétaire</small></div>
+        <div class="cv" id="c2">400 voix<small>plafonné</small></div>
+        <div class="cv" id="c3">3 pouvoirs<small>maximum</small></div>
+        <div class="lg" id="g0" style="top: 480px"><i style="background: #0e7490"></i>Toi&nbsp;: 87</div>
+        <div class="lg" id="g1" style="top: 570px"><i style="background: #f97316"></i>Gros proprio&nbsp;: 600</div>
+        <div class="lg" id="g2" style="top: 660px"><i style="background: #94a3b8"></i>Les autres&nbsp;: 313</div>
+        <div class="env" id="e0" style="top: 790px">Pouvoir 1</div>
+        <div class="env" id="e1" style="top: 880px">Pouvoir 2</div>
+        <div class="env" id="e2" style="top: 970px">Pouvoir 3</div>""",
+    cap="En AG, tu as&nbsp;<br /><span class=\"a\">combien de voix&nbsp;?</span>",
+    count0="1 000 tantièmes",
+    countk="Règle ${k + 1}/4",
+    tips=[
+        ("TES VOIX", "1 tantième = 1 voix&nbsp;: avec 87/1000, tu as <b>87 voix</b>."),
+        ("PAS 1 PERSONNE = 1 VOIX", "Celui qui a le plus de tantièmes <b>pèse le plus</b>."),
+        ("LE GARDE-FOU", "Plus de la moitié des voix&nbsp;? Elles sont <b>ramenées</b> à la somme des autres."),
+        ("LES POUVOIRS", "Une personne peut porter <b>3 pouvoirs maximum</b>, sauf petites exceptions."),
+    ],
+    know=[
+        ("ABSENT&nbsp;?", "Tu peux <b>voter par correspondance</b> avec le formulaire de la convocation."),
+        ("À DISTANCE", "L'AG peut se tenir <b>en visio</b> si elle l'a décidé."),
+    ],
+    setup="""      const C = 2 * Math.PI * 200;
+      const seg = (id, a, b, col, op) => `<circle id="${id}" cx="280" cy="280" r="200" fill="none" stroke="${col}" stroke-width="90" stroke-dasharray="${((b - a) / 1000) * C} ${C}" stroke-dashoffset="${(-a / 1000) * C}" transform="rotate(-90 280 280)" opacity="${op}"/>`;
+      document.getElementById("dn").innerHTML = seg("sO", 687, 1000, "#94a3b8", 0.5) + seg("sB1", 87, 487, "#f97316", 0.15) + seg("sB2", 487, 687, "#f97316", 0.15) + seg("sY", 0, 87, "#0e7490", 0.3);""",
+    js="""      const cv = (k, t) => {
+        if (k) tl.to(`#c${k - 1}`, { opacity: 0, duration: 0.15 }, t - 0.05);
+        tl.fromTo(`#c${k}`, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false }, t);
+      };
+      cv(0, T[0]);
+      tl.to("#sY", { opacity: 1, duration: 0.3 }, T[0]);
+      tl.fromTo("#sY", { attr: { "stroke-width": 90 } }, { attr: { "stroke-width": 130 }, duration: 0.25, yoyo: true, repeat: 1, immediateRender: false }, T[0] + 0.1);
+      tl.to("#g0", { opacity: 1, duration: 0.2 }, T[0]);
+      cv(1, T[1]);
+      tl.to(["#sB1", "#sB2"], { opacity: 1, duration: 0.3 }, T[1]);
+      tl.to("#g1", { opacity: 1, duration: 0.2 }, T[1]);
+      tl.to("#g2", { opacity: 1, duration: 0.2 }, T[1] + 0.2);
+      cv(2, T[2]);
+      tl.to("#sB2", { opacity: 0.15, duration: 0.5 }, T[2] + 0.2);
+      shake("#dn", T[2] + 0.2, 8, 4);
+      cv(3, T[3]);
+      tl.to(["#g0", "#g1", "#g2"], { opacity: 0.35, duration: 0.2 }, T[3]);
+      [0, 1, 2].forEach((i) => tl.fromTo(`#e${i}`, { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.3, ease: "back.out(2)", immediateRender: false }, T[3] + 0.2 + i * 0.3));""",
+    endtitle=["Tes voix comptent,", "utilise-les."],
+    endacc="#67e8f9",
+    endrgb="103, 232, 249",
+)
+
+# ---------------------------------------------------------------- 45. TON TÉLÉPHONE À LA VISITE
+SPECS["telephone"] = dict(
+    comment="« TON TÉLÉPHONE À LA VISITE » — vidéo utile : 4 tests à faire avec son téléphone. 120 BPM (fanfare).",
+    bpm=120,
+    T=T4,
+    vars="""        --bg1: #fefce8;
+        --bg2: #fbf0a8;
+        --bg3: #f2d653;
+        --ink: #1f1a03;
+        --acc: #a16207;
+        --pill: #1f1a03;
+        --pillt: #fde047;
+        --tipbg: #1f1a03;
+        --tiph: #fde047;""",
+    css="""      #ph {
+        left: 300px;
+        top: 450px;
+        width: 400px;
+        height: 740px;
+        border-radius: 64px;
+        background: #1f1a03;
+        box-shadow: 0 40px 70px rgba(31, 26, 3, 0.35);
+      }
+      #scr {
+        position: absolute;
+        left: 18px;
+        top: 18px;
+        right: 18px;
+        bottom: 18px;
+        border-radius: 48px;
+        background: #fffdf0;
+        overflow: hidden;
+      }
+      .sc {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+      }
+      .ap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 60px;
+        text-align: center;
+        font-size: 44px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+      }
+      #tube {
+        position: absolute;
+        left: 40px;
+        top: 300px;
+        width: 284px;
+        height: 90px;
+        border-radius: 45px;
+        background: #d9f99d;
+        border: 6px solid #1f1a03;
+      }
+      #bub {
+        position: absolute;
+        left: 106px;
+        top: 12px;
+        width: 60px;
+        height: 54px;
+        border-radius: 50%;
+        background: #fff;
+        border: 4px solid #1f1a03;
+      }
+      #deg {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 440px;
+        text-align: center;
+        font-size: 70px;
+        font-weight: 900;
+        color: #dc2626;
+      }
+      #beam {
+        position: absolute;
+        left: -40px;
+        top: 140px;
+        width: 440px;
+        height: 460px;
+        background: radial-gradient(60% 55% at 50% 30%, #fff 0%, #fef08a 45%, rgba(254, 240, 138, 0) 75%);
+      }
+      #bat {
+        position: absolute;
+        left: 92px;
+        top: 220px;
+        width: 180px;
+        height: 300px;
+        border-radius: 24px;
+        border: 10px solid #1f1a03;
+      }
+      #batf {
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        height: 0;
+        border-radius: 12px;
+        background: #22c55e;
+      }
+      .br {
+        position: absolute;
+        bottom: 230px;
+        width: 46px;
+        border-radius: 10px;
+        background: #1f1a03;
+        opacity: 0.15;
+      }
+      #room {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 560px;
+        text-align: center;
+        font-size: 36px;
+        font-weight: 900;
+      }
+""",
+    html="""        <div id="ph" class="abs"><div id="scr">
+          <div class="sc" id="s0"><div class="ap">Niveau</div><div id="tube"><div id="bub"></div></div><div id="deg">2,1°</div></div>
+          <div class="sc" id="s1"><div id="beam"></div><div class="ap">Lampe torche</div></div>
+          <div class="sc" id="s2"><div class="ap">Charge</div><div id="bat"><div id="batf"></div></div></div>
+          <div class="sc" id="s3"><div class="ap">Réseau</div><div class="br" id="br0" style="left: 70px; height: 70px"></div><div class="br" id="br1" style="left: 130px; height: 130px"></div><div class="br" id="br2" style="left: 190px; height: 190px"></div><div class="br" id="br3" style="left: 250px; height: 250px"></div><div id="room">Chambre du fond</div></div>
+        </div></div>""",
+    cap="Ton téléphone&nbsp;:<br /><span class=\"a\">l'outil secret de la visite.</span>",
+    count0="4 tests",
+    countk="Test ${k + 1}/4",
+    tips=[
+        ("LE NIVEAU", "Pose-le au sol&nbsp;: <b>un sol qui penche</b> peut cacher un plancher affaissé."),
+        ("LA LAMPE", "Collée au mur, elle fait apparaître <b>bosses, fissures et reprises</b>."),
+        ("LE CHARGEUR", "Branche-le dans chaque prise&nbsp;: <b>il doit charger</b>."),
+        ("LE RÉSEAU", "Regarde les barres <b>dans chaque pièce</b>&nbsp;: certains murs bloquent tout."),
+    ],
+    know=[
+        ("LES PHOTOS", "Photographie tout&nbsp;: <b>compteurs, plafonds, placards</b>."),
+        ("LA VIDÉO", "Filme la visite en commentant&nbsp;: <b>tu oublieras moins</b>."),
+    ],
+    setup="",
+    js="""      T.forEach((t, k) => {
+        if (k) tl.to(`#s${k - 1}`, { opacity: 0, duration: 0.15 }, t - 0.05);
+        tl.to(`#s${k}`, { opacity: 1, duration: 0.2 }, t);
+        tl.fromTo("#ph", { rotation: k % 2 ? 6 : -6 }, { rotation: 0, duration: 0.5, ease: "back.out(2)", immediateRender: false }, t);
+      });
+      tl.fromTo("#bub", { x: 0 }, { x: 70, duration: 1.2, ease: "elastic.out(1, 0.5)", immediateRender: false }, T[0] + 0.3);
+      tl.fromTo("#ph", { rotation: 0 }, { rotation: 4, duration: 1.2, ease: "power2.out", immediateRender: false }, T[0] + 0.5);
+      tl.to("#ph", { rotation: 0, duration: 0.3 }, T[1] - 0.3);
+      tl.fromTo("#beam", { opacity: 0.2, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out", immediateRender: false }, T[1] + 0.2);
+      tl.fromTo("#batf", { height: 0 }, { height: 264, duration: 2.5, ease: "power1.inOut", immediateRender: false }, T[2] + 0.2);
+      [0, 1, 2, 3].forEach((i) => tl.to(`#br${i}`, { opacity: i < 1 ? 1 : 0.15, backgroundColor: i < 1 ? "#dc2626" : "#1f1a03", duration: 0.2 }, T[3] + 0.3));
+      [0, 1, 2, 3].forEach((i) => tl.fromTo(`#br${i}`, { opacity: 0.15 }, { opacity: 1, duration: 0.15, immediateRender: false }, T[3] + 0.3 + i * 0.15).to(`#br${i}`, { opacity: i < 1 ? 1 : 0.15, duration: 0.2 }, T[3] + 1.4));""",
+    endtitle=["Ton téléphone,", "ton meilleur outil."],
+    endacc="#fde047",
+    endrgb="253, 224, 71",
+)

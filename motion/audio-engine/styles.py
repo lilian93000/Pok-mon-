@@ -42,6 +42,11 @@ Chaque style pose `nbars` mesures à partir de t0 sur un Bus, et ajoute ses gros
   cumbia      — cumbia : güiro, accordéon de synthé, basse « oum-pa » sur 1 et 3
   swing       — électro-swing : contrebasse qui marche, cuivres, charleston swing, caisse sur 2 et 4
   amapiano    — amapiano : log drum (basse percussive glissée), shaker, piano en accords
+  phonk       — phonk : mélodie de cloche 808, basse 808 saturée, charleston en triolets
+  rockabilly  — rockabilly : contrebasse slappée qui marche, guitare « twang », caisse claire au balai
+  jersey      — jersey club : grosse caisse en rebonds, voix découpées, claps rapides
+  fanfare     — fanfare : cuivres en accords, tuba « oum-pa », roulements de caisse claire
+  ukulele     — ukulélé pop : grattage aigu, claps, glockenspiel, grosse caisse légère
 """
 import numpy as np
 
@@ -95,6 +100,8 @@ def ding(note=86, L=0.6):
 
 
 def style(name, bus, kicks, t0, nbars, BAR, prog, gain=1.0, drums=True):
+    if name in ("phonk", "rockabilly", "jersey", "fanfare", "ukulele"):
+        return style9(name, bus, kicks, t0, nbars, BAR, prog, gain, drums)
     if name in ("house", "garage", "cumbia", "swing", "amapiano"):
         return style8(name, bus, kicks, t0, nbars, BAR, prog, gain, drums)
     if name in ("lofi", "disco", "dnb", "gospel", "mambo"):
@@ -880,3 +887,83 @@ def style8(name, bus, kicks, t0, nbars, BAR, prog, gain=1.0, drums=True):
                     bus.add(E.clap(), at(s) + STEP * 0.1, 0.3 * gain, rev=0.3)
             for s, d in ((3, 0), (6, 7), (11, 0), (13, 12), (14, 7)):
                 bus.add(logdrum(ch[0] - 12 + d, STEP * 2.5), at(s), 0.42 * gain)
+
+
+def style9(name, bus, kicks, t0, nbars, BAR, prog, gain=1.0, drums=True):
+    STEP = BAR / 16
+    K = E.kick(top=160, low=46, drive=2.0)
+    for b in range(nbars):
+        tb = t0 + b * BAR
+        ch = prog[b % len(prog)]
+        at = lambda s: tb + s * STEP  # noqa: E731
+        if name == "phonk":
+            for s, d in ((0, 12), (3, 12), (6, 7), (8, 10), (10, 7), (12, 3), (14, 0)):
+                bus.add(E.cowbell(ch[0] + 12 + d, 0.18), at(s), 0.22 * gain, pan=0.15, rev=0.2, duck=True)
+            if drums:
+                for s in (0, 6, 10):
+                    bus.add(K, at(s), 0.8 * gain)
+                    kicks.append(at(s))
+                for s in (4, 12):
+                    bus.add(E.clap(), at(s), 0.4 * gain, rev=0.2)
+                for k in range(24):
+                    bus.add(E.hat(0.025), tb + k * BAR / 24, (0.15 if k % 3 == 0 else 0.08) * gain, pan=0.3)
+            bus.add(E.bass808(ch[0] - 24, STEP * 6, drive=3.0, glide_from=ch[0] - 12), at(0), 0.55 * gain)
+            bus.add(E.bass808(ch[0] - 24, STEP * 4, drive=3.0), at(10), 0.45 * gain)
+        elif name == "rockabilly":
+            for q, d in enumerate((0, 4, 7, 9)):
+                bus.add(E.bass808(ch[0] - 24 + d, STEP * 1.5, drive=1.2), at(q * 4), 0.45 * gain)
+                bus.add(tom(ch[0] - 12, 0.05), at(q * 4 + 2), 0.15 * gain)
+            for s in (0, 2, 3, 6, 8, 10, 11, 14):
+                n = ch[(s // 2) % len(ch)] + 12 + (12 if s in (3, 11) else 0)
+                bus.add(E.pluck(n, STEP * 1.2, bright=7000), at(s), 0.22 * gain, pan=-0.2, rev=0.35, duck=True)
+            if drums:
+                for s in (0, 8, 10):
+                    bus.add(E.kick(top=120, low=50, drive=1.3), at(s), 0.55 * gain)
+                    kicks.append(at(s))
+                for s in (4, 12):
+                    bus.add(E.snare(L=0.25, tone=200, crack=1.2), at(s), 0.45 * gain, rev=0.3)
+                for s in range(0, 16, 2):
+                    bus.add(shaker(0.1), at(s), 0.14 * gain, pan=0.3)
+        elif name == "jersey":
+            if drums:
+                for s in (0, 3, 6, 8, 10, 12, 14):
+                    bus.add(E.kick(L=0.25, top=180, low=52, drive=2.2), at(s), 0.75 * gain)
+                    kicks.append(at(s))
+                for s in (4, 12, 15):
+                    bus.add(E.clap(), at(s), 0.35 * gain, rev=0.2)
+                for s in range(0, 16, 2):
+                    bus.add(E.hat(0.03), at(s), 0.12 * gain, pan=0.3)
+            for k, s in enumerate((1, 5, 9, 13)):
+                bus.add(E.vox("aeio"[(b + k) % 4], ch[(k + 1) % 3] + 12, STEP * 0.7), at(s), 0.28 * gain, pan=0.25 * (-1) ** k, rev=0.3)
+            bus.add(E.supersaw([n + 12 for n in ch], STEP * 4, cutoff=4500), at(0), 0.22 * gain, rev=0.3, duck=True)
+            bus.add(E.bass808(ch[0] - 24, STEP * 6, drive=2.2), at(0), 0.5 * gain)
+        elif name == "fanfare":
+            for s in (0, 3, 6, 10, 12):
+                _chord_hits(bus, [n + 12 for n in ch], at(s), STEP * (2 if s in (6, 12) else 1.2), 0.45 * gain, brass, pan=0.15, rev=0.3)
+            for q in range(4):
+                bus.add(E.bass808(ch[0] - 24 + (0 if q % 2 == 0 else 7), STEP * 1.8, drive=1.4), at(q * 4), 0.5 * gain)
+            if drums:
+                for s in (0, 8):
+                    bus.add(E.kick(top=110, low=48, drive=1.3), at(s), 0.6 * gain)
+                    kicks.append(at(s))
+                for s in (4, 12):
+                    bus.add(E.snare(L=0.25, tone=210, crack=1.0), at(s), 0.45 * gain, rev=0.3)
+                for k in range(8):
+                    bus.add(E.snare(L=0.06, tone=230, crack=0.8), at(14) + k * STEP / 4, 0.12 * gain * (k + 2) / 9)
+                bus.add(E.hat(0.4, open_=True), at(0), 0.16 * gain, pan=0.3)
+        elif name == "ukulele":
+            for s in (0, 2, 3, 6, 8, 10, 11, 14):
+                for i, n in enumerate(ch + [ch[0] + 12]):
+                    bus.add(nylon(n + 12, STEP * 1.6), at(s) + i * 0.008, 0.16 * gain, pan=-0.2, rev=0.25, duck=True)
+            for s, d in ((0, 12), (6, 7), (8, 4), (12, 7)):
+                bus.add(bell(ch[0] + 24 + d, 0.4), at(s), 0.3 * gain, pan=0.3, rev=0.4)
+            if drums:
+                for s in (0, 8):
+                    bus.add(E.kick(top=120, low=50, drive=1.2), at(s), 0.5 * gain)
+                    kicks.append(at(s))
+                for s in (4, 12):
+                    bus.add(E.clap(), at(s), 0.42 * gain, rev=0.25)
+                for s in range(0, 16, 2):
+                    bus.add(shaker(), at(s), 0.12 * gain, pan=0.3)
+            bus.add(E.bass808(ch[0] - 24, STEP * 4, drive=1.1), at(0), 0.4 * gain)
+            bus.add(E.bass808(ch[0] - 24 + 7, STEP * 4, drive=1.1), at(8), 0.38 * gain)

@@ -56,7 +56,12 @@ contester une AG (opposants / défaillants, 2 mois, tribunal judiciaire, abus de
 palier annexé (lots 12 et 13, remise en état, art. 26, prescription 30 ans) ·
 servitudes (passage, canalisation, tour d'échelle, abords d'un monument 500 m, ABF) ·
 registre des copropriétés (AC9512874, 31 lots, plan de sauvegarde, arrêté de mise en sécurité) ·
-mur mitoyen (héberge, chaperon, frais partagés, poutre à mi-épaisseur, rachat de mitoyenneté, fenêtre interdite).
+mur mitoyen (héberge, chaperon, frais partagés, poutre à mi-épaisseur, rachat de mitoyenneté, fenêtre interdite) ·
+vrai/faux (panneaux solaires sur le balcon, sonnette-caméra, syndic qui entre chez moi, locataire qui vote avec un pouvoir) ·
+bruits (coup de bélier, radiateur à purger, VMC qui siffle, évier qui gargouille) ·
+durées de vie (joints 5 ans, peinture 10 ans, robinetterie 15 ans, moteur de volet 15–20 ans, parquet massif 50 ans+) ·
+voix en AG (87/1000, propriétaire à 600 ramené à 400, 3 pouvoirs, vote par correspondance, visio) ·
+téléphone à la visite (niveau 2,1°, lampe rasante, chargeur dans les prises, réseau dans la chambre du fond).
 
 ## Résidences fictives déjà nommées
 Le Verger · Les Tilleuls · Les Acacias · Les Charmes · Le Parc · Les Platanes · Rue des Lilas · Vitrerie Nord (fabricant fictif) · 8 rue des Glycines, Lyon.
