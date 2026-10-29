@@ -23,6 +23,7 @@ import {
   type Formule,
 } from "@/lib/dossier";
 import { addClientDossier, newDossierId } from "@/lib/clientDossiers";
+import { sendWeb3Forms } from "@/lib/web3forms";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -51,10 +52,6 @@ interface UploadedFile {
   file: File;
 }
 
-// Clé Web3Forms (reçue par email après inscription sur web3forms.com).
-// Permet d'envoyer chaque commande par email, sans serveur.
-const WEB3FORMS_KEY = "7affa5b5-f488-4288-b4c1-1d72e2fbf310";
-
 export function DossierWizard() {
   const [step, setStep] = useState(1);
   const [adresse, setAdresse] = useState("");
@@ -68,6 +65,8 @@ export function DossierWizard() {
   const [formuleId, setFormuleId] = useState("premium");
   const [urgence, setUrgence] = useState(false);
   const [dragging, setDragging] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const formule = OFFERS_B2C.find((o) => o.id === formuleId)!;
@@ -103,15 +102,15 @@ export function DossierWizard() {
   const next = () => setStep((s) => Math.min(6, s + 1));
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
-  // Envoi de la commande par email (via Web3Forms) — sans serveur.
-  async function submitOrder() {
-    if (!WEB3FORMS_KEY) return;
-    try {
-      // FormData (multipart) : permet de joindre les documents à l'email.
+  // Envoi de la commande par email (via Web3Forms) à contact@analysetacopro.fr.
+  // Si les pièces jointes sont refusées, on renvoie la commande sans elles
+  // (la liste des fichiers reste dans l'email) : la demande n'est jamais perdue.
+  async function submitOrder(): Promise<boolean> {
+    const build = (withFiles: boolean) => {
       const fd = new FormData();
-      fd.append("access_key", WEB3FORMS_KEY);
       fd.append("subject", `Nouvelle commande — ${formule.name} — ${nom}`);
       fd.append("from_name", "AnalyseTaCopro");
+      fd.append("replyto", email);
       fd.append("Nom", nom);
       fd.append("Email", email);
       fd.append("Téléphone", telephone);
@@ -120,21 +119,16 @@ export function DossierWizard() {
       fd.append("Formule", formule.name);
       fd.append("Option urgence", urgence ? `Oui (+${OPTION_URGENCE.price} €)` : "Non");
       fd.append("Total", `${total} €`);
-      fd.append(
-        "Documents",
-        files.map((f) => f.name).join(", ") || "(aucun)"
-      );
-      // Pièces jointes : on attache chaque fichier réellement téléversé.
-      files.forEach((f, i) => {
-        fd.append(`Document ${i + 1}`, f.file, f.name);
-      });
-      await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: fd,
-      });
-    } catch {
-      /* on n'empêche pas la confirmation si l'email échoue */
-    }
+      fd.append("Documents", files.map((f) => f.name).join(", ") || "(aucun)");
+      if (withFiles) {
+        files.forEach((f, i) => fd.append(`Document ${i + 1}`, f.file, f.name));
+      } else if (files.length) {
+        fd.append("Pièces jointes", "Non transmises : demander les documents au client.");
+      }
+      return fd;
+    };
+    if (await sendWeb3Forms(build(true))) return true;
+    return files.length > 0 && (await sendWeb3Forms(build(false)));
   }
 
   // Enregistre le dossier dans le navigateur du client (son tableau de bord).
@@ -553,9 +547,9 @@ export function DossierWizard() {
               <span className="font-semibold text-foreground">
                 {adresse}, {ville}
               </span>
-              . Un email de confirmation vous a été envoyé à{" "}
-              <span className="font-semibold text-foreground">{email}</span>.
-              Nous vous recontactons rapidement pour finaliser votre dossier et
+              . Nous vous répondons à{" "}
+              <span className="font-semibold text-foreground">{email}</span>{" "}
+              et vous recontactons rapidement pour finaliser votre dossier et
               convenir du règlement.
             </p>
             <div className="mx-auto mt-6 max-w-sm space-y-2 rounded-2xl bg-surface-soft/50 p-5 text-left text-sm">
@@ -593,20 +587,36 @@ export function DossierWizard() {
               Retour
             </button>
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (step === 5) {
-                  submitOrder();
+                  setSending(true);
+                  setSendError(false);
+                  const ok = await submitOrder();
+                  setSending(false);
+                  if (!ok) {
+                    setSendError(true);
+                    return;
+                  }
                   saveDossier();
                 }
                 next();
               }}
-              disabled={!canNext()}
+              disabled={!canNext() || sending}
               className="inline-flex items-center gap-2 rounded-2xl bg-brand-gradient px-7 py-3 text-sm font-semibold text-white shadow-soft transition hover:shadow-soft-lg disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {step === 5 ? "Envoyer ma demande" : "Continuer"}
+              {step === 5 ? (sending ? "Envoi en cours…" : "Envoyer ma demande") : "Continuer"}
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
+        )}
+        {sendError && step === 5 && (
+          <p role="alert" className="mt-4 rounded-2xl bg-danger/10 px-4 py-3 text-center text-sm font-medium text-danger">
+            L&apos;envoi n&apos;a pas abouti. Réessayez dans un instant, ou écrivez-nous à{" "}
+            <a href="mailto:contact@analysetacopro.fr" className="underline">
+              contact@analysetacopro.fr
+            </a>
+            .
+          </p>
         )}
       </div>
     </div>

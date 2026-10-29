@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Send, CheckCircle2, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { sendWeb3Forms } from "@/lib/web3forms";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -23,21 +24,23 @@ export function ContactForm() {
       string
     >;
 
-    // Site statique (GitHub Pages) : pas de backend → on ouvre la
-    // messagerie du visiteur (mailto), honnête et fonctionnel.
+    // Site statique : pas de backend → envoi direct à contact@analysetacopro.fr via Web3Forms.
     if (process.env.NEXT_PUBLIC_STATIC === "true") {
-      const to = "contact@analysetacopro.fr";
-      const subject = encodeURIComponent(
-        `[Contact] ${data.subject || "Nouveau message"} — ${data.name || ""}`
-      );
-      const body = encodeURIComponent(
-        `Nom : ${data.name || ""}\nEmail : ${data.email || ""}\nTéléphone : ${
-          data.phone || "—"
-        }\n\n${data.message || ""}`
-      );
-      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
-      setStatus("success");
-      form.reset();
+      const fd = new FormData();
+      fd.append("subject", `[Contact] ${data.subject || "Nouveau message"} — ${data.name || ""}`);
+      fd.append("from_name", "AnalyseTaCopro — contact");
+      fd.append("replyto", data.email || "");
+      fd.append("Nom", data.name || "");
+      fd.append("Email", data.email || "");
+      fd.append("Téléphone", data.phone || "—");
+      fd.append("Message", data.message || "");
+      if (await sendWeb3Forms(fd)) {
+        setStatus("success");
+        form.reset();
+      } else {
+        setStatus("error");
+        setError("L'envoi n'a pas abouti. Réessayez, ou écrivez à contact@analysetacopro.fr.");
+      }
       return;
     }
 
