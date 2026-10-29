@@ -6,16 +6,19 @@
 :root {
   --bg: #f3f5fa; --surface: #ffffff; --ink: #0e1630; --muted: #5a6582; --line: #dde2ee;
   --brand: #0b5fff; --brand-soft: #e3ebff; --pub: #b4441c; --pub-soft: #fbe7dd; --done: #16794a; --done-soft: #ddf3e6;
+  --tt: #0e1630; --ig: #c2307a; --down: #b42318;
   --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --f-body: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #0a0f1e; --surface: #121a30; --ink: #eaf0ff; --muted: #9aa6c6; --line: #24304f;
-  --brand: #5b8dff; --brand-soft: #1a2a55; --pub: #ff9a6e; --pub-soft: #3a2117; --done: #4fd08e; --done-soft: #12301f; color-scheme: dark } }
+  --brand: #5b8dff; --brand-soft: #1a2a55; --pub: #ff9a6e; --pub-soft: #3a2117; --done: #4fd08e; --done-soft: #12301f;
+  --tt: #eaf0ff; --ig: #ff7ab8; --down: #ff8a80; color-scheme: dark } }
 :root[data-theme="dark"] {
   --bg: #0a0f1e; --surface: #121a30; --ink: #eaf0ff; --muted: #9aa6c6; --line: #24304f;
-  --brand: #5b8dff; --brand-soft: #1a2a55; --pub: #ff9a6e; --pub-soft: #3a2117; --done: #4fd08e; --done-soft: #12301f; color-scheme: dark }
+  --brand: #5b8dff; --brand-soft: #1a2a55; --pub: #ff9a6e; --pub-soft: #3a2117; --done: #4fd08e; --done-soft: #12301f;
+  --tt: #eaf0ff; --ig: #ff7ab8; --down: #ff8a80; color-scheme: dark }
 body { background: var(--bg); color: var(--ink); font: 400 16px/1.5 var(--f-body); }
 .wrap { max-width: 860px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 28px; }
 h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.02em; }
@@ -66,6 +69,31 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--brand); out
 .player video { width: min(100%, 300px); aspect-ratio: 9 / 16; max-width: 100%; border-radius: 14px; background: #000; }
 .row .player { grid-column: 1 / -1; }
 .btns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.tabs { display: flex; gap: 6px; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; width: max-content; max-width: 100%; }
+.tabs a { font: 700 15px/1 var(--f-body); color: var(--muted); text-decoration: none; padding: 10px 16px; border-radius: 9px; }
+.tabs a[aria-current="page"] { background: var(--ink); color: var(--bg); }
+.view { display: grid; gap: 28px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 4px; }
+.kpi .v { font: 800 30px/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.kpi .d { font-size: 13px; font-weight: 700; }
+.up { color: var(--done); } .down { color: var(--down); } .flat { color: var(--muted); }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+.chart { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; overflow-x: auto; }
+.chart svg { display: block; width: 100%; min-width: 520px; height: auto; }
+.legend { display: flex; gap: 16px; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.form { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 14px; }
+.form .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+fieldset { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin: 0; display: grid; gap: 10px; min-width: 0; }
+fieldset legend { font: 800 16px var(--f-display); padding: 0 6px; }
+label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); font-weight: 500; }
+input[type="number"], select, textarea { font: 500 16px var(--f-body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 10px; width: 100%; box-sizing: border-box; }
+.hist { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.hist table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14px; font-variant-numeric: tabular-nums; }
+.hist th, .hist td { padding: 10px 12px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.hist th:first-child, .hist td:first-child { text-align: left; }
+.hist th { font: 700 12px var(--f-body); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.empty { color: var(--muted); background: var(--surface); border: 1px dashed var(--line); border-radius: 14px; padding: 18px; }
 .toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 14px; }
 @media (max-width: 560px) {
   .row { grid-template-columns: auto 1fr; }
@@ -83,6 +111,9 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--brand); out
     <p class="lede">73 vidéos, une par jour, du jeudi 29 octobre 2026 au samedi 9 janvier 2027. Même vidéo sur TikTok puis sur Instagram Reels, 30 minutes plus tard. Coche chaque vidéo une fois publiée.</p>
   </header>
 
+  <nav class="tabs" aria-label="Pages"><a href="#calendrier" id="tab-cal">Calendrier</a><a href="#suivi" id="tab-suivi">Suivi des abonnés</a></nav>
+
+  <div class="view" id="view-cal">
   <section class="progress" aria-label="Avancement">
     <div class="eyebrow" id="prog-label">0 / 73 publiées</div>
     <div class="bar"><span id="prog-bar"></span></div>
@@ -122,6 +153,43 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--brand); out
     </div>
     <div id="weeks" style="display:grid;gap:22px"></div>
   </section>
+  </div>
+
+  <div class="view" id="view-suivi" hidden>
+    <section style="display:grid;gap:8px">
+      <h2>Suivi des abonnés</h2>
+      <p class="lede" style="margin:0">À remplir une fois par semaine, à la fin de chaque semaine du calendrier. Les chiffres sont enregistrés avec la page : tu les retrouves sur n'importe quel appareil.</p>
+    </section>
+    <div class="kpis" id="kpis"></div>
+    <section class="chart" aria-label="Évolution des abonnés">
+      <div class="legend"><span><span class="dot" style="background:var(--tt)"></span>TikTok</span><span><span class="dot" style="background:var(--ig)"></span>Instagram</span></div>
+      <div id="chart"></div>
+    </section>
+    <form class="form" id="stats-form" novalidate>
+      <h2 style="font-size:19px">Ajouter ou modifier une semaine</h2>
+      <label>Semaine<select id="s-week"></select></label>
+      <div class="grid2">
+        <fieldset><legend>TikTok</legend>
+          <label>Abonnés<input type="number" inputmode="numeric" min="0" id="s-tt-abo"></label>
+          <label>Vues de la semaine<input type="number" inputmode="numeric" min="0" id="s-tt-vues"></label>
+          <label>J'aime de la semaine<input type="number" inputmode="numeric" min="0" id="s-tt-likes"></label>
+        </fieldset>
+        <fieldset><legend>Instagram</legend>
+          <label>Abonnés<input type="number" inputmode="numeric" min="0" id="s-ig-abo"></label>
+          <label>Vues de la semaine<input type="number" inputmode="numeric" min="0" id="s-ig-vues"></label>
+          <label>J'aime de la semaine<input type="number" inputmode="numeric" min="0" id="s-ig-likes"></label>
+        </fieldset>
+      </div>
+      <label>Clics vers analysetacopro.fr (facultatif)<input type="number" inputmode="numeric" min="0" id="s-clics"></label>
+      <label>Note (la vidéo qui a le mieux marché, une idée…)<textarea id="s-note" rows="2"></textarea></label>
+      <div class="actions"><button type="submit" class="primary" id="s-save">Enregistrer la semaine</button></div>
+      <p class="file" style="margin:0">Où trouver les chiffres : TikTok → Profil → ☰ → Outils de créateur → Statistiques (7 derniers jours). Instagram → Profil → Tableau de bord professionnel → Statistiques.</p>
+    </form>
+    <section style="display:grid;gap:10px">
+      <h2 style="font-size:19px">Historique</h2>
+      <div id="hist"></div>
+    </section>
+  </div>
 </div>
 <div class="toast" id="toast" hidden></div>
 
@@ -226,6 +294,92 @@ function render() {
   document.getElementById("prog-bar").style.width = `${(done.size / PLAN.length) * 100}%`;
   renderToday(); renderWeeks();
 }
+/* ---------- Suivi des abonnés (base de données de la page) ---------- */
+const WEEKS = Array.from({ length: Math.ceil(PLAN.length / 7) }, (_, w) => ({ n: w + 1, from: PLAN[w * 7].date, to: PLAN[Math.min(PLAN.length, w * 7 + 7) - 1].date }));
+const FIELDS = [["tt_abonnes", "s-tt-abo"], ["tt_vues", "s-tt-vues"], ["tt_likes", "s-tt-likes"], ["ig_abonnes", "s-ig-abo"], ["ig_vues", "s-ig-vues"], ["ig_likes", "s-ig-likes"], ["clics", "s-clics"]];
+let stats = {}, statsDb = null, statsState = "loading";
+const nf = (v) => (v == null || v === "" ? "–" : Number(v).toLocaleString("fr-FR"));
+const curWeek = () => { const i = PLAN.findIndex((p) => p.date === todayIso); return i < 0 ? (todayIso < PLAN[0].date ? 1 : WEEKS.length) : Math.floor(i / 7) + 1; };
+const sel = document.getElementById("s-week");
+sel.innerHTML = WEEKS.map((w) => `<option value="${w.n}">Semaine ${w.n} · ${fmt(w.from)} → ${fmt(w.to)}</option>`).join("");
+sel.value = String(curWeek());
+function fillForm() {
+  const r = stats[sel.value] || {};
+  for (const [k, id] of FIELDS) document.getElementById(id).value = r[k] ?? "";
+  document.getElementById("s-note").value = r.note || "";
+}
+sel.onchange = fillForm;
+function delta(cur, prev) {
+  if (cur == null || prev == null) return `<span class="d flat">première mesure</span>`;
+  const d = cur - prev, c = d > 0 ? "up" : d < 0 ? "down" : "flat";
+  return `<span class="d ${c}">${d > 0 ? "+" : ""}${d.toLocaleString("fr-FR")} sur la semaine</span>`;
+}
+function series(key) { return WEEKS.map((w) => (stats[w.n] && stats[w.n][key] != null ? Number(stats[w.n][key]) : null)); }
+function lastTwo(arr) { const idx = arr.map((v, i) => (v == null ? -1 : i)).filter((i) => i >= 0); const a = idx[idx.length - 1], b = idx[idx.length - 2]; return [a == null ? null : arr[a], b == null ? null : arr[b]]; }
+function renderChart() {
+  const tt = series("tt_abonnes"), ig = series("ig_abonnes"), all = [...tt, ...ig].filter((v) => v != null);
+  const box = document.getElementById("chart");
+  if (!all.length) { box.innerHTML = `<p class="lede" style="margin:0">La courbe apparaît dès la première semaine enregistrée.</p>`; return; }
+  const W = 640, H = 240, L = 52, R = 14, T = 12, B = 30, max = Math.max(10, ...all), step = Math.pow(10, Math.floor(Math.log10(max))) / 2;
+  const top = Math.ceil(max / step) * step, x = (i) => L + (i * (W - L - R)) / (WEEKS.length - 1), y = (v) => T + (1 - v / top) * (H - T - B);
+  let g = "";
+  for (let k = 0; k <= 4; k++) { const v = (top * k) / 4; g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${Math.round(v).toLocaleString("fr-FR")}</text>`; }
+  WEEKS.forEach((w, i) => (g += `<text x="${x(i)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="var(--muted)">S${w.n}</text>`));
+  const line = (arr, col) => {
+    const pts = arr.map((v, i) => (v == null ? null : [x(i), y(v)])).filter(Boolean);
+    if (!pts.length) return "";
+    return `<polyline points="${pts.map((p) => p.join(",")).join(" ")}" fill="none" stroke="${col}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>` +
+      pts.map((p, j) => `<circle cx="${p[0]}" cy="${p[1]}" r="${j === pts.length - 1 ? 5 : 3.5}" fill="${col}"/>`).join("");
+  };
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Abonnés TikTok et Instagram par semaine">${g}${line(tt, "var(--tt)")}${line(ig, "var(--ig)")}</svg>`;
+}
+function renderStats() {
+  const k = document.getElementById("kpis"), h = document.getElementById("hist"), btn = document.getElementById("s-save");
+  btn.disabled = !statsDb;
+  if (statsState === "absent") {
+    k.innerHTML = ""; document.getElementById("chart").innerHTML = "";
+    h.innerHTML = `<div class="empty">Le suivi n'est pas disponible dans cette vue. Ouvre la page dans l'appli Claude ou sur claude.ai, connecté à ton compte.</div>`;
+    return;
+  }
+  const [tt, ttp] = lastTwo(series("tt_abonnes")), [ig, igp] = lastTwo(series("ig_abonnes"));
+  const tot = tt == null && ig == null ? null : (tt || 0) + (ig || 0), totp = ttp == null && igp == null ? null : (ttp || 0) + (igp || 0);
+  const none = `<span class="d flat">pas encore de chiffre</span>`;
+  k.innerHTML = `<div class="kpi"><span class="eyebrow"><span class="dot" style="background:var(--tt)"></span>TikTok</span><span class="v">${nf(tt)}</span>${tt == null ? none : delta(tt, ttp)}</div>
+    <div class="kpi"><span class="eyebrow"><span class="dot" style="background:var(--ig)"></span>Instagram</span><span class="v">${nf(ig)}</span>${ig == null ? none : delta(ig, igp)}</div>
+    <div class="kpi"><span class="eyebrow">Total abonnés</span><span class="v">${nf(tot)}</span>${tot == null ? none : delta(tot, totp)}</div>`;
+  renderChart();
+  const rows = WEEKS.filter((w) => stats[w.n]);
+  h.innerHTML = rows.length ? `<div class="hist"><table><thead><tr><th>Semaine</th><th>TikTok abonnés</th><th>TikTok vues</th><th>TikTok j'aime</th><th>Insta abonnés</th><th>Insta vues</th><th>Insta j'aime</th><th>Clics site</th></tr></thead><tbody>${rows
+    .map((w) => { const r = stats[w.n]; return `<tr><td>S${w.n} · ${fmt(w.from)}${r.note ? `<br><span class="file">${esc(String(r.note))}</span>` : ""}</td><td>${nf(r.tt_abonnes)}</td><td>${nf(r.tt_vues)}</td><td>${nf(r.tt_likes)}</td><td>${nf(r.ig_abonnes)}</td><td>${nf(r.ig_vues)}</td><td>${nf(r.ig_likes)}</td><td>${nf(r.clics)}</td></tr>`; }).join("")}</tbody></table></div>`
+    : `<div class="empty">${statsState === "loading" ? "Chargement des chiffres…" : "Aucune semaine enregistrée pour l'instant. À la fin de ta première semaine, remplis le formulaire ci-dessus : tes abonnés TikTok et Instagram, et les vues de la semaine."}</div>`;
+}
+document.getElementById("stats-form").onsubmit = async (e) => {
+  e.preventDefault();
+  if (!statsDb) return;
+  const body = { semaine: Number(sel.value), maj: new Date().toISOString() };
+  for (const [key, id] of FIELDS) { const v = document.getElementById(id).value.trim(); if (v !== "") { const n = Number(v); if (!Number.isFinite(n) || n < 0) { toast("Les chiffres doivent être positifs"); return; } body[key] = Math.round(n); } }
+  const note = document.getElementById("s-note").value.trim(); if (note) body.note = note.slice(0, 300);
+  if (Object.keys(body).length <= 2) { toast("Ajoute au moins un chiffre"); return; }
+  const b = document.getElementById("s-save"); b.disabled = true;
+  try { await statsDb.collection("stats").doc("s" + sel.value).set(body); toast(`Semaine ${sel.value} enregistrée`); }
+  catch (err) { toast(err && err.code === "not_granted" ? "Tu n'as pas le droit d'enregistrer ici" : "L'enregistrement n'a pas marché, réessaie"); }
+  finally { b.disabled = false; }
+};
+(window.claude?.use?.("db") || Promise.resolve(null)).then((db) => {
+  statsDb = db;
+  if (!db) { statsState = "absent"; renderStats(); return; }
+  db.collection("stats").onSnapshot((snap) => {
+    stats = {}; snap.docs.forEach((d) => { const r = d.data(); if (r && r.semaine) stats[r.semaine] = r; });
+    statsState = "ready"; renderStats(); fillForm();
+  }, () => { statsState = "ready"; renderStats(); });
+}).catch(() => { statsState = "absent"; renderStats(); });
+function route() {
+  const suivi = location.hash === "#suivi";
+  document.getElementById("view-cal").hidden = suivi; document.getElementById("view-suivi").hidden = !suivi;
+  document.getElementById("tab-cal").setAttribute("aria-current", suivi ? "false" : "page");
+  document.getElementById("tab-suivi").setAttribute("aria-current", suivi ? "page" : "false");
+}
+window.addEventListener("hashchange", route); route(); renderStats(); fillForm();
 document.querySelectorAll(".filters button").forEach((b) => (b.onclick = () => {
   filter = b.dataset.f; document.querySelectorAll(".filters button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); renderWeeks();
 }));
