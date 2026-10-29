@@ -1,0 +1,22 @@
+name: Test Web3Forms (temporaire)
+on:
+  push:
+    branches: [claude/eager-johnson-h5khu9]
+    paths: [.github/workflows/test-web3forms.yml]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Envoi sans pièce jointe
+        run: |
+          curl -sS https://api.web3forms.com/submit -H "Accept: application/json" \
+            -F access_key=00c0ecce-d9cb-402d-b589-1d5c155aae05 \
+            -F "subject=TEST 1 sans pièce jointe — à ignorer" -F "from_name=AnalyseTaCopro" \
+            -F "Message=Test automatique de la clé (sans pièce jointe)."; echo
+      - name: Envoi avec pièce jointe
+        run: |
+          printf '%%PDF-1.4 test\n' > test.pdf
+          curl -sS https://api.web3forms.com/submit -H "Accept: application/json" \
+            -F access_key=00c0ecce-d9cb-402d-b589-1d5c155aae05 \
+            -F "subject=TEST 2 avec pièce jointe — à ignorer" -F "from_name=AnalyseTaCopro" \
+            -F "Message=Test automatique de la clé (avec pièce jointe)." -F "Document 1=@test.pdf"; echo
