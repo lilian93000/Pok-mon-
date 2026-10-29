@@ -41,6 +41,34 @@ VERSIONS = (("tiktok-sans-musique", "tiktok-1080-sans-musique", "sfx", 0.14), ("
 KEEP = {"AG", "PV", "DPE", "VMC", "PLU", "PNO", "ABF", "RC", "TV", "4G/5G", "4/16/4", "UW"}
 
 KNOW = (20.2,)
+# versions courtes, utilisées seulement quand la phrase complète ne tient pas dans son temps d'écran : {vidéo: {temps: texte}}
+SHORT = {
+    "dpe": {20.2: "Bon à savoir : le DPE de l'immeuble devient obligatoire entre 2024 et 2026, selon sa taille."},
+    "dico": {2.1: "Syndic : celui qui gère la copro.", 9.3: "Parties communes : ce qui appartient à tous.",
+             16.5: "PPPT : les travaux prévus sur 10 ans."},
+    "questions": {5.9: "Cave et parking : vérifie leurs numéros de lot.", 9.5: "L'AG doit se tenir au moins une fois par an.",
+                  13.1: "Activité pro, enseigne : le règlement le dit."},
+    "etapes": {13.1: "Le prêt : au moins 1 mois pour l'obtenir. Refusé ? Dépôt rendu."},
+    "boites": {20.2: "Bon à savoir : le PV d'AG dit qui était présent. Regarde le total."},
+    "charges": {16.7: "Le gardien : 75 % ou 40 % récupérables, selon ses tâches.", 20.2: "Bon à savoir : tout ça vient d'un décret de 1987."},
+    "travaux": {5.9: "Autres fenêtres ? Ça change l'aspect : vote en AG."},
+    "diags": {20.2: "Bon à savoir : le DPE vaut 10 ans, l'électricité et le gaz 3 ans."},
+    "carrez": {15.8: "Surface plus petite ? Le prix baisse d'autant.", 20.2: "Bon à savoir : tu as 1 an après l'acte pour agir."},
+    "votes": {6.8: "Article 25 : majorité de tous, absents compris.", 15.8: "Article 26 : majorité des copropriétaires et deux tiers des voix."},
+    "etages": {2.3: "Rez-de-chaussée : moins cher, mais vis-à-vis et bruit de la rue."},
+    "age": {2.3: "Avant 1948 : beaux volumes, mais isolation et électricité à revoir."},
+    "bruits": {20.2: "Bon à savoir : dans le neuf, des règles acoustiques s'appliquent depuis 1996."},
+    "securite": {15.8: "Un différentiel 30 mA avec bouton test : il te protège."},
+    "plan": {0.2: "Un plan : 4 pièges.", 6.8: "Logement décent : une pièce de 9 m² et 2,20 m sous plafond.",
+             11.3: "Les couloirs comptent dans la surface, mais ne servent à rien."},
+    "annonce": {2.3: "À rafraîchir : des travaux, parfois beaucoup plus."},
+    "apres": {13.1: "Taxe foncière : souvent remboursée au vendeur, au prorata."},
+    "vitrage": {6.8: "4/16/4 : verre, lame d'air, verre, en millimètres."},
+    "fibre": {0.2: "La fibre : vérifie avant d'acheter."},
+    "contester": {0.2: "Une décision d'AG injuste ? Conteste-la."},
+    "servitudes": {15.8: "Près d'un monument : l'architecte des Bâtiments de France doit valider."},
+    "registre": {0.2: "Chaque copro a sa fiche officielle."},
+}
 END = 24.3
 
 
@@ -67,7 +95,7 @@ def heading(h):
 def joined(h, x):
     h = heading(h)
     x = sentence(plain(x))
-    if h.upper() in ("VRAI", "FAUX") or not h:
+    if h.upper() in ("VRAI", "FAUX", "POURQUOI") or not h:
         return x
     x = x[:1].lower() + x[1:] if not re.match(r"[A-Z]{2}|\d", x) else x
     return f"{h} {x[:1].upper() + x[1:]}" if h.endswith("?") else f"{h} : {x}"
@@ -92,7 +120,8 @@ def lines(name):
         h, x = know[0][0], know[0][1]
         out.append((KNOW[0], ["Bon à savoir. " + joined(h, x), joined(h, x), sentence(plain(x))], END - 0.15))
     out.append((END, [sentence(plain(" ".join(spec["endtitle"])))], 29.6))
-    return out
+    short = SHORT.get(name, {})
+    return [(t, v + ([short[round(t, 2)]] if round(t, 2) in short else []), dl) for t, v, dl in out]
 
 
 def tts(text):
