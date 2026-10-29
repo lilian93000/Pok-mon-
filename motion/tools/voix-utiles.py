@@ -43,22 +43,23 @@ KEEP = {"AG", "PV", "DPE", "VMC", "PLU", "PNO", "ABF", "RC", "TV", "4G/5G", "4/1
 KNOW = (20.2,)
 # versions courtes, utilisées seulement quand la phrase complète ne tient pas dans son temps d'écran : {vidéo: {temps: texte}}
 SHORT = {
-    "dpe": {20.2: "Bon à savoir : le DPE de l'immeuble devient obligatoire entre 2024 et 2026, selon sa taille."},
+    "dpe": {20.2: "Le DPE de l'immeuble devient obligatoire d'ici 2026."},
     "dico": {2.1: "Syndic : celui qui gère la copro.", 9.3: "Parties communes : ce qui appartient à tous.",
              16.5: "PPPT : les travaux prévus sur 10 ans."},
     "questions": {5.9: "Cave et parking : vérifie leurs numéros de lot.", 9.5: "L'AG doit se tenir au moins une fois par an.",
                   13.1: "Activité pro, enseigne : le règlement le dit."},
     "etapes": {13.1: "Le prêt : au moins 1 mois pour l'obtenir. Refusé ? Dépôt rendu."},
     "boites": {20.2: "Bon à savoir : le PV d'AG dit qui était présent. Regarde le total."},
-    "charges": {16.7: "Le gardien : 75 % ou 40 % récupérables, selon ses tâches.", 20.2: "Bon à savoir : tout ça vient d'un décret de 1987."},
+    "charges": {16.7: "Le gardien : en partie récupérable.", 20.2: "Bon à savoir : tout ça vient d'un décret de 1987."},
     "travaux": {5.9: "Autres fenêtres ? Ça change l'aspect : vote en AG."},
     "diags": {20.2: "Bon à savoir : le DPE vaut 10 ans, l'électricité et le gaz 3 ans."},
     "carrez": {15.8: "Surface plus petite ? Le prix baisse d'autant.", 20.2: "Bon à savoir : tu as 1 an après l'acte pour agir."},
     "votes": {6.8: "Article 25 : majorité de tous, absents compris.", 15.8: "Article 26 : majorité des copropriétaires et deux tiers des voix."},
     "etages": {2.3: "Rez-de-chaussée : moins cher, mais vis-à-vis et bruit de la rue."},
-    "age": {2.3: "Avant 1948 : beaux volumes, mais isolation et électricité à revoir."},
-    "bruits": {20.2: "Bon à savoir : dans le neuf, des règles acoustiques s'appliquent depuis 1996."},
+    "age": {2.3: "Avant 1948 : isolation souvent à revoir.", 5.9: "1948 à 1974 : peu isolé."},
+    "bruits": {20.2: "Dans le neuf : normes acoustiques depuis 1996."},
     "securite": {15.8: "Un différentiel 30 mA avec bouton test : il te protège."},
+    "duree": {9.5: "Robinetterie : environ 15 ans."},
     "plan": {0.2: "Un plan : 4 pièges.", 6.8: "Logement décent : une pièce de 9 m² et 2,20 m sous plafond.",
              11.3: "Les couloirs comptent dans la surface, mais ne servent à rien."},
     "annonce": {2.3: "À rafraîchir : des travaux, parfois beaucoup plus."},
@@ -104,9 +105,11 @@ def joined(h, x):
 def lines(name):
     """Liste de (temps d'apparition, [variantes du plus complet au plus court], échéance)."""
     spec = edu_specs.SPECS[name]
+    short = SHORT.get(name, {})
     if "vo" in spec:
         v = list(spec["vo"])
-        return [(t, [x], (v[i + 1][0] if i + 1 < len(v) else 29.6) - 0.12) for i, (t, x) in enumerate(v)]
+        return [(t, [x] + ([short[round(t, 2)]] if round(t, 2) in short else []), (v[i + 1][0] if i + 1 < len(v) else 29.6) - 0.12)
+                for i, (t, x) in enumerate(v)]
     T = json.loads(spec["T"])
     tip_at = spec.get("tipat", [round(t + 0.3, 2) for t in T])
     tips = spec.get("tips", [])
@@ -120,7 +123,6 @@ def lines(name):
         h, x = know[0][0], know[0][1]
         out.append((KNOW[0], ["Bon à savoir. " + joined(h, x), joined(h, x), sentence(plain(x))], END - 0.15))
     out.append((END, [sentence(plain(" ".join(spec["endtitle"])))], 29.6))
-    short = SHORT.get(name, {})
     return [(t, v + ([short[round(t, 2)]] if round(t, 2) in short else []), dl) for t, v, dl in out]
 
 
