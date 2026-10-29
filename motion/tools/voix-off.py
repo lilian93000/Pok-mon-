@@ -6,6 +6,7 @@ la cale sur l'image (temps de la vidéo sans accroche + durée de l'accroche), b
 
 Usage (depuis motion/) :
   ELEVEN_KEY_FILE=/chemin/vers/cle python3 tools/voix-off.py [gps meteo …]     # sans argument : toutes
+  VO_VOICE=guillaume … python3 tools/voix-off.py vraifaux                        # autre voix (voir VOICES)
 La clé n'est jamais écrite dans le dépôt ; les phrases générées sont mises en cache hors dépôt (VO_CACHE).
 """
 import hashlib
@@ -17,8 +18,12 @@ import sys
 import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VOICE = "TX3LPaxmHKxFdv7VOQHJ"  # Liam
-MODEL = "eleven_v3"
+# voix ElevenLabs : (identifiant, modèle, balise de ton v3, réglages)
+VOICES = {
+    "liam": ("TX3LPaxmHKxFdv7VOQHJ", "eleven_v3", "[excited] ", None),
+    "guillaume": ("3HZyQcLKlT0a3RDeXVsP", "eleven_multilingual_v2", "", {"stability": 0.45, "similarity_boost": 0.8, "style": 0.35, "use_speaker_boost": True}),
+}
+VOICE, MODEL, TAG, SETTINGS = VOICES[os.environ.get("VO_VOICE", "liam")]
 CACHE = os.environ.get("VO_CACHE", "/tmp/voix-off-cache")
 HOOK_LINES = "Accroche"
 
@@ -49,6 +54,7 @@ FILES = {
     "Les poupées russes": "poupees",
     "La Bourse": "bourse",
     "La tour en bois": "tour",
+    "Vrai ou faux en copro": "vraifaux",
 }
 
 NUM = {"0": "zéro", "1": "un", "2": "deux", "3": "trois", "4": "quatre", "5": "cinq", "6": "six", "7": "sept", "8": "huit", "9": "neuf"}
@@ -84,7 +90,10 @@ def tts(text, out):
     if os.path.exists(out):
         return
     key = open(os.environ["ELEVEN_KEY_FILE"]).read().strip()
-    body = json.dumps({"text": "[excited] " + speakable(text), "model_id": MODEL, "language_code": "fr"}).encode()
+    payload = {"text": TAG + speakable(text), "model_id": MODEL, "language_code": "fr"}
+    if SETTINGS:
+        payload["voice_settings"] = SETTINGS
+    body = json.dumps(payload).encode()
     req = urllib.request.Request(
         f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE}?output_format=mp3_44100_128",
         data=body,

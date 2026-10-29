@@ -267,3 +267,13 @@ Montants, noms et scores : exemples fictifs, comme à l'écran.
 > 17,6 — Nous, on teste chaque bloc avant que tu achètes.
 > 21,0 — Elle tient debout.
 > 24,2 — Teste chaque bloc avant de signer.
+
+## Vrai ou faux en copro
+Voix : **Guillaume** (`VO_VOICE=guillaume`, modèle `eleven_multilingual_v2`), posée, façon documentaire.
+> 0,2 — Vrai ou faux ? Spécial copro.
+> 2,0 — Des panneaux solaires sur ton balcon, sans rien demander ? Faux : vote en AG.
+> 6,5 — Ta sonnette-caméra filme le palier ? Faux : il faut l'accord de l'AG.
+> 11,0 — Le syndic entre chez toi quand il veut ? Faux : huit jours de préavis.
+> 15,5 — Ton locataire vote à ta place ? Vrai, avec un pouvoir écrit.
+> 20,2 — Bon à savoir : ce pouvoir, donne-le à qui tu veux, sauf au syndic.
+> 24,3 — Vrai ou faux ? Maintenant, tu sais.
