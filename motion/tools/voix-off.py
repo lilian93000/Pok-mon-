@@ -19,6 +19,8 @@ import subprocess
 import sys
 import urllib.request
 
+import numpy as np
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # voix ElevenLabs : (identifiant, modèle, balise de ton v3, réglages)
 VOICES = {
@@ -111,6 +113,26 @@ def tts(text, out):
     os.remove(raw)
 
 
+SR = 48000
+
+
+def pcm(path, af, ch):
+    """Décode un fichier audio en float32 48 kHz (ch canaux), filtre ffmpeg af appliqué."""
+    raw = subprocess.run(["ffmpeg", "-nostdin", "-loglevel", "error", "-i", path, "-vn", "-af", f"{af},aresample={SR}",
+                          "-ac", str(ch), "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
+    a = np.frombuffer(raw, np.float32).copy()
+    return a if ch == 1 else a.reshape(-1, ch)
+
+
+def fit(a, n):
+    return a[:n] if len(a) >= n else np.concatenate([a, np.zeros((n - len(a),) + a.shape[1:], a.dtype)])
+
+
+def write_wav(path, a, ch):
+    subprocess.run(["ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", str(ch), "-i", "-",
+                    "-c:a", "pcm_f32le", path], input=np.ascontiguousarray(a, np.float32).tobytes(), check=True)
+
+
 def dur(path):
     return float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path], capture_output=True, text=True).stdout)
 
@@ -155,33 +177,34 @@ def build(name, secs):
     hook_plan = schedule(gen(secs.get(HOOK_LINES, [])), 0.0, offset + 0.6)[0] if secs.get(HOOK_LINES) else []
     plan, tempo = schedule(gen(secs[name]), offset, total)
     plan = hook_plan + plan
-    args = ["ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-i", src]
-    for _, p in plan:
-        args += ["-i", p]
-    if bed:
-        args += ["-i", bed]
-    f = []
-    for k, (start, _) in enumerate(plan, start=1):
-        ms = int(start * 1000)
-        tempo_f = f"atempo={tempo:.3f}," if tempo != 1.0 else ""
+    # Les pistes sont posées échantillon par échantillon (numpy) puis mixées en une fois :
+    # adelay + amix + loudnorm décalaient toute la voix (le silence de tête de la 1ʳᵉ phrase était perdu).
+    n = int(round(total * SR))
+    vo = np.zeros(n, np.float32)
+    tempo_f = f"atempo={tempo:.3f}," if tempo != 1.0 else ""
+    for start, p in plan:
         # chaque phrase est ramenée à un niveau voix off clair (≈ −13 LUFS) avant d'être placée
-        f.append(f"[{k}:a]{tempo_f}loudnorm=I=-13:TP=-1.5:LRA=7,aresample=48000,adelay={ms}|{ms},apad[v{k}]")
-    vo_in = "".join(f"[v{k}]" for k in range(1, len(plan) + 1))
-    f.append(f"{vo_in}amix=inputs={len(plan)}:normalize=0:duration=longest,atrim=0:{total:.3f},"
-             "highpass=f=90,equalizer=f=3500:t=q:w=1.2:g=3,acompressor=threshold=0.2:ratio=3:attack=5:release=120,"
-             "aformat=channel_layouts=stereo,asplit=2[vo][key]")
+        a = pcm(p, f"{tempo_f}loudnorm=I=-13:TP=-1.5:LRA=7", ch=1)
+        i = int(round(start * SR))
+        vo[i:i + len(a)] += a[: max(0, n - i)]
+    mus = pcm(src, f"volume={gain}", ch=2)
     if bed:
         # garde le son de l'accroche, puis le fond choisi à la place de la bande-son d'origine
-        ms = int(offset * 1000)
-        f.append(f"[0:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:{offset:.3f},apad[hk]")
-        f.append(f"[{len(plan) + 1}:a]aresample=48000,aformat=channel_layouts=stereo,adelay={ms}|{ms}[bd]")
-        f.append(f"[hk][bd]amix=inputs=2:normalize=0:duration=longest,atrim=0:{total:.3f},volume={gain}[mus]")
-    else:
-        f.append(f"[0:a]aresample=48000,aformat=channel_layouts=stereo,volume={gain}[mus]")
-    f.append("[mus][key]sidechaincompress=threshold=0.015:ratio=20:attack=10:release=300:makeup=1[duck]")
-    f.append("[duck][vo]amix=inputs=2:normalize=0:weights='1 1',loudnorm=I=-11:TP=-1:LRA=11,aresample=48000[a]")
-    args += ["-filter_complex", ";".join(f), "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k",
-             "-movflags", "+faststart", "-t", f"{total:.3f}", out]
+        h = int(round(offset * SR))
+        b = pcm(bed, f"volume={gain}", ch=2)
+        mus[h:] = 0
+        mus[h:h + len(b)] += b[: max(0, len(mus) - h)]
+    mus = fit(mus, n)
+    tmp = os.path.join(CACHE, f"mix-{name}")
+    write_wav(tmp + "-vo.wav", vo[:, None], 1)
+    write_wav(tmp + "-mus.wav", mus, 2)
+    f = ["[2:a]highpass=f=90,equalizer=f=3500:t=q:w=1.2:g=3,acompressor=threshold=0.2:ratio=3:attack=5:release=120,"
+         "aformat=channel_layouts=stereo,asplit=2[vo][key]",
+         "[1:a][key]sidechaincompress=threshold=0.015:ratio=20:attack=10:release=300:makeup=1[duck]",
+         "[duck][vo]amix=inputs=2:normalize=0:weights='1 1',loudnorm=I=-11:TP=-1:LRA=11,aresample=48000[a]"]
+    args = ["ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-i", src, "-i", tmp + "-mus.wav", "-i", tmp + "-vo.wav",
+            "-filter_complex", ";".join(f), "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k",
+            "-movflags", "+faststart", "-t", f"{total:.3f}", out]
     os.makedirs(os.path.dirname(out), exist_ok=True)
     subprocess.run(args, check=True)
     print(f"{name}: {len(plan)} phrases, tempo ×{tempo:.2f} → {os.path.relpath(out, ROOT)}")
