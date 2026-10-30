@@ -127,6 +127,9 @@ def lines(name):
 
 
 SHORT_PUB = {
+    "gps": {2.6: "Chaudière à changer : onze mille huit cents euros.", 5.0: "Parking fissuré : neuf mille trois cents euros.",
+            7.4: "Normes incendie : trente mille euros de plus.", 9.8: "Route barrée : assurance résiliée.",
+            13.4: "Nouvel itinéraire avec Analyse ta copro."},
     "idees": {0.2: "Quatre idées reçues sur la copro."},
     "match": {0.2: "Acheter, c'est comme un date."},
     "voyante": {0.2: "J'ai demandé à une voyante."},

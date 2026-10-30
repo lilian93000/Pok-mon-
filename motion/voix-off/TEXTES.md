@@ -6,14 +6,15 @@ L'accroche (2,1 s) reste sans voix : musique + mots à l'écran. La musique bais
 Montants, noms et scores : exemples fictifs, comme à l'écran.
 
 ## GPS
-> 0,2 — Quatre alertes sur ta route.
-> 2,6 — Chaudière collective à changer.
-> 5,0 — Parking fissuré.
-> 7,4 — Normes incendie. Trente mille euros en plus.
-> 9,8 — Et l'assurance de l'immeuble ? Résiliée.
-> 13,4 — Avec Analyse ta copro, tu vois les dangers avant.
-> 20,8 — Score 9,4. T'es arrivé.
-> 24,3 — Vérifie l'itinéraire avant de signer.
+> 0,2 — Quatre alertes sur la route de ton futur appart.
+> 2,6 — Bouchon : chaudière collective à changer, onze mille huit cents euros.
+> 5,0 — Accident : dalle du parking fissurée, neuf mille trois cents euros.
+> 7,4 — Travaux : normes incendie. Trente mille euros de plus.
+> 9,8 — Route barrée : l'assurance de l'immeuble est résiliée.
+> 12,0 — Recalcul…
+> 13,4 — Nouvel itinéraire avec Analyse ta copro : chaudière neuve, assurance à jour.
+> 20,8 — Score 9,4 sur 10. Tu es arrivé.
+> 24,3 — Vérifie l'itinéraire avant de signer. Lien en bio.
 
 ## La météo de ta copro
 > 0,2 — Alerte rouge sur ta future copro.
