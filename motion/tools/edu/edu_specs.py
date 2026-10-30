@@ -1062,6 +1062,12 @@ SPECS["moments"] = dict(
 
 # ---------------------------------------------------------------- 10. LES 5 TESTS DE LA VISITE
 SPECS["tests"] = dict(
+    vo=[(0.2, "Ta visite : 5 tests en 5 minutes."), (2.3, "Un : ouvre deux robinets. La pression doit tenir."),
+        (5.9, "Deux : le tableau électrique. Vieux fusibles ? Travaux à prévoir."),
+        (9.5, "Trois : une flamme devant la vitre. Quatre reflets, double vitrage."),
+        (13.1, "Quatre : derrière les meubles. Taches noires ? Humidité."),
+        (16.7, "Cinq : la salle de bain. Odeur d'égout ? Siphon à revoir."),
+        (20.2, "Bon à savoir : prends une lampe, un briquet ou ton téléphone."), (24.3, "Teste tout pendant la visite.")],
     comment="« LES 5 TESTS DE LA VISITE » — vidéo utile : une note de téléphone qu'on coche pendant la visite. 120 BPM (indie pop).",
     bpm=120,
     T=T5,
@@ -1142,11 +1148,11 @@ SPECS["tests"] = dict(
     count0="Note à garder",
     countk="Test ${k + 1}/5",
     tips=[
-        ("POURQUOI", "La pression doit tenir. Sinon, <b>plomberie ou colonne fatiguée</b>."),
-        ("POURQUOI", "Vieux fusibles à broches&nbsp;? <b>Une mise aux normes est à prévoir.</b>"),
-        ("POURQUOI", "<b>4 reflets = double vitrage</b>, 2 reflets = simple vitrage."),
-        ("POURQUOI", "Taches noires = <b>humidité ou aération insuffisante</b>."),
-        ("POURQUOI", "Odeur d'égout&nbsp;: <b>siphon sec ou évacuation à revoir</b>."),
+        ("L'EAU", "La pression doit tenir. Sinon, <b>plomberie ou colonne fatiguée</b>."),
+        ("L'ÉLECTRICITÉ", "Vieux fusibles à broches&nbsp;? <b>Une mise aux normes est à prévoir.</b>"),
+        ('LE VITRAGE', "<b>4 reflets = double vitrage</b>, 2 reflets = simple vitrage."),
+        ("L'HUMIDITÉ", "Taches noires = <b>humidité ou aération insuffisante</b>."),
+        ('LES ODEURS', "Odeur d'égout&nbsp;: <b>siphon sec ou évacuation à revoir</b>."),
     ],
     know=[
         ("À EMPORTER", "Une <b>lampe de poche</b>, un briquet ou ton téléphone, et cette liste."),

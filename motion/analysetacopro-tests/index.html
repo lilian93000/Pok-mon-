@@ -304,11 +304,11 @@
         </div>
         <div class="cap">Ta visite&nbsp;:<br /><span class="a">5 tests en 5 minutes.</span></div>
         <div id="count" class="abs">Note à garder</div>
-        <div class="tip" id="tp0"><div class="h">POURQUOI</div><div class="x">La pression doit tenir. Sinon, <b>plomberie ou colonne fatiguée</b>.</div></div>
-        <div class="tip" id="tp1"><div class="h">POURQUOI</div><div class="x">Vieux fusibles à broches&nbsp;? <b>Une mise aux normes est à prévoir.</b></div></div>
-        <div class="tip" id="tp2"><div class="h">POURQUOI</div><div class="x"><b>4 reflets = double vitrage</b>, 2 reflets = simple vitrage.</div></div>
-        <div class="tip" id="tp3"><div class="h">POURQUOI</div><div class="x">Taches noires = <b>humidité ou aération insuffisante</b>.</div></div>
-        <div class="tip" id="tp4"><div class="h">POURQUOI</div><div class="x">Odeur d'égout&nbsp;: <b>siphon sec ou évacuation à revoir</b>.</div></div>
+        <div class="tip" id="tp0"><div class="h">L'EAU</div><div class="x">La pression doit tenir. Sinon, <b>plomberie ou colonne fatiguée</b>.</div></div>
+        <div class="tip" id="tp1"><div class="h">L'ÉLECTRICITÉ</div><div class="x">Vieux fusibles à broches&nbsp;? <b>Une mise aux normes est à prévoir.</b></div></div>
+        <div class="tip" id="tp2"><div class="h">LE VITRAGE</div><div class="x"><b>4 reflets = double vitrage</b>, 2 reflets = simple vitrage.</div></div>
+        <div class="tip" id="tp3"><div class="h">L'HUMIDITÉ</div><div class="x">Taches noires = <b>humidité ou aération insuffisante</b>.</div></div>
+        <div class="tip" id="tp4"><div class="h">LES ODEURS</div><div class="x">Odeur d'égout&nbsp;: <b>siphon sec ou évacuation à revoir</b>.</div></div>
       </section>
 
       <section id="know" class="clip" data-start="20" data-duration="4" data-track-index="0">
@@ -351,6 +351,7 @@
         return x - Math.floor(x);
       };
       const T = [2.0, 5.6, 9.2, 12.8, 16.4];
+      const TIP = [2.3, 5.9, 9.5, 13.1, 16.7];
       const IT = ["Ouvrir 2 robinets en même temps", "Regarder le tableau électrique", "Une flamme devant la vitre", "Regarder derrière les meubles", "Sentir la salle de bain"];
       document.getElementById("items").innerHTML = IT.map((t, k) => `<div class="it" id="it${k}" style="top: ${200 + k * 104}px"><div class="ck" id="ck${k}"></div><span>${t}</span></div>`).join("");
       document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
@@ -368,7 +369,7 @@
         tl.set("#count", { textContent: `Test ${k + 1}/5` }, t);
         tl.fromTo("#count", { scale: 1.25 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
         if (document.getElementById(`tp${k}`)) {
-          tl.fromTo(`#tp${k}`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.3);
+          tl.fromTo(`#tp${k}`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, TIP[k]);
           tl.to(`#tp${k}`, { opacity: 0, y: -10, duration: 0.15 }, (T[k + 1] || 20) - 0.25);
         }
       });

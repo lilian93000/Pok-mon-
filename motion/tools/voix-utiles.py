@@ -43,6 +43,8 @@ KEEP = {"AG", "PV", "DPE", "VMC", "PLU", "PNO", "ABF", "RC", "TV", "4G/5G", "4/1
 KNOW = (20.2,)
 # versions courtes, utilisées seulement quand la phrase complète ne tient pas dans son temps d'écran : {vidéo: {temps: texte}}
 SHORT = {
+    "tests": {5.9: "Deux : vieux fusibles ? Travaux à prévoir.", 9.5: "Trois : quatre reflets, double vitrage.",
+              13.1: "Quatre : taches noires ? Humidité.", 16.7: "Cinq : odeur d'égout ? Siphon à revoir."},
     "dpe": {20.2: "Le DPE de l'immeuble devient obligatoire d'ici 2026."},
     "dico": {2.1: "Syndic : celui qui gère la copro.", 9.3: "Parties communes : ce qui appartient à tous.",
              16.5: "PPPT : les travaux prévus sur 10 ans."},
