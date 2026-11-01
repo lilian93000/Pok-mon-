@@ -1,0 +1,141 @@
+{
+  "id": "016-mansa",
+  "titre": "L'homme qui a fait chuter le prix de l'or",
+  "duree": 60,
+  "sources": [
+    "Al-Umari, Masalik al-absar (vers 1337-38) : passage de Mansa Moussa au Caire en 1324, chute durable du cours de l'or, emprunts au retour",
+    "Ibn Khaldoun ; Atlas catalan (1375)",
+    "Mosquée Djingareyber de Tombouctou (architecte as-Sahili)"
+  ],
+  "images": {
+    "dinar": {
+      "url": "https://images.metmuseum.org/CRDImages/is/original/KN358.JPG",
+      "cut": true,
+      "credit": "Dinar d'or, XIᵉ-XIIIᵉ s., 11th–13th century — The Met (CC0)"
+    },
+    "caravane": {
+      "url": "https://images.metmuseum.org/CRDImages/ep/original/DP-14274-007.jpg",
+      "cut": false,
+      "credit": "Halte de caravanes dans le désert, 1850, 1850 — The Met (CC0)"
+    },
+    "plat": {
+      "url": "https://images.metmuseum.org/CRDImages/is/original/DP-1215-001.jpg",
+      "cut": true,
+      "credit": "Plat mamelouk, Égypte, vers 1345-60, ca. 1345–1360 — The Met (CC0)"
+    },
+    "bazar": {
+      "url": "https://images.metmuseum.org/CRDImages/ep/original/DP-15439-001.jpg",
+      "cut": false,
+      "credit": "Un bazar au Caire, 1839, 1839 — The Met (CC0)"
+    },
+    "nil": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP829487.jpg",
+      "cut": false,
+      "credit": "Vue du Nil près du Caire, ca. 1855 — The Met (CC0)"
+    },
+    "figure": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP-28793-001.jpg",
+      "cut": true,
+      "credit": "Figure masculine, XIIIᵉ s., 13th century — The Met (CC0)"
+    },
+    "figure2": {
+      "url": "https://openaccess-cdn.clevelandart.org/1985.199/1985.199_print.jpg",
+      "cut": true,
+      "credit": "Figure masculine, delta intérieur du Niger, possibly 1300s–1600s — Cleveland Museum of Art (CC0)"
+    },
+    "dinar2": {
+      "url": "https://images.metmuseum.org/CRDImages/is/original/LC-39_72-view2.jpg",
+      "cut": true,
+      "credit": "Dinar d'or, 998, dated 388 AH/998 CE — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Il a donné tellement d'*or*… qu'il a ruiné le prix de l'or.",
+      "bg": "red",
+      "rays": true,
+      "image": "dinar"
+    },
+    {
+      "text": "Afrique de l'Ouest, quatorzième siècle. L'empire du *Mali* est l'un des plus riches du monde.",
+      "bg": "dark",
+      "image": "figure"
+    },
+    {
+      "text": "Il contrôle une grande partie de l'or qui circule en Europe et au *Moyen-Orient*.",
+      "bg": "dark",
+      "image": "dinar2"
+    },
+    {
+      "text": "Son empereur s'appelle *Mansa Moussa*.",
+      "bg": "dark",
+      "image": "figure2"
+    },
+    {
+      "text": "En *1324*, il part en pèlerinage à La Mecque.",
+      "bg": "dark",
+      "image": "caravane",
+      "date": "1324"
+    },
+    {
+      "text": "Mais pas tout seul. Avec une caravane *gigantesque* : des milliers de personnes, des chameaux chargés d'or.",
+      "bg": "dark",
+      "image": "caravane",
+      "zoom": true
+    },
+    {
+      "text": "Sur la route, il s'arrête au *Caire*.",
+      "bg": "dark",
+      "image": "bazar"
+    },
+    {
+      "text": "Et là, il distribue l'or *partout* : aux dignitaires, aux mendiants, aux marchands.",
+      "bg": "dark",
+      "image": "plat"
+    },
+    {
+      "text": "Il y a tellement d'or en ville… que sa *valeur* s'effondre.",
+      "bg": "red",
+      "rays": true,
+      "image": "dinar"
+    },
+    {
+      "text": "Douze ans plus tard, selon l'historien al-Umari, le cours de l'or au Caire ne s'en est *toujours* pas remis !",
+      "bg": "dark",
+      "image": "nil",
+      "counter": {
+        "to": 12,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "Le plus fou ? Sur le chemin du retour, Mansa Moussa n'a plus assez d'or… et doit *emprunter* de l'argent.",
+      "bg": "dark",
+      "image": "bazar",
+      "zoom": true
+    },
+    {
+      "text": "Sa réputation traverse la Méditerranée. En 1375, une carte européenne le montre sur son trône, une *pépite* d'or à la main.",
+      "bg": "dark",
+      "image": "dinar2",
+      "date": "1375"
+    },
+    {
+      "text": "Il est souvent présenté comme l'homme le plus *riche* de toute l'histoire.",
+      "bg": "red",
+      "rays": true,
+      "image": "figure",
+      "stamp": "RICHESSE"
+    },
+    {
+      "text": "Avec cet or, il fait aussi construire des mosquées et des écoles, comme à *Tombouctou*.",
+      "bg": "dark",
+      "image": "figure2"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "id": "014-oxford",
+  "titre": "Oxford est plus vieux que les Aztèques",
+  "duree": 60,
+  "sources": [
+    "Enseignement à Oxford attesté dès 1096 ; départ d'étudiants vers Cambridge en 1209",
+    "Fondation de Tenochtitlan : 1325 (date traditionnelle) ; Triple Alliance aztèque : 1428 ; chute de Tenochtitlan : 1521",
+    "The Boat Race Oxford-Cambridge, depuis 1829"
+  ],
+  "images": {
+    "armes": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b02000/1b02200/1b02233v.jpg",
+      "cut": false,
+      "credit": "Armoiries des collèges d'Oxford, 1900 — Library of Congress (sans restriction connue)"
+    },
+    "chapelle": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b02000/1b02200/1b02218v.jpg",
+      "cut": false,
+      "credit": "Chapelle de University College, Oxford, 1905 — Library of Congress (sans restriction connue)"
+    },
+    "aviron": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b02000/1b02200/1b02235v.jpg",
+      "cut": false,
+      "credit": "Courses d'aviron de l'université d'Oxford, 1880 — Library of Congress (sans restriction connue)"
+    },
+    "deesse": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP-23817-001.jpg",
+      "cut": true,
+      "credit": "Chalchiuhtlicue, aztèque, 1325–1521 CE — The Met (CC0)"
+    },
+    "serpent": {
+      "url": "https://openaccess-cdn.clevelandart.org/1941.46/1941.46_print.jpg",
+      "cut": true,
+      "credit": "Serpent à plumes (Quetzalcoatl), aztèque, 1325–1521 — Cleveland Museum of Art (CC0)"
+    },
+    "temple": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP341939.jpg",
+      "cut": true,
+      "credit": "Maquette de temple, aztèque, 1400–1521 — The Met (CC0)"
+    },
+    "guerrier": {
+      "url": "https://openaccess-cdn.clevelandart.org/1984.37/1984.37_print.jpg",
+      "cut": true,
+      "credit": "Figure de guerrier, Mexique, après 1325, after 1325 (thermoluminescence date of casting core, 1345–1575) — Cleveland Museum of Art (CC0)"
+    },
+    "aigle": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP-26146-001.jpg",
+      "cut": true,
+      "credit": "Labret à tête d'aigle, aztèque, 1325–1521 CE — The Met (CC0)"
+    },
+    "brasero": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DT9917.jpg",
+      "cut": true,
+      "credit": "Brasero à glyphe de date, aztèque, 1430–1521 CE — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Cette université est plus *vieille* que l'empire aztèque.",
+      "bg": "red",
+      "rays": true,
+      "image": "armes"
+    },
+    {
+      "text": "Quand on pense aux Aztèques, on imagine une civilisation *très* ancienne.",
+      "bg": "dark",
+      "image": "deesse"
+    },
+    {
+      "text": "Des pyramides, des sacrifices, des dieux *serpents*…",
+      "bg": "dark",
+      "image": "serpent"
+    },
+    {
+      "text": "Pourtant, leur capitale, *Tenochtitlan*, n'est fondée qu'en 1325.",
+      "bg": "dark",
+      "image": "temple",
+      "date": "1325"
+    },
+    {
+      "text": "Et leur empire ne naît qu'en *1428*.",
+      "bg": "dark",
+      "image": "guerrier",
+      "date": "1428"
+    },
+    {
+      "text": "Pendant ce temps, en Angleterre, on donne déjà des cours à *Oxford*. Depuis 1096 !",
+      "bg": "dark",
+      "image": "chapelle",
+      "date": "1096"
+    },
+    {
+      "text": "Plus de *trois cents* ans d'avance !",
+      "bg": "red",
+      "rays": true,
+      "image": "armes",
+      "counter": {
+        "to": 332,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "Oxford a même eu un *bébé* : en 1209, des étudiants fuient la ville après une émeute…",
+      "bg": "dark",
+      "image": "aviron"
+    },
+    {
+      "text": "et vont fonder une nouvelle université : *Cambridge*.",
+      "bg": "dark",
+      "image": "aviron",
+      "zoom": true
+    },
+    {
+      "text": "Depuis 1829, les deux rivales s'affrontent chaque année dans une course d'*aviron* sur la Tamise.",
+      "image": "aviron",
+      "bg": "dark"
+    },
+    {
+      "text": "L'empire aztèque, lui, ne durera même pas *cent* ans.",
+      "bg": "dark",
+      "image": "aigle"
+    },
+    {
+      "text": "En *1521*, Hernán Cortés et ses alliés prennent Tenochtitlan.",
+      "bg": "dark",
+      "image": "brasero",
+      "date": "1521"
+    },
+    {
+      "text": "Quand Tenochtitlan tombe, Oxford a déjà plus de *quatre cents* ans.",
+      "image": "armes",
+      "bg": "dark",
+      "counter": {
+        "to": 425,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "Oxford, elle, donne toujours des cours… *neuf* siècles plus tard.",
+      "bg": "dark",
+      "image": "chapelle",
+      "zoom": true
+    },
+    {
+      "text": "L'histoire ne se déroule pas toujours dans l'ordre qu'on *imagine*.",
+      "bg": "red",
+      "rays": true,
+      "image": "armes"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

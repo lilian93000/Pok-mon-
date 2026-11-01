@@ -1,0 +1,131 @@
+{
+  "id": "017-peste",
+  "titre": "La peste noire",
+  "duree": 60,
+  "sources": [
+    "Peste noire 1347-1352 : arrivée à Messine (octobre 1347) par des galères génoises venues de Caffa",
+    "Gabriele de' Mussi (siège de Caffa, cadavres catapultés) — source unique",
+    "Mortalité estimée entre un tiers et la moitié de la population européenne ; Yersinia pestis",
+    "Raguse (Dubrovnik), 1377 : isolement de 30 jours ; puis 40 jours à Venise → « quarantaine »"
+  ],
+  "images": {
+    "triomphe": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP867559.jpg",
+      "cut": false,
+      "credit": "Le Triomphe de la Mort,  — The Met (CC0)"
+    },
+    "triomphe2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP823116.jpg",
+      "cut": false,
+      "credit": "Le Triomphe de la Mort, Pétrarque, ca. 1548–49 — The Met (CC0)"
+    },
+    "saint": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP811551.jpg",
+      "cut": false,
+      "credit": "Un saint visitant les pestiférés, 1599–1661 — The Met (CC0)"
+    },
+    "allegorie": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP208738.jpg",
+      "cut": false,
+      "credit": "Allégorie du Triomphe de la Mort, ca. 1538–44 — The Met (CC0)"
+    },
+    "enlum": {
+      "url": "https://openaccess-cdn.clevelandart.org/1951.314/1951.314_print.jpg",
+      "cut": true,
+      "credit": "Initiale historiée, vers 1300-1350, c. 1300–1350 — Cleveland Museum of Art (CC0)"
+    },
+    "reliquaire": {
+      "url": "https://openaccess-cdn.clevelandart.org/1931.65/1931.65_print.jpg",
+      "cut": true,
+      "credit": "Ostensoir avec relique de saint Sébastien, 1484, 1484 — Cleveland Museum of Art (CC0)"
+    },
+    "anges": {
+      "url": "https://openaccess-cdn.clevelandart.org/1924.430/1924.430_print.jpg",
+      "cut": true,
+      "credit": "Enluminure, vers 1332, c. 1332 — Cleveland Museum of Art (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "En cinq ans, un Européen sur *trois* disparaît.",
+      "bg": "red",
+      "rays": true,
+      "image": "triomphe"
+    },
+    {
+      "text": "Octobre *1347*. Des navires génois accostent en Sicile, à Messine.",
+      "bg": "dark",
+      "image": "enlum",
+      "date": "1347"
+    },
+    {
+      "text": "À bord, des marins mourants. Et une maladie que personne ne *connaît*.",
+      "bg": "dark",
+      "image": "saint"
+    },
+    {
+      "text": "Fièvre, vomissements, d'énormes boules noires sous les bras… En quelques jours, c'est la *mort*.",
+      "bg": "dark",
+      "image": "triomphe2"
+    },
+    {
+      "text": "On l'appellera la *peste noire*.",
+      "bg": "red",
+      "rays": true,
+      "image": "triomphe2",
+      "stamp": "PESTE NOIRE"
+    },
+    {
+      "text": "Selon un chroniqueur, les Mongols assiégeaient une ville de Crimée… et ont catapulté des *cadavres* par-dessus les murs.",
+      "bg": "dark",
+      "image": "allegorie"
+    },
+    {
+      "text": "La vraie coupable ? Une bactérie, transportée par les *puces* des rats… et des hommes.",
+      "bg": "dark",
+      "image": "reliquaire"
+    },
+    {
+      "text": "En quelques années, elle traverse *toute* l'Europe.",
+      "bg": "dark",
+      "image": "triomphe",
+      "zoom": true
+    },
+    {
+      "text": "Entre un tiers et la *moitié* de la population meurt. Des villages entiers disparaissent.",
+      "bg": "dark",
+      "image": "allegorie",
+      "counter": {
+        "to": 50,
+        "suffix": " %"
+      }
+    },
+    {
+      "text": "Les gens cherchent des *coupables* : des communautés juives sont massacrées, accusées d'empoisonner les puits.",
+      "bg": "dark",
+      "image": "saint"
+    },
+    {
+      "text": "Mais après la catastrophe, il manque des bras. Les paysans survivants exigent de meilleurs *salaires*.",
+      "bg": "dark",
+      "image": "anges"
+    },
+    {
+      "text": "Et une idée naît : isoler les navires suspects. D'abord trente jours… puis *quarante*.",
+      "bg": "dark",
+      "image": "enlum"
+    },
+    {
+      "text": "Quarante jours, en italien : *quaranta giorni*. C'est l'origine du mot… quarantaine.",
+      "bg": "red",
+      "rays": true,
+      "image": "triomphe2",
+      "stamp": "QUARANTAINE"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

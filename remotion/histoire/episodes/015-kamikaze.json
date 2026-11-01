@@ -1,0 +1,151 @@
+{
+  "id": "015-kamikaze",
+  "titre": "Le vent divin",
+  "duree": 60,
+  "sources": [
+    "Invasions mongoles du Japon : 1274 (baie de Hakata) et 1281 (flottes de Corée et du sud de la Chine)",
+    "Typhon d'août 1281 ; mur de défense de Hakata (genkō bōrui)",
+    "Fouilles sous-marines de Takashima (Hayashida, Sasaki) : navires construits à la hâte, coques de bateaux fluviaux"
+  ],
+  "images": {
+    "vague": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DP141042.jpg",
+      "cut": false,
+      "credit": "Hokusai, Sous la vague au large de Kanagawa, ca. 1830–32 — The Met (CC0)"
+    },
+    "esquisse": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DP141081.jpg",
+      "cut": false,
+      "credit": "Vague, esquisse,  — The Met (CC0)"
+    },
+    "tempete": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP881951.jpg",
+      "cut": false,
+      "credit": "Une tempête en mer, 1752–64 — The Met (CC0)"
+    },
+    "barque": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP823444.jpg",
+      "cut": false,
+      "credit": "Bateau dans la tempête, 1784–88 — The Met (CC0)"
+    },
+    "mongol": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DP156771.jpg",
+      "cut": true,
+      "credit": "Figure de Mongol, XIVᵉ s., 14th century — The Met (CC0)"
+    },
+    "mongol2": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DP156776.jpg",
+      "cut": true,
+      "credit": "Figure de Mongol, XIVᵉ s., 14th century — The Met (CC0)"
+    },
+    "casque": {
+      "url": "https://images.metmuseum.org/CRDImages/aa/original/DP157684.jpg",
+      "cut": true,
+      "credit": "Casque, XIVᵉ s., probably ca. 1342–57 — The Met (CC0)"
+    },
+    "armure": {
+      "url": "https://images.metmuseum.org/CRDImages/aa/original/DT305406.jpg",
+      "cut": true,
+      "credit": "Armure de samouraï (dō-maru), vers 1550, armor, ca. 1550; helmet, 18th century — The Met (CC0)"
+    },
+    "armure2": {
+      "url": "https://images.metmuseum.org/CRDImages/aa/original/DP336880.jpg",
+      "cut": true,
+      "credit": "Armure de samouraï (yoroi), 18th century — The Met (CC0)"
+    },
+    "hiver": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DP148844.jpg",
+      "cut": false,
+      "credit": "Hokusai, village en hiver, 1814 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Deux tempêtes ont *sauvé* le Japon.",
+      "bg": "red",
+      "rays": true,
+      "image": "vague"
+    },
+    {
+      "text": "Treizième siècle. L'empire *mongol* est le plus grand que le monde ait connu.",
+      "bg": "dark",
+      "image": "mongol"
+    },
+    {
+      "text": "Son chef, *Kubilai Khan*, petit-fils de Gengis Khan, règne sur la Chine. Il veut maintenant le Japon.",
+      "bg": "dark",
+      "image": "mongol2"
+    },
+    {
+      "text": "*1274* : une flotte de centaines de navires débarque dans la baie de Hakata.",
+      "bg": "dark",
+      "image": "tempete",
+      "date": "1274"
+    },
+    {
+      "text": "Les samouraïs se battent, mais les Mongols sont plus *nombreux*.",
+      "bg": "dark",
+      "image": "armure"
+    },
+    {
+      "text": "Et puis, pendant la nuit, une *tempête* frappe la flotte. Les envahisseurs repartent.",
+      "bg": "dark",
+      "image": "barque"
+    },
+    {
+      "text": "Sept ans plus tard, Kubilai *revient*. Avec la plus grande flotte de l'histoire.",
+      "bg": "red",
+      "rays": true,
+      "image": "casque",
+      "date": "1281"
+    },
+    {
+      "text": "Plus de *quatre mille* navires, selon les chroniques.",
+      "bg": "dark",
+      "image": "tempete",
+      "counter": {
+        "to": 4000,
+        "suffix": " NAVIRES"
+      }
+    },
+    {
+      "text": "Mais cette fois, les Japonais ont construit un *mur* de pierre le long de la côte.",
+      "bg": "dark",
+      "image": "hiver"
+    },
+    {
+      "text": "Pendant des semaines, ils empêchent les Mongols de *débarquer*.",
+      "bg": "dark",
+      "image": "armure2"
+    },
+    {
+      "text": "Puis, en plein mois d'août… un *typhon* géant s'abat sur la flotte.",
+      "bg": "red",
+      "rays": true,
+      "image": "vague",
+      "zoom": true
+    },
+    {
+      "text": "Des milliers de navires *coulent*. Des dizaines de milliers d'hommes se noient.",
+      "bg": "dark",
+      "image": "esquisse"
+    },
+    {
+      "text": "Des archéologues ont retrouvé les épaves : beaucoup étaient des bateaux de rivière, construits à la *hâte*.",
+      "bg": "dark",
+      "image": "barque"
+    },
+    {
+      "text": "Pour les Japonais, c'est un miracle. Ils l'appellent le « vent divin » : *kamikaze*.",
+      "bg": "red",
+      "rays": true,
+      "image": "vague",
+      "stamp": "KAMIKAZE"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
