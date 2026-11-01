@@ -122,11 +122,3 @@ rabat sur des versions plus légères.
 des lunes et carte du ciel Tycho : dépôt [NASA-3D-Resources](https://github.com/nasa/NASA-3D-Resources)
 (domaine public). Terre 4K, nuages, lumières nocturnes, relief : images NASA « Blue Marble »
 via le dépôt three.js. Les autres surfaces (Mercure, Uranus, étoiles, nébuleuses…) sont générées.
-
----
-
-## 🎬 Bonus : vidéos avec Remotion
-
-Le dossier [`remotion/`](remotion/) contient un projet **Remotion** pour créer des
-vidéos en React (intro animée de Monstrobattle). Voir
-[`remotion/README.md`](remotion/README.md) — `cd remotion && npm install && npm run dev`.

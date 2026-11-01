@@ -2,21 +2,12 @@
   "name": "monstrobattle-remotion",
   "private": true,
   "version": "1.0.0",
-  "description": "Vidéos programmatiques Remotion pour Monstrobattle",
-  "scripts": {
-    "dev": "remotion studio",
-    "render": "remotion render Intro out/intro.mp4",
-    "still": "remotion still Intro out/intro.png --frame=60",
-    "upgrade": "remotion upgrade"
-  },
+  "description": "",
+  "scripts": {},
   "dependencies": {
     "@remotion/cli": "4.0.539",
+    "remotion": "4.0.539",
     "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "remotion": "4.0.539"
-  },
-  "devDependencies": {
-    "@types/react": "19.2.2",
-    "typescript": "5.9.3"
+    "react-dom": "19.2.0"
   }
 }
