@@ -1,0 +1,136 @@
+{
+  "id": "020-danse",
+  "titre": "L'épidémie de danse de 1518",
+  "duree": 60,
+  "sources": [
+    "Strasbourg, juillet-septembre 1518 : chroniques de Daniel Specklin, Sebastian Brant ; Frau Troffea",
+    "Décision du conseil de la ville : salles ouvertes, estrade, musiciens ; puis pèlerinage au sanctuaire de saint Guy à Saverne",
+    "John Waller, A Time to Dance, a Time to Die (2008) : hypothèse d'une maladie psychogène de masse",
+    "Épidémie de danse de 1374 (vallée du Rhin, Aix-la-Chapelle)"
+  ],
+  "images": {
+    "paysans": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP855174.jpg",
+      "cut": false,
+      "credit": "Beham, La fête des paysans, 1546-47, 1546–47 — The Met (CC0)"
+    },
+    "paysans2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP855178.jpg",
+      "cut": false,
+      "credit": "Beham, La fête des paysans, 1546-47, 1546–47 — The Met (CC0)"
+    },
+    "paysans3": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP855177.jpg",
+      "cut": false,
+      "credit": "Beham, La fête des paysans, after 1547 — The Met (CC0)"
+    },
+    "fete": {
+      "url": "https://images.metmuseum.org/CRDImages/ep/original/DP120379.jpg",
+      "cut": false,
+      "credit": "Paysans dansant et festoyant, vers 1660, ca. 1660 — The Met (CC0)"
+    },
+    "fete2": {
+      "url": "https://images.metmuseum.org/CRDImages/ep/original/DP145943.jpg",
+      "cut": false,
+      "credit": "Paysans dansant, 1651, 1651 — The Met (CC0)"
+    },
+    "musiciens": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP100268.jpg",
+      "cut": false,
+      "credit": "Soldats et musiciens, Le Triomphe de César, 1504, 1504 — The Met (CC0)"
+    },
+    "saints": {
+      "url": "https://images.metmuseum.org/CRDImages/cl/original/DP317181.jpg",
+      "cut": true,
+      "credit": "Saints, vers 1340-50, ca. 1340–50 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "En 1518, des centaines de personnes ont dansé jusqu'à l'*épuisement*.",
+      "bg": "red",
+      "rays": true,
+      "image": "paysans"
+    },
+    {
+      "text": "Strasbourg, juillet *1518*. Une femme, Frau Troffea, sort dans la rue… et se met à danser.",
+      "bg": "dark",
+      "image": "paysans3",
+      "date": "JUILLET 1518"
+    },
+    {
+      "text": "Sans musique. Sans s'arrêter. Pendant des *jours*.",
+      "bg": "dark",
+      "image": "fete2"
+    },
+    {
+      "text": "Une semaine plus tard, ils sont des *dizaines* à danser avec elle.",
+      "bg": "dark",
+      "image": "paysans2"
+    },
+    {
+      "text": "En août, selon les chroniques, ils seraient près de *quatre cents* !",
+      "bg": "dark",
+      "image": "fete",
+      "counter": {
+        "to": 400,
+        "suffix": " DANSEURS"
+      }
+    },
+    {
+      "text": "Ils ont les pieds en sang, ils s'effondrent… et continuent de *danser*.",
+      "bg": "dark",
+      "image": "paysans",
+      "zoom": true
+    },
+    {
+      "text": "Les médecins de la ville ont une théorie : c'est le sang trop *chaud*. Il faut le faire sortir… en dansant encore plus !",
+      "bg": "dark",
+      "image": "fete2"
+    },
+    {
+      "text": "Alors la ville ouvre des salles, construit une estrade… et engage des *musiciens* !",
+      "bg": "red",
+      "rays": true,
+      "image": "musiciens"
+    },
+    {
+      "text": "Évidemment, c'est encore *pire*.",
+      "bg": "dark",
+      "image": "paysans3"
+    },
+    {
+      "text": "Certains danseurs meurent d'épuisement. Le conseil change d'avis et *interdit* la musique.",
+      "bg": "dark",
+      "image": "paysans2"
+    },
+    {
+      "text": "Finalement, on emmène les danseurs en pèlerinage, au sanctuaire de *saint Guy*, dans les montagnes.",
+      "bg": "dark",
+      "image": "saints"
+    },
+    {
+      "text": "Et peu à peu, l'épidémie *s'arrête*.",
+      "bg": "dark",
+      "image": "fete"
+    },
+    {
+      "text": "Et ce n'était pas la première fois : en 1374, une épidémie de danse avait déjà frappé les villes du *Rhin*.",
+      "image": "fete2",
+      "bg": "dark",
+      "date": "1374"
+    },
+    {
+      "text": "Aujourd'hui, beaucoup d'historiens pensent à une hystérie collective, après des années de famine et de *maladies*.",
+      "bg": "red",
+      "rays": true,
+      "image": "paysans",
+      "stamp": "HYSTÉRIE ?"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
