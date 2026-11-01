@@ -1,0 +1,137 @@
+{
+  "id": "022-calendrier",
+  "titre": "Les 10 jours qui n'ont jamais existé",
+  "duree": 60,
+  "sources": [
+    "Bulle Inter gravissimas de Grégoire XIII (24 février 1582) : le jeudi 4 octobre 1582 est suivi du vendredi 15 octobre",
+    "Calendrier julien (46 av. J.-C.) : 365,25 jours, soit ~11 minutes de trop par an",
+    "France : 9 → 20 décembre 1582 ; Grande-Bretagne : 1752 ; Russie : 1918 (Révolution d'Octobre le 7 novembre grégorien)",
+    "Thérèse d'Avila meurt dans la nuit du 4 au 15 octobre 1582"
+  ],
+  "images": {
+    "medaille": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/82495.jpg",
+      "cut": true,
+      "credit": "Médaille du pape Grégoire XIII, 16th century — The Met (CC0)"
+    },
+    "medaille2": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/13987.jpg",
+      "cut": false,
+      "credit": "Grégoire XIII, promulgateur du calendrier, 1579, 1579 — The Met (CC0)"
+    },
+    "heures": {
+      "url": "https://openaccess-cdn.clevelandart.org/2011.65.b/2011.65.b_print.jpg",
+      "cut": true,
+      "credit": "Livre d'heures, calendrier de juin, vers 1510, c. 1510 — Cleveland Museum of Art (CC0)"
+    },
+    "heures2": {
+      "url": "https://openaccess-cdn.clevelandart.org/2011.65/2011.65_print.jpg",
+      "cut": false,
+      "credit": "Livre d'heures, calendrier de mai, vers 1510, c. 1510 — Cleveland Museum of Art (CC0)"
+    },
+    "astrolabe": {
+      "url": "https://images.metmuseum.org/CRDImages/cl/original/DP-41678-001.jpg",
+      "cut": true,
+      "credit": "Astrolabe, 1462, 1462 — The Met (CC0)"
+    },
+    "astro": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP-18111-001.jpg",
+      "cut": true,
+      "credit": "Astronomicum Caesareum, 1540, May 1540 — The Met (CC0)"
+    },
+    "montre": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP-12603-009.jpg",
+      "cut": true,
+      "credit": "Montre à calendrier, vers 1650, ca. 1650 — The Met (CC0)"
+    },
+    "college": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP810915.jpg",
+      "cut": false,
+      "credit": "Un pape bénissant un livre devant le Sacré Collège, 1580–90 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Le 5 octobre 1582 n'a *jamais* existé.",
+      "bg": "red",
+      "rays": true,
+      "image": "medaille"
+    },
+    {
+      "text": "Ni le 6. Ni le 7. Ni aucun jour jusqu'au *14*.",
+      "bg": "dark",
+      "image": "heures"
+    },
+    {
+      "text": "Tout commence avec Jules César. Son calendrier compte trois cent soixante-cinq jours… et un *quart*.",
+      "bg": "dark",
+      "image": "astro"
+    },
+    {
+      "text": "Le problème : c'est onze minutes de *trop* par an.",
+      "bg": "dark",
+      "image": "montre",
+      "zoom": true
+    },
+    {
+      "text": "Onze minutes, ça paraît rien. Mais au bout de seize siècles, le calendrier a pris *dix* jours de retard sur le soleil !",
+      "bg": "dark",
+      "image": "astrolabe",
+      "counter": {
+        "to": 10,
+        "suffix": " JOURS"
+      }
+    },
+    {
+      "text": "Les fêtes religieuses, comme Pâques, ne tombent plus au bon *moment*.",
+      "bg": "dark",
+      "image": "heures2"
+    },
+    {
+      "text": "Alors en 1582, le pape *Grégoire XIII* décide de tout corriger.",
+      "bg": "dark",
+      "image": "medaille2",
+      "date": "1582",
+      "label": "GRÉGOIRE XIII"
+    },
+    {
+      "text": "Le jeudi 4 octobre… sera suivi du vendredi *15* octobre.",
+      "bg": "red",
+      "rays": true,
+      "image": "college",
+      "stamp": "4 → 15 OCTOBRE"
+    },
+    {
+      "text": "Dix jours *effacés*. Sainte Thérèse d'Avila meurt cette nuit-là : le 4… et elle est enterrée le lendemain, le 15 !",
+      "bg": "dark",
+      "image": "heures"
+    },
+    {
+      "text": "Et pour éviter que ça recommence : plus d'année bissextile pour les siècles… sauf tous les *quatre cents* ans.",
+      "bg": "dark",
+      "image": "montre"
+    },
+    {
+      "text": "La France suit en décembre. Mais les pays protestants *refusent* de suivre le pape.",
+      "bg": "dark",
+      "image": "medaille"
+    },
+    {
+      "text": "La Grande-Bretagne attend 1752. La Russie… *1918* !",
+      "bg": "dark",
+      "image": "astrolabe",
+      "date": "1918"
+    },
+    {
+      "text": "C'est pour ça que la Révolution d'Octobre, en Russie… a eu lieu en *novembre*.",
+      "bg": "red",
+      "rays": true,
+      "image": "medaille2"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

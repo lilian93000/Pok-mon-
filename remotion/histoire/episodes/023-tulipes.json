@@ -1,0 +1,147 @@
+{
+  "id": "023-tulipes",
+  "titre": "La tulipe au prix d'une maison",
+  "duree": 60,
+  "sources": [
+    "Tulipomanie aux Provinces-Unies (1634-1637), effondrement en février 1637 (vente de Haarlem)",
+    "Prix records de la Semper Augustus (plusieurs milliers de florins) ; salaire annuel d'un artisan : quelques centaines de florins",
+    "Anne Goldgar, Tulipmania (2007) : conséquences économiques plus limitées que la légende",
+    "Tulipes « flammées » : virus de la mosaïque transmis par les pucerons"
+  ],
+  "images": {
+    "t1": {
+      "url": "https://openaccess-cdn.clevelandart.org/2020.132/2020.132_print.jpg",
+      "cut": true,
+      "credit": "Étude de tulipe ('t roosje), vers 1645, c. 1645 — Cleveland Museum of Art (CC0)"
+    },
+    "t2": {
+      "url": "https://openaccess-cdn.clevelandart.org/2020.131/2020.131_print.jpg",
+      "cut": true,
+      "credit": "Étude de tulipe (Anvaers), vers 1645, c. 1645 — Cleveland Museum of Art (CC0)"
+    },
+    "t3": {
+      "url": "https://openaccess-cdn.clevelandart.org/2020.133/2020.133_print.jpg",
+      "cut": true,
+      "credit": "Étude de tulipe (Perregoen Machieu), vers 1645, c. 1645 — Cleveland Museum of Art (CC0)"
+    },
+    "t4": {
+      "url": "https://openaccess-cdn.clevelandart.org/2019.5/2019.5_print.jpg",
+      "cut": true,
+      "credit": "Étude de tulipe (Gemarmerde van Jasper), vers 1645, c. 1645 — Cleveland Museum of Art (CC0)"
+    },
+    "t5": {
+      "url": "https://openaccess-cdn.clevelandart.org/2019.4/2019.4_print.jpg",
+      "cut": true,
+      "credit": "Étude de tulipe (Ammirael Winckel), vers 1645, c. 1645 — Cleveland Museum of Art (CC0)"
+    },
+    "t6": {
+      "url": "https://openaccess-cdn.clevelandart.org/2020.130/2020.130_print.jpg",
+      "cut": true,
+      "credit": "Étude de tulipe (Wit en root boode), vers 1645, c. 1645 — Cleveland Museum of Art (CC0)"
+    },
+    "vase": {
+      "url": "https://images.metmuseum.org/CRDImages/rl/original/SLP1616.jpg",
+      "cut": true,
+      "credit": "Vase à tulipes, vers 1700-1720, ca. 1700–1720 — The Met (CC0)"
+    },
+    "nature": {
+      "url": "https://images.metmuseum.org/CRDImages/ep/original/DP147903.jpg",
+      "cut": false,
+      "credit": "Nature morte au verre et aux huîtres, vers 1640, ca. 1640 — The Met (CC0)"
+    },
+    "bouquet": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DT8276.jpg",
+      "cut": true,
+      "credit": "Nature morte florale, 1662, 1662 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Un bulbe de tulipe valait le prix d'une *maison*.",
+      "bg": "red",
+      "rays": true,
+      "image": "t1"
+    },
+    {
+      "text": "Pays-Bas, dix-septième siècle. Le pays est l'un des plus riches du *monde*.",
+      "bg": "dark",
+      "image": "nature"
+    },
+    {
+      "text": "Et une fleur venue de l'Empire ottoman fait *fureur* : la tulipe.",
+      "bg": "dark",
+      "image": "t2"
+    },
+    {
+      "text": "Les plus recherchées ont des pétales *flammés*, rayés de rouge et de blanc.",
+      "bg": "dark",
+      "image": "t4",
+      "zoom": true
+    },
+    {
+      "text": "Impossible de les reproduire à volonté. Elles sont *rares*. Donc hors de prix.",
+      "bg": "dark",
+      "image": "t3"
+    },
+    {
+      "text": "La plus célèbre s'appelle *Semper Augustus*.",
+      "bg": "dark",
+      "image": "t5"
+    },
+    {
+      "text": "Un seul bulbe se vend plusieurs *milliers* de florins.",
+      "bg": "dark",
+      "image": "t6",
+      "counter": {
+        "to": 5000,
+        "suffix": " FLORINS"
+      }
+    },
+    {
+      "text": "Plus de *dix* ans de salaire pour un artisan !",
+      "bg": "red",
+      "rays": true,
+      "image": "vase"
+    },
+    {
+      "text": "Tout le monde spécule. On achète des bulbes encore sous la terre, on les revend le lendemain plus *cher*.",
+      "bg": "dark",
+      "image": "bouquet"
+    },
+    {
+      "text": "Et puis, en février *1637*, à Haarlem… plus personne ne veut acheter.",
+      "bg": "dark",
+      "image": "t1",
+      "date": "FÉVRIER 1637"
+    },
+    {
+      "text": "Les prix s'*effondrent* en quelques jours. C'est l'une des premières bulles spéculatives de l'histoire.",
+      "bg": "red",
+      "rays": true,
+      "image": "t2",
+      "stamp": "KRACH"
+    },
+    {
+      "text": "Les historiens pensent aujourd'hui que la ruine a été moins grave que la légende ne le *raconte*.",
+      "bg": "dark",
+      "image": "nature"
+    },
+    {
+      "text": "Et le plus fou ? Ces flammes si recherchées étaient causées par un *virus*.",
+      "bg": "red",
+      "rays": true,
+      "image": "t4",
+      "zoom": true
+    },
+    {
+      "text": "Une maladie transmise par de petits insectes, les *pucerons*. On a payé des fortunes… pour des fleurs malades.",
+      "bg": "dark",
+      "image": "t3"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
