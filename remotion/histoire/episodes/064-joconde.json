@@ -1,0 +1,132 @@
+{
+  "id": "064-joconde",
+  "titre": "La Joconde est devenue célèbre parce qu'on l'a volée",
+  "duree": 60,
+  "sources": [
+    "Vol de la Joconde le lundi 21 août 1911 par Vincenzo Peruggia, ancien employé du Louvre ; disparition remarquée le 22 août",
+    "Guillaume Apollinaire arrêté, Pablo Picasso interrogé",
+    "Peruggia arrêté à Florence en décembre 1913 en tentant de vendre le tableau à Alfredo Geri ; retour au Louvre en janvier 1914"
+  ],
+  "images": {
+    "joconde": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP885496.jpg",
+      "cut": false,
+      "credit": "La Joconde, gravure, 1820-60, 1820–60 — The Met (CC0)"
+    },
+    "leonard": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP824104.jpg",
+      "cut": false,
+      "credit": "Portrait de Léonard de Vinci, 1786, 1786 — The Met (CC0)"
+    },
+    "vierge": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP102382.jpg",
+      "cut": false,
+      "credit": "Léonard de Vinci, tête de la Vierge, 1510-13, 1510–13 — The Met (CC0)"
+    },
+    "louvre": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/04800/04867v.jpg",
+      "cut": false,
+      "credit": "Le Louvre, Paris, vers 1890, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "colonnade": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b05000/1b05700/1b05766v.jpg",
+      "cut": false,
+      "credit": "La colonnade du Louvre, 1919, 1919 — Library of Congress (sans restriction connue)"
+    },
+    "galerie": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/05100/05174v.jpg",
+      "cut": false,
+      "credit": "Une galerie du Louvre, vers 1890, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "copistes": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c30000/3c30000/3c30100/3c30129v.jpg",
+      "cut": false,
+      "credit": "Étudiants et copistes dans la galerie du Louvre, 1868, 1868-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "puck": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/27700/27781v.jpg",
+      "cut": false,
+      "credit": "Scène quotidienne au Louvre, 1911, 1911-10-18 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "La Joconde est devenue célèbre… parce qu'on l'a *volée*.",
+      "bg": "red",
+      "rays": true,
+      "image": "joconde"
+    },
+    {
+      "text": "Avant 1911, c'est un beau tableau de Léonard de Vinci… parmi d'*autres*. Le grand public ne la connaît pas vraiment.",
+      "bg": "dark",
+      "image": "leonard"
+    },
+    {
+      "text": "Lundi 21 août *1911*. Le Louvre est fermé. Un homme en blouse blanche sort tranquillement du musée.",
+      "bg": "dark",
+      "image": "louvre",
+      "date": "21 AOÛT 1911"
+    },
+    {
+      "text": "Sous sa blouse : la *Joconde*.",
+      "bg": "red",
+      "rays": true,
+      "image": "joconde",
+      "zoom": true
+    },
+    {
+      "text": "Il s'appelle Vincenzo Peruggia. Il avait travaillé au Louvre… pour installer des vitres de *protection*.",
+      "bg": "dark",
+      "image": "galerie"
+    },
+    {
+      "text": "Personne ne remarque rien avant le *lendemain*. Le musée ferme une semaine.",
+      "bg": "dark",
+      "image": "copistes"
+    },
+    {
+      "text": "C'est le scandale. Les journaux du monde entier publient son *portrait*.",
+      "bg": "dark",
+      "image": "puck"
+    },
+    {
+      "text": "La police arrête même le poète Guillaume *Apollinaire*. Et interroge un jeune peintre : Pablo Picasso !",
+      "bg": "dark",
+      "image": "colonnade",
+      "stamp": "SUSPECTS"
+    },
+    {
+      "text": "Des foules viennent au Louvre… pour regarder l'espace *vide* sur le mur.",
+      "bg": "dark",
+      "image": "galerie",
+      "zoom": true
+    },
+    {
+      "text": "Pendant deux ans, le tableau reste caché dans une valise, chez Peruggia, à *Paris*.",
+      "bg": "dark",
+      "image": "vierge"
+    },
+    {
+      "text": "En 1913, il tente de la vendre à un marchand d'art à Florence. Le marchand prévient la *police*.",
+      "bg": "dark",
+      "image": "leonard",
+      "date": "1913"
+    },
+    {
+      "text": "Son explication ? Il voulait rendre le tableau à l'*Italie*, le pays de Léonard.",
+      "image": "vierge",
+      "bg": "dark"
+    },
+    {
+      "text": "La Joconde revient au Louvre. Et cette fois, le monde entier la *connaît*.",
+      "bg": "red",
+      "rays": true,
+      "image": "joconde"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

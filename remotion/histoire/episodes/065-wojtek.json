@@ -1,0 +1,115 @@
+{
+  "id": "065-wojtek",
+  "titre": "L'ours soldat",
+  "duree": 60,
+  "sources": [
+    "Wojtek, ourson acheté en Iran en 1942 par des soldats du IIᵉ corps polonais (armée d'Anders)",
+    "Enrôlé dans la 22ᵉ compagnie de ravitaillement d'artillerie ; bataille du Mont-Cassin (1944) ; emblème de l'unité",
+    "Mort au zoo d'Édimbourg en 1963 ; statues à Édimbourg et Cracovie"
+  ],
+  "images": {
+    "ourson": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/01600/01660v.jpg",
+      "cut": false,
+      "credit": "Fillette et ourson, vers 1900, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "ourson2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/01600/01659v.jpg",
+      "cut": false,
+      "credit": "Fillette et ourson, vers 1900, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "polonais": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/matpc/21600/21655v.jpg",
+      "cut": false,
+      "credit": "Soldats polonais entrant par la porte Saint-Étienne, Jérusalem, 1940, 1940-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "affiche": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3g00000/3g09000/3g09600/3g09649v.jpg",
+      "cut": false,
+      "credit": "Affiche de l'armée polonaise en France, 1917, 1917-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "affiche2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3g10000/3g10000/3g10200/3g10228v.jpg",
+      "cut": false,
+      "credit": "Affiche polonaise, 1917, 1917-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "train": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/12300/12386v.jpg",
+      "cut": false,
+      "credit": "Soldats polonais partant au front, 1920, 1920 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Un ours a porté des obus pendant la Seconde Guerre *mondiale*.",
+      "bg": "red",
+      "rays": true,
+      "image": "ourson"
+    },
+    {
+      "text": "Iran, *1942*. Des soldats polonais, libérés des camps soviétiques, traversent le pays pour rejoindre les Alliés.",
+      "bg": "dark",
+      "image": "polonais",
+      "date": "1942"
+    },
+    {
+      "text": "Sur la route, ils achètent un petit ourson orphelin à un jeune *garçon*.",
+      "bg": "dark",
+      "image": "ourson2"
+    },
+    {
+      "text": "Ils l'appellent *Wojtek*. Il grandit avec eux, dort avec eux… et devient la mascotte de l'unité.",
+      "bg": "dark",
+      "image": "ourson"
+    },
+    {
+      "text": "Il boit de la *bière*, mange des cigarettes, et adore la lutte avec les soldats.",
+      "bg": "dark",
+      "image": "train"
+    },
+    {
+      "text": "Problème : pour embarquer vers l'Italie, les animaux sont *interdits* sur les navires.",
+      "bg": "dark",
+      "image": "affiche"
+    },
+    {
+      "text": "Alors l'armée polonaise trouve une solution : elle enrôle Wojtek comme *soldat*. Avec un grade et un numéro.",
+      "bg": "red",
+      "rays": true,
+      "image": "affiche2",
+      "stamp": "SOLDAT WOJTEK"
+    },
+    {
+      "text": "1944, bataille du Mont-*Cassin*. Selon les témoignages, Wojtek aide à porter des caisses d'obus.",
+      "bg": "dark",
+      "image": "train",
+      "date": "1944"
+    },
+    {
+      "text": "Son image devient l'*emblème* de l'unité : un ours qui porte un obus.",
+      "bg": "dark",
+      "image": "affiche"
+    },
+    {
+      "text": "Après la guerre, il finit sa vie au zoo d'*Édimbourg*, en Écosse.",
+      "bg": "dark",
+      "image": "ourson2"
+    },
+    {
+      "text": "Ses anciens camarades viennent le voir. Certains sautent la barrière… pour *lutter* avec lui, comme avant.",
+      "bg": "dark",
+      "image": "ourson"
+    },
+    {
+      "text": "Aujourd'hui, il a des statues en Écosse et en *Pologne*. Le caporal Wojtek.",
+      "bg": "red",
+      "rays": true,
+      "image": "polonais"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

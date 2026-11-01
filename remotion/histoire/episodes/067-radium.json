@@ -1,0 +1,115 @@
+{
+  "id": "067-radium",
+  "titre": "Les filles du radium",
+  "duree": 60,
+  "sources": [
+    "Peintres de cadrans lumineux de la United States Radium Corporation (Orange, New Jersey), années 1917-1920 : technique « lip, dip, paint »",
+    "Nécroses de la mâchoire, anémies, décès ; procès de Grace Fryer et de quatre collègues, règlement en 1928",
+    "Affaire Catherine Donohue contre Radium Dial (Ottawa, Illinois), 1938 ; influence sur le droit des maladies professionnelles et les normes de radioprotection"
+  ],
+  "images": {
+    "labo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/habshaer/nj/nj1600/nj1645/photos/384849pv.jpg",
+      "cut": false,
+      "credit": "United States Radium Corporation, laboratoire de cristallisation du radium (HABS),  — Library of Congress (sans restriction connue)"
+    },
+    "danse": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/17600/17691v.jpg",
+      "cut": false,
+      "credit": "Radium Dance Group, 1905, 1905-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "pub": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a20000/3a27000/3a27500/3a27536r.jpg",
+      "cut": false,
+      "credit": "Publicité pour une permanente « au radium », 1925, 1925-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "expert": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/03600/03645v.jpg",
+      "cut": false,
+      "credit": "Dr Harvey Gaylord, expert du radium, 1914, 1914-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "marque": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/trmk/1t60000/1t66000/1t66700/1t66781v.jpg",
+      "cut": false,
+      "credit": "Marque déposée Auto Radium, 1907, 1907 — Library of Congress (sans restriction connue)"
+    },
+    "curie": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/07600/07682v.jpg",
+      "cut": false,
+      "credit": "Marie Curie, vers 1900, 1900-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Elles peignaient des montres… et leurs os *brillaient*.",
+      "bg": "red",
+      "rays": true,
+      "image": "danse"
+    },
+    {
+      "text": "Années 1910. Le radium, découvert par Marie Curie, est à la *mode*.",
+      "bg": "dark",
+      "image": "curie"
+    },
+    {
+      "text": "On en met partout : dans des crèmes, dans de l'eau, dans des *dentifrices*. On le croit bon pour la santé.",
+      "bg": "dark",
+      "image": "pub"
+    },
+    {
+      "text": "Dans le New Jersey, une usine embauche des centaines de jeunes femmes pour peindre des cadrans de montres *lumineux*.",
+      "bg": "dark",
+      "image": "labo"
+    },
+    {
+      "text": "Le travail est bien payé. La peinture contient du *radium*.",
+      "bg": "dark",
+      "image": "marque"
+    },
+    {
+      "text": "Pour affiner leur pinceau, on leur apprend une technique : le passer entre leurs *lèvres*.",
+      "bg": "dark",
+      "image": "danse",
+      "zoom": true,
+      "stamp": "LIP, DIP, PAINT"
+    },
+    {
+      "text": "On leur dit que c'est sans *danger*. Certaines s'en mettent même sur les ongles et les dents pour briller la nuit.",
+      "bg": "dark",
+      "image": "pub"
+    },
+    {
+      "text": "Quelques années plus tard, les dents tombent. Les mâchoires se *désagrègent*. Des ouvrières meurent.",
+      "bg": "red",
+      "rays": true,
+      "image": "expert"
+    },
+    {
+      "text": "Le radium s'est fixé dans leurs *os*.",
+      "bg": "dark",
+      "image": "labo"
+    },
+    {
+      "text": "En 1927, cinq d'entre elles attaquent l'entreprise en justice. Malades, certaines ne peuvent même plus *lever* le bras pour prêter serment.",
+      "bg": "dark",
+      "image": "expert",
+      "date": "1927"
+    },
+    {
+      "text": "Elles obtiennent réparation. D'autres procès suivront.",
+      "bg": "dark",
+      "image": "marque"
+    },
+    {
+      "text": "Leur combat a changé les lois : aujourd'hui, les travailleurs peuvent faire reconnaître leurs maladies *professionnelles*.",
+      "bg": "red",
+      "rays": true,
+      "image": "danse"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

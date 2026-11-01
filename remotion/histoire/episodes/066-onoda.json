@@ -1,0 +1,131 @@
+{
+  "id": "066-onoda",
+  "titre": "Le soldat qui a fait la guerre 29 ans de trop",
+  "duree": 60,
+  "sources": [
+    "Hiroo Onoda, officier de renseignement envoyé sur l'île de Lubang (Philippines) en décembre 1944 avec l'ordre de ne jamais se rendre",
+    "Tracts annonçant la fin de la guerre jugés être de la propagande ; ses compagnons se rendent ou sont tués (1950, 1954, 1972)",
+    "Retrouvé par Norio Suzuki en février 1974 ; relevé de ses fonctions par son ancien supérieur, le major Taniguchi, le 9 mars 1974 ; mort en 2014",
+    "Grâce accordée par le président Ferdinand Marcos (1974) ; une trentaine de morts attribués au groupe d'Onoda"
+  ],
+  "images": {
+    "prisonniers": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3d00000/3d01000/3d01800/3d01882v.jpg",
+      "cut": false,
+      "credit": "Prisonniers japonais à Guam après l'annonce de la reddition par l'empereur, 1945, 1945-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "jungle": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s30000/1s32000/1s32100/1s32167v.jpg",
+      "cut": false,
+      "credit": "Jungle de bambous, Java, 1919, 1919-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "jungle2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a00000/3a03000/3a03000/3a03012r.jpg",
+      "cut": false,
+      "credit": "Guerre dans la jungle, 1899, 1899 — Library of Congress (sans restriction connue)"
+    },
+    "reddition": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/71000/71002v.jpg",
+      "cut": false,
+      "credit": "Officiers japonais et américains, 1945, 1945-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "sabre": {
+      "url": "https://images.metmuseum.org/CRDImages/aa/original/LC-SR1-TR_489_2_2018_view1.jpg",
+      "cut": true,
+      "credit": "Garde de sabre japonaise (tsuba), late 17th–early 18th century — The Met (CC0)"
+    },
+    "prisonniers2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/fsa/8e02000/8e02700/8e02792v.jpg",
+      "cut": false,
+      "credit": "Prisonniers de guerre japonais, 1942, 1942-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Pour lui, la guerre s'est terminée en *1974*.",
+      "bg": "red",
+      "rays": true,
+      "image": "sabre"
+    },
+    {
+      "text": "Décembre *1944*. Le lieutenant japonais Hiroo Onoda est envoyé sur une petite île des Philippines.",
+      "bg": "dark",
+      "image": "jungle",
+      "date": "DÉC. 1944"
+    },
+    {
+      "text": "Son ordre : résister, saboter… et ne *jamais* se rendre.",
+      "bg": "dark",
+      "image": "sabre",
+      "zoom": true
+    },
+    {
+      "text": "En août 1945, le Japon capitule. La guerre est *finie*.",
+      "bg": "dark",
+      "image": "prisonniers",
+      "date": "AOÛT 1945"
+    },
+    {
+      "text": "Mais Onoda, caché dans la jungle avec trois soldats, ne le croit *pas*.",
+      "bg": "dark",
+      "image": "jungle2"
+    },
+    {
+      "text": "Des tracts annoncent la fin de la guerre ? Pour lui, c'est de la *propagande* ennemie.",
+      "bg": "dark",
+      "image": "prisonniers2"
+    },
+    {
+      "text": "Les années passent. Un de ses hommes se rend. Les deux autres sont *tués*.",
+      "bg": "dark",
+      "image": "jungle"
+    },
+    {
+      "text": "Onoda, lui, continue. Seul. Pendant des *décennies*.",
+      "bg": "dark",
+      "image": "jungle2",
+      "counter": {
+        "to": 29,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "Sa « guerre » fait des victimes : des habitants de l'île sont *tués* lors de ses raids.",
+      "image": "jungle2",
+      "bg": "dark"
+    },
+    {
+      "text": "En 1974, un jeune aventurier japonais part à sa recherche… et le *trouve* !",
+      "bg": "dark",
+      "image": "jungle",
+      "date": "1974"
+    },
+    {
+      "text": "Mais Onoda refuse de se rendre. Seul un ordre de son supérieur peut le *relever*.",
+      "bg": "dark",
+      "image": "sabre"
+    },
+    {
+      "text": "Alors on retrouve son ancien commandant, devenu libraire. Il prend l'avion… et lui ordonne de *déposer* les armes.",
+      "bg": "red",
+      "rays": true,
+      "image": "reddition",
+      "stamp": "FIN"
+    },
+    {
+      "text": "Le président des Philippines lui accorde son *pardon*.",
+      "image": "reddition",
+      "bg": "dark"
+    },
+    {
+      "text": "Onoda rend son sabre. Il rentre au Japon en héros, et meurt en 2014, à quatre-vingt-onze *ans*.",
+      "bg": "dark",
+      "image": "sabre"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
