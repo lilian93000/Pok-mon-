@@ -24,13 +24,7 @@ const img = (id: string, key: string) => staticFile(`histoire/${id}/img/${key}.p
 
 // ---------- Fonds ----------
 const Marble: React.FC = () => (
-  <svg width="100%" height="100%" style={{ position: "absolute", inset: 0, opacity: 0.13, mixBlendMode: "screen" }}>
-    <filter id="marble">
-      <feTurbulence type="fractalNoise" baseFrequency="0.0025 0.018" numOctaves={6} seed={7} />
-      <feColorMatrix values="0 0 0 0 0.85  0 0 0 0 0.8  0 0 0 0 0.72  0 0 0 2.4 -1.25" />
-    </filter>
-    <rect width="100%" height="100%" filter="url(#marble)" />
-  </svg>
+  <Img src={staticFile("histoire/_tex/marble.png")} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.16, mixBlendMode: "screen" }} />
 );
 
 const Rays: React.FC<{ color: string }> = ({ color }) => {
@@ -274,12 +268,7 @@ const Grain: React.FC = () => {
   const f = useCurrentFrame();
   return (
     <AbsoluteFill style={{ pointerEvents: "none" }}>
-      <svg width="100%" height="100%" style={{ position: "absolute", opacity: 0.09, mixBlendMode: "overlay" }}>
-        <filter id="grain">
-          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves={2} seed={f % 12} />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#grain)" />
-      </svg>
+      <Img src={staticFile(`histoire/_tex/grain${f % 4}.png`)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.1, mixBlendMode: "overlay" }} />
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(0,0,0,.65) 100%)" }} />
     </AbsoluteFill>
   );
