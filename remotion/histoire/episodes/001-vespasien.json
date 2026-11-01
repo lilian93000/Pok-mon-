@@ -1,0 +1,175 @@
+{
+  "id": "001-vespasien",
+  "titre": "L'argent n'a pas d'odeur",
+  "sources": [
+    "Suétone, Vie des douze Césars, Vespasien 16 (40 milliards de sesterces) et 23 (taxe sur l'urine, la pièce sous le nez de Titus)",
+    "Les vespasiennes : urinoirs publics de Paris (années 1830), nommés d'après Vespasien"
+  ],
+  "images": {
+    "vesp": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/SF9935154f.jpg",
+      "cut": true,
+      "credit": "Aureus de Vespasien, 70, The Met (CC0)"
+    },
+    "titus": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/SF9935165f.jpg",
+      "cut": true,
+      "credit": "Aureus de Titus, 79, The Met (CC0)"
+    },
+    "sest": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/LC-08_170_117a.jpg",
+      "cut": true,
+      "credit": "Sesterce de Titus, The Met (CC0)"
+    },
+    "head": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP328487.jpg",
+      "cut": true,
+      "credit": "Tête d'homme, époque flavienne, The Met (CC0)"
+    },
+    "elder": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP336050.jpg",
+      "cut": true,
+      "credit": "Portrait d'homme âgé, The Met (CC0)"
+    },
+    "toga": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP-1354-001.jpg",
+      "cut": true,
+      "credit": "Statue d'un homme en toge, The Met (CC0)"
+    },
+    "jar": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP121310.jpg",
+      "cut": true,
+      "credit": "Amphore en terre cuite, The Met (CC0)"
+    },
+    "colisee": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP143536.jpg",
+      "cut": false,
+      "credit": "Le Colisée, 1856, The Met (CC0)"
+    },
+    "arc": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP222149.jpg",
+      "cut": false,
+      "credit": "Arc de Titus, vers 1780, The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "« L'argent n'a pas d'*odeur*. »",
+      "image": "vesp",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Vous connaissez cette phrase. Mais elle vient d'un endroit… très *gênant*.",
+      "image": "toga",
+      "bg": "dark"
+    },
+    {
+      "text": "Rome, an *69*.",
+      "image": "colisee",
+      "bg": "dark",
+      "date": "69 apr. J.-C."
+    },
+    {
+      "text": "*Quatre* empereurs en un an.",
+      "bg": "dark",
+      "heads": 4
+    },
+    {
+      "text": "Les guerres civiles ont vidé les *caisses*.",
+      "image": "elder",
+      "bg": "dark"
+    },
+    {
+      "text": "Le nouveau maître de Rome s'appelle *Vespasien*.",
+      "image": "vesp",
+      "bg": "red",
+      "rays": true,
+      "label": "VESPASIEN"
+    },
+    {
+      "text": "Selon l'historien Suétone, il lui manque *quarante milliards* de sesterces.",
+      "image": "sest",
+      "bg": "dark",
+      "counter": {
+        "to": 40000000000,
+        "suffix": " HS"
+      }
+    },
+    {
+      "text": "Alors il trouve une idée. Il taxe…",
+      "image": "head",
+      "bg": "dark"
+    },
+    {
+      "text": "l'*urine*.",
+      "image": "jar",
+      "bg": "red",
+      "rays": true,
+      "stamp": "TAXE"
+    },
+    {
+      "text": "À Rome, l'urine vaut de l'*argent*. On la collecte dans des jarres, au coin des rues.",
+      "image": "jar",
+      "bg": "dark"
+    },
+    {
+      "text": "Les foulons s'en servent pour *blanchir* les toges.",
+      "image": "toga",
+      "bg": "dark"
+    },
+    {
+      "text": "Son fils, *Titus*, trouve ça répugnant.",
+      "image": "titus",
+      "bg": "dark",
+      "label": "TITUS"
+    },
+    {
+      "text": "Vespasien lui met une *pièce* sous le nez, tirée de la taxe.",
+      "image": "vesp",
+      "bg": "dark",
+      "zoom": true
+    },
+    {
+      "text": "« Est-ce qu'elle *sent* mauvais ? »",
+      "image": "vesp",
+      "bg": "dark",
+      "zoom": true
+    },
+    {
+      "text": "« *Non*. »",
+      "image": "titus",
+      "bg": "dark"
+    },
+    {
+      "text": "« Et pourtant, elle vient de l'*urine*. »",
+      "image": "vesp",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "*Pecunia non olet*.",
+      "image": "vesp",
+      "bg": "red",
+      "rays": true,
+      "stamp": "PECUNIA NON OLET"
+    },
+    {
+      "text": "Deux mille ans plus tard, en France, les urinoirs publics portent encore son *nom*.",
+      "image": "arc",
+      "bg": "dark"
+    },
+    {
+      "text": "Les *vespasiennes*.",
+      "image": "vesp",
+      "bg": "red",
+      "rays": true,
+      "stamp": "VESPASIENNES"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
