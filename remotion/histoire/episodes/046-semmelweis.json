@@ -1,0 +1,121 @@
+{
+  "id": "046-semmelweis",
+  "titre": "Le médecin qui voulait qu'on se lave les mains",
+  "duree": 60,
+  "sources": [
+    "Ignaz Semmelweis, Hôpital général de Vienne, 1847 : mortalité par fièvre puerpérale de la première clinique (médecins) bien supérieure à celle de la seconde (sages-femmes)",
+    "Mort de Jakob Kolletschka après une coupure lors d'une autopsie ; lavage à la chaux chlorée à partir de mai 1847",
+    "Interné en 1865, mort deux semaines plus tard d'une infection, à 47 ans"
+  ],
+  "images": {
+    "docteur": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP854891.jpg",
+      "cut": false,
+      "credit": "« Comment, docteur ? », 1824, 1824 — The Met (CC0)"
+    },
+    "docteur2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP814041.jpg",
+      "cut": false,
+      "credit": "Le docteur, 1894, 1894 — The Met (CC0)"
+    },
+    "chirurgien": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP831296.jpg",
+      "cut": false,
+      "credit": "La visite du chirurgien, 1864, 1864 — The Met (CC0)"
+    },
+    "labo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/07000/07068v.jpg",
+      "cut": false,
+      "credit": "Laboratoire de l'université de Vienne transformé en hôpital, 1917, 1917 — Library of Congress (sans restriction connue)"
+    },
+    "crane": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP168620.jpg",
+      "cut": true,
+      "credit": "Montre en forme de crâne, case ca. 1810–20, movement ca. 1650 — The Met (CC0)"
+    },
+    "hopital": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/13000/13022v.jpg",
+      "cut": false,
+      "credit": "Vienne, 1921, 1921 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Il a sauvé des mères… et on l'a *enfermé*.",
+      "bg": "red",
+      "rays": true,
+      "image": "docteur2"
+    },
+    {
+      "text": "Vienne, *1847*. Ignaz Semmelweis est médecin à la maternité du grand hôpital.",
+      "bg": "dark",
+      "image": "labo",
+      "date": "1847"
+    },
+    {
+      "text": "Il y a deux services. Dans le premier, tenu par des médecins, beaucoup de jeunes mères meurent d'une fièvre *mystérieuse*.",
+      "bg": "dark",
+      "image": "chirurgien"
+    },
+    {
+      "text": "Dans le second, tenu par des sages-femmes… *beaucoup* moins.",
+      "bg": "dark",
+      "image": "hopital"
+    },
+    {
+      "text": "Les femmes le savent. Certaines supplient pour ne pas aller chez les *médecins*.",
+      "bg": "dark",
+      "image": "docteur"
+    },
+    {
+      "text": "Puis un collègue de Semmelweis se coupe pendant une autopsie… et meurt de la même *fièvre*.",
+      "bg": "dark",
+      "image": "crane"
+    },
+    {
+      "text": "Semmelweis comprend : les médecins passent de la salle des cadavres à la salle d'*accouchement*… sans se laver les mains.",
+      "bg": "dark",
+      "image": "chirurgien",
+      "zoom": true
+    },
+    {
+      "text": "Il impose le lavage des mains avec une solution de *chlore*.",
+      "bg": "red",
+      "rays": true,
+      "image": "docteur2",
+      "stamp": "LAVEZ-VOUS LES MAINS"
+    },
+    {
+      "text": "Résultat : la mortalité *s'effondre*.",
+      "bg": "dark",
+      "image": "labo"
+    },
+    {
+      "text": "Mais ses collègues sont *vexés*. Accuser les médecins de tuer leurs patientes ? Impossible !",
+      "bg": "dark",
+      "image": "docteur"
+    },
+    {
+      "text": "Il est rejeté, perd son poste, devient de plus en plus *amer*.",
+      "bg": "dark",
+      "image": "hopital"
+    },
+    {
+      "text": "En 1865, il est interné de force. Il meurt deux semaines plus tard… d'une *infection*.",
+      "bg": "red",
+      "rays": true,
+      "image": "crane",
+      "date": "1865"
+    },
+    {
+      "text": "Quelques années après, Pasteur prouvera que les microbes existent. Semmelweis avait *raison*.",
+      "bg": "dark",
+      "image": "docteur2"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

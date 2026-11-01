@@ -1,0 +1,121 @@
+{
+  "id": "047-gage",
+  "titre": "Une barre de fer dans le crâne",
+  "duree": 60,
+  "sources": [
+    "Accident de Phineas Gage, 13 septembre 1848, Cavendish (Vermont), chantier du Rutland & Burlington Railroad",
+    "Barre à bourrer d'environ 1,10 m et 6 kg ; récits des docteurs Edward Williams et John Harlow (1848, 1868)",
+    "Crâne et barre conservés au Warren Anatomical Museum, Harvard",
+    "Gage conducteur de diligence au Chili (vers 1852-1859), mort en 1860"
+  ],
+  "images": {
+    "gorge": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/det/4a10000/4a10000/4a10500/4a10569v.jpg",
+      "cut": false,
+      "credit": "Gorge de Cavendish, Vermont, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "vallee": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/det/4a10000/4a10000/4a10500/4a10568v.jpg",
+      "cut": false,
+      "credit": "Vallée sous Cavendish, Vermont, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "gorge2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/det/4a10000/4a10000/4a10500/4a10571v.jpg",
+      "cut": false,
+      "credit": "Gorge de Cavendish, Vermont, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "chantier": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP70488.jpg",
+      "cut": false,
+      "credit": "Camp de construction ferroviaire, années 1860, 1861–65 — The Met (CC0)"
+    },
+    "pont": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP254762.jpg",
+      "cut": false,
+      "credit": "Construction d'un pont ferroviaire, 1863, April 1863 — The Met (CC0)"
+    },
+    "crane": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/245920.jpg",
+      "cut": true,
+      "credit": "Crâne, 17th century — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Une barre de fer lui traverse le crâne… et il se *relève*.",
+      "bg": "red",
+      "rays": true,
+      "image": "crane"
+    },
+    {
+      "text": "Vermont, 13 septembre *1848*. Phineas Gage dirige une équipe qui construit une voie de chemin de fer.",
+      "bg": "dark",
+      "image": "chantier",
+      "date": "1848"
+    },
+    {
+      "text": "Son travail : faire *exploser* les rochers. On remplit un trou de poudre, puis on tasse avec une longue barre de fer.",
+      "bg": "dark",
+      "image": "gorge"
+    },
+    {
+      "text": "Ce jour-là, une étincelle. La poudre *explose*.",
+      "bg": "red",
+      "rays": true,
+      "image": "pont"
+    },
+    {
+      "text": "La barre, longue d'un mètre et lourde de six kilos, entre sous sa *joue* gauche…",
+      "bg": "dark",
+      "image": "crane",
+      "zoom": true
+    },
+    {
+      "text": "…traverse son cerveau, et ressort par le sommet de son *crâne*. Elle retombe à plusieurs mètres.",
+      "bg": "dark",
+      "image": "gorge2"
+    },
+    {
+      "text": "Et Gage… ne perd même pas connaissance. Quelques minutes plus tard, il *parle*.",
+      "bg": "dark",
+      "image": "vallee"
+    },
+    {
+      "text": "Au médecin, il aurait dit : « Voilà du *travail* pour vous, docteur. »",
+      "bg": "dark",
+      "image": "chantier",
+      "stamp": "IL SURVIT"
+    },
+    {
+      "text": "Il survit. Mais selon son médecin, il n'est plus le *même* : impatient, grossier, imprévisible.",
+      "bg": "dark",
+      "image": "crane"
+    },
+    {
+      "text": "Ses amis disent : « Ce n'est plus *Gage* ».",
+      "bg": "dark",
+      "image": "gorge"
+    },
+    {
+      "text": "Il vivra encore douze ans… et travaillera même comme cocher de diligence, au *Chili* !",
+      "image": "vallee",
+      "bg": "dark"
+    },
+    {
+      "text": "Son cas va révolutionner la médecine : on comprend qu'une partie du cerveau contrôle la *personnalité*.",
+      "bg": "dark",
+      "image": "pont"
+    },
+    {
+      "text": "Aujourd'hui, son crâne et la barre de fer sont exposés dans un musée de l'université de *Harvard*.",
+      "bg": "red",
+      "rays": true,
+      "image": "crane"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

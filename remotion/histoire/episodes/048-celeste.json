@@ -1,0 +1,121 @@
+{
+  "id": "048-celeste",
+  "titre": "Le Mary Celeste, le navire fantôme",
+  "duree": 60,
+  "sources": [
+    "Le brick Mary Celeste quitte New York le 7 novembre 1872 pour Gênes avec 1 701 barils d'alcool ; capitaine Benjamin Briggs, son épouse, leur fille de 2 ans et 7 marins",
+    "Retrouvé le 4 décembre 1872 par le Dei Gratia entre les Açores et le Portugal ; canot manquant ; dernière entrée du journal le 25 novembre",
+    "Nouvelle d'Arthur Conan Doyle (1884) « J. Habakuk Jephson's Statement »"
+  ],
+  "images": {
+    "navire": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DP148096.jpg",
+      "cut": false,
+      "credit": "Un voilier américain au large d'Arai, octobre 1872, October, 1872 — The Met (CC0)"
+    },
+    "brick": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/20000/20028v.jpg",
+      "cut": false,
+      "credit": "Brick capturé, 1861, 1861-08-01 — Library of Congress (sans restriction connue)"
+    },
+    "acores": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/npcc/19400/19454v.jpg",
+      "cut": false,
+      "credit": "Front de mer de Ponta Delgada, Açores, 1909, 1909-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "acores2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s10000/1s17000/1s17200/1s17239v.jpg",
+      "cut": false,
+      "credit": "Ponta Delgada, Açores, 1903, 1903-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "lune": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s10000/1s17000/1s17200/1s17240v.jpg",
+      "cut": false,
+      "credit": "Clair de lune au large des Açores, 1902, 1902-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "naufrage": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP874599.jpg",
+      "cut": false,
+      "credit": "Le naufrage de la Méduse, 1820, 1820 — The Met (CC0)"
+    },
+    "cargo": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP853118.jpg",
+      "cut": false,
+      "credit": "Navire de charge hollandais, 1647, 1647 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "On a retrouvé ce navire intact… sans personne à *bord*.",
+      "bg": "red",
+      "rays": true,
+      "image": "lune"
+    },
+    {
+      "text": "New York, novembre *1872*. Le Mary Celeste part pour l'Italie, chargé de mille sept cents barils d'*alcool*.",
+      "bg": "dark",
+      "image": "navire",
+      "date": "NOVEMBRE 1872"
+    },
+    {
+      "text": "À bord : le capitaine Briggs, sa femme, leur petite fille de deux ans… et sept *marins*.",
+      "bg": "dark",
+      "image": "brick"
+    },
+    {
+      "text": "4 décembre. Entre les Açores et le Portugal, un autre navire aperçoit le Mary Celeste qui *dérive*.",
+      "bg": "dark",
+      "image": "acores",
+      "date": "4 DÉC. 1872"
+    },
+    {
+      "text": "Les marins montent à bord. Personne. Pas un *bruit*.",
+      "bg": "dark",
+      "image": "lune",
+      "zoom": true
+    },
+    {
+      "text": "Le navire est en bon état. Il y a six mois de nourriture et d'eau. Les affaires de l'équipage sont *intactes*.",
+      "bg": "dark",
+      "image": "cargo"
+    },
+    {
+      "text": "Seul le canot de sauvetage a *disparu*.",
+      "bg": "red",
+      "rays": true,
+      "image": "navire",
+      "stamp": "DISPARUS"
+    },
+    {
+      "text": "La dernière note du journal de bord date du 25 novembre. Neuf jours *plus tôt*.",
+      "bg": "dark",
+      "image": "acores2"
+    },
+    {
+      "text": "Les dix personnes à bord ne seront *jamais* retrouvées.",
+      "bg": "dark",
+      "image": "naufrage"
+    },
+    {
+      "text": "Les théories s'enchaînent : une mutinerie, des pirates, un monstre marin… En 1884, un jeune écrivain en tire même une nouvelle : Arthur *Conan Doyle*.",
+      "bg": "dark",
+      "image": "brick"
+    },
+    {
+      "text": "L'hypothèse la plus probable ? Des vapeurs d'alcool, une fuite, une *panique*… et un équipage qui abandonne le navire trop vite.",
+      "bg": "dark",
+      "image": "cargo"
+    },
+    {
+      "text": "Le navire a survécu. Pas ceux qui l'ont *quitté*.",
+      "bg": "red",
+      "rays": true,
+      "image": "lune"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

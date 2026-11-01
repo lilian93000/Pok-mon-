@@ -1,0 +1,141 @@
+{
+  "id": "045-otzi",
+  "titre": "Ötzi, 5 300 ans et 61 tatouages",
+  "duree": 60,
+  "sources": [
+    "Découverte le 19 septembre 1991 par Erika et Helmut Simon, Alpes de l'Ötztal (Tisenjoch, ~3 210 m)",
+    "Datation : environ 3350-3100 av. J.-C.",
+    "61 tatouages (incisions et charbon de bois), souvent sur des articulations usées",
+    "Pointe de flèche dans l'épaule gauche découverte en 2001 ; hache en cuivre ; momie conservée au musée de Bolzano"
+  ],
+  "images": {
+    "glacier": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/09700/09738v.jpg",
+      "cut": false,
+      "credit": "Sulden et ses glaciers, Tyrol, 1890, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "glacier2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c00000/3c08000/3c08800/3c08884v.jpg",
+      "cut": false,
+      "credit": "Glacier de Grindelwald, 1860, 1860-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "glacier3": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c00000/3c08000/3c08800/3c08870v.jpg",
+      "cut": false,
+      "credit": "Glacier d'Aletsch, 1860, 1860-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "passage": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c00000/3c08000/3c08800/3c08882v.jpg",
+      "cut": false,
+      "credit": "Passage du glacier de Grindelwald, 1860, 1860-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "fleche": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP121176.jpg",
+      "cut": true,
+      "credit": "Pointe de flèche en silex, Vᵉ-IVᵉ millénaire av. J.-C., 5th–4th millennium BCE — The Met (CC0)"
+    },
+    "fleche2": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP113108.jpg",
+      "cut": true,
+      "credit": "Pointe de flèche en silex, 4th millennium BCE or ca. 1450–1400 BCE — The Met (CC0)"
+    },
+    "fleche3": {
+      "url": "https://images.metmuseum.org/CRDImages/eg/original/LC-10_130_1201d-EGDP041499.jpg",
+      "cut": true,
+      "credit": "Pointe de flèche, vers 6900-3900 av. J.-C., ca. 6900–3900 B.C. — The Met (CC0)"
+    },
+    "hache": {
+      "url": "https://images.metmuseum.org/CRDImages/an/original/ME43_102_9.jpg",
+      "cut": true,
+      "credit": "Petite tête de hache, ca. late 3rd or early 1st millennium BCE — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Cet homme a cinq mille trois cents ans… et il est *tatoué*.",
+      "bg": "red",
+      "rays": true,
+      "image": "glacier"
+    },
+    {
+      "text": "19 septembre *1991*. Deux randonneurs allemands marchent dans les Alpes, à la frontière entre l'Italie et l'Autriche.",
+      "bg": "dark",
+      "image": "glacier2",
+      "date": "1991"
+    },
+    {
+      "text": "Dans la glace, ils aperçoivent un *corps*. Ils pensent à un alpiniste mort récemment.",
+      "bg": "dark",
+      "image": "passage"
+    },
+    {
+      "text": "Mais les analyses révèlent la vérité : il est mort il y a plus de *cinq mille* ans !",
+      "bg": "red",
+      "rays": true,
+      "image": "glacier3",
+      "counter": {
+        "to": 5300,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "Plus vieux que les *pyramides*. On l'appelle Ötzi.",
+      "bg": "dark",
+      "image": "glacier"
+    },
+    {
+      "text": "Il est si bien conservé qu'on connaît même son dernier repas : de la viande de *bouquetin* et des céréales.",
+      "bg": "dark",
+      "image": "fleche3"
+    },
+    {
+      "text": "Avec lui : un arc, des flèches en silex… et une hache en *cuivre*, un objet de luxe à l'époque.",
+      "bg": "dark",
+      "image": "hache"
+    },
+    {
+      "text": "Et sur sa peau : *soixante et un* tatouages.",
+      "bg": "dark",
+      "image": "glacier2",
+      "counter": {
+        "to": 61,
+        "suffix": " TATOUAGES"
+      }
+    },
+    {
+      "text": "Pas des dessins : des petites lignes et des croix, faites en frottant du charbon dans de minuscules *entailles*.",
+      "bg": "dark",
+      "image": "fleche"
+    },
+    {
+      "text": "Beaucoup se trouvent sur ses articulations usées. Peut-être un *traitement* contre la douleur.",
+      "bg": "dark",
+      "image": "glacier3"
+    },
+    {
+      "text": "En 2001, une radio révèle un dernier secret : une pointe de flèche plantée dans son *épaule*.",
+      "bg": "red",
+      "rays": true,
+      "image": "fleche2",
+      "date": "2001"
+    },
+    {
+      "text": "Ötzi n'est pas mort de froid. Il a été *assassiné*.",
+      "bg": "red",
+      "rays": true,
+      "image": "fleche2",
+      "zoom": true,
+      "stamp": "MEURTRE"
+    },
+    {
+      "text": "Aujourd'hui, il repose dans un musée en Italie, conservé dans une chambre froide à moins *six* degrés.",
+      "bg": "dark",
+      "image": "glacier"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
