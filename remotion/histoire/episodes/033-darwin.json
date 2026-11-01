@@ -1,0 +1,125 @@
+{
+  "id": "033-darwin",
+  "titre": "Darwin mangeait ses découvertes",
+  "duree": 60,
+  "sources": [
+    "Darwin, membre du « Glutton Club » à Cambridge (années 1820)",
+    "Journal du voyage du Beagle (1831-1836) : tatou, agouti, puma, tortues des Galápagos",
+    "Le nandou de Darwin : à moitié mangé avant d'être identifié, restes envoyés à Londres (Rhea darwinii, Gould 1837)"
+  ],
+  "images": {
+    "portrait": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/16300/16381v.jpg",
+      "cut": false,
+      "credit": "Portrait de Charles Darwin, 1870, 1870 — Library of Congress (sans restriction connue)"
+    },
+    "portrait2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/03400/03485v.jpg",
+      "cut": false,
+      "credit": "Charles Darwin, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "portrait3": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/46400/46402v.jpg",
+      "cut": false,
+      "credit": "Charles Darwin, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "singe": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b30000/3b35000/3b35200/3b35206r.jpg",
+      "cut": false,
+      "credit": "Caricature de Darwin, La Petite Lune, 1878, 1871-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "montevideo": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP804730.jpg",
+      "cut": false,
+      "credit": "Approche de Montevideo, 1832, 1832 — The Met (CC0)"
+    },
+    "tatou": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP835100.jpg",
+      "cut": false,
+      "credit": "Tatou, série Quadrupèdes, 1890, 1890 — The Met (CC0)"
+    },
+    "tatou2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP839192.jpg",
+      "cut": false,
+      "credit": "Tatou, série Quadrupèdes, 1890, 1890 — The Met (CC0)"
+    },
+    "amerique": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP861355.jpg",
+      "cut": false,
+      "credit": "Allégorie de l'Amérique, 1580-1600, 1580–1600 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Le père de la théorie de l'évolution mangeait les animaux qu'il *étudiait*.",
+      "bg": "red",
+      "rays": true,
+      "image": "portrait"
+    },
+    {
+      "text": "Cambridge, années 1820. Le jeune Charles Darwin fait partie d'un club étudiant un peu spécial : le *Glutton Club*.",
+      "bg": "dark",
+      "image": "portrait3"
+    },
+    {
+      "text": "Le club des *gloutons*. Le but : goûter des viandes que personne ne mange.",
+      "bg": "dark",
+      "image": "singe"
+    },
+    {
+      "text": "Faucon, butor… Un jour, un hibou. Darwin dira que c'était *immonde*.",
+      "bg": "dark",
+      "image": "portrait3",
+      "zoom": true
+    },
+    {
+      "text": "En 1831, il embarque sur le *Beagle* pour un voyage autour du monde de cinq ans.",
+      "bg": "dark",
+      "image": "montevideo",
+      "date": "1831"
+    },
+    {
+      "text": "Il observe, il dessine, il collectionne… et il *goûte*.",
+      "bg": "dark",
+      "image": "amerique"
+    },
+    {
+      "text": "Le tatou ? Selon lui, ça a le goût du *canard*.",
+      "bg": "dark",
+      "image": "tatou"
+    },
+    {
+      "text": "Un gros rongeur, l'agouti ? « La *meilleure* viande que j'aie jamais goûtée ».",
+      "bg": "dark",
+      "image": "portrait2"
+    },
+    {
+      "text": "Du puma. Et aux Galápagos… de la *tortue* géante.",
+      "bg": "dark",
+      "image": "amerique",
+      "zoom": true
+    },
+    {
+      "text": "Mais le plus beau : en Patagonie, Darwin cherche une espèce rare de *nandou*, un oiseau proche de l'autruche.",
+      "bg": "dark",
+      "image": "montevideo"
+    },
+    {
+      "text": "Un soir, l'équipage en sert un au dîner. Darwin mange… puis comprend : c'est *lui*, l'oiseau qu'il cherchait !",
+      "bg": "red",
+      "rays": true,
+      "image": "singe",
+      "stamp": "OUPS"
+    },
+    {
+      "text": "Il récupère les restes et les envoie à Londres. L'espèce portera son *nom* : le nandou de Darwin.",
+      "bg": "dark",
+      "image": "portrait2"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

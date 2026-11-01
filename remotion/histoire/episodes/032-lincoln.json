@@ -1,0 +1,140 @@
+{
+  "id": "032-lincoln",
+  "titre": "Le jour de son assassinat, il crée… les services secrets",
+  "duree": 60,
+  "sources": [
+    "U.S. Secret Service, histoire officielle : la législation créant l'agence était sur le bureau de Lincoln le soir de son assassinat (14 avril 1865) ; création effective le 5 juillet 1865",
+    "Mission initiale : lutter contre la fausse monnaie (un tiers à la moitié des billets en circulation)",
+    "Protection présidentielle après l'assassinat de McKinley (1901), officielle en 1902"
+  ],
+  "images": {
+    "portrait": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b20000/3b20000/3b20700/3b20758r.jpg",
+      "cut": false,
+      "credit": "Abraham Lincoln, 1921-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "buste": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b20000/3b20000/3b20200/3b20231r.jpg",
+      "cut": false,
+      "credit": "Buste d'Abraham Lincoln, 1908-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "mort": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/07700/07755v.jpg",
+      "cut": false,
+      "credit": "Mort d'Abraham Lincoln, 15 avril 1865, 1865-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "funerailles": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s00000/1s04000/1s04300/1s04303v.jpg",
+      "cut": false,
+      "credit": "Lincoln exposé à Springfield, mai 1865, 1865-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "investiture": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a00000/3a04000/3a04200/3a04233r.jpg",
+      "cut": false,
+      "credit": "Investiture d'Abraham Lincoln, 1865, 1897-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "faux": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/25200/25218v.jpg",
+      "cut": false,
+      "credit": "Fausse monnaie saisie par le Secret Service, 1938, 1938-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "billet": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a00000/3a05000/3a05300/3a05370r.jpg",
+      "cut": false,
+      "credit": "Billet de cinquante cents, 1837, 1837 — Library of Congress (sans restriction connue)"
+    },
+    "billet2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a00000/3a00000/3a00800/3a00817r.jpg",
+      "cut": false,
+      "credit": "« Contrefaire, c'est la mort », 1776, 1776-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "agents": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/20400/20490v.jpg",
+      "cut": false,
+      "credit": "Groupe d'agents du Secret Service, 1905, 1905-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "agents2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/28300/28387v.jpg",
+      "cut": false,
+      "credit": "Agents du Secret Service du président, 1915, 1915-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Le jour de son assassinat, il crée… les services *secrets*.",
+      "bg": "red",
+      "rays": true,
+      "image": "portrait"
+    },
+    {
+      "text": "Washington, 14 avril *1865*. La guerre de Sécession vient de se terminer.",
+      "bg": "dark",
+      "image": "investiture",
+      "date": "14 AVRIL 1865"
+    },
+    {
+      "text": "Ce jour-là, sur le bureau du président Abraham Lincoln : un projet pour créer une nouvelle agence. Le *Secret Service*.",
+      "bg": "dark",
+      "image": "buste"
+    },
+    {
+      "text": "Mais attention : pas pour le *protéger*.",
+      "bg": "dark",
+      "image": "agents"
+    },
+    {
+      "text": "À l'époque, les États-Unis ont un énorme problème : la fausse *monnaie*.",
+      "bg": "dark",
+      "image": "billet"
+    },
+    {
+      "text": "Entre un tiers et la moitié des billets en circulation sont des *faux* !",
+      "bg": "dark",
+      "image": "faux",
+      "counter": {
+        "to": 50,
+        "suffix": " %"
+      }
+    },
+    {
+      "text": "La mission du Secret Service : traquer les *faussaires*.",
+      "bg": "red",
+      "rays": true,
+      "image": "billet2",
+      "stamp": "FAUSSE MONNAIE"
+    },
+    {
+      "text": "Le soir même, Lincoln va au théâtre. Il n'a qu'un seul garde du corps… qui s'*absente*.",
+      "bg": "dark",
+      "image": "portrait",
+      "zoom": true
+    },
+    {
+      "text": "John Wilkes Booth entre dans sa loge et lui tire une balle dans la *tête*.",
+      "bg": "red",
+      "rays": true,
+      "image": "mort"
+    },
+    {
+      "text": "Lincoln meurt le lendemain matin. Le Secret Service est créé *trois* mois plus tard… pour chasser la fausse monnaie.",
+      "bg": "dark",
+      "image": "funerailles"
+    },
+    {
+      "text": "Il faudra encore deux présidents assassinés, Garfield puis McKinley, pour qu'on lui confie enfin la *protection* du président.",
+      "bg": "dark",
+      "image": "agents2"
+    },
+    {
+      "text": "Aujourd'hui, le Secret Service poursuit toujours les faux-monnayeurs. Et protège le président des *États-Unis*.",
+      "bg": "red",
+      "rays": true,
+      "image": "agents"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

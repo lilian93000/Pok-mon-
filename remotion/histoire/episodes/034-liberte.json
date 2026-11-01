@@ -1,0 +1,138 @@
+{
+  "id": "034-liberte",
+  "titre": "La statue de la Liberté n'était pas verte",
+  "duree": 60,
+  "sources": [
+    "Statue de Bartholdi, structure interne de Gustave Eiffel ; inaugurée le 28 octobre 1886",
+    "Peau de cuivre d'environ 2,4 mm ; patine verte (vert-de-gris) formée en une vingtaine d'années",
+    "1906 : projet de peindre la statue abandonné face aux protestations ; la patine protège le cuivre",
+    "Transport en 1885 dans 214 caisses"
+  ],
+  "images": {
+    "chantier": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c10000/3c12000/3c12100/3c12162v.jpg",
+      "cut": false,
+      "credit": "La statue de la Liberté de Bartholdi en construction, 1884, 1884-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "socle": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/12600/12641v.jpg",
+      "cut": false,
+      "credit": "Piédestal de la statue, 1886, 1886 — Library of Congress (sans restriction connue)"
+    },
+    "montage": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a50000/3a53000/3a53300/3a53375v.jpg",
+      "cut": false,
+      "credit": "Remontage de la statue sur son piédestal, 1886, 1886-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "armature": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3g10000/3g14000/3g14900/3g14967v.jpg",
+      "cut": false,
+      "credit": "Structure de la statue, élévations, 1881, 1881 — Library of Congress (sans restriction connue)"
+    },
+    "dessin": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP-19731-001.jpg",
+      "cut": false,
+      "credit": "Dessin de présentation de la Liberté éclairant le monde, 1875, 1875 — The Met (CC0)"
+    },
+    "bronze": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/ES7939.jpg",
+      "cut": true,
+      "credit": "Liberté, modèle réduit, 1875, 1875 — The Met (CC0)"
+    },
+    "affiche": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP242153.jpg",
+      "cut": false,
+      "credit": "La grande statue de Bartholdi, 1885, 1885 — The Met (CC0)"
+    },
+    "medaille": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/29894.jpg",
+      "cut": true,
+      "credit": "Médaille de l'Union franco-américaine, 1886, 1886 — The Met (CC0)"
+    },
+    "aujourdhui": {
+      "url": "https://tile.loc.gov/image-services/iiif/service:pnp:highsm:13900:13921/full/pct:25/0/default.jpg",
+      "cut": false,
+      "credit": "Statue de la Liberté (Carol M. Highsmith), 1980-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "La statue de la Liberté n'était *pas* verte.",
+      "bg": "red",
+      "rays": true,
+      "image": "aujourdhui"
+    },
+    {
+      "text": "Paris, années 1880. Le sculpteur Bartholdi construit une statue *géante*, cadeau de la France aux États-Unis.",
+      "bg": "dark",
+      "image": "chantier"
+    },
+    {
+      "text": "À l'intérieur, une structure en fer dessinée par un ingénieur bientôt célèbre : Gustave *Eiffel*.",
+      "bg": "dark",
+      "image": "armature",
+      "label": "GUSTAVE EIFFEL"
+    },
+    {
+      "text": "La statue est démontée, rangée dans plus de *deux cents* caisses, et envoyée en bateau à New York.",
+      "bg": "dark",
+      "image": "montage",
+      "counter": {
+        "to": 214,
+        "suffix": " CAISSES"
+      }
+    },
+    {
+      "text": "28 octobre *1886* : inauguration. Et ce jour-là, elle brille… couleur *cuivre*.",
+      "bg": "dark",
+      "image": "dessin",
+      "date": "28 OCT. 1886"
+    },
+    {
+      "text": "Un brun-orangé, comme une pièce de monnaie *neuve*.",
+      "bg": "red",
+      "rays": true,
+      "image": "medaille"
+    },
+    {
+      "text": "Car sa peau est faite de cuivre, pas plus épais que deux *pièces* de monnaie.",
+      "bg": "dark",
+      "image": "bronze",
+      "zoom": true
+    },
+    {
+      "text": "Mais l'air marin, la pluie, la pollution… Le cuivre s'oxyde. Il devient brun, puis *vert*.",
+      "bg": "dark",
+      "image": "affiche"
+    },
+    {
+      "text": "En une vingtaine d'années, la statue entière change de *couleur*.",
+      "bg": "dark",
+      "image": "socle"
+    },
+    {
+      "text": "En 1906, le Congrès américain veut la *repeindre* ! Le public proteste. Le projet est abandonné.",
+      "bg": "dark",
+      "image": "montage",
+      "date": "1906"
+    },
+    {
+      "text": "Et heureusement : ce vert-de-gris *protège* le cuivre de la corrosion.",
+      "bg": "dark",
+      "image": "aujourdhui"
+    },
+    {
+      "text": "La statue la plus célèbre du monde est verte… parce qu'elle a *rouillé*.",
+      "bg": "red",
+      "rays": true,
+      "image": "aujourdhui",
+      "zoom": true,
+      "stamp": "OXYDATION"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

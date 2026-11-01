@@ -1,0 +1,135 @@
+{
+  "id": "035-zanzibar",
+  "titre": "La guerre de 38 minutes",
+  "duree": 60,
+  "sources": [
+    "Guerre anglo-zanzibarite, 27 août 1896 : ultimatum expirant à 9 h, bombardement du palais, cessez-le-feu vers 9 h 40",
+    "Khalid ben Barghash, réfugié au consulat allemand",
+    "Environ 500 victimes zanzibarites, un marin britannique blessé ; frais du bombardement facturés au gouvernement de Zanzibar"
+  ],
+  "images": {
+    "palais": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/matpc/13800/13876v.jpg",
+      "cut": false,
+      "credit": "Palais du sultan, Zanzibar (1936), 1936-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "residence": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/matpc/00400/00400v.jpg",
+      "cut": false,
+      "credit": "Zanzibar, la résidence (1936), 1936-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "cote": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/matpc/11600/11678v.jpg",
+      "cut": false,
+      "credit": "Zanzibar (1936), 1936-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "palmiers": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/matpc/13800/13846v.jpg",
+      "cut": false,
+      "credit": "Zanzibar (1936), 1936-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "route": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/matpc/11600/11685v.jpg",
+      "cut": false,
+      "credit": "Zanzibar (1936), 1936-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "navire": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DPB874589.jpg",
+      "cut": false,
+      "credit": "Navire de la Royal Navy, carte de 1889, 1889 — The Met (CC0)"
+    },
+    "navire2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DPB874591.jpg",
+      "cut": false,
+      "credit": "Navire de la Royal Navy, carte de 1889, 1889 — The Met (CC0)"
+    },
+    "navire3": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DPB874594.jpg",
+      "cut": false,
+      "credit": "Navire de la Royal Navy, carte de 1889, 1889 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "La guerre la plus courte de l'histoire a duré *trente-huit* minutes.",
+      "bg": "red",
+      "rays": true,
+      "image": "navire"
+    },
+    {
+      "text": "Zanzibar, île de l'océan Indien, 25 août *1896*. Le sultan meurt soudainement.",
+      "bg": "dark",
+      "image": "palmiers",
+      "date": "25 AOÛT 1896"
+    },
+    {
+      "text": "Son cousin, Khalid, s'empare aussitôt du *palais* et se proclame sultan.",
+      "bg": "dark",
+      "image": "palais"
+    },
+    {
+      "text": "Problème : le Royaume-Uni contrôle la région… et il avait choisi un *autre* candidat.",
+      "bg": "dark",
+      "image": "residence"
+    },
+    {
+      "text": "Les Britanniques envoient un ultimatum : quittez le palais avant demain, *neuf* heures.",
+      "bg": "dark",
+      "image": "navire2"
+    },
+    {
+      "text": "Khalid refuse. Il barricade le palais avec près de *trois mille* hommes.",
+      "bg": "dark",
+      "image": "palais",
+      "zoom": true
+    },
+    {
+      "text": "27 août, neuf heures pile. Cinq navires de guerre britanniques ouvrent le *feu*.",
+      "bg": "red",
+      "rays": true,
+      "image": "navire3",
+      "date": "27 AOÛT, 9 H 00"
+    },
+    {
+      "text": "Le palais s'effondre. Le seul navire de guerre du sultan est *coulé*.",
+      "bg": "dark",
+      "image": "navire"
+    },
+    {
+      "text": "À neuf heures quarante, le drapeau du palais tombe. C'est *fini*.",
+      "bg": "dark",
+      "image": "cote",
+      "counter": {
+        "to": 38,
+        "suffix": " MINUTES"
+      }
+    },
+    {
+      "text": "Bilan : environ cinq cents victimes côté zanzibarite. Côté britannique : un seul marin *blessé*.",
+      "bg": "dark",
+      "image": "palais"
+    },
+    {
+      "text": "Khalid s'enfuit et se réfugie au consulat *allemand*.",
+      "bg": "dark",
+      "image": "route"
+    },
+    {
+      "text": "Le livre Guinness des records la classe comme la guerre la plus *courte* jamais enregistrée.",
+      "image": "cote",
+      "bg": "dark"
+    },
+    {
+      "text": "Et le plus fou : les Britanniques ont ensuite fait *payer* au nouveau gouvernement les obus utilisés pour le bombardement !",
+      "bg": "red",
+      "rays": true,
+      "image": "navire2",
+      "stamp": "FACTURE"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
