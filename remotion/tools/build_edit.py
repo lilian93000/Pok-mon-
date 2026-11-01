@@ -217,7 +217,7 @@ for c in captions:
             continue
         # « \h » élargit l'espace (celui de Poppins est très étroit)
         # mot prononcé en jaune
-        txt = " ".join((f"{{\\c&H0000D4FF&}}{esc(w['w'])}{{\\c&H00FFFFFF&}}" if j == i else esc(w["w"])) for j, w in enumerate(ws))
+        txt = "\\h ".join((f"{{\\c&H0000D4FF&}}{esc(w['w'])}{{\\c&H00FFFFFF&}}" if j == i else esc(w["w"])) for j, w in enumerate(ws))
         ass.append(f"Dialogue: 0,{ass_time(a)},{ass_time(b)},Cap,,0,0,0,,{txt}")
 ass_path = sys.argv[2].rsplit(".", 1)[0] + ".ass"
 open(ass_path, "w").write("\n".join(ass) + "\n")
