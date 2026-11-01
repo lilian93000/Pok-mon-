@@ -1,0 +1,125 @@
+{
+  "id": "050-bug",
+  "titre": "Le premier bug était un vrai insecte",
+  "duree": 60,
+  "sources": [
+    "Journal de bord du Harvard Mark II, 9 septembre 1947 : papillon de nuit retrouvé dans le relais n° 70, panneau F, scotché avec la mention « First actual case of bug being found »",
+    "Le mot « bug » était déjà employé pour une panne (Thomas Edison, 1878)",
+    "Journal conservé au National Museum of American History (Smithsonian)"
+  ],
+  "images": {
+    "papillon": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP820071.jpg",
+      "cut": true,
+      "credit": "Papillon de nuit, XVIIIᵉ s., early 18th–mid 18th century — The Met (CC0)"
+    },
+    "papillon2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP820075.jpg",
+      "cut": true,
+      "credit": "Papillon de nuit, XVIIIᵉ s., early 18th–mid 18th century — The Met (CC0)"
+    },
+    "hollar": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP823963.jpg",
+      "cut": false,
+      "credit": "Hollar, papillon de nuit et trois papillons, 1646, 1646 — The Met (CC0)"
+    },
+    "hollar2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP823957.jpg",
+      "cut": false,
+      "credit": "Hollar, papillons et coléoptères, 1646, 1646 — The Met (CC0)"
+    },
+    "hollar3": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP823959.jpg",
+      "cut": false,
+      "credit": "Hollar, cinq papillons, un papillon de nuit et deux coléoptères, 1646, 1646 — The Met (CC0)"
+    },
+    "bougie": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/28400/28469v.jpg",
+      "cut": false,
+      "credit": "Les papillons et la bougie, 1882, 1882-04-26 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Le premier bug informatique… était un vrai *insecte*.",
+      "bg": "red",
+      "rays": true,
+      "image": "papillon"
+    },
+    {
+      "text": "Université Harvard, 9 septembre *1947*. Une équipe travaille sur un des premiers ordinateurs : le Mark II.",
+      "bg": "dark",
+      "image": "hollar",
+      "date": "9 SEPT. 1947"
+    },
+    {
+      "text": "Une machine *géante*. Elle pèse plusieurs tonnes et remplit une salle entière.",
+      "bg": "dark",
+      "image": "hollar2"
+    },
+    {
+      "text": "Ce jour-là, elle se met à faire des *erreurs*. Personne ne comprend pourquoi.",
+      "bg": "dark",
+      "image": "bougie"
+    },
+    {
+      "text": "Les techniciens fouillent la machine… et trouvent la *coupable*.",
+      "bg": "dark",
+      "image": "papillon2",
+      "zoom": true
+    },
+    {
+      "text": "Un papillon de nuit, coincé dans le relais numéro *soixante-dix*.",
+      "bg": "red",
+      "rays": true,
+      "image": "papillon",
+      "counter": {
+        "to": 70,
+        "suffix": ""
+      }
+    },
+    {
+      "text": "Ils le retirent avec une pince… et le *scotchent* dans le carnet de bord.",
+      "bg": "dark",
+      "image": "hollar3"
+    },
+    {
+      "text": "À côté, ils écrivent : « Premier cas *réel* de bug trouvé ».",
+      "bg": "dark",
+      "image": "papillon2",
+      "stamp": "FIRST ACTUAL BUG"
+    },
+    {
+      "text": "La blague, c'est que le mot « bug » existait *déjà*. Thomas Edison l'utilisait au dix-neuvième siècle pour parler d'une panne.",
+      "bg": "dark",
+      "image": "bougie"
+    },
+    {
+      "text": "Mais cette fois, c'était un bug… au sens *propre*.",
+      "bg": "dark",
+      "image": "papillon",
+      "zoom": true
+    },
+    {
+      "text": "Depuis, corriger une erreur dans un programme, ça s'appelle « *débuguer* ». Littéralement : enlever la bestiole.",
+      "image": "hollar2",
+      "bg": "dark"
+    },
+    {
+      "text": "L'histoire a été rendue célèbre par une pionnière de l'informatique : la mathématicienne Grace *Hopper*.",
+      "bg": "dark",
+      "image": "hollar"
+    },
+    {
+      "text": "Et le carnet, avec son papillon, est toujours conservé dans un *musée* à Washington.",
+      "bg": "red",
+      "rays": true,
+      "image": "papillon2"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

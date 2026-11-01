@@ -1,0 +1,121 @@
+{
+  "id": "051-smog",
+  "titre": "Le brouillard qui a tué des milliers de personnes",
+  "duree": 60,
+  "sources": [
+    "Grand smog de Londres, 5-9 décembre 1952 : anticyclone, froid, combustion massive de charbon",
+    "Environ 4 000 décès estimés à l'époque ; études ultérieures : jusqu'à 10 000-12 000",
+    "Clean Air Act de 1956",
+    "Bétail du Smithfield Show mort pendant le smog (décembre 1952)"
+  ],
+  "images": {
+    "smog": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/gtfy/06900/06950v.jpg",
+      "cut": false,
+      "credit": "Smog à New York, 1970, 1970 — Library of Congress (sans restriction connue)"
+    },
+    "smog2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/gtfy/06900/06954v.jpg",
+      "cut": false,
+      "credit": "Smog à New York, 1970, 1970 — Library of Congress (sans restriction connue)"
+    },
+    "smog3": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/gtfy/06900/06953v.jpg",
+      "cut": false,
+      "credit": "Smog à New York, 1970, 1970 — Library of Congress (sans restriction connue)"
+    },
+    "britannia": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c10000/3c11000/3c11300/3c11313v.jpg",
+      "cut": false,
+      "credit": "Caricature, 1803, 1803-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Un brouillard a tué des milliers de personnes en *cinq* jours.",
+      "bg": "red",
+      "rays": true,
+      "image": "smog2"
+    },
+    {
+      "text": "Londres, 5 décembre *1952*. Il fait très froid. Un anticyclone bloque l'air au-dessus de la ville.",
+      "bg": "dark",
+      "image": "smog",
+      "date": "5 DÉC. 1952"
+    },
+    {
+      "text": "Pour se chauffer, des millions de Londoniens brûlent du *charbon*. Les usines aussi.",
+      "bg": "dark",
+      "image": "smog3"
+    },
+    {
+      "text": "La fumée ne peut pas s'échapper. Elle se mélange au brouillard : c'est le *smog*.",
+      "bg": "dark",
+      "image": "smog2",
+      "zoom": true
+    },
+    {
+      "text": "Un brouillard *jaune*, épais, qui sent le soufre.",
+      "bg": "dark",
+      "image": "smog"
+    },
+    {
+      "text": "On ne voit plus ses propres *pieds*. Les bus s'arrêtent. Des gens marchent devant les voitures avec des lampes.",
+      "bg": "dark",
+      "image": "smog3"
+    },
+    {
+      "text": "Le smog entre même dans les théâtres : les spectateurs ne voient plus la *scène*.",
+      "bg": "dark",
+      "image": "britannia"
+    },
+    {
+      "text": "Et surtout, il entre dans les *poumons*.",
+      "bg": "red",
+      "rays": true,
+      "image": "smog"
+    },
+    {
+      "text": "Même des vaches primées, venues pour un concours agricole, *étouffent* dans leurs étables.",
+      "image": "smog3",
+      "bg": "dark"
+    },
+    {
+      "text": "En cinq jours, des milliers de personnes meurent. Les estimations actuelles parlent de plus de *dix mille* morts.",
+      "bg": "dark",
+      "image": "smog2",
+      "counter": {
+        "to": 10000,
+        "suffix": " MORTS"
+      }
+    },
+    {
+      "text": "Les pompes funèbres manquent de *cercueils*.",
+      "bg": "dark",
+      "image": "smog3"
+    },
+    {
+      "text": "Et pendant des mois, les décès restent anormalement *élevés*.",
+      "image": "smog",
+      "bg": "dark"
+    },
+    {
+      "text": "Quatre ans plus tard, le Royaume-Uni vote une loi historique pour un air plus *propre*.",
+      "bg": "dark",
+      "image": "britannia",
+      "date": "1956"
+    },
+    {
+      "text": "L'une des premières grandes lois écologiques au *monde*.",
+      "bg": "red",
+      "rays": true,
+      "image": "smog",
+      "stamp": "CLEAN AIR ACT"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

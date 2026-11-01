@@ -1,0 +1,136 @@
+{
+  "id": "049-wright",
+  "titre": "Du premier avion à la Lune : 66 ans",
+  "duree": 60,
+  "sources": [
+    "Premier vol motorisé des frères Wright, 17 décembre 1903, Kill Devil Hills (Kitty Hawk) : 12 secondes, environ 37 m ; vol le plus long du jour : 59 s, 260 m",
+    "Apollo 11 (juillet 1969) : Neil Armstrong emporte un morceau de toile et de bois de l'hélice du Flyer de 1903",
+    "Envergure d'un Boeing 747 : environ 60 à 64 m"
+  ],
+  "images": {
+    "machine": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppprs/00600/00615v.jpg",
+      "cut": false,
+      "credit": "La machine de 1903, vue de face, 1903-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "planeur": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppprs/00600/00693v.jpg",
+      "cut": false,
+      "credit": "Planeur à Kitty Hawk, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "vol": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppprs/00500/00595v.jpg",
+      "cut": false,
+      "credit": "Vol plané, Kitty Hawk, 1902, 1902-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "plage": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppprs/00500/00542v.jpg",
+      "cut": false,
+      "credit": "Les vagues à Kitty Hawk, 1900, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "musee": {
+      "url": "https://tile.loc.gov/image-services/iiif/service:pnp:highsm:13900:13966/full/pct:25/0/default.jpg",
+      "cut": false,
+      "credit": "L'avion des frères Wright au musée de l'Air et de l'Espace, Washington (Carol M. Highsmith), 1980-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "moteur": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppprs/00600/00650v.jpg",
+      "cut": false,
+      "credit": "Moteur reconstitué des frères Wright, 1928-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "apollo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/59700/59787v.jpg",
+      "cut": false,
+      "credit": "Neil Armstrong et Buzz Aldrin à l'entraînement, Apollo 11, 1969, 1969-04 — Library of Congress (sans restriction connue)"
+    },
+    "lune": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP-15797-035.jpg",
+      "cut": false,
+      "credit": "Buzz Aldrin sur la Lune, 1969 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Entre le premier avion et le premier pas sur la Lune : *soixante-six* ans.",
+      "bg": "red",
+      "rays": true,
+      "image": "machine"
+    },
+    {
+      "text": "17 décembre *1903*. Une plage venteuse de Caroline du Nord. Deux frères, Orville et Wilbur Wright.",
+      "bg": "dark",
+      "image": "plage",
+      "date": "17 DÉC. 1903"
+    },
+    {
+      "text": "Ils ont fabriqué une machine en bois et en toile, avec un petit *moteur* qu'ils ont construit eux-mêmes.",
+      "bg": "dark",
+      "image": "moteur"
+    },
+    {
+      "text": "Orville s'allonge aux commandes. La machine décolle… et vole pendant *douze* secondes.",
+      "bg": "dark",
+      "image": "vol",
+      "counter": {
+        "to": 12,
+        "suffix": " SECONDES"
+      }
+    },
+    {
+      "text": "Trente-sept mètres. Moins que les ailes d'un *Boeing 747* !",
+      "bg": "red",
+      "rays": true,
+      "image": "planeur"
+    },
+    {
+      "text": "Le plus long vol de la journée, piloté par Wilbur, dure *cinquante-neuf* secondes.",
+      "image": "vol",
+      "bg": "dark"
+    },
+    {
+      "text": "Ce jour-là, seules *cinq* personnes y assistent. Presque personne n'y croit.",
+      "bg": "dark",
+      "image": "plage"
+    },
+    {
+      "text": "Et pourtant, ça va très vite. Des avions en bois… puis en métal… puis à *réaction*.",
+      "bg": "dark",
+      "image": "musee"
+    },
+    {
+      "text": "Juillet *1969*. Neil Armstrong part pour la Lune.",
+      "bg": "dark",
+      "image": "apollo",
+      "date": "JUILLET 1969"
+    },
+    {
+      "text": "Dans ses affaires personnelles, il emporte un petit morceau de *toile* et de bois… de l'avion des frères Wright.",
+      "bg": "dark",
+      "image": "machine",
+      "zoom": true
+    },
+    {
+      "text": "Le premier avion de l'histoire est allé *sur la Lune*.",
+      "bg": "red",
+      "rays": true,
+      "image": "lune",
+      "stamp": "1903 → 1969"
+    },
+    {
+      "text": "Orville Wright est mort en 1948. Des gens nés à l'époque de son premier vol ont *vu* les hommes marcher sur la Lune.",
+      "bg": "dark",
+      "image": "musee"
+    },
+    {
+      "text": "Une seule vie humaine pour passer de *douze* secondes de vol… à la Lune.",
+      "bg": "red",
+      "rays": true,
+      "image": "lune"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
