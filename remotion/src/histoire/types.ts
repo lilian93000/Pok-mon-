@@ -20,6 +20,7 @@ export type Props = {
   fps: number;
   duration: number;
   audio: string | null;
+  music?: string;
   words: Word[];
   beats: Beat[];
 };

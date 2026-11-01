@@ -33,7 +33,7 @@ if key:
     voice = os.environ.get("ELEVENLABS_VOICE_ID", "3HZyQcLKlT0a3RDeXVsP")  # voix choisie par l'utilisateur
     cache = pub / "voice.json"
     # Réglages « énergiques » : moins de stabilité = plus d'intonation, style poussé, débit +12 %
-    settings = {"stability": 0.28, "similarity_boost": 0.8, "style": 0.7, "use_speaker_boost": True, "speed": 1.12}
+    settings = {"stability": 0.28, "similarity_boost": 0.8, "style": 0.8, "use_speaker_boost": True, "speed": 1.2}
     settings.update(ep.get("voix", {}))
     sig = {"text": full, "voice": voice, "settings": settings}
     if not cache.exists() or json.load(open(cache)).get("sig") != sig:
@@ -61,7 +61,31 @@ if key:
         j = i + len(w["w"]) - 1
         w["start"], w["end"] = st[i], en[j]
         pos = j + 1
-    audio = f"histoire/{ep['id']}/voice.mp3"
+    # Resserrer les silences (style TikTok) : max 0,2 s après ponctuation, 0,08 s sinon
+    import subprocess
+    keep, t, removed = [], 0.0, []
+    lead = max(0.0, words[0]["start"] - 0.05)
+    keep_start, shift = lead, lead
+    cuts = [(0.0, lead)] if lead > 0 else []
+    for a, b in zip(words, words[1:]):
+        gap = b["start"] - a["end"]
+        mx = 0.2 if a["w"][-1:] in ".?!…»,:" else 0.08
+        if gap > mx:
+            cuts.append((a["end"] + mx / 2, b["start"] - mx / 2))
+    def remap(x):
+        return x - sum(min(max(x - c0, 0), c1 - c0) for c0, c1 in cuts)
+    segs, cur = [], 0.0
+    for c0, c1 in cuts:
+        if c0 > cur: segs.append((cur, c0))
+        cur = c1
+    segs.append((cur, words[-1]["end"] + 0.3))
+    fc = "".join(f"[0:a]atrim={a:.3f}:{b:.3f},asetpts=PTS-STARTPTS[s{i}];" for i, (a, b) in enumerate(segs))
+    fc += "".join(f"[s{i}]" for i in range(len(segs))) + f"concat=n={len(segs)}:v=0:a=1[o]"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(pub / "voice.mp3"), "-filter_complex", fc, "-map", "[o]",
+                    "-ar", "44100", "-b:a", "192k", str(pub / "voice_tight.mp3")], check=True)
+    for w in words:
+        w["start"], w["end"] = remap(w["start"]), remap(w["end"])
+    audio = f"histoire/{ep['id']}/voice_tight.mp3"
 else:
     t = 0.4
     for k, w in enumerate(words):
@@ -73,7 +97,7 @@ else:
         if k + 1 < len(words) and words[k + 1]["beat"] != w["beat"]:
             t += 0.1
 
-duration = words[-1]["end"] + 1.6
+duration = words[-1]["end"] + 1.2
 beats = []
 for i, b in enumerate(ep["beats"]):
     ws = [w for w in words if w["beat"] == i]
@@ -83,6 +107,7 @@ for i, b in enumerate(beats):
     b["start"] = max(0, b["start"])
     b["end"] = beats[i + 1]["start"] if i + 1 < len(beats) else duration
 props = {"id": ep["id"], "fps": FPS, "duration": round(duration, 3), "audio": audio,
+         "music": f"histoire/_sfx/music-{ep.get('musique', 'epique')}.mp3",
          "words": [{k: w[k] for k in ("w", "kw", "start", "end", "beat")} for w in words], "beats": beats}
 json.dump(props, open(pub / "props.json", "w"), ensure_ascii=False, indent=1)
 print(f"{'voix ElevenLabs' if audio else 'minutage ESTIMÉ (pas de clé)'} — {duration:.1f} s, {len(words)} mots, {len(beats)} plans")
