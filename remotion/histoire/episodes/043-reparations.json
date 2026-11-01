@@ -5,8 +5,7 @@
   "sources": [
     "Traité de Versailles signé le 28 juin 1919 dans la galerie des Glaces ; réparations fixées en 1921 (132 milliards de marks-or)",
     "Hyperinflation de 1923 ; plans Dawes (1924) et Young (1929) ; paiements suspendus en 1932-1933",
-    "Accord de Londres (1953) : remboursement des intérêts différé jusqu'à la réunification ; dernier versement le 3 octobre 2010 (environ 70 millions d'euros)",
-    "J. M. Keynes, Les Conséquences économiques de la paix (1919)"
+    "Accord de Londres (1953) : remboursement des intérêts différé jusqu'à la réunification ; dernier versement le 3 octobre 2010 (environ 70 millions d'euros)"
   ],
   "images": {
     "galerie": {
@@ -83,11 +82,6 @@
       "image": "carica2"
     },
     {
-      "text": "Dès 1919, l'économiste John Maynard Keynes avait prévenu : cette dette est *impossible* à payer.",
-      "image": "carica",
-      "bg": "dark"
-    },
-    {
       "text": "En 1923, la monnaie ne vaut plus *rien*. Il faut une brouette de billets pour acheter du pain.",
       "bg": "dark",
       "image": "havenstein",
@@ -98,6 +92,11 @@
       "bg": "red",
       "rays": true,
       "image": "gardes"
+    },
+    {
+      "text": "La colère contre ce traité nourrit la montée des *nazis*.",
+      "image": "carica2",
+      "bg": "dark"
     },
     {
       "text": "Après la Seconde Guerre mondiale, un accord est trouvé : une partie de la dette sera payée… quand l'Allemagne sera *réunifiée*.",
