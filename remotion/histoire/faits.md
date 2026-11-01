@@ -8,47 +8,47 @@ quand le fait repose sur un seul auteur (on le dit alors à l'oral : « selon…
 1. [x] **L'argent n'a pas d'odeur** — « Cette phrase vient… des toilettes. » — Vespasien taxe l'urine des teinturiers ; les urinoirs parisiens s'appellent encore des vespasiennes. (Suétone)
 2. [x] **Cléopâtre et la Lune** — « Cléopâtre est plus proche de nous que des pyramides. » — Khéops ~2560 av. J.-C., Cléopâtre meurt en 30 av. J.-C. : elle vit plus près du premier pas sur la Lune que de la construction de la Grande Pyramide.
 3. [x] **Les pyramides n'ont pas été bâties par des esclaves** — « Tout ce qu'on vous a appris sur les pyramides est faux. » — Les tombes des ouvriers de Gizeh montrent des travailleurs nourris, soignés, enterrés avec honneur.
-4. [ ] **Œil pour œil** — « Cette loi a 3 700 ans. » — Le code d'Hammurabi (~1750 av. J.-C.), gravé sur une stèle de basalte au Louvre.
-5. [ ] **Les 300 n'étaient pas 300** — « Aux Thermopyles, ils n'étaient pas 300. » — Autour des 300 Spartiates, environ 7 000 Grecs ont combattu.
+4. [x] **Œil pour œil** — « Cette loi a 3 700 ans. » — Le code d'Hammurabi (~1750 av. J.-C.), gravé sur une stèle de basalte au Louvre.
+5. [x] **Les 300 n'étaient pas 300** — « Aux Thermopyles, ils n'étaient pas 300. » — Autour des 300 Spartiates, environ 7 000 Grecs ont combattu.
 6. [x] **Hannibal et ses 37 éléphants** — « Il a fait traverser les Alpes à des éléphants. » — En 218 av. J.-C., 37 éléphants partent d'Espagne vers Rome. (Polybe)
 7. [x] **Néron n'a pas joué du violon** — « Rome brûle, et Néron joue du violon ? Impossible. » — Le violon n'existe pas avant le XVIᵉ siècle ; Néron n'était même pas à Rome au début de l'incendie de 64. (Tacite)
-8. [ ] **Le cheval consul** — « Un empereur voulait faire d'un cheval un consul. » — Incitatus, le cheval de Caligula : écurie de marbre, mangeoire d'ivoire. (Suétone)
-9. [ ] **Le béton romain qui se répare tout seul** — « Ce béton a 2 000 ans et il se soigne encore. » — Des grains de chaux réactivés par l'eau colmatent les fissures (étude du MIT, 2023).
-10. [ ] **Pline meurt en sauvant des gens** — « Il a vu le Vésuve exploser et il a foncé dedans. » — En 79, Pline l'Ancien part en bateau secourir les habitants et meurt sur la plage de Stabies. (Pline le Jeune)
-11. [ ] **Les derniers mammouths** — « Quand les pyramides ont été construites, il restait des mammouths. » — Les derniers vivaient sur l'île Wrangel jusqu'à ~2000 av. J.-C.
+8. [x] **Le cheval consul** — « Un empereur voulait faire d'un cheval un consul. » — Incitatus, le cheval de Caligula : écurie de marbre, mangeoire d'ivoire. (Suétone)
+9. [x] **Le béton romain qui se répare tout seul** — « Ce béton a 2 000 ans et il se soigne encore. » — Des grains de chaux réactivés par l'eau colmatent les fissures (étude du MIT, 2023).
+10. [x] **Pline meurt en sauvant des gens** — « Il a vu le Vésuve exploser et il a foncé dedans. » — En 79, Pline l'Ancien part en bateau secourir les habitants et meurt sur la plage de Stabies. (Pline le Jeune)
+11. [x] **Les derniers mammouths** — « Quand les pyramides ont été construites, il restait des mammouths. » — Les derniers vivaient sur l'île Wrangel jusqu'à ~2000 av. J.-C.
 12. [ ] **Ötzi et ses 61 tatouages** — « Cet homme a 5 300 ans et il est tatoué. » — La momie des Alpes porte 61 tatouages, peut-être thérapeutiques.
 
 ## Moyen Âge et Renaissance
-13. [ ] **Le procès d'un pape mort** — « On a déterré un pape pour le juger. » — Le « concile cadavérique » de 897 : le pape Formose, mort, est jugé, condamné et jeté dans le Tibre.
-14. [ ] **Quand l'Angleterre parlait français** — « Pendant 300 ans, les rois d'Angleterre parlaient français. » — Après 1066, le français est la langue de la cour ; « Dieu et mon droit » reste la devise royale.
-15. [ ] **Oxford est plus vieux que les Aztèques** — « Cette université est plus ancienne qu'un empire. » — On enseigne à Oxford dès 1096 ; Tenochtitlan est fondée en 1325.
-16. [ ] **Le vent divin** — « Deux tempêtes ont sauvé le Japon. » — En 1274 et 1281, des typhons détruisent les flottes mongoles : les « kamikaze ».
-17. [ ] **L'homme le plus riche de l'histoire** — « Il a donné tellement d'or qu'il a ruiné l'Égypte. » — Mansa Moussa traverse Le Caire en 1324 et fait chuter le cours de l'or pendant des années.
-18. [ ] **La peste noire** — « En cinq ans, un Européen sur trois disparaît. » — 1347–1352 : entre un tiers et la moitié de l'Europe meurt.
-19. [ ] **La guerre de Cent Ans a duré 116 ans** — « La guerre de Cent Ans n'a pas duré cent ans. » — 1337–1453.
-20. [ ] **Jeanne d'Arc et ses vêtements** — « Elle a été brûlée… à cause de ses vêtements. » — Sa « rechute » en 1431 est retenue parce qu'elle a repris des habits d'homme.
-21. [ ] **L'épidémie de danse** — « En 1518, des centaines de personnes ont dansé jusqu'à l'épuisement. » — Strasbourg, juillet 1518 : la ville engage même des musiciens.
-22. [ ] **Colomb est mort sans le savoir** — « Il a découvert un continent et ne l'a jamais su. » — Jusqu'à sa mort en 1506, Colomb pense avoir atteint l'Asie.
-23. [ ] **Les 10 jours qui n'ont jamais existé** — « Le 5 octobre 1582 n'a jamais existé. » — Le calendrier grégorien passe directement du 4 au 15 octobre.
+13. [x] **Le procès d'un pape mort** — « On a déterré un pape pour le juger. » — Le « concile cadavérique » de 897 : le pape Formose, mort, est jugé, condamné et jeté dans le Tibre.
+14. [x] **Quand l'Angleterre parlait français** — « Pendant 300 ans, les rois d'Angleterre parlaient français. » — Après 1066, le français est la langue de la cour ; « Dieu et mon droit » reste la devise royale.
+15. [x] **Oxford est plus vieux que les Aztèques** — « Cette université est plus ancienne qu'un empire. » — On enseigne à Oxford dès 1096 ; Tenochtitlan est fondée en 1325.
+16. [x] **Le vent divin** — « Deux tempêtes ont sauvé le Japon. » — En 1274 et 1281, des typhons détruisent les flottes mongoles : les « kamikaze ».
+17. [x] **L'homme le plus riche de l'histoire** — « Il a donné tellement d'or qu'il a ruiné l'Égypte. » — Mansa Moussa traverse Le Caire en 1324 et fait chuter le cours de l'or pendant des années.
+18. [x] **La peste noire** — « En cinq ans, un Européen sur trois disparaît. » — 1347–1352 : entre un tiers et la moitié de l'Europe meurt.
+19. [x] **La guerre de Cent Ans a duré 116 ans** — « La guerre de Cent Ans n'a pas duré cent ans. » — 1337–1453.
+20. [x] **Jeanne d'Arc et ses vêtements** — « Elle a été brûlée… à cause de ses vêtements. » — Sa « rechute » en 1431 est retenue parce qu'elle a repris des habits d'homme.
+21. [x] **L'épidémie de danse** — « En 1518, des centaines de personnes ont dansé jusqu'à l'épuisement. » — Strasbourg, juillet 1518 : la ville engage même des musiciens.
+22. [x] **Colomb est mort sans le savoir** — « Il a découvert un continent et ne l'a jamais su. » — Jusqu'à sa mort en 1506, Colomb pense avoir atteint l'Asie.
+23. [x] **Les 10 jours qui n'ont jamais existé** — « Le 5 octobre 1582 n'a jamais existé. » — Le calendrier grégorien passe directement du 4 au 15 octobre.
 
 ## Temps modernes
-24. [ ] **La tulipe au prix d'une maison** — « Un bulbe de tulipe valait une maison. » — La tulipomanie hollandaise s'effondre en février 1637.
-25. [ ] **Galilée réhabilité en 1992** — « L'Église lui a donné raison… 359 ans plus tard. » — Condamné en 1633, réhabilité par Jean-Paul II en 1992.
-26. [ ] **Le grand incendie de Londres** — « La moitié de Londres brûle… et seulement 6 morts officiels. » — Septembre 1666 : 13 000 maisons détruites.
-27. [ ] **La taxe sur la barbe** — « En Russie, porter une barbe coûtait de l'argent. » — Pierre le Grand, 1698 : un jeton prouvait qu'on avait payé.
-28. [ ] **Le plus long règne** — « Il est devenu roi à 4 ans et l'est resté 72 ans. » — Louis XIV, 1643–1715.
-29. [ ] **Napoléon n'était pas petit** — « Napoléon n'était pas petit. » — Environ 1,69 m, dans la moyenne de l'époque ; la légende vient des caricatures anglaises.
-30. [ ] **Napoléon attaqué par des lapins** — « Napoléon a battu l'Europe, mais il a perdu contre des lapins. » — 1807, une chasse tourne mal : des centaines de lapins se ruent sur lui. (Mémoires de Thiébault)
-31. [ ] **Les dents de Waterloo** — « Des milliers de dentiers venaient d'un champ de bataille. » — Après 1815, on arrache les dents des soldats morts pour faire des prothèses.
-32. [ ] **La première photo de l'histoire** — « Cette photo a mis des heures à se prendre. » — Niépce, vers 1827, depuis sa fenêtre du Gras.
+24. [x] **La tulipe au prix d'une maison** — « Un bulbe de tulipe valait une maison. » — La tulipomanie hollandaise s'effondre en février 1637.
+25. [x] **Galilée réhabilité en 1992** — « L'Église lui a donné raison… 359 ans plus tard. » — Condamné en 1633, réhabilité par Jean-Paul II en 1992.
+26. [x] **Le grand incendie de Londres** — « La moitié de Londres brûle… et seulement 6 morts officiels. » — Septembre 1666 : 13 000 maisons détruites.
+27. [x] **La taxe sur la barbe** — « En Russie, porter une barbe coûtait de l'argent. » — Pierre le Grand, 1698 : un jeton prouvait qu'on avait payé.
+28. [x] **Le plus long règne** — « Il est devenu roi à 4 ans et l'est resté 72 ans. » — Louis XIV, 1643–1715.
+29. [x] **Napoléon n'était pas petit** — « Napoléon n'était pas petit. » — Environ 1,69 m, dans la moyenne de l'époque ; la légende vient des caricatures anglaises.
+30. [x] **Napoléon attaqué par des lapins** — « Napoléon a battu l'Europe, mais il a perdu contre des lapins. » — 1807, une chasse tourne mal : des centaines de lapins se ruent sur lui. (Mémoires de Thiébault)
+31. [x] **Les dents de Waterloo** — « Des milliers de dentiers venaient d'un champ de bataille. » — Après 1815, on arrache les dents des soldats morts pour faire des prothèses.
+32. [x] **La première photo de l'histoire** — « Cette photo a mis des heures à se prendre. » — Niépce, vers 1827, depuis sa fenêtre du Gras.
 33. [ ] **Le médecin qui voulait qu'on se lave les mains** — « Il a sauvé des mères, et on l'a enfermé. » — Semmelweis divise la mortalité par dix en 1847 ; il meurt interné en 1865.
 34. [ ] **Phineas Gage** — « Une barre de fer lui traverse le crâne. Il se relève. » — 1848 : il survit, mais sa personnalité change.
-35. [ ] **Le jour où Lincoln crée sa propre protection** — « Le jour de son assassinat, il crée… les services secrets. » — 14 avril 1865 : il signe la loi créant le Secret Service.
-36. [ ] **Darwin mangeait ses découvertes** — « Le père de l'évolution mangeait les animaux qu'il étudiait. » — Au « Glutton Club » de Cambridge puis pendant le voyage du Beagle.
+35. [x] **Le jour où Lincoln crée sa propre protection** — « Le jour de son assassinat, il crée… les services secrets. » — 14 avril 1865 : il signe la loi créant le Secret Service.
+36. [x] **Darwin mangeait ses découvertes** — « Le père de l'évolution mangeait les animaux qu'il étudiait. » — Au « Glutton Club » de Cambridge puis pendant le voyage du Beagle.
 37. [ ] **Le Mary Celeste** — « On a retrouvé ce navire intact… sans personne à bord. » — 1872, au large des Açores.
-38. [ ] **La statue de la Liberté était marron** — « La statue de la Liberté n'était pas verte. » — Cuivre brun-orangé en 1886, devenu vert avec l'oxydation ; structure signée Eiffel.
+38. [x] **La statue de la Liberté était marron** — « La statue de la Liberté n'était pas verte. » — Cuivre brun-orangé en 1886, devenu vert avec l'oxydation ; structure signée Eiffel.
 39. [ ] **La tour Eiffel devait être détruite** — « La tour Eiffel devait disparaître après 20 ans. » — Sauvée par ses antennes de radio militaire.
-40. [ ] **La guerre de 38 minutes** — « La guerre la plus courte de l'histoire a duré 38 minutes. » — Royaume-Uni contre Zanzibar, 27 août 1896.
+40. [x] **La guerre de 38 minutes** — « La guerre la plus courte de l'histoire a duré 38 minutes. » — Royaume-Uni contre Zanzibar, 27 août 1896.
 
 ## XXᵉ siècle
 41. [ ] **Le vol de la Joconde** — « La Joconde est devenue célèbre… parce qu'on l'a volée. » — Août 1911 : Vincenzo Peruggia ; Picasso est interrogé.
