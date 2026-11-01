@@ -1,0 +1,136 @@
+{
+  "id": "010-pline",
+  "titre": "Pline meurt en sauvant des gens",
+  "duree": 60,
+  "sources": [
+    "Pline le Jeune, Lettres VI.16 et VI.20 à Tacite (nuage en pin parasol, appel de Rectina, « La fortune sourit aux audacieux », mort à Stabies)",
+    "Éruption du Vésuve en 79 ; « éruption plinienne »"
+  ],
+  "images": {
+    "eruption": {
+      "url": "https://images.metmuseum.org/CRDImages/ep/original/DP155336.jpg",
+      "cut": false,
+      "credit": "Une éruption du Vésuve, 1824 — The Met (CC0)"
+    },
+    "nuit": {
+      "url": "https://openaccess-cdn.clevelandart.org/1949.541/1949.541_print.jpg",
+      "cut": false,
+      "credit": "Le Vésuve à minuit, 1868 — Cleveland Museum of Art (CC0)"
+    },
+    "erupt2": {
+      "url": "https://openaccess-cdn.clevelandart.org/1959.294/1959.294_print.jpg",
+      "cut": false,
+      "credit": "Éruption du Vésuve en 1769, 1808 — Cleveland Museum of Art (CC0)"
+    },
+    "print": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP856658.jpg",
+      "cut": false,
+      "credit": "Éruption du Vésuve, 1779, 1779 — The Met (CC0)"
+    },
+    "baie": {
+      "url": "https://openaccess-cdn.clevelandart.org/1968.69/1968.69_print.jpg",
+      "cut": false,
+      "credit": "Le Vésuve et la baie de Naples depuis une grotte, 1820 — Cleveland Museum of Art (CC0)"
+    },
+    "ruines": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP-27202-001.jpg",
+      "cut": false,
+      "credit": "Ruines de Pompéi, 1853 — The Met (CC0)"
+    },
+    "forum": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/06500/06582v.jpg",
+      "cut": false,
+      "credit": "Le forum de Pompéi, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "rue": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/06500/06586v.jpg",
+      "cut": false,
+      "credit": "Rue de Pompéi, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "eventail": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/LC-14_73-001.jpg",
+      "cut": true,
+      "credit": "Éventail : éruption du Vésuve, ca. 1815 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Il a vu le Vésuve exploser… et il a foncé *dedans*.",
+      "bg": "red",
+      "rays": true,
+      "image": "eruption"
+    },
+    {
+      "text": "Baie de Naples, an *79*. L'amiral de la flotte romaine s'appelle Pline l'Ancien.",
+      "bg": "dark",
+      "image": "baie",
+      "date": "79 apr. J.-C."
+    },
+    {
+      "text": "C'est aussi le plus grand *savant* de son époque : il a écrit une encyclopédie de trente-sept livres.",
+      "bg": "dark",
+      "image": "print"
+    },
+    {
+      "text": "Un jour, sa sœur lui montre un nuage *étrange* au-dessus de la montagne.",
+      "bg": "dark",
+      "image": "nuit"
+    },
+    {
+      "text": "Un nuage immense, en forme de *pin* parasol.",
+      "bg": "dark",
+      "image": "eventail",
+      "zoom": true
+    },
+    {
+      "text": "Pline veut l'observer de plus près. Puis il reçoit un message : une amie, Rectina, est *piégée* au pied du volcan.",
+      "bg": "dark",
+      "image": "erupt2"
+    },
+    {
+      "text": "Alors il change de plan. Il lance ses navires de guerre pour *sauver* les habitants.",
+      "bg": "red",
+      "rays": true,
+      "image": "baie"
+    },
+    {
+      "text": "Les cendres tombent, des pierres pleuvent sur les bateaux. Son pilote veut faire *demi-tour*.",
+      "bg": "dark",
+      "image": "eruption",
+      "zoom": true
+    },
+    {
+      "text": "Pline répond : « La fortune sourit aux *audacieux* ! »",
+      "bg": "red",
+      "rays": true,
+      "image": "nuit",
+      "stamp": "FORTES FORTUNA IUVAT"
+    },
+    {
+      "text": "Il accoste à Stabies, chez un ami, et il essaie de rassurer tout le *monde*.",
+      "bg": "dark",
+      "image": "ruines"
+    },
+    {
+      "text": "Le lendemain, sur la plage, l'air devient irrespirable. Pline s'effondre et ne se relève *pas*.",
+      "bg": "dark",
+      "image": "forum"
+    },
+    {
+      "text": "Son neveu de dix-sept ans, resté à l'abri, racontera tout dans deux lettres à l'historien *Tacite*.",
+      "bg": "dark",
+      "image": "rue"
+    },
+    {
+      "text": "Le premier récit d'une éruption de l'histoire. Aujourd'hui, les volcanologues parlent encore d'éruption *plinienne*.",
+      "bg": "red",
+      "rays": true,
+      "image": "erupt2"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

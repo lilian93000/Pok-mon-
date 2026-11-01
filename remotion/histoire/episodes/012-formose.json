@@ -1,0 +1,139 @@
+{
+  "id": "012-formose",
+  "titre": "Le procès d'un pape mort",
+  "duree": 60,
+  "sources": [
+    "Concile cadavérique (janvier 897) : Étienne VI fait exhumer et juger le pape Formose (mort en 896)",
+    "Liutprand de Crémone ; Auxilius de Naples",
+    "Étienne VI étranglé en prison la même année",
+    "Théodore II et Jean IX annulent le jugement (897-898) ; Serge III le rétablit (904)"
+  ],
+  "images": {
+    "pape1": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP874189.jpg",
+      "cut": false,
+      "credit": "Portrait du pape Pie IV, mid-16th century — The Met (CC0)"
+    },
+    "pape2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP885760.jpg",
+      "cut": false,
+      "credit": "Portrait du pape Sixte V, 1585 — The Met (CC0)"
+    },
+    "medaille": {
+      "url": "https://openaccess-cdn.clevelandart.org/1984.16/1984.16_print.jpg",
+      "cut": true,
+      "credit": "Médaille du pape Paul II, c. 1468 — Cleveland Museum of Art (CC0)"
+    },
+    "medaille2": {
+      "url": "https://openaccess-cdn.clevelandart.org/1916.815/1916.815_print.jpg",
+      "cut": true,
+      "credit": "Médaille du pape Sixte IV, c. 1476–82 — Cleveland Museum of Art (CC0)"
+    },
+    "buste": {
+      "url": "https://openaccess-cdn.clevelandart.org/1957.496/1957.496_print.jpg",
+      "cut": true,
+      "credit": "Buste du pape Innocent X, designed 1647–48; cast 1650–1700 — Cleveland Museum of Art (CC0)"
+    },
+    "tibre": {
+      "url": "https://images.metmuseum.org/CRDImages/rl/original/sf-rlc-1975-1-677.jpg",
+      "cut": false,
+      "credit": "Vue du Tibre, before 1789 — The Met (CC0)"
+    },
+    "tibre2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP807776.jpg",
+      "cut": false,
+      "credit": "Le Tibre aux portes de Rome, n.d. — The Met (CC0)"
+    },
+    "pont": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP-13897-027.jpg",
+      "cut": false,
+      "credit": "Ponte Rotto, Rome, 1842, 1842 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "On a déterré un pape… pour lui faire un *procès*.",
+      "bg": "red",
+      "rays": true,
+      "image": "buste"
+    },
+    {
+      "text": "Rome, *896*. Le pape Formose meurt. Fin de l'histoire ? Pas du tout.",
+      "bg": "dark",
+      "image": "pape1",
+      "date": "896"
+    },
+    {
+      "text": "Son successeur, Étienne VI, le *déteste*. Une histoire de politique et de trahison.",
+      "bg": "dark",
+      "image": "pape2"
+    },
+    {
+      "text": "Neuf mois après sa mort, il fait *déterrer* son cadavre.",
+      "bg": "dark",
+      "image": "tibre2"
+    },
+    {
+      "text": "On l'habille avec ses vêtements de pape… et on l'assoit sur un *trône*, face au tribunal.",
+      "bg": "dark",
+      "image": "buste",
+      "zoom": true
+    },
+    {
+      "text": "Un diacre, debout à côté du corps, est chargé de *répondre* à sa place.",
+      "bg": "dark",
+      "image": "medaille"
+    },
+    {
+      "text": "Le procès commence. Étienne hurle ses accusations… au *cadavre*.",
+      "bg": "red",
+      "rays": true,
+      "image": "pape2"
+    },
+    {
+      "text": "Le verdict tombe : *coupable*.",
+      "bg": "red",
+      "rays": true,
+      "image": "medaille2",
+      "stamp": "COUPABLE"
+    },
+    {
+      "text": "On lui arrache ses habits sacrés. On lui coupe les trois *doigts* qui servaient à bénir.",
+      "bg": "dark",
+      "image": "buste"
+    },
+    {
+      "text": "Puis son corps est jeté dans le *Tibre*.",
+      "bg": "dark",
+      "image": "tibre"
+    },
+    {
+      "text": "Des historiens appelleront ça le « concile *cadavérique* ».",
+      "bg": "dark",
+      "image": "pont",
+      "date": "897"
+    },
+    {
+      "text": "Mais Rome est choquée. Quelques mois plus tard, Étienne VI est jeté en prison… et *étranglé*.",
+      "bg": "red",
+      "rays": true,
+      "image": "pape1"
+    },
+    {
+      "text": "Quant au corps de Formose, il aurait été repêché par un *moine*, puis réenterré à Saint-Pierre.",
+      "bg": "dark",
+      "image": "medaille"
+    },
+    {
+      "text": "Et le feuilleton continue : un pape suivant annule ce procès… puis, quelques années plus tard, un autre le *rétablit* !",
+      "image": "pape2",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

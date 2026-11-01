@@ -1,0 +1,143 @@
+{
+  "id": "009-beton",
+  "titre": "Le béton romain qui se répare tout seul",
+  "duree": 60,
+  "sources": [
+    "Panthéon de Rome (vers 125), coupole de 43 m en béton non armé",
+    "Jackson et al., 2017 (béton marin : cristaux de tobermorite formés par l'eau de mer)",
+    "Seymour, Masic et al., MIT, Science Advances 2023 (nodules de chaux, « mélange à chaud », autoréparation)",
+    "Port de Césarée Maritime (Hérode, Iᵉʳ s. av. J.-C.), béton à la pouzzolane"
+  ],
+  "images": {
+    "panth": {
+      "url": "https://images.metmuseum.org/CRDImages/rl/original/DP-19531-075.jpg",
+      "cut": false,
+      "credit": "Vue du Panthéon, Rome, early 1670s — The Met (CC0)"
+    },
+    "panth2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/10100/10183v.jpg",
+      "cut": false,
+      "credit": "Le Panthéon, Rome, 1910-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "plan": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP870370.jpg",
+      "cut": false,
+      "credit": "Le Panthéon, gravure, 16th century — The Met (CC0)"
+    },
+    "port": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP-13033-001.jpg",
+      "cut": false,
+      "credit": "Vue du port de Rome, 1554 — The Met (CC0)"
+    },
+    "aqueduc": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP-13004-005.jpg",
+      "cut": false,
+      "credit": "Aqueduc romain, 1860s — The Met (CC0)"
+    },
+    "tivoli": {
+      "url": "https://images.metmuseum.org/CRDImages/ad/original/DT208249.jpg",
+      "cut": false,
+      "credit": "Vue près de Tivoli, 1832 — The Met (CC0)"
+    },
+    "vesuve": {
+      "url": "https://images.metmuseum.org/CRDImages/ep/original/DP155336.jpg",
+      "cut": false,
+      "credit": "Une éruption du Vésuve, 1824 — The Met (CC0)"
+    },
+    "rome": {
+      "url": "https://images.metmuseum.org/CRDImages/ep/original/DT1418.jpg",
+      "cut": false,
+      "credit": "Rome antique, Panini, 1757 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Ce béton a deux mille ans… et il se *répare* encore tout seul.",
+      "bg": "red",
+      "rays": true,
+      "image": "panth2"
+    },
+    {
+      "text": "Rome, vers l'an *125*. L'empereur Hadrien fait reconstruire le Panthéon.",
+      "bg": "dark",
+      "image": "panth",
+      "date": "≈ 125 apr. J.-C."
+    },
+    {
+      "text": "Sa coupole fait *quarante-trois* mètres de large. En béton. Sans une seule barre de fer.",
+      "bg": "dark",
+      "image": "plan",
+      "counter": {
+        "to": 43,
+        "suffix": " MÈTRES"
+      }
+    },
+    {
+      "text": "Deux mille ans plus tard, c'est toujours la plus grande coupole en béton non armé du *monde* !",
+      "bg": "red",
+      "rays": true,
+      "image": "panth2",
+      "zoom": true
+    },
+    {
+      "text": "Notre béton moderne, lui, commence souvent à se fissurer au bout de cinquante ou cent *ans*.",
+      "bg": "dark",
+      "image": "aqueduc"
+    },
+    {
+      "text": "Alors, c'est quoi le *secret* des Romains ?",
+      "bg": "dark",
+      "image": "rome"
+    },
+    {
+      "text": "D'abord, de la cendre *volcanique*, venue des environs du Vésuve.",
+      "bg": "dark",
+      "image": "vesuve"
+    },
+    {
+      "text": "Dans les ports, l'eau de mer ne détruit pas leur béton… elle le *renforce* ! De nouveaux cristaux poussent à l'intérieur.",
+      "bg": "dark",
+      "image": "port"
+    },
+    {
+      "text": "À Césarée, en Israël, un port en béton romain tient sous l'eau depuis deux mille *ans*.",
+      "image": "port",
+      "bg": "dark",
+      "zoom": true
+    },
+    {
+      "text": "En 2023, des chercheurs du *MIT* trouvent une autre clé : de petits grains blancs de chaux.",
+      "bg": "dark",
+      "image": "plan",
+      "date": "2023"
+    },
+    {
+      "text": "On croyait que c'était un défaut de fabrication. En fait, c'est une *arme*.",
+      "bg": "red",
+      "rays": true,
+      "image": "panth"
+    },
+    {
+      "text": "Quand une fissure apparaît, l'eau s'infiltre, dissout la chaux… et la fissure se *rebouche* toute seule.",
+      "bg": "dark",
+      "image": "tivoli"
+    },
+    {
+      "text": "Un béton qui se *soigne*. Il y a deux mille ans.",
+      "bg": "red",
+      "rays": true,
+      "image": "panth2",
+      "stamp": "AUTORÉPARANT"
+    },
+    {
+      "text": "Deux mille ans plus tard, Rome a encore des *leçons* à nous donner.",
+      "image": "rome",
+      "bg": "dark"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

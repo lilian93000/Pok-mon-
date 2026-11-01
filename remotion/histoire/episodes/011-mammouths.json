@@ -1,0 +1,149 @@
+{
+  "id": "011-mammouths",
+  "titre": "Les derniers mammouths",
+  "duree": 60,
+  "sources": [
+    "Vartanyan et al. 1993 ; Dalén et al., Cell 2024 : mammouths de l'île Wrangel jusqu'à il y a ~4 000 ans",
+    "Grande pyramide de Khéops : vers 2560 av. J.-C.",
+    "Disparition des mammouths du continent : il y a ~10 000 ans"
+  ],
+  "images": {
+    "pyr1": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP261159.jpg",
+      "cut": false,
+      "credit": "Pyramides de Gizeh, 1865-69 — The Met (CC0)"
+    },
+    "sphinx": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP139899.jpg",
+      "cut": false,
+      "credit": "Sphinx et pyramides, 1851-52 — The Met (CC0)"
+    },
+    "mam": {
+      "url": "https://tile.loc.gov/image-services/iiif/service:pnp:highsm:23100:23193/full/pct:50/0/default.jpg",
+      "cut": false,
+      "credit": "Sculpture de mammouth laineux, Mammoth Lakes (Carol M. Highsmith), 2012-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "mam2": {
+      "url": "https://tile.loc.gov/image-services/iiif/service:pnp:highsm:23200:23285/full/pct:25/0/default.jpg",
+      "cut": false,
+      "credit": "Sculpture de mammouth laineux (Carol M. Highsmith), 2012-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "mini": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DP-14153-047.jpg",
+      "cut": true,
+      "credit": "Mammouth de Sibérie miniature, 1900 — The Met (CC0)"
+    },
+    "carte": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP862913.jpg",
+      "cut": false,
+      "credit": "La Sibérie, jeu de géographie, 1838–55 — The Met (CC0)"
+    },
+    "glace": {
+      "url": "https://openaccess-cdn.clevelandart.org/2002.44/2002.44_print.jpg",
+      "cut": false,
+      "credit": "Paysage de montagne, c. 1865–1866 — Cleveland Museum of Art (CC0)"
+    },
+    "statue": {
+      "url": "https://openaccess-cdn.clevelandart.org/1992.236/1992.236_print.jpg",
+      "cut": false,
+      "credit": "Statue tombée au Ramesseum, Thèbes, 1857 — Cleveland Museum of Art (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Quand les pyramides ont été construites… il restait encore des *mammouths*.",
+      "bg": "red",
+      "rays": true,
+      "image": "mam"
+    },
+    {
+      "text": "On imagine les mammouths avec les hommes des *cavernes*. Il y a très, très longtemps.",
+      "bg": "dark",
+      "image": "mam2"
+    },
+    {
+      "text": "Et c'est vrai : sur les continents, ils disparaissent il y a environ *dix mille* ans.",
+      "bg": "dark",
+      "image": "glace"
+    },
+    {
+      "text": "Mais pas *partout*.",
+      "bg": "red",
+      "rays": true,
+      "image": "mini"
+    },
+    {
+      "text": "Au nord de la Sibérie, il y a une île perdue dans l'océan Arctique : l'île *Wrangel*.",
+      "bg": "dark",
+      "image": "carte",
+      "label": "ÎLE WRANGEL"
+    },
+    {
+      "text": "Quand la mer monte, après la dernière glaciation, quelques mammouths s'y retrouvent *piégés*.",
+      "bg": "dark",
+      "image": "glace",
+      "zoom": true
+    },
+    {
+      "text": "Coupés du monde, ils survivent là-bas pendant encore *six mille* ans !",
+      "bg": "dark",
+      "image": "mam2",
+      "counter": {
+        "to": 6000,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "Et ce n'étaient pas des mammouths *nains*, comme on l'a longtemps cru. Ils avaient une taille normale.",
+      "image": "mam",
+      "bg": "dark"
+    },
+    {
+      "text": "On le sait grâce à leurs os et à leurs défenses, retrouvés sur l'île et datés au *carbone 14*.",
+      "image": "mini",
+      "bg": "dark",
+      "zoom": true
+    },
+    {
+      "text": "Pendant ce temps, en Égypte, on construit la grande pyramide de *Khéops*.",
+      "bg": "dark",
+      "image": "pyr1",
+      "date": "≈ 2560 av. J.-C."
+    },
+    {
+      "text": "Les derniers mammouths disparaissent vers *deux mille* avant Jésus-Christ.",
+      "bg": "dark",
+      "image": "mini",
+      "date": "≈ 2000 av. J.-C."
+    },
+    {
+      "text": "Soit plus de *cinq cents* ans après la pyramide.",
+      "bg": "red",
+      "rays": true,
+      "image": "sphinx"
+    },
+    {
+      "text": "Ils n'étaient plus que quelques *centaines*, sur une île de la taille de la Corse.",
+      "bg": "dark",
+      "image": "mam",
+      "zoom": true
+    },
+    {
+      "text": "Pourquoi ont-ils disparu d'un coup ? Une maladie, une tempête, des chasseurs ? Personne ne le sait *encore*.",
+      "bg": "dark",
+      "image": "statue"
+    },
+    {
+      "text": "Les pyramides et les mammouths ont *partagé* la même planète.",
+      "bg": "red",
+      "rays": true,
+      "image": "pyr1",
+      "stamp": "EN MÊME TEMPS"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
