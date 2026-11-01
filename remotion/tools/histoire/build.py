@@ -134,4 +134,6 @@ props = {"id": ep["id"], "fps": FPS, "duration": round(duration, 3), "audio": au
          "music": None,  # musique ajoutée dans TikTok (thème Succession), pas dans le fichier
          "words": [{k: w[k] for k in ("w", "kw", "start", "end", "beat")} for w in words], "beats": beats}
 json.dump(props, open(pub / "props.json", "w"), ensure_ascii=False, indent=1)
+if audio:
+    (pub / "ready").touch()  # signal pour tools/histoire/render_queue.sh
 print(f"{'voix ElevenLabs' if audio else 'minutage ESTIMÉ (pas de clé)'} — {duration:.1f} s, {len(words)} mots, {len(beats)} plans")
