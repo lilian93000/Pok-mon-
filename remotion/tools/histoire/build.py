@@ -17,7 +17,7 @@ pub.mkdir(parents=True, exist_ok=True)
 words = []  # {w, kw, beat}
 for i, b in enumerate(ep["beats"]):
     inside = False
-    text = b["text"].replace("« ", "«\u00a0").replace(" »", "\u00a0»").replace(" ?", "\u00a0?").replace(" :", "\u00a0:")
+    text = b["text"].replace("« ", "«\u00a0").replace(" »", "\u00a0»").replace(" ?", "\u00a0?").replace(" :", "\u00a0:").replace(" !", "\u00a0!")
     for tok in text.split(" "):
         kw = inside
         for ch in tok:
@@ -32,7 +32,11 @@ audio = None
 if key:
     voice = os.environ.get("ELEVENLABS_VOICE_ID", "3HZyQcLKlT0a3RDeXVsP")  # voix choisie par l'utilisateur
     cache = pub / "voice.json"
-    if not cache.exists() or json.load(open(cache)).get("text") != full:
+    # Réglages « énergiques » : moins de stabilité = plus d'intonation, style poussé, débit +12 %
+    settings = {"stability": 0.28, "similarity_boost": 0.8, "style": 0.7, "use_speaker_boost": True, "speed": 1.12}
+    settings.update(ep.get("voix", {}))
+    sig = {"text": full, "voice": voice, "settings": settings}
+    if not cache.exists() or json.load(open(cache)).get("sig") != sig:
         if not voice:
             req = urllib.request.Request("https://api.elevenlabs.io/v1/voices", headers={"xi-api-key": key})
             voices = json.load(urllib.request.urlopen(req, timeout=60))["voices"]
@@ -41,14 +45,14 @@ if key:
         body = json.dumps({
             "text": full,
             "model_id": os.environ.get("ELEVENLABS_MODEL", "eleven_multilingual_v2"),
-            "voice_settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.35, "use_speaker_boost": True},
+            "voice_settings": settings,
         }).encode()
         req = urllib.request.Request(
             f"https://api.elevenlabs.io/v1/text-to-speech/{voice}/with-timestamps?output_format=mp3_44100_128",
             data=body, headers={"xi-api-key": key, "Content-Type": "application/json"})
         r = json.load(urllib.request.urlopen(req, timeout=300))
         (pub / "voice.mp3").write_bytes(base64.b64decode(r["audio_base64"]))
-        json.dump({"text": full, "alignment": r["alignment"]}, open(cache, "w"))
+        json.dump({"sig": sig, "alignment": r["alignment"]}, open(cache, "w"))
     al = json.load(open(cache))["alignment"]
     st, en = al["character_start_times_seconds"], al["character_end_times_seconds"]
     pos = 0

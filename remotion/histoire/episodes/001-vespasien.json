@@ -60,7 +60,7 @@
       "rays": true
     },
     {
-      "text": "Vous connaissez cette phrase. Mais elle vient d'un endroit… très *gênant*.",
+      "text": "Vous connaissez cette phrase ! Mais elle vient d'un endroit… très *gênant*.",
       "image": "toga",
       "bg": "dark"
     },
@@ -71,7 +71,7 @@
       "date": "69 apr. J.-C."
     },
     {
-      "text": "*Quatre* empereurs en un an.",
+      "text": "*Quatre* empereurs en un an !",
       "bg": "dark",
       "heads": 4
     },
@@ -102,7 +102,7 @@
       "bg": "dark"
     },
     {
-      "text": "l'*urine*.",
+      "text": "l'*urine* !",
       "image": "jar",
       "bg": "red",
       "rays": true,
@@ -148,7 +148,7 @@
       "rays": true
     },
     {
-      "text": "*Pecunia non olet*.",
+      "text": "*Pecunia non olet* !",
       "image": "vesp",
       "bg": "red",
       "rays": true,
@@ -160,7 +160,7 @@
       "bg": "dark"
     },
     {
-      "text": "Les *vespasiennes*.",
+      "text": "Les *vespasiennes* !",
       "image": "vesp",
       "bg": "red",
       "rays": true,
