@@ -6,12 +6,12 @@ quand le fait repose sur un seul auteur (on le dit alors à l'oral : « selon…
 
 ## Antiquité
 1. [x] **L'argent n'a pas d'odeur** — « Cette phrase vient… des toilettes. » — Vespasien taxe l'urine des teinturiers ; les urinoirs parisiens s'appellent encore des vespasiennes. (Suétone)
-2. [ ] **Cléopâtre et la Lune** — « Cléopâtre est plus proche de nous que des pyramides. » — Khéops ~2560 av. J.-C., Cléopâtre meurt en 30 av. J.-C. : elle vit plus près du premier pas sur la Lune que de la construction de la Grande Pyramide.
-3. [ ] **Les pyramides n'ont pas été bâties par des esclaves** — « Tout ce qu'on vous a appris sur les pyramides est faux. » — Les tombes des ouvriers de Gizeh montrent des travailleurs nourris, soignés, enterrés avec honneur.
+2. [x] **Cléopâtre et la Lune** — « Cléopâtre est plus proche de nous que des pyramides. » — Khéops ~2560 av. J.-C., Cléopâtre meurt en 30 av. J.-C. : elle vit plus près du premier pas sur la Lune que de la construction de la Grande Pyramide.
+3. [x] **Les pyramides n'ont pas été bâties par des esclaves** — « Tout ce qu'on vous a appris sur les pyramides est faux. » — Les tombes des ouvriers de Gizeh montrent des travailleurs nourris, soignés, enterrés avec honneur.
 4. [ ] **Œil pour œil** — « Cette loi a 3 700 ans. » — Le code d'Hammurabi (~1750 av. J.-C.), gravé sur une stèle de basalte au Louvre.
 5. [ ] **Les 300 n'étaient pas 300** — « Aux Thermopyles, ils n'étaient pas 300. » — Autour des 300 Spartiates, environ 7 000 Grecs ont combattu.
-6. [ ] **Hannibal et ses 37 éléphants** — « Il a fait traverser les Alpes à des éléphants. » — En 218 av. J.-C., 37 éléphants partent d'Espagne vers Rome. (Polybe)
-7. [ ] **Néron n'a pas joué du violon** — « Rome brûle, et Néron joue du violon ? Impossible. » — Le violon n'existe pas avant le XVIᵉ siècle ; Néron n'était même pas à Rome au début de l'incendie de 64. (Tacite)
+6. [x] **Hannibal et ses 37 éléphants** — « Il a fait traverser les Alpes à des éléphants. » — En 218 av. J.-C., 37 éléphants partent d'Espagne vers Rome. (Polybe)
+7. [x] **Néron n'a pas joué du violon** — « Rome brûle, et Néron joue du violon ? Impossible. » — Le violon n'existe pas avant le XVIᵉ siècle ; Néron n'était même pas à Rome au début de l'incendie de 64. (Tacite)
 8. [ ] **Le cheval consul** — « Un empereur voulait faire d'un cheval un consul. » — Incitatus, le cheval de Caligula : écurie de marbre, mangeoire d'ivoire. (Suétone)
 9. [ ] **Le béton romain qui se répare tout seul** — « Ce béton a 2 000 ans et il se soigne encore. » — Des grains de chaux réactivés par l'eau colmatent les fissures (étude du MIT, 2023).
 10. [ ] **Pline meurt en sauvant des gens** — « Il a vu le Vésuve exploser et il a foncé dedans. » — En 79, Pline l'Ancien part en bateau secourir les habitants et meurt sur la plage de Stabies. (Pline le Jeune)

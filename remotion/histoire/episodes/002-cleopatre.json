@@ -1,0 +1,169 @@
+{
+  "id": "002-cleopatre",
+  "titre": "Cléopâtre est plus proche de nous que des pyramides",
+  "duree": 60,
+  "sources": [
+    "Grande pyramide de Khéops : vers 2560 av. J.-C.",
+    "Mort de Cléopâtre VII : 30 av. J.-C.",
+    "Apollo 11 : 1969",
+    "Plutarque, Vie d'Antoine 27 (langues de Cléopâtre, première Ptolémée à parler égyptien)"
+  ],
+  "images": {
+    "cleo": {
+      "url": "https://images.metmuseum.org/CRDImages/eg/original/DT10854.jpg",
+      "cut": true,
+      "credit": "Statue d'une reine ptolémaïque, peut-être Cléopâtre VII, The Met (CC0)"
+    },
+    "reine": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP333700.jpg",
+      "cut": true,
+      "credit": "Tête d'une reine ptolémaïque, The Met (CC0)"
+    },
+    "pyr1": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP261159.jpg",
+      "cut": false,
+      "credit": "Pyramides de Gizeh, 1865-69, The Met (CC0)"
+    },
+    "pyr2": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP261156.jpg",
+      "cut": false,
+      "credit": "Pyramides de Gizeh, 1865-69, The Met (CC0)"
+    },
+    "sphinx": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP139899.jpg",
+      "cut": false,
+      "credit": "Sphinx et pyramides, 1851-52, The Met (CC0)"
+    },
+    "lune": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP-15797-035.jpg",
+      "cut": false,
+      "credit": "Buzz Aldrin sur la Lune, 1969, The Met (CC0)"
+    },
+    "aldrin": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP-15797-029.jpg",
+      "cut": false,
+      "credit": "Buzz Aldrin et le drapeau, 1969, The Met (CC0)"
+    },
+    "ptol": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP-16199-002.jpg",
+      "cut": true,
+      "credit": "Statère d'or de Ptolémée Ier, The Met (CC0)"
+    },
+    "oct": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP138747.jpg",
+      "cut": true,
+      "credit": "Octodrachme d'or de Ptolémée III, The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Cléopâtre est plus proche de *nous*… que des pyramides.",
+      "image": "cleo",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Ça paraît impossible. Et pourtant, faites le *calcul*.",
+      "image": "pyr1",
+      "bg": "dark"
+    },
+    {
+      "text": "La grande pyramide de Khéops est achevée vers *2560* avant Jésus-Christ.",
+      "image": "pyr2",
+      "date": "≈ 2560 av. J.-C.",
+      "bg": "dark"
+    },
+    {
+      "text": "Cléopâtre, elle, meurt en *30* avant Jésus-Christ.",
+      "image": "cleo",
+      "date": "30 av. J.-C.",
+      "label": "CLÉOPÂTRE VII",
+      "bg": "dark"
+    },
+    {
+      "text": "Entre les deux : plus de *deux mille cinq cents* ans !",
+      "image": "pyr2",
+      "counter": {
+        "to": 2530,
+        "suffix": " ANS"
+      },
+      "bg": "dark"
+    },
+    {
+      "text": "Et entre Cléopâtre et le premier pas sur la *Lune*, en 1969 ?",
+      "image": "lune",
+      "date": "1969",
+      "bg": "dark"
+    },
+    {
+      "text": "Environ *deux mille* ans.",
+      "image": "aldrin",
+      "counter": {
+        "to": 1999,
+        "suffix": " ANS"
+      },
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Pour Cléopâtre, les pyramides étaient déjà de *vieilles* ruines.",
+      "image": "sphinx",
+      "bg": "dark"
+    },
+    {
+      "text": "Pour elle, Khéops était plus lointain que Jules *César* ne l'est pour nous !",
+      "image": "pyr2",
+      "bg": "dark",
+      "zoom": true
+    },
+    {
+      "text": "Des voyageurs grecs venaient les visiter, comme des *touristes*.",
+      "image": "pyr1",
+      "bg": "dark"
+    },
+    {
+      "text": "Et Cléopâtre n'était même pas vraiment *égyptienne* !",
+      "image": "reine",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Sa famille, les Ptolémées, venait de *Macédoine*, en Grèce.",
+      "image": "ptol",
+      "label": "PTOLÉMÉE Iᵉʳ",
+      "bg": "dark"
+    },
+    {
+      "text": "Pendant trois siècles, ils règnent sur l'Égypte… sans parler sa *langue*.",
+      "image": "oct",
+      "bg": "dark"
+    },
+    {
+      "text": "Selon Plutarque, Cléopâtre est la *première* de sa famille à apprendre l'égyptien.",
+      "image": "cleo",
+      "zoom": true,
+      "bg": "dark"
+    },
+    {
+      "text": "Elle parlait aussi aux Hébreux, aux Arabes, aux Mèdes… dans leur *propre* langue.",
+      "image": "reine",
+      "bg": "dark"
+    },
+    {
+      "text": "La dernière reine d'Égypte est plus proche de *nous*… que des bâtisseurs de pyramides.",
+      "image": "cleo",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Pensez-y, la prochaine fois que vous verrez une *pyramide*.",
+      "image": "sphinx",
+      "bg": "dark"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "outro": true,
+      "bg": "dark"
+    }
+  ]
+}

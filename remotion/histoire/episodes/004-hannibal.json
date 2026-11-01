@@ -1,0 +1,147 @@
+{
+  "id": "004-hannibal",
+  "titre": "Hannibal et les éléphants",
+  "duree": 60,
+  "sources": [
+    "Polybe III (37 éléphants, radeaux couverts de terre sur le Rhône, pertes de l'armée)",
+    "Tite-Live XXI.37 (rocher brisé au feu et au vinaigre), XXI.56 (éléphants morts après la Trébie), XXII.2 (Hannibal sur le dernier éléphant, perd un œil)",
+    "Cicéron : « Hannibal ad portas »"
+  ],
+  "images": {
+    "eleph": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/118259.jpg",
+      "cut": true,
+      "credit": "Éléphant du Sénégal, Barye, vers 1874, The Met (CC0)"
+    },
+    "lamp": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP145546.jpg",
+      "cut": true,
+      "credit": "Lampe en forme de tête d'éléphant, IIIᵉ s. av. J.-C., The Met (CC0)"
+    },
+    "rider": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP104920.jpg",
+      "cut": true,
+      "credit": "Cavalier coiffé d'une peau d'éléphant, IIIᵉ s. av. J.-C., The Met (CC0)"
+    },
+    "triumph": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP838027.jpg",
+      "cut": false,
+      "credit": "Le Triomphe d'Hannibal, 1784-92, The Met (CC0)"
+    },
+    "glacier": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP114485.jpg",
+      "cut": false,
+      "credit": "Glacier suisse, années 1850, The Met (CC0)"
+    },
+    "montblanc": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP139264.jpg",
+      "cut": false,
+      "credit": "L'ascension du mont Blanc, 1861, The Met (CC0)"
+    },
+    "alpes": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP874808.jpg",
+      "cut": false,
+      "credit": "Hannibal franchissant les Alpes (allégorie), 1636, The Met (CC0)"
+    },
+    "head": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP328487.jpg",
+      "cut": true,
+      "credit": "Tête d'homme romain, The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Il a fait traverser les *Alpes*… à des éléphants.",
+      "image": "eleph",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "*218* avant Jésus-Christ. Carthage et Rome se battent pour la Méditerranée.",
+      "image": "rider",
+      "date": "218 av. J.-C.",
+      "bg": "dark"
+    },
+    {
+      "text": "Le général carthaginois *Hannibal* a un plan complètement fou.",
+      "image": "triumph",
+      "label": "HANNIBAL",
+      "bg": "dark"
+    },
+    {
+      "text": "Attaquer Rome par le *nord*. Depuis l'Espagne… à pied.",
+      "image": "montblanc",
+      "bg": "dark"
+    },
+    {
+      "text": "Avec des dizaines de milliers d'hommes… et *trente-sept* éléphants de guerre !",
+      "image": "eleph",
+      "counter": {
+        "to": 37,
+        "suffix": " ÉLÉPHANTS"
+      },
+      "bg": "dark"
+    },
+    {
+      "text": "Premier obstacle : le *Rhône*. Les éléphants refusent de monter sur les bateaux.",
+      "image": "lamp",
+      "bg": "dark"
+    },
+    {
+      "text": "Alors on construit d'immenses radeaux, recouverts de *terre*, pour qu'ils croient marcher sur le sol.",
+      "image": "eleph",
+      "zoom": true,
+      "bg": "dark"
+    },
+    {
+      "text": "Puis les Alpes, en automne. *Neige*, glace, précipices, tribus qui attaquent.",
+      "image": "glacier",
+      "bg": "dark"
+    },
+    {
+      "text": "Selon Tite-Live, pour briser un rocher, on le chauffe… puis on l'arrose de *vinaigre*.",
+      "image": "montblanc",
+      "bg": "dark"
+    },
+    {
+      "text": "Quinze jours plus tard, Hannibal débouche en *Italie*.",
+      "image": "alpes",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Il a perdu près de la *moitié* de son armée.",
+      "image": "rider",
+      "bg": "dark"
+    },
+    {
+      "text": "L'hiver suivant, le froid tue les éléphants. Il n'en reste *qu'un*.",
+      "image": "eleph",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Hannibal traverse les marais sur ce dernier éléphant… et y perd un *œil*.",
+      "image": "lamp",
+      "bg": "dark"
+    },
+    {
+      "text": "Rome envoie ses légions. Hannibal les écrase, l'une après l'autre : la Trébie, Trasimène… *Cannes*.",
+      "image": "triumph",
+      "bg": "dark",
+      "zoom": true
+    },
+    {
+      "text": "Pendant des siècles, les Romains répéteront : « Hannibal est aux *portes* ! »",
+      "image": "head",
+      "stamp": "HANNIBAL AD PORTAS",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "outro": true,
+      "bg": "dark"
+    }
+  ]
+}

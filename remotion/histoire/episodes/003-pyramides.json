@@ -1,0 +1,156 @@
+{
+  "id": "003-pyramides",
+  "titre": "Les pyramides n'ont pas été construites par des esclaves",
+  "duree": 60,
+  "sources": [
+    "Découverte des tombes des ouvriers de Gizeh, 1990 (Zahi Hawass)",
+    "Ville des ouvriers Heit el-Ghurab (Mark Lehner) : boulangeries, brasseries, restes de bœufs et de moutons",
+    "Noms d'équipes : « Amis de Khéops », « Ivrognes de Mykérinos » (Lehner)",
+    "Hérodote, Histoires II.124 (100 000 hommes)"
+  ],
+  "images": {
+    "pyr1": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP261159.jpg",
+      "cut": false,
+      "credit": "Pyramides de Gizeh, 1865-69, The Met (CC0)"
+    },
+    "pyr2": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP261156.jpg",
+      "cut": false,
+      "credit": "Pyramides de Gizeh, 1865-69, The Met (CC0)"
+    },
+    "sphinx": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP139899.jpg",
+      "cut": false,
+      "credit": "Sphinx et pyramides, 1851-52, The Met (CC0)"
+    },
+    "brew": {
+      "url": "https://images.metmuseum.org/CRDImages/eg/original/DT208237.jpg",
+      "cut": true,
+      "credit": "Maquette de boulangerie et brasserie, tombe de Meketrê, The Met (CC0)"
+    },
+    "bakers": {
+      "url": "https://images.metmuseum.org/CRDImages/eg/original/DT234925.jpg",
+      "cut": true,
+      "credit": "Boulangers et brasseurs, tombe de Meketrê, The Met (CC0)"
+    },
+    "granary": {
+      "url": "https://images.metmuseum.org/CRDImages/eg/original/DP351557.jpg",
+      "cut": true,
+      "credit": "Maquette de grenier avec scribes, tombe de Meketrê, The Met (CC0)"
+    },
+    "estate": {
+      "url": "https://images.metmuseum.org/CRDImages/eg/original/DP249003.jpg",
+      "cut": true,
+      "credit": "Porteuse d'offrandes, tombe de Meketrê, The Met (CC0)"
+    },
+    "cattle": {
+      "url": "https://images.metmuseum.org/CRDImages/eg/original/DT234927.jpg",
+      "cut": true,
+      "credit": "Maquette d'étable, tombe de Meketrê, The Met (CC0)"
+    },
+    "raemkai": {
+      "url": "https://images.metmuseum.org/CRDImages/eg/original/EG592.jpg",
+      "cut": false,
+      "credit": "Chapelle de Raemkai, mur nord, The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Les pyramides n'ont *pas* été construites par des esclaves.",
+      "image": "pyr2",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Oubliez les films. Les fouets, les chaînes… tout ça est *faux*.",
+      "image": "sphinx",
+      "bg": "dark"
+    },
+    {
+      "text": "Gizeh, *1990*. Le cheval d'une touriste trébuche sur un vieux mur de briques.",
+      "image": "pyr1",
+      "date": "1990",
+      "bg": "dark"
+    },
+    {
+      "text": "Derrière ce mur : les *tombes* des ouvriers des pyramides.",
+      "image": "raemkai",
+      "bg": "dark"
+    },
+    {
+      "text": "Enterrés près de leur roi, avec du pain et de la bière pour l'*au-delà*.",
+      "image": "bakers",
+      "bg": "dark"
+    },
+    {
+      "text": "Sur certaines tombes, on lit même leurs titres : « *surveillant* du côté de la pyramide ».",
+      "image": "raemkai",
+      "bg": "dark"
+    },
+    {
+      "text": "Un honneur qu'on ne donnait *jamais* à des esclaves.",
+      "image": "estate",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Les archéologues retrouvent aussi leur *ville* : boulangeries, brasseries, dortoirs.",
+      "image": "brew",
+      "bg": "dark"
+    },
+    {
+      "text": "Les ouvriers mangeaient de la *viande*. Du bœuf, du mouton… en quantité.",
+      "image": "cattle",
+      "bg": "dark"
+    },
+    {
+      "text": "Sur leurs squelettes : des fractures *soignées*, et même des amputations réussies.",
+      "image": "granary",
+      "bg": "dark"
+    },
+    {
+      "text": "Ils avaient des *médecins* !",
+      "image": "granary",
+      "zoom": true,
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Ils travaillaient en équipes, avec des noms gravés sur les pierres.",
+      "image": "pyr2",
+      "bg": "dark"
+    },
+    {
+      "text": "Les « Amis de Khéops »… ou les « *Ivrognes* de Mykérinos » !",
+      "image": "bakers",
+      "stamp": "IVROGNES",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Pas des esclaves. Des *ouvriers* : nourris, soignés, payés en pain et en bière.",
+      "image": "brew",
+      "bg": "dark"
+    },
+    {
+      "text": "Peut-être vingt mille hommes. Pas cent mille, comme l'écrivait *Hérodote*.",
+      "image": "pyr1",
+      "counter": {
+        "to": 20000,
+        "suffix": " OUVRIERS"
+      },
+      "bg": "dark"
+    },
+    {
+      "text": "Alors la prochaine fois qu'un film vous montre des esclaves enchaînés… vous *saurez*.",
+      "image": "sphinx",
+      "bg": "dark"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "outro": true,
+      "bg": "dark"
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "id": "005-neron",
+  "titre": "Néron n'a pas joué du violon",
+  "duree": 60,
+  "sources": [
+    "Tacite, Annales XV.38-44 (incendie de 64, Néron à Antium, aide aux sinistrés, rumeur du chant sur Troie, accusation des chrétiens)",
+    "Suétone, Néron 38 et 31 (Domus Aurea)",
+    "Le violon apparaît en Italie au XVIᵉ siècle (Andrea Amati)"
+  ],
+  "images": {
+    "nero": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/SF9935142f.jpg",
+      "cut": true,
+      "credit": "Aureus de Néron, 66-67, The Met (CC0)"
+    },
+    "violin": {
+      "url": "https://images.metmuseum.org/CRDImages/mi/original/DP302645.jpg",
+      "cut": true,
+      "credit": "Violon « Kurtz », Andrea Amati, vers 1560, The Met (CC0)"
+    },
+    "cithare": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP-16774-001.jpg",
+      "cut": true,
+      "credit": "Amphore : joueur de cithare, vers 490 av. J.-C., The Met (CC0)"
+    },
+    "feu": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP854650.jpg",
+      "cut": false,
+      "credit": "Habitants fuyant une ville en flammes, XVIᵉ s., The Met (CC0)"
+    },
+    "bataille": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP874033.jpg",
+      "cut": false,
+      "credit": "Bataille dans une ville en flammes, The Met (CC0)"
+    },
+    "palais": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP877295.jpg",
+      "cut": false,
+      "credit": "Statue de Néron et le grand incendie, vers 1587, The Met (CC0)"
+    },
+    "statue": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP-1352-002.jpg",
+      "cut": true,
+      "credit": "Statue d'un membre de la famille impériale, The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Rome brûle… et Néron joue du *violon* ? Impossible.",
+      "image": "nero",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Le violon n'existe *pas* encore. Il apparaît en Italie… quinze siècles plus tard.",
+      "image": "violin",
+      "label": "VIOLON · VERS 1560",
+      "bg": "dark"
+    },
+    {
+      "text": "Rome, juillet de l'an *64*. Un feu part près du Circus Maximus.",
+      "image": "feu",
+      "date": "JUILLET 64",
+      "bg": "dark"
+    },
+    {
+      "text": "Il brûle pendant *six* jours, puis repart.",
+      "image": "bataille",
+      "counter": {
+        "to": 6,
+        "suffix": " JOURS"
+      },
+      "bg": "dark"
+    },
+    {
+      "text": "Sur les quatorze quartiers de Rome, *trois* sont rasés. Sept sont dévastés.",
+      "image": "feu",
+      "zoom": true,
+      "bg": "dark"
+    },
+    {
+      "text": "Et Néron ? Il n'est même pas à *Rome* ! Il est à Antium, à plus de cinquante kilomètres.",
+      "image": "statue",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Il rentre en *urgence*. Selon Tacite, il ouvre ses jardins aux sans-abri,",
+      "image": "nero",
+      "bg": "dark"
+    },
+    {
+      "text": "fait construire des abris… et baisse le prix du *blé*.",
+      "image": "nero",
+      "zoom": true,
+      "bg": "dark"
+    },
+    {
+      "text": "Alors pourquoi cette légende ? Une *rumeur* court déjà à l'époque.",
+      "image": "statue",
+      "bg": "dark"
+    },
+    {
+      "text": "Néron aurait chanté la chute de *Troie* pendant que la ville brûlait.",
+      "image": "cithare",
+      "bg": "dark"
+    },
+    {
+      "text": "Mais avec une *cithare*. Pas un violon.",
+      "image": "cithare",
+      "label": "CITHARE",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Et la rumeur enfle quand il bâtit son immense palais doré… sur les *ruines*.",
+      "image": "palais",
+      "bg": "dark"
+    },
+    {
+      "text": "On l'accuse d'avoir allumé le feu pour reconstruire Rome à son *goût*.",
+      "image": "palais",
+      "bg": "dark",
+      "zoom": true
+    },
+    {
+      "text": "Pour l'étouffer, Néron accuse un groupe encore méconnu : les *chrétiens*.",
+      "image": "nero",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Le violon, lui, vient d'une vieille expression *anglaise*.",
+      "image": "violin",
+      "stamp": "LÉGENDE",
+      "bg": "dark"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "outro": true,
+      "bg": "dark"
+    }
+  ]
+}
