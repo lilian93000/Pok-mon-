@@ -1,0 +1,120 @@
+{
+  "id": "061-emeus",
+  "titre": "L'armée qui a perdu contre des émeus",
+  "duree": 60,
+  "sources": [
+    "« Guerre des émeus », Australie-Occidentale, novembre-décembre 1932 : major G. P. W. Meredith, deux mitrailleuses Lewis",
+    "Environ 20 000 émeus ; près de 10 000 munitions tirées pour moins d'un millier d'oiseaux tués selon le rapport officiel",
+    "Déclaration de Meredith sur la résistance des émeus",
+    "Le sénateur James Dunn qualifie Sir George Pearce de « Minister of the Emu War »"
+  ],
+  "images": {
+    "emeu": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s10000/1s16000/1s16900/1s16947v.jpg",
+      "cut": false,
+      "credit": "L'émeu australien, Melbourne, 1908, 1908-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "lewis": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/07900/07931v.jpg",
+      "cut": false,
+      "credit": "Essais de mitrailleuse Lewis, 1917, 1917-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "lewis2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/25200/25252v.jpg",
+      "cut": false,
+      "credit": "Équipe de mitrailleuse Lewis, 1917, 1917-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "lewis3": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/07900/07932v.jpg",
+      "cut": false,
+      "credit": "Essais de mitrailleuse Lewis, 1917, 1917-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "soldats": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/matpc/20200/20202v.jpg",
+      "cut": false,
+      "credit": "Défilé de soldats australiens, 1940, 1940-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "L'armée australienne a perdu une guerre… contre des *oiseaux*.",
+      "bg": "red",
+      "rays": true,
+      "image": "emeu"
+    },
+    {
+      "text": "Australie, *1932*. Après la Première Guerre mondiale, d'anciens soldats sont devenus agriculteurs.",
+      "bg": "dark",
+      "image": "soldats",
+      "date": "1932"
+    },
+    {
+      "text": "Mais une armée envahit leurs champs de blé : vingt mille *émeus*.",
+      "bg": "dark",
+      "image": "emeu",
+      "counter": {
+        "to": 20000,
+        "suffix": " ÉMEUS"
+      }
+    },
+    {
+      "text": "Des oiseaux de presque deux mètres, qui détruisent tout sur leur *passage*.",
+      "bg": "dark",
+      "image": "emeu",
+      "zoom": true
+    },
+    {
+      "text": "Les fermiers appellent à l'aide. Le gouvernement envoie… l'*armée*.",
+      "bg": "red",
+      "rays": true,
+      "image": "lewis"
+    },
+    {
+      "text": "Un major, deux soldats, et deux *mitrailleuses*.",
+      "bg": "dark",
+      "image": "lewis2"
+    },
+    {
+      "text": "Premier jour : les émeus se dispersent dans tous les sens. Impossible de *viser*.",
+      "bg": "dark",
+      "image": "emeu"
+    },
+    {
+      "text": "Une embuscade est préparée. Au moment de tirer… la mitrailleuse s'*enraye*.",
+      "bg": "dark",
+      "image": "lewis3"
+    },
+    {
+      "text": "On installe une mitrailleuse sur un camion. Mais les émeus courent plus vite… et le camion tangue tellement que le tireur ne peut pas *tirer* !",
+      "bg": "dark",
+      "image": "lewis2"
+    },
+    {
+      "text": "Près de dix mille balles tirées. Moins d'un millier d'oiseaux *abattus*.",
+      "bg": "dark",
+      "image": "lewis",
+      "stamp": "DÉFAITE"
+    },
+    {
+      "text": "Le major dira : avec une armée aussi résistante que ces oiseaux, on pourrait affronter n'importe quelle armée du *monde*.",
+      "bg": "dark",
+      "image": "soldats"
+    },
+    {
+      "text": "Au Parlement, un sénateur surnomme le ministre de la Défense… le « ministre de la guerre des *émeus* ».",
+      "image": "soldats",
+      "bg": "dark"
+    },
+    {
+      "text": "L'armée se retire. Les émeus, eux, sont toujours *là*.",
+      "bg": "red",
+      "rays": true,
+      "image": "emeu"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

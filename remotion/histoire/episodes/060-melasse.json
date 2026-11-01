@@ -1,0 +1,124 @@
+{
+  "id": "060-melasse",
+  "titre": "La vague de mélasse",
+  "duree": 60,
+  "sources": [
+    "Grande inondation de mélasse de Boston, 15 janvier 1919 : réservoir de la Purity Distilling Company (environ 8,7 millions de litres)",
+    "Vague estimée jusqu'à 7,5 m et 50 km/h ; 21 morts et environ 150 blessés",
+    "Procès : la société jugée responsable (réservoir mal construit, fuites)"
+  ],
+  "images": {
+    "desastre": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/14900/14968v.jpg",
+      "cut": false,
+      "credit": "Boston, l'explosion de mélasse, 1919, 1919 — Library of Congress (sans restriction connue)"
+    },
+    "rue": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/det/4a10000/4a13000/4a13500/4a13536v.jpg",
+      "cut": false,
+      "credit": "Washington Street, Boston, 1906, 1906-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "rue2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/det/4a10000/4a11000/4a11300/4a11339v.jpg",
+      "cut": false,
+      "credit": "Summer Street, Boston, 1904, 1904-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "rue3": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/det/4a20000/4a22000/4a22500/4a22598v.jpg",
+      "cut": false,
+      "credit": "Bromfield Street, Boston, 1900, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "rue4": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pan/6a06000/6a06400/6a06475r.jpg",
+      "cut": false,
+      "credit": "Scène de rue, Boston, 1903, 1903-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "silo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/habshaer/ny/ny1600/ny1675/photos/350259pv.jpg",
+      "cut": false,
+      "credit": "Silo industriel,  — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Une vague de *sirop* a tué vingt et une personnes.",
+      "bg": "red",
+      "rays": true,
+      "image": "desastre"
+    },
+    {
+      "text": "Boston, 15 janvier *1919*. Il fait étonnamment doux pour un mois de janvier.",
+      "bg": "dark",
+      "image": "rue",
+      "date": "15 JANV. 1919"
+    },
+    {
+      "text": "Dans le quartier du port, un réservoir géant contient près de neuf millions de litres de *mélasse*.",
+      "bg": "dark",
+      "image": "silo"
+    },
+    {
+      "text": "Un sirop épais et sucré, utilisé pour fabriquer de l'*alcool*.",
+      "bg": "dark",
+      "image": "rue2"
+    },
+    {
+      "text": "Midi et demi. Un grondement. Le réservoir *explose*.",
+      "bg": "red",
+      "rays": true,
+      "image": "desastre",
+      "stamp": "BOUM"
+    },
+    {
+      "text": "Une vague brune de plusieurs mètres de haut déferle dans les rues à plus de *cinquante* kilomètres heure.",
+      "bg": "dark",
+      "image": "desastre",
+      "zoom": true,
+      "counter": {
+        "to": 50,
+        "suffix": " KM/H"
+      }
+    },
+    {
+      "text": "Elle renverse des maisons, arrache un pont de chemin de fer, emporte des chevaux et des *passants*.",
+      "bg": "dark",
+      "image": "rue3"
+    },
+    {
+      "text": "Elle tord même les piliers d'acier du métro *aérien*.",
+      "image": "rue4",
+      "bg": "dark"
+    },
+    {
+      "text": "Le pire : en refroidissant, la mélasse devient encore plus *épaisse*. Les victimes sont piégées, comme dans de la colle.",
+      "bg": "dark",
+      "image": "rue4"
+    },
+    {
+      "text": "Vingt et un *morts*. Environ cent cinquante blessés.",
+      "bg": "dark",
+      "image": "desastre"
+    },
+    {
+      "text": "Il faudra des semaines pour nettoyer. L'eau du port reste brune pendant des *mois*.",
+      "bg": "dark",
+      "image": "rue"
+    },
+    {
+      "text": "Le procès révèle que le réservoir fuyait depuis le début. On l'avait même peint en marron pour *cacher* les fuites.",
+      "bg": "dark",
+      "image": "silo"
+    },
+    {
+      "text": "Et des habitants affirmeront que, les jours de chaleur, le quartier sentait encore le sucre… des dizaines d'années *plus tard*.",
+      "bg": "red",
+      "rays": true,
+      "image": "rue2"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

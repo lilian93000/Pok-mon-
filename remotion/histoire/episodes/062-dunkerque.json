@@ -1,0 +1,130 @@
+{
+  "id": "062-dunkerque",
+  "titre": "Des bateaux de pêche ont sauvé une armée",
+  "duree": 60,
+  "sources": [
+    "Opération Dynamo, 26 mai - 4 juin 1940 : environ 338 000 soldats alliés évacués de Dunkerque",
+    "Plusieurs centaines de « little ships » civils (bateaux de pêche, yachts, ferries, canots)",
+    "Ordre d'arrêt allemand du 24 mai 1940 ; discours de Churchill du 4 juin 1940"
+  ],
+  "images": {
+    "phare": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/05000/05031v.jpg",
+      "cut": false,
+      "credit": "Le phare de Dunkerque, vers 1890, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "quai": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/05000/05029v.jpg",
+      "cut": false,
+      "credit": "Quai de Dunkerque, vers 1890, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "vue": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/05000/05027v.jpg",
+      "cut": false,
+      "credit": "Vue générale de Dunkerque, vers 1890, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "place": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/05000/05028v.jpg",
+      "cut": false,
+      "credit": "Place Jean-Bart, Dunkerque, vers 1890, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "bateaux": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a30000/3a39000/3a39400/3a39404v.jpg",
+      "cut": false,
+      "credit": "Bateaux de pêche, San Pedro, 1942, 1942-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "canot": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c20000/3c29000/3c29900/3c29935v.jpg",
+      "cut": false,
+      "credit": "Canot de surf, 1927, 1927 — Library of Congress (sans restriction connue)"
+    },
+    "soldats": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/00700/00725v.jpg",
+      "cut": false,
+      "credit": "Soldats britanniques, 1942, 1942-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Des bateaux de *pêche* ont sauvé une armée.",
+      "bg": "red",
+      "rays": true,
+      "image": "bateaux"
+    },
+    {
+      "text": "Mai *1940*. L'armée allemande perce le front et fonce vers la Manche.",
+      "bg": "dark",
+      "image": "vue",
+      "date": "MAI 1940"
+    },
+    {
+      "text": "Près de quatre cent mille soldats britanniques et français sont piégés sur les plages de *Dunkerque*.",
+      "bg": "dark",
+      "image": "quai"
+    },
+    {
+      "text": "Dos à la mer. Bombardés jour et *nuit*.",
+      "bg": "red",
+      "rays": true,
+      "image": "phare"
+    },
+    {
+      "text": "Problème : la plage est trop peu profonde. Les grands navires de guerre ne peuvent pas *approcher*.",
+      "bg": "dark",
+      "image": "soldats"
+    },
+    {
+      "text": "Alors la Grande-Bretagne lance un appel *incroyable* : tous les bateaux sont réquisitionnés.",
+      "bg": "dark",
+      "image": "canot"
+    },
+    {
+      "text": "Bateaux de pêche, yachts, ferries, canots de sauvetage… Des centaines de petits bateaux civils traversent la *Manche*.",
+      "bg": "dark",
+      "image": "bateaux",
+      "zoom": true
+    },
+    {
+      "text": "Souvent pilotés par leurs propriétaires : des pêcheurs, des retraités, parfois des *adolescents*.",
+      "bg": "dark",
+      "image": "canot"
+    },
+    {
+      "text": "Ils font des allers-retours entre la plage et les gros navires, sous les *bombes*.",
+      "bg": "dark",
+      "image": "phare"
+    },
+    {
+      "text": "En neuf jours, plus de trois cent trente mille soldats sont *sauvés* !",
+      "bg": "red",
+      "rays": true,
+      "image": "quai",
+      "counter": {
+        "to": 338000,
+        "suffix": " SOLDATS"
+      }
+    },
+    {
+      "text": "Le prix est lourd : plus de *deux cents* navires sont coulés pendant l'opération.",
+      "image": "phare",
+      "bg": "dark"
+    },
+    {
+      "text": "Churchill prévient : une guerre ne se gagne pas avec des évacuations. Mais sans ces hommes, la guerre aurait pu être *perdue*.",
+      "bg": "dark",
+      "image": "place"
+    },
+    {
+      "text": "Aujourd'hui encore, en Angleterre, on parle de « l'esprit de *Dunkerque* ».",
+      "bg": "red",
+      "rays": true,
+      "image": "bateaux",
+      "stamp": "LITTLE SHIPS"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

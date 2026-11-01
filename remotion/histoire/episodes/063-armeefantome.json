@@ -1,0 +1,125 @@
+{
+  "id": "063-armeefantome",
+  "titre": "L'armée fantôme",
+  "duree": 60,
+  "sources": [
+    "23rd Headquarters Special Troops (« Ghost Army »), environ 1 100 hommes, 1944-1945 : chars gonflables, haut-parleurs, faux messages radio, faux insignes",
+    "Recrutement d'artistes (dont Bill Blass, Ellsworth Kelly) ; opération Viersen (mars 1945)",
+    "Unité restée secrète jusqu'en 1996"
+  ],
+  "images": {
+    "camo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/fsa/8e00000/8e00100/8e00195v.jpg",
+      "cut": false,
+      "credit": "Soldat sortant d'un trou camouflé en papier mâché, 1942, 1942-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "classe": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/fsac/1a34000/1a34500/1a34583v.jpg",
+      "cut": false,
+      "credit": "Cours de camouflage, université de New York, 1939, 1939 — Library of Congress (sans restriction connue)"
+    },
+    "route": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/02300/02386v.jpg",
+      "cut": false,
+      "credit": "Route camouflée, 1918, 1918 — Library of Congress (sans restriction connue)"
+    },
+    "croquis": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/24200/24277v.jpg",
+      "cut": false,
+      "credit": "Position d'artillerie camouflée, 1944, 1944-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "leurres": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/tofr/45300/45397v.jpg",
+      "cut": false,
+      "credit": "Canards et leurres, 1959, 1959 — Library of Congress (sans restriction connue)"
+    },
+    "leurres2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b20000/3b21000/3b21200/3b21280r.jpg",
+      "cut": false,
+      "credit": "Un matin au-dessus des leurres, 1898, 1898-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "arbre": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/fsa/8e00000/8e00100/8e00189v.jpg",
+      "cut": false,
+      "credit": "Camouflage, McClellan Field, 1942, 1942-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Des chars *gonflables* ont trompé les nazis.",
+      "bg": "red",
+      "rays": true,
+      "image": "leurres"
+    },
+    {
+      "text": "*1944*. L'armée américaine crée une unité ultra-secrète : la vingt-troisième troupe spéciale.",
+      "bg": "dark",
+      "image": "croquis",
+      "date": "1944"
+    },
+    {
+      "text": "Mais pas de soldats d'élite. Elle recrute des *artistes* : peintres, designers, décorateurs de théâtre.",
+      "bg": "dark",
+      "image": "classe"
+    },
+    {
+      "text": "Leur mission : faire croire aux Allemands qu'une armée entière se trouve là où il n'y a *personne*.",
+      "bg": "dark",
+      "image": "route"
+    },
+    {
+      "text": "Leurs armes ? Des chars, des canons et des camions en caoutchouc… *gonflables* !",
+      "bg": "red",
+      "rays": true,
+      "image": "leurres2",
+      "stamp": "GONFLABLE"
+    },
+    {
+      "text": "Des haut-parleurs géants diffusent des bruits de moteurs et de construction, audibles à des *kilomètres*.",
+      "bg": "dark",
+      "image": "camo"
+    },
+    {
+      "text": "De faux messages radio. De faux insignes sur les uniformes. Ils se font passer pour d'autres *divisions*.",
+      "bg": "dark",
+      "image": "arbre"
+    },
+    {
+      "text": "Un jour, deux Français voient quatre soldats américains… soulever un char de quarante *tonnes* !",
+      "bg": "dark",
+      "image": "leurres",
+      "zoom": true
+    },
+    {
+      "text": "Un soldat leur répond en souriant : les Américains sont très *forts*.",
+      "bg": "dark",
+      "image": "leurres2"
+    },
+    {
+      "text": "Avec à peine plus de mille hommes, ils imitent des divisions de *dizaines* de milliers.",
+      "bg": "dark",
+      "image": "camo",
+      "counter": {
+        "to": 1100,
+        "suffix": " HOMMES"
+      }
+    },
+    {
+      "text": "Ils auraient sauvé des milliers de vies. Mais leur existence est restée *secrète* jusqu'en 1996.",
+      "bg": "dark",
+      "image": "classe",
+      "date": "1996"
+    },
+    {
+      "text": "Parmi eux, de futurs grands noms de la mode et de l'art, comme le styliste Bill *Blass*.",
+      "bg": "red",
+      "rays": true,
+      "image": "route"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
