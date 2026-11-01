@@ -1,0 +1,117 @@
+{
+  "id": "042-curie",
+  "titre": "Les carnets radioactifs de Marie Curie",
+  "duree": 60,
+  "sources": [
+    "Marie Curie : prix Nobel de physique (1903) et de chimie (1911)",
+    "Visite aux États-Unis en 1921 : le président Harding lui remet un gramme de radium",
+    "Carnets de laboratoire conservés à la BnF dans des boîtes doublées de plomb ; radium 226, demi-vie d'environ 1 600 ans",
+    "Morte en 1934 d'une anémie aplasique ; transférée au Panthéon en 1995"
+  ],
+  "images": {
+    "portrait": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b30000/3b37000/3b37500/3b37568r.jpg",
+      "cut": false,
+      "credit": "Marie Skłodowska Curie, vers 1890, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "labo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/07600/07682v.jpg",
+      "cut": false,
+      "credit": "Marie Curie, vers 1900, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "harding": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/npcc/04100/04183v.jpg",
+      "cut": false,
+      "credit": "Le président Harding et Marie Curie, 20 mai 1921, 1921-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "maison": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/npcc/04100/04182v.jpg",
+      "cut": false,
+      "credit": "Marie Curie à la Maison-Blanche, 1921, 1921-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "filles": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/32300/32322v.jpg",
+      "cut": false,
+      "credit": "Marie Curie et ses filles, 1921, 1920-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Ses carnets sont encore *dangereux* aujourd'hui.",
+      "bg": "red",
+      "rays": true,
+      "image": "portrait"
+    },
+    {
+      "text": "Paris, fin du dix-neuvième siècle. Marie Curie et son mari Pierre découvrent deux nouveaux éléments : le polonium… et le *radium*.",
+      "bg": "dark",
+      "image": "labo"
+    },
+    {
+      "text": "Le radium brille dans le noir. Marie en garde des tubes dans ses *poches*, dans le tiroir de son bureau.",
+      "bg": "dark",
+      "image": "portrait",
+      "zoom": true
+    },
+    {
+      "text": "Elle écrit que ces petites lueurs ressemblent à des lumières de *fées*.",
+      "bg": "dark",
+      "image": "labo"
+    },
+    {
+      "text": "Personne ne sait encore à quel point la *radioactivité* est dangereuse.",
+      "bg": "dark",
+      "image": "filles"
+    },
+    {
+      "text": "Elle devient la première femme prix Nobel. Puis la seule personne au monde récompensée dans *deux* sciences différentes.",
+      "bg": "red",
+      "rays": true,
+      "image": "harding"
+    },
+    {
+      "text": "En 1921, le président américain lui offre un *gramme* de radium. Une fortune.",
+      "bg": "dark",
+      "image": "harding",
+      "date": "1921"
+    },
+    {
+      "text": "Mais des années d'exposition détruisent sa santé. Elle meurt en *1934*.",
+      "bg": "dark",
+      "image": "maison",
+      "date": "1934"
+    },
+    {
+      "text": "Et ses carnets de laboratoire, ses meubles, ses livres… sont encore *contaminés*.",
+      "bg": "dark",
+      "image": "labo",
+      "zoom": true
+    },
+    {
+      "text": "Aujourd'hui, ils sont conservés à Paris, dans des boîtes doublées de *plomb*.",
+      "bg": "dark",
+      "image": "portrait"
+    },
+    {
+      "text": "Pour les consulter, il faut porter une tenue de *protection*.",
+      "bg": "dark",
+      "image": "filles",
+      "stamp": "RADIOACTIF"
+    },
+    {
+      "text": "Et le radium mettra environ mille six cents ans pour perdre seulement la *moitié* de sa radioactivité.",
+      "bg": "red",
+      "rays": true,
+      "image": "portrait",
+      "counter": {
+        "to": 1600,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

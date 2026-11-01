@@ -1,0 +1,113 @@
+{
+  "id": "041-lustig",
+  "titre": "L'homme qui a vendu la tour Eiffel",
+  "duree": 60,
+  "sources": [
+    "Victor Lustig, escroquerie de 1925 : faux papiers du ministère des Postes et Télégraphes, ferrailleurs réunis à l'hôtel de Crillon, André Poisson",
+    "Seconde tentative dénoncée à la police ; arrestation aux États-Unis en 1935 pour fausse monnaie, mort en 1947"
+  ],
+  "images": {
+    "e1": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/npcc/19200/19298v.jpg",
+      "cut": false,
+      "credit": "Paris, la tour Eiffel, 1909, 1909-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "e2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/npcc/19300/19300v.jpg",
+      "cut": false,
+      "credit": "Paris, la tour Eiffel, 1909, 1909-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "e3": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b05000/1b05700/1b05744v.jpg",
+      "cut": false,
+      "credit": "Paris en flânant, la tour Eiffel, 1919, 1919 — Library of Congress (sans restriction connue)"
+    },
+    "e4": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b05000/1b05700/1b05740v.jpg",
+      "cut": false,
+      "credit": "La tour Eiffel, 1919, 1919 — Library of Congress (sans restriction connue)"
+    },
+    "stereo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s20000/1s23000/1s23700/1s23779v.jpg",
+      "cut": false,
+      "credit": "Paris, la tour Eiffel, 1898, 1898-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Un escroc a *vendu* la tour Eiffel.",
+      "bg": "red",
+      "rays": true,
+      "image": "e3"
+    },
+    {
+      "text": "Paris, *1925*. Victor Lustig, un escroc de génie, lit un article dans le journal.",
+      "bg": "dark",
+      "image": "e1",
+      "date": "1925"
+    },
+    {
+      "text": "La tour Eiffel coûte très cher à entretenir. Certains se demandent même s'il ne faudrait pas la *démonter*.",
+      "bg": "dark",
+      "image": "e2"
+    },
+    {
+      "text": "Lustig a une *idée*.",
+      "bg": "red",
+      "rays": true,
+      "image": "stereo"
+    },
+    {
+      "text": "Il fabrique de faux papiers officiels et se fait passer pour un haut fonctionnaire du *gouvernement*.",
+      "bg": "dark",
+      "image": "e4"
+    },
+    {
+      "text": "Il invite cinq ferrailleurs dans un hôtel de luxe, et leur annonce, en secret : l'État vend la tour Eiffel… à la *ferraille*.",
+      "bg": "dark",
+      "image": "e1",
+      "zoom": true
+    },
+    {
+      "text": "Sept mille tonnes de *fer* à récupérer !",
+      "bg": "dark",
+      "image": "e2",
+      "counter": {
+        "to": 7000,
+        "suffix": " TONNES"
+      }
+    },
+    {
+      "text": "L'un d'eux, André Poisson, rêve de devenir *important*. Il est prêt à payer.",
+      "bg": "dark",
+      "image": "e3"
+    },
+    {
+      "text": "Lustig empoche l'argent… et même un *pot-de-vin* en plus. Puis il s'enfuit à Vienne.",
+      "bg": "dark",
+      "image": "stereo"
+    },
+    {
+      "text": "Et Poisson ? Il a tellement *honte* qu'il ne porte jamais plainte !",
+      "bg": "red",
+      "rays": true,
+      "image": "e4",
+      "stamp": "ARNAQUE"
+    },
+    {
+      "text": "Quelques mois plus tard, Lustig revient… et tente de *revendre* la tour !",
+      "bg": "dark",
+      "image": "e1"
+    },
+    {
+      "text": "Cette fois, un ferrailleur prévient la police. Lustig file aux États-Unis… où il finira en prison, pour fausse *monnaie*.",
+      "bg": "dark",
+      "image": "e2"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

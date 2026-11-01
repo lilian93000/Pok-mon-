@@ -1,0 +1,131 @@
+{
+  "id": "039-halifax",
+  "titre": "La plus grande explosion avant la bombe atomique",
+  "duree": 60,
+  "sources": [
+    "Explosion de Halifax, 6 décembre 1917 : collision du Mont-Blanc (chargé d'explosifs) et de l'Imo à 8 h 45, explosion à 9 h 04",
+    "Environ 2 000 morts et 9 000 blessés ; puissance estimée à ~2,9 kilotonnes",
+    "Vince Coleman, répartiteur ferroviaire, arrête un train de voyageurs",
+    "Sapin de Noël offert chaque année à Boston par la Nouvelle-Écosse (depuis 1971)"
+  ],
+  "images": {
+    "ruine": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/25800/25894v.jpg",
+      "cut": false,
+      "credit": "Explosion de Halifax, 1917, 1917-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "debris": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/25800/25898v.jpg",
+      "cut": false,
+      "credit": "Halifax, 1917, 1917-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "expo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/25800/25897v.jpg",
+      "cut": false,
+      "credit": "Bâtiment de l'exposition, Halifax, après l'explosion, 1917, 1917-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "port": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/05400/05402v.jpg",
+      "cut": false,
+      "credit": "Halifax, vue du front de mer, 1917, 1917-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "ambulances": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/04300/04358v.jpg",
+      "cut": false,
+      "credit": "Ambulances de la Croix-Rouge américaine à Halifax, 1917, 1917 — Library of Congress (sans restriction connue)"
+    },
+    "cantine": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/04300/04357v.jpg",
+      "cut": false,
+      "credit": "Cantine de la Croix-Rouge après l'explosion, 1917, 1917 — Library of Congress (sans restriction connue)"
+    },
+    "secours": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/04300/04352v.jpg",
+      "cut": false,
+      "credit": "Corps motorisé de la Croix-Rouge à Halifax, 1917, 1917 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "La plus grande explosion de l'histoire… avant la bombe *atomique*.",
+      "bg": "red",
+      "rays": true,
+      "image": "ruine"
+    },
+    {
+      "text": "Halifax, Canada. 6 décembre *1917*. Le port est en pleine activité : c'est la guerre.",
+      "bg": "dark",
+      "image": "port",
+      "date": "6 DÉC. 1917"
+    },
+    {
+      "text": "Un cargo français, le *Mont-Blanc*, entre dans le port. Dans ses cales : près de trois mille tonnes d'explosifs.",
+      "bg": "dark",
+      "image": "port",
+      "zoom": true
+    },
+    {
+      "text": "À huit heures quarante-cinq, il percute un autre navire. Un incendie *démarre* à bord.",
+      "bg": "dark",
+      "image": "debris"
+    },
+    {
+      "text": "L'équipage, qui sait ce qu'il transporte, abandonne le navire et *fuit*.",
+      "bg": "dark",
+      "image": "expo"
+    },
+    {
+      "text": "Sur les quais, des centaines de curieux s'approchent pour regarder le *feu*.",
+      "bg": "dark",
+      "image": "ruine"
+    },
+    {
+      "text": "Un employé des chemins de fer, Vince Coleman, comprend le danger. Il reste à son poste pour arrêter un train qui *arrive*.",
+      "bg": "dark",
+      "image": "ambulances"
+    },
+    {
+      "text": "Neuf heures quatre : le Mont-Blanc *explose*.",
+      "bg": "red",
+      "rays": true,
+      "image": "ruine",
+      "stamp": "9 H 04"
+    },
+    {
+      "text": "Un quartier entier est rasé. Une partie de l'ancre du navire est retrouvée à plus de trois *kilomètres*.",
+      "bg": "dark",
+      "image": "debris",
+      "zoom": true
+    },
+    {
+      "text": "Environ deux mille morts. Neuf mille *blessés*.",
+      "bg": "dark",
+      "image": "expo",
+      "counter": {
+        "to": 2000,
+        "suffix": " MORTS"
+      }
+    },
+    {
+      "text": "Vince Coleman meurt. Mais son train de voyageurs a été *sauvé*.",
+      "bg": "dark",
+      "image": "ambulances"
+    },
+    {
+      "text": "Le lendemain, Boston envoie un train de *secours*.",
+      "bg": "dark",
+      "image": "cantine"
+    },
+    {
+      "text": "Depuis, chaque année, Halifax offre à Boston un grand sapin de Noël pour dire *merci*.",
+      "bg": "red",
+      "rays": true,
+      "image": "secours"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

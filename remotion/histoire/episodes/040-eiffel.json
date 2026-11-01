@@ -1,0 +1,124 @@
+{
+  "id": "040-eiffel",
+  "titre": "La tour Eiffel devait être détruite",
+  "duree": 60,
+  "sources": [
+    "Tour construite pour l'Exposition universelle de 1889 ; concession de 20 ans",
+    "« Protestation contre la tour de M. Eiffel » (Le Temps, 14 février 1887), signée notamment par Maupassant, Charles Garnier, Gounod",
+    "Antenne de TSF militaire (capitaine Ferrié, à partir de 1903) ; interceptions pendant la Première Guerre mondiale ; concession renouvelée en 1910"
+  ],
+  "images": {
+    "e1": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/npcc/19200/19298v.jpg",
+      "cut": false,
+      "credit": "Paris, la tour Eiffel, 1909, 1909-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "e2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/npcc/19300/19300v.jpg",
+      "cut": false,
+      "credit": "Paris, la tour Eiffel, 1909, 1909-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "e3": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b05000/1b05700/1b05744v.jpg",
+      "cut": false,
+      "credit": "Paris en flânant, la tour Eiffel, 1919, 1919 — Library of Congress (sans restriction connue)"
+    },
+    "e4": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b05000/1b05700/1b05740v.jpg",
+      "cut": false,
+      "credit": "La tour Eiffel, 1919, 1919 — Library of Congress (sans restriction connue)"
+    },
+    "stereo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s20000/1s23000/1s23700/1s23779v.jpg",
+      "cut": false,
+      "credit": "Paris, la tour Eiffel, 1898, 1898-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "La tour Eiffel devait *disparaître* au bout de vingt ans.",
+      "bg": "red",
+      "rays": true,
+      "image": "e1"
+    },
+    {
+      "text": "Paris, *1889*. La ville prépare l'Exposition universelle. Gustave Eiffel construit une tour de trois cents mètres.",
+      "bg": "dark",
+      "image": "e2",
+      "date": "1889"
+    },
+    {
+      "text": "La plus haute construction du *monde*.",
+      "bg": "dark",
+      "image": "stereo",
+      "counter": {
+        "to": 300,
+        "suffix": " MÈTRES"
+      }
+    },
+    {
+      "text": "Mais les artistes de Paris la *détestent*.",
+      "bg": "dark",
+      "image": "e3"
+    },
+    {
+      "text": "Des écrivains comme Guy de Maupassant signent une lettre contre ce monument « inutile et *monstrueux* ».",
+      "bg": "dark",
+      "image": "e4"
+    },
+    {
+      "text": "On raconte que Maupassant déjeunait dans la tour… parce que c'était le seul endroit de Paris où on ne la *voyait* pas !",
+      "bg": "dark",
+      "image": "e1",
+      "zoom": true
+    },
+    {
+      "text": "Et surtout, Eiffel n'a qu'un permis de *vingt* ans. En 1909, la tour doit être démontée.",
+      "bg": "red",
+      "rays": true,
+      "image": "e2",
+      "stamp": "À DÉMOLIR"
+    },
+    {
+      "text": "Alors Eiffel cherche à la rendre *utile*. Météo, expériences scientifiques…",
+      "bg": "dark",
+      "image": "stereo"
+    },
+    {
+      "text": "Et surtout : la *radio*. Au sommet, l'armée installe une antenne géante.",
+      "bg": "dark",
+      "image": "e3"
+    },
+    {
+      "text": "Elle peut communiquer avec des postes situés à des centaines de *kilomètres*.",
+      "bg": "dark",
+      "image": "e4"
+    },
+    {
+      "text": "La tour est sauvée. Et pendant la Première Guerre mondiale, elle intercepte des messages *ennemis*.",
+      "bg": "dark",
+      "image": "e2",
+      "zoom": true
+    },
+    {
+      "text": "Depuis, elle est repeinte environ tous les sept ans. Avec près de *soixante* tonnes de peinture !",
+      "image": "e4",
+      "bg": "dark",
+      "counter": {
+        "to": 60,
+        "suffix": " TONNES"
+      }
+    },
+    {
+      "text": "Aujourd'hui, c'est le monument le plus *célèbre* de France.",
+      "bg": "red",
+      "rays": true,
+      "image": "e1"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
