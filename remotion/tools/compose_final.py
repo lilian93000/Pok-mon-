@@ -35,10 +35,11 @@ for i, c in enumerate(ch):
     )
     x += w + gap
 
+bars = []  # style simple : pas de barre de progression
 esc_ass = ass.replace(":", "\\:").replace("'", "\\'")
 # setpts=N/FPS : la concaténation laisse de petits trous d'horodatage (~2 s sur 17 min) ;
 # on renumérote les images pour rester calé sur l'audio (continu) et sur les sous-titres.
-chain = [f"[0:v]setpts=N/{FPS}/TB,subtitles='{esc_ass}':fontsdir='{fonts}'," + ",".join(bars) + "[v0]"]
+chain = [f"[0:v]setpts=N/{FPS}/TB,subtitles='{esc_ass}':fontsdir='{fonts}'" + "".join("," + b for b in bars) + "[v0]"]
 inputs = ["-i", base]
 for k, (a, b) in enumerate(ranges, 1):
     # Remotion complète parfois les numéros par des zéros (element-000.png) : on lit par glob

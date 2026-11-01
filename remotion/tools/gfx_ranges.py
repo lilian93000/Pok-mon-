@@ -10,9 +10,8 @@ F = 30
 limit = float(sys.argv[3]) if len(sys.argv) > 3 else e["duration"]
 r = [(t["at"], t["at"] + t["dur"]) for t in e["titles"]]
 for c in e["chapters"]:
-    r.append((c["at"] + 0.3, c["at"] + 4.9))
-    if c.get("map"):
-        r.append((c["at"] + 1.2, c["at"] + 6.0))
+    r.append((c["at"] + 0.2, c["at"] + 2.4))
+    r.append((c["at"] + 2.6, c["at"] + 6.1))
 r += [(t["at"], t["at"] + t["dur"]) for t in e["tips"]]
 r += [(p["at"], p["at"] + p["dur"]) for p in e["pops"]]
 r.append((e["endScreenAt"], e["duration"]))

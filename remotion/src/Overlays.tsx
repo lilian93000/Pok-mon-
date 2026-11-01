@@ -113,40 +113,29 @@ export const ChapterBar: React.FC<{ chapters: Chapter[]; duration: number; endAt
 /* ---------- Écran de fin : place libre pour les éléments YouTube ---------- */
 export const EndScreen: React.FC<{ text: string; sub: string }> = ({ text, sub }) => {
   const frame = useCurrentFrame();
-  const fade = interpolate(frame, [0, 24], [0, 1], { extrapolateRight: "clamp" });
-  const rise = interpolate(frame, [10, 40], [30, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const t = interpolate(frame, [10, 40], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const op = interpolate(frame, [0, 24], [0, 1], { extrapolateRight: "clamp" });
   return (
-    <AbsoluteFill style={{ background: `rgba(10,10,12,${0.5 * fade})` }}>
-      <AbsoluteFill style={{ justifyContent: "flex-start", alignItems: "center", paddingTop: 130, color: C.white, opacity: t, transform: `translateY(${rise}px)` }}>
-        <div style={{ ...caps, fontSize: 22, color: C.accent }}>{sub}</div>
-        <div style={{ ...outline, fontFamily: serif, fontWeight: 900, fontSize: 140, lineHeight: 1.05, marginTop: 6 }}>{text} 🇯🇵</div>
-        <div style={{ ...caps, fontSize: 18, color: C.dim, marginTop: 6 }}>日本 · Osaka · Kyoto · Nara · Kobe</div>
-      </AbsoluteFill>
-      <AbsoluteFill style={{ flexDirection: "row", justifyContent: "center", alignItems: "flex-end", gap: 120, paddingBottom: 170, opacity: fade }}>
-        <div style={{ width: 720, height: 405, border: "1px solid rgba(246,243,238,.35)" }} />
-        <div style={{ width: 300, height: 300, borderRadius: "50%", border: "1px solid rgba(246,243,238,.35)" }} />
+    <AbsoluteFill style={{ background: `rgba(0,0,0,${0.35 * op})` }}>
+      <AbsoluteFill style={{ justifyContent: "flex-start", alignItems: "center", paddingTop: 140, color: C.white, opacity: op, fontFamily, textShadow: "0 2px 12px rgba(0,0,0,.55)" }}>
+        <div style={{ fontWeight: 600, fontSize: 40 }}>{sub}</div>
+        <div style={{ fontWeight: 800, fontSize: 130, lineHeight: 1.05 }}>{text}</div>
       </AbsoluteFill>
     </AbsoluteFill>
   );
 };
 
-/* ---------- Fiche info « Bon à savoir » (boîte blanche, en haut à gauche) ---------- */
+/* ---------- Fiche « Bon à savoir » : texte simple en haut à gauche ---------- */
 export const TipCard: React.FC<{ tip: Tip }> = ({ tip }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const D = tip.dur * fps;
-  const s = spring({ frame, fps, config: { damping: 14, stiffness: 180 } });
-  const out = interpolate(frame, [D - 7, D], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const op = Math.min(interpolate(frame, [0, 12], [0, 1], { extrapolateRight: "clamp" }), interpolate(frame, [D - 12, D], [1, 0], { extrapolateLeft: "clamp" }));
+  const y = interpolate(frame, [0, 18], [12, 0], { extrapolateRight: "clamp" });
   return (
-    <AbsoluteFill style={{ alignItems: "flex-start", justifyContent: "flex-start", padding: "80px 90px", opacity: out }}>
-      <div style={{ ...caps, ...outline, fontSize: 28, color: C.accent, opacity: s }}>💡 Bon à savoir</div>
-      <div style={{ fontFamily, background: C.white, color: C.black, borderRadius: 16, padding: "16px 28px", marginTop: 10, maxWidth: 860, boxShadow: "0 10px 30px rgba(0,0,0,.35)", transform: `scale(${s})`, transformOrigin: "0 0" }}>
-        <div style={{ fontWeight: 900, fontSize: 48, lineHeight: 1.1 }}>
-          {tip.icon} {tip.title}
-        </div>
-        <div style={{ fontWeight: 700, fontSize: 32, marginTop: 6, color: "#444" }}>{tip.text}</div>
-      </div>
+    <AbsoluteFill style={{ alignItems: "flex-start", justifyContent: "flex-start", padding: "80px 90px", opacity: op, transform: `translateY(${y}px)`, color: C.white, fontFamily, textShadow: "0 2px 12px rgba(0,0,0,.55), 0 0 2px rgba(0,0,0,.4)" }}>
+      <div style={{ fontWeight: 600, fontSize: 30, opacity: 0.9 }}>Bon à savoir</div>
+      <div style={{ fontWeight: 800, fontSize: 56, lineHeight: 1.1 }}>{tip.title}</div>
+      <div style={{ fontWeight: 500, fontSize: 34, marginTop: 4, maxWidth: 900 }}>{tip.text}</div>
     </AbsoluteFill>
   );
 };

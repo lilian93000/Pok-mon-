@@ -123,15 +123,6 @@ CHAPTER_MAP = {
 
 # Animations ponctuelles (temps SOURCE ; apparaissent aussi dans l'accroche si le moment y est)
 POPS = [
-    # infos utiles (sobres)
     (29.8, 4.6, {"kind": "money", "won": 5000, "eur": 4}),
-    (54.2, 6.5, {"kind": "route", "from": "Aéroport d'Incheon", "to": "Seoul Station", "km": 50, "time": "40 min"}),
-    (447.5, 4.5, {"kind": "subscribe"}),
-    (1134.1, 4.2, {"kind": "thermo", "value": 32}),
-    (1314.7, 4.2, {"kind": "rating", "value": 8, "max": 10, "label": "Barbecue coréen"}),
-    # 4 moments forts, en citations
-    (794.0, 3.2, {"kind": "quote", "text": "Oula…", "pos": "left"}),
-    (1121.6, 3.2, {"kind": "quote", "text": "Princesse Violette", "pos": "left"}),
-    (1180.1, 3.6, {"kind": "quote", "text": "70 milliards de degrés", "pos": "left"}),
-    (1262.0, 3.6, {"kind": "quote", "text": "J'ai perdu mes saucisses", "pos": "right"}),
+    (54.2, 5.0, {"kind": "route", "from": "Aéroport d'Incheon", "to": "Séoul", "km": 50, "time": "40 min"}),
 ]

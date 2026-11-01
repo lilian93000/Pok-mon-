@@ -1,6 +1,6 @@
 import { AbsoluteFill, Sequence, useVideoConfig } from "remotion";
 import { Clip } from "./Clip";
-import { ChapterTitle, MotionIntro, PopView, SeoulMap } from "./Motion";
+import { ChapterTitle, MotionIntro, PlaceTag, PopView } from "./Motion";
 import { Captions, ChapterBar, EndScreen, TipCard } from "./Overlays";
 import type { Edit } from "./types";
 
@@ -25,17 +25,15 @@ export const Vlog: React.FC<{ edit: Edit; overlayOnly?: boolean }> = ({ edit, ov
       {overlayOnly ? null : <Captions pages={edit.captions} />}
       {overlayOnly ? null : <ChapterBar chapters={edit.chapters} duration={edit.duration} endAt={edit.endScreenAt} />}
       {edit.chapters.map((ch) => (
-        <Sequence key={ch.n} from={Math.round((ch.at + 0.3) * fps)} durationInFrames={Math.round(4.6 * fps)}>
-          <ChapterTitle ch={ch} total={edit.chapters.length} dur={4.6} />
+        <Sequence key={ch.n} from={Math.round((ch.at + 0.2) * fps)} durationInFrames={Math.round(2.2 * fps)}>
+          <ChapterTitle ch={ch} total={edit.chapters.length} dur={2.2} />
         </Sequence>
       ))}
-      {edit.chapters.map((ch) =>
-        ch.map ? (
-          <Sequence key={`map${ch.n}`} from={Math.round((ch.at + 1.2) * fps)} durationInFrames={Math.round(4.8 * fps)}>
-            <SeoulMap from={ch.mapFrom} to={ch.map} dur={4.8} />
-          </Sequence>
-        ) : null,
-      )}
+      {edit.chapters.map((ch) => (
+        <Sequence key={`place${ch.n}`} from={Math.round((ch.at + 2.6) * fps)} durationInFrames={Math.round(3.5 * fps)}>
+          <PlaceTag place={ch.place} dur={3.5} />
+        </Sequence>
+      ))}
       {edit.titles.map((t, i) => (
         <Sequence key={i} from={Math.round(t.at * fps)} durationInFrames={Math.round(t.dur * fps)}>
           <MotionIntro text={t.text} sub={t.sub ?? ""} dur={t.dur} />
