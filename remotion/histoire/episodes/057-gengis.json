@@ -1,0 +1,126 @@
+{
+  "id": "057-gengis",
+  "titre": "Gengis Khan, ancêtre de millions d'hommes",
+  "duree": 60,
+  "sources": [
+    "Zerjal et al., American Journal of Human Genetics, 2003 : lignée du chromosome Y présente chez ~8 % des hommes de l'ancien Empire mongol (~0,5 % des hommes du monde, ~16 millions)",
+    "Temüdjin proclamé Gengis Khan en 1206 ; Empire mongol, le plus grand empire contigu de l'histoire",
+    "Tombe de Gengis Khan jamais retrouvée"
+  ],
+  "images": {
+    "chronique": {
+      "url": "https://images.metmuseum.org/CRDImages/is/original/DP164680.jpg",
+      "cut": false,
+      "credit": "Tumanba Khan, sa femme et ses neuf fils, Chingiznama, vers 1596, ca. 1596 — The Met (CC0)"
+    },
+    "mongol": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DP156771.jpg",
+      "cut": true,
+      "credit": "Figure de Mongol, XIVᵉ s., 14th century — The Met (CC0)"
+    },
+    "mongol2": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DP156776.jpg",
+      "cut": true,
+      "credit": "Figure de Mongol, XIVᵉ s., 14th century — The Met (CC0)"
+    },
+    "casque": {
+      "url": "https://images.metmuseum.org/CRDImages/aa/original/DP157684.jpg",
+      "cut": true,
+      "credit": "Casque, XIVᵉ s., probably ca. 1342–57 — The Met (CC0)"
+    },
+    "mandala": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DP-32259-001.jpg",
+      "cut": false,
+      "credit": "Mandala de Vajrabhairava, époque mongole, vers 1330, ca. 1330–32 — The Met (CC0)"
+    },
+    "poeme": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DT6277_CRD.jpg",
+      "cut": false,
+      "credit": "Poème d'adieu, 1240, dated 1240 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Seize millions d'hommes descendraient d'un *seul* homme.",
+      "bg": "red",
+      "rays": true,
+      "image": "mongol"
+    },
+    {
+      "text": "Vers 1162, en Mongolie, naît un garçon nommé *Temüdjin*. Son père est empoisonné quand il a neuf ans.",
+      "bg": "dark",
+      "image": "chronique"
+    },
+    {
+      "text": "Il grandit dans la misère. Mais il réunit peu à peu toutes les tribus *mongoles*.",
+      "bg": "dark",
+      "image": "mongol2"
+    },
+    {
+      "text": "En *1206*, il prend un nouveau nom : Gengis Khan.",
+      "bg": "dark",
+      "image": "casque",
+      "date": "1206"
+    },
+    {
+      "text": "Ses cavaliers conquièrent la Chine, la Perse, l'Asie centrale… Ses descendants iront jusqu'en *Europe*.",
+      "bg": "dark",
+      "image": "mandala"
+    },
+    {
+      "text": "C'est le plus grand empire d'un seul tenant de toute l'*histoire*.",
+      "bg": "red",
+      "rays": true,
+      "image": "mongol"
+    },
+    {
+      "text": "Son petit-fils, Kubilai, deviendra même empereur de *Chine*.",
+      "image": "mandala",
+      "bg": "dark"
+    },
+    {
+      "text": "Et Gengis Khan a eu beaucoup d'*enfants*. Ses fils aussi. Ses petits-fils aussi.",
+      "bg": "dark",
+      "image": "chronique",
+      "zoom": true
+    },
+    {
+      "text": "En 2003, des généticiens analysent l'ADN d'hommes dans toute l'*Asie*.",
+      "bg": "dark",
+      "image": "poeme",
+      "date": "2003"
+    },
+    {
+      "text": "Ils découvrent une même signature génétique chez environ huit pour cent des hommes de l'ancien empire *mongol*.",
+      "bg": "dark",
+      "image": "mongol2",
+      "counter": {
+        "to": 8,
+        "suffix": " %"
+      }
+    },
+    {
+      "text": "Soit environ *seize millions* d'hommes aujourd'hui !",
+      "bg": "red",
+      "rays": true,
+      "image": "mongol",
+      "stamp": "16 000 000"
+    },
+    {
+      "text": "Cette lignée remonte à l'époque de Gengis Khan. Pour les chercheurs, il en est très probablement l'*ancêtre*.",
+      "bg": "dark",
+      "image": "casque"
+    },
+    {
+      "text": "Et le plus fou : on n'a *jamais* retrouvé sa tombe. Selon la légende, ceux qui l'ont enterré ont été tués pour garder le secret.",
+      "bg": "red",
+      "rays": true,
+      "image": "chronique"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

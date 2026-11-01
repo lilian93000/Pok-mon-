@@ -1,0 +1,136 @@
+{
+  "id": "056-muraille",
+  "titre": "On ne voit pas la Grande Muraille depuis l'espace",
+  "duree": 60,
+  "sources": [
+    "Largeur de la muraille : quelques mètres ; couleur proche du sol",
+    "Yang Liwei (2003), premier astronaute chinois : ne l'a pas vue à l'œil nu",
+    "Mythe antérieur aux vols spatiaux (Ripley's Believe It or Not, 1932) ; relevé officiel de 2012 : 21 196 km cumulés",
+    "Lettre de William Stukeley (1754)"
+  ],
+  "images": {
+    "m1": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppem/00600/00625v.jpg",
+      "cut": false,
+      "credit": "La Grande Muraille de Chine, 1983, 1983-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "m2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppem/00600/00626v.jpg",
+      "cut": false,
+      "credit": "La Grande Muraille de Chine, 1983, 1983-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "m3": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/33600/33656v.jpg",
+      "cut": false,
+      "credit": "La Grande Muraille, 1936, 1936-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "nankou": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s10000/1s19000/1s19000/1s19025v.jpg",
+      "cut": false,
+      "credit": "Passe de Nankou, la Grande Muraille au loin, 1902, 1902-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "shanhai": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b07000/1b07400/1b07438v.jpg",
+      "cut": false,
+      "credit": "Détail de la Grande Muraille, Shanhaiguan, 1895, 1895 — Library of Congress (sans restriction connue)"
+    },
+    "pekin": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP-17301-196.jpg",
+      "cut": false,
+      "credit": "La Grande Muraille, Pékin, 1865, 1865 — The Met (CC0)"
+    },
+    "tele": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/01000/01087v.jpg",
+      "cut": false,
+      "credit": "Écran de télévision montrant le vol de John Glenn, 1962, 1962-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "On ne voit *pas* la Grande Muraille de Chine depuis l'espace.",
+      "bg": "red",
+      "rays": true,
+      "image": "m1"
+    },
+    {
+      "text": "C'est l'un des « faits » les plus répétés au monde. Même dans les *manuels* scolaires.",
+      "bg": "dark",
+      "image": "m2"
+    },
+    {
+      "text": "Pourtant, c'est *faux*.",
+      "bg": "red",
+      "rays": true,
+      "image": "m3"
+    },
+    {
+      "text": "La muraille est très longue : plus de vingt mille kilomètres en comptant toutes ses *sections*.",
+      "bg": "dark",
+      "image": "nankou",
+      "counter": {
+        "to": 21196,
+        "suffix": " KM"
+      }
+    },
+    {
+      "text": "Elle a été construite et reconstruite pendant plus de *deux mille* ans, par des dynasties successives.",
+      "image": "pekin",
+      "bg": "dark"
+    },
+    {
+      "text": "Mais elle est très *étroite* : quelques mètres de large seulement. À peu près comme une route.",
+      "bg": "dark",
+      "image": "shanhai"
+    },
+    {
+      "text": "Et elle est faite de pierre et de terre… de la même couleur que le *paysage* autour.",
+      "bg": "dark",
+      "image": "pekin"
+    },
+    {
+      "text": "Depuis l'orbite, à quatre cents kilomètres, c'est comme chercher un cheveu à des kilomètres de *distance*.",
+      "bg": "dark",
+      "image": "tele"
+    },
+    {
+      "text": "En 2003, le premier astronaute chinois, Yang Liwei, l'a cherchée. Il a dit qu'il ne l'avait *pas* vue.",
+      "bg": "dark",
+      "image": "m1",
+      "date": "2003"
+    },
+    {
+      "text": "Le plus drôle ? Ce mythe existait déjà… bien avant le premier vol *spatial* !",
+      "bg": "red",
+      "rays": true,
+      "image": "m2"
+    },
+    {
+      "text": "En 1932, un célèbre journal américain affirmait déjà qu'on pouvait la voir depuis la *Lune*.",
+      "bg": "dark",
+      "image": "nankou",
+      "date": "1932"
+    },
+    {
+      "text": "Et en 1754, un savant anglais imaginait déjà qu'on pourrait l'apercevoir… depuis la *Lune*.",
+      "image": "shanhai",
+      "bg": "dark"
+    },
+    {
+      "text": "Personne n'était encore allé dans l'espace pour *vérifier*.",
+      "bg": "dark",
+      "image": "tele"
+    },
+    {
+      "text": "En revanche, depuis l'orbite, on voit très bien… les autoroutes et les villes la *nuit*.",
+      "bg": "red",
+      "rays": true,
+      "image": "m3",
+      "stamp": "MYTHE"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

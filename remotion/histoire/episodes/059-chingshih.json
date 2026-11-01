@@ -1,0 +1,136 @@
+{
+  "id": "059-chingshih",
+  "titre": "Ching Shih, la reine des pirates",
+  "duree": 60,
+  "sources": [
+    "Zheng Yi Sao (Ching Shih), 1775-1844 : à la tête de la confédération pirate de la Flotte du drapeau rouge après la mort de Zheng Yi (1807)",
+    "Estimations : de 1 200 à 1 800 navires et de 50 000 à 80 000 pirates",
+    "Code de conduite strict ; amnistie négociée avec les autorités Qing en 1810 ; fin de vie à Canton"
+  ],
+  "images": {
+    "jonque": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DP148063.jpg",
+      "cut": false,
+      "credit": "Jonque chinoise, 1862, 2nd month, 1862 — The Met (CC0)"
+    },
+    "keying": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP853626.jpg",
+      "cut": false,
+      "credit": "La jonque chinoise Keying, 1847, 1847 — The Met (CC0)"
+    },
+    "keying2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP853638.jpg",
+      "cut": false,
+      "credit": "La jonque Keying, 1847, 1847 — The Met (CC0)"
+    },
+    "canton": {
+      "url": "https://images.metmuseum.org/CRDImages/ad/original/DP-25702-001.jpg",
+      "cut": false,
+      "credit": "Le front de mer de Canton, 1847-56, 1847–56 — The Met (CC0)"
+    },
+    "port": {
+      "url": "https://images.metmuseum.org/CRDImages/ad/original/156980.jpg",
+      "cut": false,
+      "credit": "Le port de Canton, vers 1790, ca. 1790 — The Met (CC0)"
+    },
+    "pirates": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP-17301-283.jpg",
+      "cut": false,
+      "credit": "Pirates chinois capturés à Hong Kong, 1866, 1866 — The Met (CC0)"
+    },
+    "incendie": {
+      "url": "https://images.metmuseum.org/CRDImages/ad/original/DP-34347-001.jpg",
+      "cut": false,
+      "credit": "L'incendie des comptoirs de Canton, 19th century — The Met (CC0)"
+    },
+    "jonque2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s10000/1s18000/1s18800/1s18803v.jpg",
+      "cut": false,
+      "credit": "Jonque typique, rivière de Canton, 1902, 1902-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "La pirate la plus puissante de l'histoire… a pris sa retraite *tranquille*.",
+      "bg": "red",
+      "rays": true,
+      "image": "jonque"
+    },
+    {
+      "text": "Chine, début du dix-neuvième siècle. Une jeune femme de Canton épouse un chef pirate, Zheng *Yi*.",
+      "bg": "dark",
+      "image": "port"
+    },
+    {
+      "text": "En 1807, son mari *meurt*. Tout le monde s'attend à ce qu'elle disparaisse.",
+      "bg": "dark",
+      "image": "jonque2",
+      "date": "1807"
+    },
+    {
+      "text": "Au contraire. Elle prend le commandement de la *flotte*.",
+      "bg": "red",
+      "rays": true,
+      "image": "keying"
+    },
+    {
+      "text": "Bientôt, elle dirige une confédération de plus de mille navires, et des dizaines de milliers de *pirates* !",
+      "bg": "dark",
+      "image": "keying2",
+      "counter": {
+        "to": 1000,
+        "suffix": " NAVIRES"
+      }
+    },
+    {
+      "text": "Elle impose un code *strict* : désobéir, c'est la mort. Voler le butin commun, c'est la mort.",
+      "bg": "dark",
+      "image": "pirates"
+    },
+    {
+      "text": "Et les femmes capturées sont *protégées* : les maltraiter est puni de mort.",
+      "image": "pirates",
+      "bg": "dark"
+    },
+    {
+      "text": "Elle bat la marine chinoise. Puis les *Portugais*. Puis les Britanniques.",
+      "bg": "dark",
+      "image": "incendie"
+    },
+    {
+      "text": "Personne n'arrive à l'arrêter. Alors en 1810, l'empereur propose de *négocier*.",
+      "bg": "dark",
+      "image": "canton",
+      "date": "1810"
+    },
+    {
+      "text": "Elle obtient une amnistie pour presque tous ses pirates… et elle garde son *trésor* !",
+      "bg": "red",
+      "rays": true,
+      "image": "jonque",
+      "stamp": "AMNISTIE"
+    },
+    {
+      "text": "Elle s'installe à Canton, ouvre une maison de *jeu*… et vit encore plus de trente ans.",
+      "bg": "dark",
+      "image": "canton",
+      "zoom": true
+    },
+    {
+      "text": "Elle meurt en 1844, dans son lit, à soixante-huit *ans*.",
+      "bg": "dark",
+      "image": "port"
+    },
+    {
+      "text": "Une pirate qui a fait plier un *empire*.",
+      "bg": "red",
+      "rays": true,
+      "image": "keying"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "id": "058-tenochtitlan",
+  "titre": "Tenochtitlan, la ville sur l'eau",
+  "duree": 60,
+  "sources": [
+    "Tenochtitlan fondée en 1325 sur une île du lac Texcoco ; estimations de 200 000 habitants ou plus vers 1519",
+    "Chaussées, chinampas, aqueduc de Chapultepec ; marché de Tlatelolco (lettres d'Hernán Cortés)",
+    "Bernal Díaz del Castillo, Histoire véridique de la conquête de la Nouvelle-Espagne"
+  ],
+  "images": {
+    "mexico": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s30000/1s32000/1s32800/1s32837v.jpg",
+      "cut": false,
+      "credit": "Mexico, l'ancienne Tenochtitlan des Aztèques, vers 1900, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "femme": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP248740.jpg",
+      "cut": true,
+      "credit": "Figure féminine agenouillée, aztèque, 1325–1521 CE — The Met (CC0)"
+    },
+    "singe": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP-15497-007.jpg",
+      "cut": true,
+      "credit": "Singe-araignée aux attributs du dieu du vent, aztèque, 1325–1521 CE — The Met (CC0)"
+    },
+    "mais": {
+      "url": "https://openaccess-cdn.clevelandart.org/1949.555/1949.555_print.jpg",
+      "cut": true,
+      "credit": "Homme portant du maïs, aztèque, 1325–1521 — Cleveland Museum of Art (CC0)"
+    },
+    "serpent": {
+      "url": "https://openaccess-cdn.clevelandart.org/1941.46/1941.46_print.jpg",
+      "cut": true,
+      "credit": "Serpent à plumes (Quetzalcoatl), aztèque, 1325–1521 — Cleveland Museum of Art (CC0)"
+    },
+    "temple": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP341939.jpg",
+      "cut": true,
+      "credit": "Maquette de temple, aztèque, 1400–1521 — The Met (CC0)"
+    },
+    "brasero": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DT9917.jpg",
+      "cut": true,
+      "credit": "Brasero à glyphe de date, aztèque, 1430–1521 CE — The Met (CC0)"
+    },
+    "aigle": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP-26146-001.jpg",
+      "cut": true,
+      "credit": "Labret à tête d'aigle, aztèque, 1325–1521 CE — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Cette ville était l'une des plus *grandes* du monde.",
+      "bg": "red",
+      "rays": true,
+      "image": "temple"
+    },
+    {
+      "text": "Mexique, *1325*. Un peuple, les Mexicas, s'installe sur une petite île au milieu d'un lac.",
+      "bg": "dark",
+      "image": "mexico",
+      "date": "1325"
+    },
+    {
+      "text": "Selon la légende, ils y ont vu un aigle posé sur un *cactus*. Le signe envoyé par leur dieu.",
+      "bg": "dark",
+      "image": "aigle"
+    },
+    {
+      "text": "Deux siècles plus tard, l'île est devenue une ville *immense* : Tenochtitlan.",
+      "bg": "dark",
+      "image": "temple",
+      "zoom": true
+    },
+    {
+      "text": "Des canaux partout, comme à *Venise*. De grandes chaussées pour rejoindre la terre ferme.",
+      "bg": "dark",
+      "image": "serpent"
+    },
+    {
+      "text": "Des jardins flottants pour cultiver le *maïs*. Un aqueduc pour apporter l'eau douce.",
+      "bg": "dark",
+      "image": "mais"
+    },
+    {
+      "text": "Plus de *deux cent mille* habitants, selon les estimations. Autant que les plus grandes villes d'Europe.",
+      "bg": "dark",
+      "image": "femme",
+      "counter": {
+        "to": 200000,
+        "suffix": " HABITANTS"
+      }
+    },
+    {
+      "text": "En 1519, les conquistadors espagnols arrivent. Ils n'en croient pas leurs *yeux*.",
+      "bg": "dark",
+      "image": "brasero",
+      "date": "1519"
+    },
+    {
+      "text": "L'un d'eux, Bernal Díaz, écrira que certains soldats se demandaient s'ils ne *rêvaient* pas.",
+      "bg": "dark",
+      "image": "singe"
+    },
+    {
+      "text": "Le marché attire des dizaines de milliers de personnes chaque *jour*.",
+      "bg": "dark",
+      "image": "mais"
+    },
+    {
+      "text": "Deux ans plus tard, après un siège terrible, la ville est *détruite*.",
+      "bg": "red",
+      "rays": true,
+      "image": "brasero"
+    },
+    {
+      "text": "Les Espagnols bâtissent Mexico par-dessus. Et aujourd'hui encore, la capitale s'*enfonce* lentement dans l'ancien lac.",
+      "bg": "red",
+      "rays": true,
+      "image": "mexico"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
