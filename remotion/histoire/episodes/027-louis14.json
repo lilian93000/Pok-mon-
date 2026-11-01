@@ -1,0 +1,131 @@
+{
+  "id": "027-louis14",
+  "titre": "Roi à 4 ans, pendant 72 ans",
+  "duree": 60,
+  "sources": [
+    "Louis XIV roi le 14 mai 1643 (4 ans et 8 mois) ; mort le 1ᵉʳ septembre 1715 : 72 ans et 110 jours de règne",
+    "Régence d'Anne d'Autriche et Mazarin ; règne personnel à partir de 1661",
+    "Mort du Grand Dauphin (1711) et du duc de Bourgogne (1712) ; succession de son arrière-petit-fils Louis XV (5 ans)"
+  ],
+  "images": {
+    "enfant": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/261955.jpg",
+      "cut": true,
+      "credit": "Médaille de Louis XIV enfant, 1643, 1643 — The Met (CC0)"
+    },
+    "medaille": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/SF1991_346.jpg",
+      "cut": true,
+      "credit": "Médaille de Louis XIV, ca. 1675 — The Met (CC0)"
+    },
+    "g1661": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP832733.jpg",
+      "cut": false,
+      "credit": "Louis XIV, gravure, 1661, 1661 — The Met (CC0)"
+    },
+    "g1667": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP832560.jpg",
+      "cut": false,
+      "credit": "Louis XIV, gravure, 1667, 1667 — The Met (CC0)"
+    },
+    "g1670": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP833023.jpg",
+      "cut": false,
+      "credit": "Louis XIV, gravure, 1670, 1670 — The Met (CC0)"
+    },
+    "mini": {
+      "url": "https://openaccess-cdn.clevelandart.org/1940.1216/1940.1216_print.jpg",
+      "cut": false,
+      "credit": "Portrait miniature de Louis XIV, 1600s — Cleveland Museum of Art (CC0)"
+    },
+    "statue": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/189138.jpg",
+      "cut": true,
+      "credit": "Statue équestre de Louis XIV, early 18th century — The Met (CC0)"
+    },
+    "versailles": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP-35515-001.jpg",
+      "cut": false,
+      "credit": "Vue du château de Versailles, années 1680, 1680s — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Il est devenu roi à *quatre* ans… et l'est resté soixante-douze ans.",
+      "bg": "red",
+      "rays": true,
+      "image": "enfant"
+    },
+    {
+      "text": "14 mai 1643. Louis XIII meurt. Son fils devient roi de France. Il a quatre ans et huit *mois*.",
+      "bg": "dark",
+      "image": "enfant",
+      "date": "1643",
+      "label": "LOUIS XIV"
+    },
+    {
+      "text": "Évidemment, ce n'est pas lui qui gouverne. C'est sa mère… et le cardinal *Mazarin*.",
+      "bg": "dark",
+      "image": "g1661"
+    },
+    {
+      "text": "Enfant, il connaît la *Fronde* : une révolte des nobles. Il doit même fuir Paris en pleine nuit.",
+      "bg": "dark",
+      "image": "g1667"
+    },
+    {
+      "text": "Il ne l'oubliera jamais. À la mort de Mazarin, en 1661, il annonce : désormais, je gouverne *seul*.",
+      "bg": "dark",
+      "image": "g1670",
+      "date": "1661"
+    },
+    {
+      "text": "Il fait construire *Versailles*, et y installe toute la noblesse, pour mieux la surveiller.",
+      "bg": "dark",
+      "image": "versailles"
+    },
+    {
+      "text": "Là-bas, même son lever et son coucher sont des *cérémonies*, devant des dizaines de courtisans.",
+      "image": "versailles",
+      "bg": "dark",
+      "zoom": true
+    },
+    {
+      "text": "Il règne si longtemps… qu'il voit mourir son fils, puis son *petit-fils*.",
+      "bg": "dark",
+      "image": "mini"
+    },
+    {
+      "text": "À sa mort, c'est son *arrière-petit-fils* qui devient roi. Louis XV a cinq ans.",
+      "bg": "dark",
+      "image": "medaille"
+    },
+    {
+      "text": "Total : soixante-douze ans et cent dix jours sur le *trône*.",
+      "bg": "red",
+      "rays": true,
+      "image": "statue",
+      "counter": {
+        "to": 72,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "C'est le plus long règne de l'histoire de France… et l'un des plus longs du *monde*.",
+      "bg": "dark",
+      "image": "medaille",
+      "zoom": true
+    },
+    {
+      "text": "Sur son lit de mort, il aurait confié à l'enfant : « J'ai trop aimé la *guerre*. Ne m'imitez pas. »",
+      "bg": "red",
+      "rays": true,
+      "image": "mini"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

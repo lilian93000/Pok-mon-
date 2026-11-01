@@ -1,0 +1,129 @@
+{
+  "id": "025-londres",
+  "titre": "La moitié de Londres brûle, 6 morts officiels",
+  "duree": 60,
+  "sources": [
+    "Grand incendie de Londres, 2-6 septembre 1666, parti de la boulangerie de Thomas Farriner, Pudding Lane",
+    "Environ 13 200 maisons, 87 églises paroissiales et la cathédrale Saint-Paul détruites ; 6 morts recensés (bilan réel inconnu)",
+    "Journal de Samuel Pepys, 4 septembre 1666 (parmesan et vin enterrés)",
+    "Monument de Christopher Wren : 61 m, distance jusqu'au départ du feu"
+  ],
+  "images": {
+    "plan": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP823346.jpg",
+      "cut": false,
+      "credit": "Londres avant le grand incendie, 1666–77 — The Met (CC0)"
+    },
+    "chope": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP267106.jpg",
+      "cut": true,
+      "credit": "Chope gravée de la peste et du grand incendie de Londres, 1673, 1673/74 — The Met (CC0)"
+    },
+    "reconstruction": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b00000/3b02000/3b02800/3b02873r.jpg",
+      "cut": false,
+      "credit": "Plan de reconstruction de Londres après l'incendie de 1666, 1767-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "eglise": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP829233.jpg",
+      "cut": false,
+      "credit": "St Stephen Walbrook (Wren), 1809, November 1, 1809 — The Met (CC0)"
+    },
+    "feu": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP854650.jpg",
+      "cut": false,
+      "credit": "Habitants fuyant une ville en flammes, XVIᵉ s., The Met (CC0)"
+    },
+    "bataille": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP874033.jpg",
+      "cut": false,
+      "credit": "Bataille dans une ville en flammes, The Met (CC0)"
+    },
+    "eglise2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP880549.jpg",
+      "cut": false,
+      "credit": "St Stephen Walbrook, 1809, November 1, 1809 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "La moitié de Londres brûle… et seulement *six* morts officiels.",
+      "bg": "red",
+      "rays": true,
+      "image": "feu"
+    },
+    {
+      "text": "2 septembre *1666*, une heure du matin. Un feu démarre dans une boulangerie, Pudding Lane.",
+      "bg": "dark",
+      "image": "plan",
+      "date": "2 SEPT. 1666"
+    },
+    {
+      "text": "Le maire arrive, regarde… et lâche : « Bah, une femme pourrait l'éteindre en faisant *pipi* dessus. »",
+      "bg": "dark",
+      "image": "chope"
+    },
+    {
+      "text": "Erreur. Avec le vent, les maisons en bois, l'été très sec… le feu devient *monstrueux*.",
+      "bg": "dark",
+      "image": "bataille"
+    },
+    {
+      "text": "Il brûle pendant *quatre* jours.",
+      "bg": "dark",
+      "image": "feu",
+      "zoom": true,
+      "counter": {
+        "to": 4,
+        "suffix": " JOURS"
+      }
+    },
+    {
+      "text": "Treize mille maisons détruites. Quatre-vingt-sept églises. Et la cathédrale *Saint-Paul*.",
+      "bg": "red",
+      "rays": true,
+      "image": "plan"
+    },
+    {
+      "text": "Pour l'arrêter, on fait *exploser* des maisons à la poudre, pour créer des coupe-feu.",
+      "bg": "dark",
+      "image": "bataille"
+    },
+    {
+      "text": "Pendant ce temps, l'écrivain Samuel Pepys enterre dans son jardin ses objets précieux… dont son *parmesan* !",
+      "bg": "dark",
+      "image": "chope",
+      "zoom": true,
+      "stamp": "PARMESAN"
+    },
+    {
+      "text": "Bilan officiel : six morts. Mais en réalité, personne ne comptait les *pauvres*. Le vrai chiffre est inconnu.",
+      "bg": "dark",
+      "image": "feu"
+    },
+    {
+      "text": "Des dizaines de milliers de Londoniens se retrouvent *sans-abri*.",
+      "bg": "dark",
+      "image": "reconstruction"
+    },
+    {
+      "text": "L'architecte Christopher Wren reconstruit Saint-Paul… et plus de *cinquante* églises.",
+      "bg": "dark",
+      "image": "eglise"
+    },
+    {
+      "text": "Et il élève une colonne de soixante et un mètres. Exactement la *distance* jusqu'à la boulangerie.",
+      "bg": "dark",
+      "image": "eglise2",
+      "counter": {
+        "to": 61,
+        "suffix": " MÈTRES"
+      }
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

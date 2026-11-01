@@ -1,0 +1,139 @@
+{
+  "id": "024-galilee",
+  "titre": "Galilée réhabilité 359 ans plus tard",
+  "duree": 60,
+  "sources": [
+    "Observations au télescope (1609-1610) : satellites de Jupiter",
+    "Dialogue sur les deux grands systèmes du monde (1632) ; procès et abjuration (22 juin 1633) ; résidence surveillée à Arcetri jusqu'à sa mort (1642)",
+    "« Eppur si muove » : formule apparue au XVIIIᵉ siècle (Baretti, 1757)",
+    "Discours de Jean-Paul II du 31 octobre 1992",
+    "Doigt de Galilée conservé au Museo Galileo, Florence"
+  ],
+  "images": {
+    "portrait": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP838830.jpg",
+      "cut": false,
+      "credit": "Galilée, carte de 1888, 1888 — The Met (CC0)"
+    },
+    "cartouche": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP854186.jpg",
+      "cut": false,
+      "credit": "Portrait de Galilée, 1623, 1623 — The Met (CC0)"
+    },
+    "dialogo": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP818095.jpg",
+      "cut": false,
+      "credit": "Frontispice du Dialogue de Galilée, 1632, 1632 — The Met (CC0)"
+    },
+    "allegorie": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP818079.jpg",
+      "cut": false,
+      "credit": "Galilée et les allégories de l'astronomie, 1656, 1656 — The Met (CC0)"
+    },
+    "gravure": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b20000/3b27000/3b27000/3b27092r.jpg",
+      "cut": false,
+      "credit": "Galilée, gravure, 1821, 1821-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "tombe": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s20000/1s28000/1s28100/1s28121v.jpg",
+      "cut": false,
+      "credit": "Tombeau de Galilée, Santa Croce, Florence, 1860-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "statue": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/highsm/58600/58677v.jpg",
+      "cut": false,
+      "credit": "Statue de Galilée, Carnegie Museum (Carol M. Highsmith), 2019-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "lampe": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b09000/1b09300/1b09307v.jpg",
+      "cut": false,
+      "credit": "Lampe de Galilée, Pise, 1900 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "L'Église lui a donné raison… trois cent cinquante-neuf ans plus *tard*.",
+      "bg": "red",
+      "rays": true,
+      "image": "portrait"
+    },
+    {
+      "text": "1610. Galilée pointe une lunette vers le ciel. Il découvre des *lunes* autour de Jupiter.",
+      "bg": "dark",
+      "image": "allegorie",
+      "date": "1610"
+    },
+    {
+      "text": "Pour lui, c'est clair : la Terre n'est pas le centre de l'univers. Elle tourne autour du *Soleil*.",
+      "bg": "dark",
+      "image": "cartouche"
+    },
+    {
+      "text": "En 1632, il publie un livre pour le *prouver*.",
+      "bg": "dark",
+      "image": "dialogo",
+      "date": "1632"
+    },
+    {
+      "text": "Problème : pour l'Église de l'époque, c'est contraire à la *Bible*.",
+      "bg": "dark",
+      "image": "gravure"
+    },
+    {
+      "text": "1633, Rome. Galilée a soixante-neuf ans. Il est jugé par l'*Inquisition*.",
+      "bg": "dark",
+      "image": "cartouche",
+      "date": "1633"
+    },
+    {
+      "text": "À genoux, il doit déclarer que la Terre ne bouge *pas*.",
+      "bg": "red",
+      "rays": true,
+      "image": "portrait",
+      "stamp": "ABJURATION"
+    },
+    {
+      "text": "La légende raconte qu'en se relevant, il murmure : « Et pourtant, elle *tourne*. » Mais c'est sans doute inventé.",
+      "bg": "dark",
+      "image": "statue"
+    },
+    {
+      "text": "Il passe le reste de sa vie enfermé chez lui, en résidence *surveillée*. Il meurt en 1642.",
+      "bg": "dark",
+      "image": "tombe"
+    },
+    {
+      "text": "Des siècles passent. La science lui donne raison depuis *longtemps*.",
+      "bg": "dark",
+      "image": "lampe"
+    },
+    {
+      "text": "En 1992, le pape Jean-Paul II reconnaît enfin que l'Église s'est *trompée*.",
+      "bg": "dark",
+      "image": "gravure",
+      "date": "1992"
+    },
+    {
+      "text": "Trois cent cinquante-neuf ans après le *procès*.",
+      "bg": "red",
+      "rays": true,
+      "image": "portrait",
+      "counter": {
+        "to": 359,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "Et un détail fou : un des doigts de Galilée est exposé dans un musée à Florence. Pointé vers le *ciel*.",
+      "bg": "dark",
+      "image": "allegorie",
+      "zoom": true
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

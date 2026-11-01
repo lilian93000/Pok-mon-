@@ -1,0 +1,138 @@
+{
+  "id": "026-barbe",
+  "titre": "La taxe sur la barbe",
+  "duree": 60,
+  "sources": [
+    "Pierre le Grand rase lui-même les boyards à son retour de la Grande Ambassade (1698)",
+    "Oukase de 1705 : taxe sur la barbe selon le rang (jusqu'à 100 roubles par an) ; jeton de cuivre portant « l'argent a été pris »",
+    "Paysans exemptés dans les villages, payant à l'entrée des villes ; taxe abolie en 1772",
+    "Décret sur l'habit « allemand » (1700) ; fondation de Saint-Pétersbourg (1703)"
+  ],
+  "images": {
+    "pierre": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/209591.jpg",
+      "cut": false,
+      "credit": "Pierre le Grand, relief, late 18th–early 19th century — The Met (CC0)"
+    },
+    "medaillon": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP-15822-061.jpg",
+      "cut": true,
+      "credit": "Le tsar Pierre le Grand, médaillon, 18th century — The Met (CC0)"
+    },
+    "cavalier": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/03800/03892v.jpg",
+      "cut": false,
+      "credit": "Statue de Pierre le Grand, Saint-Pétersbourg, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "cavalier2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/04100/04176v.jpg",
+      "cut": false,
+      "credit": "Monument à Pierre le Grand, Saint-Pétersbourg, 1909, 1909-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "barbu": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP-30702-001.jpg",
+      "cut": true,
+      "credit": "Médaille d'un homme barbu, 1553, 1553 — The Met (CC0)"
+    },
+    "barbu2": {
+      "url": "https://images.metmuseum.org/CRDImages/ad/original/270533.jpg",
+      "cut": true,
+      "credit": "Médaillon d'un homme barbu, 1891, cast 1897–98 — The Met (CC0)"
+    },
+    "saints": {
+      "url": "https://images.metmuseum.org/CRDImages/ep/original/DP-23364-001.jpg",
+      "cut": false,
+      "credit": "Saints Pierre et Paul, années 1620, 1620s — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "En Russie, porter la barbe coûtait de l'*argent*.",
+      "bg": "red",
+      "rays": true,
+      "image": "medaillon"
+    },
+    {
+      "text": "1698. Le tsar Pierre le Grand rentre d'un long voyage en *Europe*.",
+      "bg": "dark",
+      "image": "pierre",
+      "date": "1698"
+    },
+    {
+      "text": "Il a vu la Hollande, l'Angleterre. Il veut une Russie *moderne*.",
+      "bg": "dark",
+      "image": "cavalier"
+    },
+    {
+      "text": "Et pour lui, la modernité commence… par le *visage*.",
+      "bg": "dark",
+      "image": "medaillon",
+      "zoom": true
+    },
+    {
+      "text": "Lors d'une réception, il prend un rasoir… et coupe *lui-même* la barbe des nobles !",
+      "bg": "red",
+      "rays": true,
+      "image": "barbu"
+    },
+    {
+      "text": "Pour les Russes orthodoxes, c'est un *choc* : la barbe est un signe de foi.",
+      "bg": "dark",
+      "image": "saints"
+    },
+    {
+      "text": "Et ce n'est pas tout : il interdit aussi les longs manteaux traditionnels. Place aux habits à l'*européenne* !",
+      "image": "pierre",
+      "bg": "dark"
+    },
+    {
+      "text": "Alors Pierre trouve un compromis : vous voulez garder votre barbe ? Très bien… *payez*.",
+      "bg": "dark",
+      "image": "barbu2"
+    },
+    {
+      "text": "Jusqu'à *cent* roubles par an pour les riches marchands !",
+      "bg": "dark",
+      "image": "pierre",
+      "counter": {
+        "to": 100,
+        "suffix": " ROUBLES"
+      }
+    },
+    {
+      "text": "En échange, on reçoit un *jeton* de cuivre. À garder sur soi, comme une preuve.",
+      "bg": "dark",
+      "image": "barbu",
+      "zoom": true
+    },
+    {
+      "text": "Gravé dessus : « L'argent a été *pris* ».",
+      "bg": "red",
+      "rays": true,
+      "image": "medaillon",
+      "stamp": "ARGENT PRIS"
+    },
+    {
+      "text": "Les paysans, eux, peuvent garder leur barbe au village… mais doivent payer une petite somme pour entrer en *ville*.",
+      "bg": "dark",
+      "image": "barbu2"
+    },
+    {
+      "text": "La taxe durera *soixante-dix* ans. Elle sera supprimée par Catherine II, en 1772.",
+      "bg": "dark",
+      "image": "cavalier2",
+      "date": "1772"
+    },
+    {
+      "text": "Entre-temps, Pierre aura même fondé une nouvelle capitale, tournée vers l'Europe : *Saint-Pétersbourg*.",
+      "image": "cavalier",
+      "bg": "dark",
+      "date": "1703"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
