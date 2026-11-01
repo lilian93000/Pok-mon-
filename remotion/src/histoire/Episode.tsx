@@ -7,11 +7,11 @@ import { loadFont as loadCinzel } from "@remotion/google-fonts/Cinzel";
 import { loadFont as loadMont } from "@remotion/google-fonts/Montserrat";
 import type { Beat, Props, Word } from "./types";
 
-const { fontFamily: serif } = loadCinzel("normal", { weights: ["700", "900"], subsets: ["latin", "latin-ext"] });
+export const { fontFamily: serif } = loadCinzel("normal", { weights: ["700", "900"], subsets: ["latin", "latin-ext"] });
 const { fontFamily: sans } = loadMont("normal", { weights: ["800", "900"], subsets: ["latin", "latin-ext"] });
 
 // Direction artistique « Un jour, un fait » : marbre noir, rouge pompéien, or ancien.
-const C = {
+export const C = {
   gold: "#E9B949",
   goldDeep: "#B8862B",
   red: "#7E1418",
@@ -27,7 +27,7 @@ const Marble: React.FC = () => (
   <Img src={staticFile("histoire/_tex/marble.png")} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.16, mixBlendMode: "screen" }} />
 );
 
-const Rays: React.FC<{ color: string }> = ({ color }) => {
+export const Rays: React.FC<{ color: string }> = ({ color }) => {
   const f = useCurrentFrame();
   return (
     <div
