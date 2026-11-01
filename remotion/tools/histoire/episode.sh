@@ -1,7 +1,7 @@
 #!/bin/bash
 # Fabrique un épisode « Un jour, un fait » de A à Z.
 # Usage : tools/histoire/episode.sh histoire/episodes/<id>.json
-# Variables : ELEVENLABS_API_KEY (obligatoire pour la voix), ELEVENLABS_VOICE_ID (sinon voix « Brian » nPczCjzI2devNBz1zQrb)
+# Variables : ELEVENLABS_API_KEY (obligatoire pour la voix), ELEVENLABS_VOICE_ID (par défaut : 3HZyQcLKlT0a3RDeXVsP)
 set -e
 cd "$(dirname "$0")/../.."
 EP=$1; ID=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['id'])" "$EP")

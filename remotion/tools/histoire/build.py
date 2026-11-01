@@ -30,7 +30,7 @@ full = " ".join(w["w"] for w in words)
 key = os.environ.get("ELEVENLABS_API_KEY")
 audio = None
 if key:
-    voice = os.environ.get("ELEVENLABS_VOICE_ID", "nPczCjzI2devNBz1zQrb")  # Brian par défaut
+    voice = os.environ.get("ELEVENLABS_VOICE_ID", "3HZyQcLKlT0a3RDeXVsP")  # voix choisie par l'utilisateur
     cache = pub / "voice.json"
     if not cache.exists() or json.load(open(cache)).get("text") != full:
         if not voice:

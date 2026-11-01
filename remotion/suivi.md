@@ -11,5 +11,6 @@
 ## 2. TikTok histoire « Un jour, un fait » — en cours
 - Format : un fait historique par vidéo, voix ElevenLabs, images de musée détourées.
 - Liste : `histoire/faits.md` (70 faits). Épisode test : nº 1, Vespasien et la taxe sur l'urine.
-- En attente : clé ElevenLabs (`ELEVENLABS_API_KEY`) + identifiant de voix (`ELEVENLABS_VOICE_ID`).
+- Voix ElevenLabs : 3HZyQcLKlT0a3RDeXVsP. Clé à mettre dans les secrets de l'environnement (ELEVENLABS_API_KEY).
+- Épisode 1 rendu (58,6 s) : à valider par l'utilisateur. Pistes : musique de fond, image de Paris pour les vespasiennes.
 - À valider : DA (marbre noir / rouge pompéien / or), rythme, police des sous-titres.
