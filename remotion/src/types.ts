@@ -16,7 +16,7 @@ export type Chapter = { at: number; n: number; title: string; place: string; map
 type PopBase = { at: number; dur: number };
 /** animations ponctuelles (motion design) */
 export type Pop =
-  | (PopBase & { kind: "sticker"; emoji: string; text: string; pos?: "left" | "right" | "center"; color?: string })
+  | (PopBase & { kind: "quote"; text: string; by?: string; pos?: "left" | "right" })
   | (PopBase & { kind: "money"; won: number; eur: number })
   | (PopBase & { kind: "route"; from: string; to: string; km: number; time: string })
   | (PopBase & { kind: "thermo"; value: number })

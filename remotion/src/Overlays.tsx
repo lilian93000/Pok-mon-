@@ -1,5 +1,5 @@
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { C, fontFamily } from "./theme";
+import { C, caps, fontFamily, outline, serif } from "./theme";
 import type { CaptionPage, Chapter, Tip, Title } from "./types";
 
 /* ---------- Sous-titres : 1 page de quelques mots, mot actif surligné ---------- */
@@ -113,59 +113,39 @@ export const ChapterBar: React.FC<{ chapters: Chapter[]; duration: number; endAt
 /* ---------- Écran de fin : place libre pour les éléments YouTube ---------- */
 export const EndScreen: React.FC<{ text: string; sub: string }> = ({ text, sub }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const fade = interpolate(frame, [0, 20], [0, 1], { extrapolateRight: "clamp" });
-  const pop = spring({ frame: frame - 10, fps, config: { damping: 14 } });
+  const fade = interpolate(frame, [0, 24], [0, 1], { extrapolateRight: "clamp" });
+  const rise = interpolate(frame, [10, 40], [30, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const t = interpolate(frame, [10, 40], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
-    <AbsoluteFill style={{ background: `rgba(11,11,16,${0.55 * fade})` }}>
-      <AbsoluteFill style={{ justifyContent: "flex-start", alignItems: "center", paddingTop: 120 }}>
-        <div style={{ fontFamily, textAlign: "center", color: C.white, transform: `scale(${pop})` }}>
-          <div style={{ fontWeight: 600, fontSize: 40, letterSpacing: 8, color: C.accent }}>{sub}</div>
-          <div style={{ fontWeight: 900, fontSize: 130, lineHeight: 1.05 }}>{text}</div>
-        </div>
+    <AbsoluteFill style={{ background: `rgba(10,10,12,${0.5 * fade})` }}>
+      <AbsoluteFill style={{ justifyContent: "flex-start", alignItems: "center", paddingTop: 130, color: C.white, opacity: t, transform: `translateY(${rise}px)` }}>
+        <div style={{ ...caps, fontSize: 22, color: C.accent }}>{sub}</div>
+        <div style={{ ...outline, fontFamily: serif, fontWeight: 900, fontSize: 140, lineHeight: 1.05, marginTop: 6 }}>{text} 🇯🇵</div>
+        <div style={{ ...caps, fontSize: 18, color: C.dim, marginTop: 6 }}>日本 · Osaka · Kyoto · Nara · Kobe</div>
       </AbsoluteFill>
-      {/* emplacements indicatifs (vidéo suggérée à gauche, abonnement à droite) */}
       <AbsoluteFill style={{ flexDirection: "row", justifyContent: "center", alignItems: "flex-end", gap: 120, paddingBottom: 170, opacity: fade }}>
-        <div style={{ width: 720, height: 405, borderRadius: 18, border: "4px dashed rgba(255,255,255,.35)" }} />
-        <div style={{ width: 300, height: 300, borderRadius: "50%", border: "4px dashed rgba(255,255,255,.35)" }} />
+        <div style={{ width: 720, height: 405, border: "1px solid rgba(246,243,238,.35)" }} />
+        <div style={{ width: 300, height: 300, borderRadius: "50%", border: "1px solid rgba(246,243,238,.35)" }} />
       </AbsoluteFill>
     </AbsoluteFill>
   );
 };
 
-/* ---------- Fiche info (en haut à droite) ---------- */
+/* ---------- Fiche info « Bon à savoir » (boîte blanche, en haut à gauche) ---------- */
 export const TipCard: React.FC<{ tip: Tip }> = ({ tip }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const dur = tip.dur * fps;
-  const inn = spring({ frame, fps, config: { damping: 15 } });
-  const out = interpolate(frame, [dur - 10, dur], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const D = tip.dur * fps;
+  const s = spring({ frame, fps, config: { damping: 14, stiffness: 180 } });
+  const out = interpolate(frame, [D - 7, D], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
-    <AbsoluteFill style={{ alignItems: "flex-end", justifyContent: "flex-start", padding: "90px 80px", opacity: out }}>
-      <div
-        style={{
-          fontFamily,
-          display: "flex",
-          alignItems: "center",
-          gap: 28,
-          background: "rgba(11,11,16,.78)",
-          border: "2px solid rgba(255,255,255,.12)",
-          borderLeft: `10px solid ${C.accent}`,
-          borderRadius: 24,
-          padding: "26px 40px 26px 30px",
-          maxWidth: 760,
-          color: C.white,
-          transform: `translateX(${(1 - inn) * 120}px)`,
-          opacity: inn,
-          boxShadow: "0 20px 60px rgba(0,0,0,.45)",
-        }}
-      >
-        <div style={{ fontSize: 76, lineHeight: 1 }}>{tip.icon}</div>
-        <div>
-          <div style={{ fontWeight: 600, fontSize: 24, letterSpacing: 4, color: C.accent }}>BON À SAVOIR</div>
-          <div style={{ fontWeight: 900, fontSize: 44, lineHeight: 1.1 }}>{tip.title}</div>
-          <div style={{ fontWeight: 600, fontSize: 32, opacity: 0.9, marginTop: 6 }}>{tip.text}</div>
+    <AbsoluteFill style={{ alignItems: "flex-start", justifyContent: "flex-start", padding: "80px 90px", opacity: out }}>
+      <div style={{ ...caps, ...outline, fontSize: 28, color: C.accent, opacity: s }}>💡 Bon à savoir</div>
+      <div style={{ fontFamily, background: C.white, color: C.black, borderRadius: 16, padding: "16px 28px", marginTop: 10, maxWidth: 860, boxShadow: "0 10px 30px rgba(0,0,0,.35)", transform: `scale(${s})`, transformOrigin: "0 0" }}>
+        <div style={{ fontWeight: 900, fontSize: 48, lineHeight: 1.1 }}>
+          {tip.icon} {tip.title}
         </div>
+        <div style={{ fontWeight: 700, fontSize: 32, marginTop: 6, color: "#444" }}>{tip.text}</div>
       </div>
     </AbsoluteFill>
   );

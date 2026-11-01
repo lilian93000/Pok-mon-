@@ -1,6 +1,6 @@
 """Assemble la vidéo finale : base ffmpeg + sous-titres ASS + barre de chapitres + animations Remotion.
 
-Usage : python3 tools/compose_final.py <base.mp4> <src/data/video.json> <gfx_ranges.json> <dossier_gfx> <sortie.mp4>
+Usage : python3 tools/compose_final.py <base.mp4> <src/data/video.json> <gfx_ranges.json> <dossier_gfx> <sortie.mp4> [durée_max_s]
 """
 import json
 import os
@@ -8,6 +8,7 @@ import subprocess
 import sys
 
 base, edit_path, ranges_path, gfx_dir, out = sys.argv[1:6]
+limit = ["-t", sys.argv[6]] if len(sys.argv) > 6 else []  # pour un extrait
 here = os.path.dirname(os.path.abspath(__file__))
 fonts = os.path.join(here, "..", "fonts")
 ass = edit_path.rsplit(".", 1)[0] + ".ass"
@@ -18,7 +19,7 @@ FPS, W = 30, 1920
 # --- barre de progression par chapitres (en haut) ---
 ch = e["chapters"]
 start, end = ch[0]["at"], e["endScreenAt"]
-pad, gap, y, h = 24, 6, 18, 6
+pad, gap, y, h = 24, 6, 14, 5
 usable = W - 2 * pad - gap * (len(ch) - 1)
 bars, x = [], pad
 for i, c in enumerate(ch):
@@ -26,10 +27,10 @@ for i, c in enumerate(ch):
     t_end = ch[i + 1]["at"] if i + 1 < len(ch) else end
     w = max(2, round(usable * (t_end - s) / (end - start)))
     on = f"between(t,{start:.3f},{end:.3f})"
-    bars.append(f"drawbox=x={x}:y={y}:w={w}:h={h}:color=white@0.28:t=fill:enable='{on}'")
+    bars.append(f"drawbox=x={x}:y={y}:w={w}:h={h}:color=white@0.35:t=fill:enable='{on}'")
     # remplissage rose proportionnel à l'avancement du chapitre
     bars.append(
-        f"drawbox=x={x}:y={y}:w='max(1,{w}*clip((t-{s:.3f})/{t_end - s:.3f},0,1))':h={h}:color=0xFF3D7F:t=fill:"
+        f"drawbox=x={x}:y={y}:w='max(1,{w}*clip((t-{s:.3f})/{t_end - s:.3f},0,1))':h={h}:color=0xFFD400:t=fill:"
         f"enable='between(t,{s:.3f},{end:.3f})'"
     )
     x += w + gap
@@ -52,6 +53,6 @@ fg = ";".join(chain)
 fg += ";[0:a]asetpts=N/SR/TB[aout]"  # même renumérotation côté audio (sinon ~2 s de décalage en fin)
 cmd = ["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", fg, "-map", last, "-map", "[aout]",
        "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-pix_fmt", "yuv420p", "-r", str(FPS),
-       "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out]
+       "-c:a", "aac", "-b:a", "192k", *limit, "-movflags", "+faststart", out]
 subprocess.run(cmd, check=True)
 print("ok", out)

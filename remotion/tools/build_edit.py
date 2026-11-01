@@ -204,7 +204,7 @@ ass = [
     "[Script Info]", "ScriptType: v4.00+", "PlayResX: 1920", "PlayResY: 1080", "WrapStyle: 0", "ScaledBorderAndShadow: yes", "",
     "[V4+ Styles]",
     "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-    "Style: Cap,Poppins ExtraBold,94,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,3,4,2,200,200,90,1",
+    "Style: Cap,Montserrat ExtraBold,74,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,4.5,2,2,200,200,80,1",
     "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
 ]
 for c in captions:
@@ -216,7 +216,8 @@ for c in captions:
         if b - a < 0.02:
             continue
         # « \h » élargit l'espace (celui de Poppins est très étroit)
-        txt = "\\h ".join((f"{{\\c{ACCENT}\\fscx100\\fscy100\\t(0,90,\\fscx118\\fscy118)}}{esc(w['w'])}{{\\c&H00FFFFFF&\\fscx100\\fscy100}}" if j == i else esc(w["w"])) for j, w in enumerate(ws))
+        # mot prononcé en jaune
+        txt = " ".join((f"{{\\c&H0000D4FF&}}{esc(w['w'])}{{\\c&H00FFFFFF&}}" if j == i else esc(w["w"])) for j, w in enumerate(ws))
         ass.append(f"Dialogue: 0,{ass_time(a)},{ass_time(b)},Cap,,0,0,0,,{txt}")
 ass_path = sys.argv[2].rsplit(".", 1)[0] + ".ass"
 open(ass_path, "w").write("\n".join(ass) + "\n")
