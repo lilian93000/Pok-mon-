@@ -309,17 +309,6 @@ export const Episode: React.FC<Props & { photos?: string[] }> = (props) => {
           volume={(f) => 0.24 * interpolate(f, [0, 8, fr(props.duration) - 25, fr(props.duration)], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}
         />
       )}
-      {beats.map((b, i) => (
-        <Sequence key={`sfx${i}`} from={Math.max(0, fr(b.start) - 3)} layout="none">
-          {i > 0 && <Audio src={staticFile(`histoire/_sfx/whoosh${(i % 3) + 1}.mp3`)} volume={0.32} />}
-          {(b.bg === "red" || b.counter || b.date) && <Audio src={staticFile("histoire/_sfx/impact.mp3")} volume={0.45} />}
-          {b.stamp && (
-            <Sequence from={7} layout="none">
-              <Audio src={staticFile("histoire/_sfx/stamp.mp3")} volume={0.6} />
-            </Sequence>
-          )}
-        </Sequence>
-      ))}
       <AbsoluteFill style={{ transform: `translate(${shake}px, ${-shake * 0.6}px)` }}>
         {beats.map((b, i) => {
           const from = fr(b.start);

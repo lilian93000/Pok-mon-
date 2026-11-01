@@ -3,7 +3,8 @@
   "titre": "L'argent n'a pas d'odeur",
   "sources": [
     "Suétone, Vie des douze Césars, Vespasien 16 (40 milliards de sesterces) et 23 (taxe sur l'urine, la pièce sous le nez de Titus)",
-    "Les vespasiennes : urinoirs publics de Paris (années 1830), nommés d'après Vespasien"
+    "Les vespasiennes : urinoirs publics de Paris (années 1830), nommés d'après Vespasien",
+    "Suétone, Vespasien 1 (son père, collecteur d'impôts) et 23 (« Vae, puto deus fio »)"
   ],
   "images": {
     "vesp": {
@@ -71,7 +72,7 @@
       "date": "69 apr. J.-C."
     },
     {
-      "text": "*Quatre* empereurs en un an !",
+      "text": "Galba, Othon, Vitellius… *Quatre* empereurs en un an !",
       "bg": "dark",
       "heads": 4
     },
@@ -81,7 +82,7 @@
       "bg": "dark"
     },
     {
-      "text": "Le nouveau maître de Rome s'appelle *Vespasien*.",
+      "text": "Le dernier debout s'appelle *Vespasien*. Un vieux général… fils d'un collecteur d'impôts.",
       "image": "vesp",
       "bg": "red",
       "rays": true,
@@ -155,6 +156,17 @@
       "stamp": "PECUNIA NON OLET"
     },
     {
+      "text": "Il est resté drôle jusqu'au *bout*. Sur son lit de mort, il lance :",
+      "image": "elder",
+      "bg": "dark"
+    },
+    {
+      "text": "« Malheur… je crois que je deviens un *dieu*. »",
+      "image": "vesp",
+      "bg": "red",
+      "rays": true
+    },
+    {
       "text": "Deux mille ans plus tard, en France, les urinoirs publics portent encore son *nom*.",
       "image": "arc",
       "bg": "dark"
@@ -171,5 +183,6 @@
       "bg": "dark",
       "outro": true
     }
-  ]
+  ],
+  "duree": 60
 }

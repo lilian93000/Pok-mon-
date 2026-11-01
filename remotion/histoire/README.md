@@ -1,6 +1,6 @@
 # Un jour, un fait — TikTok histoire
 
-Un fait historique par vidéo (≈ 45–70 s, 1080×1920).
+Un fait historique par vidéo : **60 s pile**, 1080×1920, voix seule (pas de bruitages). Musique de fond : thème de *Succession*, ajouté dans TikTok.
 
 - `faits.md` : les 70 faits à traiter (cocher quand fait).
 - `episodes/<nº>-<nom>.json` : script d'un épisode (plans, images, mots-clés entre `*astérisques*`).

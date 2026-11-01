@@ -97,7 +97,10 @@ else:
         if k + 1 < len(words) and words[k + 1]["beat"] != w["beat"]:
             t += 0.1
 
-duration = words[-1]["end"] + 1.2
+TARGET = float(ep.get("duree", 60))  # durée imposée : 60 s pile
+if words[-1]["end"] > TARGET - 0.8:
+    sys.exit(f"Script trop long : la voix finit à {words[-1]['end']:.1f} s (max {TARGET - 0.8:.1f} s). Raccourcir le texte.")
+duration = TARGET
 beats = []
 for i, b in enumerate(ep["beats"]):
     ws = [w for w in words if w["beat"] == i]
@@ -107,7 +110,7 @@ for i, b in enumerate(beats):
     b["start"] = max(0, b["start"])
     b["end"] = beats[i + 1]["start"] if i + 1 < len(beats) else duration
 props = {"id": ep["id"], "fps": FPS, "duration": round(duration, 3), "audio": audio,
-         "music": f"histoire/_sfx/music-{ep.get('musique', 'epique')}.mp3",
+         "music": None,  # musique ajoutée dans TikTok (thème Succession), pas dans le fichier
          "words": [{k: w[k] for k in ("w", "kw", "start", "end", "beat")} for w in words], "beats": beats}
 json.dump(props, open(pub / "props.json", "w"), ensure_ascii=False, indent=1)
 print(f"{'voix ElevenLabs' if audio else 'minutage ESTIMÉ (pas de clé)'} — {duration:.1f} s, {len(words)} mots, {len(beats)} plans")

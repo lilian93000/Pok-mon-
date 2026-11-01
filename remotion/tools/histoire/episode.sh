@@ -6,7 +6,6 @@ set -e
 cd "$(dirname "$0")/../.."
 EP=$1; ID=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['id'])" "$EP")
 python3 tools/histoire/textures.py
-python3 tools/histoire/sfx.py epique 75
 python3 tools/histoire/assets.py "$EP"
 python3 tools/histoire/build.py "$EP"
 mkdir -p out
