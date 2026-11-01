@@ -1,0 +1,119 @@
+{
+  "id": "044-mincemeat",
+  "titre": "Un cadavre a trompé Hitler",
+  "duree": 60,
+  "sources": [
+    "Opération Mincemeat : corps largué par le sous-marin HMS Seraph au large de Huelva le 30 avril 1943",
+    "Glyndwr Michael, identité « Major William Martin, Royal Marines » ; fausses lettres évoquant la Grèce et la Sardaigne",
+    "Ewen Montagu et Charles Cholmondeley ; débarquement en Sicile le 10 juillet 1943",
+    "Tombe à Huelva, inscription ajoutée en 1998"
+  ],
+  "images": {
+    "sousmarin": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/23100/23122v.jpg",
+      "cut": false,
+      "credit": "Sous-marin en mer, 1943, 1943-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "chefs": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c00000/3c05000/3c05600/3c05697v.jpg",
+      "cut": false,
+      "credit": "Les chefs alliés inspectent les forces d'invasion, 1943, 1943-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "ciel": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c00000/3c01000/3c01100/3c01112v.jpg",
+      "cut": false,
+      "credit": "Vue aérienne du débarquement en Sicile, 1943, 1943-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "port": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b40000/3b45000/3b45000/3b45054r.jpg",
+      "cut": false,
+      "credit": "Navires dans un port d'Afrique du Nord, 1943, 1943-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "rue": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b40000/3b43000/3b43700/3b43753r.jpg",
+      "cut": false,
+      "credit": "Avancée à Scoglitti, Sicile, 1943, 1943-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "soldat": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b40000/3b45000/3b45000/3b45053r.jpg",
+      "cut": false,
+      "credit": "Soldat pendant l'invasion de la Sicile, 1943, 1943-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Un mort a changé le cours de la *guerre*.",
+      "bg": "red",
+      "rays": true,
+      "image": "sousmarin"
+    },
+    {
+      "text": "1943. Les Alliés veulent débarquer en *Sicile*. Problème : c'est évident, et les Allemands l'attendent.",
+      "bg": "dark",
+      "image": "chefs",
+      "date": "1943"
+    },
+    {
+      "text": "Alors les services secrets britanniques imaginent un plan *fou*.",
+      "bg": "dark",
+      "image": "port"
+    },
+    {
+      "text": "Ils récupèrent le corps d'un homme mort, un *inconnu*. Ils en font un officier : le major William Martin.",
+      "bg": "dark",
+      "image": "sousmarin",
+      "zoom": true
+    },
+    {
+      "text": "Dans sa mallette, attachée à son poignet : de fausses lettres *secrètes*. L'invasion se fera en Grèce et en Sardaigne.",
+      "bg": "dark",
+      "image": "chefs"
+    },
+    {
+      "text": "Dans ses poches : des lettres d'amour, des tickets de théâtre, une facture… pour que tout ait l'air *vrai*.",
+      "bg": "dark",
+      "image": "soldat"
+    },
+    {
+      "text": "Le 30 avril 1943, un sous-marin le dépose en mer, au large de l'*Espagne*.",
+      "bg": "dark",
+      "image": "sousmarin",
+      "date": "30 AVRIL 1943"
+    },
+    {
+      "text": "Le corps est repêché par des pêcheurs. Les espions allemands récupèrent les *documents*.",
+      "bg": "dark",
+      "image": "port"
+    },
+    {
+      "text": "Et Hitler y *croit* ! Il envoie des troupes et des navires vers la Grèce.",
+      "bg": "red",
+      "rays": true,
+      "image": "ciel",
+      "stamp": "PIÉGÉ"
+    },
+    {
+      "text": "Le 10 juillet, les Alliés débarquent en Sicile… beaucoup moins *défendue* que prévu.",
+      "bg": "dark",
+      "image": "rue",
+      "date": "10 JUILLET 1943"
+    },
+    {
+      "text": "Parmi les auteurs de l'idée : Ian Fleming, le futur créateur de *James Bond*.",
+      "bg": "dark",
+      "image": "chefs",
+      "zoom": true
+    },
+    {
+      "text": "En 1998, le vrai nom du mort est enfin gravé sur sa tombe en Espagne : Glyndwr *Michael*.",
+      "bg": "red",
+      "rays": true,
+      "image": "sousmarin"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

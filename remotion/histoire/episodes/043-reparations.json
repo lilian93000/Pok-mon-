@@ -1,0 +1,140 @@
+{
+  "id": "043-reparations",
+  "titre": "La Première Guerre mondiale s'est terminée en 2010",
+  "duree": 60,
+  "sources": [
+    "Traité de Versailles signé le 28 juin 1919 dans la galerie des Glaces ; réparations fixées en 1921 (132 milliards de marks-or)",
+    "Hyperinflation de 1923 ; plans Dawes (1924) et Young (1929) ; paiements suspendus en 1932-1933",
+    "Accord de Londres (1953) : remboursement des intérêts différé jusqu'à la réunification ; dernier versement le 3 octobre 2010 (environ 70 millions d'euros)",
+    "J. M. Keynes, Les Conséquences économiques de la paix (1919)"
+  ],
+  "images": {
+    "galerie": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s00000/1s04000/1s04200/1s04278v.jpg",
+      "cut": false,
+      "credit": "Galerie des Glaces, table de la signature du traité, Versailles, 1923-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "table": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s50000/1s50000/1s50200/1s50252v.jpg",
+      "cut": false,
+      "credit": "La table où fut signé le traité de paix, Versailles, 1924, 1924 — Library of Congress (sans restriction connue)"
+    },
+    "chateau": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s50000/1s50000/1s50200/1s50286v.jpg",
+      "cut": false,
+      "credit": "Château de Versailles, où fut signé le traité de paix, 1924 — Library of Congress (sans restriction connue)"
+    },
+    "chefs": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s00000/1s04000/1s04200/1s04279v.jpg",
+      "cut": false,
+      "credit": "Clemenceau, Wilson et Lloyd George quittant Versailles, 1923-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "gardes": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s00000/1s04000/1s04200/1s04277v.jpg",
+      "cut": false,
+      "credit": "Gardes républicains à Versailles, 1923-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "carica": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/06900/06923v.jpg",
+      "cut": false,
+      "credit": "« Où sont les réparations ? », caricature, 1918, 1918-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "carica2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cai/2a14000/2a14500/2a14563r.jpg",
+      "cut": false,
+      "credit": "Caricature, 1919, 1919 — Library of Congress (sans restriction connue)"
+    },
+    "havenstein": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/36500/36530v.jpg",
+      "cut": false,
+      "credit": "Rudolf Havenstein, président de la Reichsbank, 1923, 1923-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "La Première Guerre mondiale s'est terminée… en *2010*.",
+      "bg": "red",
+      "rays": true,
+      "image": "galerie"
+    },
+    {
+      "text": "28 juin *1919*. Château de Versailles, galerie des Glaces. L'Allemagne signe le traité de paix.",
+      "bg": "dark",
+      "image": "table",
+      "date": "28 JUIN 1919"
+    },
+    {
+      "text": "Les vainqueurs exigent des *réparations* : l'Allemagne doit payer pour les destructions de la guerre.",
+      "bg": "dark",
+      "image": "chefs"
+    },
+    {
+      "text": "En 1921, la facture tombe : cent trente-deux *milliards* de marks-or.",
+      "bg": "dark",
+      "image": "carica",
+      "counter": {
+        "to": 132,
+        "suffix": " MILLIARDS"
+      }
+    },
+    {
+      "text": "Une somme *colossale*. L'économie allemande s'effondre.",
+      "bg": "dark",
+      "image": "carica2"
+    },
+    {
+      "text": "Dès 1919, l'économiste John Maynard Keynes avait prévenu : cette dette est *impossible* à payer.",
+      "image": "carica",
+      "bg": "dark"
+    },
+    {
+      "text": "En 1923, la monnaie ne vaut plus *rien*. Il faut une brouette de billets pour acheter du pain.",
+      "bg": "dark",
+      "image": "havenstein",
+      "date": "1923"
+    },
+    {
+      "text": "Les remboursements sont étalés, *renégociés*… puis Hitler arrête de payer.",
+      "bg": "red",
+      "rays": true,
+      "image": "gardes"
+    },
+    {
+      "text": "Après la Seconde Guerre mondiale, un accord est trouvé : une partie de la dette sera payée… quand l'Allemagne sera *réunifiée*.",
+      "bg": "dark",
+      "image": "chateau"
+    },
+    {
+      "text": "Personne n'y croit vraiment. Mais en 1990, le mur est tombé. L'Allemagne est *réunifiée*.",
+      "bg": "dark",
+      "image": "chefs"
+    },
+    {
+      "text": "Alors elle reprend les *paiements*.",
+      "bg": "dark",
+      "image": "table"
+    },
+    {
+      "text": "Le 3 octobre 2010, pour les vingt ans de la réunification, elle verse la *dernière* tranche : environ soixante-dix millions d'euros.",
+      "bg": "red",
+      "rays": true,
+      "image": "galerie",
+      "date": "3 OCT. 2010",
+      "stamp": "PAYÉ"
+    },
+    {
+      "text": "Quatre-vingt-douze ans après la fin des *combats*.",
+      "bg": "dark",
+      "image": "chateau",
+      "counter": {
+        "to": 92,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
