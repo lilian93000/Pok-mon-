@@ -123,6 +123,23 @@ CHAPTER_MAP = {
 
 # Animations ponctuelles (temps SOURCE ; apparaissent aussi dans l'accroche si le moment y est)
 POPS = [
-    (29.8, 4.6, {"kind": "money", "won": 5000, "eur": 4}),
-    (54.2, 5.0, {"kind": "route", "from": "Aéroport d'Incheon", "to": "Séoul", "km": 50, "time": "40 min"}),
+    # boutiques / lieux précis (étiquette bas gauche)
+    (26.1, 3.4, {"kind": "place", "name": "Starbucks", "sub": "Aéroport d'Incheon"}),
+    (50.4, 3.4, {"kind": "place", "name": "AREX", "sub": "Train express aéroport"}),
+    (136.8, 3.4, {"kind": "place", "name": "7-Eleven", "sub": "Supérette · Myeongdong"}),
+    (172.5, 3.4, {"kind": "place", "name": "Myeongdong", "sub": "Le quartier shopping"}),
+    (238.2, 3.4, {"kind": "place", "name": "Restaurant de poulet frit", "sub": "Myeongdong"}),
+    (838.0, 3.6, {"kind": "place", "name": "Petit temple bouddhiste", "sub": "Jongno"}),
+    (1105.6, 3.6, {"kind": "place", "name": "Location de hanbok", "sub": "Tenue traditionnelle · 1 h 30"}),
+    (1173.5, 3.4, {"kind": "place", "name": "Paul Bassett", "sub": "Café"}),
+    (1210.2, 3.2, {"kind": "place", "name": "7-Eleven", "sub": "Pause clim"}),
+    (1245.6, 3.4, {"kind": "place", "name": "Barbecue coréen", "sub": "Près de la rivière"}),
+    (1364.4, 3.4, {"kind": "place", "name": "Village Hanok", "sub": "Bukchon"}),
+    (1371.3, 3.2, {"kind": "place", "name": "Hongdae", "sub": "Le quartier des jeunes"}),
+    # prix (visibles ou dits dans la vidéo, rien d'inventé)
+    (29.8, 4.6, {"kind": "price", "item": "Iced Caramel Macchiato", "price": "5 900 ₩", "conv": "≈ 4 € · 5,95 € en France"}),
+    # infos chiffrées
+    (54.2, 5.0, {"kind": "route", "from": "Aéroport d'Incheon", "to": "Seoul Station", "km": 50, "time": "40 min"}),
+    (1134.1, 4.0, {"kind": "chip", "value": "32 °C", "label": "Plein soleil, pas d'ombre"}),
+    (1314.7, 4.0, {"kind": "chip", "value": "8/10", "label": "Notre note du barbecue"}),
 ]

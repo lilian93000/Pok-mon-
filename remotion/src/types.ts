@@ -21,7 +21,10 @@ export type Pop =
   | (PopBase & { kind: "route"; from: string; to: string; km: number; time: string })
   | (PopBase & { kind: "thermo"; value: number })
   | (PopBase & { kind: "rating"; value: number; max: number; label: string })
-  | (PopBase & { kind: "subscribe" });
+  | (PopBase & { kind: "subscribe" })
+  | (PopBase & { kind: "place"; name: string; sub?: string })
+  | (PopBase & { kind: "price"; item: string; price: string; conv?: string })
+  | (PopBase & { kind: "chip"; value: string; label: string });
 
 export type CaptionWord = { w: string; s: number; e: number };
 export type CaptionPage = { s: number; e: number; words: CaptionWord[] };
