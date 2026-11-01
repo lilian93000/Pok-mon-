@@ -1,0 +1,127 @@
+{
+  "id": "053-arkhipov",
+  "titre": "L'homme qui a dit non",
+  "duree": 60,
+  "sources": [
+    "Sous-marin soviétique B-59, 27 octobre 1962, crise des missiles de Cuba : grenades de signalisation américaines, perte de contact avec Moscou",
+    "Lancement de la torpille nucléaire soumis à l'accord des trois officiers : Savitski (commandant), Maslennikov (officier politique), Arkhipov (chef d'état-major de la flottille)",
+    "Révélé lors de la conférence de La Havane (2002) ; prix Future of Life (2017)",
+    "Accident du réacteur du K-19 (juillet 1961)"
+  ],
+  "images": {
+    "vote": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/07100/07184v.jpg",
+      "cut": false,
+      "credit": "Vote de l'Organisation des États américains, 1962, 1962-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "carica": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/07900/07978v.jpg",
+      "cut": false,
+      "credit": "Caricature, 1962, 1962-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "manif": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c20000/3c28000/3c28400/3c28465v.jpg",
+      "cut": false,
+      "credit": "Manifestation pour la paix près de l'ONU, 1962, 1962 — Library of Congress (sans restriction connue)"
+    },
+    "missile": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/habshaer/nd/nd0100/nd0116/photos/199720pv.jpg",
+      "cut": false,
+      "credit": "Installation d'alerte de missiles, Grand Forks,  — Library of Congress (sans restriction connue)"
+    },
+    "fresque": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/habshaer/nd/nd0100/nd0128/photos/199785pv.jpg",
+      "cut": false,
+      "credit": "Fresque d'une installation d'alerte de missiles, Grand Forks,  — Library of Congress (sans restriction connue)"
+    },
+    "porte": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/habshaer/nd/nd0100/nd0121/photos/199754pv.jpg",
+      "cut": false,
+      "credit": "Installation d'alerte de missiles, Grand Forks,  — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Un seul homme a peut-être empêché une guerre *nucléaire*.",
+      "bg": "red",
+      "rays": true,
+      "image": "porte"
+    },
+    {
+      "text": "Octobre *1962*. Crise des missiles de Cuba. Le monde n'a jamais été aussi proche de la guerre nucléaire.",
+      "bg": "dark",
+      "image": "vote",
+      "date": "OCTOBRE 1962"
+    },
+    {
+      "text": "Près de Cuba, un sous-marin soviétique, le B-59, est traqué par des navires *américains*.",
+      "bg": "dark",
+      "image": "carica"
+    },
+    {
+      "text": "Les Américains lancent des grenades d'exercice pour le forcer à *remonter*.",
+      "bg": "dark",
+      "image": "missile"
+    },
+    {
+      "text": "Mais à bord, personne ne le *sait*. Plus de contact avec Moscou depuis des jours. Il fait plus de quarante degrés.",
+      "bg": "dark",
+      "image": "porte",
+      "zoom": true
+    },
+    {
+      "text": "Le commandant pense que la guerre a *commencé*.",
+      "bg": "dark",
+      "image": "carica"
+    },
+    {
+      "text": "Il veut lancer une torpille à tête *nucléaire*.",
+      "bg": "red",
+      "rays": true,
+      "image": "fresque"
+    },
+    {
+      "text": "Mais il faut l'accord de *trois* officiers. Deux disent oui.",
+      "bg": "dark",
+      "image": "vote"
+    },
+    {
+      "text": "Le troisième s'appelle Vassili *Arkhipov*. Il dit non.",
+      "bg": "red",
+      "rays": true,
+      "image": "porte",
+      "stamp": "NON"
+    },
+    {
+      "text": "Arkhipov n'en est pas à sa première crise : un an plus tôt, il a survécu à un accident de *réacteur* à bord d'un autre sous-marin.",
+      "image": "missile",
+      "bg": "dark"
+    },
+    {
+      "text": "Il convainc le commandant de faire surface et d'attendre les *ordres*.",
+      "bg": "dark",
+      "image": "manif"
+    },
+    {
+      "text": "Le B-59 remonte au milieu des navires américains… puis repart vers l'*URSS*. Sans un seul tir.",
+      "image": "fresque",
+      "bg": "dark"
+    },
+    {
+      "text": "Pendant quarante ans, presque personne ne connaîtra cette *histoire*.",
+      "bg": "dark",
+      "image": "missile"
+    },
+    {
+      "text": "Aujourd'hui, beaucoup le surnomment l'homme qui a *sauvé* le monde.",
+      "bg": "red",
+      "rays": true,
+      "image": "manif"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

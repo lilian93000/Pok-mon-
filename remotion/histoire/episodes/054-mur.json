@@ -1,0 +1,130 @@
+{
+  "id": "054-mur",
+  "titre": "Le mur tombé à cause d'une phrase",
+  "duree": 60,
+  "sources": [
+    "Conférence de presse de Günter Schabowski, 9 novembre 1989 : « sofort, unverzüglich »",
+    "Ouverture du poste de Bornholmer Straße vers 23 h 30 (Harald Jäger)",
+    "Mur construit le 13 août 1961 ; au moins 140 morts ; réunification le 3 octobre 1990"
+  ],
+  "images": {
+    "mur": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3g00000/3g04000/3g04300/3g04334v.jpg",
+      "cut": false,
+      "credit": "Le mur de Berlin, 1961, 1961-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "femme": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/96300/96383v.jpg",
+      "cut": false,
+      "credit": "Femme et enfant près du mur, Berlin-Ouest, 1961, 1961 — Library of Congress (sans restriction connue)"
+    },
+    "rue": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/99700/99765v.jpg",
+      "cut": false,
+      "credit": "Berlin, 1962 (LOOK), 1962 — Library of Congress (sans restriction connue)"
+    },
+    "porte": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3g00000/3g04000/3g04300/3g04333v.jpg",
+      "cut": false,
+      "credit": "Berlin, octobre 1961, 1961 — Library of Congress (sans restriction connue)"
+    },
+    "garde": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/99700/99766v.jpg",
+      "cut": false,
+      "credit": "Berlin, 1962 (LOOK), 1962 — Library of Congress (sans restriction connue)"
+    },
+    "brandebourg": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s20000/1s24000/1s24500/1s24540v.jpg",
+      "cut": false,
+      "credit": "La porte de Brandebourg, 1896-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "morceaux": {
+      "url": "https://tile.loc.gov/image-services/iiif/service:pnp:highsm:21600:21693/full/pct:50/0/default.jpg",
+      "cut": false,
+      "credit": "Morceaux du mur de Berlin (Carol M. Highsmith), 2012 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Le mur de Berlin est tombé… à cause d'une phrase *mal lue*.",
+      "bg": "red",
+      "rays": true,
+      "image": "morceaux"
+    },
+    {
+      "text": "Depuis *1961*, un mur coupe Berlin en deux. À l'Est, les Allemands n'ont pas le droit de partir.",
+      "bg": "dark",
+      "image": "mur",
+      "date": "1961"
+    },
+    {
+      "text": "Des familles sont *séparées*. Plus de cent quarante personnes meurent en essayant de passer.",
+      "bg": "dark",
+      "image": "femme"
+    },
+    {
+      "text": "9 novembre *1989*. Le régime est-allemand est sous pression. Il prépare une petite ouverture.",
+      "bg": "dark",
+      "image": "porte",
+      "date": "9 NOV. 1989"
+    },
+    {
+      "text": "Le soir, conférence de presse. Le porte-parole, Günter *Schabowski*, reçoit une note à la dernière minute.",
+      "bg": "dark",
+      "image": "garde"
+    },
+    {
+      "text": "Il la lit en direct : les Allemands de l'Est pourront voyager à l'*étranger*.",
+      "bg": "dark",
+      "image": "rue"
+    },
+    {
+      "text": "Un journaliste demande : « À partir de *quand* ? »",
+      "bg": "dark",
+      "image": "porte",
+      "zoom": true
+    },
+    {
+      "text": "Schabowski fouille ses papiers… et improvise : « Immédiatement. Sans *délai*. »",
+      "bg": "red",
+      "rays": true,
+      "image": "garde",
+      "stamp": "SOFORT"
+    },
+    {
+      "text": "Erreur : la mesure n'était prévue que pour le *lendemain*.",
+      "bg": "dark",
+      "image": "mur"
+    },
+    {
+      "text": "Mais c'est trop tard. Des milliers de Berlinois de l'Est foncent vers les postes-*frontières*.",
+      "bg": "dark",
+      "image": "rue"
+    },
+    {
+      "text": "Les gardes n'ont reçu aucun ordre. Vers vingt-trois heures trente, ils *ouvrent*.",
+      "bg": "dark",
+      "image": "porte"
+    },
+    {
+      "text": "La nuit même, on danse sur le mur. Moins d'un an plus tard, l'Allemagne est *réunifiée*.",
+      "bg": "red",
+      "rays": true,
+      "image": "brandebourg"
+    },
+    {
+      "text": "Le mur avait tenu *vingt-huit* ans.",
+      "image": "morceaux",
+      "bg": "dark",
+      "counter": {
+        "to": 28,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

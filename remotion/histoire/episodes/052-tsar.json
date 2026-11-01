@@ -1,0 +1,129 @@
+{
+  "id": "052-tsar",
+  "titre": "La plus grosse bombe jamais explosée",
+  "duree": 60,
+  "sources": [
+    "Tsar Bomba, 30 octobre 1961, Nouvelle-Zemble : environ 50 mégatonnes (conçue pour 100)",
+    "Larguée par un Tu-95 sous un parachute géant ; champignon d'environ 60 km de haut ; onde sismique et onde de pression mesurées autour du globe",
+    "Hiroshima : environ 15 kilotonnes"
+  ],
+  "images": {
+    "champ1": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/02900/02948v.jpg",
+      "cut": false,
+      "credit": "Champignon atomique, essai américain Crossroads, 1946, 1946-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "champ2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/02900/02944v.jpg",
+      "cut": false,
+      "credit": "Essai américain Crossroads, 1946, 1946-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "champ3": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/02900/02950v.jpg",
+      "cut": false,
+      "credit": "Essai américain Crossroads, 1946, 1946-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "champ4": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/02900/02946v.jpg",
+      "cut": false,
+      "credit": "Essai américain Crossroads, 1946, 1946-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "soldats": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a40000/3a47000/3a47400/3a47482v.jpg",
+      "cut": false,
+      "credit": "Soldats américains lors d'un essai nucléaire, Nevada, 1951, 1951-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "carica": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/38500/38557v.jpg",
+      "cut": false,
+      "credit": "Caricature sur la course aux armements, 1962, 1962-04-21 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "La plus grosse bombe de l'histoire était *trop* grosse pour servir.",
+      "bg": "red",
+      "rays": true,
+      "image": "champ1"
+    },
+    {
+      "text": "Guerre froide. Les États-Unis et l'URSS font exploser des bombes nucléaires pour montrer leur *puissance*.",
+      "bg": "dark",
+      "image": "champ4"
+    },
+    {
+      "text": "Chacun veut la *plus* grosse.",
+      "bg": "dark",
+      "image": "carica"
+    },
+    {
+      "text": "30 octobre *1961*. Au-dessus d'une île de l'Arctique, un bombardier soviétique largue la Tsar Bomba.",
+      "bg": "dark",
+      "image": "champ2",
+      "date": "30 OCT. 1961"
+    },
+    {
+      "text": "Elle est si puissante qu'elle descend sous un parachute *géant*… pour laisser à l'avion le temps de s'enfuir.",
+      "bg": "dark",
+      "image": "champ3"
+    },
+    {
+      "text": "Selon les calculs, l'équipage n'avait qu'une chance sur *deux* de survivre.",
+      "image": "soldats",
+      "bg": "dark"
+    },
+    {
+      "text": "Explosion : *cinquante* mégatonnes.",
+      "bg": "red",
+      "rays": true,
+      "image": "champ1",
+      "counter": {
+        "to": 50,
+        "suffix": " MÉGATONNES"
+      }
+    },
+    {
+      "text": "Plus de *trois mille* fois la bombe d'Hiroshima.",
+      "bg": "dark",
+      "image": "champ2",
+      "zoom": true
+    },
+    {
+      "text": "Le champignon monte à environ soixante kilomètres de haut. Sept fois l'*Everest* !",
+      "bg": "dark",
+      "image": "champ4"
+    },
+    {
+      "text": "Des vitres se brisent à des centaines de kilomètres. L'onde de choc fait plusieurs fois le tour de la *Terre*.",
+      "bg": "dark",
+      "image": "soldats"
+    },
+    {
+      "text": "Et pourtant, les ingénieurs avaient volontairement *réduit* sa puissance de moitié.",
+      "bg": "dark",
+      "image": "carica"
+    },
+    {
+      "text": "Mais elle était inutilisable : trop lourde pour un missile, presque trop lourde pour un *avion*.",
+      "bg": "dark",
+      "image": "champ3"
+    },
+    {
+      "text": "Son nom officiel était RDS-220. Le surnom de Tsar Bomba, la « *tsar* des bombes », viendra plus tard.",
+      "image": "champ4",
+      "bg": "dark"
+    },
+    {
+      "text": "Un monstre construit pour une seule chose : faire *peur*.",
+      "bg": "red",
+      "rays": true,
+      "image": "champ1",
+      "stamp": "TSAR BOMBA"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "id": "055-vikings",
+  "titre": "Les Vikings n'avaient pas de cornes",
+  "duree": 60,
+  "sources": [
+    "Casque de Gjermundbu (Norvège, découvert en 1943) : seul casque viking presque complet, sans cornes",
+    "Costumes de Carl Emil Doepler pour L'Anneau du Nibelung de Wagner, Bayreuth, 1876",
+    "Casques à cornes de Veksø (Danemark), âge du bronze, vers 900 av. J.-C.",
+    "Samedi en vieux norrois : laugardagr, « jour du bain »",
+    "L'Anse aux Meadows (Terre-Neuve), vers l'an 1000"
+  ],
+  "images": {
+    "epee": {
+      "url": "https://images.metmuseum.org/CRDImages/aa/original/DT758.jpg",
+      "cut": true,
+      "credit": "Épée viking, Xᵉ s., 10th century — The Met (CC0)"
+    },
+    "broche": {
+      "url": "https://images.metmuseum.org/CRDImages/md/original/dp30622.jpg",
+      "cut": true,
+      "credit": "Broche, 600-650, 600–650 — The Met (CC0)"
+    },
+    "broche2": {
+      "url": "https://images.metmuseum.org/CRDImages/md/original/DP30282.jpg",
+      "cut": true,
+      "credit": "Broche en boîte, 1000-1100, 1000–1100 — The Met (CC0)"
+    },
+    "etriers": {
+      "url": "https://images.metmuseum.org/CRDImages/aa/original/LC-2017_241ab-001.jpg",
+      "cut": true,
+      "credit": "Paire d'étriers, fin Xᵉ-début XIᵉ s., late 10th–early 11th century — The Met (CC0)"
+    },
+    "etrier": {
+      "url": "https://images.metmuseum.org/CRDImages/md/original/DP100653.jpg",
+      "cut": true,
+      "credit": "Étrier, 975-1075, 975–1075 — The Met (CC0)"
+    },
+    "dragon": {
+      "url": "https://openaccess-cdn.clevelandart.org/1975.258/1975.258_print.jpg",
+      "cut": true,
+      "credit": "Tête de dragon, 1100-1150, 1100–1150 — Cleveland Museum of Art (CC0)"
+    },
+    "anneau": {
+      "url": "https://images.metmuseum.org/CRDImages/md/original/2000.140.jpg",
+      "cut": true,
+      "credit": "Embout de broche, vers 950, ca. 950 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Les Vikings n'ont *jamais* porté de casques à cornes.",
+      "bg": "red",
+      "rays": true,
+      "image": "dragon"
+    },
+    {
+      "text": "Films, dessins animés, déguisements… Pour tout le monde, un Viking a des *cornes* sur la tête.",
+      "bg": "dark",
+      "image": "epee"
+    },
+    {
+      "text": "Problème : les archéologues n'en ont *jamais* trouvé.",
+      "bg": "dark",
+      "image": "broche"
+    },
+    {
+      "text": "Le seul casque viking presque complet découvert, en Norvège en *1943*, est tout simple. Rond. Sans cornes.",
+      "bg": "dark",
+      "image": "etrier",
+      "date": "1943"
+    },
+    {
+      "text": "Et c'est logique : au combat, des cornes, c'est surtout une prise pour l'*ennemi* !",
+      "bg": "dark",
+      "image": "epee",
+      "zoom": true
+    },
+    {
+      "text": "Alors d'où vient l'idée ? D'un *opéra* !",
+      "bg": "red",
+      "rays": true,
+      "image": "dragon"
+    },
+    {
+      "text": "En *1876*, le compositeur Richard Wagner monte un grand opéra inspiré des légendes nordiques.",
+      "bg": "dark",
+      "image": "broche2",
+      "date": "1876"
+    },
+    {
+      "text": "Le costumier dessine des guerriers avec des casques à cornes et à *ailes*. Le public adore.",
+      "bg": "dark",
+      "image": "anneau"
+    },
+    {
+      "text": "Et l'image reste *collée* aux Vikings pour toujours.",
+      "bg": "dark",
+      "image": "dragon",
+      "stamp": "MYTHE"
+    },
+    {
+      "text": "Des casques à cornes ont bien existé en Scandinavie… mais deux mille ans *avant* les Vikings, pour des cérémonies.",
+      "bg": "dark",
+      "image": "etriers"
+    },
+    {
+      "text": "Les vrais Vikings étaient aussi des marins et des explorateurs : ils ont atteint l'Amérique… cinq siècles avant *Colomb*.",
+      "image": "epee",
+      "bg": "dark"
+    },
+    {
+      "text": "Autre surprise : les Vikings prenaient soin d'eux. On retrouve beaucoup de *peignes* dans leurs tombes.",
+      "bg": "dark",
+      "image": "broche"
+    },
+    {
+      "text": "Et dans leur langue, le samedi s'appelait… le jour du *bain*.",
+      "bg": "red",
+      "rays": true,
+      "image": "broche2"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
