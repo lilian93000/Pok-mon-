@@ -1,0 +1,126 @@
+{
+  "id": "028-napoleon",
+  "titre": "Napoléon n'était pas petit",
+  "duree": 60,
+  "sources": [
+    "Taille mesurée à sa mort : 5 pieds 2 pouces (mesure française), soit environ 1,68-1,69 m",
+    "Pouce français (2,71 cm) plus long que le pouce anglais (2,54 cm)",
+    "Taille moyenne des conscrits français de l'époque : environ 1,65 m",
+    "Caricatures de James Gillray (« Little Boney »)"
+  ],
+  "images": {
+    "portrait": {
+      "url": "https://openaccess-cdn.clevelandart.org/2000.106/2000.106_print.jpg",
+      "cut": false,
+      "credit": "Portrait de Napoléon Iᵉʳ, 1841, 1841 — Cleveland Museum of Art (CC0)"
+    },
+    "gulliver": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP809030.jpg",
+      "cut": false,
+      "credit": "Gillray, Le roi de Brobdingnag et Gulliver, 1803, June 26, 1803 — The Met (CC0)"
+    },
+    "pudding": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP809028.jpg",
+      "cut": false,
+      "credit": "Gillray, Le pudding en danger, 1805, February 26, 1805 — The Met (CC0)"
+    },
+    "boulanger": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP809034.jpg",
+      "cut": false,
+      "credit": "Gillray, Tiddy-Doll, 1806, January 23, 1806 — The Met (CC0)"
+    },
+    "pie": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b40000/3b43000/3b43700/3b43737r.jpg",
+      "cut": false,
+      "credit": "Buonaparté pie, 1803, 1803-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "loupe": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b40000/3b43000/3b43700/3b43736r.jpg",
+      "cut": false,
+      "credit": "Une expérience à la loupe, 1803, 1803-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "ministre": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP818508.jpg",
+      "cut": false,
+      "credit": "Gillray, caricature, 1806, May 2, 1806 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Napoléon n'était *pas* petit.",
+      "bg": "red",
+      "rays": true,
+      "image": "portrait"
+    },
+    {
+      "text": "Tout le monde l'imagine minuscule. C'est devenu une *blague* mondiale.",
+      "bg": "dark",
+      "image": "gulliver"
+    },
+    {
+      "text": "À sa mort, en 1821, son médecin le mesure : cinq pieds, deux *pouces*.",
+      "bg": "dark",
+      "image": "portrait",
+      "zoom": true,
+      "date": "1821"
+    },
+    {
+      "text": "Et c'est là que tout se joue. Car le pouce *français* est plus long que le pouce anglais.",
+      "bg": "dark",
+      "image": "loupe"
+    },
+    {
+      "text": "Les Anglais lisent cinq pieds deux à leur façon… et obtiennent un mètre *cinquante-sept*.",
+      "bg": "dark",
+      "image": "pie"
+    },
+    {
+      "text": "Mais en vrai, Napoléon mesurait environ un mètre *soixante-neuf*.",
+      "bg": "red",
+      "rays": true,
+      "image": "portrait",
+      "counter": {
+        "to": 169,
+        "suffix": " CM"
+      }
+    },
+    {
+      "text": "À l'époque, le Français moyen faisait un mètre *soixante-cinq*. Napoléon était donc plutôt grand !",
+      "bg": "dark",
+      "image": "boulanger"
+    },
+    {
+      "text": "Alors d'où vient la légende ? D'abord, des caricaturistes *anglais*.",
+      "bg": "dark",
+      "image": "pudding"
+    },
+    {
+      "text": "Le plus célèbre, James Gillray, le dessine en nain colérique : « Little *Boney* », le petit Bonaparte.",
+      "bg": "dark",
+      "image": "gulliver",
+      "zoom": true,
+      "stamp": "LITTLE BONEY"
+    },
+    {
+      "text": "Ensuite, son surnom : le « petit *caporal* ». Un surnom affectueux donné par ses soldats… pas une question de taille.",
+      "bg": "dark",
+      "image": "ministre"
+    },
+    {
+      "text": "Et enfin, il était toujours entouré de sa garde impériale : des soldats choisis pour être très *grands*.",
+      "bg": "dark",
+      "image": "boulanger"
+    },
+    {
+      "text": "Deux cents ans plus tard, la propagande anglaise *gagne* encore.",
+      "bg": "red",
+      "rays": true,
+      "image": "portrait"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "id": "031-photo",
+  "titre": "La première photo de l'histoire",
+  "duree": 60,
+  "sources": [
+    "Nicéphore Niépce, Point de vue du Gras, Saint-Loup-de-Varennes, vers 1826-1827 (héliographie sur étain enduit de bitume de Judée), conservée au Harry Ransom Center, Austin",
+    "Daguerre, Boulevard du Temple (1838) : premières personnes photographiées",
+    "Annonce du daguerréotype en 1839 ; brevet acheté par l'État français et offert au monde"
+  ],
+  "images": {
+    "femme": {
+      "url": "https://images.metmuseum.org/CRDImages/mi/original/DP224724.jpg",
+      "cut": false,
+      "credit": "Femme à l'accordéon, daguerréotype, années 1840, 1840s — The Met (CC0)"
+    },
+    "homme": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP332555.jpg",
+      "cut": false,
+      "credit": "Frederick Langenheim, daguerréotype, vers 1849, ca. 1849–50 — The Met (CC0)"
+    },
+    "etui": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP700003.jpg",
+      "cut": false,
+      "credit": "Daguerréotype dans son étui, années 1840, 1840s — The Met (CC0)"
+    },
+    "etui2": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP700201.jpg",
+      "cut": false,
+      "credit": "Daguerréotype dans son étui, 1860s — The Met (CC0)"
+    },
+    "boite": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP-13897-093.jpg",
+      "cut": true,
+      "credit": "Boîte à plaques de daguerréotype, années 1840, 1840s — The Met (CC0)"
+    },
+    "rome": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP142940.jpg",
+      "cut": false,
+      "credit": "Temple de la Fortune virile, photographie, 1848-52, 1848–52 — The Met (CC0)"
+    },
+    "rome2": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP155014.jpg",
+      "cut": false,
+      "credit": "Piazza del Popolo, photographie, 1848-52, 1848–52 — The Met (CC0)"
+    },
+    "niepce": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP102586.jpg",
+      "cut": false,
+      "credit": "Niépce de Saint-Victor, héliogravure, 1855, 1855 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "La toute première photo de l'histoire a mis des *jours* à se prendre.",
+      "image": "boite",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "France, vers *1827*. Un inventeur, Nicéphore Niépce, s'installe à la fenêtre de sa maison de campagne.",
+      "bg": "dark",
+      "image": "rome2",
+      "date": "≈ 1827"
+    },
+    {
+      "text": "Il pose une plaque d'étain recouverte de *bitume* au fond d'une boîte noire.",
+      "bg": "dark",
+      "image": "boite"
+    },
+    {
+      "text": "Et il attend. Des heures. Peut-être plusieurs *jours*.",
+      "bg": "dark",
+      "image": "boite",
+      "zoom": true,
+      "counter": {
+        "to": 72,
+        "suffix": " HEURES ?"
+      }
+    },
+    {
+      "text": "Le bitume durcit là où la lumière le touche. Le reste est lavé. Et une image *apparaît* : des toits, une cour, un arbre.",
+      "bg": "dark",
+      "image": "etui2"
+    },
+    {
+      "text": "C'est la plus ancienne photographie qui existe *encore* aujourd'hui.",
+      "bg": "red",
+      "rays": true,
+      "image": "boite",
+      "stamp": "PLUS VIEILLE PHOTO"
+    },
+    {
+      "text": "Mais avec une pose si longue, impossible de photographier quelqu'un : tout ce qui bouge *disparaît*.",
+      "bg": "dark",
+      "image": "rome2"
+    },
+    {
+      "text": "Niépce s'associe avec un certain Louis *Daguerre*. Niépce meurt en 1833… et Daguerre améliore l'invention.",
+      "bg": "dark",
+      "image": "etui"
+    },
+    {
+      "text": "En 1838, il photographie un boulevard de Paris. La rue est pleine de monde… mais l'image est *vide*.",
+      "bg": "dark",
+      "image": "rome2"
+    },
+    {
+      "text": "Sauf un homme, qui se fait cirer les chaussures. Il est resté immobile assez longtemps : le premier *humain* photographié !",
+      "bg": "dark",
+      "image": "homme"
+    },
+    {
+      "text": "En 1839, l'État français achète l'invention… et l'offre au monde *entier*.",
+      "bg": "dark",
+      "image": "etui2",
+      "date": "1839"
+    },
+    {
+      "text": "Quelques années plus tard, tout le monde veut son *portrait*.",
+      "bg": "red",
+      "rays": true,
+      "image": "femme"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

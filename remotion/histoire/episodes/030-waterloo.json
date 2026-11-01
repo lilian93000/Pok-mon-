@@ -1,0 +1,120 @@
+{
+  "id": "030-waterloo",
+  "titre": "Les dents de Waterloo",
+  "duree": 60,
+  "sources": [
+    "Bataille de Waterloo, 18 juin 1815 : des dizaines de milliers de morts et de blessés",
+    "Prothèses dentaires à dents humaines (« Waterloo teeth ») avant la généralisation des dents en porcelaine",
+    "Mount Vernon : achat de dents par George Washington à des personnes asservies (1784)"
+  ],
+  "images": {
+    "bataille": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP209110.jpg",
+      "cut": false,
+      "credit": "Scène de bataille (Waterloo), 1815–66 — The Met (CC0)"
+    },
+    "wellington": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP-17286-021.jpg",
+      "cut": true,
+      "credit": "Buste du duc de Wellington, 1823, 1823 — The Met (CC0)"
+    },
+    "voiture": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP885256.jpg",
+      "cut": false,
+      "credit": "Exposition de la voiture de Bonaparte prise à Waterloo, 1816, January 10, 1816 — The Met (CC0)"
+    },
+    "lion": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s10000/1s17000/1s17500/1s17503v.jpg",
+      "cut": false,
+      "credit": "Butte du Lion, Waterloo, 1920-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "echecs": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/LC-48_174_6-001.jpg",
+      "cut": true,
+      "credit": "Jeu d'échecs de la bataille de Waterloo, 19th century — The Met (CC0)"
+    },
+    "portrait": {
+      "url": "https://openaccess-cdn.clevelandart.org/2000.106/2000.106_print.jpg",
+      "cut": false,
+      "credit": "Portrait de Napoléon Iᵉʳ, 1841, 1841 — Cleveland Museum of Art (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Des milliers de dentiers venaient d'un champ de *bataille*.",
+      "bg": "red",
+      "rays": true,
+      "image": "bataille"
+    },
+    {
+      "text": "18 juin *1815*. Waterloo, en Belgique. Napoléon affronte Wellington.",
+      "bg": "dark",
+      "image": "wellington",
+      "date": "18 JUIN 1815"
+    },
+    {
+      "text": "Le soir, c'est fini. Napoléon a *perdu*.",
+      "bg": "dark",
+      "image": "portrait"
+    },
+    {
+      "text": "Sur le champ de bataille : des dizaines de milliers de morts et de *blessés*.",
+      "bg": "dark",
+      "image": "bataille",
+      "zoom": true
+    },
+    {
+      "text": "Et dans la nuit, des pillards arrivent. Ils ne cherchent pas seulement de l'or… mais des *dents*.",
+      "bg": "dark",
+      "image": "lion"
+    },
+    {
+      "text": "À l'époque, les dentiers des riches sont faits avec de *vraies* dents humaines.",
+      "bg": "dark",
+      "image": "echecs"
+    },
+    {
+      "text": "Un bon dentier coûte une *fortune*. Les dents viennent des cimetières, des condamnés à mort, ou de pauvres qui vendent les leurs.",
+      "image": "voiture",
+      "bg": "dark"
+    },
+    {
+      "text": "Et les meilleures sont celles de jeunes hommes en bonne santé. Exactement comme des *soldats*.",
+      "bg": "dark",
+      "image": "bataille"
+    },
+    {
+      "text": "Des tonneaux de dents arrachées sont expédiés vers l'*Angleterre*.",
+      "bg": "dark",
+      "image": "voiture"
+    },
+    {
+      "text": "Pendant des années, les gens appelleront ces dentiers des « dents de *Waterloo* ».",
+      "bg": "red",
+      "rays": true,
+      "image": "wellington",
+      "stamp": "WATERLOO TEETH"
+    },
+    {
+      "text": "Même George Washington portait des dentiers avec des dents humaines, achetées à des personnes *réduites en esclavage*.",
+      "bg": "dark",
+      "image": "echecs"
+    },
+    {
+      "text": "Il faudra attendre les dents en *porcelaine* pour que ce commerce disparaisse.",
+      "bg": "dark",
+      "image": "lion"
+    },
+    {
+      "text": "Une victoire qui s'est retrouvée… dans la *bouche* des vainqueurs.",
+      "bg": "red",
+      "rays": true,
+      "image": "bataille"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

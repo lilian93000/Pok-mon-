@@ -1,0 +1,125 @@
+{
+  "id": "029-lapins",
+  "titre": "Napoléon attaqué par des lapins",
+  "duree": 60,
+  "sources": [
+    "Mémoires du général Paul Thiébault : chasse organisée par Berthier après le traité de Tilsit (juillet 1807)",
+    "Récit anecdotique, rapporté par une seule source"
+  ],
+  "images": {
+    "portrait": {
+      "url": "https://openaccess-cdn.clevelandart.org/2000.106/2000.106_print.jpg",
+      "cut": false,
+      "credit": "Portrait de Napoléon Iᵉʳ, 1841, 1841 — Cleveland Museum of Art (CC0)"
+    },
+    "chasse": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP818235.jpg",
+      "cut": false,
+      "credit": "Bruegel, La chasse au lapin, 1560, 1560 — The Met (CC0)"
+    },
+    "lapin": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DT4920.jpg",
+      "cut": true,
+      "credit": "Lapin, netsuke, mid-19th century — The Met (CC0)"
+    },
+    "lapin2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP815317.jpg",
+      "cut": false,
+      "credit": "Le lapin, 1866, 1866 — The Met (CC0)"
+    },
+    "vase": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP264073.jpg",
+      "cut": true,
+      "credit": "Vase Médicis, château de Saint-Cloud, 1811, 1811 — The Met (CC0)"
+    },
+    "epee": {
+      "url": "https://images.metmuseum.org/CRDImages/aa/original/LC-1982_136-007.jpg",
+      "cut": true,
+      "credit": "Épée de chasse, 1809-13, 1809–13 — The Met (CC0)"
+    },
+    "chasse2": {
+      "url": "https://openaccess-cdn.clevelandart.org/2009.80/2009.80_print.jpg",
+      "cut": false,
+      "credit": "Bruegel, La chasse au lapin, 1560, 1560 — Cleveland Museum of Art (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Napoléon a battu l'Europe… mais il a perdu contre des *lapins*.",
+      "bg": "red",
+      "rays": true,
+      "image": "lapin"
+    },
+    {
+      "text": "Juillet *1807*. Napoléon vient de signer la paix avec la Russie. Il est au sommet de sa puissance.",
+      "bg": "dark",
+      "image": "portrait",
+      "date": "1807"
+    },
+    {
+      "text": "Pour fêter ça, son chef d'état-major, Berthier, organise une partie de *chasse*.",
+      "bg": "dark",
+      "image": "chasse"
+    },
+    {
+      "text": "Au programme : une chasse au *lapin*. On fait installer des centaines de lapins sur le terrain.",
+      "bg": "dark",
+      "image": "lapin2"
+    },
+    {
+      "text": "On lâche les animaux. Napoléon s'avance, prêt à *tirer*.",
+      "bg": "dark",
+      "image": "epee"
+    },
+    {
+      "text": "Mais au lieu de s'enfuir… les lapins foncent *droit* sur lui !",
+      "bg": "red",
+      "rays": true,
+      "image": "lapin",
+      "zoom": true
+    },
+    {
+      "text": "Des dizaines, des centaines de lapins *l'encerclent*. Ils grimpent sur ses jambes, sur ses bottes.",
+      "bg": "dark",
+      "image": "chasse2"
+    },
+    {
+      "text": "L'empereur et ses hommes tentent de les chasser à coups de *fouet*. Rien à faire.",
+      "bg": "dark",
+      "image": "vase"
+    },
+    {
+      "text": "Napoléon doit battre en *retraite*… jusqu'à sa voiture.",
+      "bg": "red",
+      "rays": true,
+      "image": "portrait",
+      "stamp": "RETRAITE"
+    },
+    {
+      "text": "L'explication ? Berthier n'avait pas acheté des lapins sauvages… mais des lapins *domestiques*.",
+      "bg": "dark",
+      "image": "lapin2"
+    },
+    {
+      "text": "Pour eux, un homme qui arrive, c'est l'heure du *repas* !",
+      "bg": "dark",
+      "image": "lapin",
+      "zoom": true
+    },
+    {
+      "text": "Berthier était réputé pour être l'homme le mieux organisé de l'armée… Sauf ce *jour-là*.",
+      "image": "chasse2",
+      "bg": "dark"
+    },
+    {
+      "text": "L'histoire vient des mémoires d'un général, Thiébault. On ne sait pas si elle est totalement *vraie*… mais on l'adore.",
+      "bg": "dark",
+      "image": "chasse"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
