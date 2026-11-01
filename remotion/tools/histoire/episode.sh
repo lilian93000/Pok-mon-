@@ -13,4 +13,5 @@ mkdir -p out
 npx remotion render src/histoire/index.ts Histoire "out/$ID.mp4" \
   --browser-executable=/opt/pw-browsers/chromium --concurrency=$(nproc) --crf=20 --log=error \
   --props="{\"id\":\"$ID\",\"fps\":30,\"duration\":10,\"audio\":null,\"words\":[],\"beats\":[]}"
-echo "→ out/$ID.mp4"
+ffmpeg -v error -y -i "out/$ID.mp4" -c:v copy -af "loudnorm=I=-14:TP=-1.5:LRA=9" -ar 48000 -c:a aac -b:a 192k "out/$ID-final.mp4"
+echo "→ out/$ID-final.mp4"
