@@ -60,5 +60,17 @@ lst = os.path.join(work, "list.txt")
 with open(lst, "w") as f:
     for p in parts:
         f.write(f"file '{os.path.abspath(p)}'\n")
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", lst, "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out], check=True)
+
+# Audio recollé à l'échantillon près : chaque plan est complété/coupé à frames/30 s.
+# (la concaténation ffmpeg laisse des trous d'horodatage et perd quelques ms → décalage)
+raw_path = os.path.join(work, "audio.raw")
+with open(raw_path, "wb") as raw_out:
+    for p, s in zip(parts, segs):
+        pcm = subprocess.run(["ffmpeg", "-v", "error", "-i", p, "-map", "0:a", "-f", "s16le", "-ac", "2", "-ar", "48000", "-"],
+                             capture_output=True, check=True).stdout
+        n = round(s["frames"] * 48000 / FPS) * 4
+        raw_out.write(pcm[:n] + b"\0" * max(0, n - len(pcm)))
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", lst,
+                "-f", "s16le", "-ac", "2", "-ar", "48000", "-i", raw_path,
+                "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out], check=True)
 print("ok", out)

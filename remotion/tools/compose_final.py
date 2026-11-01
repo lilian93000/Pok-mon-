@@ -48,8 +48,9 @@ for k, (a, b) in enumerate(ranges, 1):
     )
 last = f"[v{len(ranges)}]"
 fg = ";".join(chain)
-cmd = ["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", fg, "-map", last, "-map", "0:a",
+fg += ";[0:a]asetpts=N/SR/TB[aout]"  # même renumérotation côté audio (sinon ~2 s de décalage en fin)
+cmd = ["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", fg, "-map", last, "-map", "[aout]",
        "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-pix_fmt", "yuv420p", "-r", str(FPS),
-       "-c:a", "copy", "-movflags", "+faststart", out]
+       "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out]
 subprocess.run(cmd, check=True)
 print("ok", out)
