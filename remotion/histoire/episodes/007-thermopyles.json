@@ -1,0 +1,144 @@
+{
+  "id": "007-thermopyles",
+  "titre": "Les 300 n'étaient pas 300",
+  "duree": 60,
+  "sources": [
+    "Hérodote, Histoires VII.202-228 (effectifs grecs, trois jours de combat, Éphialte, Diénécès, Thespiens et Thébains)"
+  ],
+  "images": {
+    "helm": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP119913.jpg",
+      "cut": true,
+      "credit": "Casque corinthien, vers 650-600 av. J.-C. — The Met (CC0)"
+    },
+    "helm2": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/260020.jpg",
+      "cut": true,
+      "credit": "Casque corinthien, fin VIᵉ s. av. J.-C. — The Met (CC0)"
+    },
+    "head": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP263933.jpg",
+      "cut": true,
+      "credit": "Tête barbue au casque corinthien — The Met (CC0)"
+    },
+    "leo": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP-20920-001.jpg",
+      "cut": false,
+      "credit": "Léonidas aux Thermopyles, dessin, vers 1812 — The Met (CC0)"
+    },
+    "lek": {
+      "url": "https://openaccess-cdn.clevelandart.org/1928.660/1928.660_print.jpg",
+      "cut": true,
+      "credit": "Lécythe : guerrier, vers 480 av. J.-C. — Cleveland Museum of Art (CC0)"
+    },
+    "amph": {
+      "url": "https://openaccess-cdn.clevelandart.org/1927.433/1927.433_print.jpg",
+      "cut": true,
+      "credit": "Amphore : guerriers au combat, vers 530 av. J.-C. — Cleveland Museum of Art (CC0)"
+    },
+    "kylix": {
+      "url": "https://openaccess-cdn.clevelandart.org/1926.242/1926.242_print.jpg",
+      "cut": true,
+      "credit": "Coupe : guerrier, vers 490 av. J.-C. — Cleveland Museum of Art (CC0)"
+    },
+    "neck": {
+      "url": "https://openaccess-cdn.clevelandart.org/1929.979/1929.979_print.jpg",
+      "cut": true,
+      "credit": "Amphore : départ du guerrier, vers 520 av. J.-C. — Cleveland Museum of Art (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Aux Thermopyles, ils n'étaient *pas* trois cents.",
+      "bg": "red",
+      "rays": true,
+      "image": "helm"
+    },
+    {
+      "text": "480 avant Jésus-Christ. L'immense armée perse de *Xerxès* envahit la Grèce.",
+      "bg": "dark",
+      "image": "leo",
+      "date": "480 av. J.-C."
+    },
+    {
+      "text": "Hérodote parle de *millions* de soldats. C'est exagéré… mais ils sont des dizaines de milliers.",
+      "image": "amph",
+      "bg": "dark",
+      "zoom": true
+    },
+    {
+      "text": "Pour l'arrêter, un passage étroit entre la montagne et la *mer* : les Thermopyles.",
+      "bg": "dark",
+      "image": "amph"
+    },
+    {
+      "text": "Le roi de Sparte, *Léonidas*, s'y installe avec ses trois cents soldats.",
+      "bg": "dark",
+      "image": "head"
+    },
+    {
+      "text": "Mais ils ne sont pas seuls. Autour d'eux : environ *sept mille* Grecs !",
+      "bg": "dark",
+      "image": "helm2",
+      "counter": {
+        "to": 7000,
+        "suffix": " GRECS"
+      }
+    },
+    {
+      "text": "Pendant *trois* jours, ils bloquent les Perses.",
+      "bg": "dark",
+      "image": "neck"
+    },
+    {
+      "text": "Un Perse menace : nos flèches vont cacher le *soleil*.",
+      "bg": "dark",
+      "image": "lek"
+    },
+    {
+      "text": "Un Spartiate, Diénécès, répond : « Tant mieux. Nous combattrons à l'*ombre*. »",
+      "bg": "red",
+      "rays": true,
+      "image": "helm",
+      "zoom": true
+    },
+    {
+      "text": "Puis un traître, Éphialte, montre aux Perses un *sentier* dans la montagne.",
+      "bg": "dark",
+      "image": "leo"
+    },
+    {
+      "text": "Encerclé, Léonidas renvoie la plupart des Grecs *chez eux*.",
+      "bg": "dark",
+      "image": "kylix"
+    },
+    {
+      "text": "Mais restent avec lui : sept cents soldats de *Thespies*, et quatre cents Thébains.",
+      "bg": "red",
+      "rays": true,
+      "image": "helm2"
+    },
+    {
+      "text": "Leur chef, *Démophile*, refuse de partir : il ne laissera pas Léonidas mourir seul.",
+      "image": "kylix",
+      "bg": "dark"
+    },
+    {
+      "text": "Les Thespiens sont morts jusqu'au dernier… et l'histoire les a *oubliés*.",
+      "bg": "dark",
+      "image": "head",
+      "stamp": "THESPIES"
+    },
+    {
+      "text": "On retient les trois cents. Mais ils n'étaient *pas* seuls.",
+      "bg": "red",
+      "rays": true,
+      "image": "helm"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

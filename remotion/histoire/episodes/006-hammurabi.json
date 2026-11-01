@@ -1,0 +1,140 @@
+{
+  "id": "006-hammurabi",
+  "titre": "Œil pour œil : la loi a 3 700 ans",
+  "duree": 60,
+  "sources": [
+    "Code de Hammurabi (vers 1754 av. J.-C.), lois 196, 197, 198, 199, 218, 229",
+    "Stèle emportée à Suse par Shutruk-Nahhunte (XIIᵉ s. av. J.-C.), retrouvée en 1901 par la mission Jacques de Morgan, musée du Louvre"
+  ],
+  "images": {
+    "gudea": {
+      "url": "https://openaccess-cdn.clevelandart.org/1963.680/1963.680_print.jpg",
+      "cut": true,
+      "credit": "Tête de Gudea, Lagash, vers 2144-2124 av. J.-C. — Cleveland Museum of Art (CC0)"
+    },
+    "statue": {
+      "url": "https://openaccess-cdn.clevelandart.org/1963.154/1963.154_print.jpg",
+      "cut": true,
+      "credit": "Statue de Gudea — Cleveland Museum of Art (CC0)"
+    },
+    "tab3": {
+      "url": "https://images.metmuseum.org/CRDImages/an/original/DP360672.jpg",
+      "cut": true,
+      "credit": "Tablette cunéiforme d'exercice — The Met (CC0)"
+    },
+    "tab2": {
+      "url": "https://images.metmuseum.org/CRDImages/an/original/DP-23691-001.jpg",
+      "cut": true,
+      "credit": "Tablette cunéiforme — The Met (CC0)"
+    },
+    "tab6": {
+      "url": "https://images.metmuseum.org/CRDImages/an/original/DP-32722-001.jpg",
+      "cut": true,
+      "credit": "Tablette cunéiforme — The Met (CC0)"
+    },
+    "cyl": {
+      "url": "https://images.metmuseum.org/CRDImages/an/original/DP360616.jpg",
+      "cut": true,
+      "credit": "Cylindre cunéiforme de Nabuchodonosor II — The Met (CC0)"
+    },
+    "lion1": {
+      "url": "https://images.metmuseum.org/CRDImages/an/original/DT891.jpg",
+      "cut": false,
+      "credit": "Panneau au lion, Babylone — The Met (CC0)"
+    },
+    "lion2": {
+      "url": "https://images.metmuseum.org/CRDImages/an/original/DT892.jpg",
+      "cut": false,
+      "credit": "Panneau au lion, Babylone — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "« Œil pour œil, dent pour dent. » Cette loi a *trois mille sept cents* ans.",
+      "bg": "red",
+      "rays": true,
+      "image": "gudea"
+    },
+    {
+      "text": "Babylone, vers *1750* avant Jésus-Christ.",
+      "bg": "dark",
+      "image": "lion1",
+      "date": "≈ 1750 av. J.-C."
+    },
+    {
+      "text": "Le roi *Hammurabi* fait graver ses lois dans la pierre, pour que tout le monde les connaisse.",
+      "bg": "dark",
+      "image": "statue"
+    },
+    {
+      "text": "Une stèle de basalte de plus de deux mètres, couverte de *deux cent quatre-vingt-deux* lois.",
+      "bg": "dark",
+      "image": "cyl",
+      "counter": {
+        "to": 282,
+        "suffix": " LOIS"
+      }
+    },
+    {
+      "text": "Loi 196 : si un homme crève l'œil d'un autre homme… on lui crève l'*œil*.",
+      "bg": "dark",
+      "image": "gudea",
+      "zoom": true,
+      "stamp": "LOI 196"
+    },
+    {
+      "text": "Loi 197 : s'il lui casse un os… on lui casse un *os*.",
+      "bg": "dark",
+      "image": "tab2"
+    },
+    {
+      "text": "Mais attention : tout dépend de *qui* vous êtes.",
+      "bg": "red",
+      "rays": true,
+      "image": "statue"
+    },
+    {
+      "text": "Crever l'œil d'un homme du peuple ? Une simple *amende* : une mine d'argent.",
+      "bg": "dark",
+      "image": "tab3"
+    },
+    {
+      "text": "L'œil d'un esclave ? On paie la *moitié* de son prix… à son maître.",
+      "bg": "dark",
+      "image": "tab6"
+    },
+    {
+      "text": "Un patient meurt pendant une opération ? On coupe les *mains* du chirurgien.",
+      "bg": "red",
+      "rays": true,
+      "image": "gudea"
+    },
+    {
+      "text": "Une maison s'effondre et tue son propriétaire ? L'architecte est mis à *mort*.",
+      "bg": "dark",
+      "image": "cyl"
+    },
+    {
+      "text": "Six siècles plus tard, un roi ennemi emporte la stèle en Iran, comme *butin* de guerre.",
+      "bg": "dark",
+      "image": "lion2"
+    },
+    {
+      "text": "Des archéologues *français* la retrouvent à Suse, en 1901.",
+      "bg": "dark",
+      "image": "tab2",
+      "date": "1901"
+    },
+    {
+      "text": "Aujourd'hui, elle est exposée au *Louvre*, à Paris. Vous pouvez aller la voir.",
+      "bg": "red",
+      "rays": true,
+      "image": "statue"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
