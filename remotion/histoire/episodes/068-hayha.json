@@ -1,0 +1,111 @@
+{
+  "id": "068-hayha",
+  "titre": "La mort blanche",
+  "duree": 60,
+  "sources": [
+    "Simo Häyhä, tireur d'élite finlandais pendant la guerre d'Hiver (30 novembre 1939 - 13 mars 1940), front de Kollaa",
+    "Environ 500 soldats abattus selon les décomptes finlandais ; utilisation de la visée métallique",
+    "Grièvement blessé à la mâchoire le 6 mars 1940 ; mort en 2002 à 96 ans"
+  ],
+  "images": {
+    "neige": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c00000/3c08000/3c08800/3c08870v.jpg",
+      "cut": false,
+      "credit": "Glacier d'Aletsch, 1860, 1860-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "neige2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c00000/3c08000/3c08800/3c08884v.jpg",
+      "cut": false,
+      "credit": "Glacier de Grindelwald, 1860, 1860-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "neige3": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c00000/3c08000/3c08800/3c08882v.jpg",
+      "cut": false,
+      "credit": "Passage du glacier de Grindelwald, 1860, 1860-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Cinq cents victimes en cent jours, par moins quarante *degrés*.",
+      "bg": "red",
+      "rays": true,
+      "image": "neige"
+    },
+    {
+      "text": "30 novembre *1939*. L'Union soviétique envahit la Finlande. C'est la guerre d'*Hiver*.",
+      "bg": "dark",
+      "date": "30 NOV. 1939"
+    },
+    {
+      "text": "Face à l'une des plus grandes armées du monde, la petite Finlande n'a presque *rien*.",
+      "bg": "dark",
+      "image": "neige2"
+    },
+    {
+      "text": "Mais elle a ses soldats, habitués au froid, à la forêt… et à la *neige*.",
+      "bg": "dark",
+      "image": "neige3"
+    },
+    {
+      "text": "Parmi eux, un fermier et chasseur d'un mètre soixante : Simo *Häyhä*.",
+      "bg": "dark",
+      "stamp": "SIMO HÄYHÄ"
+    },
+    {
+      "text": "Habillé tout en *blanc*, il reste immobile des heures dans la neige, par moins vingt, moins quarante degrés.",
+      "bg": "dark",
+      "image": "neige",
+      "counter": {
+        "to": -40,
+        "suffix": " °C"
+      }
+    },
+    {
+      "text": "Il garde de la neige dans la bouche, pour que la buée de sa respiration ne le *trahisse* pas.",
+      "bg": "dark",
+      "image": "neige2",
+      "zoom": true
+    },
+    {
+      "text": "Il n'utilise pas de lunette de visée : le reflet du verre pourrait le faire *repérer*.",
+      "bg": "dark",
+      "image": "neige3"
+    },
+    {
+      "text": "En une centaine de jours, environ *cinq cents* soldats ennemis tombent sous ses balles.",
+      "bg": "dark",
+      "counter": {
+        "to": 500,
+        "suffix": ""
+      }
+    },
+    {
+      "text": "Les Soviétiques le surnomment « la Mort *blanche* ».",
+      "bg": "red",
+      "rays": true,
+      "image": "neige",
+      "stamp": "LA MORT BLANCHE"
+    },
+    {
+      "text": "Le 6 mars 1940, une balle lui fracasse la *mâchoire*. Il tombe dans le coma.",
+      "bg": "dark",
+      "date": "6 MARS 1940"
+    },
+    {
+      "text": "Il se réveille une semaine plus tard… le jour même où la *paix* est signée.",
+      "bg": "dark",
+      "image": "neige2"
+    },
+    {
+      "text": "Il a survécu, et il est mort en 2002, à quatre-vingt-seize *ans*.",
+      "bg": "red",
+      "rays": true,
+      "image": "neige3"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "id": "069-petrov",
+  "titre": "Les ordinateurs disaient : missiles en approche",
+  "duree": 60,
+  "sources": [
+    "Incident du 26 septembre 1983, bunker Serpoukhov-15 : le système d'alerte satellitaire Oko signale le lancement de cinq missiles américains",
+    "Le lieutenant-colonel Stanislav Petrov le juge comme une fausse alerte ; cause : reflets du soleil sur des nuages en haute altitude",
+    "Contexte : destruction du vol KAL 007 (1ᵉʳ septembre 1983) ; incident révélé en 1998 ; mort de Petrov en 2017"
+  ],
+  "images": {
+    "radar": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/habshaer/nd/nd0000/nd0078/photos/199393pv.jpg",
+      "cut": false,
+      "credit": "Radar d'acquisition, complexe Safeguard Stanley R. Mickelsen (HAER),  — Library of Congress (sans restriction connue)"
+    },
+    "radar2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/habshaer/ak/ak0400/ak0486/photos/193486pv.jpg",
+      "cut": false,
+      "credit": "Système d'alerte avancée contre les missiles balistiques, Clear (HAER),  — Library of Congress (sans restriction connue)"
+    },
+    "antenne": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/habshaer/ca/ca3500/ca3504/photos/365463pv.jpg",
+      "cut": false,
+      "credit": "Réseau radar transhorizon, Tulelake (HAER),  — Library of Congress (sans restriction connue)"
+    },
+    "silo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/habshaer/mo/mo1800/mo1801/photos/197175pv.jpg",
+      "cut": false,
+      "credit": "Installation d'entraînement au lancement de missiles Minuteman (HAER),  — Library of Congress (sans restriction connue)"
+    },
+    "silo2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/habshaer/ca/ca2500/ca2577/photos/382458pv.jpg",
+      "cut": false,
+      "credit": "Laboratoire de propulsion de missiles, base d'Edwards (HAER),  — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Les ordinateurs disaient : missiles nucléaires en approche. Il n'a *rien* fait.",
+      "bg": "red",
+      "rays": true,
+      "image": "radar"
+    },
+    {
+      "text": "26 septembre *1983*. Près de Moscou, dans un bunker secret, l'officier Stanislav Petrov est de garde.",
+      "bg": "dark",
+      "image": "radar2",
+      "date": "26 SEPT. 1983"
+    },
+    {
+      "text": "Son rôle : surveiller les satellites qui détectent les lancements de missiles *américains*.",
+      "bg": "dark",
+      "image": "antenne"
+    },
+    {
+      "text": "La tension est *énorme* entre les deux superpuissances.",
+      "bg": "dark",
+      "image": "silo"
+    },
+    {
+      "text": "Peu après minuit, l'alarme *hurle*. Sur l'écran, un mot : LANCEMENT.",
+      "bg": "dark",
+      "stamp": "LANCEMENT"
+    },
+    {
+      "text": "Un missile américain vient d'être tiré vers l'URSS. Puis un *deuxième*. Puis cinq.",
+      "bg": "dark",
+      "image": "silo2",
+      "counter": {
+        "to": 5,
+        "suffix": " MISSILES"
+      }
+    },
+    {
+      "text": "Le protocole est clair : prévenir immédiatement ses chefs, qui peuvent lancer une *riposte* nucléaire.",
+      "bg": "dark",
+      "image": "radar",
+      "zoom": true
+    },
+    {
+      "text": "Mais Petrov *hésite*. Si les Américains attaquaient vraiment, ils enverraient des centaines de missiles. Pas cinq.",
+      "bg": "dark",
+      "image": "radar2"
+    },
+    {
+      "text": "Alors il décide : c'est une *fausse* alerte. Il ne transmet rien.",
+      "bg": "red",
+      "rays": true,
+      "image": "silo",
+      "stamp": "FAUSSE ALERTE"
+    },
+    {
+      "text": "Il avait raison : les satellites avaient confondu des reflets du soleil sur des nuages… avec des *missiles*.",
+      "bg": "dark",
+      "image": "radar"
+    },
+    {
+      "text": "Personne ne l'a remercié. L'histoire n'a été révélée qu'en *1998*.",
+      "bg": "dark",
+      "image": "radar2",
+      "date": "1998"
+    },
+    {
+      "text": "Petrov disait simplement : j'ai eu une drôle d'impression, dans le *ventre*.",
+      "bg": "red",
+      "rays": true,
+      "image": "silo"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "id": "070-tchernobyl",
+  "titre": "Les trois plongeurs de Tchernobyl",
+  "duree": 60,
+  "sources": [
+    "Accident du réacteur n° 4 de Tchernobyl, 26 avril 1986",
+    "Risque d'une explosion de vapeur si le combustible en fusion atteignait les bassins situés sous le réacteur",
+    "Début mai 1986 : Oleksiy Ananenko, Valeri Bespalov et Boris Baranov ouvrent les vannes de vidange ; tous trois survivent (Baranov meurt en 2005)"
+  ],
+  "images": {
+    "centrale": {
+      "url": "https://tile.loc.gov/image-services/iiif/service:pnp:highsm:23500:23530/full/pct:25/0/default.jpg",
+      "cut": false,
+      "credit": "Centrale nucléaire de Rancho Seco, Californie (Carol M. Highsmith), 2012 — Library of Congress (sans restriction connue)"
+    },
+    "centrale2": {
+      "url": "https://tile.loc.gov/image-services/iiif/service:pnp:highsm:13000:13019/full/pct:25/0/default.jpg",
+      "cut": false,
+      "credit": "Centrale nucléaire, vers 1980, 1980-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "chantier": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/56700/56757v.jpg",
+      "cut": false,
+      "credit": "Construction de la centrale de Calvert Cliffs, 1969, 1969-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Trois hommes ont plongé sous un réacteur nucléaire en *fusion*.",
+      "bg": "red",
+      "rays": true,
+      "image": "centrale"
+    },
+    {
+      "text": "26 avril *1986*. Ukraine, alors en URSS. Le réacteur numéro quatre de la centrale de Tchernobyl *explose*.",
+      "bg": "dark",
+      "date": "26 AVRIL 1986",
+      "stamp": "TCHERNOBYL"
+    },
+    {
+      "text": "C'est la pire catastrophe nucléaire de l'*histoire*.",
+      "bg": "dark",
+      "image": "centrale2"
+    },
+    {
+      "text": "Mais quelques jours plus tard, les scientifiques découvrent un danger encore plus *grave*.",
+      "bg": "dark",
+      "image": "chantier"
+    },
+    {
+      "text": "Sous le réacteur, des bassins remplis de millions de litres d'*eau*.",
+      "bg": "dark",
+      "image": "centrale",
+      "zoom": true
+    },
+    {
+      "text": "Si le combustible en fusion les atteint, l'eau se transforme en vapeur d'un coup… et peut provoquer une deuxième *explosion*.",
+      "bg": "dark",
+      "stamp": "DANGER"
+    },
+    {
+      "text": "Il faut vider ces bassins. Pour ça, quelqu'un doit aller ouvrir des vannes… dans les sous-sols inondés et *radioactifs*.",
+      "bg": "dark",
+      "image": "centrale2"
+    },
+    {
+      "text": "Trois employés de la centrale y vont : Oleksiy Ananenko, Valeri Bespalov et Boris *Baranov*.",
+      "bg": "dark",
+      "counter": {
+        "to": 3,
+        "suffix": " HOMMES"
+      }
+    },
+    {
+      "text": "Dans l'eau jusqu'à la taille, dans le *noir*, avec des lampes qui s'éteignent.",
+      "bg": "dark",
+      "image": "chantier"
+    },
+    {
+      "text": "Ils trouvent les vannes. Ils les *ouvrent*. L'eau s'écoule.",
+      "bg": "red",
+      "rays": true,
+      "image": "centrale"
+    },
+    {
+      "text": "La légende raconte qu'ils sont morts quelques jours plus tard. C'est *faux*.",
+      "bg": "dark",
+      "image": "centrale2",
+      "stamp": "MYTHE"
+    },
+    {
+      "text": "Tous les trois ont *survécu*. Deux d'entre eux étaient encore en vie plus de trente ans après.",
+      "bg": "red",
+      "rays": true,
+      "image": "centrale"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

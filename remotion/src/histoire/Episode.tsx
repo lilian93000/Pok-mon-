@@ -107,7 +107,7 @@ const Stamp: React.FC<{ text: string }> = ({ text }) => {
   const { fps } = useVideoConfig();
   const t = spring({ frame: f - 4, fps, config: { damping: 11, stiffness: 220 } });
   const scale = interpolate(t, [0, 1], [2.6, 1]);
-  const size = text.length > 12 ? 92 : 150;
+  const size = Math.min(140, Math.floor(1250 / Math.max(1, text.length)));
   return (
     <AbsoluteFill style={{ alignItems: "center", top: 560, height: 400 }}>
       <div
