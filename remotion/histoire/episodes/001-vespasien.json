@@ -89,6 +89,11 @@
       "label": "VESPASIEN"
     },
     {
+      "text": "Un empereur réputé radin… mais avec un sacré sens de l'*humour*.",
+      "image": "head",
+      "bg": "dark"
+    },
+    {
       "text": "Selon l'historien Suétone, il lui manque *quarante milliards* de sesterces.",
       "image": "sest",
       "bg": "dark",
@@ -153,7 +158,10 @@
       "image": "vesp",
       "bg": "red",
       "rays": true,
-      "stamp": "PECUNIA NON OLET"
+      "stamp": "PECUNIA NON OLET",
+      "prononciation": {
+        "Pecunia non olet": "Pékounia nonne olète"
+      }
     },
     {
       "text": "Il est resté drôle jusqu'au *bout*. Sur son lit de mort, il lance :",

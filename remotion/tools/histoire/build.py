@@ -14,18 +14,32 @@ pub = root / "public" / "histoire" / ep["id"]
 pub.mkdir(parents=True, exist_ok=True)
 
 # Texte : un mot = un jeton séparé par des espaces ; *mot* = mot-clé (accent)
-words = []  # {w, kw, beat}
+def toks(text):
+    text = text.replace("« ", "«\u00a0").replace(" »", "\u00a0»").replace(" ?", "\u00a0?").replace(" :", "\u00a0:").replace(" !", "\u00a0!")
+    return text.split(" ")
+
+def spoken(tok):
+    # ce qu'on envoie à la voix : sans guillemets ni astérisques (les « en début de texte font dérailler la voix)
+    return tok.replace("*", "").replace("«", "").replace("»", "").replace("\u00a0", " ").strip()
+
+words = []  # {w: affiché, s: prononcé, kw, beat}
 for i, b in enumerate(ep["beats"]):
+    disp = toks(b["text"])
+    # "prononciation" : {"Pecunia non olet": "Pékounia nonne olète"} — même nombre de mots
+    said_text = b["text"]
+    for k, v in b.get("prononciation", {}).items():
+        said_text = said_text.replace(k, v)
+    said = toks(said_text)
+    assert len(said) == len(disp), f"plan {i} : la prononciation doit garder le même nombre de mots"
     inside = False
-    text = b["text"].replace("« ", "«\u00a0").replace(" »", "\u00a0»").replace(" ?", "\u00a0?").replace(" :", "\u00a0:").replace(" !", "\u00a0!")
-    for tok in text.split(" "):
+    for tok, sk in zip(disp, said):
         kw = inside
         for ch in tok:
             if ch == "*":
                 inside = not inside
                 kw = kw or inside
-        words.append({"w": tok.replace("*", ""), "kw": kw, "beat": i})
-full = " ".join(w["w"] for w in words)
+        words.append({"w": tok.replace("*", ""), "s": spoken(sk), "kw": kw, "beat": i})
+full = " ".join(w["s"] for w in words if w["s"])
 
 key = os.environ.get("ELEVENLABS_API_KEY")
 audio = None
@@ -57,10 +71,17 @@ if key:
     st, en = al["character_start_times_seconds"], al["character_end_times_seconds"]
     pos = 0
     for w in words:
-        i = full.index(w["w"], pos)
-        j = i + len(w["w"]) - 1
+        if not w["s"]:  # mot sans son (ex. « seul) : collé au mot suivant
+            w["start"] = w["end"] = None
+            continue
+        i = full.index(w["s"], pos)
+        j = i + len(w["s"]) - 1
         w["start"], w["end"] = st[i], en[j]
         pos = j + 1
+    for k in range(len(words) - 1, -1, -1):
+        if words[k]["start"] is None:
+            nxt = words[k + 1] if k + 1 < len(words) else words[k - 1]
+            words[k]["start"] = words[k]["end"] = nxt["start"]
     # Resserrer les silences (style TikTok) : max 0,2 s après ponctuation, 0,08 s sinon
     import subprocess
     keep, t, removed = [], 0.0, []
