@@ -1,0 +1,130 @@
+{
+  "id": "036-boulanger",
+  "titre": "Le boulanger du Titanic",
+  "duree": 60,
+  "sources": [
+    "Témoignage de Charles Joughin à la commission d'enquête britannique (1912)",
+    "Température de l'eau estimée à -2 °C ; la plupart des naufragés meurent en moins de 30 minutes",
+    "Joughin récupéré près du canot pliant B, puis recueilli par le canot 12",
+    "Charles Joughin meurt en 1956 à Paterson (New Jersey), à 78 ans"
+  ],
+  "images": {
+    "lancement": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a30000/3a35000/3a35200/3a35267v.jpg",
+      "cut": false,
+      "credit": "Le Titanic avant son lancement, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "montage": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b30000/3b37000/3b37100/3b37182r.jpg",
+      "cut": false,
+      "credit": "Le grand désastre du Titanic, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "canot": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b30000/3b39000/3b39700/3b39746r.jpg",
+      "cut": false,
+      "credit": "Survivants du Titanic en route vers le Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "carpathia": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c20000/3c21000/3c21000/3c21012v.jpg",
+      "cut": false,
+      "credit": "Le Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "survivants": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a30000/3a35000/3a35400/3a35462r.jpg",
+      "cut": false,
+      "credit": "Survivants du Titanic à bord du Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "rostron": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c20000/3c21000/3c21000/3c21011v.jpg",
+      "cut": false,
+      "credit": "Le capitaine Rostron du Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Il a survécu des heures dans l'eau glacée… grâce au *whisky* ?",
+      "bg": "red",
+      "rays": true,
+      "image": "montage"
+    },
+    {
+      "text": "Nuit du 14 au 15 avril *1912*. Le Titanic heurte un iceberg.",
+      "bg": "dark",
+      "image": "lancement",
+      "date": "15 AVRIL 1912"
+    },
+    {
+      "text": "À bord, le chef boulanger s'appelle Charles *Joughin*.",
+      "bg": "dark",
+      "image": "survivants"
+    },
+    {
+      "text": "D'abord, il aide les femmes et les enfants à monter dans les *canots*.",
+      "bg": "dark",
+      "image": "canot"
+    },
+    {
+      "text": "Puis il redescend dans sa cabine… et boit un bon verre d'*alcool*.",
+      "bg": "dark",
+      "image": "montage",
+      "zoom": true
+    },
+    {
+      "text": "Il remonte et jette des dizaines de chaises longues par-dessus bord, pour que les gens puissent s'y *accrocher*.",
+      "bg": "dark",
+      "image": "canot"
+    },
+    {
+      "text": "Quand le navire coule, il reste à l'arrière, tout en haut… et descend avec lui, comme dans un *ascenseur*.",
+      "bg": "red",
+      "rays": true,
+      "image": "lancement"
+    },
+    {
+      "text": "Il dira qu'il n'a même pas eu la tête *mouillée*.",
+      "bg": "dark",
+      "image": "lancement",
+      "zoom": true
+    },
+    {
+      "text": "L'eau est à moins *deux* degrés. La plupart des naufragés meurent en quelques minutes.",
+      "bg": "dark",
+      "image": "canot",
+      "counter": {
+        "to": -2,
+        "suffix": " °C"
+      }
+    },
+    {
+      "text": "Joughin, lui, nage… pendant des *heures*.",
+      "bg": "dark",
+      "image": "montage"
+    },
+    {
+      "text": "Il finit par s'accrocher à un canot retourné, puis il est recueilli à l'*aube*.",
+      "bg": "dark",
+      "image": "carpathia"
+    },
+    {
+      "text": "Il racontera tout devant la commission d'enquête britannique. Et il vivra jusqu'à *soixante-dix-huit* ans.",
+      "image": "rostron",
+      "bg": "dark"
+    },
+    {
+      "text": "Le whisky l'a-t-il sauvé ? Les médecins en doutent : l'alcool ferait plutôt perdre de la *chaleur*.",
+      "bg": "dark",
+      "image": "rostron"
+    },
+    {
+      "text": "Mais une chose est sûre : il était l'un des rares à avoir survécu dans l'eau *glacée*.",
+      "bg": "red",
+      "rays": true,
+      "image": "survivants"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

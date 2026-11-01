@@ -1,0 +1,128 @@
+{
+  "id": "038-treve",
+  "titre": "La trêve de Noël 1914",
+  "duree": 60,
+  "sources": [
+    "Trêve de Noël, 24-25 décembre 1914, front ouest (lettres et journaux de soldats britanniques et allemands)",
+    "Échanges de cadeaux, inhumation des morts, parties de football improvisées attestées par plusieurs témoignages",
+    "Interdiction par les états-majors ; tentatives de 1915 réprimées"
+  ],
+  "images": {
+    "tranchee": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/19100/19132v.jpg",
+      "cut": false,
+      "credit": "Un moment calme dans les tranchées allemandes, 1914, 1914-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "tranchee2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a50000/3a51000/3a51300/3a51394v.jpg",
+      "cut": false,
+      "credit": "Soldats dans une tranchée, 1914-15, 1915-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "tirailleurs": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/18600/18694v.jpg",
+      "cut": false,
+      "credit": "Tranchées, 1915, 1915-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "messe": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s00000/1s04000/1s04100/1s04102v.jpg",
+      "cut": false,
+      "credit": "Messe dans les tranchées alliées, front ouest, 1923-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "creuser": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/17300/17363v.jpg",
+      "cut": false,
+      "credit": "Creusement d'une tranchée, Paris, 1914, 1914-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "rats": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s40000/1s49000/1s49800/1s49827v.jpg",
+      "cut": false,
+      "credit": "Soldats français dans les tranchées, 1929 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "En pleine guerre, des ennemis ont joué au *foot* ensemble.",
+      "bg": "red",
+      "rays": true,
+      "image": "tranchee"
+    },
+    {
+      "text": "Décembre *1914*. La Première Guerre mondiale a commencé depuis cinq mois.",
+      "bg": "dark",
+      "image": "creuser",
+      "date": "DÉCEMBRE 1914"
+    },
+    {
+      "text": "Sur le front, les soldats britanniques et allemands se font face dans des tranchées, parfois à quelques dizaines de *mètres*.",
+      "bg": "dark",
+      "image": "tranchee2"
+    },
+    {
+      "text": "La boue, le froid, les rats… et la *mort*, partout.",
+      "bg": "dark",
+      "image": "rats"
+    },
+    {
+      "text": "Le soir du 24 décembre, côté allemand, des petits sapins illuminés apparaissent sur les *tranchées*.",
+      "bg": "dark",
+      "image": "tranchee",
+      "zoom": true
+    },
+    {
+      "text": "Puis un chant s'élève : « Stille Nacht ». *Douce nuit*.",
+      "bg": "dark",
+      "image": "messe"
+    },
+    {
+      "text": "Les Britanniques répondent… avec leurs propres chants de *Noël*.",
+      "bg": "dark",
+      "image": "tranchee2"
+    },
+    {
+      "text": "Le lendemain matin, des soldats sortent des tranchées. Sans armes. Ils se serrent la *main*.",
+      "bg": "red",
+      "rays": true,
+      "image": "tirailleurs"
+    },
+    {
+      "text": "Ils échangent des cigarettes, du chocolat, des boutons d'uniforme… et enterrent ensemble leurs *morts*.",
+      "bg": "dark",
+      "image": "messe"
+    },
+    {
+      "text": "Et dans plusieurs endroits, un ballon apparaît. Des matchs de *football* improvisés dans le no man's land !",
+      "bg": "red",
+      "rays": true,
+      "image": "tranchee",
+      "stamp": "TRÊVE"
+    },
+    {
+      "text": "Sur tout le front, près de *cent mille* soldats auraient participé à ces trêves.",
+      "image": "tirailleurs",
+      "bg": "dark",
+      "counter": {
+        "to": 100000,
+        "suffix": " SOLDATS"
+      }
+    },
+    {
+      "text": "Les généraux sont furieux. Ils *interdisent* que cela se reproduise.",
+      "bg": "dark",
+      "image": "creuser"
+    },
+    {
+      "text": "Quelques jours plus tard, les combats reprennent. La guerre durera encore quatre *ans*.",
+      "bg": "dark",
+      "image": "rats",
+      "counter": {
+        "to": 4,
+        "suffix": " ANS"
+      }
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}

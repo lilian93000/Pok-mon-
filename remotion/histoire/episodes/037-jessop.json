@@ -1,0 +1,131 @@
+{
+  "id": "037-jessop",
+  "titre": "La femme insubmersible",
+  "duree": 60,
+  "sources": [
+    "Violet Jessop : hôtesse sur l'Olympic lors de la collision avec le HMS Hawke (20 septembre 1911), sur le Titanic (1912, canot 16), infirmière sur le Britannic (coulé le 21 novembre 1916)",
+    "Mémoires de Violet Jessop (publiées en 1997)"
+  ],
+  "images": {
+    "lancement": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a30000/3a35000/3a35200/3a35267v.jpg",
+      "cut": false,
+      "credit": "Le Titanic avant son lancement, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "montage": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b30000/3b37000/3b37100/3b37182r.jpg",
+      "cut": false,
+      "credit": "Le grand désastre du Titanic, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "canot": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b30000/3b39000/3b39700/3b39746r.jpg",
+      "cut": false,
+      "credit": "Survivants du Titanic en route vers le Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "carpathia": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c20000/3c21000/3c21000/3c21012v.jpg",
+      "cut": false,
+      "credit": "Le Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "survivants": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a30000/3a35000/3a35400/3a35462r.jpg",
+      "cut": false,
+      "credit": "Survivants du Titanic à bord du Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "rostron": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c20000/3c21000/3c21000/3c21011v.jpg",
+      "cut": false,
+      "credit": "Le capitaine Rostron du Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "britannic": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/10900/10937v.jpg",
+      "cut": false,
+      "credit": "Le Britannic en navire-hôpital, 1917, 1917 — Library of Congress (sans restriction connue)"
+    },
+    "hopital": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/10900/10939v.jpg",
+      "cut": false,
+      "credit": "Salle pour blessés graves à bord d'un navire-hôpital anglais, 1917, 1917 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Elle a survécu au Titanic… et à ses deux *frères* jumeaux.",
+      "bg": "red",
+      "rays": true,
+      "image": "lancement"
+    },
+    {
+      "text": "Violet Jessop travaille comme hôtesse sur les grands paquebots de la compagnie *White Star*.",
+      "bg": "dark",
+      "image": "survivants"
+    },
+    {
+      "text": "La compagnie construit trois navires presque identiques : l'Olympic, le *Titanic*… et le Britannic.",
+      "bg": "dark",
+      "image": "montage"
+    },
+    {
+      "text": "1911 : Violet est à bord de l'Olympic quand il percute un navire de guerre. Le paquebot est gravement *endommagé*.",
+      "bg": "dark",
+      "image": "lancement",
+      "date": "1911"
+    },
+    {
+      "text": "Elle s'en sort *indemne*.",
+      "bg": "dark",
+      "image": "carpathia"
+    },
+    {
+      "text": "1912 : elle embarque sur le Titanic. La nuit du naufrage, on la fait monter dans un canot… et on lui confie un *bébé*.",
+      "bg": "dark",
+      "image": "canot",
+      "date": "1912"
+    },
+    {
+      "text": "Le lendemain, sur le navire de sauvetage, une femme lui reprend l'enfant… sans un *mot*.",
+      "bg": "dark",
+      "image": "survivants"
+    },
+    {
+      "text": "1916, en pleine guerre. Le troisième frère, le Britannic, est devenu navire-*hôpital*. Violet y est infirmière.",
+      "bg": "dark",
+      "image": "britannic",
+      "date": "1916"
+    },
+    {
+      "text": "Il heurte une mine en mer Égée. Il coule en moins d'une *heure*.",
+      "bg": "red",
+      "rays": true,
+      "image": "hopital"
+    },
+    {
+      "text": "Son canot est aspiré vers les hélices du navire. Violet *saute* à l'eau.",
+      "bg": "dark",
+      "image": "britannic",
+      "zoom": true
+    },
+    {
+      "text": "Elle se cogne violemment la tête… mais elle *survit*.",
+      "bg": "dark",
+      "image": "hopital"
+    },
+    {
+      "text": "Trois naufrages, trois *survies*. On la surnommera « Miss Insubmersible ».",
+      "bg": "red",
+      "rays": true,
+      "image": "lancement",
+      "stamp": "INSUBMERSIBLE"
+    },
+    {
+      "text": "Elle a continué à naviguer pendant des années… et elle est morte à quatre-vingt-trois ans, dans son *lit*.",
+      "bg": "dark",
+      "image": "carpathia"
+    },
+    {
+      "text": "Un fait d'histoire par jour. *Abonnez-vous*.",
+      "bg": "dark",
+      "outro": true
+    }
+  ]
+}
