@@ -106,3 +106,46 @@ FIX = {
 }
 # lignes à ne pas sous-titrer (transcription douteuse) : (début, fin) source
 NO_CAPTION = [(0.0, 1.8), (44.5, 46.9), (64.7, 76.0), (104.0, 131.0), (407.5, 411.2), (1105.5, 1117.0), (1378.5, 1449.7)]
+
+# ---------------- Motion design ----------------
+# Carte de Séoul affichée au début de chaque chapitre : (lieu d'arrivée, lieu de départ)
+CHAPTER_MAP = {
+    1: ("station", None),
+    2: ("myeongdong", "station"),
+    3: ("cheonggye", "myeongdong"),
+    4: ("cheonggye", None),
+    5: ("jongno", "cheonggye"),
+    6: ("ewha", "jongno"),
+    7: ("palace", "ewha"),
+    8: ("cheonggye", "palace"),
+    9: ("hongdae", "cheonggye"),
+}
+
+# Animations ponctuelles (temps SOURCE ; apparaissent aussi dans l'accroche si le moment y est)
+POPS = [
+    (7.7, 3.0, {"kind": "sticker", "emoji": "✈️", "text": "12 h de vol", "pos": "right"}),
+    (13.0, 2.4, {"kind": "sticker", "emoji": "😎", "text": "Magnifique", "pos": "left"}),
+    (29.8, 4.6, {"kind": "money", "won": 5000, "eur": 4}),
+    (41.9, 2.8, {"kind": "sticker", "emoji": "☕", "text": "5,95 € en France", "pos": "left"}),
+    (54.2, 6.5, {"kind": "route", "from": "Aéroport d'Incheon", "to": "Seoul Station", "km": 50, "time": "40 min en train"}),
+    (157.7, 3.0, {"kind": "sticker", "emoji": "⚡", "text": "Gâteaux Pikachu", "pos": "right"}),
+    (240.4, 3.0, {"kind": "sticker", "emoji": "🍗", "text": "Chicken time", "pos": "left"}),
+    (309.0, 3.4, {"kind": "sticker", "emoji": "😋", "text": "TROP BON", "pos": "right"}),
+    (412.8, 2.4, {"kind": "sticker", "emoji": "🤯", "text": "C'est fou", "pos": "right", "color": "#33D6FF"}),
+    (447.5, 4.5, {"kind": "subscribe"}),
+    (614.8, 2.6, {"kind": "sticker", "emoji": "🎥", "text": "Juste un vlog", "pos": "left"}),
+    (656.7, 3.6, {"kind": "sticker", "emoji": "📷", "text": "DJI Osmo", "pos": "left", "color": "#33D6FF"}),
+    (794.0, 3.0, {"kind": "sticker", "emoji": "💥", "text": "OULA", "pos": "center"}),
+    (850.2, 2.6, {"kind": "sticker", "emoji": "🔒", "text": "Fermé…", "pos": "right"}),
+    (900.6, 3.2, {"kind": "sticker", "emoji": "🎓", "text": "Une fac sous terre", "pos": "right", "color": "#33D6FF"}),
+    (1094.3, 3.0, {"kind": "sticker", "emoji": "👘", "text": "Hanbok", "pos": "right"}),
+    (1121.6, 3.0, {"kind": "sticker", "emoji": "👑", "text": "Princesse Violette", "pos": "left"}),
+    (1134.1, 4.2, {"kind": "thermo", "value": 32}),
+    (1180.1, 3.4, {"kind": "sticker", "emoji": "🔥", "text": "70 milliards de degrés", "pos": "center"}),
+    (1262.0, 3.4, {"kind": "sticker", "emoji": "🌭", "text": "RIP les saucisses", "pos": "right"}),
+    (1314.7, 4.2, {"kind": "rating", "value": 8, "max": 10, "label": "BARBECUE CORÉEN"}),
+    (1335.2, 2.6, {"kind": "sticker", "emoji": "🍄", "text": "Champignon", "pos": "left", "color": "#33D6FF"}),
+    (1338.2, 2.8, {"kind": "sticker", "emoji": "🌶️", "text": "Bœuf spicy", "pos": "right"}),
+    (1366.8, 2.8, {"kind": "sticker", "emoji": "🏯", "text": "Village Hanok", "pos": "right"}),
+    (1371.7, 2.8, {"kind": "sticker", "emoji": "🎤", "text": "Hongdae", "pos": "left", "color": "#33D6FF"}),
+]

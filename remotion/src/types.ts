@@ -11,7 +11,17 @@ export type Segment = {
   volume?: number;
 };
 
-export type Chapter = { at: number; n: number; title: string; place: string };
+export type Chapter = { at: number; n: number; title: string; place: string; map?: string; mapFrom?: string };
+
+type PopBase = { at: number; dur: number };
+/** animations ponctuelles (motion design) */
+export type Pop =
+  | (PopBase & { kind: "sticker"; emoji: string; text: string; pos?: "left" | "right" | "center"; color?: string })
+  | (PopBase & { kind: "money"; won: number; eur: number })
+  | (PopBase & { kind: "route"; from: string; to: string; km: number; time: string })
+  | (PopBase & { kind: "thermo"; value: number })
+  | (PopBase & { kind: "rating"; value: number; max: number; label: string })
+  | (PopBase & { kind: "subscribe" });
 
 export type CaptionWord = { w: string; s: number; e: number };
 export type CaptionPage = { s: number; e: number; words: CaptionWord[] };
@@ -31,6 +41,7 @@ export type Edit = {
   titles: Title[];
   /** fiches info (guide de survie) */
   tips: Tip[];
+  pops: Pop[];
   /** début de l'écran de fin (s) */
   endScreenAt: number;
 };

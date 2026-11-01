@@ -8,7 +8,7 @@ import json
 import sys
 
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from plan_coree import CHAPTERS, END, FIX, HOOK, NO_CAPTION, TIPS  # noqa: E402
+from plan_coree import CHAPTER_MAP, CHAPTERS, END, FIX, HOOK, NO_CAPTION, POPS, TIPS  # noqa: E402
 
 FPS = 30
 GAP = 1.0  # blanc maximal gardé dans les passages parlés (s)
@@ -95,7 +95,12 @@ for n, (title, place, blocks) in enumerate(CHAPTERS, 1):
     start = cursor
     for a, b, kind, opts in blocks:
         add_block(a, b, kind, opts)
-    chapters.append({"at": start / FPS, "n": n, "title": title, "place": place})
+    ch = {"at": start / FPS, "n": n, "title": title, "place": place}
+    if n in CHAPTER_MAP:
+        ch["map"], frm = CHAPTER_MAP[n]
+        if frm:
+            ch["mapFrom"] = frm
+    chapters.append(ch)
 
 end_at = cursor / FPS
 for a, b, kind, opts in END:
@@ -149,6 +154,18 @@ for t, icon, title, text in TIPS:
     if at is not None:
         tips.append({"at": round(at, 3), "dur": 5.5, "icon": icon, "title": title, "text": text})
 
+def src_to_outs(t):
+    """toutes les positions dans le montage (un moment peut être dans l'accroche ET dans son chapitre)"""
+    return [(s["out"] + (t - s["from"]) * FPS) / FPS for s in segments if s["from"] <= t < s["to"]]
+
+
+pops = []
+for t, dur, data in POPS:
+    for at in src_to_outs(t):
+        if at + dur <= end_at:
+            pops.append({"at": round(at, 3), "dur": dur, **data})
+pops.sort(key=lambda p: p["at"])
+
 edit = {
     "src": "base.mp4",
     "fps": FPS,
@@ -158,12 +175,13 @@ edit = {
     "captions": captions,
     "titles": titles,
     "tips": tips,
+    "pops": pops,
     "endScreenAt": end_at,
 }
 json.dump(edit, open(sys.argv[2], "w"), ensure_ascii=False)
 json.dump(segments, open(sys.argv[3], "w"), indent=0)
 m, s = divmod(duration, 60)
-print(f"{len(segments)} plans · durée {int(m)} min {s:04.1f} s · {len(captions)} sous-titres · {len(tips)} fiches")
+print(f"{len(segments)} plans · durée {int(m)} min {s:04.1f} s · {len(captions)} sous-titres · {len(tips)} fiches · {len(pops)} animations")
 for c in chapters:
     print(f"  {int(c['at'] // 60):02d}:{c['at'] % 60:04.1f}  {c['n']}. {c['title']}")
 print(f"  {int(end_at // 60):02d}:{end_at % 60:04.1f}  écran de fin")
@@ -198,7 +216,7 @@ for c in captions:
         if b - a < 0.02:
             continue
         # « \h » élargit l'espace (celui de Poppins est très étroit)
-        txt = "\\h ".join((f"{{\\c{ACCENT}}}{esc(w['w'])}{{\\c&H00FFFFFF&}}" if j == i else esc(w["w"])) for j, w in enumerate(ws))
+        txt = "\\h ".join((f"{{\\c{ACCENT}\\fscx100\\fscy100\\t(0,90,\\fscx118\\fscy118)}}{esc(w['w'])}{{\\c&H00FFFFFF&\\fscx100\\fscy100}}" if j == i else esc(w["w"])) for j, w in enumerate(ws))
         ass.append(f"Dialogue: 0,{ass_time(a)},{ass_time(b)},Cap,,0,0,0,,{txt}")
 ass_path = sys.argv[2].rsplit(".", 1)[0] + ".ass"
 open(ass_path, "w").write("\n".join(ass) + "\n")

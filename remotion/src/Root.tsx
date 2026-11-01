@@ -4,7 +4,7 @@ import { Vlog } from "./Vlog";
 import edit from "./data/coree.json";
 import type { Edit } from "./types";
 
-const e = edit as Edit;
+const e = edit as unknown as Edit;
 
 export const RemotionRoot: React.FC = () => (
   <>

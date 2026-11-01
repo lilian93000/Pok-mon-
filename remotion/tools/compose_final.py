@@ -40,8 +40,9 @@ esc_ass = ass.replace(":", "\\:").replace("'", "\\'")
 chain = [f"[0:v]setpts=N/{FPS}/TB,subtitles='{esc_ass}':fontsdir='{fonts}'," + ",".join(bars) + "[v0]"]
 inputs = ["-i", base]
 for k, (a, b) in enumerate(ranges, 1):
-    inputs += ["-thread_queue_size", "512", "-framerate", str(FPS), "-start_number", str(a),
-               "-i", os.path.join(gfx_dir, str(a), "element-%d.png")]
+    # Remotion complète parfois les numéros par des zéros (element-000.png) : on lit par glob
+    inputs += ["-thread_queue_size", "512", "-framerate", str(FPS), "-pattern_type", "glob",
+               "-i", os.path.join(gfx_dir, str(a), "element-*.png")]
     chain.append(f"[{k}:v]setpts=PTS-STARTPTS+{a / FPS:.4f}/TB[g{k}]")
     chain.append(
         f"[v{k - 1}][g{k}]overlay=0:0:eof_action=pass:repeatlast=0:enable='between(t,{a / FPS:.4f},{(b + 1) / FPS:.4f})'[v{k}]"
