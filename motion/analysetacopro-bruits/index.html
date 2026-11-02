@@ -5,192 +5,356 @@
     <meta name="viewport" content="width=1080, height=1920" />
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
-      /* « LES BRUITS EN VISITE » — format v2 : accroche du sujet dès la 1ʳᵉ image, sous-titres mot à mot, 24.2 s.
-         Généré par tools/build.py à partir de tools/minutage.json (voix de Guillaume). Rendu 2160×3840 à 60 i/s. */
+      /* « LES BRUITS » — vidéo utile pendant la visite : repérer une mauvaise isolation phonique. 96 BPM (chillwave).
+         Composé en 1080×1920, rendu en 2160×3840 à 60 i/s. Bande-son : tools/soundtrack.py */
       @font-face {
         font-family: "Inter";
         src: url("assets/fonts/Inter.woff2") format("woff2");
         font-weight: 100 900;
         font-style: normal;
       }
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #070b1a; }
-      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Inter", sans-serif; color: #fff; background: #070b1a; }
-      .clip { position: absolute; inset: 0; overflow: hidden; }
-      .abs { position: absolute; }
-      .glow { position: absolute; left: 0; top: 200px; width: 1080px; height: 1400px; border-radius: 50%; opacity: 0; }
-      #tag { left: 70px; top: 200px; padding: 12px 28px; border-radius: 999px; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.25); font-size: 34px; font-weight: 800; letter-spacing: 0.04em; }
-      #count { right: 170px; top: 200px; padding: 12px 26px; border-radius: 999px; background: #fff; color: #070b1a; font-size: 34px; font-weight: 900; opacity: 0; font-variant-numeric: tabular-nums; }
-      #big { left: 0; right: 0; top: 520px; text-align: center; font-size: 250px; font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: #fff; text-shadow: 0 0 60px rgba(255,59,59,0.9), 0 12px 0 #b91c1c; }
-      .snd { position: absolute; left: 0; right: 0; top: 400px; height: 700px; opacity: 0; }
-      .ono { position: absolute; left: 40px; right: 40px; top: 0; text-align: center; font-size: 132px; font-weight: 900; letter-spacing: -0.05em; line-height: 1.05; white-space: nowrap; }
-      .where { position: absolute; left: 0; right: 0; top: 178px; text-align: center; font-size: 46px; font-weight: 700; color: rgba(255,255,255,0.75); }
-      .wv { position: absolute; left: 70px; width: 940px; top: 270px; height: 220px; overflow: hidden; border-radius: 28px; background: rgba(0,0,0,0.35); }
-      .wv svg { position: absolute; left: 0; top: 0; }
-      .verd { position: absolute; left: 70px; right: 70px; top: 530px; padding: 26px 30px; border-radius: 30px; color: #070b1a; text-align: center; opacity: 0; }
-      .verd b { display: block; font-size: 58px; font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; }
-      .verd span { display: block; margin-top: 6px; font-size: 38px; font-weight: 700; }
-      #pv { left: 90px; width: 900px; top: 430px; height: 640px; border-radius: 26px; background: #fbfaf5; color: #1f2937; padding: 44px 50px; opacity: 0; box-shadow: 0 40px 80px rgba(0,0,0,0.5); }
-      #pv h3 { font-size: 40px; font-weight: 900; letter-spacing: -0.02em; }
-      #pv p { margin-top: 10px; font-size: 26px; color: #6b7280; font-weight: 600; }
-      .ln { margin-top: 26px; height: 22px; border-radius: 11px; background: #e5e7eb; }
-      #res { position: relative; margin-top: 30px; font-size: 36px; font-weight: 800; line-height: 1.25; padding: 14px 18px; }
-      #mark { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; background: #fde047; border-radius: 10px; transform-origin: 0 50%; z-index: 0; }
-      #res span { position: relative; z-index: 1; }
-      #stamp { right: 60px; bottom: 60px; padding: 14px 26px; border: 7px solid #dc2626; color: #dc2626; border-radius: 16px; font-size: 52px; font-weight: 900; transform: rotate(-9deg); opacity: 0; }
-      #caps { left: 60px; right: 60px; top: 1190px; height: 300px; }
-      .ch { position: absolute; left: 0; right: 0; top: 0; text-align: center; font-size: 86px; font-weight: 900; letter-spacing: -0.035em; line-height: 1.12; opacity: 0; }
-      .ch i { font-style: normal; color: #ffffff; display: inline-block; margin: 0 10px; }
-      #end { opacity: 0; }
-      #end-logo { left: 70px; top: 560px; font-size: 52px; font-weight: 800; display: flex; align-items: center; gap: 18px; }
-      #end-logo svg { width: 56px; height: 64px; }
-      #end-t { left: 70px; right: 150px; top: 680px; font-size: 104px; font-weight: 900; letter-spacing: -0.05em; line-height: 1.02; }
-      #end-t span { color: #fde047; }
-      #end-url { left: 70px; top: 1060px; font-size: 64px; font-weight: 800; }
-      #flash { background: #fff; opacity: 0; pointer-events: none; }
+      :root {
+        --brand: #0b5fff;
+        --bg1: #f5f3ff;
+        --bg2: #dcd6fb;
+        --bg3: #b7aaf0;
+        --ink: #1b1440;
+        --acc: #6d28d9;
+        --pill: #1b1440;
+        --pillt: #c4b5fd;
+        --tipbg: #1b1440;
+        --tiph: #c4b5fd;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--bg2);
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(80% 55% at 50% 40%, var(--bg1) 0%, var(--bg2) 65%, var(--bg3) 100%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .abs {
+        position: absolute;
+      }
+      .cap {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 215px;
+        font-size: 60px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        z-index: 6;
+      }
+      .cap .a {
+        color: var(--acc);
+      }
+      #count {
+        left: 70px;
+        top: 372px;
+        padding: 8px 24px;
+        border-radius: 999px;
+        background: var(--pill);
+        color: var(--pillt);
+        font-size: 36px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        z-index: 6;
+      }
+      .tip {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        top: 1225px;
+        padding: 22px 28px 26px;
+        border-radius: 26px;
+        background: var(--tipbg);
+        color: #fff;
+        opacity: 0;
+        z-index: 5;
+      }
+      .tip .h {
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: var(--tiph);
+      }
+      .tip .x {
+        margin-top: 6px;
+        font-size: 40px;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.12;
+      }
+      .tip .x b {
+        color: var(--tiph);
+      }
+      #know {
+        background: radial-gradient(80% 55% at 50% 40%, #fff8d6 0%, #ffe98a 65%, #ffd84d 100%);
+        color: #14213a;
+      }
+      .card {
+        position: absolute;
+        left: 70px;
+        right: 160px;
+        padding: 34px 36px 38px;
+        border-radius: 30px;
+        background: #fff;
+        box-shadow: 0 30px 70px rgba(80, 60, 0, 0.25);
+        opacity: 0;
+      }
+      .card .h {
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        color: var(--brand);
+      }
+      .card .x {
+        margin-top: 10px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1.06;
+      }
+      .card .x b {
+        color: var(--brand);
+      }
+      .card .s {
+        margin-top: 14px;
+        font-size: 30px;
+        font-weight: 700;
+        color: #51617f;
+      }
+      #sec {
+        left: 70px;
+        top: 450px;
+        width: 850px;
+        height: 720px;
+      }
+      .wave {
+        fill: none;
+        stroke: #6d28d9;
+        stroke-width: 7;
+        opacity: 0;
+      }
+      /* Fin */
+      #end {
+        background: radial-gradient(80% 55% at 50% 35%, #12305e 0%, #0b1530 55%, #070a16 100%);
+        color: #fff;
+      }
+      #end-logo {
+        left: 70px;
+        top: 330px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+      }
+      #end-logo svg {
+        width: 84px;
+        height: 84px;
+      }
+      #end-title {
+        left: 70px;
+        top: 500px;
+        font-size: 112px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.97;
+      }
+      #end-title .y {
+        color: #c4b5fd;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+      }
+      .mask > span {
+        display: inline-block;
+      }
+      #cta {
+        left: 70px;
+        top: 1080px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 38px 56px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--brand);
+        font-size: 50px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 80px rgba(196, 181, 253, 0.35);
+      }
+      #cta svg {
+        width: 50px;
+        height: 50px;
+      }
+      #url {
+        left: 70px;
+        top: 1260px;
+        font-size: 94px;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+      #url .ch {
+        display: inline-block;
+      }
+      #bio {
+        left: 70px;
+        top: 1405px;
+        padding: 18px 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        font-size: 42px;
+        font-weight: 800;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="24.2" data-width="1080" data-height="1920">
-      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="24.2" data-track-index="4" data-volume="1"></audio>
-      <section id="stage" class="clip" data-start="0" data-duration="24.2" data-track-index="0">
-        <div class="glow" id="g0" style="background: radial-gradient(closest-side, #ff3b3b88, #ff3b3b22 55%, transparent 75%)"></div>
-        <div class="glow" id="g1" style="background: radial-gradient(closest-side, #ff3b3b88, #ff3b3b22 55%, transparent 75%)"></div>
-        <div class="glow" id="g2" style="background: radial-gradient(closest-side, #06b6d488, #06b6d422 55%, transparent 75%)"></div>
-        <div class="glow" id="g3" style="background: radial-gradient(closest-side, #22c55e88, #22c55e22 55%, transparent 75%)"></div>
-        <div class="glow" id="g4" style="background: radial-gradient(closest-side, #2563eb88, #2563eb22 55%, transparent 75%)"></div>
-        <div class="glow" id="g5" style="background: radial-gradient(closest-side, #2563eb88, #2563eb22 55%, transparent 75%)"></div>
-        <div id="tag" class="abs">VISITE D'APPART</div>
-        <div id="count" class="abs">1/3</div>
-        <div id="big" class="abs">CLAC&nbsp;!</div>
-        <div class="snd" id="s0">
-          <div class="ono" id="o0" style="color: #ff4d4d; text-shadow: 0 0 50px #ff4d4d">« CLAC&nbsp;! »</div>
-          <div class="where">dans les tuyaux</div>
-          <div class="wv"><svg id="wsv0" width="2600" height="220" viewBox="0 0 2600 220"><polyline points="0,110.0 6,106.1 12,111.8 18,113.1 24,106.9 30,108.4 36,113.9 42,109.8 48,110.4 54,148.5 60,161.6 66,84.1 72,83.1 78,110.7 84,109.7 90,106.2 96,112.0 102,112.9 108,106.7 114,108.6 120,113.9 126,109.6 132,106.3 138,112.1 144,112.8 150,106.6 156,108.7 162,113.9 168,109.5 174,106.3 180,112.2 186,112.7 192,106.6 198,108.9 204,114.0 210,109.3 216,106.3 222,112.3 228,112.6 234,106.5 240,109.0 246,114.0 252,109.2 258,106.4 264,112.4 270,112.5 276,106.4 282,109.1 288,114.0 294,109.1 300,106.5 306,112.5 312,112.4 318,106.4 324,109.3 330,114.0 336,108.9 342,106.5 348,112.6 354,112.3 360,106.3 366,109.4 372,113.9 378,108.8 384,106.6 390,112.7 396,112.2 402,106.3 408,109.5 414,113.9 420,108.7 426,106.7 432,112.8 438,112.1 444,106.2 450,109.7 456,113.9 462,108.6 468,106.7 474,112.9 480,111.9 486,106.2 492,109.8 498,113.9 504,108.4 510,106.8 516,113.0 522,111.8 528,106.2 534,109.9 540,113.9 546,108.3 552,106.9 558,113.1 564,112.7 570,115.8 576,112.1 582,43.6 588,47.0 594,99.1 600,113.7 606,111.6 612,106.1 618,110.2 624,113.8 630,108.1 636,107.1 642,113.3 648,111.5 654,106.1 660,110.3 666,113.8 672,108.0 678,107.1 684,113.3 690,111.3 696,106.1 702,110.4 708,113.7 714,107.9 720,107.2 726,113.4 732,111.2 738,106.1 744,110.6 750,113.7 756,107.7 762,107.3 768,113.5 774,111.1 780,106.0 786,110.7 792,113.6 798,107.6 804,107.4 810,113.5 816,111.0 822,106.0 828,110.8 834,113.6 840,107.5 846,107.5 852,113.6 858,110.8 864,106.0 870,111.0 876,113.5 882,107.4 888,107.6 894,113.6 900,110.7 906,106.0 912,111.1 918,113.5 924,107.3 930,107.8 936,113.7 942,110.6 948,106.1 954,111.2 960,113.4 966,107.2 972,107.9 978,113.7 984,110.4 990,106.1 996,111.4 1002,113.3 1008,107.1 1014,108.0 1020,113.8 1026,110.3 1032,106.1 1038,111.5 1044,113.2 1050,107.0 1056,108.1 1062,113.8 1068,110.2 1074,106.1 1080,111.7 1086,114.1 1092,95.9 1098,36.6 1104,45.2 1110,111.2 1116,112.5 1122,112.3 1128,113.1 1134,106.9 1140,108.3 1146,113.9 1152,109.9 1158,106.2 1164,111.8 1170,113.0 1176,106.8 1182,108.5 1188,113.9 1194,109.8 1200,106.2 1206,112.0 1212,112.9 1218,106.7 1224,108.6 1230,113.9 1236,109.6 1242,106.2 1248,112.1 1254,112.8 1260,106.6 1266,108.7 1272,113.9 1278,109.5 1284,106.3 1290,112.2 1296,112.7 1302,106.6 1308,108.8 1314,114.0 1320,109.4 1326,106.3 1332,112.3 1338,112.6 1344,106.5 1350,109.0 1356,114.0 1362,109.2 1368,106.4 1374,112.4 1380,112.5 1386,106.5 1392,109.1 1398,114.0 1404,109.1 1410,106.4 1416,112.5 1422,112.4 1428,106.4 1434,109.2 1440,114.0 1446,109.0 1452,106.5 1458,112.6 1464,112.3 1470,106.3 1476,109.4 1482,114.0 1488,108.9 1494,106.6 1500,112.7 1506,112.2 1512,106.3 1518,109.5 1524,113.9 1530,108.7 1536,106.6 1542,112.8 1548,112.1 1554,106.2 1560,109.6 1566,113.9 1572,108.6 1578,106.7 1584,112.9 1590,112.0 1596,106.2 1602,109.7 1608,108.7 1614,74.4 1620,81.0 1626,156.5 1632,139.3 1638,108.8 1644,109.9 1650,113.9 1656,108.4 1662,106.9 1668,113.1 1674,111.7 1680,106.1 1686,110.0 1692,113.9 1698,108.2 1704,106.9 1710,113.2 1716,111.6 1722,106.1 1728,110.1 1734,113.8 1740,108.1 1746,107.0 1752,113.2 1758,111.5 1764,106.1 1770,110.3 1776,113.8 1782,108.0 1788,107.1 1794,113.3 1800,111.4 1806,106.1 1812,110.4 1818,113.7 1824,107.9 1830,107.2 1836,113.4 1842,111.2 1848,106.1 1854,110.5 1860,113.7 1866,107.8 1872,107.3 1878,113.4 1884,111.1 1890,106.0 1896,110.7 1902,113.6 1908,107.7 1914,107.4 1920,113.5 1926,111.0 1932,106.0 1938,110.8 1944,113.6 1950,107.6 1956,107.5 1962,113.6 1968,110.9 1974,106.0 1980,110.9 1986,113.5 1992,107.5 1998,107.6 2004,113.6 2010,110.7 2016,106.0 2022,111.1 2028,113.5 2034,107.4 2040,107.7 2046,113.7 2052,110.6 2058,106.1 2064,111.2 2070,113.4 2076,107.3 2082,107.8 2088,113.7 2094,110.5 2100,106.1 2106,111.3 2112,113.3 2118,107.1 2124,106.9 2130,106.6 2136,124.1 2142,191.3 2148,167.2 2154,116.9 2160,106.2 2166,108.0 2172,113.8 2178,110.2 2184,106.1 2190,111.6 2196,113.2 2202,107.0 2208,108.2 2214,113.8 2220,110.1 2226,106.1 2232,111.7 2238,113.1 2244,106.9 2250,108.3 2256,113.9 2262,109.9 2268,106.2 2274,111.8 2280,113.0 2286,106.8 2292,108.4 2298,113.9 2304,109.8 2310,106.2 2316,111.9 2322,112.9 2328,106.7 2334,108.5 2340,113.9 2346,109.7 2352,106.2 2358,112.0 2364,112.8 2370,106.7 2376,108.7 2382,113.9 2388,109.5 2394,106.3 2400,112.2 2406,112.7 2412,106.6 2418,108.8 2424,113.9 2430,109.4 2436,106.3 2442,112.3 2448,112.6 2454,106.5 2460,108.9 2466,114.0 2472,109.3 2478,106.4 2484,112.4 2490,112.5 2496,106.5 2502,109.1 2508,114.0 2514,109.1 2520,106.4 2526,112.5 2532,112.4 2538,106.4 2544,109.2 2550,114.0 2556,109.0 2562,106.5 2568,112.6 2574,112.3 2580,106.4 2586,109.3 2592,114.0 2598,108.9" fill="none" stroke="#ff4d4d" stroke-width="7" stroke-linejoin="round" /></svg></div>
-          <div class="verd" id="v0" style="background: #ff4d4d"><b>COUP DE BÉLIER</b><span>la plomberie souffre</span></div>
-        </div>
-        <div class="snd" id="s1">
-          <div class="ono" id="o1" style="color: #22d3ee; text-shadow: 0 0 50px #22d3ee">« FIIIIIH »</div>
-          <div class="where">dans la VMC</div>
-          <div class="wv"><svg id="wsv1" width="2600" height="220" viewBox="0 0 2600 220"><polyline points="0,110.0 6,154.7 12,118.0 18,64.2 24,93.3 30,155.0 36,135.5 42,67.7 48,76.2 54,147.5 60,151.3 66,79.1 72,62.8 78,132.8 84,161.2 90,96.3 96,57.0 102,114.3 108,162.6 114,114.9 120,59.9 126,96.7 132,155.7 138,130.5 144,70.0 150,83.8 156,143.3 162,140.3 168,83.8 174,77.1 180,129.0 186,144.3 192,97.9 198,75.5 204,115.6 210,144.0 216,110.4 222,77.1 228,103.9 234,141.4 240,121.6 246,80.4 252,93.0 258,137.4 264,132.5 270,85.5 276,82.0 282,130.7 288,143.3 294,94.0 300,71.7 306,120.1 312,152.6 318,106.9 324,64.3 330,105.0 336,157.3 342,123.7 348,63.0 354,87.4 360,154.7 366,141.3 372,69.7 378,71.0 384,144.0 390,155.3 396,83.9 402,60.3 408,127.3 414,162.0 420,102.1 426,58.0 432,108.7 438,160.0 444,119.8 450,63.9 456,92.8 462,150.8 468,133.2 474,75.5 480,82.4 486,137.8 492,140.7 498,89.1 504,77.5 510,124.2 516,143.3 522,102.1 528,76.7 534,111.9 540,142.9 546,113.9 552,78.0 558,100.5 564,140.7 570,125.2 576,81.0 582,89.1 588,136.6 594,136.8 600,86.8 606,77.4 612,128.8 618,148.1 624,96.9 630,67.2 636,116.2 642,156.4 648,111.8 654,61.5 660,99.5 666,158.7 672,129.6 678,63.2 684,81.5 690,152.8 696,146.5 702,73.1 708,66.9 714,139.3 720,157.9 726,89.4 732,59.4 738,121.4 744,161.1 750,107.8 756,60.4 762,103.7 768,156.1 774,123.9 780,68.7 786,89.9 792,145.5 798,134.9 804,80.9 810,81.6 816,132.6 822,140.7 828,93.8 834,78.0 840,120.0 846,142.6 852,105.9 858,77.3 864,108.4 870,142.4 876,117.4 882,78.2 888,96.8 894,140.5 900,129.3 906,81.4 912,84.5 918,135.7 924,141.7 930,88.4 936,72.4 942,126.2 948,152.8 954,100.5 960,63.0 966,111.5 972,159.5 978,117.2 984,59.8 990,93.6 996,158.8 1002,135.4 1008,64.8 1014,76.3 1020,149.6 1026,150.7 1032,77.7 1038,64.1 1044,133.8 1050,159.0 1056,95.2 1062,60.0 1068,115.6 1074,158.9 1080,113.0 1086,64.0 1092,99.4 1098,151.6 1104,127.1 1110,73.8 1116,87.8 1122,140.3 1128,136.0 1134,85.8 1140,81.2 1146,128.1 1152,140.6 1158,97.9 1164,78.2 1170,116.3 1176,142.5 1182,109.4 1188,77.2 1194,104.8 1200,142.7 1206,121.2 1212,78.0 1218,92.6 1224,140.6 1230,134.0 1236,81.8 1242,79.5 1248,134.4 1254,146.9 1260,90.7 1266,67.4 1272,122.8 1278,157.2 1284,105.0 1290,59.7 1296,106.2 1302,161.5 1308,123.1 1314,59.5 1320,87.8 1326,157.3 1332,140.7 1338,67.9 1344,72.0 1350,145.1 1356,153.5 1362,83.1 1368,62.9 1374,128.0 1380,158.5 1386,101.1 1392,62.1 1398,110.3 1404,155.5 1410,117.4 1416,68.3 1422,95.9 1428,146.8 1434,129.5 1440,78.7 1446,86.3 1452,135.6 1458,136.8 1464,90.2 1470,80.8 1476,124.1 1482,140.9 1488,101.5 1494,77.8 1500,112.9 1506,143.1 1512,112.9 1518,76.4 1524,101.0 1530,143.5 1536,125.5 1542,77.4 1548,87.7 1554,140.6 1560,139.2 1566,82.8 1572,74.0 1578,132.4 1584,152.1 1590,93.9 1596,62.8 1602,118.4 1608,160.8 1614,110.3 1620,57.6 1626,100.4 1632,161.9 1638,128.9 1644,60.9 1650,82.4 1656,154.3 1662,145.1 1668,72.4 1674,69.0 1680,139.7 1686,155.0 1692,89.0 1698,63.1 1704,122.1 1710,156.7 1716,106.5 1722,65.2 1728,105.7 1734,151.5 1740,121.1 1746,72.9 1752,93.3 1758,142.1 1764,131.3 1770,83.2 1776,85.2 1782,131.4 1788,137.7 1794,94.0 1800,80.1 1806,120.7 1812,141.8 1818,104.8 1824,76.7 1830,109.4 1836,144.3 1842,116.8 1848,75.2 1854,96.6 1860,144.4 1866,130.4 1872,77.1 1878,82.3 1884,140.0 1890,144.8 1896,84.5 1902,68.6 1908,129.5 1914,156.9 1920,98.0 1926,59.1 1932,113.3 1938,163.0 1944,116.0 1950,57.0 1956,94.6 1962,160.7 1968,134.3 1974,63.8 1980,78.0 1986,149.9 1992,148.3 1998,77.7 2004,67.4 2010,133.8 2016,155.0 2022,95.0 2028,64.7 2034,116.5 2040,153.9 2046,111.3 2052,68.9 2058,101.8 2064,147.3 2070,124.0 2076,77.2 2082,91.1 2088,137.9 2094,132.8 2100,87.1 2106,83.9 2112,127.9 2118,138.9 2124,97.2 2130,78.7 2136,117.4 2142,143.3 2148,108.2 2154,75.0 2160,105.6 2166,146.0 2172,121.2 2178,73.8 2184,91.6 2190,145.2 2196,135.9 2202,77.3 2208,76.6 2214,138.6 2220,150.4 2226,87.2 2232,63.7 2238,125.5 2244,160.8 2250,103.0 2256,56.6 2262,107.7 2268,163.8 2274,121.8 2280,58.1 2286,89.2 2292,157.9 2298,138.8 2304,68.0 2310,74.6 2316,144.6 2322,150.1 2328,83.6 2334,67.1 2340,127.8 2346,153.7 2352,100.6 2358,67.2 2364,111.6 2370,150.5 2376,115.4 2382,72.8 2388,98.6 2394,143.2 2400,126.5 2406,81.1 2412,89.2 2418,134.4 2424,134.5 2430,90.3 2436,82.3 2442,124.9 2448,140.7 2454,100.3 2460,76.7 2466,114.2 2472,145.5 2478,112.0 2484,72.8 2490,101.2 2496,147.9 2502,126.2 2508,72.6 2514,86.0 2520,145.3 2526,141.8 2532,78.4 2538,70.9 2544,136.1 2550,155.5 2556,90.9 2562,59.6 2568,120.7 2574,163.4 2580,108.6 2586,55.7 2592,101.9 2598,162.9" fill="none" stroke="#22d3ee" stroke-width="7" stroke-linejoin="round" /></svg></div>
-          <div class="verd" id="v1" style="background: #22d3ee"><b>BOUCHES ENCRASSÉES</b><span>l'humidité s'installe</span></div>
-        </div>
-        <div class="snd" id="s2">
-          <div class="ono" id="o2" style="color: #4ade80; text-shadow: 0 0 50px #4ade80">« GLOU GLOU »</div>
-          <div class="where">dans l'évier</div>
-          <div class="wv"><svg id="wsv2" width="2600" height="220" viewBox="0 0 2600 220"><polyline points="0,110.0 6,68.4 12,59.8 18,73.5 24,71.0 30,41.6 36,19.2 42,36.1 48,78.3 54,103.9 60,99.6 66,96.7 72,124.9 78,168.5 84,185.5 90,164.7 96,139.9 102,143.3 108,161.7 114,156.4 120,119.0 126,85.4 132,88.1 138,112.4 144,118.2 150,95.5 156,78.0 162,94.9 168,128.9 174,138.2 180,113.1 186,88.1 192,93.5 198,113.4 204,108.8 210,73.3 216,43.7 222,51.4 228,80.3 234,91.0 240,75.8 246,69.8 252,100.5 258,148.5 264,171.6 270,160.8 276,150.5 282,168.0 288,194.5 294,190.2 300,150.1 306,112.0 312,106.2 318,115.8 324,103.0 330,64.1 336,36.7 342,48.9 348,80.8 354,91.7 360,75.5 366,67.2 372,92.5 378,129.7 384,138.2 390,113.5 396,93.0 402,104.1 408,127.3 414,124.6 420,94.0 426,74.2 432,92.0 438,126.5 444,137.7 450,122.0 456,115.4 462,142.1 468,178.3 474,183.6 480,154.7 486,129.3 492,133.0 498,144.3 504,126.0 510,78.8 516,42.8 522,44.9 528,63.6 534,61.2 540,37.3 546,29.6 552,61.2 558,106.7 564,125.4 570,115.4 576,113.3 582,141.2 588,174.3 594,174.1 600,141.9 606,117.6 612,125.8 618,143.5 624,134.1 630,100.1 636,81.2 642,100.0 648,130.7 654,134.4 660,111.8 666,100.5 672,121.2 678,147.0 684,139.9 690,102.7 696,75.6 702,81.2 708,94.8 714,81.0 720,45.0 726,27.4 732,49.9 738,85.7 744,97.0 750,86.6 756,92.3 762,132.0 768,176.3 774,186.4 780,165.6 786,153.0 792,168.1 798,183.8 804,165.0 810,119.1 816,87.8 822,92.2 828,105.5 834,92.8 840,60.5 846,48.5 852,74.2 858,107.6 864,111.2 870,90.3 876,83.4 882,107.5 888,133.0 894,124.4 900,90.2 906,71.6 912,87.3 918,109.1 924,102.8 930,77.4 936,73.3 942,106.5 948,145.7 954,154.4 960,139.5 966,139.4 972,168.4 978,194.7 984,183.1 990,143.3 996,116.5 1002,119.7 1008,123.7 1014,96.6 1020,50.5 1026,27.7 1032,44.0 1038,68.4 1044,66.7 1050,48.7 1056,53.4 1062,92.7 1068,132.9 1074,138.7 1080,119.9 1086,116.3 1092,141.2 1098,162.5 1104,148.3 1110,112.1 1116,95.8 1122,113.7 1128,134.0 1134,124.8 1140,98.6 1146,95.5 1152,126.4 1158,156.6 1164,152.5 1170,125.9 1176,116.2 1182,134.4 1188,147.1 1194,123.2 1200,78.1 1206,54.1 1212,63.9 1218,75.4 1224,58.8 1230,29.7 1236,28.8 1242,65.8 1248,105.1 1254,113.9 1260,105.5 1266,117.9 1272,158.7 1278,191.5 1284,184.8 1290,154.4 1296,141.1 1302,154.9 1308,162.3 1314,135.3 1320,92.1 1326,74.7 1332,92.3 1338,109.9 1344,97.9 1350,72.6 1356,72.9 1362,104.9 1368,131.4 1374,121.9 1380,93.4 1386,85.7 1392,105.9 1398,118.8 1404,97.2 1410,60.9 1416,51.6 1422,76.5 1428,100.2 1434,94.8 1440,78.7 1446,90.7 1452,134.5 1458,171.7 1464,172.4 1470,154.3 1476,155.8 1482,180.9 1488,192.7 1494,164.6 1500,118.3 1506,95.4 1512,101.9 1518,102.9 1524,73.7 1530,36.2 1536,30.5 1542,60.1 1548,86.7 1554,82.7 1560,67.8 1566,79.3 1572,118.4 1578,145.9 1584,135.4 1590,108.7 1596,105.2 1602,128.0 1608,140.5 1614,119.1 1620,87.5 1626,85.8 1632,115.7 1638,139.2 1644,130.9 1650,112.6 1656,121.7 1662,156.9 1668,178.5 1674,161.3 1680,128.1 1686,117.7 1692,130.7 1698,130.0 1704,94.0 1710,48.7 1716,34.7 1722,52.9 1728,65.8 1734,50.9 1740,32.7 1746,48.2 1752,94.4 1758,130.4 1764,131.6 1770,121.1 1776,135.2 1782,170.7 1788,188.0 1794,165.7 1800,130.5 1806,121.5 1812,137.7 1818,141.5 1824,113.1 1830,79.9 1836,79.7 1842,108.9 1848,127.4 1854,113.2 1860,91.7 1866,98.6 1872,128.6 1878,141.2 1884,116.1 1890,81.1 1896,74.0 1902,91.3 1908,95.2 1914,67.7 1920,38.0 1926,43.8 1932,79.9 1938,106.1 1944,102.3 1950,95.2 1956,119.1 1962,165.6 1968,192.7 1974,180.6 1980,157.0 1986,157.6 1992,176.2 1998,173.8 2004,134.5 2010,89.6 2016,76.9 2022,90.8 2028,92.5 2034,65.7 2040,40.3 2046,50.8 2052,88.0 2058,110.2 2064,99.0 2070,83.1 2076,96.1 2082,128.6 2088,140.1 2094,115.2 2100,85.4 2106,86.8 2112,111.3 2118,119.9 2124,98.4 2130,78.3 2136,93.8 2142,134.0 2148,157.1 2154,146.9 2160,133.2 2166,148.0 2172,179.3 2178,185.8 2184,153.5 2190,115.1 2196,105.2 2202,114.4 2208,104.2 2214,63.5 2220,26.7 2226,28.0 2232,56.3 2238,71.0 2244,58.7 2250,50.6 2256,77.6 2262,124.9 2268,150.0 2274,139.2 2280,124.4 2286,137.5 2292,165.3 2298,168.1 2304,135.9 2310,103.8 2316,105.2 2322,127.6 2328,131.5 2334,106.4 2340,86.3 2346,101.6 2352,136.6 2358,149.3 2364,128.2 2370,106.5 2376,114.3 2382,136.1 2388,132.0 2394,93.8 2400,57.5 2406,55.5 2412,73.8 2418,73.8 2424,47.7 2430,31.3 2436,54.2 2442,99.1 2448,124.2 2454,119.3 2460,117.6 2466,146.6 2472,187.4 2478,198.6 2484,172.4 2490,144.6 2496,145.6 2502,159.1 2508,146.9 2514,104.3 2520,69.2 2526,71.7 2532,94.2 2538,97.0 2544,73.5 2550,59.0 2556,80.2 2562,116.7 2568,127.0 2574,104.7 2580,85.7 2586,97.6 2592,121.3 2598,118.3" fill="none" stroke="#4ade80" stroke-width="7" stroke-linejoin="round" /></svg></div>
-          <div class="verd" id="v2" style="background: #4ade80"><b>ÉVACUATION MAL VENTILÉE</b><span>souvent tout l'immeuble</span></div>
-        </div>
-        <div id="pv" class="abs">
-          <h3>Procès-verbal d'assemblée générale</h3>
-          <p>Résidence Les Lilas · exemple fictif</p>
-          <div class="ln" style="width: 92%"></div>
-          <div class="ln" style="width: 78%"></div>
-          <div id="res"><div id="mark"></div><span>Résolution 7 : remplacement des colonnes d'eau</span></div>
-          <div class="ln" style="width: 85%"></div>
-          <div class="ln" style="width: 60%"></div>
-          <div id="stamp" class="abs">48&nbsp;000&nbsp;€</div>
-        </div>
-        <div id="end" class="abs" style="inset: 0">
-          <div id="end-logo" class="abs"><svg viewBox="0 0 56 64"><rect x="2" y="0" width="52" height="9" rx="4" fill="#fff" /><rect x="8" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="23" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="38" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="0" y="55" width="56" height="9" rx="4" fill="#fff" /></svg>AnalyseTaCopro</div>
-          <div id="end-t" class="abs">Partie 2 :<br /><span>les bruits de l'immeuble.</span></div>
-          <div id="end-url" class="abs">analysetacopro.fr</div>
-        </div>
-        <div id="caps" class="abs">
-          <div class="ch" id="c0"><i id="c0w0">Tu</i> <i id="c0w1">entends</i> <i id="c0w2">ça</i> <i id="c0w3">pendant</i></div>
-          <div class="ch" id="c1"><i id="c1w0">une</i> <i id="c1w1">visite ?</i></div>
-          <div class="ch" id="c2"><i id="c2w0">Méfie-toi.</i></div>
-          <div class="ch" id="c3"><i id="c3w0">Un</i> <i id="c3w1">clac</i> <i id="c3w2">dans</i> <i id="c3w3">les</i></div>
-          <div class="ch" id="c4"><i id="c4w0">tuyaux</i> <i id="c4w1">quand</i> <i id="c4w2">tu</i> <i id="c4w3">fermes</i></div>
-          <div class="ch" id="c5"><i id="c5w0">le</i> <i id="c5w1">robinet ?</i></div>
-          <div class="ch" id="c6"><i id="c6w0">Coup</i> <i id="c6w1">de</i> <i id="c6w2">bélier :</i></div>
-          <div class="ch" id="c7"><i id="c7w0">la</i> <i id="c7w1">plomberie</i> <i id="c7w2">souffre.</i></div>
-          <div class="ch" id="c8"><i id="c8w0">Un</i> <i id="c8w1">sifflement</i> <i id="c8w2">dans</i> <i id="c8w3">la</i></div>
-          <div class="ch" id="c9"><i id="c9w0">VMC ?</i></div>
-          <div class="ch" id="c10"><i id="c10w0">Bouches</i> <i id="c10w1">encrassées :</i></div>
-          <div class="ch" id="c11"><i id="c11w0">l'humidité</i> <i id="c11w1">s'installe.</i></div>
-          <div class="ch" id="c12"><i id="c12w0">Un</i> <i id="c12w1">glouglou</i> <i id="c12w2">dans</i> <i id="c12w3">l'évier ?</i></div>
-          <div class="ch" id="c13"><i id="c13w0">Évacuation</i> <i id="c13w1">mal</i> <i id="c13w2">ventilée :</i></div>
-          <div class="ch" id="c14"><i id="c14w0">souvent</i> <i id="c14w1">un</i> <i id="c14w2">problème</i> <i id="c14w3">de</i></div>
-          <div class="ch" id="c15"><i id="c15w0">tout</i> <i id="c15w1">l'immeuble.</i></div>
-          <div class="ch" id="c16"><i id="c16w0">Ces</i> <i id="c16w1">bruits,</i></div>
-          <div class="ch" id="c17"><i id="c17w0">l'annonce</i> <i id="c17w1">ne</i> <i id="c17w2">te</i> <i id="c17w3">les</i></div>
-          <div class="ch" id="c18"><i id="c18w0">dira</i> <i id="c18w1">jamais.</i></div>
-          <div class="ch" id="c19"><i id="c19w0">Les</i> <i id="c19w1">PV</i></div>
-          <div class="ch" id="c20"><i id="c20w0">d'AG,</i></div>
-          <div class="ch" id="c21"><i id="c21w0">si.</i></div>
-          <div class="ch" id="c22"><i id="c22w0">Abonne-toi :</i></div>
-          <div class="ch" id="c23"><i id="c23w0">la</i> <i id="c23w1">partie</i> <i id="c23w2">2</i> <i id="c23w3">arrive.</i></div>
-        </div>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="30" data-track-index="4" data-volume="1"></audio>
+
+      <section id="main" class="clip" data-start="0" data-duration="20" data-track-index="0">
+        <svg id="sec" class="abs" viewBox="0 0 850 720"></svg>
+        <div class="cap">Les bruits de l'immeuble&nbsp;:<br /><span class="a">teste avant d'acheter.</span></div>
+        <div id="count" class="abs">Coupe de deux étages</div>
+        <div class="tip" id="tp0"><div class="h">2 TYPES DE BRUIT</div><div class="x"><b>Aériens</b>&nbsp;: voix, télé. <b>D'impact</b>&nbsp;: pas, chaises, talons.</div></div>
+        <div class="tip" id="tp1"><div class="h">TAPE SUR LA CLOISON</div><div class="x">Son creux&nbsp;? C'est une <b>cloison légère</b>&nbsp;: tu entendras la pièce d'à côté.</div></div>
+        <div class="tip" id="tp2"><div class="h">LE SOL DU DESSUS</div><div class="x">Parquet ou carrelage chez le voisin&nbsp;? Demande s'il y a une <b>sous-couche acoustique</b>.</div></div>
+        <div class="tip" id="tp3"><div class="h">LES CANALISATIONS</div><div class="x">Chasse d'eau, descente d'eaux usées&nbsp;: <b>écoute les murs</b> de la salle de bain.</div></div>
       </section>
-      <div id="flash" class="clip" data-start="0" data-duration="24.2" data-track-index="2" data-layout-allow-overlap></div>
+
+      <section id="know" class="clip" data-start="20" data-duration="4" data-track-index="0">
+        <div class="cap">Bon à savoir&nbsp;:</div>
+        <div class="card" id="k0" style="top: 420px"><div class="h">LE REPÈRE</div><div class="x">Immeubles neufs&nbsp;: une <b>réglementation acoustique</b> s'applique depuis 1996.</div></div>
+        <div class="card" id="k1" style="top: 900px"><div class="h">LE TEST</div><div class="x">Demande à quelqu'un de <b>marcher à l'étage</b> pendant ta visite.</div></div>
+      </section>
+
+      <section id="end" class="clip" data-start="24" data-duration="6" data-track-index="0">
+        <div id="end-logo" class="abs">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="9" width="28" height="5" rx="2.5" fill="#FFFFFF" />
+            <rect x="13" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+            <rect x="15" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="22.25" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="29.5" y="18" width="3.5" height="22" rx="1.75" fill="#FFFFFF" />
+            <rect x="12" y="40" width="24" height="4" rx="2" fill="#FFFFFF" />
+          </svg>
+          <span>AnalyseTaCopro</span>
+        </div>
+        <div id="end-title" class="abs">
+          <span class="mask"><span>Écoute l'immeuble</span></span>
+          <span class="mask"><span class="y">avant de signer.</span></span>
+        </div>
+        <div id="cta" class="abs">
+          Faire analyser ma copro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+        </div>
+        <div id="url" class="abs"></div>
+        <div id="bio" class="abs">Lien en bio</div>
+      </section>
+
+      <div id="flash" class="clip" data-start="0" data-duration="30" data-track-index="2" data-layout-allow-overlap></div>
     </div>
     <script>
-      const DUR = 24.2;
-      const SC = [[0, 2.75], [2.75, 7.25], [7.25, 12.1], [12.1, 17.55], [17.55, 21.35], [21.35, 24.2]];
-      const VERD = [5.049, 9.564, 13.997];
-      const CH = [[0.26, 1.098, [0.3, 0.497, 0.725, 0.871]], [1.058, 1.699, [1.098, 1.191]], [1.659, 2.8, [1.699]], [2.76, 3.38, [2.8, 2.955, 3.173, 3.287]], [3.34, 4.179, [3.38, 3.681, 3.837, 3.971]], [4.139, 5.049, [4.179, 4.272]], [5.009, 6.045, [5.049, 5.236, 5.329]], [6.005, 7.75, [6.045, 6.189, 6.553]], [7.71, 8.548, [7.75, 7.896, 8.351, 8.454]], [8.508, 9.564, [8.548]], [9.524, 10.871, [9.564, 9.979]], [10.831, 12.65, [10.871, 11.399]], [12.61, 13.997, [12.65, 12.837, 13.199, 13.334]], [13.957, 15.553, [13.997, 14.63, 14.786]], [15.513, 16.579, [15.553, 16.019, 16.144, 16.475]], [16.539, 17.75, [16.579, 16.724]], [17.71, 18.31, [17.75, 17.957]], [18.27, 19.004, [18.31, 18.704, 18.797, 18.911]], [18.964, 19.73, [19.004, 19.222]], [19.69, 20.228, [19.73, 19.906]], [20.188, 20.673, [20.228]], [20.633, 21.45, [20.673]], [21.41, 22.145, [21.45]], [22.105, 23.999, [22.145, 22.269, 22.579, 22.787]]];
+      const BEAT = 60 / 96,
+        BAR = BEAT * 4;
+      const rnd = (i, k) => {
+        const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      };
+      const T = [2.0, 6.5, 11.0, 15.5];
+      let s = `<rect x="20" y="20" width="810" height="680" fill="#ffffff" stroke="#1b1440" stroke-width="6"/>`;
+      s += `<rect x="20" y="340" width="810" height="36" fill="#a5a0c2"/>`;
+      s += `<rect x="420" y="20" width="14" height="320" fill="#d6d3e8" stroke="#1b1440" stroke-width="3"/><rect x="420" y="376" width="14" height="324" fill="#d6d3e8" stroke="#1b1440" stroke-width="3"/>`;
+      s += `<rect x="760" y="20" width="40" height="680" fill="#cbd5e1" stroke="#1b1440" stroke-width="3"/>`;
+      // TV + personnage (haut), chaise (haut), WC (haut droite)
+      s += `<rect x="80" y="210" width="120" height="80" rx="8" fill="#1b1440"/><rect x="92" y="222" width="96" height="56" fill="#818cf8"/>`;
+      s += `<circle cx="300" cy="230" r="22" fill="#1b1440"/><rect x="284" y="254" width="32" height="70" rx="12" fill="#1b1440"/>`;
+      s += `<rect x="620" y="270" width="80" height="60" rx="14" fill="#e5e7eb" stroke="#1b1440" stroke-width="4"/>`;
+      // pièce du bas : toi
+      s += `<circle cx="600" cy="560" r="24" fill="#6d28d9"/><rect x="583" y="586" width="34" height="80" rx="12" fill="#6d28d9"/>`;
+      const W = [[140, 250], [300, 330], [427, 500], [780, 520]];
+      W.forEach(([x, y], k) => {
+        for (let r = 0; r < 3; r++) s += `<circle class="wave w${k}" cx="${x}" cy="${y}" r="${30 + r * 35}"/>`;
+      });
+      document.getElementById("sec").innerHTML = s;
+      document.getElementById("url").innerHTML = "analysetacopro.fr".split("").map((c) => `<span class="ch">${c}</span>`).join("");
+
       const tl = gsap.timeline({ paused: true });
-      const flash = (t, a = 0.5, d = 0.22) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
-      const shake = (sel, t, amp = 22, n = 7) => {
-        for (let i = 0; i < n; i++) tl.to(sel, { x: Math.sin(i * 2.7 + t) * amp * (1 - i / n), y: Math.cos(i * 3.1 + t) * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+      const flash = (t, a = 0.6, d = 0.25) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 10, n = 5) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: (rnd(i, t) - 0.5) * 2 * amp * (1 - i / n), y: (rnd(i, t + 1) - 0.5) * 2 * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
         tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
       };
       tl.set("#flash", { opacity: 0 }, 0);
-      tl.set("#end", { opacity: 0 }, 0);
 
-      // fonds : une couleur par scène
-      SC.forEach(([a, b], i) => {
-        tl.fromTo(`#g${i}`, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power2.out", immediateRender: false }, Math.max(0, a));
-        if (i < SC.length - 1) tl.to(`#g${i}`, { opacity: 0, duration: 0.3 }, b);
+      // les étapes : compteur + explication
+      T.forEach((t, k) => {
+        tl.set("#count", { textContent: `Test ${k + 1}/4` }, t);
+        tl.fromTo("#count", { scale: 1.25 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, t);
+        if (document.getElementById(`tp${k}`)) {
+          tl.fromTo(`#tp${k}`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, t + 0.3);
+          tl.to(`#tp${k}`, { opacity: 0, y: -10, duration: 0.15 }, (T[k + 1] || 20) - 0.25);
+        }
       });
-
-      // 0 s : l'accroche, le bruit tout de suite
-      tl.fromTo("#big", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.out" }, 0);
-      shake("#big", 0.0, 26, 9);
-      flash(0.0, 0.35, 0.18);
-      tl.to("#big", { scale: 0.92, duration: SC[0][1] - 0.6, ease: "none" }, 0.3);
-      tl.to("#big", { opacity: 0, scale: 0.6, duration: 0.18 }, SC[0][1] - 0.18);
-
-      // les 3 bruits
-      [0, 1, 2].forEach((k) => {
-        const [a, b] = SC[k + 1];
-        tl.set("#count", { textContent: `${k + 1}/3` }, a);
-        tl.fromTo("#count", { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, a);
-        tl.fromTo(`#s${k}`, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", immediateRender: false }, a);
-        tl.fromTo(`#o${k}`, { scale: 1.7 }, { scale: 1, duration: 0.3, ease: "back.out(2.2)", immediateRender: false }, a);
-        if (k === 0) shake(`#o${k}`, a + 0.02, 18);
-        tl.fromTo(`#wsv${k}`, { x: 0 }, { x: -1640, duration: b - a, ease: "none", immediateRender: false }, a);
-        tl.fromTo(`#v${k}`, { opacity: 0, y: 40, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(2.5)", immediateRender: false }, VERD[k]);
-        flash(VERD[k], 0.18, 0.15);
-        tl.to(`#s${k}`, { opacity: 0, y: -40, duration: 0.2 }, b - 0.2);
+      T.forEach((t, k) => {
+        const g = k === 0 ? ".w0, .w1" : `.w${k + 1 > 3 ? 3 : k + 1}`;
+        if (k) tl.to(".wave", { opacity: 0, duration: 0.2 }, t - 0.2);
+        tl.fromTo(g, { scale: 0.4, opacity: 0.9, transformOrigin: "50% 50%" }, { scale: 1.3, opacity: 0, duration: 0.9, ease: "power1.out", stagger: 0.12, repeat: 3, immediateRender: false }, t);
+        shake("#sec", t, 4, 3);
       });
-      tl.to("#count", { opacity: 0, duration: 0.2 }, SC[3][1] - 0.2);
+      // 20 s : bon à savoir
+      flash(20, 0.5, 0.25);
+      tl.fromTo("#k0", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 20.2);
+      tl.fromTo("#k1", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false }, 21.3);
 
-      // la révélation : le PV d'AG
-      const [pa, pb] = SC[4];
-      tl.fromTo("#pv", { opacity: 0, y: 220, rotate: 4 }, { opacity: 1, y: 0, rotate: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, pa);
-      tl.fromTo("#mark", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.inOut", immediateRender: false }, pa + 1.3);
-      tl.fromTo("#stamp", { opacity: 0, scale: 2.2 }, { opacity: 1, scale: 1, duration: 0.22, ease: "power4.in", immediateRender: false }, pa + 2.2);
-      shake("#pv", pa + 2.42, 16);
-      flash(pa + 2.42, 0.3, 0.18);
-      tl.to(["#pv", "#tag"], { opacity: 0, duration: 0.2 }, pb - 0.2);
+      // Fin
+      const E0 = 24.0;
+      flash(E0, 0.6, 0.3);
+      tl.fromTo("#end-logo", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0);
+      tl.fromTo("#end-title .mask > span", { yPercent: 115 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: BEAT / 2 }, E0 + 0.1);
+      tl.fromTo("#cta", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, E0 + BEAT * 2);
+      tl.fromTo("#url .ch", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out", stagger: 0.03 }, E0 + BEAT * 1.5);
+      tl.fromTo("#bio", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, E0 + BEAT * 4);
+      tl.to("#cta", { scale: 1.05, duration: BEAT / 2, ease: "sine.inOut", yoyo: true, repeat: 9 }, E0 + BEAT * 4.5);
 
-      // fin courte
-      const [ea] = SC[5];
-      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.25, immediateRender: false }, ea);
-      tl.fromTo("#end-t", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(2)", immediateRender: false }, ea + 0.1);
-      tl.fromTo("#end-url", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, ea + 0.5);
-
-      // sous-titres mot à mot
-      CH.forEach(([t0, t1, ws], i) => {
-        tl.fromTo(`#c${i}`, { opacity: 0, y: 24, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t0);
-        ws.forEach((s, j) => {
-          tl.set(`#c${i}w${j}`, { color: "#fde047" }, s);
-          if (j + 1 < ws.length) tl.set(`#c${i}w${j}`, { color: "#ffffff" }, ws[j + 1]);
-        });
-        tl.to(`#c${i}`, { opacity: 0, duration: 0.08 }, t1 - 0.08);
-      });
 
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
