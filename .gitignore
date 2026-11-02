@@ -1,0 +1,8 @@
+
+# Moteur des skills vidéo (téléchargé/généré localement)
+.claude/skills/short-editing/.runtime/
+.claude/skills/short-editing/engine/node_modules/
+video-agent/takes/
+video-agent/edits/
+video-agent/.env
+video-agent/.tmp/
