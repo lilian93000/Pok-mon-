@@ -66,6 +66,61 @@
       "url": "https://tile.loc.gov/storage-services/service/pnp/fsa/8a10000/8a10600/8a10689v.jpg",
       "cut": false,
       "credit": "Chargement de ferraille, Saint-Louis, 1939, 1939-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "concorde": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b10000/3b10000/3b10000/3b10074r.jpg",
+      "cut": false,
+      "credit": "Place de la Concorde, Paris, 1851, 1851-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "concorde2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pga/14300/14327v.jpg",
+      "cut": false,
+      "credit": "Place de la Concorde, Paris, 1870, 1870-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "boulevard": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b05000/1b05000/1b05059v.jpg",
+      "cut": false,
+      "credit": "Boulevard Saint-Germain, Paris, 1920, 1920 — Library of Congress (sans restriction connue)"
+    },
+    "boulevard2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b05000/1b05700/1b05798v.jpg",
+      "cut": false,
+      "credit": "Porte et boulevard Saint-Martin, Paris, 1918, 1918 — Library of Congress (sans restriction connue)"
+    },
+    "clavier": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/05900/05985v.jpg",
+      "cut": false,
+      "credit": "Touches de machine à écrire, 1921, 1921-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "bureau": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/42400/42414v.jpg",
+      "cut": false,
+      "credit": "Bureau avec machines à écrire, 1922, 1922-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "journal": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/18400/18418v.jpg",
+      "cut": false,
+      "credit": "Journal The Spiker, 1917, 1917 — Library of Congress (sans restriction connue)"
+    },
+    "guichet": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b00000/3b02000/3b02300/3b02307r.jpg",
+      "cut": false,
+      "credit": "Dépôt d'un billet au guichet d'une banque, 1925, 1925-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "billets2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b10000/3b14000/3b14000/3b14019r.jpg",
+      "cut": false,
+      "credit": "Billets, caricature, vers 1900, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "prefet": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/25800/25821v.jpg",
+      "cut": false,
+      "credit": "Le préfet de police de Paris, 1915, 1915-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "police": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/00700/00763v.jpg",
+      "cut": false,
+      "credit": "Police militaire à Paris, 1919, 1919 — Library of Congress (sans restriction connue)"
     }
   },
   "beats": [
@@ -76,18 +131,18 @@
       "rays": true,
       "tag": "excited",
       "title": "IL A VENDU LA TOUR EIFFEL",
-      "alt": "e2"
+      "alt": "stereo"
     },
     {
       "text": "Pour de *vrai*.",
-      "image": "e3",
+      "image": "e2",
       "bg": "red",
       "rays": true,
       "stamp": "VENDUE"
     },
     {
       "text": "Paris, *1925*.",
-      "image": "e4",
+      "image": "boulevard",
       "bg": "dark",
       "date": "1925"
     },
@@ -95,25 +150,29 @@
       "text": "Victor Lustig. Escroc *professionnel*.",
       "image": "faux",
       "bg": "dark",
-      "alt": "billet"
+      "alt": "billets2"
     },
     {
       "text": "Il lit le journal : la tour coûte une *fortune*.",
-      "image": "e2",
+      "image": "journal",
       "bg": "dark",
-      "alt": "billet"
+      "alt": "e4"
     },
     {
       "text": "Et là… *déclic*.",
-      "image": "e1",
+      "image": "e3",
       "bg": "red",
       "rays": true,
       "zoom": true
     },
     {
       "text": "Faux papiers. Faux *ministère*.",
-      "image": "billet2",
-      "bg": "dark"
+      "image": "clavier",
+      "bg": "dark",
+      "alt": "bureau",
+      "sfx": [
+        "typewriter"
+      ]
     },
     {
       "text": "Il convoque cinq *ferrailleurs*.",
@@ -122,10 +181,13 @@
     },
     {
       "text": "« Messieurs… l'État vend la tour. »",
-      "image": "e3",
+      "image": "concorde",
       "bg": "dark",
       "tag": "whispers",
-      "zoom": true
+      "zoom": true,
+      "sfx": [
+        "whisper"
+      ]
     },
     {
       "text": "*Secret* d'État !",
@@ -145,44 +207,46 @@
     },
     {
       "text": "Un ferrailleur *mord* à l'hameçon.",
-      "image": "e2",
+      "image": "boulevard2",
       "bg": "dark"
     },
     {
       "text": "Il paie. Et il ajoute un *pot-de-vin* !",
-      "image": "billet",
+      "image": "guichet",
       "bg": "red",
       "rays": true,
-      "alt": "faux"
+      "alt": "billet",
+      "sfx": [
+        "cash"
+      ]
     },
     {
       "text": "Lustig ? *Envolé*.",
-      "image": "e1",
+      "image": "e2",
       "bg": "dark",
       "zoom": true
     },
     {
       "text": "La victime a tellement *honte*… qu'elle ne porte jamais plainte !",
-      "image": "faux",
+      "image": "prefet",
       "bg": "red",
       "rays": true,
       "tag": "laughs",
-      "stamp": "ARNAQUE",
-      "alt": "billet2"
+      "stamp": "ARNAQUE"
     },
     {
       "text": "Alors Lustig *revient*… et essaie de la revendre !",
       "image": "e3",
       "bg": "dark",
       "tag": "excited",
-      "alt": "e4"
+      "alt": "concorde2"
     },
     {
       "text": "Cette fois, la police l'attend. Il finira à *Alcatraz*.",
-      "image": "alcatraz",
+      "image": "police",
       "bg": "dark",
       "date": "ALCATRAZ",
-      "alt": "ferraille"
+      "alt": "alcatraz"
     },
     {
       "text": "L'homme qui a vendu…",
@@ -190,5 +254,8 @@
       "bg": "dark",
       "zoom": true
     }
-  ]
+  ],
+  "musique": "heist",
+  "volume_musique": 0.12,
+  "sfx": true
 }

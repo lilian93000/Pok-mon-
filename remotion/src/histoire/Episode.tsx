@@ -335,9 +335,25 @@ export const Episode: React.FC<Props & { photos?: string[] }> = (props) => {
       {props.music && (
         <Audio
           src={staticFile(props.music)}
-          volume={(f) => 0.24 * interpolate(f, [0, 8, fr(props.duration) - 25, fr(props.duration)], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}
+          volume={(f) => (props.musicVolume ?? 0.24) * interpolate(f, [0, 8, fr(props.duration) - 25, fr(props.duration)], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}
         />
       )}
+      {props.sfx && beats.map((b, i) => {
+        const at = Math.max(0, fr(b.start) - 2);
+        const S = (name: string, vol: number, delay = 0) => (
+          <Sequence key={name + i + delay} from={at + delay} layout="none"><Audio src={staticFile(`histoire/_sfx/${name}.mp3`)} volume={vol} /></Sequence>
+        );
+        return (
+          <React.Fragment key={`sfx${i}`}>
+            {i > 0 && S("whoosh", 0.22)}
+            {b.alt && S("whoosh", 0.16, Math.round(((b.end - b.start) * fps) / 2))}
+            {(b.bg === "red" || b.counter) && S("impact", 0.32)}
+            {b.stamp && S("stamp", 0.5, 6)}
+            {b.date && S("camera", 0.35)}
+            {(b.sfx || []).map((n, k) => S(n, 0.42, 2 + k))}
+          </React.Fragment>
+        );
+      })}
       <AbsoluteFill style={{ transform: `translate(${shake}px, ${-shake * 0.6}px)` }}>
         {beats.map((b, i) => {
           const from = fr(b.start);

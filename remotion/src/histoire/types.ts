@@ -11,7 +11,8 @@ export type Beat = {
   stamp?: string;
   label?: string;
   date?: string;
-  title?: string; // v2 : gros titre fixe en haut (accroche lisible sans le son)
+  title?: string;
+  sfx?: string[]; // bruitages en plus au début du plan (fichiers public/histoire/_sfx/<nom>.mp3) // v2 : gros titre fixe en haut (accroche lisible sans le son)
   heads?: number;
   counter?: { to: number; suffix?: string };
   outro?: boolean;
@@ -23,7 +24,9 @@ export type Props = {
   duration: number;
   audio: string | null;
   music?: string;
-  punch?: boolean; // mode « feu d'artifice » : coups de zoom, secousses, étincelles, sous-titres 1-2 mots
+  punch?: boolean;
+  sfx?: boolean; // bruitages automatiques : whoosh à chaque coupe, impact, tampon, déclic sur les dates
+  musicVolume?: number; // mode « feu d'artifice » : coups de zoom, secousses, étincelles, sous-titres 1-2 mots
   v2?: boolean; // format court en boucle : pas de bandeau ni d'écran de fin, accroche visible dès la 1re image
   words: Word[];
   beats: Beat[];
