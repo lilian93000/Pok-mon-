@@ -1,0 +1,224 @@
+{
+  "id": "008-caligula-v3",
+  "titre": "Le cheval consul",
+  "v2": true,
+  "punch": true,
+  "model": "eleven_v3",
+  "tempo": 1.15,
+  "pause": 0.12,
+  "sources": [
+    "Suétone, Caligula 55 (Incitatus : écurie de marbre, mangeoire d'ivoire, maison, silence la veille des courses, projet de consulat)",
+    "Dion Cassius LIX.14 (dîner, orge dorée, promesse du consulat)",
+    "Assassinat de Caligula le 24 janvier 41, à 28 ans",
+    "Suétone, Caligula 22 (temple et statue en or)"
+  ],
+  "musique": "score",
+  "volume_musique": 0.22,
+  "ambiance": "malice",
+  "sfx": true,
+  "images": {
+    "bronze": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP337502.jpg",
+      "cut": true,
+      "credit": "Buste en bronze de Caligula — The Met (CC0)"
+    },
+    "marble": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP337262.jpg",
+      "cut": true,
+      "credit": "Buste en marbre de Caligula — The Met (CC0)"
+    },
+    "head": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP337520.jpg",
+      "cut": true,
+      "credit": "Tête en bronze de Caligula — The Met (CC0)"
+    },
+    "sest": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/SF9935448f.jpg",
+      "cut": true,
+      "credit": "Sesterce de Caligula — The Met (CC0)"
+    },
+    "cameo": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP155539.jpg",
+      "cut": true,
+      "credit": "Camée de Caligula — The Met (CC0)"
+    },
+    "horse1": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP-44413-001.jpg",
+      "cut": true,
+      "credit": "Cheval en bronze — The Met (CC0)"
+    },
+    "horse2": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP-31515-004.jpg",
+      "cut": true,
+      "credit": "Cheval en bronze — The Met (CC0)"
+    },
+    "horsehead": {
+      "url": "https://openaccess-cdn.clevelandart.org/1985.178/1985.178_print.jpg",
+      "cut": true,
+      "credit": "Tête de cheval en terre cuite — Cleveland Museum of Art (CC0)"
+    },
+    "email": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/29309.jpg",
+      "cut": false,
+      "credit": "L'empereur Caligula, émail, vers 1700, late 17th–early 18th century — The Met (CC0)"
+    },
+    "course": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP823016.jpg",
+      "cut": false,
+      "credit": "Course de chars, 1889, 1889 — The Met (CC0)"
+    },
+    "plaque": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP140136.jpg",
+      "cut": true,
+      "credit": "Plaque romaine avec un char, 27 av.–68 apr. J.-C., 27 BCE–68 CE — The Met (CC0)"
+    },
+    "amph1": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP227367.jpg",
+      "cut": true,
+      "credit": "Amphore avec course de chars, vers 530 av. J.-C., ca. 530 BCE — The Met (CC0)"
+    },
+    "amph2": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP227372.jpg",
+      "cut": true,
+      "credit": "Amphore avec course de chars, vers 520 av. J.-C., ca. 520 BCE — The Met (CC0)"
+    },
+    "chevaux": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pga/12000/12051v.jpg",
+      "cut": false,
+      "credit": "Chevaux, 1874, 1874-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "pale": {
+      "url": "https://openaccess-cdn.clevelandart.org/1928.8/1928.8_print.jpg",
+      "cut": false,
+      "credit": "Albert Pinkham Ryder, La mort sur un cheval pâle, vers 1896-1908, c. 1896–1908 — Cleveland Museum of Art (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Cet empereur voulait faire de son *CHEVAL* un consul !",
+      "image": "marble",
+      "alt": "horse1",
+      "tag": "excited",
+      "title": "LE CHEVAL CONSUL",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Oui, un *cheval*.",
+      "image": "horsehead",
+      "tag": "laughs",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Rome, an *37*.",
+      "image": "email",
+      "bg": "dark",
+      "date": "37 APR. J.-C.",
+      "tag": "curious"
+    },
+    {
+      "text": "Le nouvel empereur : *Caligula*.",
+      "image": "bronze",
+      "bg": "dark",
+      "label": "CALIGULA",
+      "tag": "mischievously"
+    },
+    {
+      "text": "Son chouchou ? Un cheval de course : *Incitatus* !",
+      "image": "course",
+      "bg": "dark",
+      "tag": "excited"
+    },
+    {
+      "text": "Il lui offre une écurie en *marbre* !",
+      "image": "horse2",
+      "bg": "dark",
+      "tag": "excited"
+    },
+    {
+      "text": "Une mangeoire en *ivoire* !",
+      "image": "horse1",
+      "bg": "dark",
+      "tag": "laughs"
+    },
+    {
+      "text": "Un collier de pierres *précieuses* !",
+      "image": "cameo",
+      "bg": "dark",
+      "tag": "sarcastic"
+    },
+    {
+      "text": "Et même une *maison*, avec des esclaves !",
+      "image": "plaque",
+      "tag": "laughs",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "La veille des courses…",
+      "image": "head",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "whispers",
+      "sfx": [
+        "whisper"
+      ]
+    },
+    {
+      "text": "des soldats imposent le *SILENCE* dans tout le quartier… pour que le cheval dorme !",
+      "image": "amph1",
+      "bg": "dark",
+      "stamp": "CHUT !",
+      "tag": "excited"
+    },
+    {
+      "text": "Selon Dion Cassius, il lui sert de l'orge en *or* !",
+      "image": "amph2",
+      "bg": "dark",
+      "tag": "laughs"
+    },
+    {
+      "text": "Et il promet d'en faire un *CONSUL* !",
+      "image": "chevaux",
+      "stamp": "CONSUL",
+      "tag": "excited",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Folie ? Ou *moquerie* ?",
+      "image": "marble",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "curious"
+    },
+    {
+      "text": "Pour beaucoup d'historiens, il voulait *humilier* le Sénat.",
+      "image": "sest",
+      "bg": "dark",
+      "tag": "mischievously"
+    },
+    {
+      "text": "Comme pour dire : même mon cheval ferait mieux que *VOUS* !",
+      "image": "horsehead",
+      "tag": "sarcastic",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Incitatus ne sera jamais consul. Caligula est *assassiné*… à vingt-huit ans.",
+      "image": "pale",
+      "bg": "dark",
+      "date": "41 APR. J.-C.",
+      "tag": "dramatically"
+    },
+    {
+      "text": "Cet empereur voulait faire de son cheval…",
+      "image": "email",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "curious"
+    }
+  ]
+}

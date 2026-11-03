@@ -1,0 +1,239 @@
+{
+  "id": "054-mur-v3",
+  "titre": "Le mur tombé à cause d'une phrase",
+  "v2": true,
+  "punch": true,
+  "model": "eleven_v3",
+  "tempo": 1.15,
+  "pause": 0.12,
+  "sources": [
+    "Conférence de presse de Günter Schabowski, 9 novembre 1989 : « sofort, unverzüglich »",
+    "Ouverture du poste de Bornholmer Straße vers 23 h 30 (Harald Jäger)",
+    "Mur construit le 13 août 1961 ; au moins 140 morts ; réunification le 3 octobre 1990",
+    "Mise en œuvre de la mesure prévue pour le 10 novembre 1989 ; annonce retransmise en direct à la télévision"
+  ],
+  "musique": "score",
+  "volume_musique": 0.22,
+  "ambiance": "epique",
+  "sfx": true,
+  "images": {
+    "mur": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3g00000/3g04000/3g04300/3g04334v.jpg",
+      "cut": false,
+      "credit": "Le mur de Berlin, 1961, 1961-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "femme": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/96300/96383v.jpg",
+      "cut": false,
+      "credit": "Femme et enfant près du mur, Berlin-Ouest, 1961, 1961 — Library of Congress (sans restriction connue)"
+    },
+    "rue": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/99700/99765v.jpg",
+      "cut": false,
+      "credit": "Berlin, 1962 (LOOK), 1962 — Library of Congress (sans restriction connue)"
+    },
+    "porte": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3g00000/3g04000/3g04300/3g04333v.jpg",
+      "cut": false,
+      "credit": "Berlin, octobre 1961, 1961 — Library of Congress (sans restriction connue)"
+    },
+    "garde": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/99700/99766v.jpg",
+      "cut": false,
+      "credit": "Berlin, 1962 (LOOK), 1962 — Library of Congress (sans restriction connue)"
+    },
+    "brandebourg": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s20000/1s24000/1s24500/1s24540v.jpg",
+      "cut": false,
+      "credit": "La porte de Brandebourg, 1896-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "morceaux": {
+      "url": "https://tile.loc.gov/image-services/iiif/service:pnp:highsm:21600:21693/full/pct:50/0/default.jpg",
+      "cut": false,
+      "credit": "Morceaux du mur de Berlin (Carol M. Highsmith), 2012 — Library of Congress (sans restriction connue)"
+    },
+    "w82": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppss/01200/01282v.jpg",
+      "cut": false,
+      "credit": "Le mur de Berlin, 1986, John Zukowsky — Library of Congress (sans restriction connue)"
+    },
+    "w85": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppss/01200/01285v.jpg",
+      "cut": false,
+      "credit": "Le mur de Berlin, février 1990, John Zukowsky — Library of Congress (sans restriction connue)"
+    },
+    "w88": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppss/01200/01288v.jpg",
+      "cut": false,
+      "credit": "Le mur et un mirador, février 1990, John Zukowsky — Library of Congress (sans restriction connue)"
+    },
+    "souv86": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppss/01200/01286v.jpg",
+      "cut": false,
+      "credit": "Morceaux du mur vendus en souvenir, février 1990, John Zukowsky — Library of Congress (sans restriction connue)"
+    },
+    "ddr": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppss/01300/01311v.jpg",
+      "cut": false,
+      "credit": "Enseignes de Berlin-Est, 1986-1990, John Zukowsky — Library of Congress (sans restriction connue)"
+    },
+    "check": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/07100/07183v.jpg",
+      "cut": false,
+      "credit": "Poste-frontière à Berlin-Ouest, octobre 1961 — Library of Congress (sans restriction connue)"
+    },
+    "gate49": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/71200/71249v.jpg",
+      "cut": false,
+      "credit": "Porte de Brandebourg, 1959, U.S. News & World Report — Library of Congress (sans restriction connue)"
+    },
+    "ho": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/71200/71244v.jpg",
+      "cut": false,
+      "credit": "Berlin-Est, 1959, U.S. News & World Report — Library of Congress (sans restriction connue)"
+    },
+    "velo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/71200/71245v.jpg",
+      "cut": false,
+      "credit": "Berlin-Est, 1959, U.S. News & World Report — Library of Congress (sans restriction connue)"
+    },
+    "ruines": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/71200/71257v.jpg",
+      "cut": false,
+      "credit": "Berlin-Est, 1959, U.S. News & World Report — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Le mur de Berlin est tombé… à cause d'une *GAFFE* !",
+      "image": "w88",
+      "alt": "morceaux",
+      "tag": "excited",
+      "title": "LE MUR TOMBÉ À CAUSE D'UNE GAFFE",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Une phrase. Une *seule*.",
+      "image": "w82",
+      "bg": "dark",
+      "tag": "mischievously"
+    },
+    {
+      "text": "Berlin, *1961*.",
+      "image": "mur",
+      "bg": "dark",
+      "date": "13 AOÛT 1961",
+      "tag": "curious"
+    },
+    {
+      "text": "Un mur coupe la ville en *DEUX*.",
+      "image": "femme",
+      "bg": "dark",
+      "alt": "rue",
+      "tag": "dramatically"
+    },
+    {
+      "text": "À l'Est, interdit de *partir*.",
+      "image": "check",
+      "bg": "dark",
+      "tag": "dramatically"
+    },
+    {
+      "text": "Plus de cent quarante *morts* en essayant de passer.",
+      "image": "garde",
+      "bg": "dark",
+      "counter": {
+        "to": 140,
+        "suffix": " MORTS"
+      },
+      "tag": "dramatically"
+    },
+    {
+      "text": "Vingt-huit ans plus tard… le *9 novembre 1989*.",
+      "image": "porte",
+      "bg": "dark",
+      "date": "9 NOV. 1989",
+      "tag": "curious"
+    },
+    {
+      "text": "Conférence de presse. Günter *Schabowski* reçoit une note… qu'il n'a pas lue.",
+      "image": "ddr",
+      "bg": "dark",
+      "alt": "ho",
+      "tag": "mischievously"
+    },
+    {
+      "text": "Il annonce : les Allemands de l'Est pourront *voyager* !",
+      "image": "gate49",
+      "bg": "dark",
+      "tag": "excited"
+    },
+    {
+      "text": "Un journaliste demande : « À partir de *quand* ? »",
+      "image": "ruines",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "curious"
+    },
+    {
+      "text": "Silence… Il fouille ses papiers…",
+      "image": "velo",
+      "bg": "dark",
+      "tag": "whispers",
+      "sfx": [
+        "whisper"
+      ]
+    },
+    {
+      "text": "« Immédiatement. Sans *délai*. »",
+      "image": "garde",
+      "stamp": "SOFORT",
+      "tag": "excited",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "*FAUX* ! C'était prévu pour le lendemain !",
+      "image": "w82",
+      "tag": "laughs",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Trop tard : c'est en direct à la *télé*.",
+      "image": "rue",
+      "bg": "dark",
+      "tag": "excited"
+    },
+    {
+      "text": "Des milliers de Berlinois foncent vers la *frontière* !",
+      "image": "check",
+      "bg": "dark",
+      "alt": "porte",
+      "tag": "excited"
+    },
+    {
+      "text": "Les gardes n'ont aucun *ordre*… À vingt-trois heures trente, ils ouvrent !",
+      "image": "w85",
+      "bg": "dark",
+      "date": "23 H 30",
+      "tag": "dramatically"
+    },
+    {
+      "text": "Cette nuit-là, on *DANSE* sur le mur !",
+      "image": "brandebourg",
+      "alt": "souv86",
+      "tag": "laughs",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Le mur de Berlin est tombé…",
+      "image": "w88",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "curious"
+    }
+  ]
+}

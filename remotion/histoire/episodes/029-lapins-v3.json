@@ -1,0 +1,228 @@
+{
+  "id": "029-lapins-v3",
+  "titre": "Napoléon attaqué par des lapins",
+  "v2": true,
+  "punch": true,
+  "model": "eleven_v3",
+  "tempo": 1.15,
+  "pause": 0.12,
+  "sources": [
+    "Mémoires du général Paul Thiébault : chasse organisée par Berthier après le traité de Tilsit (juillet 1807)",
+    "Récit anecdotique, rapporté par une seule source"
+  ],
+  "musique": "score",
+  "volume_musique": 0.22,
+  "ambiance": "absurde",
+  "sfx": true,
+  "images": {
+    "portrait": {
+      "url": "https://openaccess-cdn.clevelandart.org/2000.106/2000.106_print.jpg",
+      "cut": false,
+      "credit": "Portrait de Napoléon Iᵉʳ, 1841, 1841 — Cleveland Museum of Art (CC0)"
+    },
+    "chasse": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP818235.jpg",
+      "cut": false,
+      "credit": "Bruegel, La chasse au lapin, 1560, 1560 — The Met (CC0)"
+    },
+    "lapin": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DT4920.jpg",
+      "cut": true,
+      "credit": "Lapin, netsuke, mid-19th century — The Met (CC0)"
+    },
+    "lapin2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP815317.jpg",
+      "cut": false,
+      "credit": "Le lapin, 1866, 1866 — The Met (CC0)"
+    },
+    "vase": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP264073.jpg",
+      "cut": true,
+      "credit": "Vase Médicis, château de Saint-Cloud, 1811, 1811 — The Met (CC0)"
+    },
+    "epee": {
+      "url": "https://images.metmuseum.org/CRDImages/aa/original/LC-1982_136-007.jpg",
+      "cut": true,
+      "credit": "Épée de chasse, 1809-13, 1809–13 — The Met (CC0)"
+    },
+    "chasse2": {
+      "url": "https://openaccess-cdn.clevelandart.org/2009.80/2009.80_print.jpg",
+      "cut": false,
+      "credit": "Bruegel, La chasse au lapin, 1560, 1560 — Cleveland Museum of Art (CC0)"
+    },
+    "gulliver": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP809030.jpg",
+      "cut": false,
+      "credit": "Gillray, Le roi de Brobdingnag et Gulliver, 1803, June 26, 1803 — The Met (CC0)"
+    },
+    "pudding": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP809028.jpg",
+      "cut": false,
+      "credit": "Gillray, Le pudding en danger, 1805, February 26, 1805 — The Met (CC0)"
+    },
+    "boulanger": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP809034.jpg",
+      "cut": false,
+      "credit": "Gillray, Tiddy-Doll, 1806, January 23, 1806 — The Met (CC0)"
+    },
+    "nap1": {
+      "url": "https://images.metmuseum.org/CRDImages/ep/original/DP-23545-001.jpg",
+      "cut": false,
+      "credit": "Napoléon Bonaparte,  — The Met (CC0)"
+    },
+    "nap2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP887362.jpg",
+      "cut": false,
+      "credit": "Portrait de Napoléon Bonaparte, 1781–1811 — The Met (CC0)"
+    },
+    "buste": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP-30196-1.jpg",
+      "cut": true,
+      "credit": "Napoléon Bonaparte, Premier consul, vers 1800, ca. 1800 — The Met (CC0)"
+    },
+    "lapgris": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pga/12000/12048v.jpg",
+      "cut": false,
+      "credit": "Lapin gris, 1874, 1874-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "hunt21": {
+      "url": "https://images.metmuseum.org/CRDImages/ad/original/DT9458.jpg",
+      "cut": false,
+      "credit": "Partie de chasse, vers 1750, ca. 1750 — The Met (CC0)"
+    },
+    "carrosse": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP804374.jpg",
+      "cut": false,
+      "credit": "Arrivée du carrosse princier à la chasse, vers 1756, ca. 1756 — The Met (CC0)"
+    },
+    "battue": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/12400/12494v.jpg",
+      "cut": false,
+      "credit": "Battue aux lapins, Hermiston, 1913, 1913-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "catch": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP249380.jpg",
+      "cut": true,
+      "credit": "Les chasseurs de lapins, porcelaine, vers 1755, ca. 1755–59 — The Met (CC0)"
+    },
+    "hunt19": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP830837.jpg",
+      "cut": false,
+      "credit": "Une partie de chasse, vers 1555, ca. 1555–65 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Napoléon a battu l'Europe… mais il a perdu contre des *LAPINS* !",
+      "image": "portrait",
+      "alt": "lapgris",
+      "tag": "excited",
+      "title": "NAPOLÉON ATTAQUÉ PAR DES LAPINS",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Oui. Des *lapins*. C'est un général qui le raconte !",
+      "image": "lapin",
+      "tag": "laughs",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Juillet *1807*.",
+      "image": "nap1",
+      "bg": "dark",
+      "date": "JUILLET 1807",
+      "tag": "curious"
+    },
+    {
+      "text": "Napoléon est au *sommet* de sa puissance.",
+      "image": "buste",
+      "bg": "dark",
+      "tag": "mischievously"
+    },
+    {
+      "text": "Pour fêter la paix, son bras droit organise une *chasse*.",
+      "image": "hunt21",
+      "bg": "dark",
+      "alt": "hunt19",
+      "tag": "curious"
+    },
+    {
+      "text": "Au menu : des *centaines* de lapins !",
+      "image": "battue",
+      "bg": "dark",
+      "tag": "excited"
+    },
+    {
+      "text": "On ouvre les cages… Napoléon *épaule*…",
+      "image": "epee",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "whispers",
+      "sfx": [
+        "whisper"
+      ]
+    },
+    {
+      "text": "Et là… les lapins foncent droit sur *LUI* !",
+      "image": "chasse",
+      "tag": "excited",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Ils grimpent sur ses *bottes* !",
+      "image": "lapin2",
+      "bg": "dark",
+      "tag": "laughs"
+    },
+    {
+      "text": "Sur ses *jambes* !",
+      "image": "catch",
+      "tag": "laughs",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Ses hommes sortent les *fouets*… Rien à faire !",
+      "image": "gulliver",
+      "bg": "dark",
+      "tag": "sarcastic"
+    },
+    {
+      "text": "L'Empereur bat en *RETRAITE*… jusqu'à sa voiture !",
+      "image": "carrosse",
+      "bg": "dark",
+      "tag": "laughs"
+    },
+    {
+      "text": "L'explication ? Ce n'étaient pas des lapins *sauvages*…",
+      "image": "chasse2",
+      "bg": "dark",
+      "tag": "mischievously"
+    },
+    {
+      "text": "mais des lapins *DOMESTIQUES* !",
+      "image": "lapin",
+      "stamp": "DOMESTIQUES",
+      "tag": "excited",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Pour eux, un homme qui arrive… c'est l'heure du *repas* !",
+      "image": "boulanger",
+      "bg": "dark",
+      "alt": "pudding",
+      "tag": "laughs"
+    },
+    {
+      "text": "Napoléon a battu l'Europe…",
+      "image": "nap2",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "curious"
+    }
+  ]
+}

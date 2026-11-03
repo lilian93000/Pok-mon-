@@ -1,0 +1,235 @@
+{
+  "id": "036-boulanger-v3",
+  "titre": "Le boulanger du Titanic",
+  "v2": true,
+  "punch": true,
+  "model": "eleven_v3",
+  "tempo": 1.15,
+  "pause": 0.12,
+  "sources": [
+    "Témoignage de Charles Joughin à la commission d'enquête britannique (1912)",
+    "Température de l'eau estimée à -2 °C ; la plupart des naufragés meurent en moins de 30 minutes",
+    "Joughin récupéré près du canot pliant B, puis recueilli par le canot 12",
+    "Charles Joughin meurt en 1956 à Paterson (New Jersey), à 78 ans",
+    "Joughin fait porter du pain dans les canots et jette des chaises longues par-dessus bord (témoignage, 1912)"
+  ],
+  "musique": "score",
+  "volume_musique": 0.22,
+  "ambiance": "sombre",
+  "sfx": true,
+  "images": {
+    "lancement": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a30000/3a35000/3a35200/3a35267v.jpg",
+      "cut": false,
+      "credit": "Le Titanic avant son lancement, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "montage": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b30000/3b37000/3b37100/3b37182r.jpg",
+      "cut": false,
+      "credit": "Le grand désastre du Titanic, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "canot": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b30000/3b39000/3b39700/3b39746r.jpg",
+      "cut": false,
+      "credit": "Survivants du Titanic en route vers le Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "carpathia": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c20000/3c21000/3c21000/3c21012v.jpg",
+      "cut": false,
+      "credit": "Le Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "survivants": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a30000/3a35000/3a35400/3a35462r.jpg",
+      "cut": false,
+      "credit": "Survivants du Titanic à bord du Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "rostron": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c20000/3c21000/3c21000/3c21011v.jpg",
+      "cut": false,
+      "credit": "Le capitaine Rostron du Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "foule": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/10300/10346v.jpg",
+      "cut": false,
+      "credit": "Foule attendant les survivants du Titanic, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "ice1": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/04400/04400v.jpg",
+      "cut": false,
+      "credit": "Iceberg, 1914, 1914-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "ice2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsc/01900/01936v.jpg",
+      "cut": false,
+      "credit": "Iceberg, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "carp2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c20000/3c21000/3c21000/3c21012v.jpg",
+      "cut": false,
+      "credit": "Le Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "escalier": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/10900/10963v.jpg",
+      "cut": false,
+      "credit": "Grand escalier de l'Olympic, navire jumeau du Titanic, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "fumoir": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/10900/10964v.jpg",
+      "cut": false,
+      "credit": "Fumoir de l'Olympic, navire jumeau du Titanic, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "pont": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/10900/10960v.jpg",
+      "cut": false,
+      "credit": "Pont de l'Olympic, navire jumeau du Titanic, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "arriere": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/10900/10957v.jpg",
+      "cut": false,
+      "credit": "Pont arrière de l'Olympic, navire jumeau du Titanic, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "avant": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/10900/10959v.jpg",
+      "cut": false,
+      "credit": "Pont avant de l'Olympic, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "nuit": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/24200/24223v.jpg",
+      "cut": false,
+      "credit": "Nuit en mer, 1944, 1944-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Il a survécu dans l'eau glacée… grâce à l'*ALCOOL* ?!",
+      "image": "montage",
+      "alt": "ice1",
+      "tag": "excited",
+      "title": "LE BOULANGER QUI A SURVÉCU AU TITANIC",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Nuit du 14 avril *1912*.",
+      "image": "nuit",
+      "bg": "dark",
+      "date": "14 AVRIL 1912",
+      "tag": "curious"
+    },
+    {
+      "text": "Le Titanic heurte un *iceberg*.",
+      "image": "ice1",
+      "tag": "dramatically",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "À bord, le chef boulanger : Charles *Joughin*.",
+      "image": "escalier",
+      "bg": "dark",
+      "tag": "mischievously",
+      "prononciation": {
+        "Joughin": "Djoguinne"
+      }
+    },
+    {
+      "text": "D'abord, il fait porter du *pain* dans les canots !",
+      "image": "canot",
+      "bg": "dark",
+      "tag": "excited"
+    },
+    {
+      "text": "Puis il descend dans sa cabine… et boit un *GRAND* verre.",
+      "image": "fumoir",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "mischievously"
+    },
+    {
+      "text": "Il remonte… et balance des dizaines de chaises par-dessus *bord* !",
+      "image": "pont",
+      "bg": "dark",
+      "tag": "laughs"
+    },
+    {
+      "text": "Pour que les gens puissent s'y *accrocher*.",
+      "image": "avant",
+      "bg": "dark",
+      "tag": "curious"
+    },
+    {
+      "text": "Le navire coule. Lui, il grimpe tout à l'*ARRIÈRE*…",
+      "image": "arriere",
+      "bg": "dark",
+      "tag": "dramatically"
+    },
+    {
+      "text": "et descend avec, comme dans un *ascenseur* !",
+      "image": "lancement",
+      "tag": "laughs",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Il dira : « J'ai à peine eu la tête *mouillée*. »",
+      "image": "ice2",
+      "bg": "dark",
+      "tag": "sarcastic"
+    },
+    {
+      "text": "L'eau ? Moins *deux* degrés !",
+      "image": "ice1",
+      "date": "−2 °C",
+      "tag": "excited",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "La plupart meurent en quelques *minutes*…",
+      "image": "nuit",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "whispers"
+    },
+    {
+      "text": "Joughin, lui, nage… pendant des *heures* et des heures !",
+      "image": "carp2",
+      "bg": "dark",
+      "alt": "carpathia",
+      "tag": "excited",
+      "prononciation": {
+        "Joughin": "Djoguinne"
+      }
+    },
+    {
+      "text": "Un canot le *repêche* à l'aube.",
+      "image": "survivants",
+      "bg": "dark",
+      "tag": "curious"
+    },
+    {
+      "text": "Et il vivra jusqu'à *soixante-dix-huit* ans !",
+      "image": "foule",
+      "counter": {
+        "to": 78,
+        "suffix": " ANS"
+      },
+      "tag": "laughs",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "L'alcool l'a sauvé ? Les médecins en *doutent*…",
+      "image": "rostron",
+      "bg": "dark",
+      "tag": "sarcastic"
+    },
+    {
+      "text": "Il a survécu dans l'eau glacée…",
+      "image": "ice2",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "curious"
+    }
+  ]
+}
