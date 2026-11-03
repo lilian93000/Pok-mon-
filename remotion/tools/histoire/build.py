@@ -89,22 +89,27 @@ if key:
     # Resserrer les silences (style TikTok) : max 0,2 s après ponctuation, 0,08 s sinon
     import subprocess
     keep, t, removed = [], 0.0, []
-    lead = max(0.0, next(w for w in words if w["w"])["start"] - 0.05)
-    keep_start, shift = lead, lead
+    det = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(pub / "voice.mp3"), "-af", "silencedetect=noise=-38dB:d=0.12", "-f", "null", "-"],
+                         capture_output=True, text=True).stderr
+    starts = [float(x) for x in re.findall(r"silence_start: ([\d.]+)", det)]
+    ends = [float(x) for x in re.findall(r"silence_end: ([\d.]+)", det)]
+    total = float(re.search(r"Duration: (\d+):(\d+):([\d.]+)", det).group(3)) + 60 * float(re.search(r"Duration: (\d+):(\d+)", det).group(2))
+    lead = max(0.0, ends[0] - 0.03) if starts and starts[0] < 0.05 else 0.0  # blanc du début, mesuré
     cuts = [(0.0, lead)] if lead > 0 else []
-    real = [w for w in words if w["w"]]
-    for a, b in zip(real, real[1:]):
-        gap = b["start"] - a["end"]
-        mx = float(ep.get("pause", 0.2)) if a["w"][-1:] in ".?!…»,:" else 0.06
-        if gap > mx:
-            cuts.append((a["end"] + mx / 2, b["start"] - mx / 2))
+    keep = float(ep.get("pause", 0.2))
+    for s0, s1 in zip(starts, ends):
+        if s0 < lead + 0.01 or s1 >= total - 0.05:  # ni le blanc du début, ni celui de la fin
+            continue
+        if s1 - s0 > keep:
+            cuts.append((s0 + keep / 2, s1 - keep / 2))
     def remap(x):
         return x - sum(min(max(x - c0, 0), c1 - c0) for c0, c1 in cuts)
     segs, cur = [], 0.0
     for c0, c1 in cuts:
         if c0 > cur: segs.append((cur, c0))
         cur = c1
-    segs.append((cur, words[-1]["end"] + 0.3))
+    tail = next((s0 for s0, s1 in zip(starts, ends) if s1 >= total - 0.05 and s0 > cur), total)
+    segs.append((cur, min(total, tail + 0.15)))
     fc = "".join(f"[0:a]atrim={a:.3f}:{b:.3f},asetpts=PTS-STARTPTS[s{i}];" for i, (a, b) in enumerate(segs))
     TEMPO = float(ep.get("tempo", 1.0))  # > 1 : voix accélérée au montage (atempo garde le timbre)
     fc += "".join(f"[s{i}]" for i in range(len(segs))) + f"concat=n={len(segs)}:v=0:a=1" + (f",atempo={TEMPO}" if TEMPO != 1 else "") + "[o]"
@@ -113,6 +118,38 @@ if key:
     for w in words:
         w["start"], w["end"] = remap(w["start"]) / TEMPO, remap(w["end"]) / TEMPO
     audio = f"histoire/{ep['id']}/voice_tight.mp3"
+    if ep.get("model") == "eleven_v3":
+        # Recalage des sous-titres sur la voix finale (minutage v3 imprécis) : transcription mot à mot + alignement de séquences
+        import difflib, unicodedata, wave
+        import numpy as np
+        from faster_whisper import WhisperModel
+        wav = pub / "voice_tight.wav"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(pub / "voice_tight.mp3"), "-ar", "16000", "-ac", "1", str(wav)], check=True)
+        wf = wave.open(str(wav)); pcm = np.frombuffer(wf.readframes(wf.getnframes()), np.int16).astype(np.float32) / 32768
+        segs_w, _ = WhisperModel("small", device="cpu", compute_type="int8").transcribe(pcm, language="fr", word_timestamps=True)
+        hw = [x for g in segs_w for x in g.words]
+        norm = lambda t: "".join(c for c in unicodedata.normalize("NFD", t.lower()) if c.isalnum())
+        ours = [w for w in words if w["w"]]
+        sm = difflib.SequenceMatcher(None, [norm(w["w"]) for w in ours], [norm(x.word) for x in hw], autojunk=False)
+        fixed = 0
+        for blk in sm.get_matching_blocks():
+            for k in range(blk.size):
+                w, x = ours[blk.a + k], hw[blk.b + k]
+                w["start"], w["end"] = x.start, x.end; fixed += 1
+        matched = {blk.a + k for blk in sm.get_matching_blocks() for k in range(blk.size)}
+        k = 0
+        while k < len(ours):  # mots non reconnus : répartis entre leurs voisins calés
+            if k in matched:
+                k += 1; continue
+            j = k
+            while j < len(ours) and j not in matched: j += 1
+            t0 = ours[k - 1]["end"] if k > 0 else 0.0
+            t1 = ours[j]["start"] if j < len(ours) else t0 + 0.35 * (j - k)
+            step = max(0.05, (t1 - t0) / (j - k))
+            for n in range(k, j):
+                ours[n]["start"], ours[n]["end"] = t0 + step * (n - k), t0 + step * (n - k + 1) - 0.02
+            k = j
+        print(f"recalage : {fixed}/{len(ours)} mots calés sur la voix réelle, {len(ours) - fixed} répartis entre leurs voisins")
 else:
     t = 0.4
     for k, w in enumerate(words):

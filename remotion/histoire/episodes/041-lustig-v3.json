@@ -4,7 +4,7 @@
   "v2": true,
   "punch": true,
   "model": "eleven_v3",
-  "tempo": 1.18,
+  "tempo": 1.15,
   "pause": 0.12,
   "sources": [
     "Victor Lustig, escroquerie de 1925 : faux papiers du ministère des Postes et Télégraphes, ferrailleurs réunis à l'hôtel de Crillon, André Poisson",
@@ -125,7 +125,7 @@
   },
   "beats": [
     {
-      "text": "Cet homme a vendu la *tour Eiffel*.",
+      "text": "Cet homme a vendu la *tour Eiffel* !",
       "image": "e1",
       "bg": "red",
       "rays": true,
@@ -134,36 +134,41 @@
       "alt": "stereo"
     },
     {
-      "text": "Pour de *vrai*.",
+      "text": "Pour de *VRAI*.",
       "image": "e2",
       "bg": "red",
       "rays": true,
-      "stamp": "VENDUE"
+      "stamp": "VENDUE",
+      "tag": "laughs"
     },
     {
       "text": "Paris, *1925*.",
       "image": "boulevard",
       "bg": "dark",
-      "date": "1925"
+      "date": "1925",
+      "tag": "curious"
     },
     {
-      "text": "Victor Lustig. Escroc *professionnel*.",
+      "text": "Victor Lustig. Escroc *PROFESSIONNEL*.",
       "image": "faux",
       "bg": "dark",
-      "alt": "billets2"
+      "alt": "billets2",
+      "tag": "mischievously"
     },
     {
-      "text": "Il lit le journal : la tour coûte une *fortune*.",
+      "text": "Il lit le journal : la tour coûte une *fortune*…",
       "image": "journal",
       "bg": "dark",
-      "alt": "e4"
+      "alt": "e4",
+      "tag": "curious"
     },
     {
-      "text": "Et là… *déclic*.",
+      "text": "Et là… *DÉCLIC* !",
       "image": "e3",
       "bg": "red",
       "rays": true,
-      "zoom": true
+      "zoom": true,
+      "tag": "excited"
     },
     {
       "text": "Faux papiers. Faux *ministère*.",
@@ -172,7 +177,8 @@
       "alt": "bureau",
       "sfx": [
         "typewriter"
-      ]
+      ],
+      "tag": "mischievously"
     },
     {
       "text": "Il convoque cinq *ferrailleurs*.",
@@ -194,7 +200,8 @@
       "image": "e4",
       "bg": "red",
       "rays": true,
-      "stamp": "SECRET"
+      "stamp": "SECRET",
+      "tag": "whispers"
     },
     {
       "text": "Sept mille tonnes de *fer* !",
@@ -203,12 +210,14 @@
       "counter": {
         "to": 7000,
         "suffix": " TONNES"
-      }
+      },
+      "tag": "excited"
     },
     {
       "text": "Un ferrailleur *mord* à l'hameçon.",
       "image": "boulevard2",
-      "bg": "dark"
+      "bg": "dark",
+      "tag": "sarcastic"
     },
     {
       "text": "Il paie. Et il ajoute un *pot-de-vin* !",
@@ -218,13 +227,15 @@
       "alt": "billet",
       "sfx": [
         "cash"
-      ]
+      ],
+      "tag": "laughs"
     },
     {
-      "text": "Lustig ? *Envolé*.",
+      "text": "Lustig ? *ENVOLÉ* !",
       "image": "e2",
       "bg": "dark",
-      "zoom": true
+      "zoom": true,
+      "tag": "excited"
     },
     {
       "text": "La victime a tellement *honte*… qu'elle ne porte jamais plainte !",
@@ -238,24 +249,26 @@
       "text": "Alors Lustig *revient*… et essaie de la revendre !",
       "image": "e3",
       "bg": "dark",
-      "tag": "excited",
+      "tag": "mischievously",
       "alt": "concorde2"
     },
     {
-      "text": "Cette fois, la police l'attend. Il finira à *Alcatraz*.",
+      "text": "Cette fois, la police l'attend. Il finira… à *Alcatraz*.",
       "image": "police",
       "bg": "dark",
       "date": "ALCATRAZ",
-      "alt": "alcatraz"
+      "alt": "alcatraz",
+      "tag": "dramatically"
     },
     {
       "text": "L'homme qui a vendu…",
       "image": "e1",
       "bg": "dark",
-      "zoom": true
+      "zoom": true,
+      "tag": "curious"
     }
   ],
-  "musique": "heist",
-  "volume_musique": 0.12,
+  "musique": "tonic",
+  "volume_musique": 0.13,
   "sfx": true
 }
