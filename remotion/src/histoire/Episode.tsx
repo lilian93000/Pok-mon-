@@ -345,8 +345,8 @@ export const Episode: React.FC<Props & { photos?: string[] }> = (props) => {
         );
         return (
           <React.Fragment key={`sfx${i}`}>
-            {i > 0 && S("whoosh", 0.22)}
-            {b.alt && S("whoosh", 0.16, Math.round(((b.end - b.start) * fps) / 2))}
+            {/* whoosh discret, seulement sur les coupes qui n'ont pas déjà un bruitage (retour utilisateur : trop présent) */}
+            {i > 0 && !(b.bg === "red" || b.counter || b.stamp || b.date || b.sfx) && S("whoosh", 0.07)}
             {(b.bg === "red" || b.counter) && S("impact", 0.32)}
             {b.stamp && S("stamp", 0.5, 6)}
             {b.date && S("camera", 0.35)}
