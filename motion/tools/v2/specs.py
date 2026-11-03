@@ -30,7 +30,7 @@ SPECS["prix"] = dict(
         dict(type="stat", label="BORDEAUX", value=45, unit="m²", note="un grand 2 pièces", at="45", note_at="carrés.", area=45, max=161, price="4 469 €/m²", glow="#a855f7"),
         dict(type="stat", label="MARSEILLE", value=56, unit="m²", note="un 3 pièces", at="56", note_at="trois-pièces.", area=56, max=161, price="3 581 €/m²", glow="#06b6d4"),
         dict(type="stat", label="SAINT-ÉTIENNE", value=161, unit="m²", note="une maison de ville", at="161", note_at="ville.", area=161, max=161, price="1 244 €/m²", glow="#22c55e"),
-        dict(type="punch", big="×8", sub="même budget", at="huit", glow="#eab308"),
+        dict(type="punch", big="×8", sub="même budget", at="Même", glow="#eab308"),
         dict(type="end", t1="Demain :", t2="ta ville.", glow="#2563eb"),
     ],
 )
@@ -52,12 +52,12 @@ SPECS["caution"] = dict(
     ],
     scenes=[
         dict(type="hook", big="TA CAUTION", sub="il peut la garder ?", glow="#ef4444"),
-        dict(type="rule", n="1/3", big="1 MOIS", sub="de loyer hors charges, maximum", chip="2 en meublé", chip_at="meublé.", at="mois", glow="#3b82f6"),
-        dict(type="rule", n="2/3", big="1 MOIS", sub="pour te la rendre", chip="si l'état des lieux est conforme", chip_at="conforme.", at="mois", glow="#22c55e"),
-        dict(type="rule", n="2/3", big="2 MOIS", sub="s'il y a des dégâts", chip="avec devis ou factures", chip_at="factures.", at="mois", glow="#f97316"),
-        dict(type="rule", n="3/3", big="USURE", sub="normale = jamais pour toi", chip="la vétusté reste au proprio", chip_at="facturée.", at="normale", glow="#a855f7"),
-        dict(type="punch", big="+10 %", sub="du loyer par mois de retard", at="10", glow="#eab308"),
-        dict(type="end", t1="Enregistre-la", t2="avant l'état des lieux.", glow="#2563eb"),
+        dict(type="rule", n="1/3", big="1 MOIS", sub="de loyer hors charges, maximum", chip="2 en meublé", chip_at="meublé.", at="Un", glow="#3b82f6"),
+        dict(type="rule", n="2/3", big="1 MOIS", sub="pour te la rendre", chip="si l'état des lieux est conforme", chip_at="conforme.", at="Deux", glow="#22c55e"),
+        dict(type="rule", n="2/3", big="2 MOIS", sub="s'il y a des dégâts", chip="avec devis ou factures", chip_at="factures.", at="Deux", glow="#f97316"),
+        dict(type="rule", n="3/3", big="USURE", sub="normale = jamais pour toi", chip="la vétusté reste au proprio", chip_at="facturée.", at="Trois", glow="#a855f7"),
+        dict(type="punch", big="+10 %", sub="du loyer par mois de retard", at="Et", glow="#eab308"),
+        dict(type="end", t1="Enregistre-la", t2="pour l'état des lieux.", glow="#2563eb"),
     ],
 )
 
@@ -84,7 +84,7 @@ SPECS["arnaque"] = dict(
         dict(type="flag", n="2/4", target="owner", label="PAS DE VISITE", at="visite", glow="#f97316"),
         dict(type="flag", n="3/4", target="pay", label="VIREMENT AVANT VISITE", at="virement", glow="#eab308"),
         dict(type="flag", n="4/4", target="docs", label="DOCUMENTS INTERDITS", at="interdit", glow="#a855f7"),
-        dict(type="verdict", big="0 €", sub="avant la visite et le bail signé", at="euro", glow="#22c55e"),
-        dict(type="end", t1="Envoie-la", t2="à qui cherche un appart.", glow="#2563eb"),
+        dict(type="verdict", big="0 €", sub="avant la visite et le bail signé", at="La", glow="#22c55e"),
+        dict(type="end", t1="Envoie-la", t2="à qui cherche.", glow="#2563eb"),
     ],
 )

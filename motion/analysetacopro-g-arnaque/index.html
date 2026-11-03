@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « CETTE ANNONCE EST UNE ARNAQUE » — format v2 grand public. Série arnaques : 4 indices d'une fausse annonce de location (décret n° 2015-1437 pour les pièces interdites).
+         Généré par tools/v2/build.py (arnaque) à partir de tools/minutage.json. Composé en 1080×1920, rendu 2160×3840 à 60 i/s. */
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; font-display: block; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0a0d1f; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Inter", sans-serif; color: #fff; background: #0a0d1f; }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+      .abs { position: absolute; }
+      .glow { position: absolute; left: 0; top: 160px; width: 1080px; height: 1300px; border-radius: 50%; opacity: 0; }
+      #grid { position: absolute; left: 0; top: 0; width: 1080px; height: 2100px; opacity: 0.16; background-image: radial-gradient(circle, #fff 2px, transparent 2.5px); background-size: 54px 54px; }
+      #tag { left: 70px; top: 190px; padding: 12px 26px; border-radius: 999px; background: rgba(255,255,255,0.13); border: 2px solid rgba(255,255,255,0.28); font-size: 32px; font-weight: 800; letter-spacing: 0.04em; }
+      #count { right: 160px; top: 190px; padding: 12px 24px; border-radius: 999px; background: #fff; color: #0a0d1f; font-size: 32px; font-weight: 900; opacity: 0; font-variant-numeric: tabular-nums; }
+      .scn { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; }
+      .hook { position: absolute; left: 40px; right: 40px; top: 470px; text-align: center; font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: #fff; text-shadow: 0 10px 0 rgba(0,0,0,0.35), 0 0 70px rgba(255,255,255,0.35); white-space: nowrap; font-variant-numeric: tabular-nums; }
+      .hsub { position: absolute; left: 0; right: 0; top: 800px; text-align: center; font-size: 70px; font-weight: 900; color: #fde047; letter-spacing: -0.03em; opacity: 0; }
+      .lab { position: absolute; left: 70px; top: 330px; font-size: 104px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+      .ppm { position: absolute; left: 74px; top: 450px; font-size: 38px; font-weight: 700; color: rgba(255,255,255,0.72); }
+      .val { position: absolute; left: 60px; top: 560px; font-size: 290px; font-weight: 900; letter-spacing: -0.06em; line-height: 1; color: #fde047; text-shadow: 0 12px 0 rgba(0,0,0,0.35); font-variant-numeric: tabular-nums; transform-origin: 0% 50%; }
+      .val small { font-size: 110px; letter-spacing: -0.03em; margin-left: 12px; color: #fff; }
+      .planbox { position: absolute; left: 570px; top: 480px; width: 450px; height: 460px; }
+      .plan { position: absolute; left: 0; bottom: 0; }
+      .ghost { position: absolute; left: 0; bottom: 0; }
+      .ghost span { position: absolute; left: 10px; top: -44px; font-size: 30px; font-weight: 800; color: rgba(255,255,255,0.6); white-space: nowrap; }
+      .chip { position: absolute; left: 70px; top: 975px; padding: 16px 30px; border-radius: 24px; color: #0a0d1f; font-size: 54px; font-weight: 900; letter-spacing: -0.02em; transform-origin: 0% 50%; }
+      .src { position: absolute; left: 70px; right: 150px; top: 1100px; font-size: 28px; font-weight: 600; color: rgba(255,255,255,0.55); }
+      .rbig { position: absolute; left: 40px; right: 40px; top: 430px; text-align: center; font-weight: 900; letter-spacing: -0.05em; line-height: 1; white-space: nowrap; text-shadow: 0 12px 0 rgba(0,0,0,0.35); opacity: 0; }
+      .rbig.punch { color: #fde047; top: 400px; }
+      .rbig.ok { color: #4ade80; }
+      .bar { position: absolute; left: 270px; width: 540px; top: 720px; height: 16px; border-radius: 8px; transform-origin: 0% 50%; transform: scaleX(0); }
+      .rsub { position: absolute; left: 70px; right: 70px; top: 770px; text-align: center; font-size: 62px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.12; opacity: 0; }
+      .rbig.punch ~ .rsub { top: 720px; }
+      .scn .chip.r { left: 0; right: 0; }
+      #lst { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; transform-origin: 50% 40%; }
+      .card { position: absolute; left: 90px; top: 310px; width: 900px; height: 820px; background: #ffffff; border-radius: 36px; color: #111827; padding: 30px; box-shadow: 0 40px 90px rgba(0,0,0,0.55); transform-origin: 50% 50%; }
+      .card .photo { display: block; border-radius: 22px; }
+      .lt { margin-top: 22px; font-size: 48px; font-weight: 900; letter-spacing: -0.03em; }
+      .lp { margin-top: 2px; font-size: 34px; font-weight: 600; color: #6b7280; }
+      .lprice { position: absolute; left: 30px; top: 500px; font-size: 74px; font-weight: 900; letter-spacing: -0.04em; color: #111827; }
+      .lowner { position: absolute; left: 30px; top: 600px; font-size: 32px; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 16px; }
+      .lowner i { width: 54px; height: 54px; border-radius: 50%; background: #c7d2fe; display: block; }
+      .lmsg { position: absolute; left: 30px; right: 30px; top: 676px; padding: 16px 22px; border-radius: 22px; background: #f3f4f6; font-size: 29px; font-weight: 600; line-height: 1.3; color: #374151; }
+      .lmsg span { border-radius: 8px; padding: 0 4px; }
+      .ring { position: absolute; border: 9px solid #ef4444; border-radius: 26px; opacity: 0; }
+      #ring-price { left: 100px; top: 795px; width: 440px; height: 112px; }
+      #ring-owner { left: 100px; top: 895px; width: 610px; height: 86px; }
+      .stampx { position: absolute; padding: 14px 24px; border: 8px solid #ef4444; outline: 4px solid #ef4444; outline-offset: 6px; border-radius: 18px; color: #ef4444; background: rgba(255,255,255,0.92); font-size: 46px; font-weight: 900; letter-spacing: -0.02em; white-space: nowrap; opacity: 0; }
+      #st-price { left: 560px; top: 808px; transform: rotate(-6deg); }
+      #st-owner { left: 130px; top: 360px; transform: rotate(5deg); }
+      #st-pay { left: 380px; top: 470px; transform: rotate(-4deg); }
+      #st-docs { left: 150px; top: 572px; transform: rotate(5deg); }
+      .elogo { position: absolute; left: 70px; top: 520px; display: flex; align-items: center; gap: 18px; font-size: 46px; font-weight: 800; }
+      .eb { position: absolute; left: 70px; right: 150px; top: 640px; }
+      .et { font-size: 112px; font-weight: 900; letter-spacing: -0.05em; line-height: 1.02; opacity: 0; }
+      .et span { color: #fde047; }
+      .eurl { display: inline-block; margin-top: 44px; padding: 16px 28px; border-radius: 999px; background: #fff; color: #0a0d1f; font-size: 40px; font-weight: 900; opacity: 0; }
+      #caps { left: 60px; right: 60px; top: 1190px; height: 300px; }
+      .ch { position: absolute; left: 0; right: 0; top: 0; text-align: center; font-size: 84px; font-weight: 900; letter-spacing: -0.035em; line-height: 1.12; opacity: 0; text-shadow: 0 6px 0 rgba(0,0,0,0.45); }
+      .ch i { font-style: normal; color: #fff; display: inline-block; margin: 0 8px; }
+      #flash { background: #fff; opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="25.07" data-width="1080" data-height="1920">
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="25.07" data-track-index="4" data-volume="1"></audio>
+      <section id="stage" class="clip" data-start="0" data-duration="25.07" data-track-index="0">
+        <div id="grid"></div>
+        <div class="glow" id="g0" style="background: radial-gradient(closest-side, #ef444499, #ef444426 55%, transparent 75%)"></div>
+        <div class="glow" id="g1" style="background: radial-gradient(closest-side, #ef444499, #ef444426 55%, transparent 75%)"></div>
+        <div class="glow" id="g2" style="background: radial-gradient(closest-side, #f9731699, #f9731626 55%, transparent 75%)"></div>
+        <div class="glow" id="g3" style="background: radial-gradient(closest-side, #eab30899, #eab30826 55%, transparent 75%)"></div>
+        <div class="glow" id="g4" style="background: radial-gradient(closest-side, #a855f799, #a855f726 55%, transparent 75%)"></div>
+        <div class="glow" id="g5" style="background: radial-gradient(closest-side, #22c55e99, #22c55e26 55%, transparent 75%)"></div>
+        <div class="glow" id="g6" style="background: radial-gradient(closest-side, #2563eb99, #2563eb26 55%, transparent 75%)"></div>
+        <div id="tag" class="abs">ARNAQUE OU PAS ?</div>
+        <div id="count" class="abs">1</div>
+        <div id="lst">
+          <div class="card">
+            <svg class="photo" viewBox="0 0 840 330" width="840" height="330">
+              <rect width="840" height="330" fill="#fde68a" /><rect x="0" y="230" width="840" height="100" fill="#d6a86b" />
+              <rect x="520" y="40" width="250" height="170" rx="10" fill="#bae6fd" stroke="#fff" stroke-width="14" /><line x1="645" y1="40" x2="645" y2="210" stroke="#fff" stroke-width="10" />
+              <circle cx="590" cy="95" r="30" fill="#fef08a" />
+              <rect x="90" y="150" width="330" height="100" rx="26" fill="#6366f1" /><rect x="70" y="120" width="70" height="140" rx="24" fill="#4f46e5" /><rect x="370" y="120" width="70" height="140" rx="24" fill="#4f46e5" />
+              <rect x="470" y="190" width="28" height="70" rx="6" fill="#92400e" /><circle cx="484" cy="170" r="42" fill="#16a34a" />
+                          </svg>
+            <div class="lt">T2 lumineux · 45 m²</div><div class="lp">Paris 11ᵉ</div>
+            <div class="lprice" id="lprice">650 €/mois</div>
+            <div class="lowner" id="lowner"><i></i>Propriétaire · à l'étranger</div>
+            <div class="lmsg" id="lmsg">Je suis à Londres. <span id="hl-pay">Faites un virement de 650 € pour réserver</span>, et envoyez <span id="hl-docs">vos relevés bancaires</span>.</div>
+          </div>
+          <div class="ring" id="ring-price"></div><div class="ring" id="ring-owner"></div>
+          <div class="stampx" id="st-price">PRIX TROP BAS</div><div class="stampx" id="st-owner">PAS DE VISITE</div><div class="stampx" id="st-pay">VIREMENT AVANT VISITE</div><div class="stampx" id="st-docs">DOCUMENTS INTERDITS</div>
+        </div>
+        <div class="scn" id="s0"></div>
+        <div class="scn" id="s1"></div>
+        <div class="scn" id="s2"></div>
+        <div class="scn" id="s3"></div>
+        <div class="scn" id="s4"></div>
+        <div class="scn" id="s5"><div class="rbig ok" id="s5big" style="font-size:260px">0 €</div><div class="rsub" id="s5sub">avant la visite et le bail signé</div></div>
+        <div class="scn" id="s6"><div class="elogo"><svg viewBox="0 0 56 64" width="50" height="58"><rect x="2" y="0" width="52" height="9" rx="4" fill="#fff" /><rect x="8" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="23" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="38" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="0" y="55" width="56" height="9" rx="4" fill="#fff" /></svg>AnalyseTaCopro</div>
+          <div class="eb"><div class="et">Envoie-la<br /><span>à qui cherche.</span></div><div class="eurl">analysetacopro.fr · lien en bio</div></div></div>
+        <div id="caps" class="abs">
+          <div class="ch" id="c0"><i id="c0w0">Cette</i> <i id="c0w1">annonce</i> <i id="c0w2">est</i> <i id="c0w3">une</i></div>
+          <div class="ch" id="c1"><i id="c1w0">arnaque.</i></div>
+          <div class="ch" id="c2"><i id="c2w0">Tu</i> <i id="c2w1">vois</i> <i id="c2w2">pourquoi ?</i></div>
+          <div class="ch" id="c3"><i id="c3w0">Un :</i></div>
+          <div class="ch" id="c4"><i id="c4w0">le</i> <i id="c4w1">prix.</i></div>
+          <div class="ch" id="c5"><i id="c5w0">Un</i> <i id="c5w1">deux-pièces</i> <i id="c5w2">à</i> <i id="c5w3">Paris</i></div>
+          <div class="ch" id="c6"><i id="c6w0">à</i> <i id="c6w1">650</i> <i id="c6w2">euros,</i></div>
+          <div class="ch" id="c7"><i id="c7w0">c'est</i> <i id="c7w1">bien</i> <i id="c7w2">trop</i> <i id="c7w3">bas.</i></div>
+          <div class="ch" id="c8"><i id="c8w0">Deux :</i></div>
+          <div class="ch" id="c9"><i id="c9w0">le</i> <i id="c9w1">propriétaire</i> <i id="c9w2">est</i> <i id="c9w3">à</i></div>
+          <div class="ch" id="c10"><i id="c10w0">l'étranger.</i></div>
+          <div class="ch" id="c11"><i id="c11w0">Pas</i> <i id="c11w1">de</i> <i id="c11w2">visite</i> <i id="c11w3">possible.</i></div>
+          <div class="ch" id="c12"><i id="c12w0">Trois :</i></div>
+          <div class="ch" id="c13"><i id="c13w0">il</i> <i id="c13w1">veut</i> <i id="c13w2">un</i> <i id="c13w3">virement</i></div>
+          <div class="ch" id="c14"><i id="c14w0">pour</i> <i id="c14w1">réserver,</i></div>
+          <div class="ch" id="c15"><i id="c15w0">avant</i> <i id="c15w1">toute</i> <i id="c15w2">visite.</i></div>
+          <div class="ch" id="c16"><i id="c16w0">Quatre :</i></div>
+          <div class="ch" id="c17"><i id="c17w0">il</i> <i id="c17w1">exige</i> <i id="c17w2">tes</i> <i id="c17w3">relevés</i></div>
+          <div class="ch" id="c18"><i id="c18w0">bancaires.</i></div>
+          <div class="ch" id="c19"><i id="c19w0">C'est</i> <i id="c19w1">interdit</i> <i id="c19w2">de</i> <i id="c19w3">les</i></div>
+          <div class="ch" id="c20"><i id="c20w0">demander.</i></div>
+          <div class="ch" id="c21"><i id="c21w0">La</i> <i id="c21w1">règle :</i></div>
+          <div class="ch" id="c22"><i id="c22w0">jamais</i> <i id="c22w1">un</i> <i id="c22w2">euro</i> <i id="c22w3">avant</i></div>
+          <div class="ch" id="c23"><i id="c23w0">la</i> <i id="c23w1">visite</i> <i id="c23w2">et</i> <i id="c23w3">le</i></div>
+          <div class="ch" id="c24"><i id="c24w0">bail</i> <i id="c24w1">signé.</i></div>
+          <div class="ch" id="c25"><i id="c25w0">Envoie-la</i> <i id="c25w1">à</i> <i id="c25w2">quelqu'un</i> <i id="c25w3">qui</i></div>
+          <div class="ch" id="c26"><i id="c26w0">cherche</i> <i id="c26w1">un</i> <i id="c26w2">appart.</i></div>
+        </div>
+      </section>
+      <div id="flash" class="clip" data-start="0" data-duration="25.07" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const DUR = 25.07, WIN = [[0.0, 2.796], [2.796, 7.424], [7.424, 11.108], [11.108, 14.527], [14.527, 18.647], [18.647, 22.066], [22.066, 25.07]], CAPS = [[0.26, 1.117, [0.3, 0.569, 0.859, 0.988]], [1.077, 1.697, [1.117]], [1.657, 2.896, [1.697, 1.837, 1.956]], [2.856, 3.444, [2.896]], [3.404, 4.186, [3.444, 3.595]], [4.146, 5.197, [4.186, 4.358, 4.756, 4.831]], [5.157, 6.261, [5.197, 5.358, 5.992]], [6.221, 7.524, [6.261, 6.433, 6.615, 6.798]], [7.484, 8.093, [7.524]], [8.053, 8.921, [8.093, 8.212, 8.739, 8.868]], [8.881, 9.663, [8.921]], [9.623, 11.208, [9.663, 9.814, 9.921, 10.201]], [11.168, 11.821, [11.208]], [11.781, 12.67, [11.821, 11.982, 12.164, 12.251]], [12.63, 13.272, [12.67, 12.82]], [13.232, 14.627, [13.272, 13.53, 13.67]], [14.587, 15.347, [14.627]], [15.307, 16.325, [15.347, 15.551, 15.884, 16.014]], [16.285, 17.024, [16.325]], [16.984, 17.787, [17.024, 17.229, 17.594, 17.691]], [17.747, 18.747, [17.787]], [18.707, 19.51, [18.747, 18.962]], [19.47, 20.381, [19.51, 19.822, 19.941, 20.198]], [20.341, 21.048, [20.381, 20.478, 20.854, 20.951]], [21.008, 22.166, [21.048, 21.252]], [22.126, 23.134, [22.166, 22.618, 22.703, 23.036]], [23.094, 24.694, [23.134, 23.381, 23.477]]];
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.4, d = 0.2) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 18, n = 7) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: Math.sin(i * 2.7 + t) * amp * (1 - i / n), y: Math.cos(i * 3.1 + t) * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const sp = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+      const roll = (sel, a, b, t, d) => {
+        const o = { v: a };
+        tl.fromTo(o, { v: a }, { v: b, duration: d, ease: "power2.out", immediateRender: false, onUpdate: () => { document.querySelector(sel).textContent = sp(o.v); } }, t);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      tl.fromTo("#grid", { y: 0 }, { y: -180, duration: DUR, ease: "none" }, 0);
+      // chaque scène n'est visible que pendant sa fenêtre ; une couleur de fond par scène
+      WIN.forEach(([a, b], k) => {
+        tl.set(`#s${k}`, { opacity: 1 }, a);
+        if (k < WIN.length - 1) tl.set(`#s${k}`, { opacity: 0 }, b);
+        tl.fromTo(`#g${k}`, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, a);
+        if (k < WIN.length - 1) tl.to(`#g${k}`, { opacity: 0, duration: 0.25 }, b);
+      });
+      tl.to('#lst', { opacity: 0, duration: 0.25 }, 19.047);
+      tl.to("#tag", { opacity: 0, duration: 0.2 }, WIN[WIN.length - 1][0]);
+      tl.set("#count", { opacity: 0 }, 0.000);
+      tl.set("#count", { textContent: "1/4" }, 2.796); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 2.796);
+      tl.set("#count", { textContent: "2/4" }, 7.424); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 7.424);
+      tl.set("#count", { textContent: "3/4" }, 11.108); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 11.108);
+      tl.set("#count", { textContent: "4/4" }, 14.527); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 14.527);
+      tl.to("#lst", { scale: 0.55, y: -160, opacity: 0.18, duration: 0.35, ease: "power2.in" }, 18.647);
+      tl.fromTo("#s5big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 18.627);
+      shake("#s5big", 18.767, 20); flash(18.767, 0.22, 0.15);
+      tl.fromTo("#s5sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 18.897);
+      tl.set("#count", { opacity: 0 }, 18.647);
+      tl.fromTo("#s6 .et", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(2)", immediateRender: false }, 22.146);
+      tl.fromTo("#s6 .eurl", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 22.466);
+      tl.set("#count", { opacity: 0 }, 22.066);
+      tl.fromTo("#lst", { y: 700, rotate: 5, opacity: 0 }, { y: 0, rotate: 0, opacity: 1, duration: 0.45, ease: "back.out(1.5)", immediateRender: false }, 0);
+      flash(0, 0.3, 0.2);
+      tl.fromTo("#lst .card", { scale: 1 }, { scale: 1.04, duration: 2.2, ease: "none", immediateRender: false }, 0.4);
+      tl.fromTo("#ring-price", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "power3.in", immediateRender: false }, 6.748);
+      tl.fromTo("#st-price", { scale: 2.6, opacity: 0 }, { scale: 1, opacity: 0.95, duration: 0.1, ease: "power4.in", immediateRender: false }, 6.798);
+      shake("#lst", 6.898, 16); flash(6.898, 0.2, 0.14);
+      tl.fromTo("#ring-owner", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "power3.in", immediateRender: false }, 9.871);
+      tl.fromTo("#st-owner", { scale: 2.6, opacity: 0 }, { scale: 1, opacity: 0.95, duration: 0.1, ease: "power4.in", immediateRender: false }, 9.921);
+      shake("#lst", 10.021, 16); flash(10.021, 0.2, 0.14);
+      tl.fromTo("#hl-pay", { backgroundColor: "rgba(239,68,68,0)", color: "#374151" }, { backgroundColor: "rgba(239,68,68,1)", color: "#ffffff", duration: 0.2, immediateRender: false }, 12.201);
+      tl.fromTo("#st-pay", { scale: 2.6, opacity: 0 }, { scale: 1, opacity: 0.95, duration: 0.1, ease: "power4.in", immediateRender: false }, 12.251);
+      shake("#lst", 12.351, 16); flash(12.351, 0.2, 0.14);
+      tl.fromTo("#hl-docs", { backgroundColor: "rgba(239,68,68,0)", color: "#374151" }, { backgroundColor: "rgba(239,68,68,1)", color: "#ffffff", duration: 0.2, immediateRender: false }, 17.179);
+      tl.fromTo("#st-docs", { scale: 2.6, opacity: 0 }, { scale: 1, opacity: 0.95, duration: 0.1, ease: "power4.in", immediateRender: false }, 17.229);
+      shake("#lst", 17.329, 16); flash(17.329, 0.2, 0.14);
+      // sous-titres mot à mot : le mot dit passe en jaune
+      CAPS.forEach(([t0, t1, ws], i) => {
+        tl.fromTo(`#c${i}`, { opacity: 0, y: 26, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t0);
+        ws.forEach((s, j) => {
+          tl.set(`#c${i}w${j}`, { color: "#fde047" }, s);
+          if (j + 1 < ws.length) tl.set(`#c${i}w${j}`, { color: "#ffffff" }, ws[j + 1]);
+        });
+        tl.to(`#c${i}`, { opacity: 0, duration: 0.08 }, t1 - 0.08);
+      });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
