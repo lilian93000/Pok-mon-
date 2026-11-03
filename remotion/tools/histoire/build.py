@@ -118,8 +118,9 @@ else:
         if k + 1 < len(words) and words[k + 1]["beat"] != w["beat"]:
             t += 0.1
 
-TARGET = float(ep.get("duree", 60))  # durée imposée : 60 s pile
-if words[-1]["end"] > TARGET - 0.8:
+LOOP = bool(ep.get("v2"))  # format court en boucle : la vidéo s'arrête juste après le dernier mot
+TARGET = round(words[-1]["end"] + 0.3, 3) if LOOP else float(ep.get("duree", 60))  # sinon : 60 s pile
+if not LOOP and words[-1]["end"] > TARGET - 0.8:
     sys.exit(f"Script trop long : la voix finit à {words[-1]['end']:.1f} s (max {TARGET - 0.8:.1f} s). Raccourcir le texte.")
 duration = TARGET
 beats = []
@@ -130,7 +131,7 @@ for i, b in enumerate(ep["beats"]):
 for i, b in enumerate(beats):
     b["start"] = max(0, b["start"])
     b["end"] = beats[i + 1]["start"] if i + 1 < len(beats) else duration
-props = {"id": ep["id"], "fps": FPS, "duration": round(duration, 3), "audio": audio,
+props = {"id": ep["id"], "v2": LOOP, "fps": FPS, "duration": round(duration, 3), "audio": audio,
          "music": None,  # musique ajoutée dans TikTok (thème Succession), pas dans le fichier
          "words": [{k: w[k] for k in ("w", "kw", "start", "end", "beat")} for w in words], "beats": beats}
 json.dump(props, open(pub / "props.json", "w"), ensure_ascii=False, indent=1)

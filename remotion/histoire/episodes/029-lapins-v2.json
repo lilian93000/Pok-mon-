@@ -1,0 +1,150 @@
+{
+  "id": "029-lapins-v2",
+  "titre": "Napoléon attaqué par des lapins",
+  "v2": true,
+  "sources": [
+    "Mémoires du général Paul Thiébault : chasse organisée par Berthier après le traité de Tilsit (juillet 1807)",
+    "Récit anecdotique, rapporté par une seule source"
+  ],
+  "images": {
+    "portrait": {
+      "url": "https://openaccess-cdn.clevelandart.org/2000.106/2000.106_print.jpg",
+      "cut": false,
+      "credit": "Portrait de Napoléon Iᵉʳ, 1841, 1841 — Cleveland Museum of Art (CC0)"
+    },
+    "chasse": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP818235.jpg",
+      "cut": false,
+      "credit": "Bruegel, La chasse au lapin, 1560, 1560 — The Met (CC0)"
+    },
+    "lapin": {
+      "url": "https://images.metmuseum.org/CRDImages/as/original/DT4920.jpg",
+      "cut": true,
+      "credit": "Lapin, netsuke, mid-19th century — The Met (CC0)"
+    },
+    "lapin2": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP815317.jpg",
+      "cut": false,
+      "credit": "Le lapin, 1866, 1866 — The Met (CC0)"
+    },
+    "vase": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP264073.jpg",
+      "cut": true,
+      "credit": "Vase Médicis, château de Saint-Cloud, 1811, 1811 — The Met (CC0)"
+    },
+    "epee": {
+      "url": "https://images.metmuseum.org/CRDImages/aa/original/LC-1982_136-007.jpg",
+      "cut": true,
+      "credit": "Épée de chasse, 1809-13, 1809–13 — The Met (CC0)"
+    },
+    "chasse2": {
+      "url": "https://openaccess-cdn.clevelandart.org/2009.80/2009.80_print.jpg",
+      "cut": false,
+      "credit": "Bruegel, La chasse au lapin, 1560, 1560 — Cleveland Museum of Art (CC0)"
+    },
+    "gulliver": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP809030.jpg",
+      "cut": false,
+      "credit": "Gillray, Le roi de Brobdingnag et Gulliver, 1803, June 26, 1803 — The Met (CC0)"
+    },
+    "pudding": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP809028.jpg",
+      "cut": false,
+      "credit": "Gillray, Le pudding en danger, 1805, February 26, 1805 — The Met (CC0)"
+    },
+    "boulanger": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP809034.jpg",
+      "cut": false,
+      "credit": "Gillray, Tiddy-Doll, 1806, January 23, 1806 — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Napoléon a battu l'Europe… mais il a perdu contre des *lapins*.",
+      "image": "lapin",
+      "bg": "red",
+      "rays": true,
+      "zoom": true,
+      "alt": "chasse2",
+      "title": "NAPOLÉON CONTRE LES LAPINS"
+    },
+    {
+      "text": "Juillet *1807*. Il est au sommet de sa puissance.",
+      "image": "portrait",
+      "bg": "dark",
+      "date": "1807",
+      "alt": "gulliver"
+    },
+    {
+      "text": "Pour fêter la paix, son bras droit organise une *chasse*.",
+      "image": "chasse",
+      "bg": "dark",
+      "alt": "lapin2"
+    },
+    {
+      "text": "Au menu : des lapins. Des *centaines*.",
+      "image": "lapin2",
+      "bg": "dark"
+    },
+    {
+      "text": "On ouvre les cages. Napoléon *épaule*…",
+      "image": "epee",
+      "bg": "dark"
+    },
+    {
+      "text": "Et les lapins foncent… droit sur *lui* !",
+      "image": "lapin",
+      "bg": "red",
+      "rays": true,
+      "zoom": true
+    },
+    {
+      "text": "Ils grimpent sur ses *bottes*.",
+      "image": "chasse2",
+      "bg": "dark"
+    },
+    {
+      "text": "Sur ses *jambes*.",
+      "image": "gulliver",
+      "bg": "dark"
+    },
+    {
+      "text": "Ses hommes sortent les *fouets*. Rien à faire.",
+      "image": "pudding",
+      "bg": "dark"
+    },
+    {
+      "text": "L'Empereur bat en *retraite*… jusqu'à sa voiture.",
+      "image": "portrait",
+      "bg": "red",
+      "rays": true,
+      "stamp": "RETRAITE",
+      "alt": "vase"
+    },
+    {
+      "text": "L'explication ? Ce n'étaient pas des lapins *sauvages*…",
+      "image": "boulanger",
+      "bg": "dark",
+      "alt": "pudding"
+    },
+    {
+      "text": "mais des lapins *domestiques*.",
+      "image": "lapin2",
+      "bg": "dark",
+      "zoom": true
+    },
+    {
+      "text": "Pour eux, un homme qui arrive… c'est l'heure du *repas* !",
+      "image": "lapin",
+      "bg": "red",
+      "rays": true,
+      "alt": "chasse"
+    },
+    {
+      "text": "Voilà comment l'homme qui a conquis l'Europe…",
+      "image": "portrait",
+      "bg": "dark",
+      "zoom": true
+    }
+  ]
+}

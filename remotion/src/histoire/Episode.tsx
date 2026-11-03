@@ -60,13 +60,15 @@ const Background: React.FC<{ beat: Beat }> = ({ beat }) => {
 };
 
 // ---------- Image principale ----------
-const Subject: React.FC<{ id: string; beat: Beat; photo: boolean }> = ({ id, beat, photo }) => {
+const Subject: React.FC<{ id: string; beat: Beat; photo: boolean; v2?: boolean; index?: number }> = ({ id, beat, photo, v2, index = 0 }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const len = (beat.end - beat.start) * fps;
-  const pop = spring({ frame: f, fps, config: { damping: 14, mass: 0.7 } });
-  const drift = interpolate(f, [0, len], [1, beat.zoom ? 1.45 : 1.07], { extrapolateRight: "clamp", easing: Easing.out(Easing.quad) });
-  const blur = interpolate(f, [0, 6], [12, 0], { extrapolateRight: "clamp" });
+  // v2 : la 1re image est pleine dès la frame 0 (miniature + 2 premières secondes), entrées plus sèches, zooms alternés plus marqués
+  const pop = v2 && index === 0 ? 1 : spring({ frame: f, fps, config: v2 ? { damping: 20, stiffness: 320 } : { damping: 14, mass: 0.7 } });
+  const [z0, z1] = beat.zoom ? [1, 1.5] : v2 ? (index % 2 ? [1.16, 1.0] : [1.0, 1.16]) : [1, 1.07];
+  const drift = interpolate(f, [0, len], [z0, z1], { extrapolateRight: "clamp", easing: Easing.out(Easing.quad) });
+  const blur = v2 ? 0 : interpolate(f, [0, 6], [12, 0], { extrapolateRight: "clamp" });
   const src = img(id, beat.image!);
   const scale = (0.86 + 0.14 * pop) * drift;
   return (
@@ -137,6 +139,12 @@ const Label: React.FC<{ text: string }> = ({ text }) => {
     </AbsoluteFill>
   );
 };
+
+const Headline: React.FC<{ text: string }> = ({ text }) => (
+  <AbsoluteFill style={{ top: 110, height: 260, alignItems: "center", justifyContent: "center", padding: "0 60px" }}>
+    <div style={{ fontFamily: serif, fontWeight: 900, fontSize: 82, lineHeight: 1.05, color: C.gold, textAlign: "center", textShadow: "0 6px 0 rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.8)" }}>{text}</div>
+  </AbsoluteFill>
+);
 
 const DateCard: React.FC<{ text: string }> = ({ text }) => {
   const f = useCurrentFrame();
@@ -230,7 +238,7 @@ const chunkWords = (words: Word[], beats: Beat[]): Chunk[] => {
   return out;
 };
 
-const Captions: React.FC<{ chunk: Chunk }> = ({ chunk }) => {
+const Captions: React.FC<{ chunk: Chunk; v2?: boolean; instant?: boolean }> = ({ chunk, v2, instant }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t0 = chunk.start;
@@ -238,14 +246,14 @@ const Captions: React.FC<{ chunk: Chunk }> = ({ chunk }) => {
     <AbsoluteFill style={{ top: 1290, height: 380, alignItems: "center", justifyContent: "center", padding: "0 70px" }}>
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "6px 26px" }}>
         {chunk.words.map((w, i) => {
-          const local = f - (w.start - t0) * fps;
+          const local = instant ? 30 : f - (w.start - t0) * fps;
           const p = spring({ frame: local, fps, config: { damping: 12, stiffness: 260 } });
           const under = interpolate(local, [2, 9], [0, 100], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
           return (
             <span
               key={i}
               style={{
-                position: "relative", fontFamily: sans, fontWeight: 900, fontSize: 84, lineHeight: 1.12,
+                position: "relative", fontFamily: sans, fontWeight: 900, fontSize: v2 ? 98 : 84, lineHeight: 1.1,
                 textTransform: "uppercase", color: w.kw ? C.gold : "#FFFFFF", opacity: local < 0 ? 0 : 1,
                 transform: `translateY(${(1 - p) * 26}px) scale(${0.9 + 0.1 * p})`, display: "inline-block",
                 textShadow: "0 6px 0 rgba(0,0,0,.55), 0 10px 30px rgba(0,0,0,.6)", letterSpacing: "0.01em",
@@ -274,9 +282,9 @@ const Grain: React.FC = () => {
   );
 };
 
-const Flash: React.FC = () => {
+const Flash: React.FC<{ strength?: number }> = ({ strength = 0.55 }) => {
   const f = useCurrentFrame();
-  const o = interpolate(f, [0, 5], [0.55, 0], { extrapolateRight: "clamp" });
+  const o = interpolate(f, [0, 5], [strength, 0], { extrapolateRight: "clamp" });
   return <AbsoluteFill style={{ background: "#FFE9C2", opacity: o }} />;
 };
 
@@ -318,26 +326,34 @@ export const Episode: React.FC<Props & { photos?: string[] }> = (props) => {
             <Sequence key={i} from={from} durationInFrames={dur} layout="none">
               <AbsoluteFill>
                 <Background beat={b} />
-                {b.image && !b.outro && <Subject id={id} beat={b} photo={photo} />}
+                {b.image && !b.outro && !b.alt && <Subject id={id} beat={b} photo={photo} v2={props.v2} index={i} />}
+                {b.image && b.alt && (() => {
+                  const half = Math.round(dur / 2), mid = b.start + half / fps;
+                  return (<>
+                    <Sequence durationInFrames={half} layout="none"><Subject id={id} beat={{ ...b, end: mid }} photo={photo} v2={props.v2} index={i} /></Sequence>
+                    <Sequence from={half} layout="none"><Subject id={id} beat={{ ...b, image: b.alt, start: mid, zoom: false }} photo={photo} v2={props.v2} index={i + 1} /><Flash strength={0.18} /></Sequence>
+                  </>);
+                })()}
                 {b.heads && <Heads id={id} n={b.heads} />}
                 {b.label && <Label text={b.label} />}
                 {b.date && <DateCard text={b.date} />}
+                {b.title && <Headline text={b.title} />}
                 {b.counter && <Counter to={b.counter.to} suffix={b.counter.suffix} len={dur} />}
                 {b.stamp && <Stamp text={b.stamp} />}
                 {b.outro && <Outro />}
-                {b.bg === "red" && i > 0 && <Flash />}
+                {b.bg === "red" && i > 0 ? <Flash /> : props.v2 && i > 0 ? <Flash strength={0.18} /> : null}
               </AbsoluteFill>
             </Sequence>
           );
         })}
         {chunks.map((c, i) => (
           <Sequence key={`c${i}`} from={fr(c.start)} durationInFrames={Math.max(1, fr(c.end) - fr(c.start))} layout="none">
-            <Captions chunk={c} />
+            <Captions chunk={c} v2={props.v2} instant={props.v2 && i === 0} />
           </Sequence>
         ))}
       </AbsoluteFill>
       <Grain />
-      <Badge n={num} />
+      {!props.v2 && <Badge n={num} />}
     </AbsoluteFill>
   );
 };
