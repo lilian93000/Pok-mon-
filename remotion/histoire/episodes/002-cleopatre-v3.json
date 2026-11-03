@@ -1,0 +1,276 @@
+{
+  "id": "002-cleopatre-v3",
+  "titre": "Cléopâtre est plus proche de nous que des pyramides",
+  "v2": true,
+  "punch": true,
+  "model": "eleven_v3",
+  "tempo": 1.15,
+  "pause": 0.12,
+  "sources": [
+    "Grande pyramide de Khéops : vers 2560 av. J.-C.",
+    "Mort de Cléopâtre VII : 30 av. J.-C.",
+    "Apollo 11 : 1969",
+    "Plutarque, Vie d'Antoine 27 (langues de Cléopâtre, première Ptolémée à parler égyptien)",
+    "Obélisques dits « aiguilles de Cléopâtre » : érigés sous Thoutmôsis III (vers 1450 av. J.-C.) à Héliopolis, déplacés à Alexandrie sous Auguste"
+  ],
+  "musique": "score",
+  "volume_musique": 0.22,
+  "ambiance": "mystere",
+  "sfx": true,
+  "images": {
+    "cleo": {
+      "url": "https://images.metmuseum.org/CRDImages/eg/original/DT10854.jpg",
+      "cut": true,
+      "credit": "Statue d'une reine ptolémaïque, peut-être Cléopâtre VII, The Met (CC0)"
+    },
+    "reine": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP333700.jpg",
+      "cut": true,
+      "credit": "Tête d'une reine ptolémaïque, The Met (CC0)"
+    },
+    "lune": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP-15797-035.jpg",
+      "cut": false,
+      "credit": "Buzz Aldrin sur la Lune, 1969, The Met (CC0)"
+    },
+    "aldrin": {
+      "url": "https://images.metmuseum.org/CRDImages/ph/original/DP-15797-029.jpg",
+      "cut": false,
+      "credit": "Buzz Aldrin et le drapeau, 1969, The Met (CC0)"
+    },
+    "ptol": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP-16199-002.jpg",
+      "cut": true,
+      "credit": "Statère d'or de Ptolémée Ier, The Met (CC0)"
+    },
+    "oct": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP138747.jpg",
+      "cut": true,
+      "credit": "Octodrachme d'or de Ptolémée III, The Met (CC0)"
+    },
+    "statue": {
+      "url": "https://images.metmuseum.org/CRDImages/ad/original/DT10855.jpg",
+      "cut": true,
+      "credit": "Cléopâtre, William Wetmore Story, 1858, 1858, carved 1869 — The Met (CC0)"
+    },
+    "dessin": {
+      "url": "https://images.metmuseum.org/CRDImages/dp/original/DP819141.jpg",
+      "cut": false,
+      "credit": "Cléopâtre, dessin, 1647, 1647 — The Met (CC0)"
+    },
+    "bern": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/35300/35330v.jpg",
+      "cut": false,
+      "credit": "Sarah Bernhardt en Cléopâtre, 1920-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "p7": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/33600/33659v.jpg",
+      "cut": false,
+      "credit": "[Great Pyramids, Egypt], 1936-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "p9": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/03900/03948v.jpg",
+      "cut": false,
+      "credit": "Vue générale des pyramides, 1867-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "p10": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/03900/03953v.jpg",
+      "cut": false,
+      "credit": "Hotel Mena-House et pyramides, 1867-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "p11": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/41400/41412v.jpg",
+      "cut": false,
+      "credit": "Kairo, les pyramides, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "p12": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/41400/41411v.jpg",
+      "cut": false,
+      "credit": "Kairo, les pyramides, femmes Arabes, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "p8": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s20000/1s21000/1s21300/1s21308v.jpg",
+      "cut": false,
+      "credit": "Four pyramids of Gizeh, Egypt, 1906-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "s13": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a00000/3a02000/3a02500/3a02564v.jpg",
+      "cut": false,
+      "credit": "The Sphinx, Egypt, 1890-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "s16": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/matpc/17900/17963v.jpg",
+      "cut": false,
+      "credit": "Egypt. Sphinx & pyramids. Sphinx (rear view), 1934-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "s18": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/matpc/17900/17965v.jpg",
+      "cut": false,
+      "credit": "Egypt. Sphinx & pyramids. Sphinx head (close up), 1934-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "aig27": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/04400/04469v.jpg",
+      "cut": false,
+      "credit": "Cleopatra's Needle, 1856-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "aig26": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b10000/3b19000/3b19800/3b19838r.jpg",
+      "cut": false,
+      "credit": "Cleopatra's Needle, 1880-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "aig29": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s00000/1s07000/1s07000/1s07066v.jpg",
+      "cut": false,
+      "credit": "Cleopatra's Needle, Central Park, New York., 1901-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "tete": {
+      "url": "https://images.metmuseum.org/CRDImages/gr/original/DP333700.jpg",
+      "cut": true,
+      "credit": "Tête d'une reine ptolémaïque, ca. 270–250 BCE — The Met (CC0)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Cléopâtre est plus proche de *NOUS*… que des pyramides !",
+      "image": "cleo",
+      "tag": "excited",
+      "title": "PLUS PROCHE DE NOUS QUE DES PYRAMIDES",
+      "alt": "p11",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Si, si. Faites le *calcul*.",
+      "image": "p9",
+      "bg": "dark",
+      "tag": "mischievously"
+    },
+    {
+      "text": "Khéops : vers *2560* avant Jésus-Christ.",
+      "image": "p7",
+      "bg": "dark",
+      "date": "≈ 2560 av. J.-C.",
+      "tag": "curious"
+    },
+    {
+      "text": "Cléopâtre, elle, meurt en *30* avant Jésus-Christ.",
+      "image": "statue",
+      "bg": "dark",
+      "date": "30 av. J.-C.",
+      "tag": "curious"
+    },
+    {
+      "text": "Écart : *DEUX MILLE CINQ CENTS* ans !",
+      "image": "s13",
+      "counter": {
+        "to": 2530,
+        "suffix": " ANS"
+      },
+      "tag": "excited",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Et entre Cléopâtre… et le premier pas sur la *Lune* ?",
+      "image": "lune",
+      "bg": "dark",
+      "date": "1969",
+      "tag": "curious"
+    },
+    {
+      "text": "Seulement *deux mille* ans !",
+      "image": "aldrin",
+      "counter": {
+        "to": 1999,
+        "suffix": " ANS"
+      },
+      "tag": "laughs",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Pour elle, les pyramides étaient déjà de *VIEILLES* ruines.",
+      "image": "s16",
+      "bg": "dark",
+      "alt": "p10",
+      "tag": "sarcastic"
+    },
+    {
+      "text": "Des Grecs venaient les visiter… comme des *touristes* !",
+      "image": "p8",
+      "bg": "dark",
+      "alt": "p12",
+      "tag": "laughs"
+    },
+    {
+      "text": "Et attention…",
+      "image": "tete",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "whispers",
+      "sfx": [
+        "whisper"
+      ]
+    },
+    {
+      "text": "Cléopâtre n'était même pas *égyptienne* !",
+      "image": "reine",
+      "stamp": "GRECQUE",
+      "tag": "excited",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Sa famille vient de *Macédoine*, en Grèce.",
+      "image": "ptol",
+      "bg": "dark",
+      "label": "PTOLÉMÉE Iᵉʳ",
+      "tag": "curious"
+    },
+    {
+      "text": "Trois siècles sur le trône… sans parler *égyptien* !",
+      "image": "oct",
+      "bg": "dark",
+      "tag": "sarcastic"
+    },
+    {
+      "text": "Cléopâtre, elle, est la *PREMIÈRE* à l'apprendre !",
+      "image": "dessin",
+      "bg": "dark",
+      "alt": "bern",
+      "tag": "excited"
+    },
+    {
+      "text": "Et même « l'aiguille de Cléopâtre », son *obélisque*…",
+      "image": "aig27",
+      "bg": "dark",
+      "alt": "aig29",
+      "tag": "mischievously"
+    },
+    {
+      "text": "a *mille quatre cents* ans de plus qu'elle !",
+      "image": "aig26",
+      "counter": {
+        "to": 1400,
+        "suffix": " ANS"
+      },
+      "tag": "laughs",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "La dernière reine d'Égypte… est plus proche de *NOUS*.",
+      "image": "cleo",
+      "bg": "dark",
+      "alt": "s18",
+      "tag": "dramatically"
+    },
+    {
+      "text": "Cléopâtre est plus proche…",
+      "image": "p9",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "curious"
+    }
+  ]
+}
