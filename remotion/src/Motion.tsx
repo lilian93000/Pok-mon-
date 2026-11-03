@@ -206,42 +206,31 @@ export const RouteCard: React.FC<{ from: string; to: string; km: number; time: s
   );
 };
 
-/* ---------- Carte de Séoul (style plan sombre, propre) ---------- */
-export const PLACES: Record<string, { lat: number; lon: number; name: string }> = {
-  station: { lat: 37.5547, lon: 126.9707, name: "Seoul Station" },
-  myeongdong: { lat: 37.5636, lon: 126.9858, name: "Myeongdong" },
-  cheonggye: { lat: 37.5692, lon: 126.9905, name: "Cheonggyecheon" },
-  jongno: { lat: 37.5722, lon: 126.9833, name: "Jongno" },
-  ewha: { lat: 37.5619, lon: 126.9466, name: "Ewha" },
-  palace: { lat: 37.5796, lon: 126.977, name: "Gyeongbokgung" },
-  hongdae: { lat: 37.5563, lon: 126.9236, name: "Hongdae" },
-  hanok: { lat: 37.5826, lon: 126.983, name: "Bukchon" },
-};
+/* ---------- Carte de la ville (lieux du plan, cadrage automatique) ---------- */
+type Places = Record<string, { lat: number; lon: number; name: string }>;
 const MW = 500;
 const MH = 330;
-const proj = (lat: number, lon: number) => ({ x: 30 + ((lon - 126.918) / 0.078) * (MW - 60), y: 40 + ((37.586 - lat) / 0.034) * (MH - 80) });
-const STREAM = [
-  [37.5701, 126.9768],
-  [37.5694, 126.9852],
-  [37.5689, 126.9948],
-  [37.5684, 127.004],
-].map(([la, lo]) => proj(la, lo));
-const ROADS = [
-  [[37.586, 126.97], [37.548, 126.975]],
-  [[37.586, 126.988], [37.548, 126.99]],
-  [[37.575, 126.918], [37.573, 127.0]],
-  [[37.56, 126.918], [37.562, 127.0]],
-  [[37.586, 126.94], [37.548, 126.955]],
-].map((r) => r.map(([la, lo]) => proj(la, lo)));
+const makeProj = (places: Places) => {
+  const ps = Object.values(places);
+  const lats = ps.map((p) => p.lat);
+  const lons = ps.map((p) => p.lon);
+  const [la0, la1, lo0, lo1] = [Math.min(...lats), Math.max(...lats), Math.min(...lons), Math.max(...lons)];
+  const dLa = Math.max(la1 - la0, 0.005);
+  const dLo = Math.max(lo1 - lo0, 0.005);
+  return (lat: number, lon: number) => ({ x: 40 + ((lon - lo0) / dLo) * (MW - 80), y: 50 + ((la1 - lat) / dLa) * (MH - 110) });
+};
 
-export const SeoulMap: React.FC<{ from?: string; to: string; dur: number }> = ({ from, to, dur }) => {
+export const CityMap: React.FC<{ places: Places; city: string; from?: string; to: string; dur: number }> = ({ places, city, from, to, dur }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  if (!places[to]) return null;
+  const proj = makeProj(places);
   const D = dur * fps;
   const out = interpolate(frame, [D - 12, D], [1, 0], clamp);
   const inn = interpolate(frame, [0, 16], [0, 1], { ...clamp, easing: ease });
-  const a = proj(PLACES[from ?? to].lat, PLACES[from ?? to].lon);
-  const b = proj(PLACES[to].lat, PLACES[to].lon);
+  const src = places[from ?? to] ?? places[to];
+  const a = proj(src.lat, src.lon);
+  const b = proj(places[to].lat, places[to].lon);
   const p = interpolate(frame, [14, 50], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
   const px = a.x + (b.x - a.x) * p;
   const py = a.y + (b.y - a.y) * p;
@@ -251,11 +240,13 @@ export const SeoulMap: React.FC<{ from?: string; to: string; dur: number }> = ({
     <AbsoluteFill style={{ justifyContent: "flex-start", alignItems: "flex-end", padding: "80px 90px", opacity: out * inn }}>
       <div style={{ ...glass, position: "relative", width: MW, height: MH, overflow: "hidden", transform: `translateY(${(1 - inn) * -24}px)` }}>
         <svg width={MW} height={MH} style={{ position: "absolute", inset: 0 }}>
-          {ROADS.map((r, i) => (
-            <line key={i} x1={r[0].x} y1={r[0].y} x2={r[1].x} y2={r[1].y} stroke="rgba(255,255,255,.12)" strokeWidth={6} />
+          {Array.from({ length: 9 }).map((_, i) => (
+            <line key={`v${i}`} x1={i * 62} y1={0} x2={i * 62 + 40} y2={MH} stroke="rgba(255,255,255,.07)" strokeWidth={5} />
           ))}
-          <polyline points={STREAM.map((q) => `${q.x},${q.y}`).join(" ")} fill="none" stroke="rgba(120,180,255,.55)" strokeWidth={5} strokeLinecap="round" />
-          {Object.entries(PLACES).map(([k, q0]) => {
+          {Array.from({ length: 6 }).map((_, i) => (
+            <line key={`h${i}`} x1={0} y1={i * 64 + 20} x2={MW} y2={i * 64} stroke="rgba(255,255,255,.07)" strokeWidth={5} />
+          ))}
+          {Object.entries(places).map(([k, q0]) => {
             if (k === to) return null;
             const q = proj(q0.lat, q0.lon);
             const right = q.x > MW - 150;
@@ -276,8 +267,8 @@ export const SeoulMap: React.FC<{ from?: string; to: string; dur: number }> = ({
           </g>
         </svg>
         <div style={{ position: "absolute", left: 18, bottom: 14, fontFamily, color: C.white, opacity: drop }}>
-          <div style={{ fontWeight: 600, fontSize: 18, opacity: 0.75 }}>Séoul</div>
-          <div style={{ fontWeight: 800, fontSize: 30 }}>{PLACES[to].name}</div>
+          <div style={{ fontWeight: 600, fontSize: 18, opacity: 0.75 }}>{city}</div>
+          <div style={{ fontWeight: 800, fontSize: 30 }}>{places[to].name}</div>
         </div>
       </div>
     </AbsoluteFill>

@@ -2,7 +2,7 @@
 # Rend uniquement les plages animées en PNG transparents.
 # Usage : tools/render_gfx.sh <plages.json> <dossier_sortie> [composition] [concurrence]
 set -e
-RANGES=$1; OUT=$2; COMP=${3:-CoreeOverlay}; CONC=${4:-4}
+RANGES=$1; OUT=$2; COMP=${3:-VlogOverlay}; CONC=${4:-4}
 cd "$(dirname "$0")/.."
 BUNDLE=$OUT/bundle
 npx remotion bundle --out-dir=$BUNDLE --log=error >/dev/null

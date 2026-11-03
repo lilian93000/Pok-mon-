@@ -143,3 +143,18 @@ POPS = [
     (1134.1, 4.0, {"kind": "chip", "value": "32 °C", "label": "Plein soleil, pas d'ombre"}),
     (1314.7, 4.0, {"kind": "chip", "value": "8/10", "label": "Notre note du barbecue"}),
 ]
+
+# Carte : ville + lieux (lat, lon) ; le cadrage est calculé automatiquement
+CITY = "Séoul"
+PLACES = {
+    "station": {"lat": 37.5547, "lon": 126.9707, "name": "Seoul Station"},
+    "myeongdong": {"lat": 37.5636, "lon": 126.9858, "name": "Myeongdong"},
+    "cheonggye": {"lat": 37.5692, "lon": 126.9905, "name": "Cheonggyecheon"},
+    "jongno": {"lat": 37.5722, "lon": 126.9833, "name": "Jongno"},
+    "ewha": {"lat": 37.5619, "lon": 126.9466, "name": "Ewha"},
+    "palace": {"lat": 37.5796, "lon": 126.977, "name": "Gyeongbokgung"},
+    "hongdae": {"lat": 37.5563, "lon": 126.9236, "name": "Hongdae"},
+    "hanok": {"lat": 37.5826, "lon": 126.983, "name": "Bukchon"},
+}
+# Écran de fin : (sur-titre, titre)
+END_TEXT = ["Prochain épisode", "Le Japon"]

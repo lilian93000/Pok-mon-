@@ -1,14 +1,19 @@
 """Construit le montage à partir du plan + de la transcription.
 
-Usage : python3 tools/build_edit.py <transcript.json> <src/data/coree.json> <segments.json>
-- coree.json   : données lues par Remotion (titres, chapitres, sous-titres, fiches)
+Usage : python3 tools/build_edit.py <transcript.json> <src/data/current.json> <segments.json> [plan]
+- plan         : nom du module tools/plan_<plan>.py (défaut : coree)
+- current.json : données lues par Remotion (titres, chapitres, sous-titres, fiches, carte)
 - segments.json: liste des plans à découper par ffmpeg (tools/render_base.py)
 """
 import json
 import sys
 
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from plan_coree import CHAPTER_MAP, CHAPTERS, END, FIX, HOOK, NO_CAPTION, POPS, TIPS  # noqa: E402
+import importlib  # noqa: E402
+
+plan = importlib.import_module("plan_" + (sys.argv[4] if len(sys.argv) > 4 else "coree"))
+CHAPTER_MAP, CHAPTERS, END, FIX, HOOK = plan.CHAPTER_MAP, plan.CHAPTERS, plan.END, plan.FIX, plan.HOOK
+NO_CAPTION, POPS, TIPS = plan.NO_CAPTION, plan.POPS, plan.TIPS
 
 FPS = 30
 GAP = 1.0  # blanc maximal gardé dans les passages parlés (s)
@@ -177,6 +182,9 @@ edit = {
     "tips": tips,
     "pops": pops,
     "endScreenAt": end_at,
+    "city": getattr(plan, "CITY", ""),
+    "places": getattr(plan, "PLACES", {}),
+    "endText": getattr(plan, "END_TEXT", ["", ""]),
 }
 json.dump(edit, open(sys.argv[2], "w"), ensure_ascii=False)
 json.dump(segments, open(sys.argv[3], "w"), indent=0)

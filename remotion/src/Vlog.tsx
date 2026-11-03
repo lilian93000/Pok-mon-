@@ -1,6 +1,6 @@
 import { AbsoluteFill, Sequence, useVideoConfig } from "remotion";
 import { Clip } from "./Clip";
-import { ChapterTitle, MotionIntro, PlaceLabel, PopView, SeoulMap } from "./Motion";
+import { ChapterTitle, CityMap, MotionIntro, PlaceLabel, PopView } from "./Motion";
 import { Captions, ChapterBar, EndScreen, TipCard } from "./Overlays";
 import type { Edit } from "./types";
 
@@ -35,9 +35,9 @@ export const Vlog: React.FC<{ edit: Edit; overlayOnly?: boolean }> = ({ edit, ov
         </Sequence>
       ))}
       {edit.chapters.map((ch) =>
-        ch.map ? (
+        ch.map && edit.places?.[ch.map] ? (
           <Sequence key={`map${ch.n}`} from={Math.round((ch.at + 2.4) * fps)} durationInFrames={Math.round(4.6 * fps)}>
-            <SeoulMap from={ch.mapFrom} to={ch.map} dur={4.6} />
+            <CityMap places={edit.places ?? {}} city={edit.city ?? ""} from={ch.mapFrom} to={ch.map} dur={4.6} />
           </Sequence>
         ) : null,
       )}
@@ -57,7 +57,7 @@ export const Vlog: React.FC<{ edit: Edit; overlayOnly?: boolean }> = ({ edit, ov
         </Sequence>
       ))}
       <Sequence from={endFrom}>
-        <EndScreen text="Le Japon" sub="Prochain épisode" />
+        <EndScreen text={edit.endText?.[1] ?? ""} sub={edit.endText?.[0] ?? ""} />
       </Sequence>
     </AbsoluteFill>
   );

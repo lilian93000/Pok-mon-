@@ -1,7 +1,7 @@
 import { Composition } from "remotion";
 import { Thumbnail } from "./Thumbnail";
 import { Vlog } from "./Vlog";
-import edit from "./data/coree.json";
+import edit from "./data/current.json";
 import type { Edit } from "./types";
 
 const e = edit as unknown as Edit;
@@ -9,7 +9,7 @@ const e = edit as unknown as Edit;
 export const RemotionRoot: React.FC = () => (
   <>
   <Composition
-    id="Coree"
+    id="Vlog"
     component={Vlog}
     durationInFrames={Math.round(e.duration * e.fps)}
     fps={e.fps}
@@ -19,7 +19,7 @@ export const RemotionRoot: React.FC = () => (
   />
   {/* Calque transparent (titres, sous-titres, chapitres) posé par ffmpeg sur le montage */}
   <Composition
-    id="CoreeOverlay"
+    id="VlogOverlay"
     component={Vlog}
     durationInFrames={Math.round(e.duration * e.fps)}
     fps={e.fps}
@@ -28,7 +28,7 @@ export const RemotionRoot: React.FC = () => (
     defaultProps={{ edit: e, overlayOnly: true }}
   />
   <Composition
-    id="CoreeMiniature"
+    id="Miniature"
     component={Thumbnail}
     durationInFrames={1}
     fps={30}

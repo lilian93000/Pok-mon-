@@ -47,4 +47,9 @@ export type Edit = {
   pops: Pop[];
   /** début de l'écran de fin (s) */
   endScreenAt: number;
+  /** carte : nom de la ville + lieux (lat/lon) */
+  city?: string;
+  places?: Record<string, { lat: number; lon: number; name: string }>;
+  /** écran de fin : [sur-titre, titre] */
+  endText?: [string, string];
 };
