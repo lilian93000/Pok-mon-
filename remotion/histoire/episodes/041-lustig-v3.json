@@ -268,7 +268,7 @@
       "tag": "curious"
     }
   ],
-  "musique": "tonic",
-  "volume_musique": 0.13,
+  "musique": "score",
+  "volume_musique": 0.22, "ambiance": "malice",
   "sfx": true
 }

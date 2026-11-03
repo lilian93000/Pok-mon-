@@ -8,6 +8,10 @@ EP=$1; ID=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['id']
 python3 tools/histoire/textures.py
 python3 tools/histoire/assets.py "$EP"
 python3 tools/histoire/build.py "$EP"
+# musique composée sur mesure, calée sur les plans (épisodes « musique »: « score »)
+if [ "$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('musique',''))" "$EP")" = score ]; then
+  python3 tools/histoire/score.py "$ID"
+fi
 mkdir -p out
 npx remotion render src/histoire/index.ts Histoire "out/$ID.mp4" \
   --browser-executable=/opt/pw-browsers/chromium --concurrency=$(nproc) --crf=20 --log=error \

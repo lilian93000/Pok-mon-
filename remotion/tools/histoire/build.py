@@ -175,8 +175,10 @@ for i, b in enumerate(beats):
     b["start"] = max(0, b["start"])
     b["end"] = beats[i + 1]["start"] if i + 1 < len(beats) else duration
 props = {"id": ep["id"], "v2": LOOP, "punch": bool(ep.get("punch")), "fps": FPS, "duration": round(duration, 3), "audio": audio,
-         "music": f"histoire/_sfx/music-{ep['musique']}.mp3" if ep.get("musique") else None,
-         "musicVolume": float(ep.get("volume_musique", 0.12)), "sfx": bool(ep.get("sfx")),
+         # "score" = musique composée sur mesure par tools/histoire/score.py (calée sur les plans)
+         "music": (f"histoire/{ep['id']}/music.mp3" if ep.get("musique") == "score"
+                   else f"histoire/_sfx/music-{ep['musique']}.mp3" if ep.get("musique") else None),
+         "musicVolume": float(ep.get("volume_musique", 0.22 if ep.get("musique") == "score" else 0.12)), "sfx": bool(ep.get("sfx")),
          "words": [{k: w[k] for k in ("w", "kw", "start", "end", "beat")} for w in words if w["w"]], "beats": beats}
 json.dump(props, open(pub / "props.json", "w"), ensure_ascii=False, indent=1)
 if audio:
