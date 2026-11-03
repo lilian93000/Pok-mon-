@@ -23,6 +23,7 @@ export type Props = {
   duration: number;
   audio: string | null;
   music?: string;
+  punch?: boolean; // mode « feu d'artifice » : coups de zoom, secousses, étincelles, sous-titres 1-2 mots
   v2?: boolean; // format court en boucle : pas de bandeau ni d'écran de fin, accroche visible dès la 1re image
   words: Word[];
   beats: Beat[];

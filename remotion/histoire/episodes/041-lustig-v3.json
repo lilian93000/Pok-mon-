@@ -1,0 +1,194 @@
+{
+  "id": "041-lustig-v3",
+  "titre": "L'homme qui a vendu la tour Eiffel",
+  "v2": true,
+  "punch": true,
+  "model": "eleven_v3",
+  "tempo": 1.18,
+  "pause": 0.12,
+  "sources": [
+    "Victor Lustig, escroquerie de 1925 : faux papiers du ministère des Postes et Télégraphes, ferrailleurs réunis à l'hôtel de Crillon, André Poisson",
+    "Seconde tentative dénoncée à la police ; arrestation aux États-Unis en 1935 pour fausse monnaie, mort en 1947",
+    "Victor Lustig incarcéré à Alcatraz à partir de 1936"
+  ],
+  "images": {
+    "e1": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/npcc/19200/19298v.jpg",
+      "cut": false,
+      "credit": "Paris, la tour Eiffel, 1909, 1909-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "e2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/npcc/19300/19300v.jpg",
+      "cut": false,
+      "credit": "Paris, la tour Eiffel, 1909, 1909-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "e3": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b05000/1b05700/1b05744v.jpg",
+      "cut": false,
+      "credit": "Paris en flânant, la tour Eiffel, 1919, 1919 — Library of Congress (sans restriction connue)"
+    },
+    "e4": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1b00000/1b05000/1b05700/1b05740v.jpg",
+      "cut": false,
+      "credit": "La tour Eiffel, 1919, 1919 — Library of Congress (sans restriction connue)"
+    },
+    "stereo": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s20000/1s23000/1s23700/1s23779v.jpg",
+      "cut": false,
+      "credit": "Paris, la tour Eiffel, 1898, 1898-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "faux": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/25200/25218v.jpg",
+      "cut": false,
+      "credit": "Fausse monnaie saisie par le Secret Service, 1938, 1938-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "billet": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a00000/3a05000/3a05300/3a05370r.jpg",
+      "cut": false,
+      "credit": "Billet de cinquante cents, 1837, 1837 — Library of Congress (sans restriction connue)"
+    },
+    "billet2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a00000/3a00000/3a00800/3a00817r.jpg",
+      "cut": false,
+      "credit": "« Contrefaire, c'est la mort », 1776, 1776-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "alcatraz": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/pcrd/1a00000/1a01000/1a01000/1a01036v.jpg",
+      "cut": false,
+      "credit": "Île d'Alcatraz, baie de San Francisco, 1926, 1926 — Library of Congress (sans restriction connue)"
+    },
+    "ferraille": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/fsa/8a27000/8a27800/8a27830v.jpg",
+      "cut": false,
+      "credit": "Terrain rempli de ferraille, Oklahoma City, 1940, 1940-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "ferraille2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/fsa/8a10000/8a10600/8a10689v.jpg",
+      "cut": false,
+      "credit": "Chargement de ferraille, Saint-Louis, 1939, 1939-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Cet homme a vendu la *tour Eiffel*.",
+      "image": "e1",
+      "bg": "red",
+      "rays": true,
+      "tag": "excited",
+      "title": "IL A VENDU LA TOUR EIFFEL",
+      "alt": "e2"
+    },
+    {
+      "text": "Pour de *vrai*.",
+      "image": "e3",
+      "bg": "red",
+      "rays": true,
+      "stamp": "VENDUE"
+    },
+    {
+      "text": "Paris, *1925*.",
+      "image": "e4",
+      "bg": "dark",
+      "date": "1925"
+    },
+    {
+      "text": "Victor Lustig. Escroc *professionnel*.",
+      "image": "faux",
+      "bg": "dark",
+      "alt": "billet"
+    },
+    {
+      "text": "Il lit le journal : la tour coûte une *fortune*.",
+      "image": "e2",
+      "bg": "dark",
+      "alt": "billet"
+    },
+    {
+      "text": "Et là… *déclic*.",
+      "image": "e1",
+      "bg": "red",
+      "rays": true,
+      "zoom": true
+    },
+    {
+      "text": "Faux papiers. Faux *ministère*.",
+      "image": "billet2",
+      "bg": "dark"
+    },
+    {
+      "text": "Il convoque cinq *ferrailleurs*.",
+      "image": "ferraille2",
+      "bg": "dark"
+    },
+    {
+      "text": "« Messieurs… l'État vend la tour. »",
+      "image": "e3",
+      "bg": "dark",
+      "tag": "whispers",
+      "zoom": true
+    },
+    {
+      "text": "*Secret* d'État !",
+      "image": "e4",
+      "bg": "red",
+      "rays": true,
+      "stamp": "SECRET"
+    },
+    {
+      "text": "Sept mille tonnes de *fer* !",
+      "image": "ferraille",
+      "bg": "dark",
+      "counter": {
+        "to": 7000,
+        "suffix": " TONNES"
+      }
+    },
+    {
+      "text": "Un ferrailleur *mord* à l'hameçon.",
+      "image": "e2",
+      "bg": "dark"
+    },
+    {
+      "text": "Il paie. Et il ajoute un *pot-de-vin* !",
+      "image": "billet",
+      "bg": "red",
+      "rays": true,
+      "alt": "faux"
+    },
+    {
+      "text": "Lustig ? *Envolé*.",
+      "image": "e1",
+      "bg": "dark",
+      "zoom": true
+    },
+    {
+      "text": "La victime a tellement *honte*… qu'elle ne porte jamais plainte !",
+      "image": "faux",
+      "bg": "red",
+      "rays": true,
+      "tag": "laughs",
+      "stamp": "ARNAQUE",
+      "alt": "billet2"
+    },
+    {
+      "text": "Alors Lustig *revient*… et essaie de la revendre !",
+      "image": "e3",
+      "bg": "dark",
+      "tag": "excited",
+      "alt": "e4"
+    },
+    {
+      "text": "Cette fois, la police l'attend. Il finira à *Alcatraz*.",
+      "image": "alcatraz",
+      "bg": "dark",
+      "date": "ALCATRAZ",
+      "alt": "ferraille"
+    },
+    {
+      "text": "L'homme qui a vendu…",
+      "image": "e1",
+      "bg": "dark",
+      "zoom": true
+    }
+  ]
+}

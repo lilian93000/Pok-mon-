@@ -27,13 +27,13 @@ const Marble: React.FC = () => (
   <Img src={staticFile("histoire/_tex/marble.png")} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.16, mixBlendMode: "screen" }} />
 );
 
-export const Rays: React.FC<{ color: string }> = ({ color }) => {
+export const Rays: React.FC<{ color: string; speed?: number }> = ({ color, speed = 0.12 }) => {
   const f = useCurrentFrame();
   return (
     <div
       style={{
         position: "absolute", left: "50%", top: "38%", width: 3400, height: 3400,
-        marginLeft: -1700, marginTop: -1700, transform: `rotate(${f * 0.12}deg)`,
+        marginLeft: -1700, marginTop: -1700, transform: `rotate(${f * speed}deg)`,
         background: `repeating-conic-gradient(${color} 0deg 4deg, transparent 4deg 15deg)`,
         maskImage: "radial-gradient(circle, black 8%, transparent 52%)",
         WebkitMaskImage: "radial-gradient(circle, black 8%, transparent 52%)",
@@ -43,7 +43,7 @@ export const Rays: React.FC<{ color: string }> = ({ color }) => {
   );
 };
 
-const Background: React.FC<{ beat: Beat }> = ({ beat }) => {
+const Background: React.FC<{ beat: Beat; punch?: boolean }> = ({ beat, punch }) => {
   const red = beat.bg === "red";
   return (
     <AbsoluteFill
@@ -54,13 +54,13 @@ const Background: React.FC<{ beat: Beat }> = ({ beat }) => {
       }}
     >
       {!red && <Marble />}
-      {beat.rays && <Rays color={red ? "rgba(255,190,120,.22)" : "rgba(233,185,73,.16)"} />}
+      {beat.rays && <Rays color={red ? "rgba(255,190,120,.22)" : "rgba(233,185,73,.16)"} speed={punch ? 0.7 : 0.12} />}
     </AbsoluteFill>
   );
 };
 
 // ---------- Image principale ----------
-const Subject: React.FC<{ id: string; beat: Beat; photo: boolean; v2?: boolean; index?: number }> = ({ id, beat, photo, v2, index = 0 }) => {
+const Subject: React.FC<{ id: string; beat: Beat; photo: boolean; v2?: boolean; index?: number; punch?: boolean }> = ({ id, beat, photo, v2, index = 0, punch }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const len = (beat.end - beat.start) * fps;
@@ -70,10 +70,12 @@ const Subject: React.FC<{ id: string; beat: Beat; photo: boolean; v2?: boolean; 
   const drift = interpolate(f, [0, len], [z0, z1], { extrapolateRight: "clamp", easing: Easing.out(Easing.quad) });
   const blur = v2 ? 0 : interpolate(f, [0, 6], [12, 0], { extrapolateRight: "clamp" });
   const src = img(id, beat.image!);
-  const scale = (0.86 + 0.14 * pop) * drift;
+  const hit = punch && !(v2 && index === 0) ? interpolate(spring({ frame: f, fps, config: { damping: 11, stiffness: 420 } }), [0, 1], [1.38, 1]) : 1;
+  const rot = punch ? (random(`r${index}`) - 0.5) * 5 * interpolate(f, [0, 8], [1, 0.25], { extrapolateRight: "clamp" }) : 0;
+  const scale = (punch ? 1 : 0.86 + 0.14 * pop) * drift * hit;
   return (
-    <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-start", paddingTop: 250 }}>
-      <div style={{ width: 900, height: 980, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${scale})`, filter: `blur(${blur}px)`, opacity: pop }}>
+    <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-start", paddingTop: beat.title ? 400 : 250 }}>
+      <div style={{ width: 900, height: beat.title ? 820 : 980, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${scale}) rotate(${rot}deg)`, filter: `blur(${blur}px)`, opacity: punch ? 1 : pop }}>
         {photo ? (
           <div style={{ position: "relative", padding: 0 }}>
             <Img src={src} style={{ maxWidth: 880, maxHeight: 900, display: "block", filter: "sepia(.35) contrast(1.08) brightness(.92)", boxShadow: "0 40px 90px rgba(0,0,0,.7)" }} />
@@ -142,7 +144,7 @@ const Label: React.FC<{ text: string }> = ({ text }) => {
 
 const Headline: React.FC<{ text: string }> = ({ text }) => (
   <AbsoluteFill style={{ top: 110, height: 260, alignItems: "center", justifyContent: "center", padding: "0 60px" }}>
-    <div style={{ fontFamily: serif, fontWeight: 900, fontSize: 82, lineHeight: 1.05, color: C.gold, textAlign: "center", textShadow: "0 6px 0 rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.8)" }}>{text}</div>
+    <div style={{ fontFamily: serif, fontWeight: 900, fontSize: 82, lineHeight: 1.05, color: C.gold, textAlign: "center", textShadow: "0 6px 0 rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.8)", background: "rgba(10,6,5,.72)", padding: "18px 30px", borderRadius: 16 }}>{text}</div>
   </AbsoluteFill>
 );
 
@@ -219,13 +221,13 @@ const Outro: React.FC = () => {
 // ---------- Sous-titres mot à mot ----------
 type Chunk = { words: Word[]; start: number; end: number };
 
-const chunkWords = (words: Word[], beats: Beat[]): Chunk[] => {
+const chunkWords = (words: Word[], beats: Beat[], max = 3): Chunk[] => {
   const out: Chunk[] = [];
   let cur: Word[] = [];
   words.forEach((w, i) => {
     cur.push(w);
     const next = words[i + 1];
-    const brk = !next || next.beat !== w.beat || /[.,?!…:»]$/.test(w.w) || cur.length >= 3;
+    const brk = !next || next.beat !== w.beat || /[.,?!…:»]$/.test(w.w) || cur.length >= max;
     if (brk) {
       out.push({ words: cur, start: cur[0].start - 0.05, end: 0 });
       cur = [];
@@ -238,7 +240,7 @@ const chunkWords = (words: Word[], beats: Beat[]): Chunk[] => {
   return out;
 };
 
-const Captions: React.FC<{ chunk: Chunk; v2?: boolean; instant?: boolean }> = ({ chunk, v2, instant }) => {
+const Captions: React.FC<{ chunk: Chunk; v2?: boolean; instant?: boolean; punch?: boolean }> = ({ chunk, v2, instant, punch }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t0 = chunk.start;
@@ -253,9 +255,9 @@ const Captions: React.FC<{ chunk: Chunk; v2?: boolean; instant?: boolean }> = ({
             <span
               key={i}
               style={{
-                position: "relative", fontFamily: sans, fontWeight: 900, fontSize: v2 ? 98 : 84, lineHeight: 1.1,
+                position: "relative", fontFamily: sans, fontWeight: 900, fontSize: punch ? (w.kw ? 128 : 108) : v2 ? 98 : 84, lineHeight: 1.1,
                 textTransform: "uppercase", color: w.kw ? C.gold : "#FFFFFF", opacity: local < 0 ? 0 : 1,
-                transform: `translateY(${(1 - p) * 26}px) scale(${0.9 + 0.1 * p})`, display: "inline-block",
+                transform: punch ? `scale(${interpolate(p, [0, 1], [1.6, 1])}) rotate(${w.kw ? -3 : 0}deg)` : `translateY(${(1 - p) * 26}px) scale(${0.9 + 0.1 * p})`, display: "inline-block",
                 textShadow: "0 6px 0 rgba(0,0,0,.55), 0 10px 30px rgba(0,0,0,.6)", letterSpacing: "0.01em",
               }}
             >
@@ -267,6 +269,23 @@ const Captions: React.FC<{ chunk: Chunk; v2?: boolean; instant?: boolean }> = ({
           );
         })}
       </div>
+    </AbsoluteFill>
+  );
+};
+
+// ---------- Étincelles dorées (feu d'artifice) ----------
+const Sparks: React.FC<{ seed: string; y?: number }> = ({ seed, y = 760 }) => {
+  const f = useCurrentFrame();
+  if (f > 26) return null;
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none" }}>
+      {Array.from({ length: 34 }).map((_, k) => {
+        const a = random(`${seed}a${k}`) * Math.PI * 2, v = 14 + random(`${seed}v${k}`) * 30;
+        const t = f, x = 540 + Math.cos(a) * v * t, yy = y + Math.sin(a) * v * t + 0.9 * t * t;
+        const o = interpolate(t, [0, 4, 26], [0, 1, 0], { extrapolateRight: "clamp" });
+        const sz = 6 + random(`${seed}s${k}`) * 10;
+        return <div key={k} style={{ position: "absolute", left: x, top: yy, width: sz, height: sz, borderRadius: "50%", background: k % 3 ? C.gold : "#FFF3D6", opacity: o, boxShadow: `0 0 ${sz * 2}px ${C.gold}` }} />;
+      })}
     </AbsoluteFill>
   );
 };
@@ -300,13 +319,15 @@ export const Episode: React.FC<Props & { photos?: string[] }> = (props) => {
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
   const { id, beats, words, audio } = props;
-  const chunks = chunkWords(words, beats);
+  const chunks = chunkWords(words, beats, props.punch ? 2 : 3);
   const fr = (s: number) => Math.round(s * fps);
   const num = id.split("-")[0];
 
   // secousse sur les tampons
   const stampBeat = beats.find((b) => b.stamp && frame >= fr(b.start) + 4 && frame < fr(b.start) + 14);
-  const shake = stampBeat ? (random(frame) - 0.5) * 22 * interpolate(frame - fr(stampBeat.start), [4, 14], [1, 0]) : 0;
+  const cutBeat = props.punch ? beats.find((b) => frame >= fr(b.start) && frame < fr(b.start) + 5) : undefined;
+  const shake = stampBeat ? (random(frame) - 0.5) * 22 * interpolate(frame - fr(stampBeat.start), [4, 14], [1, 0])
+    : cutBeat ? (random(frame) - 0.5) * 16 * interpolate(frame - fr(cutBeat.start), [0, 5], [1, 0]) : 0;
 
   return (
     <AbsoluteFill style={{ background: C.ink }}>
@@ -325,13 +346,13 @@ export const Episode: React.FC<Props & { photos?: string[] }> = (props) => {
           return (
             <Sequence key={i} from={from} durationInFrames={dur} layout="none">
               <AbsoluteFill>
-                <Background beat={b} />
-                {b.image && !b.outro && !b.alt && <Subject id={id} beat={b} photo={photo} v2={props.v2} index={i} />}
+                <Background beat={b} punch={props.punch} />
+                {b.image && !b.outro && !b.alt && <Subject id={id} beat={b} photo={photo} v2={props.v2} index={i} punch={props.punch} />}
                 {b.image && b.alt && (() => {
                   const half = Math.round(dur / 2), mid = b.start + half / fps;
                   return (<>
-                    <Sequence durationInFrames={half} layout="none"><Subject id={id} beat={{ ...b, end: mid }} photo={photo} v2={props.v2} index={i} /></Sequence>
-                    <Sequence from={half} layout="none"><Subject id={id} beat={{ ...b, image: b.alt, start: mid, zoom: false }} photo={photo} v2={props.v2} index={i + 1} /><Flash strength={0.18} /></Sequence>
+                    <Sequence durationInFrames={half} layout="none"><Subject id={id} beat={{ ...b, end: mid }} photo={photo} v2={props.v2} index={i} punch={props.punch} /></Sequence>
+                    <Sequence from={half} layout="none"><Subject id={id} beat={{ ...b, image: b.alt, start: mid, zoom: false }} photo={photo} v2={props.v2} index={i + 1} punch={props.punch} /><Flash strength={props.punch ? 0.35 : 0.18} /></Sequence>
                   </>);
                 })()}
                 {b.heads && <Heads id={id} n={b.heads} />}
@@ -341,14 +362,15 @@ export const Episode: React.FC<Props & { photos?: string[] }> = (props) => {
                 {b.counter && <Counter to={b.counter.to} suffix={b.counter.suffix} len={dur} />}
                 {b.stamp && <Stamp text={b.stamp} />}
                 {b.outro && <Outro />}
-                {b.bg === "red" && i > 0 ? <Flash /> : props.v2 && i > 0 ? <Flash strength={0.18} /> : null}
+                {b.bg === "red" && i > 0 ? <Flash /> : props.v2 && i > 0 ? <Flash strength={props.punch ? 0.35 : 0.18} /> : null}
+                {props.punch && (b.bg === "red" || b.stamp || b.counter) && <Sparks seed={`s${i}`} />}
               </AbsoluteFill>
             </Sequence>
           );
         })}
         {chunks.map((c, i) => (
           <Sequence key={`c${i}`} from={fr(c.start)} durationInFrames={Math.max(1, fr(c.end) - fr(c.start))} layout="none">
-            <Captions chunk={c} v2={props.v2} instant={props.v2 && i === 0} />
+            <Captions chunk={c} v2={props.v2} instant={props.v2 && i === 0} punch={props.punch} />
           </Sequence>
         ))}
       </AbsoluteFill>

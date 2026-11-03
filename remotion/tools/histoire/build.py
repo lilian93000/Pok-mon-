@@ -32,6 +32,8 @@ for i, b in enumerate(ep["beats"]):
     said = toks(said_text)
     assert len(said) == len(disp), f"plan {i} : la prononciation doit garder le même nombre de mots"
     inside = False
+    if b.get("tag"):  # consigne de jeu ElevenLabs v3 (ex. [excited]) : dite, jamais affichée
+        words.append({"w": "", "s": f"[{b['tag']}]", "kw": False, "beat": i})
     for tok, sk in zip(disp, said):
         kw = inside
         for ch in tok:
@@ -48,6 +50,8 @@ if key:
     cache = pub / "voice.json"
     # Réglages « énergiques » : moins de stabilité = plus d'intonation, style poussé, débit +12 %
     settings = {"stability": 0.28, "similarity_boost": 0.8, "style": 0.8, "use_speaker_boost": True, "speed": 1.2}
+    if ep.get("model") == "eleven_v3":
+        settings = {"stability": 0.0, "similarity_boost": 0.8, "style": 1.0, "use_speaker_boost": True}
     settings.update(ep.get("voix", {}))
     sig = {"text": full, "voice": voice, "settings": settings}
     if not cache.exists() or json.load(open(cache)).get("sig") != sig:
@@ -58,7 +62,7 @@ if key:
             voice = voices[0]["voice_id"]
         body = json.dumps({
             "text": full,
-            "model_id": os.environ.get("ELEVENLABS_MODEL", "eleven_multilingual_v2"),
+            "model_id": ep.get("model") or os.environ.get("ELEVENLABS_MODEL", "eleven_multilingual_v2"),
             "voice_settings": settings,
         }).encode()
         req = urllib.request.Request(
@@ -85,12 +89,13 @@ if key:
     # Resserrer les silences (style TikTok) : max 0,2 s après ponctuation, 0,08 s sinon
     import subprocess
     keep, t, removed = [], 0.0, []
-    lead = max(0.0, words[0]["start"] - 0.05)
+    lead = max(0.0, next(w for w in words if w["w"])["start"] - 0.05)
     keep_start, shift = lead, lead
     cuts = [(0.0, lead)] if lead > 0 else []
-    for a, b in zip(words, words[1:]):
+    real = [w for w in words if w["w"]]
+    for a, b in zip(real, real[1:]):
         gap = b["start"] - a["end"]
-        mx = 0.2 if a["w"][-1:] in ".?!…»,:" else 0.08
+        mx = float(ep.get("pause", 0.2)) if a["w"][-1:] in ".?!…»,:" else 0.06
         if gap > mx:
             cuts.append((a["end"] + mx / 2, b["start"] - mx / 2))
     def remap(x):
@@ -101,11 +106,12 @@ if key:
         cur = c1
     segs.append((cur, words[-1]["end"] + 0.3))
     fc = "".join(f"[0:a]atrim={a:.3f}:{b:.3f},asetpts=PTS-STARTPTS[s{i}];" for i, (a, b) in enumerate(segs))
-    fc += "".join(f"[s{i}]" for i in range(len(segs))) + f"concat=n={len(segs)}:v=0:a=1[o]"
+    TEMPO = float(ep.get("tempo", 1.0))  # > 1 : voix accélérée au montage (atempo garde le timbre)
+    fc += "".join(f"[s{i}]" for i in range(len(segs))) + f"concat=n={len(segs)}:v=0:a=1" + (f",atempo={TEMPO}" if TEMPO != 1 else "") + "[o]"
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(pub / "voice.mp3"), "-filter_complex", fc, "-map", "[o]",
                     "-ar", "44100", "-b:a", "192k", str(pub / "voice_tight.mp3")], check=True)
     for w in words:
-        w["start"], w["end"] = remap(w["start"]), remap(w["end"])
+        w["start"], w["end"] = remap(w["start"]) / TEMPO, remap(w["end"]) / TEMPO
     audio = f"histoire/{ep['id']}/voice_tight.mp3"
 else:
     t = 0.4
@@ -125,15 +131,15 @@ if not LOOP and words[-1]["end"] > TARGET - 0.8:
 duration = TARGET
 beats = []
 for i, b in enumerate(ep["beats"]):
-    ws = [w for w in words if w["beat"] == i]
+    ws = [w for w in words if w["beat"] == i and w["w"]]
     photo = bool(b.get("image")) and not ep["images"][b["image"]].get("cut")
     beats.append({**{k: v for k, v in b.items() if k != "text"}, "photo": photo, "start": ws[0]["start"] - (0.4 if i == 0 else 0.08)})
 for i, b in enumerate(beats):
     b["start"] = max(0, b["start"])
     b["end"] = beats[i + 1]["start"] if i + 1 < len(beats) else duration
-props = {"id": ep["id"], "v2": LOOP, "fps": FPS, "duration": round(duration, 3), "audio": audio,
+props = {"id": ep["id"], "v2": LOOP, "punch": bool(ep.get("punch")), "fps": FPS, "duration": round(duration, 3), "audio": audio,
          "music": None,  # musique ajoutée dans TikTok (thème Succession), pas dans le fichier
-         "words": [{k: w[k] for k in ("w", "kw", "start", "end", "beat")} for w in words], "beats": beats}
+         "words": [{k: w[k] for k in ("w", "kw", "start", "end", "beat")} for w in words if w["w"]], "beats": beats}
 json.dump(props, open(pub / "props.json", "w"), ensure_ascii=False, indent=1)
 if audio:
     (pub / "ready").touch()  # signal pour tools/histoire/render_queue.sh
