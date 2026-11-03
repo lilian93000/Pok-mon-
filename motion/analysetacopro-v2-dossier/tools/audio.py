@@ -104,6 +104,6 @@ if __name__ == "__main__":
     place(bus, paper(0.4), ev["endfile"], 0.8); place(bus, stamp(), ev["endfile"] + 0.32, 0.5)
     # mastering doux vers −14 LUFS (pic vérifié ensuite)
     peak = float(np.abs(bus).max()); bus = np.tanh(1.6 * bus / peak) / np.tanh(1.6) * 0.89
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", "-", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", str(SR), "-c:a", "pcm_s16le", out], input=bus.tobytes(), check=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", "-", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", str(SR), "-c:a", "pcm_s16le", out], input=bus.astype(np.float32).tobytes(), check=True)
     json.dump({"starts": STARTS, "wipes": WIPES, "dur": DUR, "ev": ev, "words": words}, open(tim, "w"), ensure_ascii=False)
     print("ok", out, {k: round(v, 2) for k, v in ev.items()})
