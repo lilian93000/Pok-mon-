@@ -39,7 +39,7 @@ CHAPTERS = [
         (533.9, 538.2, "talk", {}),
         (547.4, 575.2, "talk", {"punch": True}),
         (575.6, 616.8, "talk", {"punch": True}),
-        (617.0, 651.2, "talk", {"punch": True}),
+        (617.0, 636.2, "talk", {"punch": True}),  # sans le passage frais bancaires (LCL/Revolut)
         (651.6, 676.5, "talk", {"punch": True}),
     ]),
     ("À la recherche du temple", "Jongno, Séoul", [
@@ -91,7 +91,6 @@ TIPS = [
     (551.3, "🙏", "Le service", "Des gens hyper serviables"),
     (586.2, "🏨", "Check-in hôtel", "15 h normalement (on l'a eu à 13 h !)"),
     (620.0, "💵", "Payer", "Apple Pay OK · cash pour transports & démarches"),
-    (639.5, "🏦", "Frais bancaires", "Option Explorer (LCL) ou Revolut"),
     (735.9, "🗺️", "Google Maps ne marche pas", "Utilise Kakao Maps"),
     (759.6, "🚇", "Dernier métro", "Minuit le week-end · 1 h en semaine"),
 ]
