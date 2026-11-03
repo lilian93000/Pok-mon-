@@ -18,8 +18,10 @@
       #tag { left: 70px; top: 190px; padding: 12px 26px; border-radius: 999px; background: rgba(255,255,255,0.13); border: 2px solid rgba(255,255,255,0.28); font-size: 32px; font-weight: 800; letter-spacing: 0.04em; }
       #count { right: 160px; top: 190px; padding: 12px 24px; border-radius: 999px; background: #fff; color: #0a0d1f; font-size: 32px; font-weight: 900; opacity: 0; font-variant-numeric: tabular-nums; }
       .scn { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; }
-      .hook { position: absolute; left: 40px; right: 40px; top: 470px; text-align: center; font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: #fff; text-shadow: 0 10px 0 rgba(0,0,0,0.35), 0 0 70px rgba(255,255,255,0.35); white-space: nowrap; font-variant-numeric: tabular-nums; }
-      .hsub { position: absolute; left: 0; right: 0; top: 800px; text-align: center; font-size: 70px; font-weight: 900; color: #fde047; letter-spacing: -0.03em; opacity: 0; }
+      .hookbox { position: absolute; left: 40px; right: 40px; top: 360px; height: 780px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+      .hpre { font-size: 64px; font-weight: 900; letter-spacing: -0.03em; color: rgba(255,255,255,0.85); margin-bottom: 18px; }
+      .hook { font-weight: 900; letter-spacing: -0.05em; line-height: 0.98; color: #fff; text-shadow: 0 12px 0 rgba(0,0,0,0.4), 0 0 80px rgba(255,255,255,0.3); white-space: nowrap; }
+      .hsub { margin-top: 34px; padding: 14px 32px; border-radius: 26px; background: #fde047; color: #0a0d1f; font-size: 66px; font-weight: 900; letter-spacing: -0.03em; }
       .lab { position: absolute; left: 70px; top: 330px; font-size: 104px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
       .ppm { position: absolute; left: 74px; top: 450px; font-size: 38px; font-weight: 700; color: rgba(255,255,255,0.72); }
       .val { position: absolute; left: 60px; top: 560px; font-size: 290px; font-weight: 900; letter-spacing: -0.06em; line-height: 1; color: #fde047; text-shadow: 0 12px 0 rgba(0,0,0,0.35); font-variant-numeric: tabular-nums; transform-origin: 0% 50%; }
@@ -67,9 +69,9 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="25.92" data-width="1080" data-height="1920">
-      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="25.92" data-track-index="4" data-volume="1"></audio>
-      <section id="stage" class="clip" data-start="0" data-duration="25.92" data-track-index="0">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="27.03" data-width="1080" data-height="1920">
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="27.03" data-track-index="4" data-volume="1"></audio>
+      <section id="stage" class="clip" data-start="0" data-duration="27.03" data-track-index="0">
         <div id="grid"></div>
         <div class="glow" id="g0" style="background: radial-gradient(closest-side, #ef444499, #ef444426 55%, transparent 75%)"></div>
         <div class="glow" id="g1" style="background: radial-gradient(closest-side, #3b82f699, #3b82f626 55%, transparent 75%)"></div>
@@ -81,7 +83,7 @@
         <div id="tag" class="abs">LOCATAIRE · TES DROITS</div>
         <div id="count" class="abs">1</div>
 
-        <div class="scn" id="s0"><div class="hook" style="font-size:138px"><span id="s0n">TA CAUTION</span></div><div class="hsub" id="s0sub">il peut la garder ?</div></div>
+        <div class="scn" id="s0"><div class="hookbox"><div class="hpre">Ta caution :</div><div class="hook" style="font-size:115px">IL TE DOIT<br />DE L'ARGENT ?</div><div class="hsub" id="s0sub">voici la loi</div></div></div>
         <div class="scn" id="s1"><div class="rbig" id="s1big" style="font-size:179px">1 MOIS</div><div class="bar" id="s1b" style="background:#3b82f6"></div><div class="rsub" id="s1sub">de loyer hors charges, maximum</div><div class="chip" id="s1c" style="background:#3b82f6">2 en meublé</div></div>
         <div class="scn" id="s2"><div class="rbig" id="s2big" style="font-size:179px">1 MOIS</div><div class="bar" id="s2b" style="background:#22c55e"></div><div class="rsub" id="s2sub">pour te la rendre</div><div class="chip" id="s2c" style="background:#22c55e">si l'état des lieux est conforme</div></div>
         <div class="scn" id="s3"><div class="rbig" id="s3big" style="font-size:179px">2 MOIS</div><div class="bar" id="s3b" style="background:#f97316"></div><div class="rsub" id="s3sub">s'il y a des dégâts</div><div class="chip" id="s3c" style="background:#f97316">avec devis ou factures</div></div>
@@ -90,39 +92,40 @@
         <div class="scn" id="s6"><div class="elogo"><svg viewBox="0 0 56 64" width="50" height="58"><rect x="2" y="0" width="52" height="9" rx="4" fill="#fff" /><rect x="8" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="23" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="38" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="0" y="55" width="56" height="9" rx="4" fill="#fff" /></svg>AnalyseTaCopro</div>
           <div class="eb"><div class="et">Enregistre-la<br /><span>pour l'état des lieux.</span></div><div class="eurl">analysetacopro.fr · lien en bio</div></div></div>
         <div id="caps" class="abs">
-          <div class="ch" id="c0"><i id="c0w0">Ton</i> <i id="c0w1">proprio</i> <i id="c0w2">peut</i> <i id="c0w3">garder</i></div>
-          <div class="ch" id="c1"><i id="c1w0">ta</i> <i id="c1w1">caution ?</i></div>
-          <div class="ch" id="c2"><i id="c2w0">Voici</i> <i id="c2w1">la</i> <i id="c2w2">loi.</i></div>
-          <div class="ch" id="c3"><i id="c3w0">Un :</i></div>
-          <div class="ch" id="c4"><i id="c4w0">elle</i> <i id="c4w1">ne</i> <i id="c4w2">dépasse</i> <i id="c4w3">pas</i></div>
-          <div class="ch" id="c5"><i id="c5w0">un</i> <i id="c5w1">mois</i> <i id="c5w2">de</i> <i id="c5w3">loyer</i></div>
-          <div class="ch" id="c6"><i id="c6w0">hors</i> <i id="c6w1">charges.</i></div>
-          <div class="ch" id="c7"><i id="c7w0">Deux</i> <i id="c7w1">en</i> <i id="c7w2">meublé.</i></div>
-          <div class="ch" id="c8"><i id="c8w0">Deux :</i></div>
-          <div class="ch" id="c9"><i id="c9w0">il</i> <i id="c9w1">doit</i> <i id="c9w2">te</i> <i id="c9w3">la</i></div>
-          <div class="ch" id="c10"><i id="c10w0">rendre</i> <i id="c10w1">sous</i> <i id="c10w2">un</i> <i id="c10w3">mois</i></div>
-          <div class="ch" id="c11"><i id="c11w0">si</i> <i id="c11w1">l'état</i> <i id="c11w2">des</i> <i id="c11w3">lieux</i></div>
-          <div class="ch" id="c12"><i id="c12w0">est</i> <i id="c12w1">conforme.</i></div>
-          <div class="ch" id="c13"><i id="c13w0">Deux</i> <i id="c13w1">mois</i> <i id="c13w2">s'il</i> <i id="c13w3">y</i></div>
-          <div class="ch" id="c14"><i id="c14w0">a</i> <i id="c14w1">des</i> <i id="c14w2">dégâts,</i></div>
-          <div class="ch" id="c15"><i id="c15w0">et</i> <i id="c15w1">seulement</i> <i id="c15w2">avec</i> <i id="c15w3">devis</i></div>
-          <div class="ch" id="c16"><i id="c16w0">ou</i> <i id="c16w1">factures.</i></div>
-          <div class="ch" id="c17"><i id="c17w0">Trois :</i></div>
-          <div class="ch" id="c18"><i id="c18w0">l'usure</i> <i id="c18w1">normale</i> <i id="c18w2">ne</i> <i id="c18w3">peut</i></div>
-          <div class="ch" id="c19"><i id="c19w0">jamais</i> <i id="c19w1">t'être</i> <i id="c19w2">facturée.</i></div>
-          <div class="ch" id="c20"><i id="c20w0">Et</i> <i id="c20w1">pour</i> <i id="c20w2">chaque</i> <i id="c20w3">mois</i></div>
-          <div class="ch" id="c21"><i id="c21w0">de</i> <i id="c21w1">retard,</i></div>
-          <div class="ch" id="c22"><i id="c22w0">il</i> <i id="c22w1">te</i> <i id="c22w2">doit</i> <i id="c22w3">10</i></div>
-          <div class="ch" id="c23"><i id="c23w0">pour</i> <i id="c23w1">cent</i> <i id="c23w2">du</i> <i id="c23w3">loyer</i></div>
-          <div class="ch" id="c24"><i id="c24w0">en</i> <i id="c24w1">plus.</i></div>
-          <div class="ch" id="c25"><i id="c25w0">Enregistre-la</i> <i id="c25w1">avant</i> <i id="c25w2">ton</i> <i id="c25w3">état</i></div>
-          <div class="ch" id="c26"><i id="c26w0">des</i> <i id="c26w1">lieux.</i></div>
+          <div class="ch" id="c0"><i id="c0w0">Ton</i> <i id="c0w1">proprio</i> <i id="c0w2">te</i> <i id="c0w3">doit</i></div>
+          <div class="ch" id="c1"><i id="c1w0">peut-être</i> <i id="c1w1">de</i> <i id="c1w2">l'argent.</i></div>
+          <div class="ch" id="c2"><i id="c2w0">Voici</i> <i id="c2w1">la</i> <i id="c2w2">loi</i> <i id="c2w3">sur</i></div>
+          <div class="ch" id="c3"><i id="c3w0">ta</i> <i id="c3w1">caution.</i></div>
+          <div class="ch" id="c4"><i id="c4w0">Un :</i></div>
+          <div class="ch" id="c5"><i id="c5w0">elle</i> <i id="c5w1">ne</i> <i id="c5w2">dépasse</i> <i id="c5w3">pas</i></div>
+          <div class="ch" id="c6"><i id="c6w0">un</i> <i id="c6w1">mois</i> <i id="c6w2">de</i> <i id="c6w3">loyer</i></div>
+          <div class="ch" id="c7"><i id="c7w0">hors</i> <i id="c7w1">charges.</i></div>
+          <div class="ch" id="c8"><i id="c8w0">Deux</i> <i id="c8w1">en</i> <i id="c8w2">meublé.</i></div>
+          <div class="ch" id="c9"><i id="c9w0">Deux :</i></div>
+          <div class="ch" id="c10"><i id="c10w0">il</i> <i id="c10w1">doit</i> <i id="c10w2">te</i> <i id="c10w3">la</i></div>
+          <div class="ch" id="c11"><i id="c11w0">rendre</i> <i id="c11w1">sous</i> <i id="c11w2">un</i> <i id="c11w3">mois</i></div>
+          <div class="ch" id="c12"><i id="c12w0">si</i> <i id="c12w1">l'état</i> <i id="c12w2">des</i> <i id="c12w3">lieux</i></div>
+          <div class="ch" id="c13"><i id="c13w0">est</i> <i id="c13w1">conforme.</i></div>
+          <div class="ch" id="c14"><i id="c14w0">Deux</i> <i id="c14w1">mois</i> <i id="c14w2">s'il</i> <i id="c14w3">y</i></div>
+          <div class="ch" id="c15"><i id="c15w0">a</i> <i id="c15w1">des</i> <i id="c15w2">dégâts,</i></div>
+          <div class="ch" id="c16"><i id="c16w0">et</i> <i id="c16w1">seulement</i> <i id="c16w2">avec</i> <i id="c16w3">devis</i></div>
+          <div class="ch" id="c17"><i id="c17w0">ou</i> <i id="c17w1">factures.</i></div>
+          <div class="ch" id="c18"><i id="c18w0">Trois :</i></div>
+          <div class="ch" id="c19"><i id="c19w0">l'usure</i> <i id="c19w1">normale</i> <i id="c19w2">ne</i> <i id="c19w3">peut</i></div>
+          <div class="ch" id="c20"><i id="c20w0">jamais</i> <i id="c20w1">t'être</i> <i id="c20w2">facturée.</i></div>
+          <div class="ch" id="c21"><i id="c21w0">Et</i> <i id="c21w1">pour</i> <i id="c21w2">chaque</i> <i id="c21w3">mois</i></div>
+          <div class="ch" id="c22"><i id="c22w0">de</i> <i id="c22w1">retard,</i></div>
+          <div class="ch" id="c23"><i id="c23w0">il</i> <i id="c23w1">te</i> <i id="c23w2">doit</i> <i id="c23w3">10</i></div>
+          <div class="ch" id="c24"><i id="c24w0">pour</i> <i id="c24w1">cent</i> <i id="c24w2">du</i> <i id="c24w3">loyer</i></div>
+          <div class="ch" id="c25"><i id="c25w0">en</i> <i id="c25w1">plus.</i></div>
+          <div class="ch" id="c26"><i id="c26w0">Enregistre-la</i> <i id="c26w1">avant</i> <i id="c26w2">ton</i> <i id="c26w3">état</i></div>
+          <div class="ch" id="c27"><i id="c27w0">des</i> <i id="c27w1">lieux.</i></div>
         </div>
       </section>
-      <div id="flash" class="clip" data-start="0" data-duration="25.92" data-track-index="2" data-layout-allow-overlap></div>
+      <div id="flash" class="clip" data-start="0" data-duration="27.03" data-track-index="2" data-layout-allow-overlap></div>
     </div>
     <script>
-      const DUR = 25.92, WIN = [[0.0, 3.159], [3.159, 7.667], [7.667, 12.174], [12.174, 15.931], [15.931, 19.132], [19.132, 22.986], [22.986, 25.92]], CAPS = [[0.26, 1.3, [0.3, 0.515, 0.923, 1.053]], [1.26, 2.063, [1.3, 1.418]], [2.023, 3.259, [2.063, 2.375, 2.471]], [3.219, 3.84, [3.259]], [3.8, 4.689, [3.84, 4.012, 4.119, 4.453]], [4.649, 5.452, [4.689, 4.828, 5.022, 5.129]], [5.412, 6.344, [5.452, 5.678]], [6.304, 7.767, [6.344, 6.666, 6.839]], [7.727, 8.434, [7.767]], [8.394, 8.961, [8.434, 8.584, 8.756, 8.842]], [8.921, 10.197, [8.961, 9.444, 9.712, 9.798]], [10.157, 11.046, [10.197, 10.4, 10.67, 10.787]], [11.006, 12.274, [11.046, 11.164]], [12.234, 12.983, [12.274, 12.5, 12.736, 12.93]], [12.943, 13.757, [12.983, 13.059, 13.177]], [13.717, 14.779, [13.757, 13.897, 14.188, 14.392]], [14.739, 16.031, [14.779, 14.93]], [15.991, 16.74, [16.031]], [16.7, 17.654, [16.74, 17.052, 17.375, 17.493]], [17.614, 19.232, [17.654, 17.923, 18.213]], [19.192, 19.888, [19.232, 19.393, 19.544, 19.759]], [19.848, 20.673, [19.888, 19.974]], [20.633, 21.339, [20.673, 20.844, 20.952, 21.167]], [21.299, 22.102, [21.339, 21.533, 21.715, 21.812]], [22.062, 23.086, [22.102, 22.188]], [23.046, 24.613, [23.086, 23.967, 24.257, 24.43]], [24.573, 25.528, [24.613, 24.72]]];
+      const DUR = 27.03, WIN = [[0.0, 4.271], [4.271, 8.779], [8.779, 13.286], [13.286, 17.044], [17.044, 20.244], [20.244, 24.098], [24.098, 27.03]], CAPS = [[0.0, 1.193, [0.3, 0.505, 0.923, 1.02]], [1.153, 2.418, [1.193, 1.601, 1.676]], [2.378, 3.31, [2.418, 2.848, 2.956, 3.17]], [3.27, 4.371, [3.31, 3.439]], [4.331, 4.952, [4.371]], [4.912, 5.801, [4.952, 5.124, 5.231, 5.565]], [5.761, 6.564, [5.801, 5.94, 6.134, 6.241]], [6.524, 7.456, [6.564, 6.79]], [7.416, 8.879, [7.456, 7.778, 7.951]], [8.839, 9.546, [8.879]], [9.506, 10.073, [9.546, 9.696, 9.868, 9.954]], [10.033, 11.309, [10.073, 10.556, 10.824, 10.91]], [11.269, 12.158, [11.309, 11.512, 11.782, 11.899]], [12.118, 13.386, [12.158, 12.276]], [13.346, 14.095, [13.386, 13.612, 13.848, 14.042]], [14.055, 14.869, [14.095, 14.171, 14.289]], [14.829, 15.891, [14.869, 15.009, 15.3, 15.504]], [15.851, 17.144, [15.891, 16.042]], [17.104, 17.853, [17.144]], [17.813, 18.767, [17.853, 18.165, 18.488, 18.606]], [18.727, 20.344, [18.767, 19.036, 19.326]], [20.304, 21.0, [20.344, 20.505, 20.656, 20.871]], [20.96, 21.785, [21.0, 21.086]], [21.745, 22.451, [21.785, 21.956, 22.064, 22.279]], [22.411, 23.214, [22.451, 22.645, 22.827, 22.924]], [23.174, 24.198, [23.214, 23.3]], [24.158, 25.725, [24.198, 25.079, 25.369, 25.542]], [25.685, 26.64, [25.725, 25.832]]];
       const tl = gsap.timeline({ paused: true });
       const flash = (t, a = 0.4, d = 0.2) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
       const shake = (sel, t, amp = 18, n = 7) => {
@@ -140,51 +143,54 @@
       WIN.forEach(([a, b], k) => {
         tl.set(`#s${k}`, { opacity: 1 }, a);
         if (k < WIN.length - 1) tl.set(`#s${k}`, { opacity: 0 }, b);
-        tl.fromTo(`#g${k}`, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, a);
+        if (k === 0) tl.set("#g0", { opacity: 1 }, 0);
+        else tl.fromTo(`#g${k}`, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, a);
         if (k < WIN.length - 1) tl.to(`#g${k}`, { opacity: 0, duration: 0.25 }, b);
       });
 
       tl.to("#tag", { opacity: 0, duration: 0.2 }, WIN[WIN.length - 1][0]);
-      tl.fromTo("#s0 .hook", { scale: 2.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.out", immediateRender: false }, 0);
-      shake("#s0 .hook", 0.02, 22);
-      tl.fromTo("#s0sub", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 0.9);
-      tl.to("#s0 .hook", { scale: 1.06, duration: 2.76, ease: "none" }, 0.3);
+      tl.fromTo("#s0 .hook", { scale: 1.07 }, { scale: 1, duration: 0.22, ease: "power4.out", immediateRender: false }, 0.0);
+      shake("#s0 .hook", 0.05, 20);
+      tl.fromTo("#s0sub", { y: 40 }, { y: 0, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 0.0);
+      tl.fromTo("#s0sub", { scale: 1 }, { scale: 1.12, duration: 0.15, yoyo: true, repeat: 1, ease: "sine.out", immediateRender: false }, 2.956);
+      tl.to("#s0 .hook", { scale: 1.06, duration: 3.87, ease: "none" }, 0.3);
       tl.set("#count", { opacity: 0 }, 0.000);
-      tl.fromTo("#s1big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 3.139);
-      shake("#s1big", 3.279, 20); flash(3.279, 0.22, 0.15);
-      tl.fromTo("#s1b", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 3.359);
-      tl.fromTo("#s1sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 3.409);
-      tl.fromTo("#s1c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 6.839);
-      tl.set("#count", { textContent: "1/3" }, 3.159); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 3.159);
-      tl.fromTo("#s2big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 7.647);
-      shake("#s2big", 7.787, 20); flash(7.787, 0.22, 0.15);
-      tl.fromTo("#s2b", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 7.867);
-      tl.fromTo("#s2sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 7.917);
-      tl.fromTo("#s2c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 11.164);
-      tl.set("#count", { textContent: "2/3" }, 7.667); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 7.667);
-      tl.fromTo("#s3big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 12.154);
-      shake("#s3big", 12.294, 20); flash(12.294, 0.22, 0.15);
-      tl.fromTo("#s3b", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 12.374);
-      tl.fromTo("#s3sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 12.424);
-      tl.fromTo("#s3c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 14.930);
-      tl.set("#count", { textContent: "2/3" }, 12.174); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 12.174);
-      tl.fromTo("#s4big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 15.911);
-      shake("#s4big", 16.051, 20); flash(16.051, 0.22, 0.15);
-      tl.fromTo("#s4b", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 16.131);
-      tl.fromTo("#s4sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 16.181);
-      tl.fromTo("#s4c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 18.213);
-      tl.set("#count", { textContent: "3/3" }, 15.931); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 15.931);
-      tl.fromTo("#s5big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 19.112);
-      shake("#s5big", 19.252, 20); flash(19.252, 0.22, 0.15);
-      tl.fromTo("#s5sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 19.382);
-      tl.to("#s5big", { scale: 1.08, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, 19.532);
-      tl.set("#count", { opacity: 0 }, 19.132);
-      tl.fromTo("#s6 .et", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(2)", immediateRender: false }, 23.066);
-      tl.fromTo("#s6 .eurl", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 23.386);
-      tl.set("#count", { opacity: 0 }, 22.986);
+      tl.fromTo("#s1big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 4.251);
+      shake("#s1big", 4.391, 20); flash(4.391, 0.22, 0.15);
+      tl.fromTo("#s1b", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 4.471);
+      tl.fromTo("#s1sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 4.521);
+      tl.fromTo("#s1c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 7.951);
+      tl.set("#count", { textContent: "1/3" }, 4.271); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 4.271);
+      tl.fromTo("#s2big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 8.759);
+      shake("#s2big", 8.899, 20); flash(8.899, 0.22, 0.15);
+      tl.fromTo("#s2b", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 8.979);
+      tl.fromTo("#s2sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 9.029);
+      tl.fromTo("#s2c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 12.276);
+      tl.set("#count", { textContent: "2/3" }, 8.779); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 8.779);
+      tl.fromTo("#s3big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 13.266);
+      shake("#s3big", 13.406, 20); flash(13.406, 0.22, 0.15);
+      tl.fromTo("#s3b", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 13.486);
+      tl.fromTo("#s3sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 13.536);
+      tl.fromTo("#s3c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 16.042);
+      tl.set("#count", { textContent: "2/3" }, 13.286); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 13.286);
+      tl.fromTo("#s4big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 17.024);
+      shake("#s4big", 17.164, 20); flash(17.164, 0.22, 0.15);
+      tl.fromTo("#s4b", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 17.244);
+      tl.fromTo("#s4sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 17.294);
+      tl.fromTo("#s4c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 19.326);
+      tl.set("#count", { textContent: "3/3" }, 17.044); tl.fromTo("#count", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 17.044);
+      tl.fromTo("#s5big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 20.224);
+      shake("#s5big", 20.364, 20); flash(20.364, 0.22, 0.15);
+      tl.fromTo("#s5sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 20.494);
+      tl.to("#s5big", { scale: 1.08, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, 20.644);
+      tl.set("#count", { opacity: 0 }, 20.244);
+      tl.fromTo("#s6 .et", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(2)", immediateRender: false }, 24.178);
+      tl.fromTo("#s6 .eurl", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 24.498);
+      tl.set("#count", { opacity: 0 }, 24.098);
       // sous-titres mot à mot : le mot dit passe en jaune
       CAPS.forEach(([t0, t1, ws], i) => {
-        tl.fromTo(`#c${i}`, { opacity: 0, y: 26, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t0);
+        if (i === 0) tl.set("#c0", { opacity: 1 }, 0);
+        else tl.fromTo(`#c${i}`, { opacity: 0, y: 26, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t0);
         ws.forEach((s, j) => {
           tl.set(`#c${i}w${j}`, { color: "#fde047" }, s);
           if (j + 1 < ws.length) tl.set(`#c${i}w${j}`, { color: "#ffffff" }, ws[j + 1]);

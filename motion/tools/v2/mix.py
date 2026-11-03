@@ -89,7 +89,7 @@ if __name__ == "__main__":
     for k, sc in enumerate(spec["scenes"]):
         t0 = 0.0 if k == 0 else round(starts[k] - 0.1, 3)
         ev = {"t0": t0}
-        for key in ("at", "note_at", "chip_at"):
+        for key in ("at", "note_at", "chip_at", "sub_at"):
             if key in sc:
                 ev[key] = find(words, k, sc[key])
         scenes.append(ev)

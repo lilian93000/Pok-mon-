@@ -18,8 +18,10 @@
       #tag { left: 70px; top: 190px; padding: 12px 26px; border-radius: 999px; background: rgba(255,255,255,0.13); border: 2px solid rgba(255,255,255,0.28); font-size: 32px; font-weight: 800; letter-spacing: 0.04em; }
       #count { right: 160px; top: 190px; padding: 12px 24px; border-radius: 999px; background: #fff; color: #0a0d1f; font-size: 32px; font-weight: 900; opacity: 0; font-variant-numeric: tabular-nums; }
       .scn { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; }
-      .hook { position: absolute; left: 40px; right: 40px; top: 470px; text-align: center; font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: #fff; text-shadow: 0 10px 0 rgba(0,0,0,0.35), 0 0 70px rgba(255,255,255,0.35); white-space: nowrap; font-variant-numeric: tabular-nums; }
-      .hsub { position: absolute; left: 0; right: 0; top: 800px; text-align: center; font-size: 70px; font-weight: 900; color: #fde047; letter-spacing: -0.03em; opacity: 0; }
+      .hookbox { position: absolute; left: 40px; right: 40px; top: 360px; height: 780px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+      .hpre { font-size: 64px; font-weight: 900; letter-spacing: -0.03em; color: rgba(255,255,255,0.85); margin-bottom: 18px; }
+      .hook { font-weight: 900; letter-spacing: -0.05em; line-height: 0.98; color: #fff; text-shadow: 0 12px 0 rgba(0,0,0,0.4), 0 0 80px rgba(255,255,255,0.3); white-space: nowrap; }
+      .hsub { margin-top: 34px; padding: 14px 32px; border-radius: 26px; background: #fde047; color: #0a0d1f; font-size: 66px; font-weight: 900; letter-spacing: -0.03em; }
       .lab { position: absolute; left: 70px; top: 330px; font-size: 104px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
       .ppm { position: absolute; left: 74px; top: 450px; font-size: 38px; font-weight: 700; color: rgba(255,255,255,0.72); }
       .val { position: absolute; left: 60px; top: 560px; font-size: 290px; font-weight: 900; letter-spacing: -0.06em; line-height: 1; color: #fde047; text-shadow: 0 12px 0 rgba(0,0,0,0.35); font-variant-numeric: tabular-nums; transform-origin: 0% 50%; }
@@ -67,9 +69,9 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="23.05" data-width="1080" data-height="1920">
-      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="23.05" data-track-index="4" data-volume="1"></audio>
-      <section id="stage" class="clip" data-start="0" data-duration="23.05" data-track-index="0">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="24.09" data-width="1080" data-height="1920">
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="24.09" data-track-index="4" data-volume="1"></audio>
+      <section id="stage" class="clip" data-start="0" data-duration="24.09" data-track-index="0">
         <div id="grid"></div>
         <div class="glow" id="g0" style="background: radial-gradient(closest-side, #f59e0b99, #f59e0b26 55%, transparent 75%)"></div>
         <div class="glow" id="g1" style="background: radial-gradient(closest-side, #ef444499, #ef444426 55%, transparent 75%)"></div>
@@ -82,7 +84,7 @@
         <div id="tag" class="abs">200 000 € · 5 VILLES</div>
         <div id="count" class="abs">1</div>
 
-        <div class="scn" id="s0"><div class="hook" style="font-size:138px"><span id="s0n">0</span>&nbsp;€</div><div class="hsub" id="s0sub">tu achètes quoi ?</div></div>
+        <div class="scn" id="s0"><div class="hookbox"><div class="hpre">200 000 € à Paris =</div><div class="hook" style="font-size:150px">UN PLACARD</div><div class="hsub" id="s0sub">ailleurs, une maison ?</div></div></div>
         <div class="scn" id="s1"><div class="lab">PARIS</div><div class="ppm">9 633 €/m²</div>
           <div class="val"><span id="s1n">0</span><small>m²</small></div>
           <div class="planbox"><svg class="plan " width="171" height="171" viewBox="-8 -8 171 171"><rect x="0" y="0" width="155" height="155" rx="6" fill="rgba(253,224,71,0.16)" stroke="#ffffff" stroke-width="10"  /><line x1="90" y1="8" x2="90" y2="65" stroke="#fff" stroke-width="6" /><path d="M 28 147 a 25 25 0 0 1 25 -25" fill="none" stroke="#fff" stroke-width="4" /></svg></div>
@@ -112,34 +114,37 @@
         <div class="scn" id="s7"><div class="elogo"><svg viewBox="0 0 56 64" width="50" height="58"><rect x="2" y="0" width="52" height="9" rx="4" fill="#fff" /><rect x="8" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="23" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="38" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="0" y="55" width="56" height="9" rx="4" fill="#fff" /></svg>AnalyseTaCopro</div>
           <div class="eb"><div class="et">Demain :<br /><span>ta ville.</span></div><div class="eurl">analysetacopro.fr · lien en bio</div></div></div>
         <div id="caps" class="abs">
-          <div class="ch" id="c0"><i id="c0w0">Avec</i> <i id="c0w1">200</i> <i id="c0w2">000</i> <i id="c0w3">euros,</i></div>
-          <div class="ch" id="c1"><i id="c1w0">tu</i> <i id="c1w1">achètes</i> <i id="c1w2">quoi ?</i></div>
-          <div class="ch" id="c2"><i id="c2w0">Cinq</i> <i id="c2w1">villes.</i></div>
-          <div class="ch" id="c3"><i id="c3w0">Paris :</i></div>
-          <div class="ch" id="c4"><i id="c4w0">21</i> <i id="c4w1">mètres</i> <i id="c4w2">carrés.</i></div>
-          <div class="ch" id="c5"><i id="c5w0">Un</i> <i id="c5w1">studio.</i></div>
-          <div class="ch" id="c6"><i id="c6w0">Lyon :</i></div>
-          <div class="ch" id="c7"><i id="c7w0">42</i> <i id="c7w1">mètres</i> <i id="c7w2">carrés.</i></div>
-          <div class="ch" id="c8"><i id="c8w0">Un</i> <i id="c8w1">deux-pièces.</i></div>
-          <div class="ch" id="c9"><i id="c9w0">Bordeaux :</i></div>
-          <div class="ch" id="c10"><i id="c10w0">45</i> <i id="c10w1">mètres</i> <i id="c10w2">carrés.</i></div>
-          <div class="ch" id="c11"><i id="c11w0">Marseille :</i></div>
-          <div class="ch" id="c12"><i id="c12w0">56</i> <i id="c12w1">mètres</i> <i id="c12w2">carrés.</i></div>
-          <div class="ch" id="c13"><i id="c13w0">Un</i> <i id="c13w1">vrai</i> <i id="c13w2">trois-pièces.</i></div>
-          <div class="ch" id="c14"><i id="c14w0">Et</i> <i id="c14w1">Saint-Étienne :</i></div>
-          <div class="ch" id="c15"><i id="c15w0">161</i> <i id="c15w1">mètres</i> <i id="c15w2">carrés.</i></div>
-          <div class="ch" id="c16"><i id="c16w0">Une</i> <i id="c16w1">maison</i> <i id="c16w2">de</i> <i id="c16w3">ville.</i></div>
-          <div class="ch" id="c17"><i id="c17w0">Même</i> <i id="c17w1">budget,</i></div>
-          <div class="ch" id="c18"><i id="c18w0">huit</i> <i id="c18w1">fois</i> <i id="c18w2">plus</i> <i id="c18w3">grand.</i></div>
-          <div class="ch" id="c19"><i id="c19w0">Abonne-toi :</i></div>
-          <div class="ch" id="c20"><i id="c20w0">demain,</i></div>
-          <div class="ch" id="c21"><i id="c21w0">ta</i> <i id="c21w1">ville.</i></div>
+          <div class="ch" id="c0"><i id="c0w0">200</i> <i id="c0w1">000</i> <i id="c0w2">euros :</i></div>
+          <div class="ch" id="c1"><i id="c1w0">à</i> <i id="c1w1">Paris,</i></div>
+          <div class="ch" id="c2"><i id="c2w0">un</i> <i id="c2w1">placard.</i></div>
+          <div class="ch" id="c3"><i id="c3w0">Ailleurs,</i></div>
+          <div class="ch" id="c4"><i id="c4w0">une</i> <i id="c4w1">maison.</i></div>
+          <div class="ch" id="c5"><i id="c5w0">Regarde.</i></div>
+          <div class="ch" id="c6"><i id="c6w0">Paris :</i></div>
+          <div class="ch" id="c7"><i id="c7w0">21</i> <i id="c7w1">mètres</i> <i id="c7w2">carrés.</i></div>
+          <div class="ch" id="c8"><i id="c8w0">Un</i> <i id="c8w1">studio.</i></div>
+          <div class="ch" id="c9"><i id="c9w0">Lyon :</i></div>
+          <div class="ch" id="c10"><i id="c10w0">42</i> <i id="c10w1">mètres</i> <i id="c10w2">carrés.</i></div>
+          <div class="ch" id="c11"><i id="c11w0">Un</i> <i id="c11w1">deux-pièces.</i></div>
+          <div class="ch" id="c12"><i id="c12w0">Bordeaux :</i></div>
+          <div class="ch" id="c13"><i id="c13w0">45</i> <i id="c13w1">mètres</i> <i id="c13w2">carrés.</i></div>
+          <div class="ch" id="c14"><i id="c14w0">Marseille :</i></div>
+          <div class="ch" id="c15"><i id="c15w0">56</i> <i id="c15w1">mètres</i> <i id="c15w2">carrés.</i></div>
+          <div class="ch" id="c16"><i id="c16w0">Un</i> <i id="c16w1">vrai</i> <i id="c16w2">trois-pièces.</i></div>
+          <div class="ch" id="c17"><i id="c17w0">Et</i> <i id="c17w1">Saint-Étienne :</i></div>
+          <div class="ch" id="c18"><i id="c18w0">161</i> <i id="c18w1">mètres</i> <i id="c18w2">carrés.</i></div>
+          <div class="ch" id="c19"><i id="c19w0">Une</i> <i id="c19w1">maison</i> <i id="c19w2">de</i> <i id="c19w3">ville.</i></div>
+          <div class="ch" id="c20"><i id="c20w0">Même</i> <i id="c20w1">budget,</i></div>
+          <div class="ch" id="c21"><i id="c21w0">huit</i> <i id="c21w1">fois</i> <i id="c21w2">plus</i> <i id="c21w3">grand.</i></div>
+          <div class="ch" id="c22"><i id="c22w0">Abonne-toi :</i></div>
+          <div class="ch" id="c23"><i id="c23w0">demain,</i></div>
+          <div class="ch" id="c24"><i id="c24w0">ta</i> <i id="c24w1">ville.</i></div>
         </div>
       </section>
-      <div id="flash" class="clip" data-start="0" data-duration="23.05" data-track-index="2" data-layout-allow-overlap></div>
+      <div id="flash" class="clip" data-start="0" data-duration="24.09" data-track-index="2" data-layout-allow-overlap></div>
     </div>
     <script>
-      const DUR = 23.05, WIN = [[0.0, 3.183], [3.183, 5.973], [5.973, 8.715], [8.715, 10.585], [10.585, 14.173], [14.173, 18.075], [18.075, 20.212], [20.212, 23.05]], CAPS = [[0.26, 1.268, [0.3, 0.633, 0.837, 0.999]], [1.228, 2.203, [1.268, 1.407, 1.697]], [2.163, 3.283, [2.203, 2.471]], [3.243, 3.971, [3.283]], [3.931, 4.981, [3.971, 4.229, 4.487]], [4.941, 6.073, [4.981, 5.132]], [6.033, 6.707, [6.073]], [6.667, 7.825, [6.707, 7.029, 7.277]], [7.785, 8.815, [7.825, 7.987]], [8.775, 9.428, [8.815]], [9.388, 10.685, [9.428, 9.718, 9.922]], [10.645, 11.62, [10.685]], [11.58, 12.889, [11.62, 12.082, 12.362]], [12.849, 14.273, [12.889, 13.082, 13.308]], [14.233, 15.455, [14.273, 14.467]], [15.415, 16.789, [15.455, 16.036, 16.316]], [16.749, 18.175, [16.789, 16.982, 17.24, 17.316]], [18.135, 18.949, [18.175, 18.433]], [18.909, 20.312, [18.949, 19.131, 19.315, 19.476]], [20.272, 21.172, [20.312]], [21.132, 21.483, [21.172]], [21.443, 22.668, [21.483, 21.602]]];
+      const DUR = 24.09, WIN = [[0.0, 4.223], [4.223, 7.013], [7.013, 9.755], [9.755, 11.625], [11.625, 15.213], [15.213, 19.115], [19.115, 21.252], [21.252, 24.09]], CAPS = [[0.0, 1.321, [0.3, 0.708, 0.869]], [1.281, 1.881, [1.321, 1.461]], [1.841, 2.601, [1.881, 2.009]], [2.561, 2.966, [2.601]], [2.926, 3.385, [2.966, 3.063]], [3.345, 4.323, [3.385]], [4.283, 5.011, [4.323]], [4.971, 6.021, [5.011, 5.269, 5.527]], [5.981, 7.113, [6.021, 6.172]], [7.073, 7.747, [7.113]], [7.707, 8.865, [7.747, 8.069, 8.317]], [8.825, 9.855, [8.865, 9.027]], [9.815, 10.468, [9.855]], [10.428, 11.725, [10.468, 10.758, 10.962]], [11.685, 12.66, [11.725]], [12.62, 13.929, [12.66, 13.122, 13.402]], [13.889, 15.313, [13.929, 14.122, 14.348]], [15.273, 16.495, [15.313, 15.507]], [16.455, 17.829, [16.495, 17.076, 17.356]], [17.789, 19.215, [17.829, 18.022, 18.28, 18.356]], [19.175, 19.989, [19.215, 19.473]], [19.949, 21.352, [19.989, 20.171, 20.355, 20.516]], [21.312, 22.212, [21.352]], [22.172, 22.523, [22.212]], [22.483, 23.708, [22.523, 22.642]]];
       const tl = gsap.timeline({ paused: true });
       const flash = (t, a = 0.4, d = 0.2) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
       const shake = (sel, t, amp = 18, n = 7) => {
@@ -157,63 +162,65 @@
       WIN.forEach(([a, b], k) => {
         tl.set(`#s${k}`, { opacity: 1 }, a);
         if (k < WIN.length - 1) tl.set(`#s${k}`, { opacity: 0 }, b);
-        tl.fromTo(`#g${k}`, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, a);
+        if (k === 0) tl.set("#g0", { opacity: 1 }, 0);
+        else tl.fromTo(`#g${k}`, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, a);
         if (k < WIN.length - 1) tl.to(`#g${k}`, { opacity: 0, duration: 0.25 }, b);
       });
 
       tl.to("#tag", { opacity: 0, duration: 0.2 }, WIN[WIN.length - 1][0]);
-      tl.fromTo("#s0 .hook", { scale: 2.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.out", immediateRender: false }, 0);
-      shake("#s0 .hook", 0.02, 22);
-      roll("#s0n", 0, 200000, 0.05, 0.85);
-      tl.fromTo("#s0sub", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 0.9);
-      tl.to("#s0 .hook", { scale: 1.06, duration: 2.78, ease: "none" }, 0.3);
+      tl.fromTo("#s0 .hook", { scale: 1.07 }, { scale: 1, duration: 0.22, ease: "power4.out", immediateRender: false }, 0.0);
+      shake("#s0 .hook", 0.05, 20);
+      tl.fromTo("#s0sub", { y: 40 }, { y: 0, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 0.0);
+      tl.fromTo("#s0sub", { scale: 1 }, { scale: 1.12, duration: 0.15, yoyo: true, repeat: 1, ease: "sine.out", immediateRender: false }, 2.601);
+      tl.to("#s0 .hook", { scale: 1.06, duration: 3.82, ease: "none" }, 0.3);
       tl.set("#count", { opacity: 0 }, 0.000);
-      tl.fromTo("#s1 .lab", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 3.203);
-      tl.fromTo("#s1 .ppm", { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, 3.433);
-      roll("#s1n", 0, 21, 3.921, 0.45);
-      tl.fromTo("#s1 .val", { scale: 0.6 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, 3.921);
-      tl.fromTo("#s1 .plan:not(.g)", { scale: 0, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }, 3.971);
-      tl.fromTo("#s1c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 5.132);
-      tl.set("#count", { opacity: 0 }, 3.183);
-      tl.fromTo("#s2 .lab", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 5.993);
-      tl.fromTo("#s2 .ppm", { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, 6.223);
-      roll("#s2n", 0, 42, 6.657, 0.45);
-      tl.fromTo("#s2 .val", { scale: 0.6 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, 6.657);
-      tl.fromTo("#s2 .plan:not(.g)", { scale: 0, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }, 6.707);
-      tl.fromTo("#s2c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 7.987);
-      tl.set("#count", { opacity: 0 }, 5.973);
-      tl.fromTo("#s3 .lab", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 8.735);
-      tl.fromTo("#s3 .ppm", { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, 8.965);
-      roll("#s3n", 0, 45, 9.378, 0.45);
-      tl.fromTo("#s3 .val", { scale: 0.6 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, 9.378);
-      tl.fromTo("#s3 .plan:not(.g)", { scale: 0, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }, 9.428);
-      tl.fromTo("#s3c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 9.922);
-      tl.set("#count", { opacity: 0 }, 8.715);
-      tl.fromTo("#s4 .lab", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 10.605);
-      tl.fromTo("#s4 .ppm", { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, 10.835);
-      roll("#s4n", 0, 56, 11.570, 0.45);
-      tl.fromTo("#s4 .val", { scale: 0.6 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, 11.570);
-      tl.fromTo("#s4 .plan:not(.g)", { scale: 0, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }, 11.620);
-      tl.fromTo("#s4c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 13.308);
-      tl.set("#count", { opacity: 0 }, 10.585);
-      tl.fromTo("#s5 .lab", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 14.193);
-      tl.fromTo("#s5 .ppm", { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, 14.423);
-      roll("#s5n", 0, 161, 15.405, 0.45);
-      tl.fromTo("#s5 .val", { scale: 0.6 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, 15.405);
-      tl.fromTo("#s5 .plan:not(.g)", { scale: 0, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }, 15.455);
-      tl.fromTo("#s5c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 17.316);
-      tl.set("#count", { opacity: 0 }, 14.173);
-      tl.fromTo("#s6big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 18.055);
-      shake("#s6big", 18.195, 20); flash(18.195, 0.22, 0.15);
-      tl.fromTo("#s6sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 18.325);
-      tl.to("#s6big", { scale: 1.08, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, 18.475);
-      tl.set("#count", { opacity: 0 }, 18.075);
-      tl.fromTo("#s7 .et", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(2)", immediateRender: false }, 20.292);
-      tl.fromTo("#s7 .eurl", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 20.612);
-      tl.set("#count", { opacity: 0 }, 20.212);
+      tl.fromTo("#s1 .lab", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 4.243);
+      tl.fromTo("#s1 .ppm", { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, 4.473);
+      roll("#s1n", 0, 21, 4.961, 0.45);
+      tl.fromTo("#s1 .val", { scale: 0.6 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, 4.961);
+      tl.fromTo("#s1 .plan:not(.g)", { scale: 0, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }, 5.011);
+      tl.fromTo("#s1c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 6.172);
+      tl.set("#count", { opacity: 0 }, 4.223);
+      tl.fromTo("#s2 .lab", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 7.033);
+      tl.fromTo("#s2 .ppm", { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, 7.263);
+      roll("#s2n", 0, 42, 7.697, 0.45);
+      tl.fromTo("#s2 .val", { scale: 0.6 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, 7.697);
+      tl.fromTo("#s2 .plan:not(.g)", { scale: 0, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }, 7.747);
+      tl.fromTo("#s2c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 9.027);
+      tl.set("#count", { opacity: 0 }, 7.013);
+      tl.fromTo("#s3 .lab", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 9.775);
+      tl.fromTo("#s3 .ppm", { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, 10.005);
+      roll("#s3n", 0, 45, 10.418, 0.45);
+      tl.fromTo("#s3 .val", { scale: 0.6 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, 10.418);
+      tl.fromTo("#s3 .plan:not(.g)", { scale: 0, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }, 10.468);
+      tl.fromTo("#s3c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 10.962);
+      tl.set("#count", { opacity: 0 }, 9.755);
+      tl.fromTo("#s4 .lab", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 11.645);
+      tl.fromTo("#s4 .ppm", { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, 11.875);
+      roll("#s4n", 0, 56, 12.610, 0.45);
+      tl.fromTo("#s4 .val", { scale: 0.6 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, 12.610);
+      tl.fromTo("#s4 .plan:not(.g)", { scale: 0, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }, 12.660);
+      tl.fromTo("#s4c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 14.348);
+      tl.set("#count", { opacity: 0 }, 11.625);
+      tl.fromTo("#s5 .lab", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 15.233);
+      tl.fromTo("#s5 .ppm", { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, 15.463);
+      roll("#s5n", 0, 161, 16.445, 0.45);
+      tl.fromTo("#s5 .val", { scale: 0.6 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }, 16.445);
+      tl.fromTo("#s5 .plan:not(.g)", { scale: 0, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }, 16.495);
+      tl.fromTo("#s5c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 18.356);
+      tl.set("#count", { opacity: 0 }, 15.213);
+      tl.fromTo("#s6big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 19.095);
+      shake("#s6big", 19.235, 20); flash(19.235, 0.22, 0.15);
+      tl.fromTo("#s6sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 19.365);
+      tl.to("#s6big", { scale: 1.08, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, 19.515);
+      tl.set("#count", { opacity: 0 }, 19.115);
+      tl.fromTo("#s7 .et", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(2)", immediateRender: false }, 21.332);
+      tl.fromTo("#s7 .eurl", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 21.652);
+      tl.set("#count", { opacity: 0 }, 21.252);
       // sous-titres mot à mot : le mot dit passe en jaune
       CAPS.forEach(([t0, t1, ws], i) => {
-        tl.fromTo(`#c${i}`, { opacity: 0, y: 26, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t0);
+        if (i === 0) tl.set("#c0", { opacity: 1 }, 0);
+        else tl.fromTo(`#c${i}`, { opacity: 0, y: 26, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t0);
         ws.forEach((s, j) => {
           tl.set(`#c${i}w${j}`, { color: "#fde047" }, s);
           if (j + 1 < ws.length) tl.set(`#c${i}w${j}`, { color: "#ffffff" }, ws[j + 1]);

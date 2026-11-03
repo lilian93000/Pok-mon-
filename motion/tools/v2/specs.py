@@ -14,7 +14,7 @@ SPECS["prix"] = dict(
     tag="200 000 € · 5 VILLES",
     source="Prix moyen au m² des appartements · MeilleursAgents, 1ᵉʳ nov. 2026 · hors frais",
     lines=[
-        "Avec 200 000 euros, tu achètes quoi ? Cinq villes.",
+        "200 000 euros : à Paris, un placard. Ailleurs, une maison. Regarde.",
         "Paris : 21 mètres carrés. Un studio.",
         "Lyon : 42 mètres carrés. Un deux-pièces.",
         "Bordeaux : 45 mètres carrés.",
@@ -24,7 +24,7 @@ SPECS["prix"] = dict(
         "Abonne-toi : demain, ta ville.",
     ],
     scenes=[
-        dict(type="hook", big="200 000 €", count=200000, sub="tu achètes quoi ?", glow="#f59e0b"),
+        dict(type="hook", pre="200 000 € à Paris =", big="UN PLACARD", sub="ailleurs, une maison ?", sub_at="Ailleurs", glow="#f59e0b"),
         dict(type="stat", label="PARIS", value=21, unit="m²", note="un studio", at="21", note_at="studio.", area=21, max=161, price="9 633 €/m²", glow="#ef4444"),
         dict(type="stat", label="LYON", value=42, unit="m²", note="un 2 pièces", at="42", note_at="deux-pièces.", area=42, max=161, price="4 736 €/m²", glow="#f97316"),
         dict(type="stat", label="BORDEAUX", value=45, unit="m²", note="un grand 2 pièces", at="45", note_at="carrés.", area=45, max=161, price="4 469 €/m²", glow="#a855f7"),
@@ -42,7 +42,7 @@ SPECS["caution"] = dict(
     tag="LOCATAIRE · TES DROITS",
     source="Loi du 6 juillet 1989, art. 22 (location vide) et art. 25-6 (meublé)",
     lines=[
-        "Ton proprio peut garder ta caution ? Voici la loi.",
+        "Ton proprio te doit peut-être de l'argent. Voici la loi sur ta caution.",
         "Un : elle ne dépasse pas un mois de loyer hors charges. Deux en meublé.",
         "Deux : il doit te la rendre sous un mois si l'état des lieux est conforme.",
         "Deux mois s'il y a des dégâts, et seulement avec devis ou factures.",
@@ -51,7 +51,7 @@ SPECS["caution"] = dict(
         "Enregistre-la avant ton état des lieux.",
     ],
     scenes=[
-        dict(type="hook", big="TA CAUTION", sub="il peut la garder ?", glow="#ef4444"),
+        dict(type="hook", pre="Ta caution :", big="IL TE DOIT\nDE L'ARGENT ?", sub="voici la loi", sub_at="loi", glow="#ef4444"),
         dict(type="rule", n="1/3", big="1 MOIS", sub="de loyer hors charges, maximum", chip="2 en meublé", chip_at="meublé.", at="Un", glow="#3b82f6"),
         dict(type="rule", n="2/3", big="1 MOIS", sub="pour te la rendre", chip="si l'état des lieux est conforme", chip_at="conforme.", at="Deux", glow="#22c55e"),
         dict(type="rule", n="2/3", big="2 MOIS", sub="s'il y a des dégâts", chip="avec devis ou factures", chip_at="factures.", at="Deux", glow="#f97316"),
@@ -70,7 +70,7 @@ SPECS["arnaque"] = dict(
     listing=dict(title="T2 lumineux · 45 m²", place="Paris 11ᵉ", price="650 €/mois", owner="Propriétaire · à l'étranger",
                  msg="Je suis à Londres. Faites un virement de 650 € pour réserver, et envoyez vos relevés bancaires."),
     lines=[
-        "Cette annonce est une arnaque. Tu vois pourquoi ?",
+        "650 euros à Paris ? C'est une arnaque. Regarde.",
         "Un : le prix. Un deux-pièces à Paris à 650 euros, c'est bien trop bas.",
         "Deux : le propriétaire est à l'étranger. Pas de visite possible.",
         "Trois : il veut un virement pour réserver, avant toute visite.",

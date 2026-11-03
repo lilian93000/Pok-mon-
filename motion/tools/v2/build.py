@@ -42,7 +42,7 @@ for k, x in enumerate(words):
 CAPS = []
 for i, c in enumerate(chunks):
     nxt = chunks[i + 1][0][2] if i + 1 < len(chunks) else DUR
-    CAPS.append([round(c[0][2] - 0.04, 3), round(min(nxt, c[-1][3] + 0.55), 3), [[show(x[1]), x[2]] for x in c]])
+    CAPS.append([0.0 if i == 0 else round(c[0][2] - 0.04, 3), round(min(nxt, c[-1][3] + 0.55), 3), [[show(x[1]), x[2]] for x in c]])
 
 
 def size_for(txt, big=230):
@@ -77,15 +77,16 @@ for k, sc in enumerate(SPEC["scenes"]):
     sid = f"s{k}"
     parts = []
     if ty == "hook":
-        big = sc["big"]
-        fs = size_for(big)
-        val = f'<span id="{sid}n">{fmt(0) if "count" in sc else big}</span>' if "count" not in sc else f'<span id="{sid}n">0</span>&nbsp;€'
-        parts.append(f'<div class="hook" style="font-size:{fs}px">{val}</div><div class="hsub" id="{sid}sub">{sc["sub"]}</div>')
-        js.append(f'tl.fromTo("#{sid} .hook", {{ scale: 2.2, opacity: 0 }}, {{ scale: 1, opacity: 1, duration: 0.16, ease: "power4.out", immediateRender: false }}, 0);')
-        js.append(f'shake("#{sid} .hook", 0.02, 22);')
-        if "count" in sc:
-            js.append(f'roll("#{sid}n", 0, {sc["count"]}, 0.05, 0.85);')
-        js.append(f'tl.fromTo("#{sid}sub", {{ y: 60, opacity: 0 }}, {{ y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }}, 0.9);')
+        big = sc["big"].split("\n")
+        fs = size_for(max(big, key=len), 250)
+        pre = f'<div class="hpre">{sc["pre"]}</div>' if "pre" in sc else ""
+        parts.append(f'<div class="hookbox">{pre}<div class="hook" style="font-size:{fs}px">{"<br />".join(big)}</div><div class="hsub" id="{sid}sub">{sc["sub"]}</div></div>')
+        # 1re image = l'accroche déjà lisible (c'est aussi la couverture par défaut) ; elle « claque » juste après
+        js.append(f'tl.fromTo("#{sid} .hook", {{ scale: 1.07 }}, {{ scale: 1, duration: 0.22, ease: "power4.out", immediateRender: false }}, 0.0);')
+        js.append(f'shake("#{sid} .hook", 0.05, 20);')
+        js.append(f'tl.fromTo("#{sid}sub", {{ y: 40 }}, {{ y: 0, duration: 0.3, ease: "back.out(2)", immediateRender: false }}, 0.0);')
+        if "sub_at" in ev:
+            js.append(f'tl.fromTo("#{sid}sub", {{ scale: 1 }}, {{ scale: 1.12, duration: 0.15, yoyo: true, repeat: 1, ease: "sine.out", immediateRender: false }}, {ev["sub_at"]:.3f});')
         js.append(f'tl.to("#{sid} .hook", {{ scale: 1.06, duration: {t1 - 0.4:.2f}, ease: "none" }}, 0.3);')
     elif ty == "stat":
         side = 430 * math.sqrt(sc["area"] / sc["max"])
@@ -160,9 +161,11 @@ if "listing" in SPEC:
           <div class="ring" id="ring-price"></div><div class="ring" id="ring-owner"></div>
           {''.join(f'<div class="stampx" id="st-{s["target"]}">{s["label"]}</div>' for s in SPEC["scenes"] if s["type"] == "flag")}
         </div>'''
-    js.append('tl.fromTo("#lst", { y: 700, rotate: 5, opacity: 0 }, { y: 0, rotate: 0, opacity: 1, duration: 0.45, ease: "back.out(1.5)", immediateRender: false }, 0);')
+    js.append('tl.set("#lst", { opacity: 1 }, 0);')
+    js.append('tl.fromTo("#lst .card", { scale: 1.1 }, { scale: 1, duration: 0.25, ease: "power4.out", immediateRender: false }, 0);')
     js.append('flash(0, 0.3, 0.2);')
-    js.append('tl.fromTo("#lst .card", { scale: 1 }, { scale: 1.04, duration: 2.2, ease: "none", immediateRender: false }, 0.4);')
+    js.append('tl.to("#lst .card", { scale: 1.04, duration: 2.2, ease: "none" }, 0.3);')
+    prev = []
     for k, sc in enumerate(SPEC["scenes"]):
         if sc["type"] != "flag":
             continue
@@ -172,6 +175,9 @@ if "listing" in SPEC:
             js.append(f'tl.fromTo("#ring-{tg}", {{ scale: 1.6, opacity: 0 }}, {{ scale: 1, opacity: 1, duration: 0.22, ease: "power3.in", immediateRender: false }}, {at - 0.05:.3f});')
         else:
             js.append(f'tl.fromTo("#hl-{tg}", {{ backgroundColor: "rgba(239,68,68,0)", color: "#374151" }}, {{ backgroundColor: "rgba(239,68,68,1)", color: "#ffffff", duration: 0.2, immediateRender: false }}, {at - 0.05:.3f});')
+        if prev:
+            js.append(f'tl.to({json.dumps(prev)}, {{ opacity: 0.3, scale: 0.92, duration: 0.2 }}, {at - 0.15:.3f});')
+        prev.append(f"#st-{tg}")
         js.append(f'tl.fromTo("#st-{tg}", {{ scale: 2.6, opacity: 0 }}, {{ scale: 1, opacity: 0.95, duration: 0.1, ease: "power4.in", immediateRender: false }}, {at:.3f});')
         js.append(f'shake("#lst", {at + 0.1:.3f}, 16); flash({at + 0.1:.3f}, 0.2, 0.14);')
 
@@ -192,8 +198,10 @@ css = f"""      @font-face {{ font-family: "Inter"; src: url("assets/fonts/Inter
       #tag {{ left: 70px; top: 190px; padding: 12px 26px; border-radius: 999px; background: rgba(255,255,255,0.13); border: 2px solid rgba(255,255,255,0.28); font-size: 32px; font-weight: 800; letter-spacing: 0.04em; }}
       #count {{ right: 160px; top: 190px; padding: 12px 24px; border-radius: 999px; background: #fff; color: {INK}; font-size: 32px; font-weight: 900; opacity: 0; font-variant-numeric: tabular-nums; }}
       .scn {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; }}
-      .hook {{ position: absolute; left: 40px; right: 40px; top: 470px; text-align: center; font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: #fff; text-shadow: 0 10px 0 rgba(0,0,0,0.35), 0 0 70px rgba(255,255,255,0.35); white-space: nowrap; font-variant-numeric: tabular-nums; }}
-      .hsub {{ position: absolute; left: 0; right: 0; top: 800px; text-align: center; font-size: 70px; font-weight: 900; color: {YEL}; letter-spacing: -0.03em; opacity: 0; }}
+      .hookbox {{ position: absolute; left: 40px; right: 40px; top: 360px; height: 780px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }}
+      .hpre {{ font-size: 64px; font-weight: 900; letter-spacing: -0.03em; color: rgba(255,255,255,0.85); margin-bottom: 18px; }}
+      .hook {{ font-weight: 900; letter-spacing: -0.05em; line-height: 0.98; color: #fff; text-shadow: 0 12px 0 rgba(0,0,0,0.4), 0 0 80px rgba(255,255,255,0.3); white-space: nowrap; }}
+      .hsub {{ margin-top: 34px; padding: 14px 32px; border-radius: 26px; background: {YEL}; color: {INK}; font-size: 66px; font-weight: 900; letter-spacing: -0.03em; }}
       .lab {{ position: absolute; left: 70px; top: 330px; font-size: 104px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }}
       .ppm {{ position: absolute; left: 74px; top: 450px; font-size: 38px; font-weight: 700; color: rgba(255,255,255,0.72); }}
       .val {{ position: absolute; left: 60px; top: 560px; font-size: 290px; font-weight: 900; letter-spacing: -0.06em; line-height: 1; color: {YEL}; text-shadow: 0 12px 0 rgba(0,0,0,0.35); font-variant-numeric: tabular-nums; transform-origin: 0% 50%; }}
@@ -286,7 +294,8 @@ html = f"""<!doctype html>
       WIN.forEach(([a, b], k) => {{
         tl.set(`#s${{k}}`, {{ opacity: 1 }}, a);
         if (k < WIN.length - 1) tl.set(`#s${{k}}`, {{ opacity: 0 }}, b);
-        tl.fromTo(`#g${{k}}`, {{ opacity: 0, scale: 0.85 }}, {{ opacity: 1, scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }}, a);
+        if (k === 0) tl.set("#g0", {{ opacity: 1 }}, 0);
+        else tl.fromTo(`#g${{k}}`, {{ opacity: 0, scale: 0.85 }}, {{ opacity: 1, scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }}, a);
         if (k < WIN.length - 1) tl.to(`#g${{k}}`, {{ opacity: 0, duration: 0.25 }}, b);
       }});
 {"      tl.to('#lst', { opacity: 0, duration: 0.25 }, " + str(round(listing_end + 0.4, 3)) + ");" if listing_end else ""}
@@ -294,7 +303,8 @@ html = f"""<!doctype html>
 {chr(10).join("      " + j for j in js)}
       // sous-titres mot à mot : le mot dit passe en jaune
       CAPS.forEach(([t0, t1, ws], i) => {{
-        tl.fromTo(`#c${{i}}`, {{ opacity: 0, y: 26, scale: 0.92 }}, {{ opacity: 1, y: 0, scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }}, t0);
+        if (i === 0) tl.set("#c0", {{ opacity: 1 }}, 0);
+        else tl.fromTo(`#c${{i}}`, {{ opacity: 0, y: 26, scale: 0.92 }}, {{ opacity: 1, y: 0, scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }}, t0);
         ws.forEach((s, j) => {{
           tl.set(`#c${{i}}w${{j}}`, {{ color: "{YEL}" }}, s);
           if (j + 1 < ws.length) tl.set(`#c${{i}}w${{j}}`, {{ color: "#ffffff" }}, ws[j + 1]);
