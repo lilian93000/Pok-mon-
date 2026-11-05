@@ -1,0 +1,278 @@
+{
+  "id": "058-tenochtitlan-v3",
+  "titre": "Tenochtitlan, la ville sur l'eau",
+  "v2": true,
+  "punch": true,
+  "model": "eleven_v3",
+  "tempo": 1.15,
+  "pause": 0.12,
+  "sources": [
+    "Tenochtitlan fondée en 1325 sur une île du lac Texcoco ; estimations de 200 000 habitants ou plus vers 1519",
+    "Chaussées, chinampas, aqueduc de Chapultepec ; marché de Tlatelolco (lettres d'Hernán Cortés)",
+    "Bernal Díaz del Castillo, Histoire véridique de la conquête de la Nouvelle-Espagne",
+    "Londres vers 1500 : environ 50 000 habitants ; estimations pour Tenochtitlan entre 60 000 et plus de 200 000",
+    "Affaissement actuel du sol de Mexico, bâtie sur les sédiments de l'ancien lac Texcoco"
+  ],
+  "musique": "score",
+  "volume_musique": 0.22,
+  "ambiance": "mystere",
+  "sfx": true,
+  "images": {
+    "mexico": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s30000/1s32000/1s32800/1s32837v.jpg",
+      "cut": false,
+      "credit": "Mexico, l'ancienne Tenochtitlan des Aztèques, vers 1900, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "femme": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP248740.jpg",
+      "cut": true,
+      "credit": "Figure féminine agenouillée, aztèque, 1325–1521 CE — The Met (CC0)"
+    },
+    "singe": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP-15497-007.jpg",
+      "cut": true,
+      "credit": "Singe-araignée aux attributs du dieu du vent, aztèque, 1325–1521 CE — The Met (CC0)"
+    },
+    "mais": {
+      "url": "https://openaccess-cdn.clevelandart.org/1949.555/1949.555_print.jpg",
+      "cut": true,
+      "credit": "Homme portant du maïs, aztèque, 1325–1521 — Cleveland Museum of Art (CC0)"
+    },
+    "serpent": {
+      "url": "https://openaccess-cdn.clevelandart.org/1941.46/1941.46_print.jpg",
+      "cut": true,
+      "credit": "Serpent à plumes (Quetzalcoatl), aztèque, 1325–1521 — Cleveland Museum of Art (CC0)"
+    },
+    "temple": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP341939.jpg",
+      "cut": true,
+      "credit": "Maquette de temple, aztèque, 1400–1521 — The Met (CC0)"
+    },
+    "brasero": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DT9917.jpg",
+      "cut": true,
+      "credit": "Brasero à glyphe de date, aztèque, 1430–1521 CE — The Met (CC0)"
+    },
+    "aigle": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP-26146-001.jpg",
+      "cut": true,
+      "credit": "Labret à tête d'aigle, aztèque, 1325–1521 CE — The Met (CC0)"
+    },
+    "temple2": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP341942.jpg",
+      "cut": true,
+      "credit": "Maquette de temple, aztèque, 1400–1521, 1400–1521 — The Met (CC0)"
+    },
+    "chalch": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP-23817-001.jpg",
+      "cut": true,
+      "credit": "Chalchiuhtlicue, déesse de l'eau, aztèque, 1325–1521 CE — The Met (CC0)"
+    },
+    "xochi": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s30000/1s33000/1s33100/1s33197v.jpg",
+      "cut": false,
+      "credit": "Les jardins flottants de Xochimilco, 1931, 1931-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "cortes": {
+      "url": "https://images.metmuseum.org/CRDImages/es/original/DP-34092-006.jpg",
+      "cut": true,
+      "credit": "Hernán Cortés, médaille, 1529, 1529 — The Met (CC0)"
+    },
+    "aigle2": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP-17616-001.jpg",
+      "cut": false,
+      "credit": "Relief à l'aigle, 900–1200, 900–1200 CE — The Met (CC0)"
+    },
+    "cath": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/det/4a30000/4a31000/4a31800/4a31864v.jpg",
+      "cut": false,
+      "credit": "La cathédrale de Mexico, 1884, 1884 — Library of Congress (sans restriction connue)"
+    },
+    "cath2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c30000/3c38000/3c38400/3c38425v.jpg",
+      "cut": false,
+      "credit": "La cathédrale de Mexico, 1884, 1884-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "guerrier": {
+      "url": "https://openaccess-cdn.clevelandart.org/1984.37/1984.37_print.jpg",
+      "cut": true,
+      "credit": "Figure de guerrier, aztèque, after 1325 (thermoluminescence date of casting core, 1345–1575) — Cleveland Museum of Art (CC0)"
+    },
+    "chicome": {
+      "url": "https://images.metmuseum.org/CRDImages/ao/original/DP-23858-001.jpg",
+      "cut": true,
+      "credit": "Chicomecoatl, déesse du maïs, aztèque, 1325–1521 CE — The Met (CC0)"
+    },
+    "barque": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/npcc/20100/20106v.jpg",
+      "cut": false,
+      "credit": "Canal de Mexico, 1909, 1909-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "viga": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b30000/3b35000/3b35400/3b35455r.jpg",
+      "cut": false,
+      "credit": "Canal de la Viga, Mexico, 1910, 1910-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "canal": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/det/4a30000/4a31000/4a31800/4a31867v.jpg",
+      "cut": false,
+      "credit": "Canal de la Viga, Mexico, 1884, 1884 — Library of Congress (sans restriction connue)"
+    },
+    "casque": {
+      "url": "https://images.metmuseum.org/CRDImages/aa/original/DP22421.jpg",
+      "cut": true,
+      "credit": "Morion espagnol, vers 1560–70, ca. 1560–70 — The Met (CC0)"
+    },
+    "marche": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s30000/1s32000/1s32900/1s32918v.jpg",
+      "cut": false,
+      "credit": "Marché de Mexico, 1902, 1902-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "chapul": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/stereo/1s30000/1s32000/1s32500/1s32591v.jpg",
+      "cut": false,
+      "credit": "Chapultepec, Mexico, 1908, 1908-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Une ville construite sur un *LAC*… plus peuplée que Londres !",
+      "image": "temple",
+      "alt": "xochi",
+      "tag": "excited",
+      "title": "LA VILLE SUR L'EAU",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Tenochtitlan. La capitale des *Aztèques*.",
+      "image": "chalch",
+      "bg": "dark",
+      "tag": "mischievously"
+    },
+    {
+      "text": "Mexique, *1325*.",
+      "image": "mexico",
+      "bg": "dark",
+      "date": "1325",
+      "tag": "curious"
+    },
+    {
+      "text": "Un peuple s'installe sur une minuscule île… au milieu d'un *lac*.",
+      "image": "viga",
+      "bg": "dark",
+      "tag": "curious"
+    },
+    {
+      "text": "Pourquoi là ? Selon la légende… un *aigle*…",
+      "image": "aigle2",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "whispers",
+      "sfx": [
+        "whisper"
+      ]
+    },
+    {
+      "text": "posé sur un *cactus* ! Le signe de leur dieu !",
+      "image": "aigle",
+      "tag": "excited",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Deux siècles plus tard… une ville *IMMENSE* !",
+      "image": "temple2",
+      "bg": "dark",
+      "alt": "guerrier",
+      "tag": "excited"
+    },
+    {
+      "text": "Des canaux partout, comme à *Venise* !",
+      "image": "canal",
+      "bg": "dark",
+      "alt": "xochi",
+      "tag": "laughs"
+    },
+    {
+      "text": "Des jardins *flottants* pour cultiver le maïs !",
+      "image": "mais",
+      "bg": "dark",
+      "alt": "chicome",
+      "tag": "excited"
+    },
+    {
+      "text": "Un aqueduc pour apporter l'eau *douce* !",
+      "image": "chapul",
+      "bg": "dark",
+      "tag": "curious"
+    },
+    {
+      "text": "Plus de *deux cent mille* habitants, selon les estimations !",
+      "image": "femme",
+      "counter": {
+        "to": 200000,
+        "suffix": " HABITANTS"
+      },
+      "tag": "excited",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "En 1519, les conquistadors espagnols *débarquent*.",
+      "image": "casque",
+      "bg": "dark",
+      "date": "1519",
+      "tag": "dramatically"
+    },
+    {
+      "text": "Ils n'en croient pas leurs *YEUX* !",
+      "image": "cortes",
+      "bg": "dark",
+      "label": "HERNÁN CORTÉS",
+      "tag": "excited"
+    },
+    {
+      "text": "L'un d'eux écrira : on se demandait si on ne *rêvait* pas…",
+      "image": "singe",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "whispers"
+    },
+    {
+      "text": "Le marché ? Des dizaines de milliers de personnes chaque *jour* !",
+      "image": "barque",
+      "bg": "dark",
+      "alt": "marche",
+      "tag": "excited"
+    },
+    {
+      "text": "Deux ans plus tard… après un siège terrible, la ville est *DÉTRUITE*.",
+      "image": "brasero",
+      "date": "1521",
+      "tag": "dramatically",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Les Espagnols bâtissent Mexico *par-dessus*.",
+      "image": "cath",
+      "bg": "dark",
+      "alt": "cath2",
+      "tag": "sarcastic"
+    },
+    {
+      "text": "Et aujourd'hui encore, la ville s'*enfonce*… dans l'ancien lac !",
+      "image": "serpent",
+      "bg": "dark",
+      "tag": "mischievously"
+    },
+    {
+      "text": "Une ville construite sur un lac…",
+      "image": "xochi",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "curious"
+    }
+  ]
+}
