@@ -1,0 +1,276 @@
+{
+  "id": "037-jessop-v3",
+  "titre": "La femme insubmersible",
+  "v2": true,
+  "punch": true,
+  "model": "eleven_v3",
+  "tempo": 1.15,
+  "pause": 0.12,
+  "sources": [
+    "Violet Jessop : hôtesse sur l'Olympic lors de la collision avec le HMS Hawke (20 septembre 1911), sur le Titanic (1912, canot 16), infirmière sur le Britannic (coulé le 21 novembre 1916)",
+    "Mémoires de Violet Jessop (publiées en 1997)",
+    "Violet Jessop meurt en 1971, à 83 ans"
+  ],
+  "musique": "score",
+  "volume_musique": 0.22,
+  "ambiance": "epique",
+  "sfx": true,
+  "images": {
+    "lancement": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a30000/3a35000/3a35200/3a35267v.jpg",
+      "cut": false,
+      "credit": "Le Titanic avant son lancement, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "montage": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b30000/3b37000/3b37100/3b37182r.jpg",
+      "cut": false,
+      "credit": "Le grand désastre du Titanic, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "canot": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3b30000/3b39000/3b39700/3b39746r.jpg",
+      "cut": false,
+      "credit": "Survivants du Titanic en route vers le Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "carpathia": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c20000/3c21000/3c21000/3c21012v.jpg",
+      "cut": false,
+      "credit": "Le Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "survivants": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a30000/3a35000/3a35400/3a35462r.jpg",
+      "cut": false,
+      "credit": "Survivants du Titanic à bord du Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "rostron": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3c20000/3c21000/3c21000/3c21011v.jpg",
+      "cut": false,
+      "credit": "Le capitaine Rostron du Carpathia, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "britannic": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/10900/10937v.jpg",
+      "cut": false,
+      "credit": "Le Britannic en navire-hôpital, 1917, 1917 — Library of Congress (sans restriction connue)"
+    },
+    "hopital": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/anrc/10900/10939v.jpg",
+      "cut": false,
+      "credit": "Salle pour blessés graves à bord d'un navire-hôpital anglais, 1917, 1917 — Library of Congress (sans restriction connue)"
+    },
+    "ice1": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/04400/04400v.jpg",
+      "cut": false,
+      "credit": "Iceberg, 1914, 1914-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "nuit": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/24200/24223v.jpg",
+      "cut": false,
+      "credit": "Nuit en mer, 1944, 1944-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "avant": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/10900/10959v.jpg",
+      "cut": false,
+      "credit": "Pont avant de l'Olympic, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "pont": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/10900/10960v.jpg",
+      "cut": false,
+      "credit": "Pont de l'Olympic, navire jumeau du Titanic, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "hship": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/24600/24658v.jpg",
+      "cut": false,
+      "credit": "Navire-hôpital, 1915, 1915-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "lits": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ggbain/01500/01555v.jpg",
+      "cut": false,
+      "credit": "Infirmerie d'un navire, vers 1900, 1900-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "infirmieres": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/07100/07144v.jpg",
+      "cut": false,
+      "credit": "Infirmières de la Croix-Rouge, 1916, 1916-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "deux": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/hec/07800/07819v.jpg",
+      "cut": false,
+      "credit": "Infirmières, 1916, 1916-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "pont2": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/det/4a10000/4a14000/4a14100/4a14156v.jpg",
+      "cut": false,
+      "credit": "Pont d'un navire de guerre, 1899, 1899-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "bastingage": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/det/4a10000/4a14000/4a14000/4a14068v.jpg",
+      "cut": false,
+      "credit": "Pont d'un navire de guerre, 1898, 1898-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "gym": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/10900/10956v.jpg",
+      "cut": false,
+      "credit": "Gymnase de l'Olympic, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "salon": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/10900/10962v.jpg",
+      "cut": false,
+      "credit": "Salon de l'Olympic, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "palm": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ds/10900/10958v.jpg",
+      "cut": false,
+      "credit": "Palm Court de l'Olympic, 1911, 1911-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "berceau": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/cph/3a30000/3a35000/3a35600/3a35683r.jpg",
+      "cut": false,
+      "credit": "Mère et bébé, 1912, 1912-01-01 — Library of Congress (sans restriction connue)"
+    },
+    "mine": {
+      "url": "https://tile.loc.gov/storage-services/service/pnp/ppmsca/83900/83914v.jpg",
+      "cut": false,
+      "credit": "Robert Fulton, mine sous-marine, 1806, 1806-01-01 — Library of Congress (sans restriction connue)"
+    }
+  },
+  "beats": [
+    {
+      "text": "Elle a survécu au *TITANIC*… et à ses deux jumeaux !",
+      "image": "montage",
+      "alt": "ice1",
+      "tag": "excited",
+      "title": "LA FEMME INSUBMERSIBLE",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Trois naufrages. Une seule *femme*.",
+      "image": "deux",
+      "bg": "dark",
+      "tag": "mischievously"
+    },
+    {
+      "text": "Violet Jessop. Hôtesse sur les paquebots de *luxe*.",
+      "image": "palm",
+      "bg": "dark",
+      "alt": "salon",
+      "tag": "curious"
+    },
+    {
+      "text": "La compagnie construit trois navires *jumeaux* :",
+      "image": "lancement",
+      "bg": "dark",
+      "tag": "curious"
+    },
+    {
+      "text": "l'Olympic, le Titanic… et le *Britannic*.",
+      "image": "britannic",
+      "bg": "dark",
+      "tag": "excited"
+    },
+    {
+      "text": "1911 : Violet est sur l'*Olympic*…",
+      "image": "gym",
+      "bg": "dark",
+      "date": "1911",
+      "tag": "curious"
+    },
+    {
+      "text": "quand il percute un navire de *GUERRE* !",
+      "image": "pont2",
+      "tag": "excited",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Elle s'en sort *indemne*.",
+      "image": "salon",
+      "bg": "dark",
+      "tag": "sarcastic"
+    },
+    {
+      "text": "1912 : elle embarque sur le *Titanic*.",
+      "image": "ice1",
+      "bg": "dark",
+      "date": "1912",
+      "tag": "dramatically"
+    },
+    {
+      "text": "Cette nuit-là, dans un canot… on lui confie un *bébé*.",
+      "image": "berceau",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "whispers",
+      "sfx": [
+        "whisper"
+      ]
+    },
+    {
+      "text": "Au matin, une femme lui reprend l'enfant… sans un *MOT* !",
+      "image": "survivants",
+      "bg": "dark",
+      "alt": "carpathia",
+      "tag": "excited"
+    },
+    {
+      "text": "1916. C'est la *guerre*.",
+      "image": "hship",
+      "bg": "dark",
+      "date": "1916",
+      "tag": "dramatically"
+    },
+    {
+      "text": "Le Britannic est devenu navire-*hôpital*. Violet y est infirmière.",
+      "image": "hopital",
+      "bg": "dark",
+      "alt": "infirmieres",
+      "tag": "curious"
+    },
+    {
+      "text": "Il heurte une *MINE* !",
+      "image": "mine",
+      "tag": "excited",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "Il coule en moins d'une *heure*…",
+      "image": "bastingage",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "whispers"
+    },
+    {
+      "text": "Son canot est aspiré vers les *hélices*… Elle saute à l'eau !",
+      "image": "avant",
+      "bg": "dark",
+      "tag": "excited"
+    },
+    {
+      "text": "Elle se cogne la tête… mais elle *SURVIT* !",
+      "image": "canot",
+      "stamp": "SURVIVANTE",
+      "tag": "laughs",
+      "bg": "red",
+      "rays": true
+    },
+    {
+      "text": "On la surnommera « Miss *Insubmersible* » !",
+      "image": "rostron",
+      "bg": "dark",
+      "tag": "mischievously"
+    },
+    {
+      "text": "Elle est morte à quatre-vingt-trois ans… dans son *lit* !",
+      "image": "lits",
+      "bg": "dark",
+      "tag": "sarcastic"
+    },
+    {
+      "text": "Elle a survécu au Titanic…",
+      "image": "montage",
+      "bg": "dark",
+      "zoom": true,
+      "tag": "curious"
+    }
+  ]
+}
