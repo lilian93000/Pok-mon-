@@ -78,16 +78,16 @@ for k, sc in enumerate(SPEC["scenes"]):
     parts = []
     if ty == "hook":
         big = sc["big"].split("\n")
-        fs = size_for(max(big, key=len), 250)
+        fs = sc.get("fs") or size_for(max(big, key=len), 250)
         pre = f'<div class="hpre">{sc["pre"]}</div>' if "pre" in sc else ""
         parts.append(f'<div class="hookbox">{pre}<div class="hook" style="font-size:{fs}px">{"<br />".join(big)}</div><div class="hsub" id="{sid}sub">{sc["sub"]}</div></div>')
         # 1re image = l'accroche déjà lisible (c'est aussi la couverture par défaut) ; elle « claque » juste après
-        js.append(f'tl.fromTo("#{sid} .hook", {{ scale: 1.07 }}, {{ scale: 1, duration: 0.22, ease: "power4.out", immediateRender: false }}, 0.0);')
-        js.append(f'shake("#{sid} .hook", 0.05, 20);')
-        js.append(f'tl.fromTo("#{sid}sub", {{ y: 40 }}, {{ y: 0, duration: 0.3, ease: "back.out(2)", immediateRender: false }}, 0.0);')
+        js.append(f'tl.fromTo("#{sid} .hook", {{ scale: 1.07 }}, {{ scale: 1, duration: 0.22, ease: "power4.out", immediateRender: false }}, {t0:.3f});')
+        js.append(f'shake("#{sid} .hook", {t0 + 0.05:.3f}, 20);')
+        js.append(f'tl.fromTo("#{sid}sub", {{ y: 40 }}, {{ y: 0, duration: 0.3, ease: "back.out(2)", immediateRender: false }}, {t0:.3f});')
         if "sub_at" in ev:
             js.append(f'tl.fromTo("#{sid}sub", {{ scale: 1 }}, {{ scale: 1.12, duration: 0.15, yoyo: true, repeat: 1, ease: "sine.out", immediateRender: false }}, {ev["sub_at"]:.3f});')
-        js.append(f'tl.to("#{sid} .hook", {{ scale: 1.06, duration: {t1 - 0.4:.2f}, ease: "none" }}, 0.3);')
+        js.append(f'tl.to("#{sid} .hook", {{ scale: 1.06, duration: {max(0.3, t1 - t0 - 0.4):.2f}, ease: "none" }}, {t0 + 0.3:.3f});')
     elif ty == "stat":
         side = 430 * math.sqrt(sc["area"] / sc["max"])
         ghost = ""
@@ -104,7 +104,7 @@ for k, sc in enumerate(SPEC["scenes"]):
         js.append(f'roll("#{sid}n", 0, {sc["value"]}, {ev["at"] - 0.05:.3f}, 0.45);')
         js.append(f'tl.fromTo("#{sid} .val", {{ scale: 0.6 }}, {{ scale: 1, duration: 0.45, ease: "back.out(2.2)", immediateRender: false }}, {ev["at"] - 0.05:.3f});')
         js.append(f'tl.fromTo("#{sid} .plan:not(.g)", {{ scale: 0, transformOrigin: "0% 100%" }}, {{ scale: 1, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }}, {ev["at"]:.3f});')
-        js.append(f'tl.fromTo("#{sid}c", {{ scale: 0, rotate: -8 }}, {{ scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }}, {ev["note_at"]:.3f});')
+        js.append(f'tl.fromTo("#{sid}c", {{ scale: 0, rotate: -8 }}, {{ scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }}, {ev.get("note_at", ev["at"] + 0.6):.3f});')
     elif ty in ("rule", "punch", "verdict"):
         big = sc["big"]
         fs = size_for(big, 260 if ty != "rule" else 230)

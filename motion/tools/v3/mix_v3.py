@@ -79,12 +79,15 @@ if __name__ == "__main__":
             words.append([li, disp, a, b]); last = key
     # « display » : fusionne des mots dits en toutes lettres (six cent cinquante euros → 650 €)
     for spoken, shown in spec.get("display", {}).items():
-        sw = spoken.split()
+        sw = voix_v3.norm(spoken)
         k = 0
-        while k + len(sw) <= len(words):
-            if [voix_v3.norm(w[1])[0] if voix_v3.norm(w[1]) else "" for w in words[k:k + len(sw)]] == sw and len({w[0] for w in words[k:k + len(sw)]}) == 1:
-                tail = re.sub(r"^[\w€-]+", "", words[k + len(sw) - 1][1])  # garde la ponctuation finale (« ? », « … »)
-                words[k:k + len(sw)] = [[words[k][0], shown + tail, words[k][2], words[k + len(sw) - 1][3]]]
+        while k < len(words):
+            toks, m = [], k
+            while m < len(words) and len(toks) < len(sw) and words[m][0] == words[k][0]:
+                toks += voix_v3.norm(words[m][1]); m += 1
+            if toks == sw:
+                tail = re.sub(r"^[\w€'-]+", "", words[m - 1][1])  # garde la ponctuation finale (« ? », « … »)
+                words[k:m] = [[words[k][0], shown + tail, words[k][2], words[m - 1][3]]]
             k += 1
     # scènes : chaque scène couvre des phrases ; ses mots portent l'indice de la scène
     owner = {li: k for k, sc in enumerate(spec["scenes"]) for li in sc["groups"]}
@@ -100,8 +103,12 @@ if __name__ == "__main__":
         first = next(w for w in W if w[0] == k)
         t0 = 0.0 if k == 0 else round(first[2] - 0.1, 3)
         ev = {"t0": t0}
-        if "at" in sc:
-            ev["at"] = next(w[2] for w in W if w[0] == k and voix_v3.norm(w[1]) and voix_v3.norm(w[1])[0].startswith(sc["at"]))
+        for key in ("at", "note_at", "chip_at", "sub_at"):
+            if key in sc:
+                hits = [w[2] for w in W if w[0] == k and any(t.startswith(sc[key]) for t in voix_v3.norm(w[1]))]
+                if not hits:
+                    raise SystemExit(f"mot d'ancrage introuvable : {sc[key]!r} (scène {k})")
+                ev[key] = hits[0]
         scenes.append(ev); starts.append(first[2])
         if k:
             place(bus, whoosh, t0 - 0.12, 0.3)
@@ -114,8 +121,12 @@ if __name__ == "__main__":
             place(bus, impact2, ev["at"], 0.75); place(bus, sparkle, ev["at"] + 0.1, 0.4)
         elif ty == "verdict":
             place(bus, ping, ev["at"], 0.55)
-        elif ty == "loop":
+        elif ty == "loop" or (ty == "hook" and k):
             place(bus, pop, t0 + 0.1, 0.45)
+        elif ty == "stat":
+            place(bus, pop, ev["at"] + 0.35, 0.5)
+        elif ty == "rule":
+            place(bus, impact2, ev["at"], 0.4)
     bus = bus[: int(dur * SR)]
     bus = np.tanh(1.4 * bus / np.abs(bus).max()) / np.tanh(1.4) * 0.89
     out = os.path.join(proj, "assets", "audio", "soundtrack.wav")

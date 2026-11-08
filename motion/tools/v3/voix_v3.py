@@ -87,11 +87,20 @@ def tighten(src, dst):
 
 
 def norm(s):
+    """Mots comparables à l'oreille : sans accents ni apostrophes, chiffres en lettres, finales muettes (-s, -e, -es) retirées."""
+    import unicodedata
     from num2words import num2words
+    s = s.replace("%", " pour cent ").replace("\u202f", " ").replace("\u00a0", " ")
     s = re.sub(r"\d[\d\s]*\d|\d", lambda m: " " + num2words(int(m.group(0).replace(" ", "")), lang="fr") + " ", s)  # 650 → six cent cinquante
     s = re.sub(r"\[[^\]]+\]", " ", s).lower().replace("…", " ").replace("’", "'").replace(" '", "'")
     s = re.sub(r"[^\w' -]", " ", s)
-    return [w for w in re.split(r"[\s-]+", s) if w]
+    out = []
+    for w in re.split(r"[\s'-]+", s):
+        w = "".join(c for c in unicodedata.normalize("NFD", w) if unicodedata.category(c) != "Mn")
+        w = re.sub(r"(es|s|e|x)$", "", w) if len(w) > 3 else w
+        if w:
+            out.append(w)
+    return out
 
 
 def transcribe(path):
@@ -113,7 +122,7 @@ def compare(lines, words):
     for i, ln in enumerate(lines):
         for w in norm(ln):
             ref.append(w); owner.append(i)
-    hyp = [w for x in words for w in norm(x[0])]
+    hyp = norm(" ".join(x[0] for x in words))   # texte entier : « 200 000 », « d 'abord » se recollent
     sm = SequenceMatcher(a=ref, b=hyp, autojunk=False)
     issues = {}
     for tag, i1, i2, j1, j2 in sm.get_opcodes():
@@ -139,7 +148,8 @@ if __name__ == "__main__":
         tts(text, raw, al)
     final = f"{out}/essai{n}.mp3"
     dur, cut = tighten(raw, final)
-    words = transcribe(final)
+    wj = f"{out}/essai{n}-whisper.json"
+    words = json.load(open(wj)) if os.environ.get("RECHECK") and os.path.exists(wj) else transcribe(final)
     json.dump(words, open(f"{out}/essai{n}-whisper.json", "w"), ensure_ascii=False)
     issues, score = compare(lines, words)
     fdur = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", final]))

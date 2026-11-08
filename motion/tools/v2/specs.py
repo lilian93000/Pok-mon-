@@ -112,3 +112,43 @@ SPECS["arnaque3"] = dict(
         dict(type="loop", groups=[11], glow="#ef4444"),
     ],
 )
+
+# ---------------------------------------------------------------- PRIX, voix v3 (voix-off/v3/prix.txt, essai 2 validé)
+SPECS["prix3"] = dict(
+    title="200 000 € : TU ACHÈTES QUOI ?",
+    comment="Surface achetable avec 200 000 € dans 5 villes (MeilleursAgents, 1er nov. 2026), voix v3 énergique ; la fin boucle sur le début.",
+    tag="200 000 € · 5 VILLES",
+    source="Prix moyen au m² des appartements · MeilleursAgents, 1ᵉʳ nov. 2026 · hors frais",
+    script="voix-off/v3/prix.txt",
+    display={"deux cent mille euros": "200 000 €", "vingt et un mètres carrés": "21 m²", "quarante-deux mètres carrés": "42 m²",
+             "quarante-cinq": "45 m²", "cinquante-six mètres carrés": "56 m²", "cent soixante et un mètres carrés": "161 m²"},
+    scenes=[
+        dict(type="hook", groups=[0], big="200 000 €", sub="tu achètes QUOI ?", sub_at="quoi", glow="#f59e0b"),
+        dict(type="stat", groups=[1, 2], label="PARIS", value=21, unit="m²", note="un studio", at="vingt", note_at="studio", area=21, max=161, price="9 633 €/m²", glow="#ef4444"),
+        dict(type="stat", groups=[3], label="LYON", value=42, unit="m²", note="un 2 pièces", at="quarant", area=42, max=161, price="4 736 €/m²", glow="#f97316"),
+        dict(type="stat", groups=[4], label="BORDEAUX", value=45, unit="m²", note="ça respire", at="quarant", note_at="respir", area=45, max=161, price="4 469 €/m²", glow="#a855f7"),
+        dict(type="stat", groups=[5], label="MARSEILLE", value=56, unit="m²", note="un 3 pièces", at="cinquant", area=56, max=161, price="3 581 €/m²", glow="#06b6d4"),
+        dict(type="stat", groups=[6, 7, 8], label="SAINT-ÉTIENNE", value=161, unit="m²", note="une maison de ville", at="cent", note_at="maison", area=161, max=161, price="1 244 €/m²", glow="#22c55e"),
+        dict(type="punch", groups=[9], big="×8", sub="même budget", at="huit", glow="#eab308"),
+        dict(type="hook", groups=[10], big="200 000 €", sub="tu achètes…", glow="#f59e0b"),
+    ],
+)
+
+# ---------------------------------------------------------------- CAUTION, voix v3 (voix-off/v3/caution.txt, essai 1 validé)
+SPECS["caution3"] = dict(
+    title="TA CAUTION : CE QUE DIT LA LOI",
+    comment="Dépôt de garantie (loi du 6 juillet 1989, art. 22 et 25-6), voix v3 énergique ; la fin boucle sur le début.",
+    tag="LOCATAIRE · TES DROITS",
+    source="Loi du 6 juillet 1989, art. 22 (location vide) et art. 25-6 (meublé)",
+    script="voix-off/v3/caution.txt",
+    display={"dix pour cent": "10 %"},
+    scenes=[
+        dict(type="hook", groups=[0, 1], pre="Ta caution :", big="IL TE DOIT\nDE L'ARGENT ?", sub="peut-être bien…", sub_at="argent", glow="#ef4444"),
+        dict(type="rule", groups=[2, 3], n="1/3", big="1 MOIS", sub="de loyer hors charges, maximum", chip="2 en meublé", at="regl", chip_at="meubl", glow="#3b82f6"),
+        dict(type="rule", groups=[4], n="2/3", big="1 MOIS", sub="pour te la rendre", chip="si l'état des lieux est nickel", at="regl", chip_at="rendu", glow="#22c55e"),
+        dict(type="rule", groups=[5], n="2/3", big="2 MOIS", sub="s'il y a des dégâts", chip="avec devis ou factures", at="deg", chip_at="factur", glow="#f97316"),
+        dict(type="rule", groups=[6, 7], n="3/3", big="USURE", sub="normale = pas ton problème", chip="la vétusté reste au proprio", at="detail", chip_at="problem", glow="#a855f7"),
+        dict(type="punch", groups=[8, 9], big="+10 %", sub="par mois de retard", at="dix", glow="#eab308"),
+        dict(type="hook", groups=[10], pre="Ton proprio garde", big="TA CAUTION ?", fs=128, sub="la loi dit non", glow="#ef4444"),
+    ],
+)
