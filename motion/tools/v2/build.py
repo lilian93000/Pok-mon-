@@ -113,13 +113,12 @@ for k, sc in enumerate(SPEC["scenes"]):
         bar = f'<div class="bar" id="{sid}b" style="background:{sc["glow"]}"></div>' if ty == "rule" else ""
         parts.append(f'<div class="{cls}" id="{sid}big" style="font-size:{fs}px">{big}</div>{bar}<div class="rsub" id="{sid}sub">{sc["sub"]}</div>{chip}')
         at = ev["at"]
-        if ty == "verdict":
-            js.append(f'tl.to("#lst", {{ scale: 0.55, y: -160, opacity: 0.18, duration: 0.35, ease: "power2.in" }}, {t0:.3f});')
         js.append(f'tl.fromTo("#{sid}big", {{ scale: 2.3, opacity: 0 }}, {{ scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }}, {at - 0.12:.3f});')
         js.append(f'shake("#{sid}big", {at + 0.02:.3f}, 20); flash({at + 0.02:.3f}, 0.22, 0.15);')
         if bar:
             js.append(f'tl.fromTo("#{sid}b", {{ scaleX: 0 }}, {{ scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }}, {at + 0.1:.3f});')
-        js.append(f'tl.fromTo("#{sid}sub", {{ y: 50, opacity: 0 }}, {{ y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }}, {at + 0.15:.3f});')
+        sub_t = t0 + 0.1 if ty == "punch" else at + 0.15   # le « coup de poing » : le contexte d'abord, le mot choc pile sur la voix
+        js.append(f'tl.fromTo("#{sid}sub", {{ y: 50, opacity: 0 }}, {{ y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }}, {sub_t:.3f});')
         if chip:
             js.append(f'tl.fromTo("#{sid}c", {{ scale: 0, rotate: -8 }}, {{ scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }}, {ev["chip_at"]:.3f});')
         if ty == "punch":
@@ -128,6 +127,8 @@ for k, sc in enumerate(SPEC["scenes"]):
         parts.append("")  # l'annonce vit dans son propre calque (#lst)
     elif ty == "flag":
         parts.append("")
+    elif ty == "loop":
+        parts.append('<div class="lbrand">AnalyseTaCopro · lien en bio</div>')
     elif ty == "end":
         parts.append(f'''<div class="elogo"><svg viewBox="0 0 56 64" width="50" height="58"><rect x="2" y="0" width="52" height="9" rx="4" fill="#fff" /><rect x="8" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="23" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="38" y="14" width="9" height="36" rx="3" fill="#fff" /><rect x="0" y="55" width="56" height="9" rx="4" fill="#fff" /></svg>AnalyseTaCopro</div>
           <div class="eb"><div class="et">{sc["t1"]}<br /><span>{sc["t2"]}</span></div><div class="eurl">analysetacopro.fr · lien en bio</div></div>''')
@@ -143,7 +144,9 @@ for k, sc in enumerate(SPEC["scenes"]):
 LST = ""
 if "listing" in SPEC:
     L = SPEC["listing"]
-    msg = L["msg"].replace("Faites un virement de 650 € pour réserver", '<span id="hl-pay">Faites un virement de 650 € pour réserver</span>').replace("vos relevés bancaires", '<span id="hl-docs">vos relevés bancaires</span>')
+    msg = L["msg"]
+    for tg, txt in L.get("hl", {"pay": "Faites un virement de 650 € pour réserver", "docs": "vos relevés bancaires"}).items():
+        msg = msg.replace(txt, f'<span id="hl-{tg}">{txt}</span>')
     LST = f'''        <div id="lst">
           <div class="card">
             <svg class="photo" viewBox="0 0 840 330" width="840" height="330">
@@ -185,7 +188,19 @@ if "listing" in SPEC:
 glows = "\n".join(f'        <div class="glow" id="g{k}" style="background: radial-gradient(closest-side, {s["glow"]}99, {s["glow"]}26 55%, transparent 75%)"></div>' for k, s in enumerate(SPEC["scenes"]))
 caps = "\n".join(f'          <div class="ch" id="c{i}">' + " ".join(f'<i id="c{i}w{j}">{t}</i>' for j, (t, _) in enumerate(c[2])) + "</div>" for i, c in enumerate(CAPS))
 WIN = [[round(SC[k]["t0"], 3), round(ENDS[k], 3)] for k in range(N)]
-listing_end = next((SC[k]["t0"] for k, s in enumerate(SPEC["scenes"]) if s["type"] == "verdict"), None)
+# l'annonce s'efface à la première scène qui suit le dernier indice ; une scène « loop » la ramène (la vidéo boucle)
+flags = [k for k, s in enumerate(SPEC["scenes"]) if s["type"] == "flag"]
+listing_end = SC[flags[-1] + 1]["t0"] if flags and flags[-1] + 1 < N else None
+if listing_end is not None:
+    js.append(f'tl.to("#lst", {{ scale: 0.55, y: -160, opacity: 0.18, duration: 0.35, ease: "power2.in" }}, {listing_end:.3f});')
+for k, s in enumerate(SPEC["scenes"]):
+    if s["type"] == "loop" and "listing" in SPEC:
+        t = SC[k]["t0"]
+        tgs = [f["target"] for f in SPEC["scenes"] if f["type"] == "flag"]
+        js.append(f'tl.set({json.dumps([f"#st-{g}" for g in tgs] + ["#ring-price", "#ring-owner"])}, {{ opacity: 0, scale: 1 }}, {t:.3f});')
+        js.append(f'tl.set(["#hl-pay", "#hl-docs"], {{ backgroundColor: "rgba(239,68,68,0)", color: "#374151" }}, {t:.3f});')
+        js.append(f'tl.fromTo("#lst", {{ opacity: 0, scale: 0.9, y: 60 }}, {{ opacity: 1, scale: 1, y: 0, duration: 0.3, ease: "power3.out", immediateRender: false }}, {t:.3f});')
+        js.append(f'tl.set("#lst .card", {{ scale: 1 }}, {t:.3f});')
 
 css = f"""      @font-face {{ font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; font-display: block; }}
       * {{ margin: 0; padding: 0; box-sizing: border-box; }}
@@ -242,6 +257,7 @@ css = f"""      @font-face {{ font-family: "Inter"; src: url("assets/fonts/Inter
       .et {{ font-size: 112px; font-weight: 900; letter-spacing: -0.05em; line-height: 1.02; opacity: 0; }}
       .et span {{ color: {YEL}; }}
       .eurl {{ display: inline-block; margin-top: 44px; padding: 16px 28px; border-radius: 999px; background: #fff; color: {INK}; font-size: 40px; font-weight: 900; opacity: 0; }}
+      .lbrand {{ position: absolute; right: 150px; top: 190px; padding: 12px 24px; border-radius: 999px; background: #fff; color: {INK}; font-size: 30px; font-weight: 900; }}
       #caps {{ left: 60px; right: 60px; top: 1190px; height: 300px; }}
       .ch {{ position: absolute; left: 0; right: 0; top: 0; text-align: center; font-size: 84px; font-weight: 900; letter-spacing: -0.035em; line-height: 1.12; opacity: 0; text-shadow: 0 6px 0 rgba(0,0,0,0.45); }}
       .ch i {{ font-style: normal; color: #fff; display: inline-block; margin: 0 8px; }}
@@ -299,7 +315,7 @@ html = f"""<!doctype html>
         if (k < WIN.length - 1) tl.to(`#g${{k}}`, {{ opacity: 0, duration: 0.25 }}, b);
       }});
 {"      tl.to('#lst', { opacity: 0, duration: 0.25 }, " + str(round(listing_end + 0.4, 3)) + ");" if listing_end else ""}
-      tl.to("#tag", {{ opacity: 0, duration: 0.2 }}, WIN[WIN.length - 1][0]);
+{"      tl.to('#tag', { opacity: 0, duration: 0.2 }, WIN[WIN.length - 1][0]);" if SPEC["scenes"][-1]["type"] == "end" else ""}
 {chr(10).join("      " + j for j in js)}
       // sous-titres mot à mot : le mot dit passe en jaune
       CAPS.forEach(([t0, t1, ws], i) => {{

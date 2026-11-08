@@ -88,3 +88,27 @@ SPECS["arnaque"] = dict(
         dict(type="end", t1="Envoie-la", t2="à qui cherche.", glow="#2563eb"),
     ],
 )
+
+# ---------------------------------------------------------------- ARNAQUE, voix v3 « histoire » (émotions, une seule génération)
+# La voix vient de tools/v3/voix_v3.py (voix-off/v3/arnaque.txt) ; « groups » = phrases du script couvertes par chaque scène.
+SPECS["arnaque3"] = dict(
+    title="650 € À PARIS ? C'EST UNE ARNAQUE",
+    comment="Arnaque à la location, voix v3 énergique ; la fin reprend l'annonce du début pour que la vidéo boucle.",
+    tag="ARNAQUE OU PAS ?",
+    source="Annonce fictive · pièces interdites : décret n° 2015-1437 du 5 nov. 2015",
+    script="voix-off/v3/arnaque.txt",
+    display={"six cent cinquante euros": "650 €"},
+    listing=dict(title="T2 lumineux · 45 m²", place="Paris 11ᵉ", price="650 €/mois", owner="Propriétaire · à Londres",
+                 msg="Je suis à Londres. Faites un virement de 650 € pour réserver, puis envoyez votre relevé de banque.",
+                 hl={"pay": "Faites un virement de 650 € pour réserver", "docs": "votre relevé de banque"}),
+    scenes=[
+        dict(type="listing", groups=[0, 1, 2], glow="#ef4444"),
+        dict(type="flag", groups=[3], n="1/4", target="price", label="PRIX TROP BAS", at="beaucoup", glow="#ef4444"),
+        dict(type="flag", groups=[4, 5], n="2/4", target="owner", label="PAS DE VISITE", at="impossible", glow="#f97316"),
+        dict(type="flag", groups=[6, 7], n="3/4", target="pay", label="VIREMENT AVANT VISITE", at="virement", glow="#eab308"),
+        dict(type="flag", groups=[8], n="4/4", target="docs", label="DOCUMENT INTERDIT", at="interdit", glow="#a855f7"),
+        dict(type="punch", groups=[9], big="ARNAQUE !", sub="4 indices sur 4", at="arnaque", glow="#ef4444"),
+        dict(type="verdict", groups=[10], big="0 €", sub="avant visite et bail signé", at="jamais", glow="#22c55e"),
+        dict(type="loop", groups=[11], glow="#ef4444"),
+    ],
+)
