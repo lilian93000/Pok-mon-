@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* « FRAIS DE NOTAIRE : QUI GARDE L'ARGENT ? » — format v2 grand public. Sur 200 000 € dans l'ancien : ~16 000 € de frais, dont ~12 600 € de droits de mutation (6,32 %) et ~2 500 € pour le notaire ; voix v3, fin en boucle.
+         Généré par tools/v2/build.py (notaire3) à partir de tools/minutage.json. Composé en 1080×1920, rendu 2160×3840 à 60 i/s. */
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; font-display: block; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0a0d1f; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Inter", sans-serif; color: #fff; background: #0a0d1f; }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+      .abs { position: absolute; }
+      .glow { position: absolute; left: 0; top: 160px; width: 1080px; height: 1300px; border-radius: 50%; opacity: 0; }
+      #grid { position: absolute; left: 0; top: 0; width: 1080px; height: 2100px; opacity: 0.16; background-image: radial-gradient(circle, #fff 2px, transparent 2.5px); background-size: 54px 54px; }
+      #tag { left: 70px; top: 190px; padding: 12px 26px; border-radius: 999px; background: rgba(255,255,255,0.13); border: 2px solid rgba(255,255,255,0.28); font-size: 32px; font-weight: 800; letter-spacing: 0.04em; }
+      #count { right: 160px; top: 190px; padding: 12px 24px; border-radius: 999px; background: #fff; color: #0a0d1f; font-size: 32px; font-weight: 900; opacity: 0; font-variant-numeric: tabular-nums; }
+      .scn { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; }
+      .hookbox { position: absolute; left: 40px; right: 40px; top: 360px; height: 780px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+      .hpre { font-size: 64px; font-weight: 900; letter-spacing: -0.03em; color: rgba(255,255,255,0.85); margin-bottom: 18px; }
+      .hook { font-weight: 900; letter-spacing: -0.05em; line-height: 0.98; color: #fff; text-shadow: 0 12px 0 rgba(0,0,0,0.4), 0 0 80px rgba(255,255,255,0.3); white-space: nowrap; }
+      .hsub { margin-top: 34px; padding: 14px 32px; border-radius: 26px; background: #fde047; color: #0a0d1f; font-size: 66px; font-weight: 900; letter-spacing: -0.03em; }
+      .lab { position: absolute; left: 70px; top: 330px; font-size: 104px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+      .ppm { position: absolute; left: 74px; top: 450px; font-size: 38px; font-weight: 700; color: rgba(255,255,255,0.72); }
+      .val { position: absolute; left: 60px; top: 560px; font-size: 290px; font-weight: 900; letter-spacing: -0.06em; line-height: 1; color: #fde047; text-shadow: 0 12px 0 rgba(0,0,0,0.35); font-variant-numeric: tabular-nums; transform-origin: 0% 50%; }
+      .val small { font-size: 110px; letter-spacing: -0.03em; margin-left: 12px; color: #fff; }
+      .planbox { position: absolute; left: 570px; top: 480px; width: 450px; height: 460px; }
+      .plan { position: absolute; left: 0; bottom: 0; }
+      .ghost { position: absolute; left: 0; bottom: 0; }
+      .ghost span { position: absolute; left: 10px; top: -44px; font-size: 30px; font-weight: 800; color: rgba(255,255,255,0.6); white-space: nowrap; }
+      .chip { position: absolute; left: 70px; top: 975px; padding: 16px 30px; border-radius: 24px; color: #0a0d1f; font-size: 54px; font-weight: 900; letter-spacing: -0.02em; transform-origin: 0% 50%; }
+      .src { position: absolute; left: 70px; right: 150px; top: 1100px; font-size: 28px; font-weight: 600; color: rgba(255,255,255,0.55); }
+      .rbig { position: absolute; left: 40px; right: 40px; top: 430px; text-align: center; font-weight: 900; letter-spacing: -0.05em; line-height: 1; white-space: nowrap; text-shadow: 0 12px 0 rgba(0,0,0,0.35); opacity: 0; }
+      .rbig.punch { color: #fde047; top: 400px; }
+      .rbig.ok { color: #4ade80; }
+      .bar { position: absolute; left: 270px; width: 540px; top: 720px; height: 16px; border-radius: 8px; transform-origin: 0% 50%; transform: scaleX(0); }
+      .rsub { position: absolute; left: 70px; right: 70px; top: 770px; text-align: center; font-size: 62px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.12; opacity: 0; }
+      .rbig.punch ~ .rsub { top: 720px; }
+      .scn .chip.r { left: 0; right: 0; }
+      #lst { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; transform-origin: 50% 40%; }
+      .card { position: absolute; left: 90px; top: 310px; width: 900px; height: 820px; background: #ffffff; border-radius: 36px; color: #111827; padding: 30px; box-shadow: 0 40px 90px rgba(0,0,0,0.55); transform-origin: 50% 50%; }
+      .card .photo { display: block; border-radius: 22px; }
+      .lt { margin-top: 22px; font-size: 48px; font-weight: 900; letter-spacing: -0.03em; }
+      .lp { margin-top: 2px; font-size: 34px; font-weight: 600; color: #6b7280; }
+      .lprice { position: absolute; left: 30px; top: 500px; font-size: 74px; font-weight: 900; letter-spacing: -0.04em; color: #111827; }
+      .lowner { position: absolute; left: 30px; top: 600px; font-size: 32px; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 16px; }
+      .lowner i { width: 54px; height: 54px; border-radius: 50%; background: #c7d2fe; display: block; }
+      .lmsg { position: absolute; left: 30px; right: 30px; top: 676px; padding: 16px 22px; border-radius: 22px; background: #f3f4f6; font-size: 29px; font-weight: 600; line-height: 1.3; color: #374151; }
+      .lmsg span { border-radius: 8px; padding: 0 4px; }
+      .ring { position: absolute; border: 9px solid #ef4444; border-radius: 26px; opacity: 0; }
+      #ring-price { left: 100px; top: 795px; width: 440px; height: 112px; }
+      #ring-owner { left: 100px; top: 895px; width: 610px; height: 86px; }
+      .stampx { position: absolute; padding: 14px 24px; border: 8px solid #ef4444; outline: 4px solid #ef4444; outline-offset: 6px; border-radius: 18px; color: #ef4444; background: rgba(255,255,255,0.92); font-size: 46px; font-weight: 900; letter-spacing: -0.02em; white-space: nowrap; opacity: 0; }
+      #st-price { left: 560px; top: 808px; transform: rotate(-6deg); }
+      #st-owner { left: 130px; top: 360px; transform: rotate(5deg); }
+      #st-pay { left: 380px; top: 470px; transform: rotate(-4deg); }
+      #st-docs { left: 150px; top: 572px; transform: rotate(5deg); }
+      .elogo { position: absolute; left: 70px; top: 520px; display: flex; align-items: center; gap: 18px; font-size: 46px; font-weight: 800; }
+      .eb { position: absolute; left: 70px; right: 150px; top: 640px; }
+      .et { font-size: 112px; font-weight: 900; letter-spacing: -0.05em; line-height: 1.02; opacity: 0; }
+      .et span { color: #fde047; }
+      .eurl { display: inline-block; margin-top: 44px; padding: 16px 28px; border-radius: 999px; background: #fff; color: #0a0d1f; font-size: 40px; font-weight: 900; opacity: 0; }
+      .lbrand { position: absolute; right: 150px; top: 190px; padding: 12px 24px; border-radius: 999px; background: #fff; color: #0a0d1f; font-size: 30px; font-weight: 900; }
+      .stitle { position: absolute; left: 70px; right: 150px; top: 330px; font-size: 76px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.05; opacity: 0; }
+      .sbar { position: absolute; left: 70px; width: 940px; top: 560px; height: 130px; border-radius: 26px; overflow: hidden; display: flex; background: rgba(255,255,255,0.08); transform-origin: 0% 50%; }
+      .sbar i { display: block; height: 100%; opacity: 0.12; }
+      .srows { position: absolute; left: 70px; width: 940px; top: 740px; }
+      .srow { display: flex; align-items: center; gap: 22px; margin-bottom: 26px; font-size: 54px; font-weight: 800; opacity: 0; }
+      .srow b { width: 46px; height: 46px; border-radius: 12px; flex: none; }
+      .srow span { flex: 1; }
+      .srow em { font-style: normal; font-weight: 900; color: #fde047; font-variant-numeric: tabular-nums; }
+      #caps { left: 60px; right: 60px; top: 1190px; height: 300px; }
+      .ch { position: absolute; left: 0; right: 0; top: 0; text-align: center; font-size: 84px; font-weight: 900; letter-spacing: -0.035em; line-height: 1.12; opacity: 0; text-shadow: 0 6px 0 rgba(0,0,0,0.45); }
+      .ch i { font-style: normal; color: #fff; display: inline-block; margin: 0 8px; }
+      #flash { background: #fff; opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="27.96" data-width="1080" data-height="1920">
+      <audio id="soundtrack" src="assets/audio/soundtrack.wav" data-start="0" data-duration="27.96" data-track-index="4" data-volume="1"></audio>
+      <section id="stage" class="clip" data-start="0" data-duration="27.96" data-track-index="0">
+        <div id="grid"></div>
+        <div class="glow" id="g0" style="background: radial-gradient(closest-side, #f59e0b99, #f59e0b26 55%, transparent 75%)"></div>
+        <div class="glow" id="g1" style="background: radial-gradient(closest-side, #ef444499, #ef444426 55%, transparent 75%)"></div>
+        <div class="glow" id="g2" style="background: radial-gradient(closest-side, #f9731699, #f9731626 55%, transparent 75%)"></div>
+        <div class="glow" id="g3" style="background: radial-gradient(closest-side, #22c55e99, #22c55e26 55%, transparent 75%)"></div>
+        <div class="glow" id="g4" style="background: radial-gradient(closest-side, #a855f799, #a855f726 55%, transparent 75%)"></div>
+        <div class="glow" id="g5" style="background: radial-gradient(closest-side, #f59e0b99, #f59e0b26 55%, transparent 75%)"></div>
+        <div id="tag" class="abs">ACHETER · LES VRAIS CHIFFRES</div>
+        <div id="count" class="abs">1</div>
+
+        <div class="scn" id="s0"><div class="hookbox"><div class="hpre">Un appart à 200 000 € :</div><div class="hook" style="font-size:195px">16 000 €</div><div class="hsub" id="s0sub">de frais de notaire !</div></div></div>
+        <div class="scn" id="s1"><div class="stitle">Qui garde tes 16 000 € ?</div><div class="sbar"><i id="s1g0" style="width:15.62%;background:#3b82f6"></i><i id="s1g1" style="width:78.75%;background:#ef4444"></i><i id="s1g2" style="width:5.62%;background:#a3a3a3"></i></div><div class="srows"><div class="srow" id="s1r0"><b style="background:#3b82f6"></b><span>Le notaire</span><em>2 500&nbsp;€</em></div><div class="srow" id="s1r1"><b style="background:#ef4444"></b><span>Les taxes</span><em>12 600&nbsp;€</em></div><div class="srow" id="s1r2"><b style="background:#a3a3a3"></b><span>Autres frais</span><em>900&nbsp;€</em></div></div><div class="src">Ancien, 200 000 € · droits de mutation 6,32 % (taux relevé, la plupart des départements) · émoluments barème 2026 · arrondis</div></div>
+        <div class="scn" id="s2"><div class="rbig" id="s2big" style="font-size:179px">7 À 8 %</div><div class="bar" id="s2b" style="background:#f97316"></div><div class="rsub" id="s2sub">du prix, dans l'ancien</div><div class="chip" id="s2c" style="background:#f97316">le vrai coût de l'achat</div></div>
+        <div class="scn" id="s3"><div class="rbig" id="s3big" style="font-size:179px">2 À 3 %</div><div class="bar" id="s3b" style="background:#22c55e"></div><div class="rsub" id="s3sub">dans le neuf</div><div class="chip" id="s3c" style="background:#22c55e">taxes réduites</div></div>
+        <div class="scn" id="s4"><div class="rbig punch" id="s4big" style="font-size:202px">IMPÔTS</div><div class="rsub" id="s4sub">pas vraiment des « frais de notaire »</div></div>
+        <div class="scn" id="s5"><div class="hookbox"><div class="hpre">Un appart à 200 000 € :</div><div class="hook" style="font-size:195px">16 000 €</div><div class="hsub" id="s5sub">de frais de notaire…</div></div></div>
+        <div id="caps" class="abs">
+          <div class="ch" id="c0"><i id="c0w0">Un</i> <i id="c0w1">appart</i> <i id="c0w2">à</i> <i id="c0w3">200 000 €.</i></div>
+          <div class="ch" id="c1"><i id="c1w0">Notaire :</i></div>
+          <div class="ch" id="c2"><i id="c2w0">16 000 € !</i></div>
+          <div class="ch" id="c3"><i id="c3w0">Et</i> <i id="c3w1">tu</i> <i id="c3w2">crois</i> <i id="c3w3">que</i></div>
+          <div class="ch" id="c4"><i id="c4w0">le</i> <i id="c4w1">notaire</i> <i id="c4w2">garde</i> <i id="c4w3">tout ?</i></div>
+          <div class="ch" id="c5"><i id="c5w0">Même</i> <i id="c5w1">pas.</i></div>
+          <div class="ch" id="c6"><i id="c6w0">Il</i> <i id="c6w1">garde…</i> <i id="c6w2">environ</i> <i id="c6w3">2 500 €.</i></div>
+          <div class="ch" id="c7"><i id="c7w0">Le</i> <i id="c7w1">reste ?</i></div>
+          <div class="ch" id="c8"><i id="c8w0">Des</i> <i id="c8w1">TAXES.</i></div>
+          <div class="ch" id="c9"><i id="c9w0">12 600 €…</i> <i id="c9w1">département,</i></div>
+          <div class="ch" id="c10"><i id="c10w0">commune,</i></div>
+          <div class="ch" id="c11"><i id="c11w0">État.</i></div>
+          <div class="ch" id="c12"><i id="c12w0">Les</i> <i id="c12w1">fameux</i> <i id="c12w2">droits</i> <i id="c12w3">de</i></div>
+          <div class="ch" id="c13"><i id="c13w0">mutation.</i></div>
+          <div class="ch" id="c14"><i id="c14w0">Merci</i> <i id="c14w1">qui ?</i></div>
+          <div class="ch" id="c15"><i id="c15w0">Et</i> <i id="c15w1">le</i> <i id="c15w2">détail</i> <i id="c15w3">que</i></div>
+          <div class="ch" id="c16"><i id="c16w0">peu</i> <i id="c16w1">de</i> <i id="c16w2">gens</i> <i id="c16w3">savent…</i></div>
+          <div class="ch" id="c17"><i id="c17w0">Dans</i> <i id="c17w1">l'ancien :</i></div>
+          <div class="ch" id="c18"><i id="c18w0">7 à 8 %</i> <i id="c18w1">du</i> <i id="c18w2">prix.</i></div>
+          <div class="ch" id="c19"><i id="c19w0">Dans</i> <i id="c19w1">le</i> <i id="c19w2">neuf ?</i></div>
+          <div class="ch" id="c20"><i id="c20w0">Seulement</i> <i id="c20w1">2 à 3 %.</i></div>
+          <div class="ch" id="c21"><i id="c21w0">Le</i> <i id="c21w1">nom</i> <i id="c21w2">est</i> <i id="c21w3">trompeur :</i></div>
+          <div class="ch" id="c22"><i id="c22w0">c'est</i> <i id="c22w1">surtout…</i> <i id="c22w2">des</i> <i id="c22w3">IMPÔTS.</i></div>
+          <div class="ch" id="c23"><i id="c23w0">Un</i> <i id="c23w1">appart</i> <i id="c23w2">à</i> <i id="c23w3">200 000 €.</i></div>
+          <div class="ch" id="c24"><i id="c24w0">Frais</i> <i id="c24w1">de</i> <i id="c24w2">notaire…</i></div>
+        </div>
+      </section>
+      <div id="flash" class="clip" data-start="0" data-duration="27.96" data-track-index="2" data-layout-allow-overlap></div>
+    </div>
+    <script>
+      const DUR = 27.96, WIN = [[0.0, 2.68], [2.68, 15.08], [15.08, 19.82], [19.82, 21.96], [21.96, 24.88], [24.88, 27.96]], CAPS = [[0.0, 1.54, [0.0, 0.24, 0.52, 0.7]], [1.5, 2.28, [1.54]], [2.24, 2.78, [2.28]], [2.74, 3.5, [2.78, 3.06, 3.28, 3.36]], [3.46, 4.56, [3.5, 3.66, 3.88, 4.12]], [4.52, 5.44, [4.56, 4.8]], [5.4, 7.56, [5.44, 5.66, 6.16, 6.76]], [7.52, 8.22, [7.56, 7.72]], [8.18, 9.2, [8.22, 8.4]], [9.16, 11.72, [9.2, 11.0]], [11.68, 12.26, [11.72]], [12.22, 12.8, [12.26]], [12.76, 13.76, [12.8, 13.02, 13.36, 13.56]], [13.72, 14.42, [13.76]], [14.38, 15.18, [14.42, 14.68]], [15.14, 15.98, [15.18, 15.32, 15.5, 15.76]], [15.94, 17.24, [15.98, 16.12, 16.24, 16.36]], [17.2, 18.2, [17.24, 17.36]], [18.16, 19.92, [18.2, 19.3, 19.5]], [19.88, 20.74, [19.92, 19.98, 20.18]], [20.7, 22.06, [20.74, 20.92]], [22.02, 23.36, [22.06, 22.42, 22.54, 22.74]], [23.32, 24.98, [23.36, 23.54, 24.02, 24.52]], [24.94, 26.72, [24.98, 25.18, 25.46, 25.68]], [26.68, 27.96, [26.72, 26.84, 26.98]]];
+      const tl = gsap.timeline({ paused: true });
+      const flash = (t, a = 0.4, d = 0.2) => tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const shake = (sel, t, amp = 18, n = 7) => {
+        for (let i = 0; i < n; i++) tl.to(sel, { x: Math.sin(i * 2.7 + t) * amp * (1 - i / n), y: Math.cos(i * 3.1 + t) * amp * (1 - i / n), duration: 0.03, ease: "none" }, t + i * 0.03);
+        tl.to(sel, { x: 0, y: 0, duration: 0.04 }, t + n * 0.03);
+      };
+      const sp = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+      const roll = (sel, a, b, t, d) => {
+        const o = { v: a };
+        tl.fromTo(o, { v: a }, { v: b, duration: d, ease: "power2.out", immediateRender: false, onUpdate: () => { document.querySelector(sel).textContent = sp(o.v); } }, t);
+      };
+      tl.set("#flash", { opacity: 0 }, 0);
+      tl.fromTo("#grid", { y: 0 }, { y: -180, duration: DUR, ease: "none" }, 0);
+      // chaque scène n'est visible que pendant sa fenêtre ; une couleur de fond par scène
+      WIN.forEach(([a, b], k) => {
+        tl.set(`#s${k}`, { opacity: 1 }, a);
+        if (k < WIN.length - 1) tl.set(`#s${k}`, { opacity: 0 }, b);
+        if (k === 0) tl.set("#g0", { opacity: 1 }, 0);
+        else tl.fromTo(`#g${k}`, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, a);
+        if (k < WIN.length - 1) tl.to(`#g${k}`, { opacity: 0, duration: 0.25 }, b);
+      });
+
+
+      tl.fromTo("#s0 .hook", { scale: 1.07 }, { scale: 1, duration: 0.22, ease: "power4.out", immediateRender: false }, 0.000);
+      shake("#s0 .hook", 0.050, 20);
+      tl.fromTo("#s0sub", { y: 40 }, { y: 0, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 0.000);
+      tl.fromTo("#s0sub", { scale: 1 }, { scale: 1.12, duration: 0.15, yoyo: true, repeat: 1, ease: "sine.out", immediateRender: false }, 2.280);
+      tl.to("#s0 .hook", { scale: 1.06, duration: 2.28, ease: "none" }, 0.300);
+      tl.set("#count", { opacity: 0 }, 0.000);
+      tl.fromTo("#s1 .stitle", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 2.730);
+      tl.fromTo("#s1 .sbar", { scaleX: 0.2, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, 2.880);
+      tl.fromTo("#s1g0", { opacity: 0.12 }, { opacity: 1, duration: 0.2, immediateRender: false }, 6.160);
+      tl.fromTo("#s1g0", { scaleY: 1.6 }, { scaleY: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 6.160);
+      tl.fromTo("#s1r0", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 6.160);
+      tl.fromTo("#s1g1", { opacity: 0.12 }, { opacity: 1, duration: 0.2, immediateRender: false }, 9.200);
+      tl.fromTo("#s1g1", { scaleY: 1.6 }, { scaleY: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 9.200);
+      tl.fromTo("#s1r1", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 9.200);
+      tl.fromTo("#s1g2", { opacity: 0.12 }, { opacity: 1, duration: 0.2, immediateRender: false }, 13.760);
+      tl.fromTo("#s1g2", { scaleY: 1.6 }, { scaleY: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 13.760);
+      tl.fromTo("#s1r2", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 13.760);
+      tl.set("#count", { opacity: 0 }, 2.680);
+      tl.fromTo("#s2big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 17.240);
+      shake("#s2big", 17.380, 20); flash(17.380, 0.22, 0.15);
+      tl.fromTo("#s2b", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 17.460);
+      tl.fromTo("#s2sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 17.510);
+      tl.fromTo("#s2c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 19.500);
+      tl.set("#count", { opacity: 0 }, 15.080);
+      tl.fromTo("#s3big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 20.060);
+      shake("#s3big", 20.200, 20); flash(20.200, 0.22, 0.15);
+      tl.fromTo("#s3b", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 20.280);
+      tl.fromTo("#s3sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 20.330);
+      tl.fromTo("#s3c", { scale: 0, rotate: -8 }, { scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 20.740);
+      tl.set("#count", { opacity: 0 }, 19.820);
+      tl.fromTo("#s4big", { scale: 2.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in", immediateRender: false }, 24.400);
+      shake("#s4big", 24.540, 20); flash(24.540, 0.22, 0.15);
+      tl.fromTo("#s4sub", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 22.060);
+      tl.to("#s4big", { scale: 1.08, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, 24.820);
+      tl.set("#count", { opacity: 0 }, 21.960);
+      tl.fromTo("#s5 .hook", { scale: 1.07 }, { scale: 1, duration: 0.22, ease: "power4.out", immediateRender: false }, 24.880);
+      shake("#s5 .hook", 24.930, 20);
+      tl.fromTo("#s5sub", { y: 40 }, { y: 0, duration: 0.3, ease: "back.out(2)", immediateRender: false }, 24.880);
+      tl.to("#s5 .hook", { scale: 1.06, duration: 2.68, ease: "none" }, 25.180);
+      tl.set("#count", { opacity: 0 }, 24.880);
+      // sous-titres mot à mot : le mot dit passe en jaune
+      CAPS.forEach(([t0, t1, ws], i) => {
+        if (i === 0) tl.set("#c0", { opacity: 1 }, 0);
+        else tl.fromTo(`#c${i}`, { opacity: 0, y: 26, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, t0);
+        ws.forEach((s, j) => {
+          tl.set(`#c${i}w${j}`, { color: "#fde047" }, s);
+          if (j + 1 < ws.length) tl.set(`#c${i}w${j}`, { color: "#ffffff" }, ws[j + 1]);
+        });
+        tl.to(`#c${i}`, { opacity: 0, duration: 0.08 }, t1 - 0.08);
+      });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

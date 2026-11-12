@@ -152,3 +152,45 @@ SPECS["caution3"] = dict(
         dict(type="hook", groups=[10], pre="Ton proprio garde", big="TA CAUTION ?", fs=128, sub="la loi dit non", glow="#ef4444"),
     ],
 )
+
+# ---------------------------------------------------------------- FRAIS DE NOTAIRE, voix v3 (voix-off/v3/notaire.txt, essai 2 validé)
+SPECS["notaire3"] = dict(
+    title="FRAIS DE NOTAIRE : QUI GARDE L'ARGENT ?",
+    comment="Sur 200 000 € dans l'ancien : ~16 000 € de frais, dont ~12 600 € de droits de mutation (6,32 %) et ~2 500 € pour le notaire ; voix v3, fin en boucle.",
+    tag="ACHETER · LES VRAIS CHIFFRES",
+    source="Ancien, 200 000 € · droits de mutation 6,32 % (taux relevé, la plupart des départements) · émoluments barème 2026 · arrondis",
+    script="voix-off/v3/notaire.txt",
+    display={"deux cent mille": "200 000 €", "seize mille": "16 000 €", "deux mille cinq cents": "2 500 €",
+             "douze mille six cents euros": "12 600 €", "sept à huit pour cent": "7 à 8 %", "deux à trois pour cent": "2 à 3 %"},
+    scenes=[
+        dict(type="hook", groups=[0], pre="Un appart à 200 000 € :", big="16 000 €", sub="de frais de notaire !", sub_at="seiz", glow="#f59e0b"),
+        dict(type="split", groups=[1, 2, 3, 4, 5], title="Qui garde tes 16 000 € ?", glow="#ef4444",
+             segments=[dict(label="Le notaire", value=2500, color="#3b82f6", at="environ"),
+                       dict(label="Les taxes", value=12600, color="#ef4444", at="douz"),
+                       dict(label="Autres frais", value=900, color="#a3a3a3", at="mutat")]),
+        dict(type="rule", groups=[6, 7], big="7 À 8 %", sub="du prix, dans l'ancien", chip="le vrai coût de l'achat", at="ancien", chip_at="pri", glow="#f97316"),
+        dict(type="rule", groups=[8], big="2 À 3 %", sub="dans le neuf", chip="taxes réduites", at="neuf", chip_at="seulement", glow="#22c55e"),
+        dict(type="punch", groups=[9], big="IMPÔTS", sub="pas vraiment des « frais de notaire »", at="impot", glow="#a855f7"),
+        dict(type="hook", groups=[10], pre="Un appart à 200 000 € :", big="16 000 €", sub="de frais de notaire…", glow="#f59e0b"),
+    ],
+)
+
+# ---------------------------------------------------------------- ÉTAT DES LIEUX D'ENTRÉE, voix v3 (voix-off/v3/etatdeslieux.txt, essai 1 validé)
+SPECS["etatdeslieux3"] = dict(
+    title="ÉTAT DES LIEUX : LE DÉLAI SECRET",
+    comment="10 jours pour compléter l'état des lieux d'entrée (1er mois de chauffe pour le chauffage), commission de conciliation, présomption de bon état sans état des lieux ; voix v3, fin en boucle.",
+    tag="LOCATAIRE · TES DROITS",
+    source="Loi du 6 juillet 1989, art. 3-2 · Code civil, art. 1731",
+    script="voix-off/v3/etatdeslieux.txt",
+    display={"dix jours": "10 jours"},
+    scenes=[
+        dict(type="hook", groups=[0], pre="État des lieux d'entrée :", big="DÉLAI SECRET", fs=128, sub="que personne ne te dit", sub_at="secret", glow="#ef4444"),
+        dict(type="punch", groups=[1], big="UNE FUITE", sub="juste après avoir signé…", at="fuit", glow="#06b6d4"),
+        dict(type="rule", groups=[2, 3], n="1/3", big="10 JOURS", sub="pour compléter l'état des lieux", chip="tout défaut oublié", at="dix", chip_at="complet", glow="#22c55e"),
+        dict(type="rule", groups=[4], n="1/3", big="CHAUFFAGE", sub="1ᵉʳ mois de chauffe", chip="délai plus long", at="chauffag", chip_at="premier", glow="#f97316"),
+        dict(type="rule", groups=[5], n="2/3", big="RECOMMANDÉ", sub="avec photos datées", chip="garde une preuve", at="recommand", chip_at="photo", glow="#3b82f6"),
+        dict(type="rule", groups=[6, 7], n="3/3", big="GRATUIT", sub="commission de conciliation", chip="si le proprio refuse", at="commission", chip_at="refus", glow="#a855f7"),
+        dict(type="punch", groups=[8, 9, 10], big="BON ÉTAT", sub="sans état des lieux : présumé", at="bon", glow="#ef4444"),
+        dict(type="hook", groups=[11], pre="Ton état des lieux d'entrée :", big="10 JOURS", sub="pas un de plus", glow="#22c55e"),
+    ],
+)

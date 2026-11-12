@@ -90,7 +90,7 @@ def norm(s):
     """Mots comparables à l'oreille : sans accents ni apostrophes, chiffres en lettres, finales muettes (-s, -e, -es) retirées."""
     import unicodedata
     from num2words import num2words
-    s = s.replace("%", " pour cent ").replace("\u202f", " ").replace("\u00a0", " ")
+    s = s.replace("%", " pour cent ").replace("€", " euros ").replace("\u202f", " ").replace("\u00a0", " ")
     s = re.sub(r"\d[\d\s]*\d|\d", lambda m: " " + num2words(int(m.group(0).replace(" ", "")), lang="fr") + " ", s)  # 650 → six cent cinquante
     s = re.sub(r"\[[^\]]+\]", " ", s).lower().replace("…", " ").replace("’", "'").replace(" '", "'")
     s = re.sub(r"[^\w' -]", " ", s)

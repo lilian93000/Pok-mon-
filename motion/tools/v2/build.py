@@ -123,6 +123,19 @@ for k, sc in enumerate(SPEC["scenes"]):
             js.append(f'tl.fromTo("#{sid}c", {{ scale: 0, rotate: -8 }}, {{ scale: 1, rotate: -2, duration: 0.3, ease: "back.out(3)", immediateRender: false }}, {ev["chip_at"]:.3f});')
         if ty == "punch":
             js.append(f'tl.to("#{sid}big", {{ scale: 1.08, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }}, {at + 0.3:.3f});')
+    elif ty == "split":
+        # où part l'argent : une barre qui se découpe au fil de la voix, puis une ligne par part
+        tot = sum(x["value"] for x in sc["segments"])
+        bar = "".join(f'<i id="{sid}g{j}" style="width:{100 * x["value"] / tot:.2f}%;background:{x["color"]}"></i>' for j, x in enumerate(sc["segments"]))
+        rows = "".join(f'<div class="srow" id="{sid}r{j}"><b style="background:{x["color"]}"></b><span>{x["label"]}</span><em>{fmt(x["value"])}&nbsp;€</em></div>' for j, x in enumerate(sc["segments"]))
+        parts.append(f'<div class="stitle">{sc["title"]}</div><div class="sbar">{bar}</div><div class="srows">{rows}</div><div class="src">{SPEC["source"]}</div>')
+        js.append(f'tl.fromTo("#{sid} .stitle", {{ y: 50, opacity: 0 }}, {{ y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }}, {t0 + 0.05:.3f});')
+        js.append(f'tl.fromTo("#{sid} .sbar", {{ scaleX: 0.2, opacity: 0 }}, {{ scaleX: 1, opacity: 1, duration: 0.35, ease: "power3.out", immediateRender: false }}, {t0 + 0.2:.3f});')
+        for j, x in enumerate(sc["segments"]):
+            at = ev[f"seg{j}"]
+            js.append(f'tl.fromTo("#{sid}g{j}", {{ opacity: 0.12 }}, {{ opacity: 1, duration: 0.2, immediateRender: false }}, {at:.3f});')
+            js.append(f'tl.fromTo("#{sid}g{j}", {{ scaleY: 1.6 }}, {{ scaleY: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }}, {at:.3f});')
+            js.append(f'tl.fromTo("#{sid}r{j}", {{ x: -80, opacity: 0 }}, {{ x: 0, opacity: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }}, {at:.3f});')
     elif ty == "listing":
         parts.append("")  # l'annonce vit dans son propre calque (#lst)
     elif ty == "flag":
@@ -258,6 +271,14 @@ css = f"""      @font-face {{ font-family: "Inter"; src: url("assets/fonts/Inter
       .et span {{ color: {YEL}; }}
       .eurl {{ display: inline-block; margin-top: 44px; padding: 16px 28px; border-radius: 999px; background: #fff; color: {INK}; font-size: 40px; font-weight: 900; opacity: 0; }}
       .lbrand {{ position: absolute; right: 150px; top: 190px; padding: 12px 24px; border-radius: 999px; background: #fff; color: {INK}; font-size: 30px; font-weight: 900; }}
+      .stitle {{ position: absolute; left: 70px; right: 150px; top: 330px; font-size: 76px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.05; opacity: 0; }}
+      .sbar {{ position: absolute; left: 70px; width: 940px; top: 560px; height: 130px; border-radius: 26px; overflow: hidden; display: flex; background: rgba(255,255,255,0.08); transform-origin: 0% 50%; }}
+      .sbar i {{ display: block; height: 100%; opacity: 0.12; }}
+      .srows {{ position: absolute; left: 70px; width: 940px; top: 740px; }}
+      .srow {{ display: flex; align-items: center; gap: 22px; margin-bottom: 26px; font-size: 54px; font-weight: 800; opacity: 0; }}
+      .srow b {{ width: 46px; height: 46px; border-radius: 12px; flex: none; }}
+      .srow span {{ flex: 1; }}
+      .srow em {{ font-style: normal; font-weight: 900; color: {YEL}; font-variant-numeric: tabular-nums; }}
       #caps {{ left: 60px; right: 60px; top: 1190px; height: 300px; }}
       .ch {{ position: absolute; left: 0; right: 0; top: 0; text-align: center; font-size: 84px; font-weight: 900; letter-spacing: -0.035em; line-height: 1.12; opacity: 0; text-shadow: 0 6px 0 rgba(0,0,0,0.45); }}
       .ch i {{ font-style: normal; color: #fff; display: inline-block; margin: 0 8px; }}

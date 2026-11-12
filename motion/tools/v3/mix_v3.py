@@ -103,11 +103,13 @@ if __name__ == "__main__":
         first = next(w for w in W if w[0] == k)
         t0 = 0.0 if k == 0 else round(first[2] - 0.1, 3)
         ev = {"t0": t0}
-        for key in ("at", "note_at", "chip_at", "sub_at"):
-            if key in sc:
-                hits = [w[2] for w in W if w[0] == k and any(t.startswith(sc[key]) for t in voix_v3.norm(w[1]))]
+        anchors = {key: sc[key] for key in ("at", "note_at", "chip_at", "sub_at") if key in sc}
+        anchors.update({f"seg{j}": x["at"] for j, x in enumerate(sc.get("segments", []))})
+        for key in anchors:
+            if True:
+                hits = [w[2] for w in W if w[0] == k and any(t.startswith(anchors[key]) for t in voix_v3.norm(w[1]))]
                 if not hits:
-                    raise SystemExit(f"mot d'ancrage introuvable : {sc[key]!r} (scène {k})")
+                    raise SystemExit(f"mot d'ancrage introuvable : {anchors[key]!r} (scène {k})")
                 ev[key] = hits[0]
         scenes.append(ev); starts.append(first[2])
         if k:
@@ -127,6 +129,9 @@ if __name__ == "__main__":
             place(bus, pop, ev["at"] + 0.35, 0.5)
         elif ty == "rule":
             place(bus, impact2, ev["at"], 0.4)
+        elif ty == "split":
+            for j in range(len(sc["segments"])):
+                place(bus, pop, ev[f"seg{j}"], 0.55)
     bus = bus[: int(dur * SR)]
     bus = np.tanh(1.4 * bus / np.abs(bus).max()) / np.tanh(1.4) * 0.89
     out = os.path.join(proj, "assets", "audio", "soundtrack.wav")
