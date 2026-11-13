@@ -194,3 +194,61 @@ SPECS["etatdeslieux3"] = dict(
         dict(type="hook", groups=[11], pre="Ton état des lieux d'entrée :", big="10 JOURS", sub="pas un de plus", glow="#22c55e"),
     ],
 )
+
+# ---------------------------------------------------------------- TÉLÉPHONE EN VISITE, voix v3 (voix-off/v3/telephone.txt, essai 2 validé)
+SPECS["telephone3"] = dict(
+    title="TON TÉLÉPHONE, L'OUTIL SECRET DE LA VISITE",
+    comment="4 réflexes en visite avec son téléphone : niveau, lampe rasante, chargeur dans les prises, réseau ; voix v3, fin en boucle.",
+    tag="VISITE · LES BONS RÉFLEXES",
+    source="Astuces de visite AnalyseTaCopro",
+    script="voix-off/v3/telephone.txt",
+    scenes=[
+        dict(type="hook", groups=[0], pre="En visite d'appart :", big="TON\nTÉLÉPHONE", sub="l'outil secret", sub_at="secret", glow="#06b6d4"),
+        dict(type="rule", groups=[1, 2], n="1/4", big="NIVEAU", sub="pose-le au sol", chip="ça penche = plancher qui a bougé", at="niveau", chip_at="pench", glow="#3b82f6"),
+        dict(type="rule", groups=[3, 4], n="2/4", big="LAMPE", sub="collée au mur", chip="fissures et bosses apparaissent", at="lamp", chip_at="fissur", glow="#f59e0b"),
+        dict(type="rule", groups=[5, 6], n="3/4", big="CHARGEUR", sub="dans chaque prise", chip="prise morte = à noter", at="chargeur", chip_at="mort", glow="#22c55e"),
+        dict(type="rule", groups=[7, 8], n="4/4", big="RÉSEAU", sub="dans chaque pièce", chip="0 barre dans la chambre ?", at="reseau", chip_at="zero", glow="#a855f7"),
+        dict(type="hook", groups=[9], pre="En visite d'appart :", big="TON\nTÉLÉPHONE", sub="l'outil…", glow="#06b6d4"),
+    ],
+)
+
+# ---------------------------------------------------------------- VRAI OU FAUX LOCATAIRE, voix v3 (voix-off/v3/vfloc.txt, essai 1 validé)
+SPECS["vfloc3"] = dict(
+    title="VRAI OU FAUX : SPÉCIAL LOCATAIRE",
+    comment="Jeu : visite du bailleur, révision du loyer (1 fois par an, IRL), réparations locatives (décret 87-712), trêve hivernale (1er nov.–31 mars) ; voix v3, fin en boucle.",
+    tag="JEU · LOCATAIRE",
+    source="Loi du 6 juillet 1989 · décret 87-712 · CCH, art. L412-6",
+    script="voix-off/v3/vfloc.txt",
+    display={"trente et un mars": "31 mars"},
+    scenes=[
+        dict(type="hook", groups=[0], pre="Spécial locataire :", big="VRAI\nOU FAUX ?", sub="4 questions", glow="#a855f7"),
+        dict(type="hook", groups=[1], n="1/4", pre="Ton proprio entre chez toi", big="QUAND\nIL VEUT ?", sub="vrai ou faux ?", glow="#3b82f6"),
+        dict(type="punch", groups=[2], big="FAUX", sub="c'est TON domicile", at="fau", glow="#ef4444"),
+        dict(type="hook", groups=[3], n="2/4", pre="Il augmente le loyer", big="QUAND\nIL VEUT ?", sub="vrai ou faux ?", glow="#3b82f6"),
+        dict(type="punch", groups=[4], big="FAUX", sub="1 fois par an, maximum", at="fau", glow="#ef4444"),
+        dict(type="hook", groups=[5], n="3/4", pre="Les petites réparations", big="C'EST\nPOUR TOI ?", sub="vrai ou faux ?", glow="#3b82f6"),
+        dict(type="verdict", groups=[6], big="VRAI", sub="joints, ampoules, poignées", at="vrai", glow="#22c55e"),
+        dict(type="hook", groups=[7], n="4/4", pre="Dehors", big="EN PLEIN\nHIVER ?", sub="vrai ou faux ?", glow="#3b82f6"),
+        dict(type="punch", groups=[8], big="FAUX", sub="trêve jusqu'au 31 mars", at="fau", glow="#ef4444"),
+        dict(type="hook", groups=[9], pre="Ton score :", big="?/4", sub="dis-le en commentaire", glow="#eab308"),
+        dict(type="hook", groups=[10], pre="Spécial locataire :", big="VRAI\nOU FAUX ?", sub="…", glow="#a855f7"),
+    ],
+)
+
+# ---------------------------------------------------------------- 3 PHRASES D'UN PV D'AG, voix v3 (voix-off/v3/pvag.txt, essai 2 validé)
+SPECS["pvag3"] = dict(
+    title="3 PHRASES D'UN PV D'AG QUI DOIVENT TE FAIRE FUIR",
+    comment="Travaux votés à appeler (payés par l'acheteur sauf clause du compromis, décret 1967 art. 6-2), question reportée, expertise en cours ; voix v3, fin en boucle.",
+    tag="ACHETER · LA COPRO",
+    source="Décret du 17 mars 1967, art. 6-2 · procès-verbaux d'assemblée générale",
+    script="voix-off/v3/pvag.txt",
+    display={"Trois phrases": "3 phrases"},
+    scenes=[
+        dict(type="hook", groups=[0], pre="Dans un PV d'AG :", big="3 PHRASES", sub="qui doivent te faire fuir", sub_at="fuir", glow="#ef4444"),
+        dict(type="rule", groups=[1, 2, 3], n="1/3", big="APPELS DE FONDS", sub="« travaux votés, à venir »", chip="après la vente : c'est TOI qui paies", at="appel", chip_at="toi", glow="#f97316"),
+        dict(type="rule", groups=[4, 5], n="2/3", big="REPORTÉ", sub="« à la prochaine assemblée »", chip="le problème traîne", at="report", chip_at="train", glow="#eab308"),
+        dict(type="rule", groups=[6, 7], n="3/3", big="EXPERTISE", sub="« en cours sur les fissures »", chip="pas encore chiffrée", at="expertis", chip_at="chiffr", glow="#a855f7"),
+        dict(type="punch", groups=[8], big="ON TRAQUE", sub="ces phrases pour toi", at="traqu", glow="#22c55e"),
+        dict(type="hook", groups=[9], pre="Dans un PV d'AG :", big="3 PHRASES", sub="…", glow="#ef4444"),
+    ],
+)

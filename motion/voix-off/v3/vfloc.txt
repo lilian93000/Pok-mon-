@@ -1,0 +1,12 @@
+# Vrai ou faux, spécial locataire — voix v3 (trêve hivernale : CCH L412-6 ; loyer : révision annuelle IRL ; réparations locatives : décret 87-712)
+[excited] Vrai ou faux, spécial locataire !
+[curious] Ton proprio peut entrer chez toi quand il veut ?
+[sarcastic] FAUX ! C'est ton domicile, pas le sien.
+[curious] Il peut augmenter le loyer quand il veut ?
+[mischievously] FAUX ! Une fois par an, maximum.
+[curious] Les petites réparations, c'est pour toi ?
+[laughs] VRAI ! Joints, ampoules, poignées… à ta charge.
+[curious] Il peut te mettre dehors en plein hiver ?
+[dramatically] FAUX ! Trêve hivernale, jusqu'au trente et un mars.
+[excited] Combien de bonnes réponses ? Dis-le en commentaire !
+[curious] Vrai ou faux…
