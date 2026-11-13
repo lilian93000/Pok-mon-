@@ -33,6 +33,7 @@ SURFACES = {
     "roland": "terre", "madrid": "terre", "rome": "terre", "iasi": "terre",
     "hamburg": "terre", "palermo": "terre", "bucharest": "terre",
     "kitzb": "terre", "warsaw": "terre", "prague": "terre",
+    "sopo": "terre", "cundinamarca": "terre", "bogota": "terre", "cali": "terre",
     # été/automne dur nord-américain + asie
     "toronto": "dur", "montreal": "dur", "canadian": "dur", "national bank": "dur",
     "cincinnati": "dur", "washington": "dur", "dc open": "dur", "monterrey": "dur",
