@@ -337,6 +337,15 @@ let done = store.get('todos',{});
 let lastImport = store.get('lastImport',null);
 
 /* ---------- lien de configuration privé : #setup=... ---------- */
+function applySetup(text){
+  const m = String(text||'').match(/#setup=([A-Za-z0-9_\-]+)/);
+  if(!m) return false;
+  try{
+    const cfg = JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,'+').replace(/_/g,'/')))));
+    S = Object.assign({}, DEFAULTS, cfg); S.goals = Object.assign({}, DEFAULTS.goals, cfg.goals||{});
+    store.set('settings',S); return true;
+  }catch(e){ return false; }
+}
 (function(){
   const m = location.hash.match(/^#setup=([A-Za-z0-9_\-]+)/);
   if(!m) return;
@@ -681,8 +690,11 @@ function importCard(){
 function setupCard(){
   return `<div class="card hero"><div class="blob b1"></div><div class="blob b2"></div><div style="position:relative">
     <div class="lbl">Bienvenue 👋</div><div class="big" style="font-size:40px">Mon Budget</div>
-    <div class="sub" style="max-width:none">Pour commencer, ouvre le lien de configuration que Claude t'a donné, ou remplis ces 3 infos.</div></div></div>
-    <div class="card anim" style="--i:1">
+    <div class="sub" style="max-width:none">Colle ton lien de configuration, ou remplis les 3 infos plus bas.</div></div></div>
+    <div class="card anim" style="--i:1"><div class="h">🔗 J'ai un lien de configuration</div>
+      <input id="suLink" class="wide" style="width:100%;border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:12px;font-size:14px" placeholder="Colle ton lien ici" aria-label="Lien de configuration">
+      <button class="bigbtn" id="suLinkGo">Installer mes réglages</button></div>
+    <div class="card anim" style="--i:2"><div class="h">✍️ Sinon, à la main</div>
       <div class="field"><label for="su1">Salaire mensuel (CHF)</label><input id="su1" type="number" inputmode="decimal" placeholder="ex. 4000"></div>
       <div class="field"><label for="su2">Taux CHF → €</label><input id="su2" type="number" step="0.01" value="${S.rate}"></div>
       <div class="field"><label for="su3">Jour de paie</label><input id="su3" type="number" min="1" max="28" value="${S.payDay}"></div>
@@ -690,6 +702,7 @@ function setupCard(){
       <p class="muted" style="font-size:12px;margin:10px 0 0">Tu pourras ajouter tes charges fixes et tes objectifs dans Réglages.</p></div>`;
 }
 function bindSetupCard(){
+  $('suLinkGo').onclick=()=>{ if(applySetup($('suLink').value)){ toast('Tes réglages sont installés ✅'); render(); } else toast('Lien non reconnu : copie-le en entier'); };
   $('suGo').onclick=()=>{const v=parseFloat($('su1').value); if(!(v>0)){toast('Indique ton salaire');return;}
     S.salaryChf=v; S.rate=parseFloat($('su2').value)||1.08; S.payDay=parseInt($('su3').value)||24; store.set('settings',S); render();};
 }
@@ -837,6 +850,7 @@ function renderSettings(M){
   <div class="card anim" style="--i:4"><div class="h">⚠️ Données</div>
     <p class="muted" style="font-size:13px;margin:0 0 8px">Tout est stocké sur ce téléphone uniquement.</p>
     <button class="ghost" id="copyLink">Copier mon lien de configuration</button>
+    <input id="pasteLink" style="width:100%;margin-top:8px;border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:10px;font-size:13px" placeholder="…ou colle un lien de configuration ici" aria-label="Coller un lien de configuration">
     <button class="ghost danger" id="wipeTx">Effacer les opérations importées</button>
     <div id="wipeConfirm"></div></div>`;
   const num=(id,k,int)=>$(id).onchange=()=>{const v=int?parseInt($(id).value):parseFloat($(id).value); if(!isNaN(v)){S[k]=v; if(k==='plaisir') S.goals.plaisir=v; save();}};
@@ -848,6 +862,7 @@ function renderSettings(M){
   $('addFix').onclick=()=>{S.fixed.push({e:'🔒',n:'Nouvelle charge',v:0,day:null,kw:''}); save();};
   $('copyLink').onclick=async()=>{const link=location.origin+location.pathname+'#setup='+b64(JSON.stringify(S));
     try{await navigator.clipboard.writeText(link); toast('Lien copié : garde-le pour un autre téléphone');}catch(e){toast('Copie impossible sur cet appareil');}};
+  $('pasteLink').onchange=()=>{ if(applySetup($('pasteLink').value)){ toast('Réglages installés ✅'); render(); } else toast('Lien non reconnu'); };
   $('wipeTx').onclick=()=>{$('wipeConfirm').innerHTML=`<p style="font-size:13px;margin:10px 0 0">Effacer les ${TXS.length} opérations ? Tes réglages sont gardés.</p><button class="ghost danger" id="wipeYes">Oui, effacer</button>`;
     $('wipeYes').onclick=()=>{TXS=[]; store.set('tx',TXS); toast('Opérations effacées'); render();};};
   function save(){ store.set('settings',S); render(false); }
