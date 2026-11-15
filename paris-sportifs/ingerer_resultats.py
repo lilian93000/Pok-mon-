@@ -34,6 +34,7 @@ SURFACES = {
     "hamburg": "terre", "palermo": "terre", "bucharest": "terre",
     "kitzb": "terre", "warsaw": "terre", "prague": "terre",
     "sopo": "terre", "cundinamarca": "terre", "bogota": "terre", "cali": "terre",
+    "colina": "terre", "lp open": "terre", "chile": "terre", "chili": "terre",
     # été/automne dur nord-américain + asie
     "toronto": "dur", "montreal": "dur", "canadian": "dur", "national bank": "dur",
     "cincinnati": "dur", "washington": "dur", "dc open": "dur", "monterrey": "dur",
