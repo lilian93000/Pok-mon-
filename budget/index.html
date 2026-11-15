@@ -262,7 +262,6 @@ section.on{display:block}
       <div class="chip"><span class="dot" id="updDot"></span><span id="upd">Aucun relevé importé</span></div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="importbtn" id="importBtn" aria-label="Importer un relevé">⬆︎ <span>Relevé</span></button>
       <button class="iconbtn" id="themeBtn" aria-label="Changer de thème">☾</button>
     </div>
   </div>
@@ -557,7 +556,11 @@ function compute(){
    ===================================================================== */
 function renderToday(M){
   const sec=$('s-today');
-  if(!S.salaryChf){ sec.innerHTML = setupCard(); bindSetupCard(); return; }
+  if(!S.salaryChf){ sec.innerHTML = `<div class="card hero"><div class="blob b1"></div><div class="blob b2"></div><div style="position:relative">
+    <div class="lbl">Bienvenue 👋</div><div class="big" style="font-size:40px">Mon Budget</div>
+    <div class="sub" style="max-width:none">Ton tableau de bord s'affichera ici. Pour commencer, colle ton lien de configuration dans Réglages.</div>
+    <button class="bigbtn" style="background:#fff;color:#4338ca" id="goSettings">⚙️ Ouvrir les réglages</button></div></div>`;
+    $('goSettings').onclick=()=>show('settings'); return; }
   const hasData = TXS.length>0;
   sec.innerHTML = `
   <div class="card hero">
@@ -570,7 +573,7 @@ function renderToday(M){
     <div class="foot"><div><span style="opacity:.8">Dépensé ce mois</span><b class="num" id="lifeSpent">0 €</b></div>
       <div style="text-align:right"><span style="opacity:.8">Il reste</span><b class="num" id="lifeLeft">0 €</b></div></div>
   </div>
-  ${hasData?'':importCard()}
+  ${hasData?'':`<div class="card anim" style="--i:1;display:flex;align-items:center;gap:12px"><span style="font-size:28px">📥</span><div style="flex:1;font-size:14px"><b>Aucune opération pour l'instant</b><br><span class="muted">Importe ton relevé dans Réglages.</span></div><button class="importbtn" id="goImport">Réglages</button></div>`}
   <div class="card anim proj" style="--i:1">
     <div class="h"><span>🔮 À ce rythme, ton épargne ce mois</span></div>
     <div class="big3 num" id="projSave">0 €</div>
@@ -595,6 +598,7 @@ function renderToday(M){
   <div class="card anim" style="--i:8"><div class="h"><span>Dernières opérations</span><span class="r">touche pour changer la catégorie</span></div>
     <div id="list"></div><button class="more" id="moreBtn">Voir tout</button></div>`;
 
+  if($('goImport')) $('goImport').onclick=()=>show('settings');
   // hero
   countUp($('perDay'), Math.max(M.perDayNow,0));
   $('perDaySub').textContent = !hasData ? `Importe ton relevé pour commencer.` : M.perDayNow<=0
@@ -843,7 +847,11 @@ function renderSettings(M){
   const sec=$('s-settings');
   const g=k=>S.goals[k]??0;
   sec.innerHTML=`
-  <div class="card anim" style="--i:0"><div class="h">📥 Mes relevés</div>
+  <div class="card anim" style="--i:0"><div class="h">🔗 Lien de configuration</div>
+    <p class="muted" style="margin:0 0 10px;font-size:13px">Colle ici le lien que Claude t'a donné : il installe tes réglages, tes objectifs et tes opérations.</p>
+    <input id="pasteLink" style="width:100%;border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:12px;font-size:14px" placeholder="Colle ton lien ici" aria-label="Coller un lien de configuration">
+    <button class="bigbtn" id="pasteGo">Installer</button></div>
+  <div class="card anim" style="--i:0"><div class="h">📥 Importer un relevé</div>
     <p style="margin:0 0 4px;font-size:14px"><b>${TXS.length}</b> opérations enregistrées${M.lastTx?` · jusqu'au <b>${dFr(M.lastTx)}</b>`:''}</p>
     <p class="muted" style="margin:0;font-size:13px">Importe le relevé de chaque compte (€, CHF, joint). Les doublons sont ignorés.</p>
     <button class="bigbtn" onclick="document.getElementById('file').click()">⬆︎ Importer un relevé</button></div>
@@ -863,7 +871,6 @@ function renderSettings(M){
   <div class="card anim" style="--i:4"><div class="h">⚠️ Données</div>
     <p class="muted" style="font-size:13px;margin:0 0 8px">Tout est stocké sur ce téléphone uniquement.</p>
     <button class="ghost" id="copyLink">Copier mon lien de configuration</button>
-    <input id="pasteLink" style="width:100%;margin-top:8px;border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:10px;font-size:13px" placeholder="…ou colle un lien de configuration ici" aria-label="Coller un lien de configuration">
     <button class="ghost danger" id="wipeTx">Effacer les opérations importées</button>
     <div id="wipeConfirm"></div></div>`;
   const num=(id,k,int)=>$(id).onchange=()=>{const v=int?parseInt($(id).value):parseFloat($(id).value); if(!isNaN(v)){S[k]=v; if(k==='plaisir') S.goals.plaisir=v; save();}};
@@ -875,7 +882,7 @@ function renderSettings(M){
   $('addFix').onclick=()=>{S.fixed.push({e:'🔒',n:'Nouvelle charge',v:0,day:null,kw:''}); save();};
   $('copyLink').onclick=async()=>{const link=location.origin+location.pathname+'#setup='+b64(JSON.stringify(S));
     try{await navigator.clipboard.writeText(link); toast('Lien copié : garde-le pour un autre téléphone');}catch(e){toast('Copie impossible sur cet appareil');}};
-  $('pasteLink').onchange=async()=>{ const r=await applySetup($('pasteLink').value); toast(setupToast(r)); if(r) render(); };
+  $('pasteGo').onclick=async()=>{ const r=await applySetup($('pasteLink').value); toast(setupToast(r)); if(r) show('today'); };
   $('wipeTx').onclick=()=>{$('wipeConfirm').innerHTML=`<p style="font-size:13px;margin:10px 0 0">Effacer les ${TXS.length} opérations ? Tes réglages sont gardés.</p><button class="ghost danger" id="wipeYes">Oui, effacer</button>`;
     $('wipeYes').onclick=()=>{TXS=[]; store.set('tx',TXS); toast('Opérations effacées'); render();};};
   function save(){ store.set('settings',S); render(false); }
@@ -904,7 +911,6 @@ function show(s){
   render(true);
 }
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.s));
-$('importBtn').onclick=()=>$('file').click();
 $('file').onchange=e=>{ if(e.target.files.length) importFiles([...e.target.files]); e.target.value=''; };
 let theme=store.get('theme',null); if(theme) document.documentElement.dataset.theme=theme;
 $('themeBtn').onclick=()=>{const dark=document.documentElement.dataset.theme?document.documentElement.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;theme=dark?'light':'dark';document.documentElement.dataset.theme=theme;store.set('theme',theme);};
