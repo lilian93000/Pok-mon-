@@ -337,26 +337,39 @@ let done = store.get('todos',{});
 let lastImport = store.get('lastImport',null);
 
 /* ---------- lien de configuration privé : #setup=... ---------- */
-function applySetup(text){
-  const m = String(text||'').match(/#setup=([A-Za-z0-9_\-]+)/);
-  if(!m) return false;
-  try{
-    const cfg = JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,'+').replace(/_/g,'/')))));
-    S = Object.assign({}, DEFAULTS, cfg); S.goals = Object.assign({}, DEFAULTS.goals, cfg.goals||{});
-    store.set('settings',S); return true;
-  }catch(e){ return false; }
+// #setup=<json en base64>  ou  #setupz=<json compressé (deflate) : réglages + opérations>
+function b64bytes(x){ const bin=atob(x.replace(/-/g,'+').replace(/_/g,'/')); return Uint8Array.from(bin,c=>c.charCodeAt(0)); }
+function installCfg(cfg){
+  const set = cfg.s || cfg;
+  S = Object.assign({}, DEFAULTS, set); S.goals = Object.assign({}, DEFAULTS.goals, set.goals||{});
+  store.set('settings',S);
+  let added=0;
+  if(Array.isArray(cfg.t)){
+    const ids=new Set(TXS.map(t=>t.id));
+    cfg.t.forEach(([id,d,desc,amt,cur,type,product])=>{ if(!ids.has(id)){ TXS.push({id,d,desc,amt,cur,type,product}); added++; } });
+    TXS.sort((a,b)=>a.d.localeCompare(b.d)); store.set('tx',TXS);
+  }
+  return {added};
 }
-(function(){
-  const m = location.hash.match(/^#setup=([A-Za-z0-9_\-]+)/);
-  if(!m) return;
+async function applySetup(text){
+  text=String(text||'');
   try{
-    const json = decodeURIComponent(escape(atob(m[1].replace(/-/g,'+').replace(/_/g,'/'))));
-    const cfg = JSON.parse(json);
-    S = Object.assign({}, DEFAULTS, cfg); S.goals = Object.assign({}, DEFAULTS.goals, cfg.goals||{});
-    store.set('settings',S);
-    setTimeout(()=>toast('Tes réglages sont installés ✅'),400);
-  }catch(e){ setTimeout(()=>toast('Lien de configuration illisible'),400); }
+    let m=text.match(/#setupz=([A-Za-z0-9_\-]+)/);
+    if(m){
+      const stream=new Blob([b64bytes(m[1])]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+      return installCfg(JSON.parse(await new Response(stream).text()));
+    }
+    m=text.match(/#setup=([A-Za-z0-9_\-]+)/);
+    if(m) return installCfg(JSON.parse(new TextDecoder().decode(b64bytes(m[1]))));
+  }catch(e){}
+  return null;
+}
+function setupToast(r){ return r ? (r.added?`Réglages + ${r.added} opérations installés ✅`:'Tes réglages sont installés ✅') : 'Lien non reconnu : copie-le en entier'; }
+(async function(){
+  if(!/^#setupz?=/.test(location.hash)) return;
+  const r = await applySetup(location.hash);
   history.replaceState(null,'',location.pathname+location.search);
+  toast(setupToast(r)); if(r) render();
 })();
 
 /* ---------- outils ---------- */
@@ -702,7 +715,7 @@ function setupCard(){
       <p class="muted" style="font-size:12px;margin:10px 0 0">Tu pourras ajouter tes charges fixes et tes objectifs dans Réglages.</p></div>`;
 }
 function bindSetupCard(){
-  $('suLinkGo').onclick=()=>{ if(applySetup($('suLink').value)){ toast('Tes réglages sont installés ✅'); render(); } else toast('Lien non reconnu : copie-le en entier'); };
+  $('suLinkGo').onclick=async()=>{ const r=await applySetup($('suLink').value); toast(setupToast(r)); if(r) render(); };
   $('suGo').onclick=()=>{const v=parseFloat($('su1').value); if(!(v>0)){toast('Indique ton salaire');return;}
     S.salaryChf=v; S.rate=parseFloat($('su2').value)||1.08; S.payDay=parseInt($('su3').value)||24; store.set('settings',S); render();};
 }
@@ -862,7 +875,7 @@ function renderSettings(M){
   $('addFix').onclick=()=>{S.fixed.push({e:'🔒',n:'Nouvelle charge',v:0,day:null,kw:''}); save();};
   $('copyLink').onclick=async()=>{const link=location.origin+location.pathname+'#setup='+b64(JSON.stringify(S));
     try{await navigator.clipboard.writeText(link); toast('Lien copié : garde-le pour un autre téléphone');}catch(e){toast('Copie impossible sur cet appareil');}};
-  $('pasteLink').onchange=()=>{ if(applySetup($('pasteLink').value)){ toast('Réglages installés ✅'); render(); } else toast('Lien non reconnu'); };
+  $('pasteLink').onchange=async()=>{ const r=await applySetup($('pasteLink').value); toast(setupToast(r)); if(r) render(); };
   $('wipeTx').onclick=()=>{$('wipeConfirm').innerHTML=`<p style="font-size:13px;margin:10px 0 0">Effacer les ${TXS.length} opérations ? Tes réglages sont gardés.</p><button class="ghost danger" id="wipeYes">Oui, effacer</button>`;
     $('wipeYes').onclick=()=>{TXS=[]; store.set('tx',TXS); toast('Opérations effacées'); render();};};
   function save(){ store.set('settings',S); render(false); }
