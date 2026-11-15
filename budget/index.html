@@ -338,10 +338,9 @@ let lastImport = store.get('lastImport',null);
 /* ---------- lien de configuration privé : #setup=... ---------- */
 // #setup=<json en base64>  ou  #setupz=<json compressé (deflate) : réglages + opérations>
 function b64bytes(x){ const bin=atob(x.replace(/-/g,'+').replace(/_/g,'/')); return Uint8Array.from(bin,c=>c.charCodeAt(0)); }
-function installCfg(cfg){
+function installCfg(cfg, txOnly){
   const set = cfg.s || cfg;
-  S = Object.assign({}, DEFAULTS, set); S.goals = Object.assign({}, DEFAULTS.goals, set.goals||{});
-  store.set('settings',S);
+  if(!txOnly){ S = Object.assign({}, DEFAULTS, set); S.goals = Object.assign({}, DEFAULTS.goals, set.goals||{}); store.set('settings',S); }
   let added=0;
   if(Array.isArray(cfg.t)){
     const ids=new Set(TXS.map(t=>t.id));
@@ -363,6 +362,37 @@ async function applySetup(text){
   }catch(e){}
   return null;
 }
+/* ---------- données chiffrées (data.enc.json) : déverrouillées avec ton code ---------- */
+let ENC=null;
+const cleanCode = c => String(c||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+async function decryptData(code){
+  const b=x=>b64bytes(x);
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(cleanCode(code)), 'PBKDF2', false, ['deriveKey']);
+  const aes = await crypto.subtle.deriveKey({name:'PBKDF2', salt:b(ENC.salt), iterations:ENC.it, hash:'SHA-256'}, key, {name:'AES-GCM', length:256}, false, ['decrypt']);
+  const plain = await crypto.subtle.decrypt({name:'AES-GCM', iv:b(ENC.iv)}, aes, b(ENC.ct));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+async function unlock(code, quiet){
+  try{
+    const cfg = await decryptData(code);
+    const first = !store.get('code',null) || !S.salaryChf;
+    const r = installCfg(cfg, !first);
+    store.set('code', cleanCode(code)); store.set('dataV', ENC.v);
+    if(!quiet) toast(`Tes chiffres sont là ✅`);
+    else if(r.added) toast(`${r.added} nouvelle${r.added>1?'s':''} opération${r.added>1?'s':''} ajoutée${r.added>1?'s':''} ✅`);
+    render(); return true;
+  }catch(e){ if(!quiet) toast('Code incorrect'); return false; }
+}
+(async function(){
+  try{
+    const res = await fetch('data.enc.json',{cache:'no-store'}); if(!res.ok) return;
+    ENC = await res.json();
+    const code = store.get('code',null);
+    if(code && ENC.v > store.get('dataV',0)) await unlock(code, true);
+    else if(!S.salaryChf) render();
+  }catch(e){}
+})();
+
 function setupToast(r){ return r ? (r.added?`Réglages + ${r.added} opérations installés ✅`:'Tes réglages sont installés ✅') : 'Lien non reconnu : copie-le en entier'; }
 (async function(){
   if(!/^#setupz?=/.test(location.hash)) return;
@@ -556,6 +586,14 @@ function compute(){
    ===================================================================== */
 function renderToday(M){
   const sec=$('s-today');
+  if(!S.salaryChf && ENC){ sec.innerHTML = `<div class="card hero"><div class="blob b1"></div><div class="blob b2"></div><div style="position:relative">
+    <div class="lbl">Bienvenue 👋</div><div class="big" style="font-size:40px">🔒 Tes chiffres</div>
+    <div class="sub" style="max-width:none">Entre ton code (une seule fois) pour afficher ton tableau de bord.</div>
+    <input id="codeIn" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX" aria-label="Code"
+      style="width:100%;margin-top:16px;border:0;border-radius:16px;padding:16px;font:inherit;font-size:22px;font-weight:800;letter-spacing:.12em;text-align:center;color:#111;background:#fff">
+    <button class="bigbtn" style="background:#111827" id="codeGo">Afficher mes chiffres</button></div></div>`;
+    const go=async()=>{ $('codeGo').textContent='…'; if(!(await unlock($('codeIn').value))) $('codeGo').textContent='Afficher mes chiffres'; };
+    $('codeGo').onclick=go; $('codeIn').onkeydown=e=>{ if(e.key==='Enter') go(); }; return; }
   if(!S.salaryChf){ sec.innerHTML = `<div class="card hero"><div class="blob b1"></div><div class="blob b2"></div><div style="position:relative">
     <div class="lbl">Bienvenue 👋</div><div class="big" style="font-size:40px">Mon Budget</div>
     <div class="sub" style="max-width:none">Ton tableau de bord s'affichera ici. Pour commencer, colle ton lien de configuration dans Réglages.</div>
@@ -917,7 +955,11 @@ $('themeBtn').onclick=()=>{const dark=document.documentElement.dataset.theme?doc
 show(tab);
 
 /* hors connexion */
-if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+if('serviceWorker' in navigator && location.protocol==='https:'){
+  navigator.serviceWorker.register('sw.js').then(r=>r.update()).catch(()=>{});
+  // une nouvelle version vient de s'installer : on recharge une fois pour l'afficher
+  let reloaded=false; navigator.serviceWorker.addEventListener('controllerchange',()=>{ if(!reloaded){ reloaded=true; location.reload(); } });
+}
 </script>
 </body>
 </html>
