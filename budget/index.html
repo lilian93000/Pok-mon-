@@ -252,7 +252,65 @@ nav button.on{color:var(--card)}
 nav button.on .i{transform:translateY(-1px) scale(1.12)}
 section{display:none}
 section.on{display:block}
+
+/* ---------- Moneymons ---------- */
+.mm-card{color:#fff;border:0;padding:16px 16px 18px;background:var(--mmbg)}
+.mm-card::after{content:"";position:absolute;inset:0;background:radial-gradient(110% 70% at 50% 0%,rgba(255,255,255,.35),transparent 60%);pointer-events:none}
+.mm-top{display:flex;justify-content:space-between;position:relative;z-index:2}
+.mm-tag{font:700 12px Inter,sans-serif;background:rgba(255,255,255,.92);color:#2a1a40;padding:4px 10px;border-radius:99px}
+.mm-stage{position:relative;height:230px;display:grid;place-items:center;z-index:1}
+.mm-mon{width:220px;height:220px;cursor:pointer;filter:drop-shadow(0 14px 16px rgba(0,0,0,.3));transition:filter .6s}
+.mm-mon svg{width:100%;height:100%;overflow:visible}
+.mm-mon .mm-body{transform-origin:50% 92%;animation:mmBreath 3s ease-in-out infinite}
+.mm-mon .mm-float{animation:mmFloat 4.2s ease-in-out infinite}
+@keyframes mmBreath{50%{transform:scale(1.035,.97)}}
+@keyframes mmFloat{50%{transform:translateY(-6px)}}
+.mm-mon.mood-ok .mm-body{animation-duration:4.5s}
+.mm-mon.mood-tired{filter:saturate(.45) brightness(.92) drop-shadow(0 10px 12px rgba(0,0,0,.3))}
+.mm-mon.mood-tired .mm-body{animation:mmTired 5s ease-in-out infinite}
+@keyframes mmTired{50%{transform:translateY(6px) scale(1.03,.95)}}
+.mm-aura{filter:drop-shadow(0 0 10px #ffd23a) drop-shadow(0 0 22px rgba(255,210,58,.6))}
+.mm-mood{position:absolute;right:18px;top:20px;font-size:26px;animation:mmFloat 2.6s ease-in-out infinite}
+.mm-bubble{position:absolute;top:0;left:50%;transform:translateX(-50%) scale(.6);opacity:0;background:#fff;color:#2a1450;font:600 14px Fredoka,Inter,sans-serif;padding:9px 13px;border-radius:16px;max-width:88%;text-align:center;z-index:4;transition:all .35s cubic-bezier(.34,1.56,.64,1);font-family:Inter,sans-serif}
+.mm-bubble::after{content:"";position:absolute;bottom:-8px;left:50%;margin-left:-8px;border:8px solid transparent;border-top-color:#fff;border-bottom:0}
+.mm-bubble.on{opacity:1;transform:translateX(-50%) scale(1)}
+.mm-name{font:900 26px Inter,sans-serif;letter-spacing:-.02em;text-align:center;position:relative;z-index:1;text-shadow:0 3px 0 rgba(0,0,0,.18)}
+.mm-xp{position:relative;z-index:1;margin-top:8px}
+.mm-xp .bar{background:rgba(0,0,0,.22);height:10px}
+.mm-xp .bar i{background:linear-gradient(90deg,#fff3a0,#ffd23a)}
+.mm-xp small{display:block;text-align:center;font-size:12px;opacity:.92;margin-top:6px}
+.mm-fly{position:fixed;z-index:70;pointer-events:none;font-size:22px}
+.mm-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mm-pick button{border:0;border-radius:18px;padding:6px 4px 8px;color:#fff;cursor:pointer;background:var(--b);font:800 12px Inter,sans-serif;transition:transform .2s}
+.mm-pick button:active{transform:scale(.94)}
+.mm-pick svg{width:84px;height:84px;display:block;margin:0 auto}
+/* combat */
+.arena{position:relative;height:230px;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#3a2a8a 0%,#6a3aa0 52%,#3a9a5a 52.5%,#2a6a3a 100%)}
+.ar-foe{position:absolute;right:6px;top:26px;width:120px;height:120px}
+.ar-me{position:absolute;left:2px;bottom:4px;width:140px;height:140px}
+.ar-foe svg,.ar-me svg{width:100%;height:100%;overflow:visible}
+.hpbox{position:absolute;background:rgba(255,255,255,.94);color:#2a1450;border-radius:12px;padding:6px 9px;width:142px;z-index:3;box-shadow:0 6px 14px rgba(0,0,0,.25)}
+.hpbox b{font:800 12px Inter,sans-serif}.hpbox small{display:block;font:600 10.5px Inter,sans-serif;color:#6a5a8a;margin-top:2px}
+.hpbox .bar{height:7px;background:#e4ddf2;margin-top:4px}
+.hp-foe{left:8px;top:8px}.hp-me{right:8px;bottom:10px}
+.bdlg{margin-top:10px;background:var(--soft);border-radius:14px;padding:10px 12px;min-height:44px;font:600 14px Inter,sans-serif}
+.dmg{position:absolute;font:900 20px Inter,sans-serif;color:#fff;-webkit-text-stroke:2px #8a0a1a;paint-order:stroke;z-index:6;pointer-events:none}
+.fireball{position:absolute;width:34px;height:34px;border-radius:50%;z-index:5;pointer-events:none;background:radial-gradient(circle at 40% 40%,#fff,var(--fc) 45%,rgba(0,0,0,0) 72%);filter:drop-shadow(0 0 10px var(--fc))}
+/* évolution */
+.evo{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:radial-gradient(70% 50% at 50% 45%,#5a3fd1,#0e0826 80%);animation:fade .4s both}
+.evo .rays{position:absolute;width:900px;height:900px;border-radius:50%;background:repeating-conic-gradient(rgba(255,230,140,.32) 0 8deg,transparent 8deg 22deg);animation:spin 14s linear infinite;opacity:0;transition:opacity .8s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.evo .slot{position:relative;width:260px;height:260px}
+.evo .slot>div{position:absolute;inset:0}
+.evo .slot svg{width:100%;height:100%;overflow:visible}
+.evo .sil{filter:brightness(0) invert(1) drop-shadow(0 0 18px #fff)}
+.evo .msg{position:absolute;top:calc(14% + env(safe-area-inset-top,0px));left:16px;right:16px;text-align:center;color:#fff;font:900 24px Inter,sans-serif;text-shadow:0 3px 0 rgba(0,0,0,.3)}
+.evo .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.evo .close{position:absolute;bottom:calc(40px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);opacity:0;transition:opacity .5s}
+.sparkle{position:fixed;width:12px;height:12px;background:#fff;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);z-index:95;pointer-events:none}
+@media (prefers-reduced-motion: reduce){.mm-mon .mm-body,.mm-mon .mm-float,.mm-mood,.evo .rays{animation:none!important}}
 </style>
+<script src="moneymons.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -591,6 +649,140 @@ function compute(){
   return {all,today,C,inC,vie,fun,fix,rev,epa,salaryEur,fixTotal,vieGoal,perDayGoal,totalDays,daysLeft,daysElapsed,BUDGET,vieSpent,funSpent,vieToday,leftVie,perDayBase,perDayNow,pace,projVie,projSave,lastTx};
 }
 
+
+/* =====================================================================
+   MONEYMONS : compagnon, combat, évolution
+   ===================================================================== */
+if(window.MM_DEFS) document.body.insertAdjacentHTML('afterbegin','<div style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">'+window.MM_DEFS+'</div>');
+const MONS = window.MONEYMONS||[];
+const EVO_AT=[0,1000,6600];
+const monById = id => MONS.find(m=>m.id===id);
+const stageFor = sav => sav>=EVO_AT[2]?2:sav>=EVO_AT[1]?1:0;
+const levelFor = sav => sav<1000?1+Math.floor(sav/1000*15):sav<6600?16+Math.floor((sav-1000)/5600*20):36+Math.floor((sav-6600)/1000);
+function monForm(m,st){ const k=Math.min(st,m.stages.length-1); return {name:m.stages[k].name+(st>k?' ★'.repeat(st-k):''), svg:m.stages[k].svg, aura:st>k}; }
+// enveloppe animable (respiration + flottement) autour du dessin
+function animSvg(svg){ return svg.replace(/(<svg[^>]*>)/,'$1<g class="mm-float"><g class="mm-body">').replace(/<\/svg>\s*$/,'</g></g></svg>'); }
+function moodOf(M){ if(!TXS.length) return 'happy'; if(M.perDayNow>M.perDayBase*.35) return 'happy'; if(M.perDayNow>0) return 'ok'; return 'tired'; }
+function mmLines(M,m,form,sav){
+  const L=[], mood=moodOf(M);
+  if(mood==='happy') L.push(`Il te reste ${fmt(Math.max(M.perDayNow,0))} aujourd'hui, on gère ! 🔥`);
+  if(mood==='ok') L.push(`Plus que ${fmt(Math.max(M.perDayNow,0))} pour aujourd'hui… on fait attention 🙏`);
+  if(mood==='tired') L.push(`Budget du jour dépassé… demain on se rattrape 💪`);
+  const lastFF=M.all.filter(t=>t.c==='fastfood').map(t=>t.d).sort().pop(), noFF=lastFF?daysBetween(lastFF,M.today):M.daysElapsed;
+  if(noFF>0) L.push(`${noFF} jour${noFF>1?'s':''} sans fast-food, je suis fier de toi !`); else L.push(`Un fast-food aujourd'hui ? Aïe, ça pique 🍔`);
+  const st=stageFor(sav); if(st<2) L.push(`Encore ${fmt(EVO_AT[st+1]-sav)} d'épargne et j'évolue ! ✨`);
+  L.push(M.projSave>=S.savingsGoal?`À ce rythme tu mets ${fmt(M.projSave)} de côté ce mois 🏦`:`Il reste ${M.daysLeft} jours avant la paie, on tient bon !`);
+  return L;
+}
+let mmMsgI=0, mmBubbleT;
+function mmSay(text){ const b=$('mmBubble'); if(!b) return; b.classList.add('on'); b.textContent=''; let i=0; clearInterval(b._t);
+  const ch=Array.from(text); b._t=setInterval(()=>{ b.textContent=ch.slice(0,++i).join(''); if(i>=ch.length) clearInterval(b._t); }, reduce?0:20);
+  clearTimeout(mmBubbleT); mmBubbleT=setTimeout(()=>b.classList.remove('on'),3800); }
+function mmBurst(x,y,chars,n=14){ if(reduce) return; for(let i=0;i<n;i++){ const s=document.createElement('span'); s.className='mm-fly'; s.textContent=chars[i%chars.length]; s.style.left=x+'px'; s.style.top=y+'px'; document.body.appendChild(s);
+  const a=-Math.PI/2+(Math.random()-.5)*2.4, r=70+Math.random()*90;
+  s.animate([{transform:'translate(-50%,-50%) scale(.4)',opacity:1},{transform:`translate(calc(-50% + ${Math.cos(a)*r}px),calc(-50% + ${Math.sin(a)*r}px)) scale(1.1) rotate(${(Math.random()-.5)*120}deg)`,opacity:1,offset:.6},{transform:`translate(calc(-50% + ${Math.cos(a)*r*1.1}px),calc(-50% + ${Math.sin(a)*r+60}px)) scale(.8)`,opacity:0}],{duration:1100+Math.random()*400,easing:'cubic-bezier(.22,1,.36,1)'}).onfinish=()=>s.remove(); } }
+
+function pickerCard(){
+  return `<div class="card anim" style="--i:0"><div class="h"><span>✨ Choisis ton Moneymon</span><span class="r">il grandira avec ton épargne</span></div>
+  <div class="mm-pick">${MONS.map(m=>`<button data-mm="${m.id}" style="--b:${m.bg}">${m.stages[0].svg.replace('<svg ','<svg aria-hidden="true" ')}<span>${m.emoji} ${esc(m.stages[0].name)}</span></button>`).join('')}</div></div>`;
+}
+function bindPicker(){ document.querySelectorAll('[data-mm]').forEach(b=>b.onclick=e=>{ store.set('starter',b.dataset.mm); store.set('stageSeen',stageFor(S.savingsBalance)); store.set('seenTx',TXS.length);
+  mmBurst(e.clientX,e.clientY,['✨','🪙','💛','⭐'],22); toast(`${monById(b.dataset.mm).stages[0].name} te rejoint ! 🎉`); render(); }); }
+
+function companionCard(M){
+  const m=monById(store.get('starter',null)); if(!m) return '';
+  const sav=S.savingsBalance||0, st=stageFor(sav), f=monForm(m,st), lvl=levelFor(sav), mood=moodOf(M);
+  const next=EVO_AT[Math.min(st+1,2)], prev=EVO_AT[st], pct=st>=2?100:Math.max(3,(sav-prev)/(next-prev)*100);
+  return `<div class="card mm-card anim" style="--i:0;--mmbg:${m.bg}">
+    <div class="mm-top"><span class="mm-tag">${m.emoji} ${m.type}</span><span class="mm-tag">Niv. ${lvl}</span></div>
+    <div class="mm-stage"><div class="mm-bubble" id="mmBubble"></div>
+      <div class="mm-mon mood-${mood} ${f.aura?'mm-aura':''}" id="mmMon" role="button" tabindex="0" aria-label="Toucher ${esc(f.name)}">${animSvg(f.svg)}</div>
+      <div class="mm-mood">${mood==='happy'?'':mood==='ok'?'💦':'💤'}</div></div>
+    <div class="mm-name">${esc(f.name)}</div>
+    <div class="mm-xp"><div class="bar"><i style="width:${pct}%"></i></div><small>${st>=2?`Forme finale · ${fmt(sav)} épargnés`:`${fmt(sav)} épargnés · évolution à ${fmt(next)}`}</small></div></div>`;
+}
+function bindCompanion(M){
+  const el=$('mmMon'); if(!el) return; const m=monById(store.get('starter',null)), sav=S.savingsBalance||0, f=monForm(m,stageFor(sav));
+  const lines=mmLines(M,m,f,sav);
+  const poke=()=>{ if(!reduce) el.animate([{transform:'translateY(0) scale(1)'},{transform:'translateY(6px) scale(1.12,.86)',offset:.18},{transform:'translateY(-60px) scale(.92,1.1)',offset:.45},{transform:'translateY(-60px) rotate(-8deg)',offset:.55},{transform:'translateY(0) scale(1.14,.86)',offset:.82},{transform:'none'}],{duration:900,easing:'ease-out'});
+    const r=el.getBoundingClientRect(); mmBurst(r.left+r.width/2,r.top+r.height*.35,moodOf(M)==='tired'?['💧','💤']:['🪙','💛','✨',m.emoji]); mmSay(lines[(mmMsgI++)%lines.length]); };
+  el.onclick=poke; el.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); poke(); } };
+  setTimeout(()=>mmSay(lines[0]),700);
+}
+
+function battleCard(M){
+  const m=monById(store.get('starter',null)); if(!m) return '';
+  const f=monForm(m,stageFor(S.savingsBalance||0));
+  const days=[]; for(let d=D(M.C.start); iso(d)<=M.today; d.setDate(d.getDate()+1)){ const k=iso(d); days.push(sum(M.vie.filter(t=>t.d===k))<=M.perDayGoal); }
+  const good=days.filter(Boolean).length, foe=Math.max(0,(M.totalDays-good)/M.totalDays*100), me=Math.max(0,M.leftVie/M.BUDGET*100);
+  const col=p=>p>50?'#36d27a':p>20?'#ffcf3a':'#ff4d5e';
+  return `<div class="card anim" style="--i:2"><div class="h"><span>⚔️ Combat du mois</span><span class="r">encore ${M.daysLeft} j</span></div>
+    <div class="arena" id="arena">
+      <div class="hpbox hp-foe"><b>👹 Dépensor</b><div class="bar"><i id="foeHp" style="width:${foe}%;background:${col(foe)}"></i></div><small>${good} bon${good>1?'s':''} jour${good>1?'s':''} sur ${M.totalDays}</small></div>
+      <div class="ar-foe" id="arFoe">${window.MM_DEPENSOR||''}</div>
+      <div class="ar-me ${f.aura?'mm-aura':''}" id="arMe">${f.svg}</div>
+      <div class="hpbox hp-me"><b>${m.emoji} ${esc(f.name)}</b><div class="bar"><i id="meHp" style="width:${me}%;background:${col(me)}"></i></div><small>${fmt(Math.max(M.leftVie,0))} / ${fmt(M.BUDGET)}</small></div>
+    </div>
+    <div class="bdlg" id="bdlg">${M.leftVie>=0?`Tu tiens bon ! Dépensor a perdu ${good} PV ce mois.`:`Dépensor mène le combat… reprends le dessus demain !`}</div>
+    <button class="more" id="replay">▶ Revoir les coups du jour</button></div>`;
+}
+let battleBusy=false;
+async function typeIn(el,txt){ const ch=Array.from(txt); el.textContent=''; for(let i=1;i<=ch.length;i++){ el.textContent=ch.slice(0,i).join(''); if(!reduce) await new Promise(r=>setTimeout(r,16)); } }
+async function playBattle(M){
+  if(battleBusy) return; const arena=$('arena'); if(!arena) return; battleBusy=true;
+  const m=monById(store.get('starter',null)), f=monForm(m,stageFor(S.savingsBalance||0)), dlg=$('bdlg');
+  const lastDay=[...M.vie,...M.fun].map(t=>t.d).sort().pop()||M.today;
+  const hits=[...M.vie,...M.fun].filter(t=>t.d===lastDay).sort((a,b)=>b.v-a.v).slice(0,3);
+  const dayTot=sum(M.vie.filter(t=>t.d===lastDay));
+  const foeEl=$('arFoe'), meEl=$('arMe'), W=arena.clientWidth;
+  const dmg=(x,y,txt,stroke)=>{ const d=document.createElement('div'); d.className='dmg'; d.textContent=txt; if(stroke) d.style.webkitTextStrokeColor=stroke; d.style.left=x+'px'; d.style.top=y+'px'; arena.appendChild(d);
+    d.animate([{transform:'translate(-50%,0) scale(.3)',opacity:0},{transform:'translate(-50%,-26px) scale(1.2)',opacity:1,offset:.25},{transform:'translate(-50%,-44px)',opacity:1,offset:.7},{transform:'translate(-50%,-70px)',opacity:0}],{duration:1200}).onfinish=()=>d.remove(); };
+  const shake=(el,a=8)=>{ if(!reduce) el.animate([0,1,2,3,4,5].map(i=>({transform:`translate(${i%2?a:-a}px,${i%3?-a/2:a/2}px)`})).concat([{transform:'none'}]),{duration:360}); };
+  const flash=el=>el.animate([{filter:'brightness(1)'},{filter:'brightness(3) saturate(0)'},{filter:'brightness(1)'},{filter:'brightness(3) saturate(0)'},{filter:'brightness(1)'}],{duration:420});
+  if(!hits.length){ await typeIn(dlg,'Aucune dépense ce jour-là : Dépensor n\'a pas pu attaquer !'); battleBusy=false; return; }
+  await typeIn(dlg,`${dLong(lastDay)} : Dépensor attaque !`);
+  for(const t of hits){
+    await typeIn(dlg,`Dépensor utilise ${t.desc} !`);
+    if(!reduce) await foeEl.animate([{transform:'none'},{transform:'translate(10px,-8px) rotate(6deg)',offset:.3},{transform:'translate(-90px,70px) scale(1.1) rotate(-10deg)',offset:.6},{transform:'none'}],{duration:560,easing:'cubic-bezier(.5,0,.5,1)'}).finished;
+    flash(meEl); shake(arena,7); dmg(72,120,'−'+fmt(t.v,2));
+    await new Promise(r=>setTimeout(r,650));
+  }
+  if(dayTot<=M.perDayGoal){
+    await typeIn(dlg,`${f.name} contre-attaque : journée dans le budget !`);
+    const fb=document.createElement('div'); fb.className='fireball'; fb.style.setProperty('--fc',m.color); arena.appendChild(fb);
+    if(!reduce) await fb.animate([{left:'90px',top:'140px',transform:'scale(.5)'},{left:(W*.45)+'px',top:'40px',transform:'scale(1.2)',offset:.55},{left:(W-70)+'px',top:'70px',transform:'scale(1.4)'}],{duration:600,easing:'cubic-bezier(.3,.6,.4,1)'}).finished;
+    fb.remove(); flash(foeEl); shake(foeEl,10); const r=foeEl.getBoundingClientRect(); mmBurst(r.left+r.width/2,r.top+r.height/2,['✨','🪙',m.emoji],12); dmg(W-66,50,'−1 PV','#7a2a00');
+    await typeIn(dlg,`C'est super efficace ! Dépensor perd 1 PV.`);
+  } else await typeIn(dlg,`Journée à ${fmt(dayTot)} : au-dessus de ${fmt(M.perDayGoal)}. Dépensor gagne ce round.`);
+  battleBusy=false;
+}
+
+function playEvolution(m,from,to){
+  const A=monForm(m,from), B=monForm(m,to);
+  const ov=document.createElement('div'); ov.className='evo'; ov.setAttribute('role','dialog'); ov.setAttribute('aria-modal','true');
+  ov.innerHTML=`<div class="rays"></div><div class="msg"></div><div class="slot"><div class="a">${A.svg}</div><div class="b" style="opacity:0">${B.svg}</div></div><div class="flash"></div><button class="bigbtn close" style="width:auto;padding:14px 28px">Super !</button>`;
+  document.body.appendChild(ov);
+  const msg=ov.querySelector('.msg'), a=ov.querySelector('.a'), b=ov.querySelector('.b'), sleep=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
+  (async()=>{
+    await typeIn(msg,`Quoi ? ${A.name.replace(/ ★+/,'')} évolue !`); await sleep(600);
+    ov.querySelector('.rays').style.opacity=1; a.classList.add('sil'); b.classList.add('sil');
+    let d=420; for(let i=0;i<14;i++){ a.style.opacity=i%2?0:1; b.style.opacity=i%2?1:0; await sleep(d); d=Math.max(60,d*.8); }
+    ov.querySelector('.flash').animate([{opacity:0},{opacity:1,offset:.3},{opacity:0}],{duration:900});
+    await sleep(260); a.style.opacity=0; b.style.opacity=1; b.classList.remove('sil'); if(B.aura) b.classList.add('mm-aura');
+    if(!reduce) b.animate([{transform:'scale(.7)'},{transform:'scale(1.12)',offset:.6},{transform:'scale(1)'}],{duration:800,easing:'cubic-bezier(.34,1.56,.64,1)'});
+    for(let i=0;i<30;i++){ const s=document.createElement('div'); s.className='sparkle'; s.style.left=innerWidth/2+'px'; s.style.top=innerHeight/2+'px'; document.body.appendChild(s);
+      const an=Math.random()*Math.PI*2, r=100+Math.random()*160; s.animate([{transform:'translate(-50%,-50%) scale(0)',opacity:1},{transform:`translate(calc(-50% + ${Math.cos(an)*r}px),calc(-50% + ${Math.sin(an)*r}px)) scale(${.6+Math.random()*1.5}) rotate(180deg)`,opacity:0}],{duration:1300+Math.random()*600,easing:'cubic-bezier(.22,1,.36,1)'}).onfinish=()=>s.remove(); }
+    await typeIn(msg,`${A.name.replace(/ ★+/,'')} a évolué en ${B.name} !`);
+    const c=ov.querySelector('.close'); c.style.opacity=1; c.onclick=()=>ov.remove(); c.focus();
+  })();
+}
+function checkEvolution(){
+  const id=store.get('starter',null); if(!id) return; const m=monById(id); if(!m) return;
+  const st=stageFor(S.savingsBalance||0), seen=store.get('stageSeen',0);
+  if(st>seen){ store.set('stageSeen',st); setTimeout(()=>playEvolution(m,seen,st),600); }
+  else if(st<seen) store.set('stageSeen',st);
+}
+
 /* =====================================================================
    RENDU — MON MOIS
    ===================================================================== */
@@ -603,7 +795,8 @@ function renderToday(M){
     <button class="bigbtn" style="background:#fff;color:#4338ca" id="goSettings">⚙️ Ouvrir les réglages</button></div></div>`;
     $('goSettings').onclick=()=>show('settings'); return; }
   const hasData = TXS.length>0;
-  sec.innerHTML = `
+  const hasMon = !!monById(store.get('starter',null));
+  sec.innerHTML = (hasMon? companionCard(M) : pickerCard()) + `
   <div class="card hero">
     <div class="blob b1"></div><div class="blob b2"></div>
     <div class="content">
@@ -614,6 +807,7 @@ function renderToday(M){
     <div class="foot"><div><span style="opacity:.8">Dépensé ce mois</span><b class="num" id="lifeSpent">0 €</b></div>
       <div style="text-align:right"><span style="opacity:.8">Il reste</span><b class="num" id="lifeLeft">0 €</b></div></div>
   </div>
+  ${hasMon&&hasData?battleCard(M):''}
   ${hasData?'':`<div class="card anim" style="--i:1;display:flex;align-items:center;gap:12px"><span style="font-size:28px">📥</span><div style="flex:1;font-size:14px"><b>Aucune opération pour l'instant</b><br><span class="muted">Importe ton relevé dans Réglages.</span></div><button class="importbtn" id="goImport">Réglages</button></div>`}
   <div class="card anim proj" style="--i:1">
     <div class="h"><span>🔮 À ce rythme, ton épargne ce mois</span></div>
@@ -640,6 +834,9 @@ function renderToday(M){
     <div id="list"></div><button class="more" id="moreBtn">Voir tout</button></div>`;
 
   if($('goImport')) $('goImport').onclick=()=>show('settings');
+  if(hasMon){ bindCompanion(M); if($('replay')) $('replay').onclick=()=>playBattle(M);
+    if(hasData && TXS.length>store.get('seenTx',0)){ store.set('seenTx',TXS.length); setTimeout(()=>playBattle(M),1200); }
+    checkEvolution(); } else bindPicker();
   // hero
   countUp($('perDay'), Math.max(M.perDayNow,0));
   $('perDaySub').textContent = !hasData ? `Importe ton relevé pour commencer.` : M.perDayNow<=0
@@ -669,7 +866,9 @@ function renderToday(M){
   const on = autoSaved || !!saved[M.C.start];
   $('saveCard').classList.toggle('on',on);
   $('saveSub').innerHTML = autoSaved?'<b style="color:var(--save)">Virement détecté 👏</b>':on?'<b style="color:var(--save)">Mis de côté 👏</b>':'Touche quand c\'est fait';
-  const tg=e=>{ if(autoSaved) return; saved[M.C.start]=!saved[M.C.start]; store.set('saved',saved); if(saved[M.C.start]) burst(e.clientX||innerWidth/2,e.clientY||innerHeight/2); render(); };
+  const tg=e=>{ if(autoSaved) return; saved[M.C.start]=!saved[M.C.start]; store.set('saved',saved);
+    S.savingsBalance=Math.max(0,(S.savingsBalance||0)+(saved[M.C.start]?1:-1)*S.savingsGoal); store.set('settings',S);
+    if(saved[M.C.start]) burst(e.clientX||innerWidth/2,e.clientY||innerHeight/2); render(); };
   $('saveCard').onclick=tg; $('saveCard').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tg(e);}};
 
   // envie d'acheter
@@ -915,6 +1114,7 @@ function renderSettings(M){
     ${[...VIE_CATS,'plaisir'].map(k=>`<div class="field"><label for="g_${k}">${CATS[k].e} ${CATS[k].n}</label><input id="g_${k}" data-goal="${k}" type="number" step="10" min="0" value="${g(k)}"></div>`).join('')}</div>
   <div class="card anim" style="--i:4"><div class="h">⚠️ Données</div>
     <p class="muted" style="font-size:13px;margin:0 0 8px">Tout est stocké sur ce téléphone uniquement.</p>
+    <button class="ghost" id="changeMon">Changer de Moneymon</button>
     <button class="ghost" id="copyLink">Copier mon lien de configuration</button>
     <button class="ghost danger" id="wipeTx">Effacer les opérations importées</button>
     <div id="wipeConfirm"></div></div>`;
@@ -925,6 +1125,7 @@ function renderSettings(M){
   sec.querySelectorAll('.fixrow input').forEach(i=>i.onchange=()=>{const f=S.fixed[+i.closest('.fixrow').dataset.i]; const k=i.dataset.k; f[k]=(k==='v'||k==='day')?(parseFloat(i.value)||(k==='day'?null:0)):i.value; save();});
   sec.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{S.fixed.splice(+b.dataset.del,1); save();});
   $('addFix').onclick=()=>{S.fixed.push({e:'🔒',n:'Nouvelle charge',v:0,day:null,kw:''}); save();};
+  $('changeMon').onclick=()=>{ store.set('starter',null); show('today'); };
   $('copyLink').onclick=async()=>{const link=location.origin+location.pathname+'#setup='+b64(JSON.stringify(S));
     try{await navigator.clipboard.writeText(link); toast('Lien copié : garde-le pour un autre téléphone');}catch(e){toast('Copie impossible sur cet appareil');}};
   $('codeGo2').onclick=async()=>{ if(!ENC){ toast('Connexion nécessaire pour charger tes chiffres'); return; } store.set('code',null); if(await unlock($('codeIn2').value)) show('today'); };
