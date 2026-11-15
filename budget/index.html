@@ -375,7 +375,7 @@ async function decryptData(code){
 async function unlock(code, quiet){
   try{
     const cfg = await decryptData(code);
-    const first = !store.get('code',null) || !S.salaryChf;
+    const first = !store.get('code',null);
     const r = installCfg(cfg, !first);
     store.set('code', cleanCode(code)); store.set('dataV', ENC.v);
     if(!quiet) toast(`Tes chiffres sont là ✅`);
@@ -389,10 +389,20 @@ async function unlock(code, quiet){
     ENC = await res.json();
     const code = store.get('code',null);
     if(code && ENC.v > store.get('dataV',0)) await unlock(code, true);
-    else if(!S.salaryChf) render();
+    else if(!code) render();
   }catch(e){}
 })();
 
+function codeCard(){ return `<div class="card hero"><div class="blob b1"></div><div class="blob b2"></div><div style="position:relative">
+    <div class="lbl">Bienvenue 👋</div><div class="big" style="font-size:40px">🔒 Ton code</div>
+    <div class="sub" style="max-width:none">Tape ton code ici (une seule fois) pour afficher tous tes chiffres.</div>
+    <input id="codeIn" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX" aria-label="Ton code"
+      style="width:100%;margin-top:16px;border:0;border-radius:16px;padding:16px;font:inherit;font-size:22px;font-weight:800;letter-spacing:.12em;text-align:center;color:#111;background:#fff">
+    <button class="bigbtn" style="background:#111827" id="codeGo">Afficher mes chiffres</button></div></div>`; }
+function bindCodeCard(){
+  const go=async()=>{ $('codeGo').textContent='…'; if(!(await unlock($('codeIn').value))) $('codeGo').textContent='Afficher mes chiffres'; };
+  $('codeGo').onclick=go; $('codeIn').onkeydown=e=>{ if(e.key==='Enter') go(); };
+}
 function setupToast(r){ return r ? (r.added?`Réglages + ${r.added} opérations installés ✅`:'Tes réglages sont installés ✅') : 'Lien non reconnu : copie-le en entier'; }
 (async function(){
   if(!/^#setupz?=/.test(location.hash)) return;
@@ -586,14 +596,7 @@ function compute(){
    ===================================================================== */
 function renderToday(M){
   const sec=$('s-today');
-  if(!S.salaryChf && ENC){ sec.innerHTML = `<div class="card hero"><div class="blob b1"></div><div class="blob b2"></div><div style="position:relative">
-    <div class="lbl">Bienvenue 👋</div><div class="big" style="font-size:40px">🔒 Tes chiffres</div>
-    <div class="sub" style="max-width:none">Entre ton code (une seule fois) pour afficher ton tableau de bord.</div>
-    <input id="codeIn" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX" aria-label="Code"
-      style="width:100%;margin-top:16px;border:0;border-radius:16px;padding:16px;font:inherit;font-size:22px;font-weight:800;letter-spacing:.12em;text-align:center;color:#111;background:#fff">
-    <button class="bigbtn" style="background:#111827" id="codeGo">Afficher mes chiffres</button></div></div>`;
-    const go=async()=>{ $('codeGo').textContent='…'; if(!(await unlock($('codeIn').value))) $('codeGo').textContent='Afficher mes chiffres'; };
-    $('codeGo').onclick=go; $('codeIn').onkeydown=e=>{ if(e.key==='Enter') go(); }; return; }
+  if(ENC && !store.get('code',null)){ sec.innerHTML = codeCard(); bindCodeCard(); return; }
   if(!S.salaryChf){ sec.innerHTML = `<div class="card hero"><div class="blob b1"></div><div class="blob b2"></div><div style="position:relative">
     <div class="lbl">Bienvenue 👋</div><div class="big" style="font-size:40px">Mon Budget</div>
     <div class="sub" style="max-width:none">Ton tableau de bord s'affichera ici. Pour commencer, colle ton lien de configuration dans Réglages.</div>
@@ -885,6 +888,10 @@ function renderSettings(M){
   const sec=$('s-settings');
   const g=k=>S.goals[k]??0;
   sec.innerHTML=`
+  <div class="card anim" style="--i:0"><div class="h">🔑 Mon code</div>
+    <p class="muted" style="margin:0 0 10px;font-size:13px">${store.get('code',null)?'Code enregistré ✅ Tes chiffres se mettent à jour tout seuls.':'Tape ton code pour charger tes chiffres.'}</p>
+    <input id="codeIn2" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX" aria-label="Ton code" style="width:100%;border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:12px;font-size:18px;font-weight:800;letter-spacing:.1em;text-align:center">
+    <button class="bigbtn" id="codeGo2">Charger mes chiffres</button></div>
   <div class="card anim" style="--i:0"><div class="h">🔗 Lien de configuration</div>
     <p class="muted" style="margin:0 0 10px;font-size:13px">Colle ici le lien que Claude t'a donné : il installe tes réglages, tes objectifs et tes opérations.</p>
     <input id="pasteLink" style="width:100%;border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:12px;font-size:14px" placeholder="Colle ton lien ici" aria-label="Coller un lien de configuration">
@@ -920,6 +927,7 @@ function renderSettings(M){
   $('addFix').onclick=()=>{S.fixed.push({e:'🔒',n:'Nouvelle charge',v:0,day:null,kw:''}); save();};
   $('copyLink').onclick=async()=>{const link=location.origin+location.pathname+'#setup='+b64(JSON.stringify(S));
     try{await navigator.clipboard.writeText(link); toast('Lien copié : garde-le pour un autre téléphone');}catch(e){toast('Copie impossible sur cet appareil');}};
+  $('codeGo2').onclick=async()=>{ if(!ENC){ toast('Connexion nécessaire pour charger tes chiffres'); return; } store.set('code',null); if(await unlock($('codeIn2').value)) show('today'); };
   $('pasteGo').onclick=async()=>{ const r=await applySetup($('pasteLink').value); toast(setupToast(r)); if(r) show('today'); };
   $('wipeTx').onclick=()=>{$('wipeConfirm').innerHTML=`<p style="font-size:13px;margin:10px 0 0">Effacer les ${TXS.length} opérations ? Tes réglages sont gardés.</p><button class="ghost danger" id="wipeYes">Oui, effacer</button>`;
     $('wipeYes').onclick=()=>{TXS=[]; store.set('tx',TXS); toast('Opérations effacées'); render();};};
