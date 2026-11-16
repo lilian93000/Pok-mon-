@@ -280,6 +280,8 @@ section.on{display:block}
 .mm-xp .bar i{background:linear-gradient(90deg,#fff3a0,#ffd23a)}
 .mm-xp small{display:block;text-align:center;font-size:12px;opacity:.92;margin-top:6px}
 .mm-fly{position:fixed;z-index:70;pointer-events:none;font-size:22px}
+.mm-swap{border:0;cursor:pointer;transition:transform .2s}.mm-swap:active{transform:scale(.92)}
+.mm-pick button.cur{outline:3px solid #fff;outline-offset:-3px;box-shadow:0 0 0 3px var(--fix)}
 .mm-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .mm-pick button{border:0;border-radius:18px;padding:6px 4px 8px;color:#fff;cursor:pointer;background:var(--b);font:800 12px Inter,sans-serif;transition:transform .2s}
 .mm-pick button:active{transform:scale(.94)}
@@ -694,14 +696,28 @@ function companionCard(M){
   const sav=S.savingsBalance||0, st=stageFor(sav), f=monForm(m,st), lvl=levelFor(sav), mood=moodOf(M);
   const next=EVO_AT[Math.min(st+1,2)], prev=EVO_AT[st], pct=st>=2?100:Math.max(3,(sav-prev)/(next-prev)*100);
   return `<div class="card mm-card anim" style="--i:0;--mmbg:${m.bg}">
-    <div class="mm-top"><span class="mm-tag">${m.emoji} ${m.type}</span><span class="mm-tag">Niv. ${lvl}</span></div>
+    <div class="mm-top"><span class="mm-tag">${m.emoji} ${m.type} · Niv. ${lvl}</span><button class="mm-tag mm-swap" id="mmSwap" aria-label="Changer de Moneymon">🔄 Changer</button></div>
     <div class="mm-stage"><div class="mm-bubble" id="mmBubble"></div>
       <div class="mm-mon mood-${mood} ${f.aura?'mm-aura':''}" id="mmMon" role="button" tabindex="0" aria-label="Toucher ${esc(f.name)}">${animSvg(f.svg)}</div>
       <div class="mm-mood">${mood==='happy'?'':mood==='ok'?'💦':'💤'}</div></div>
     <div class="mm-name">${esc(f.name)}</div>
     <div class="mm-xp"><div class="bar"><i style="width:${pct}%"></i></div><small>${st>=2?`Forme finale · ${fmt(sav)} épargnés`:`${fmt(sav)} épargnés · évolution à ${fmt(next)}`}</small></div></div>`;
 }
+function openSwap(){
+  const cur=store.get('starter',null), st=stageFor(S.savingsBalance||0);
+  const bd=document.createElement('div'); bd.className='backdrop';
+  bd.innerHTML=`<div class="sheetbox" role="dialog" aria-modal="true" aria-label="Changer de Moneymon">
+    <h3>🔄 Changer de Moneymon</h3><p class="muted" style="font-size:13px;margin:4px 0 12px">Ton épargne est gardée : le nouveau arrive directement à ton niveau.</p>
+    <div class="mm-pick">${MONS.map(m=>{const f=monForm(m,st);return `<button data-sw="${m.id}" class="${m.id===cur?'cur':''}" style="--b:${m.bg}">${f.svg.replace('<svg ','<svg aria-hidden="true" ')}<span>${m.emoji} ${esc(f.name)}</span></button>`;}).join('')}</div>
+    <button class="ghost" id="swClose">Fermer</button></div>`;
+  document.body.appendChild(bd);
+  const close=()=>bd.remove(); bd.onclick=e=>{ if(e.target===bd) close(); }; bd.querySelector('#swClose').onclick=close;
+  bd.querySelectorAll('[data-sw]').forEach(b=>b.onclick=e=>{ const id=b.dataset.sw; close(); if(id===cur) return;
+    store.set('starter',id); store.set('stageSeen',st); mmBurst(e.clientX,e.clientY,['✨','🪙','💛','⭐'],22);
+    toast(`${monForm(monById(id),st).name} te rejoint ! 🎉`); render(); window.scrollTo({top:0,behavior:reduce?'auto':'smooth'}); });
+}
 function bindCompanion(M){
+  if($('mmSwap')) $('mmSwap').onclick=openSwap;
   const el=$('mmMon'); if(!el) return; const m=monById(store.get('starter',null)), sav=S.savingsBalance||0, f=monForm(m,stageFor(sav));
   const lines=mmLines(M,m,f,sav);
   const poke=()=>{ if(!reduce) el.animate([{transform:'translateY(0) scale(1)'},{transform:'translateY(6px) scale(1.12,.86)',offset:.18},{transform:'translateY(-60px) scale(.92,1.1)',offset:.45},{transform:'translateY(-60px) rotate(-8deg)',offset:.55},{transform:'translateY(0) scale(1.14,.86)',offset:.82},{transform:'none'}],{duration:900,easing:'ease-out'});
