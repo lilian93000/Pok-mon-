@@ -46,6 +46,16 @@ Bon jeu ! 🎉
 
 ---
 
+## ⚔ Bonus : Hannibal ad portas
+
+Le dossier [`hannibal/`](hannibal/) contient un **simulateur 3D de bataille antique** :
+Rome contre Hannibal à **Cannes** (216 av. J.-C.) et à **Zama** (202 av. J.-C.). Effectifs
+réels, jusqu'à un soldat dessiné par homme, moral, fatigue, flancs et encerclement, projectiles
+balistiques, soleil et vent du jour, et plans historiques d'Hannibal, Varron et Scipion.
+Voir [`hannibal/README.md`](hannibal/README.md).
+
+---
+
 ## ◆ Bonus : Oracle Bourse
 
 Le dossier [`bourse/`](bourse/) contient un autre projet : une **machine d'analyse
