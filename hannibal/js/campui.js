@@ -130,7 +130,7 @@ export class CampaignUI {
     for (const m of this.markEls) put(m.el, m.pos, 6, 46, 58, 6, true);
     for (const a of this.c.armies) {
       const el = this.armyEls.get(a.id), t = map.tokens.get(a.id);
-      if (el && t) put(el, t.gr.position, 22, el.offsetWidth || 80, 22, -11, a.id === this.sel);
+      if (el && t) put(el, t.gr.position, 17, el.offsetWidth || 80, 22, -11, a.id === this.sel);
     }
     const order = PROVINCES.slice().sort((a, b) => b.walls - a.walls || (this.c.owner[b.id] === this.c.player) - (this.c.owner[a.id] === this.c.player));
     const marked = new Set(this.markEls.map((m) => m.prov));
@@ -223,6 +223,9 @@ export class CampaignUI {
     map.sel = this.sel;
     map.paint(c.owner, hl, this.selProv || (sel ? sel.prov : null));
     map.syncArmies(c, animate);
+    map.showPaths(sel && sel.side === c.player && !this.busy ? sel : null, sel && sel.side === c.player && !this.busy ? c.options(sel) : null);
+    // les marqueurs se posent au bout des flèches de trajet
+    for (const m of this.markEls) if (map.pathEnd && map.pathEnd[m.prov]) m.pos = map.pathEnd[m.prov];
     this.syncArmyLabels();
     this.updateTop();
     this.updateLabels();

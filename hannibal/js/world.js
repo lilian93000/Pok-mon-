@@ -5,6 +5,7 @@ import { Sky } from 'three/addons/objects/Sky.js';
 import { HALF } from './terrain.js';
 import { mulberry32, makeNoise2D, smoothstep } from './noise.js';
 import { CLOUD, CLOUD_GLSL, makeCloudTexture, makeCloudLayer, makeStrawTexture, GrassField, addRocks, addReeds } from './nature.js';
+import { tileNoise } from './mapart.js';
 
 export class World {
   constructor(renderer, scene, terrain, scn, q) {
@@ -134,6 +135,8 @@ export class World {
     colTex.wrapS = colTex.wrapT = THREE.ClampToEdgeWrapping;
     // détail fin répété (chaume, mottes, cailloux)
     const detail = detailTexture(256);
+    // bruit périodique sans volutes pour les variations moyennes et larges du sol
+    const macro = tileNoise(256, 23);
     // piétinement et sang : mis à jour pendant la bataille
     this.trS = 512;
     this.trData = new Uint8Array(this.trS * this.trS * 4);
@@ -148,6 +151,7 @@ export class World {
       sh.uniforms.uStraw = { value: straw };
       sh.uniforms.uBump = { value: this.q.bump ?? 1 };
       sh.uniforms.uDetail = { value: detail };
+      sh.uniforms.uMacro = { value: macro };
       sh.uniforms.uTrample = { value: this.trTex };
       sh.uniforms.uMud = { value: new THREE.Color(zama ? '#a27c56' : '#a48c6a') };
       sh.vertexShader = sh.vertexShader
@@ -155,7 +159,7 @@ export class World {
         .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvW = (modelMatrix * vec4(transformed,1.0)).xyz;');
       sh.fragmentShader = sh.fragmentShader
         .replace('#include <common>', `#include <common>
-          varying vec3 vW; uniform sampler2D uDetail; uniform sampler2D uTrample; uniform vec3 uMud; uniform sampler2D uStraw; uniform float uBump; uniform vec4 uZone;
+          varying vec3 vW; uniform sampler2D uDetail; uniform sampler2D uMacro; uniform sampler2D uTrample; uniform vec3 uMud; uniform sampler2D uStraw; uniform float uBump; uniform vec4 uZone;
           ${CLOUD_GLSL}
           // relief fin : perturbation de la normale par les dérivées écran (comme un bump map)
           vec3 bumpN(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy, float faceDirection) {
@@ -166,20 +170,25 @@ export class World {
             return normalize(abs(fDet) * surf_norm - vGrad);
           }
           float groundH(vec2 p, float near) {
-            return texture2D(uStraw, p / 3.7).r * 0.06 * near + texture2D(uDetail, p / 3.1).r * 0.12 + texture2D(uDetail, p / 23.0).g * 0.35;
+            return texture2D(uStraw, p / 3.7).r * 0.06 * near + texture2D(uDetail, p / 3.1).r * 0.12 + texture2D(uMacro, p / 23.0).g * 0.35;
           }`)
         .replace('#include <map_fragment>', `
           vec2 guv = (vW.xz + ${HALF.toFixed(1)}) / ${(HALF * 2).toFixed(1)};
           vec4 gc = texture2D(map, guv);
-          float d1 = texture2D(uDetail, vW.xz / 3.1).r, d2 = texture2D(uDetail, vW.xz / 23.0).g, d3 = texture2D(uDetail, vW.xz / 0.9).b;
-          float dd = mix(1.0, (0.78 + 0.44*d1) * (0.86 + 0.28*d2), 1.0);
+          float d1 = texture2D(uDetail, vW.xz / 3.1).r, d2 = texture2D(uMacro, vW.xz / 23.0).g, d3 = texture2D(uDetail, vW.xz / 0.9).b;
           float camD = length(vW - cameraPosition);
+          // le grain fin (chaume en rangs) ne vit que près de la caméra : au loin il crée du moiré
+          float fineK = 1.0 - smoothstep(30.0, 110.0, camD);
+          float dd = (0.78 + 0.44 * mix(0.5, d1, fineK)) * (0.86 + 0.28*d2);
           dd = mix(dd, 1.0, smoothstep(250.0, 1400.0, camD));
           dd *= mix(0.9 + 0.2*d3, 1.0, smoothstep(10.0, 60.0, camD));
-          float nearF = 1.0 - smoothstep(25.0, 180.0, camD);
+          float nearF = 1.0 - smoothstep(20.0, 90.0, camD);
           float stv = texture2D(uStraw, vW.xz / 3.7).r;
           dd *= mix(1.0, 0.7 + 0.62 * stv, nearF);
           vec3 col = gc.rgb * dd;
+          // taches naturelles à toutes les distances : herbe plus drue, terre nue, pierrailles
+          float m1 = texture2D(uMacro, vW.xz / 190.0).r, m2 = texture2D(uMacro, vW.xz / 730.0).a;
+          col *= (0.86 + 0.28 * m1) * (0.9 + 0.2 * m2);
           vec4 tr = texture2D(uTrample, guv);
           col = mix(col, uMud * (0.8 + 0.35*d1), clamp(tr.r * 1.2, 0.0, 0.8));
           col = mix(col, vec3(0.2, 0.07, 0.05), clamp(tr.g * 0.6, 0.0, 0.32) * (0.6 + 0.4*d3));
@@ -190,7 +199,7 @@ export class World {
             col = mix(col, vec3(0.95, 0.78, 0.45), inZ * (0.10 + 0.5 * edge));
           }
           diffuseColor.rgb *= col;
-          float bumpK = uBump * (1.0 - smoothstep(60.0, 420.0, camD));
+          float bumpK = uBump * (1.0 - smoothstep(35.0, 170.0, camD));
           float Hh = groundH(vW.xz, nearF) * (1.0 - clamp(tr.r, 0.0, 0.6));
           vec2 dHdxy = vec2(dFdx(Hh), dFdy(Hh)) * bumpK * 6.0;`)
         .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>

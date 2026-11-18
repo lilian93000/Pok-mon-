@@ -256,7 +256,9 @@ export class Effects {
   // Contours des unités : sélection toujours, toutes les unités si l'aide tactique est active
   updateOverlay(camera, selection, mode) {
     const camH = camera.position.y - this.ter.height(camera.position.x, camera.position.z);
-    const showAll = mode === 'on' || (mode === 'auto' && camH > 380);
+    // « auto » : contour pour les unités choisies seulement ; vu de très haut, une teinte au sol
+    const showAll = mode === 'on' || (mode === 'auto' && camH > 650);
+    const soft = mode !== 'on';
     const P = this.linePos, C = this.lineCol, FP = this.fillPos, FC = this.fillCol;
     let n = 0, f = 0;
     const seg = (x0, y0, z0, x1, y1, z1, r, g, bb) => {
@@ -281,6 +283,7 @@ export class Effects {
       const pts = [[-u.hw, u.hd], [u.hw, u.hd], [u.hw, -u.hd], [-u.hw, -u.hd]].map(([lx, lz]) => {
         const [x, z] = u.world(lx, lz); return [x, this.ter.height(x, z) + lift, z];
       });
+      if (!sel && soft) { tri(pts[0], pts[1], pts[2], r, g, bb); tri(pts[0], pts[2], pts[3], r, g, bb); continue; }
       for (let i = 0; i < 4; i++) { const a = pts[i], c = pts[(i + 1) % 4]; seg(a[0], a[1], a[2], c[0], c[1], c[2], r, g, bb); }
       // flèche d'orientation devant l'unité
       const al = Math.min(30, Math.max(8, u.w * 0.2));

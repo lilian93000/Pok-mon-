@@ -235,6 +235,13 @@ export class RTSCamera {
       else { this.target.x += (u.x - this.target.x) * Math.min(1, dt * 3); this.target.z += (u.z - this.target.z) * Math.min(1, dt * 3); }
     }
     this.target.x = clamp(this.target.x, this.lim.x0, this.lim.x1); this.target.z = clamp(this.target.z, this.lim.z0, this.lim.z1);
+    // carte : la caméra se couche quand on s'approche (l'écart choisi au doigt est conservé)
+    if (this.lim.auto) {
+      const a = this.lim.auto, t = clamp((this.dist - a[0]) / (a[1] - a[0]), 0, 1), base = a[2] + (a[3] - a[2]) * t * t * (3 - 2 * t);
+      if (this.autoBase === undefined) this.autoBase = base;
+      this.pitch += base - this.autoBase;
+      this.autoBase = base;
+    }
     this.pitch = clamp(this.pitch, this.minPitch(), this.lim.pmax);
     const c = this.cur, k = 1 - Math.exp(-dt * 9);
     c.x += (this.target.x - c.x) * k; c.z += (this.target.z - c.z) * k;

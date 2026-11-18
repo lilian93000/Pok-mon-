@@ -170,6 +170,9 @@ export class UI {
     $('menuBtn').onclick = () => { this.app.setSpeed(0); if (this.app.campBattle) this.fieldMenu(); else this.showMenu(true); };
     this.multi = false;
     this.adviceOn = true;
+    // téléphone : les commandes secondaires se replient derrière « … »
+    for (const id of ['soundBtn', 'advBtn', 'viewBtn', 'helpBtn']) { $(id).classList.add('opt2'); $(id).addEventListener('click', () => { $('topR').classList.remove('open'); $('moreBtn').setAttribute('aria-expanded', 'false'); }); }
+    $('moreBtn').onclick = () => { const o = $('topR').classList.toggle('open'); $('moreBtn').setAttribute('aria-expanded', String(o)); };
     $('advBtn').onclick = () => { this.adviceOn = !this.adviceOn; $('advBtn').classList.toggle('off', !this.adviceOn); this.adv.keys = ''; this.updateAdvice(); this.toast(this.adviceOn ? 'Conseiller activé.' : 'Conseiller désactivé.'); };
     $('mapBtn').onclick = (e) => { e.stopPropagation(); this.miniBig = !this.miniBig; $('mini').classList.toggle('big', this.miniBig); this.drawMini(); };
     $('engage').onclick = () => this.app.engage();
@@ -238,6 +241,7 @@ export class UI {
       <button class="${id === cur ? 'ghost' : 'primary'} sm" data-apply="${id}">${id === cur ? 'Plan choisi' : 'Appliquer'}</button></div>`;
     el.innerHTML = list.map((p) => card(p.id, p.name, p.tag, p.desc, p.pros, p.cons)).join('')
       + card('free', 'Commandement libre', '', "Déploiement historique, aucun plan : chaque unité attend tes ordres.", [], []);
+    for (const pl of el.querySelectorAll('.plan')) pl.onclick = (e) => { if (e.target.closest('[data-apply]')) return; const b2 = pl.querySelector('[data-apply]'); if (b2 && !pl.classList.contains('on')) b2.click(); };
     for (const btn of el.querySelectorAll('[data-apply]')) btn.onclick = () => {
       const id = btn.dataset.apply;
       app.applyStrategy(id === 'free' ? null : list.find((p) => p.id === id));

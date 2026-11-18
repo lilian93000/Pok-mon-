@@ -17,10 +17,11 @@ import { CampaignUI, loadSave } from './campui.js';
 import { fieldScenario, fieldOutcome, battleSides } from './battlegen.js';
 
 const QUALITY = {
-  low: { pr: 1, shadows: true, shadowMap: 1024, groundTex: 1024, N: 385, trees: 1500, bushes: 1500, rocks: 600, reeds: 1200, grass: 0, treeShadows: false, dust: 700, nearDist: 70, nearCap: 1200, copies: 1, post: false, strawTex: 512, bump: 0.6 },
-  medium: { pr: 1.5, shadows: true, shadowMap: 2048, groundTex: 1024, N: 385, trees: 3000, bushes: 4000, rocks: 1500, reeds: 2500, grass: 30000, grassTile: 70, treeShadows: true, dust: 1600, nearDist: 110, nearCap: 1200, copies: 2, post: true, msaa: 0, bloom: false, strawTex: 1024, bump: 1 },
-  high: { pr: 2, shadows: true, shadowMap: 4096, groundTex: 1024, N: 769, trees: 5000, bushes: 7000, rocks: 3000, reeds: 4500, grass: 90000, grassTile: 100, treeShadows: true, dust: 2600, nearDist: 150, nearCap: 1500, copies: 4, post: true, msaa: 4, bloom: true, strawTex: 1024, bump: 1 },
-  ultra: { pr: 'ultra', shadows: true, shadowMap: 4096, groundTex: 1536, N: 769, trees: 7000, bushes: 10000, rocks: 5000, reeds: 7000, grass: 180000, grassTile: 130, treeShadows: true, rocksShadow: true, dust: 3500, nearDist: 220, nearCap: 2500, copies: 4, post: true, msaa: 4, bloom: true, strawTex: 2048, bump: 1.2 },
+  // « Légère » est la qualité des téléphones : image nette (la résolution baisse seule si ça rame), herbe proche, rangs doublés
+  low: { pr: 1.5, shadows: true, shadowMap: 1024, groundTex: 1024, N: 385, trees: 2200, bushes: 2200, rocks: 800, reeds: 1500, grass: 12000, grassTile: 48, treeShadows: false, dust: 800, nearDist: 80, nearCap: 1500, copies: 2, post: false, strawTex: 512, bump: 0.7 },
+  medium: { pr: 1.5, shadows: true, shadowMap: 2048, groundTex: 1024, N: 385, trees: 3000, bushes: 4000, rocks: 1500, reeds: 2500, grass: 30000, grassTile: 70, treeShadows: true, dust: 1600, nearDist: 120, nearCap: 2500, copies: 2, post: true, msaa: 0, bloom: false, strawTex: 1024, bump: 1 },
+  high: { pr: 2, shadows: true, shadowMap: 4096, groundTex: 1024, N: 769, trees: 5000, bushes: 7000, rocks: 3000, reeds: 4500, grass: 90000, grassTile: 100, treeShadows: true, dust: 2600, nearDist: 170, nearCap: 4000, copies: 4, post: true, msaa: 4, bloom: true, strawTex: 1024, bump: 1 },
+  ultra: { pr: 'ultra', shadows: true, shadowMap: 4096, groundTex: 1536, N: 769, trees: 7000, bushes: 10000, rocks: 5000, reeds: 7000, grass: 180000, grassTile: 130, treeShadows: true, rocksShadow: true, dust: 3500, nearDist: 240, nearCap: 6000, copies: 4, post: true, msaa: 4, bloom: true, strawTex: 2048, bump: 1.2 },
 };
 const touch = matchMedia('(pointer: coarse)').matches;
 const mobile = touch || Math.min(screen.width, screen.height) < 700;
@@ -53,7 +54,7 @@ const app = {
   camp: null, cmap: null, campBattle: null,
 };
 const BATTLE_LIM = { x0: -6000, x1: 6000, z0: -6000, z1: 6000, dmin: 5, dmax: 5000, pmin: null, pmax: 1.45 };
-const MAP_LIM = { x0: MB.x0 + 150, x1: MB.x1 - 150, z0: MB.z0 + 120, z1: MB.z1 - 60, dmin: 160, dmax: 2600, pmin: 0.5, pmax: 1.3 };
+const MAP_LIM = { x0: MB.x0 + 150, x1: MB.x1 - 150, z0: MB.z0 + 120, z1: MB.z1 - 60, dmin: 70, dmax: 2500, pmin: 0.3, pmax: 1.32, auto: [120, 1500, 0.46, 1.02] };
 app.audio = new BattleAudio();
 app.cam = new RTSCamera(camera, canvas, null);
 app.ui = new UI(app);
@@ -240,7 +241,7 @@ function frame(now) {
   last = now;
   if (app.state === 'campaign' && app.cmap) {
     app.cam.update(rdt);
-    app.cmap.update(rdt);
+    app.cmap.update(rdt, camera, app.cam);
     app.campUI.update(rdt);
     app.audio.update(rdt, QUIET);
     renderer.render(app.cmap.scene, camera);
@@ -315,7 +316,8 @@ app.battleMode = () => {
 app.mapMode = () => {
   app.cam.lim = { ...MAP_LIM };
   app.cam.ter = app.cmap;
-  camera.near = 2; camera.far = 14000; camera.updateProjectionMatrix();
+  app.cam.autoBase = undefined;
+  camera.near = 1; camera.far = 16000; camera.updateProjectionMatrix();
   renderer.toneMappingExposure = 0.92;
 };
 app.hideBattleHud = () => {
@@ -333,7 +335,7 @@ app.openCampaign = async (c) => {
     $('loading').hidden = false;
     $('loadmsg').textContent = 'Tracé de la carte de la Méditerranée…';
     await wait(40);
-    app.cmap = new CampaignMap(renderer, { shadows: !mobile, texScale: mobile ? 1.5 : 2 });
+    app.cmap = new CampaignMap(renderer, { shadows: true, mobile, texScale: mobile ? 1.5 : 2, mesh: mobile ? 2 : 1, trees: mobile ? 0.55 : 1.3, clouds: 1 });
     $('loading').hidden = true;
   }
   app.camp = c;

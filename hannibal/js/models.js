@@ -52,7 +52,7 @@ function legs(b, s, lod) {
   const legMat = s.trousers ? 2 : 0;
   for (const [side, part, pv] of [[1, 1, PV.legL], [-1, 2, PV.legR]]) {
     const x = 0.1 * side;
-    if (lod) { b.box(0.12, 0.9, 0.13, { p: [x, 0.46, 0], part, pv, mat: legMat }); continue; }
+    if (lod) { b.cyl(0.074, 0.056, 0.9, 4, { p: [x, 0.47, 0], r: [0, Math.PI / 4, 0], part, pv, mat: legMat }); continue; }
     b.cyl(0.075, 0.058, 0.86, 5, { p: [x, 0.5, 0], part, pv, mat: legMat });
     b.box(0.1, 0.06, 0.24, { p: [x, 0.03, 0.04], part, pv, mat: 5 });
     if (s.greave && side === 1) b.cyl(0.072, 0.064, 0.36, 5, { p: [x, 0.3, 0.005], part, pv, mat: 3 });
@@ -61,9 +61,20 @@ function legs(b, s, lod) {
 function body(b, s, lod) {
   const torsoMat = s.bare ? 0 : s.armor === 'mail' ? 4 : s.armor === 'linen' ? 14 : s.armor === 'muscle' ? 3 : 1;
   if (lod) {
-    b.box(0.4, 0.86, 0.27, { p: [0, 1.04, 0], mat: torsoMat === 0 && !s.trousers ? 1 : torsoMat });
-    b.box(0.2, 0.22, 0.2, { p: [0, 1.6, 0], mat: s.helmet ? (s.helmet === 'cap' ? 5 : s.helmet === 'hood' ? 15 : 3) : s.hair ? 10 : 0, part: 5, pv: PV.neck });
-    if (s.cloak) b.box(0.42, 0.75, 0.04, { p: [0, 1.05, -0.16], mat: 11 });
+    // silhouette arrondie à peu de facettes (soldats à moyenne distance)
+    const tm = torsoMat === 0 && !s.trousers ? 1 : torsoMat;
+    if (!s.trousers || s.tunicLong) b.cyl(0.2, 0.26, 0.42, 6, { p: [0, 0.84, 0], mat: 1, s: [1, 1, 0.78] });
+    else b.cyl(0.19, 0.2, 0.3, 6, { p: [0, 0.88, 0], mat: 2, s: [1, 1, 0.75] });
+    b.cyl(0.21, 0.175, 0.5, 6, { p: [0, 1.21, 0], mat: tm, s: [1, 1, 0.68] });
+    b.box(0.42, 0.07, 0.24, { p: [0, 1.45, 0], mat: tm });
+    b.add(new THREE.IcosahedronGeometry(0.108, 0), { p: [0, 1.6, 0], mat: 0, part: 5, pv: PV.neck });
+    const hm = s.helmet ? (s.helmet === 'cap' ? 5 : s.helmet === 'hood' ? 15 : 3) : s.hair ? 10 : -1;
+    if (hm >= 0) b.sph(s.helmet ? 0.126 : 0.114, 6, 2, { p: [0, 1.615, -0.006], mat: hm, part: 5, pv: PV.neck }, true);
+    if (s.helmet === 'hood' || s.longHair) b.box(0.2, 0.22, 0.05, { p: [0, 1.48, -0.11], mat: s.helmet === 'hood' ? 15 : 10, part: 5, pv: PV.neck });
+    if (s.beard) b.box(0.12, 0.07, 0.05, { p: [0, 1.535, 0.07], mat: 10, part: 5, pv: PV.neck });
+    if (s.crest === 'feathers') b.box(0.05, 0.34, 0.03, { p: [0, 1.9, -0.01], mat: 9, part: 5, pv: PV.neck });
+    else if (s.crest === 'crest') b.box(0.035, 0.13, 0.28, { p: [0, 1.79, -0.02], mat: 9, part: 5, pv: PV.neck });
+    if (s.cloak) b.box(0.42, 0.8, 0.04, { p: [0, 1.02, -0.16], r: [0.1, 0, 0], mat: 11 });
     return;
   }
   if (!s.trousers || s.tunicLong) b.cyl(0.2, 0.26, 0.42, 7, { p: [0, 0.83, 0], mat: 1, s: [1, 1, 0.8] });
@@ -108,7 +119,7 @@ function body(b, s, lod) {
 function arms(b, s, lod) {
   for (const [side, part, pv] of [[-1, 3, PV.armR], [1, 4, PV.armL]]) {
     const x = 0.25 * side;
-    if (lod) { if (part === 3) b.box(0.1, 0.6, 0.1, { p: [x, 1.12, 0], part, pv, mat: 0 }); continue; }
+    if (lod) { b.cyl(0.056, 0.044, 0.64, 4, { p: [x, 1.1, 0], r: [0, Math.PI / 4, 0], part, pv, mat: 0 }); continue; }
     b.cyl(0.055, 0.042, 0.66, 5, { p: [x, 1.09, 0], part, pv, mat: 0 }, true);
     if (!s.bare) b.cyl(0.07, 0.065, 0.2, 5, { p: [x, 1.33, 0], part, pv, mat: s.armor === 'mail' ? 4 : s.armor === 'linen' ? 14 : 1 });
   }
@@ -161,7 +172,7 @@ function shield(b, s, lod) {
   const [w, h, t] = SHIELD_DIMS[S];
   const y = shieldY(S);
   const p = [0.13, y, 0.3];
-  if (lod) { b.box(w, h, t + 0.02, { p, part, pv, mat: 7, r: [0, -0.2, 0] }); return; }
+  if (lod) { b.add(new THREE.CylinderGeometry(0.5, 0.5, t + 0.02, 7, 1), { p, r: [Math.PI / 2, -0.2, 0], ro: 'YXZ', s: [w, 1, h], part, pv, mat: 7 }); return; }
   b.add(new THREE.CylinderGeometry(0.5, 0.5, t, 11, 1), { p, r: [Math.PI / 2, -0.2, 0], ro: 'YXZ', s: [w, 1, h], part, pv, mat: 7 });
   b.sph(Math.min(w, h) * 0.12, 5, 2, { p: [p[0] + 0.012, p[1], p[2] + t / 2 - 0.005], r: [Math.PI / 2, 0, 0], part, pv, mat: 8 }, true);
   if (S === 'scutum' || S === 'oval') b.box(0.04, h * 0.85, 0.02, { p: [p[0] + 0.012, p[1], p[2] + t / 2], r: [0, -0.2, 0], part, pv, mat: S === 'scutum' ? 8 : 6 });
@@ -186,25 +197,32 @@ function horse(b, s, lod) {
   const k = s.pony ? 0.88 : 1;
   const legs = [[0.17, 0.62, 11], [-0.17, 0.62, 12], [0.17, -0.6, 13], [-0.17, -0.6, 14]];
   if (lod) {
-    b.box(0.55 * k, 0.55 * k, 1.6 * k, { p: [0, 1.15 * k, 0], mat: 12 });
-    b.box(0.22, 0.6, 0.3, { p: [0, 1.6 * k, 0.95 * k], r: [-0.6, 0, 0], mat: 12, part: 15, pv: [0, 1.3 * k, 0.7 * k] });
-    for (const [x, z, part] of legs) b.box(0.1, 0.95 * k, 0.12, { p: [x * k, 0.5 * k, z * k], part, pv: [x * k, 1.0 * k, z * k], mat: 12 });
+    const npv = [0, 1.35 * k, 0.72 * k];
+    b.cyl(0.3 * k, 0.29 * k, 1.55 * k, 6, { p: [0, 1.17 * k, 0], r: [Math.PI / 2, 0, 0], s: [0.85, 1, 1.05], mat: 12 }, true);
+    b.cyl(0.11 * k, 0.19 * k, 0.75 * k, 5, { p: [0, 1.62 * k, 0.95 * k], r: [0.75, 0, 0], mat: 12, part: 15, pv: npv });
+    b.box(0.16 * k, 0.19 * k, 0.5 * k, { p: [0, 1.86 * k, 1.27 * k], r: [0.75, 0, 0], mat: 12, part: 15, pv: npv });
+    b.box(0.05, 0.28 * k, 0.5 * k, { p: [0, 1.82 * k, 0.9 * k], r: [0.75, 0, 0], mat: 13, part: 15, pv: npv });
+    for (const [x, z, part] of legs) b.cyl(0.062 * k, 0.045 * k, 1.0 * k, 4, { p: [x * k, 0.55 * k, z * k], r: [0, Math.PI / 4, 0], part, pv: [x * k, 1.05 * k, z * k], mat: 12 });
+    b.box(0.08, 0.55 * k, 0.08, { p: [0, 0.98 * k, -0.95 * k], r: [-0.35, 0, 0], mat: 13, part: 19, pv: [0, 1.25 * k, -0.85 * k] });
+    if (s.cloth) b.box(0.6 * k, 0.03, 0.66 * k, { p: [0, 1.47 * k, -0.02], mat: s.cloth });
     return;
   }
-  b.cyl(0.31 * k, 0.29 * k, 1.25 * k, 8, { p: [0, 1.17 * k, 0], r: [Math.PI / 2, 0, 0], s: [0.85, 1, 1.05], mat: 12 });
-  b.sph(0.32 * k, 8, 6, { p: [0, 1.18 * k, 0.6 * k], s: [0.85, 1, 1], mat: 12 });
-  b.sph(0.33 * k, 8, 6, { p: [0, 1.2 * k, -0.6 * k], s: [0.9, 1, 1], mat: 12 });
+  // corps en tonneau : croupe ronde, garrot, poitrail (surface de révolution)
+  const prof = [[0.0, -0.8], [0.17, -0.77], [0.27, -0.66], [0.32, -0.45], [0.315, -0.15], [0.3, 0.15], [0.31, 0.42], [0.28, 0.62], [0.18, 0.76], [0.0, 0.8]].map(([r, y]) => new THREE.Vector2(r * k, y * k));
+  b.add(new THREE.LatheGeometry(prof, 11), { p: [0, 1.18 * k, 0], r: [Math.PI / 2, 0, 0], s: [0.86, 1, 1.02], mat: 12 });
   const npv = [0, 1.35 * k, 0.72 * k];
-  b.cyl(0.12 * k, 0.2 * k, 0.75 * k, 7, { p: [0, 1.62 * k, 0.95 * k], r: [0.75, 0, 0], mat: 12, part: 15, pv: npv });
-  b.box(0.17 * k, 0.2 * k, 0.52 * k, { p: [0, 1.86 * k, 1.27 * k], r: [0.75, 0, 0], mat: 12, part: 15, pv: npv });
-  b.box(0.05, 0.3 * k, 0.6 * k, { p: [0, 1.82 * k, 0.9 * k], r: [0.75, 0, 0], mat: 13, part: 15, pv: npv });
-  for (const x of [-0.05, 0.05]) b.cone(0.03, 0.1, 3, { p: [x, 2.1 * k, 1.1 * k], mat: 12, part: 15, pv: npv });
+  b.cyl(0.12 * k, 0.21 * k, 0.78 * k, 8, { p: [0, 1.62 * k, 0.95 * k], r: [0.75, 0, 0], s: [0.85, 1, 1.15], mat: 12, part: 15, pv: npv });
+  // tête effilée vers les naseaux, oreilles, crinière
+  b.cyl(0.062 * k, 0.105 * k, 0.56 * k, 8, { p: [0, 1.86 * k, 1.27 * k], r: [0.75 + Math.PI / 2, 0, 0], s: [0.8, 1, 1.1], mat: 12, part: 15, pv: npv }, true);
+  b.box(0.05, 0.3 * k, 0.62 * k, { p: [0, 1.82 * k, 0.9 * k], r: [0.75, 0, 0], mat: 13, part: 15, pv: npv });
+  for (const x of [-0.05, 0.05]) b.cone(0.03, 0.12, 4, { p: [x, 2.1 * k, 1.1 * k], mat: 12, part: 15, pv: npv });
   for (const [x, z, part] of legs) {
     const pv = [x * k, 1.05 * k, z * k];
-    b.cyl(0.065 * k, 0.04 * k, 1.0 * k, 5, { p: [x * k, 0.55 * k, z * k], part, pv, mat: 12 });
-    b.cyl(0.05 * k, 0.055 * k, 0.08, 5, { p: [x * k, 0.04, z * k], part, pv, mat: 13 });
+    b.cyl(0.085 * k, 0.06 * k, 0.42 * k, 6, { p: [x * k, 0.86 * k, z * k], part, pv, mat: 12 });
+    b.cyl(0.05 * k, 0.036 * k, 0.62 * k, 6, { p: [x * k, 0.38 * k, z * k], part, pv, mat: 12 });
+    b.cyl(0.045 * k, 0.055 * k, 0.09, 6, { p: [x * k, 0.045, z * k + 0.01], part, pv, mat: 13 });
   }
-  b.box(0.08, 0.6 * k, 0.08, { p: [0, 0.98 * k, -0.95 * k], r: [-0.35, 0, 0], mat: 13, part: 19, pv: [0, 1.25 * k, -0.85 * k] });
+  b.cyl(0.035, 0.075, 0.68 * k, 6, { p: [0, 0.98 * k, -0.95 * k], r: [-0.35, 0, 0], mat: 13, part: 19, pv: [0, 1.25 * k, -0.85 * k] });
   if (s.cloth) b.box(0.62 * k, 0.03, 0.7 * k, { p: [0, 1.47 * k, -0.02], mat: s.cloth });
 }
 function rider(b, s, lod) {

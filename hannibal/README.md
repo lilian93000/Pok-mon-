@@ -20,7 +20,22 @@ Il faut être connecté (Three.js et les polices viennent d'un CDN).
 
 - **La carte** : Hispanie, Gaule du Sud, Italie, Sicile, Sardaigne, Corse, Baléares et Afrique du
   Nord en relief, côtes, Alpes, Pyrénées, Apennins, Atlas et grands fleuves tracés à la main,
-  31 provinces avec leur ville, leur peuple, leur revenu, leur garnison et leur muraille.
+  33 provinces avec leur ville, leur peuple, leur revenu, leur garnison et leur muraille.
+  Les frontières suivent les crêtes ; chaque faction borde son territoire de sa couleur. Forêts
+  (chênes, pins parasols, cyprès, sapins des Alpes, palmiers d'Afrique), champs cultivés autour des
+  villes et dans les greniers à blé (plaine du Pô, Campanie, Sicile, vallée du Bagradas), voies
+  romaines tracées le long des vallées, mer animée avec écume sur les côtes, brume et nuages aux
+  confins du monde connu.
+- **Les villes** selon leur peuple : murailles, tours et portes, toits de tuiles en Italie, maisons
+  à terrasses en Hispanie et en Afrique, huttes rondes des Gaulois, tentes des Numides, nuraghes de
+  Sardaigne. Rome a son Capitole et son Circus Maximus, Carthage sa Byrsa et son port circulaire,
+  Syracuse et Tarente leur théâtre ; les ports ont leurs quais, leurs phares et leurs galères.
+- **Les armées** sont de petites troupes sur la carte : le général à cheval, l'enseigne de la
+  faction qui flotte au vent, les soldats de l'armée (légionnaires, Libyens, Gaulois, éléphants…).
+  Elles marchent le long des routes, s'embarquent sur des galères pour les traversées, et dressent
+  un camp de siège (palissade, tour d'assaut, bélier) devant les villes qu'elles assiègent. Le
+  trajet vers chaque destination possible s'affiche en pointillés : or pour marcher, rouge pour
+  attaquer, bleu pour traverser.
 - **Les camps** : Rome (15 provinces, la mer, des légions qui se relèvent de chaque défaite) ou
   Carthage (Hannibal à Carthagène avec ses éléphants, l'Hispanie, l'Afrique). Les peuples libres
   (Insubres, Boïens, Ligures, Volques, Celtibères, Lusitaniens, Numides, Maures) défendent leurs terres.
@@ -57,6 +72,9 @@ Il faut être connecté (Three.js et les polices viennent d'un CDN).
   pour choisir plusieurs unités ; glisser, pincer et tourner à deux doigts pour la caméra.
 - Plein écran (Android et ordinateurs), invitation à tourner l'écran, qualité « Légère » et
   une figurine pour huit hommes par défaut, résolution qui s'adapte à la fluidité.
+- En bataille, les commandes secondaires (son, conseiller, aide tactique, aide) se replient
+  derrière le bouton « … » ; les plans de bataille tiennent en une bande et se choisissent d'un
+  toucher ; le conseiller reste discret.
 
 ## Ce qui est simulé
 
@@ -133,7 +151,10 @@ relief deux fois plus fin, chaumes et herbes sèches en 3D autour de la caméra 
 long de l'Aufide, oliviers et peupliers, couche de nuages dont les ombres glissent sur la plaine,
 relief fin du sol calculé au pixel, boucliers peints (ailes et éclairs romains, anneaux gaulois,
 signe de Tanit), anticrénelage, halo et étalonnage des couleurs. En qualité haute, chaque figurine
-est dessinée comme un groupe de 2 à 4 soldats : les rangs ont leur vraie densité.
+est dessinée comme un groupe de 2 à 4 soldats : les rangs ont leur vraie densité. Les soldats
+lointains gardent une silhouette arrondie (casques, cimiers, tuniques), les chevaux ont un corps
+modelé, une tête effilée et des jambes en deux parties. Vus de haut, les régiments ne sont plus
+entourés de cadres : seuls les régiments choisis gardent leur contour.
 
 ## Jouer
 
@@ -175,7 +196,8 @@ l'encerclement et une lourde défaite romaine.
 | `js/campaign.js` | Campagne : provinces, armées, généraux, économie, sièges, événements, IA (sans Three.js) |
 | `js/battlegen.js` | Batailles de campagne : déploiement des armées, terrain, retour des pertes |
 | `js/geo.js` | Côtes, montagnes et fleuves de la Méditerranée occidentale |
-| `js/campmap.js` | Carte de campagne en 3D : relief, provinces, villes, armées |
+| `js/campmap.js` | Carte de campagne en 3D : relief, provinces, frontières, routes, mer, forêts, armées |
+| `js/mapart.js` | Décors de la carte : arbres, villes selon les peuples, ports et galères, troupes, étendards, siège |
 | `js/campui.js` | Interface de la campagne : sélection, marche, levées, batailles, tours |
 | `js/nature.js` | Herbes 3D, rochers, roseaux, nuages et leurs ombres, textures fines du sol |
 | `js/post.js` | Rendu cinéma (anticrénelage, halo, étalonnage) |

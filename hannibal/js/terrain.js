@@ -159,12 +159,13 @@ export class Terrain {
       c = pal[r2 < 0.9 ? ((r2 / 0.9) * 5) | 0 : 5].slice();
     }
     void r;
-    const big = n.fbm(x / 900, z / 900, 3), mid = m.fbm(x / 160, z / 160, 3);
-    const k = 1 + 0.05 * big + 0.04 * mid;
+    const big = n.fbm(x / 900, z / 900, 3), mid = m.fbm(x / 160, z / 160, 3), fine = n(x / 38, z / 38);
+    const k = 1 + 0.05 * big + 0.04 * mid + 0.035 * fine;
     c[0] *= k; c[1] *= k; c[2] *= k * 0.98;
-    // chemins de terre entre certaines parcelles
+    // haies, talus et chemins de terre entre les parcelles
     const eu = Math.abs((u / pw) - Math.round(u / pw)) * pw, ev = Math.abs((v / 240) - Math.round(v / 240)) * 240;
-    void eu; void ev;
+    const ed = Math.min(eu, ev);
+    const hedgeE = ed < 6 ? (1 - ed / 6) * (r2 > 0.3 ? 1 : 0.5) * 0.6 : 0;
     const h = this.height(x, z);
     const sx = this.height(x + 6, z) - this.height(x - 6, z), sz = this.height(x, z + 6) - this.height(x, z - 6);
     const slope = Math.sqrt(sx * sx + sz * sz) / 12;
@@ -190,6 +191,7 @@ export class Terrain {
     }
     // haut des collines : herbe plus verte, pâturages
     c = mix3(c, zama ? [0.6, 0.52, 0.34] : [0.52, 0.52, 0.32], smoothstep(18, 45, h) * 0.35);
+    if (hedgeE > 0) c = mix3(c, this.lush > 0.3 ? [0.25, 0.31, 0.17] : zama ? [0.58, 0.46, 0.32] : [0.63, 0.55, 0.39], hedgeE * (1 - rock));
     return c;
   }
 

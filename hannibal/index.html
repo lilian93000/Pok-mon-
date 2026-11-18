@@ -351,8 +351,43 @@ body.deploying #feed { display: none; }
 #rotate p { margin: 0; color: var(--muted); }
 .ord .l { white-space: nowrap; }
 
+#moreBtn { display: none; }
+.plan { cursor: pointer; }
+
 /* ---------- téléphone à l'horizontale */
 @media (max-height: 520px) and (orientation: landscape) {
+  #moreBtn { display: grid; }
+  #topR { position: relative; }
+  #topR .opt2 { display: none; }
+  #topR.open .opt2 { display: grid; position: absolute; right: 44px; z-index: 9; box-shadow: 0 6px 18px rgba(0,0,0,0.5); }
+  #topR.open #soundBtn { top: 42px; } #topR.open #advBtn { top: 84px; } #topR.open #viewBtn { top: 126px; } #topR.open #helpBtn { top: 168px; }
+  #deploy { position: fixed; top: calc(48px + env(safe-area-inset-top, 0px)); left: calc(110px + env(safe-area-inset-left, 0px)); right: calc(68px + env(safe-area-inset-right, 0px)); width: auto !important; max-height: 40vh; padding: 6px 8px !important; }
+  #deploy .dh { flex-wrap: nowrap; justify-content: flex-end; }
+  #deploy .dh .ghost { padding: 6px 10px; font-size: 11.5px; }
+  #deploy .dh .primary { padding: 7px 12px; font-size: 12px; }
+  #plans { flex-wrap: nowrap; overflow-x: auto; }
+  .plan { flex: 0 0 auto !important; padding: 5px 10px !important; flex-direction: row !important; align-items: center; }
+  .plan .ph { flex-direction: row !important; gap: 6px !important; align-items: baseline; }
+  .plan .tag { font-size: 10px; }
+  .plan button { display: none; }
+  .plan.on { box-shadow: inset 0 0 0 1px var(--bronze); }
+  #feed div:nth-child(n+2) { display: none; }
+  #feed div { max-width: 38vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #advice { width: min(250px, 34vw) !important; padding: 5px 7px !important; gap: 3px !important; }
+  #advice .ah { font-size: 9.5px; }
+  #advice p { font-size: 11px !important; line-height: 1.3; margin: 0; }
+  #advice .aa { flex-direction: row; gap: 5px; }
+  #advice .aa button { padding: 4px 8px; font-size: 10.5px; min-height: 0; letter-spacing: 0.02em; }
+  .cmark svg { width: 34px; height: 34px; padding: 8px; }
+  .cmark span { font-size: 10px; padding: 0 5px; }
+  #cPanel { width: min(600px, calc(100vw - 170px)) !important; max-height: 50vh !important; padding: 7px 9px; gap: 5px; }
+  #cPanel .cpt .sub:not(:first-of-type) { display: none; }
+  #cPanel .cpt .sub.warn { display: block; }
+  #cPanel .cph b { font-size: 14px; }
+  .cu { width: 38px !important; height: 50px !important; }
+  .cu svg { width: 19px !important; height: 19px !important; }
+  .cu .n { font-size: 10px; }
+  .cact { min-height: 36px !important; padding: 5px 9px !important; font-size: 12px !important; }
   body { font-size: 13px; }
   .iconbtn { width: 36px; height: 36px; }
   .iconbtn svg { width: 18px; height: 18px; }
@@ -474,6 +509,7 @@ body.deploying #feed { display: none; }
     <button class="iconbtn" id="viewBtn" title="Aide tactique" aria-label="Aide tactique"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="1"/><path d="M12 6V3M9 3h6"/></svg></button>
     <button class="iconbtn fsBtn" title="Plein écran" aria-label="Plein écran" hidden><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
     <button class="iconbtn" id="helpBtn" title="Commandes" aria-label="Commandes"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg></button>
+    <button class="iconbtn" id="moreBtn" title="Autres commandes" aria-label="Autres commandes" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></button>
     <button class="iconbtn" id="menuBtn" title="Menu" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
 </header>
