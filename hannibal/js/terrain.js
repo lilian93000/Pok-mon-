@@ -9,11 +9,11 @@ import { makeNoise2D, smoothstep, clamp } from './noise.js';
 export const HALF = 3000;
 
 export class Terrain {
-  constructor(kind = 'cannae', seed = 7) {
+  constructor(kind = 'cannae', seed = 7, N = 385) {
     this.kind = kind;
     this.n = makeNoise2D(seed);
     this.m = makeNoise2D(seed * 3 + 1);
-    this.N = 385;
+    this.N = N;
     this.size = HALF * 2;
     this.cell = this.size / (this.N - 1);
     this.hasRiver = kind === 'cannae';
@@ -110,13 +110,17 @@ export class Terrain {
     const zama = this.kind === 'zama';
     // parcelles agricoles (champs orientés comme un cadastre)
     const a = 0.32, ca = Math.cos(a), sa = Math.sin(a);
-    const u = x * ca - z * sa, v = x * sa + z * ca;
-    const pu = Math.floor(u / 170), pv = Math.floor(v / 240);
+    const v = x * sa + z * ca;
+    const pv = Math.floor(v / 240);
+    // parcelles décalées d'une rangée à l'autre, largeurs variables
+    const u = x * ca - z * sa + ((((pv * 2654435761) >>> 0) % 1000) / 1000) * 170;
+    const pw = 150 + (pv & 3) * 25;
+    const pu = Math.floor(u / pw);
     const r = (((pu * 73856093) ^ (pv * 19349663)) >>> 0) % 1000 / 1000;
     let c;
     // limites de parcelles irrégulières
     const wob = 0;
-    const pu2 = Math.floor(u / 170 + wob), pv2 = Math.floor(v / 240 - wob);
+    const pu2 = pu + wob, pv2 = pv;
     const r2 = (((pu2 * 73856093) ^ (pv2 * 19349663)) >>> 0) % 1000 / 1000;
     if (zama) {
       const pal = [[0.69, 0.53, 0.35], [0.65, 0.5, 0.33], [0.71, 0.57, 0.38], [0.62, 0.51, 0.34], [0.67, 0.55, 0.36]];
@@ -137,8 +141,8 @@ export class Terrain {
     const k = 1 + 0.05 * big + 0.04 * mid;
     c[0] *= k; c[1] *= k; c[2] *= k * 0.98;
     // chemins de terre entre certaines parcelles
-    const eu = Math.abs((u / 170) - Math.round(u / 170)) * 170, ev = Math.abs((v / 240) - Math.round(v / 240)) * 240;
-    if ((eu < 2 && ((pv & 7) === 1)) || (ev < 2 && ((pu & 7) === 2))) { c = [0.70, 0.61, 0.47]; }
+    const eu = Math.abs((u / pw) - Math.round(u / pw)) * pw, ev = Math.abs((v / 240) - Math.round(v / 240)) * 240;
+    void eu; void ev;
     const h = this.height(x, z);
     const sx = this.height(x + 6, z) - this.height(x - 6, z), sz = this.height(x, z + 6) - this.height(x, z - 6);
     const slope = Math.sqrt(sx * sx + sz * sz) / 12;

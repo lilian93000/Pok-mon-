@@ -55,6 +55,41 @@ retourner contre leur propre camp.
 **Le son**, entièrement synthétisé : vent, rumeur de la mêlée, chocs de métal et de boucliers,
 cris, galop, sifflement des volées, tuba et cornu romains, carnyx gaulois, barrissements.
 
+## Stratégie façon Total War
+
+- **Plans de bataille proposés** avant chaque bataille, pour chaque camp, avec leurs atouts et
+  leurs risques. Appliqué en un clic, un plan redéploie l'armée et tes officiers l'exécutent ; tu
+  reprends la main sur n'importe quelle unité à tout moment (elle passe alors « sous tes ordres
+  directs », et le bouton « Rendre au plan » la rend aux officiers).
+  - Cannes, Rome : le plan de Varron (historique), front large et réserves, mur de légions et
+    garde arrière, toute la cavalerie au fleuve.
+  - Cannes, Carthage : le croissant d'Hannibal (historique), ligne droite et marteau, défense en
+    profondeur.
+  - Zama, Rome : les couloirs de Scipion (historique), le quinconce classique, la cavalerie
+    d'abord.
+  - Zama, Carthage : le plan d'Hannibal (historique), éléphants en réserve, vétérans en tête.
+  Laissés à leurs officiers, ces plans n'ont pas tous la même issue : à Cannes, le plan de Varron
+  perd comme en 216, alors que « Mur de légions, garde arrière » bat Hannibal.
+- **Conseiller** pendant la bataille : il repère les menaces de flanc ou de dos, la cavalerie
+  ennemie derrière les lignes, les unités épuisées à relever, la cavalerie libre qui peut frapper
+  un dos exposé, les généraux en danger, les éléphants qui chargent… et propose à chaque fois une
+  manœuvre exécutable en un clic.
+- **Cartes d'unités** en bas de l'écran (effectif, moral, état, formation), regroupées par corps ;
+  **bannières** au-dessus de chaque unité ; **carte tactique** agrandissable (Tab).
+- **Formations et capacités** : orbis (cercle défensif sans flanc ni dos), mur de lances, ordre
+  lâche contre les projectiles, coin de cavalerie (cuneus), volée de pila sur ordre, harangue et
+  ralliement du général, trompettes contre les éléphants, relève des lignes.
+
+## Graphismes
+
+Quatre qualités, de « Légère » (téléphones) à **« Ultra 4K »** : rendu interne en 3840 × 2160,
+relief deux fois plus fin, chaumes et herbes sèches en 3D autour de la caméra (jusqu'à
+180 000 touffes qui ondulent au vent et se couchent là où les troupes passent), rochers, roseaux le
+long de l'Aufide, oliviers et peupliers, couche de nuages dont les ombres glissent sur la plaine,
+relief fin du sol calculé au pixel, boucliers peints (ailes et éclairs romains, anneaux gaulois,
+signe de Tanit), anticrénelage, halo et étalonnage des couleurs. En qualité haute, chaque figurine
+est dessinée comme un groupe de 2 à 4 soldats : les rangs ont leur vraie densité.
+
 ## Jouer
 
 - Choisis la bataille, ton camp (Rome, Carthage ou spectateur), l'échelle et la qualité.
@@ -91,6 +126,9 @@ l'encerclement et une lourde défaite romaine.
 | `js/data.js` | Types de troupes, ordres de bataille, textes historiques |
 | `js/sim.js` | Moteur de bataille (sans Three.js, testable dans Node) |
 | `js/ai.js` | Plans d'Hannibal, de Varron et de Scipion, réflexes des unités |
+| `js/plans.js` | Plans proposés au joueur, doctrine des officiers, conseiller |
+| `js/nature.js` | Herbes 3D, rochers, roseaux, nuages et leurs ombres, textures fines du sol |
+| `js/post.js` | Rendu cinéma (anticrénelage, halo, étalonnage) |
 | `js/terrain.js` | Relief, rivière, nature du sol |
 | `js/models.js` | Soldats, chevaux et éléphants modélisés par code |
 | `js/figures.js` | Soldats instanciés et animés sur la carte graphique |

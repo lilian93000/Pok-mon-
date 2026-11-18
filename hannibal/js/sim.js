@@ -62,6 +62,7 @@ export class Unit {
     this.skirmish = !!(T.light || T.skirmisher);
     this.speed = 0; this.running = false;
     this.lastHitBy = null;
+    this.form = 'normal'; this.manual = false; this.cd = {}; this.boostT = 0;
   }
 
   axes() {
@@ -90,7 +91,9 @@ export class Unit {
     const dh = hd0 - this.hd;
     if (this.state !== ST.ROUTING) { this.x += this.fx * dh; this.z += this.fz * dh; }
   }
+  ruled() { return this.manual && this.b.aiSide === this.side; }
   setFiles(f) {
+    if (this.ruled()) return;
     f = Math.round(clamp(f, 4, this.men));
     if (f === this.files) return;
     const fz0 = this.x + this.fx * this.hd, fzz = this.z + this.fz * this.hd;
@@ -121,9 +124,36 @@ export class Unit {
     return Math.abs(lx) <= this.hw + m && Math.abs(lz) <= this.hd + m;
   }
   command(o) {
-    if (!this.alive || this.routing) return;
+    if (!this.alive || this.routing || this.ruled()) return;
+    if ((this.form === 'orbis' || this.form === 'wall') && o.kind !== 'hold' && o.kind !== 'turn') this.setForm('normal');
     this.order = o;
     if (o.kind === 'turn') this.startTurn(o.dth);
+  }
+  // Formations : orbis (cercle), cuneus (coin de cavalerie), wall (mur de lances), loose / tight
+  setForm(f) {
+    if (this.ruled() || !this.alive || this.routing || f === this.form) return false;
+    const T = this.T;
+    if (f === 'orbis' && !(T.cat === 'inf' && !T.light)) return false;
+    if (f === 'cuneus' && !this.isCav) return false;
+    if (f === 'wall' && !T.spear) return false;
+    if ((f === 'loose' || f === 'tight') && T.cat !== 'inf') return false;
+    const prev = this.form;
+    if (prev === 'orbis' && this.formFiles) { this.files = this.formFiles; }
+    this.spX = T.spX; this.spZ = T.spZ;
+    this.form = f;
+    if (f === 'orbis') {
+      this.formFiles = this.files;
+      this.files = Math.max(4, Math.round(Math.sqrt(this.men * this.spZ / this.spX)));
+      this.order = { kind: 'hold' };
+    } else if (f === 'wall') this.order = { kind: 'hold' };
+    else if (f === 'loose') { this.spX = T.spX * 1.6; this.spZ = T.spZ * 1.3; }
+    else if (f === 'tight') { this.spX = T.spX * 0.85; }
+    const fx0 = this.x + this.fx * this.hd, fz0 = this.z + this.fz * this.hd;
+    this.dims();
+    if (f !== 'orbis' && prev !== 'orbis') { this.x = fx0 - this.fx * this.hd; this.z = fz0 - this.fz * this.hd; }
+    this.coh = Math.min(this.coh, 0.7);
+    this.reform++;
+    return true;
   }
   startTurn(dth) {
     this.th += dth; this.axes();
@@ -471,8 +501,8 @@ export class Battle {
     const fast = att.isCav || att.isEle ? along > 4 : along > 2.2;
     if (!fast) return;
     const sideMul = defSide === FRONT ? 1 : defSide === REAR ? 1.7 : 1.35;
-    const braced = def.T.spear && defSide === FRONT && def.speed < 0.5 && !def.routing;
-    let bonus = T.charge / 10 * sideMul;
+    const braced = (def.T.spear && defSide === FRONT && def.speed < 0.5 && !def.routing) || def.form === 'wall' || def.form === 'orbis';
+    let bonus = T.charge / 10 * sideMul * (att.form === 'cuneus' ? 1.5 : 1);
     if (att.isCav && def.heavyInf && defSide === FRONT && !def.routing) bonus *= braced ? 0.15 : 0.45;
     if (att.isEle && def.lanes) bonus *= 0.35;
     att.impactT = 3; att.impactBonus = bonus;
@@ -524,6 +554,7 @@ export class Battle {
   fighters(u, side, L) {
     let n;
     if (u.chasing) n = (L / u.spX) * 2.2;
+    else if (u.form === 'orbis') n = L / u.spX;
     else if (side === FRONT) n = (L / u.spX) * (u.T.spear ? 1.5 : 1.2);
     else if (side === REAR) n = (L / u.spX) * 0.5;
     else n = (L / u.spZ) * 0.8;
@@ -534,13 +565,15 @@ export class Battle {
     if (a.men < 1) return 0;
     const fa = this.fighters(a, sa, L);
     const fatA = 1 - 0.45 * Math.pow(a.fatigue / 100, 1.5), fatB = 1 - 0.45 * Math.pow(b.fatigue / 100, 1.5);
-    let atk = a.T.ma * fatA * (0.6 + 0.4 * a.coh) * (a.morale < 25 ? 0.8 : 1);
-    let def = b.T.md * fatB * (0.6 + 0.4 * b.coh) * (sb === FRONT ? 1 : sb === REAR ? 0.45 : 0.65) * (b.hamperT > 0 ? 0.8 : 1);
+    let atk = a.T.ma * fatA * (0.6 + 0.4 * a.coh) * (a.morale < 25 ? 0.8 : 1) * (a.boostT > 0 ? 1.1 : 1) * (a.form === 'orbis' ? 0.85 : 1);
+    let def = b.T.md * fatB * (0.6 + 0.4 * b.coh) * (sb === FRONT || b.form === 'orbis' ? 1 : sb === REAR ? 0.45 : 0.65) * (b.hamperT > 0 ? 0.8 : 1);
+    if (b.form === 'loose') def *= 0.85; else if (b.form === 'tight') def *= 1.08;
+    if (b.form === 'cuneus') def *= 0.88;
     if (a.routing) atk *= 0.25;
     let r = BASE_KILL * fa * 2 * atk / (atk + def);
     if (a.impactT > 0) r *= 1 + a.impactBonus * (a.impactT / 3);
     if (a.isCav && b.heavyInf && sb === FRONT && !b.routing && b.coh > 0.5) r *= 0.45;
-    if (b.isCav && a.T.spear && sa === FRONT) r *= 1.6;
+    if (b.isCav && a.T.spear && sa === FRONT) r *= a.form === 'wall' ? 2.4 : 1.6;
     if (a.isEle) r *= b.lanes ? 0.5 : b.isCav ? 1.2 : 1.6;
     if (b.isEle) r *= 0.06; // un éléphant ne tombe pas comme un homme
     if (b.routing) r *= (a.isCav ? 7 : 5) * (b.trapped ? 1.5 : 1);
@@ -685,7 +718,7 @@ export class Battle {
       if (!u.isInside(x, z)) continue;
       if ((u.isCav || u.isEle) ? hAbove > 3.2 : hAbove > 1.9) return false;
       const M = this.pType[i];
-      const dens = clamp(2.2 / (u.spX * u.spZ), 0.35, 1);
+      const dens = clamp(2.2 / (u.spX * u.spZ), 0.3, 1) * (u.form === 'loose' ? 0.8 : 1);
       const vx = this.pVX[i], vz = this.pVZ[i];
       const fromFront = vx * u.fx + vz * u.fz < 0;
       const shield = u.isEle ? 0 : u.heavyInf ? 0.45 : u.isCav ? 0.15 : 0.25;
@@ -705,6 +738,59 @@ export class Battle {
       return true;
     }
     return false;
+  }
+
+  // ------------------------------------------------------------- capacités
+  // Harangue : le général raffermit les unités autour de lui
+  harangue(g) {
+    if (!g.gen || g.genState === 2 || g.routing || (g.cd.harangue || 0) > 0) return false;
+    let n = 0;
+    for (const u of this.units) {
+      if (u.side !== g.side || !u.active || u === g) continue;
+      if (Math.hypot(u.x - g.x, u.z - g.z) > g.gen.aura * 1.25 + u.rad) continue;
+      u.morale = Math.min(u.T.morale + 22, u.morale + 16); u.boostT = 45; n++;
+    }
+    g.cd.harangue = 150;
+    this.emit('ability', `${g.name} harangue ses hommes (${n} unités galvanisées).`, g);
+    return true;
+  }
+  // Ralliement : rappeler les fuyards proches qui ne sont pas pris au piège
+  rally(g) {
+    if (!g.gen || g.genState === 2 || g.routing || (g.cd.rally || 0) > 0) return false;
+    let n = 0;
+    for (const u of this.units) {
+      if (u.side !== g.side || !u.routing || u.trapped || u.men < u.men0 * 0.15) continue;
+      if (Math.hypot(u.x - g.x, u.z - g.z) > g.gen.aura * 1.4 + u.rad) continue;
+      u.state = ST.READY; u.order = { kind: 'hold' }; u.morale = Math.max(u.morale, 32); u.coh = 0.45; u.safeT = 0; n++;
+    }
+    g.cd.rally = 200;
+    this.emit('ability', n ? `${g.name} rallie ${n} unité${n > 1 ? 's' : ''} en fuite.` : `${g.name} appelle au ralliement, mais personne ne l'entend.`, g);
+    return true;
+  }
+  // Volée de pila sur ordre
+  throwPila(u) {
+    if (!u.active || u.pila <= 0 || u.pilaCD > 0 || u.engaged) return false;
+    const t = this.frontEnemy(u, 32);
+    if (!t) return false;
+    this.volley(u, t, PILUM, Math.min(u.men, u.files * 2), 1);
+    u.pila--; u.pilaCD = 2.2; u.firing = 1.5;
+    this.emit('pila', `${u.name} lance ses pila.`, u);
+    return true;
+  }
+  // Trompettes et cors : affolent les éléphants ennemis proches (Zama)
+  horns(side) {
+    const key = 'horns' + side;
+    if ((this.flagT[key + 'cd'] || -1e9) > this.t) return false;
+    let n = 0;
+    for (const e of this.units) {
+      if (e.side === side || !e.isEle || !e.active) continue;
+      const near = this.units.some((o) => o.side === side && o.active && Math.hypot(o.x - e.x, o.z - e.z) < 450);
+      if (!near) continue;
+      e.morale -= 5 + this.rng() * 16; n++;
+    }
+    this.flagT[key + 'cd'] = this.t + 120;
+    this.emit('horns', n ? 'Trompettes et cors sonnent ensemble : les éléphants s\'affolent.' : 'Les trompettes sonnent, mais aucun éléphant n\'est assez proche.', null, { side });
+    return true;
   }
 
   // ------------------------------------------------------------- moral
@@ -745,11 +831,14 @@ export class Battle {
       u.morale = clamp(u.morale, 0, 100);
       return;
     }
+    if (u.boostT > 0) u.boostT -= dt;
+    for (const k in u.cd) if (u.cd[k] > 0) u.cd[k] -= dt;
+    const orb = u.form === 'orbis' ? 0.3 : 1;
     if (u.engaged) dm -= 0.04;
-    if (u.eS[LEFT] > 0 || u.eS[RIGHT] > 0) dm -= 0.35;
-    if (u.eS[REAR] > 0) dm -= 0.7;
+    if (u.eS[LEFT] > 0 || u.eS[RIGHT] > 0) dm -= 0.35 * orb;
+    if (u.eS[REAR] > 0) dm -= 0.7 * orb;
     if (u.nSides >= 3) {
-      dm -= 1.0;
+      dm -= 1.0 * (u.form === 'orbis' ? 0.4 : 1);
       if (!u.flags.surr && this.throttled('surr' + u.side, 15)) { u.flags.surr = 1; this.emit('surround', `${u.name} est encerclée !`, u); }
     }
     if (u.fatigue > 70) dm -= 0.08;
@@ -759,7 +848,7 @@ export class Battle {
     u.morale = Math.min(cap, u.morale + dm * dt);
     if (u.morale < cap && dm > 0) u.morale = Math.min(cap, u.morale);
     // seuil de rupture
-    const flanked = u.eS[LEFT] > 0 || u.eS[RIGHT] > 0 || u.eS[REAR] > 0;
+    const flanked = u.form !== 'orbis' && (u.eS[LEFT] > 0 || u.eS[RIGHT] > 0 || u.eS[REAR] > 0);
     u.morale = Math.max(0, u.morale);
     if (u.morale < 10 || (flanked && u.morale < 18) || (u.isEle && u.morale < 22)) this.rout(u);
   }

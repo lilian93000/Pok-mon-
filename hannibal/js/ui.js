@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { SCENARIOS, TYPES } from './data.js';
 import { ST, FRONT } from './sim.js';
 import { HALF } from './terrain.js';
+import { STRATEGIES, advise } from './plans.js';
 
 const $ = (id) => document.getElementById(id);
 const nf = new Intl.NumberFormat('fr-FR');
@@ -25,21 +26,42 @@ const ICON = {
   follow: '<circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>',
   rank: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
   close: '<path d="M6 6l12 12M18 6L6 18"/>',
+  orbis: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',
+  wall: '<path d="M4 20l6-16M10 20l6-16M16 20l4-11"/>',
+  wedge: '<path d="M12 4l8 16H4z"/>',
+  loose: '<circle cx="6" cy="6" r="1.5"/><circle cx="18" cy="6" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="6" cy="18" r="1.5"/><circle cx="18" cy="18" r="1.5"/>',
+  pila: '<path d="M3 21L17 7M17 7l4-4M14 6l4 4M8 21L21 8"/>',
+  harangue: '<path d="M4 10v4h3l6 5V5L7 10zM16 8l4-3M16 12h5M16 16l4 3"/>',
+  rally: '<path d="M6 21V4M6 4h11l-3 4 3 4H6"/>',
+  horns: '<path d="M3 10c6 0 10-4 18-6v16c-8-2-12-6-18-6z"/>',
+  release: '<path d="M4 12h12M12 6l6 6-6 6"/>',
 };
+const TI = {
+  legion: '<path d="M6 14a6 6 0 0 1 12 0v2H6z"/><path d="M12 8V3M9.5 4.5L12 3l2.5 1.5"/><path d="M8 16l-1 4M16 16l1 4"/>',
+  spear: '<path d="M12 2l2.2 5h-4.4zM12 7v15"/><path d="M6.5 15a5.5 5.5 0 0 1 11 0"/>',
+  javelin: '<path d="M4 20L18 6M18 6l-1 4M18 6l-4 1"/><circle cx="8" cy="9" r="3.5"/>',
+  sling: '<path d="M5 4c6 4 8 8 7 16M12 20c1-6 3-10 7-12"/><circle cx="19" cy="7" r="1.6"/>',
+  horse: '<path d="M7 21l1-6-3-3 4-7 5 1 4 3 2 5-3 1-2-2-2 2 1 6"/>',
+  gen: '<path d="M4 9l4 3 4-6 4 6 4-3-2 9H6z"/>',
+  oval: '<ellipse cx="12" cy="12" rx="5.5" ry="9"/><path d="M12 3v18"/>',
+  sword: '<path d="M6 18c6-1 11-6 13-14-6 3-10 7-12 12zM5 19l2-2"/>',
+  round: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/>',
+  ele: '<path d="M4 15c0-6 4-9 9-9 4 0 7 3 7 7v6h-3v-4h-2v4h-3v-4H9c0 3-1 5-3 5"/><path d="M6 15c-2 1-2 4 0 5"/>',
+};
+const ARCH_ICON = { hastatus: 'legion', princeps: 'legion', triarius: 'spear', veles: 'javelin', gaul: 'oval', iber: 'sword', libyan: 'legion', veteran: 'legion', ligur: 'oval', slinger: 'sling', lonch: 'javelin', carthcit: 'round', eques: 'horse', eques_socii: 'horse', ibercav: 'horse', numid: 'horse', carthcav: 'horse', gen_rom: 'gen', gen_carth: 'gen', elephant: 'ele' };
+const tsvg = (u) => `<svg viewBox="0 0 24 24" aria-hidden="true">${TI[ARCH_ICON[u.T.arch]] || TI.legion}</svg>`;
+const FORM = { normal: '', orbis: 'Orbis', cuneus: 'Coin', wall: 'Mur de lances', loose: 'Ordre lâche', tight: 'Ordre serré' };
 const svg = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[k]}</svg>`;
 
 const GROUPS = {
-  cannae: [
-    [['velites'], 'Vélites'], [['hastati'], 'Hastati'], [['principes'], 'Principes'], [['triarii'], 'Triarii'],
-    [['cavR'], 'Cavalerie romaine'], [['cavL'], 'Cavalerie alliée'], [['gen'], 'Consuls'],
-    [['light'], 'Troupes légères'], [['center'], 'Gaulois et Ibères'], [['libL'], 'Libyens ouest'], [['libR'], 'Libyens est'],
-    [['cavL', 'cavL2', 'genCavL'], "Cavalerie d'Hasdrubal"], [['cavR', 'genCavR'], 'Numides'],
-  ],
-  zama: [
-    [['velites'], 'Vélites'], [['hastati'], 'Hastati'], [['principes'], 'Principes'], [['triarii'], 'Triarii'],
-    [['cavR', 'numInf', 'genCavR'], 'Massinissa'], [['cavL', 'genCavL'], 'Lélius'], [['gen'], 'Scipion'],
-    [['ele'], 'Éléphants'], [['light'], 'Frondeurs'], [['line1'], '1re ligne'], [['line2'], '2e ligne'], [['line3'], 'Vétérans'],
-  ],
+  cannae: {
+    0: [[['velites'], 'Vélites'], [['hastati'], 'Hastati'], [['principes'], 'Principes'], [['triarii'], 'Triarii'], [['cavR'], 'Cav. romaine'], [['cavL'], 'Cav. alliée'], [['gen'], 'Consuls']],
+    1: [[['light'], 'Légers'], [['center'], 'Gaulois et Ibères'], [['libL'], 'Libyens ouest'], [['libR'], 'Libyens est'], [['cavL', 'cavL2'], 'Hasdrubal'], [['cavR'], 'Numides'], [['gen', 'genCavL', 'genCavR'], 'Généraux']],
+  },
+  zama: {
+    0: [[['velites'], 'Vélites'], [['hastati'], 'Hastati'], [['principes'], 'Principes'], [['triarii'], 'Triarii'], [['cavR', 'numInf'], 'Massinissa'], [['cavL'], 'Lélius'], [['gen', 'genCavL', 'genCavR'], 'Généraux']],
+    1: [[['ele'], 'Éléphants'], [['light'], 'Frondeurs'], [['line1'], '1re ligne'], [['line2'], '2e ligne'], [['line3'], 'Vétérans'], [['cavR', 'cavL'], 'Cavalerie'], [['gen'], 'Hannibal']],
+  },
 };
 
 export class UI {
@@ -52,6 +74,7 @@ export class UI {
     this.feedN = 0;
     this.lastHud = 0; this.lastLbl = 0; this.lastMini = 0;
     this.cfg = { scn: 'cannae', side: 0, scale: app.defaultScale, quality: app.defaultQuality };
+    this.adv = { cd: {}, last: 0 };
     this.buildMenu();
     this.bindHud();
   }
@@ -83,6 +106,7 @@ export class UI {
     const s = SCENARIOS[this.cfg.scn];
     const total = s.units().reduce((a, u) => a + u.men, 0);
     $('scaleNote').textContent = this.cfg.scale === 1 ? `Chaque homme est représenté : ${fmt(total)} soldats. Pour un ordinateur puissant.` : `Une figurine pour ${this.cfg.scale} hommes : environ ${fmt(total / this.cfg.scale)} figurines.`;
+    $('qualNote').textContent = { low: 'Pour téléphones et petits ordinateurs.', medium: 'Herbes 3D près de la caméra, nuages et rendu cinéma.', high: 'Relief deux fois plus fin, anticrénelage, halo, 90 000 touffes d\'herbe.', ultra: 'Rendu interne en 4K, 180 000 touffes d\'herbe, détail des soldats jusqu\'à 260 m. Carte graphique puissante conseillée.' }[this.cfg.quality];
     $('sideNote').textContent = this.cfg.side === 2 ? "L'ordinateur suit le plan historique des deux généraux." : `Tu commandes ${s.commanders[this.cfg.side]}. L'adversaire suit le plan historique.`;
     $('brief').innerHTML = `<b>${s.name}, ${s.date}.</b> ${s.brief[this.cfg.side]}`;
     $('startBtn').onclick = () => this.app.start({ ...this.cfg });
@@ -114,6 +138,9 @@ export class UI {
     $('helpBtn').onclick = () => { $('helpM').hidden = false; };
     for (const b of document.querySelectorAll('[data-close]')) b.onclick = () => { b.closest('.modal').hidden = true; };
     $('menuBtn').onclick = () => { this.app.setSpeed(0); this.showMenu(true); };
+    this.adviceOn = true;
+    $('advBtn').onclick = () => { this.adviceOn = !this.adviceOn; $('advBtn').classList.toggle('off', !this.adviceOn); this.adv.keys = ''; this.updateAdvice(); this.toast(this.adviceOn ? 'Conseiller activé.' : 'Conseiller désactivé.'); };
+    $('mapBtn').onclick = (e) => { e.stopPropagation(); this.miniBig = !this.miniBig; $('mini').classList.toggle('big', this.miniBig); this.drawMini(); };
     $('engage').onclick = () => this.app.engage();
     $('resetDeploy').onclick = () => this.app.resetDeploy();
     window.addEventListener('keydown', (e) => this.key(e));
@@ -137,6 +164,9 @@ export class UI {
     else if (k === 'KeyC') this.order('charge');
     else if (k === 'KeyH') this.order('hold');
     else if (k === 'KeyB') this.order('back');
+    else if (k === 'Tab' || k === 'KeyM') { e.preventDefault(); $('mapBtn').click(); }
+    else if (k === 'KeyO') this.order('orbis');
+    else if (k === 'KeyP') this.order('pila');
     else if (k === 'Escape') { this.clearSel(); for (const m of document.querySelectorAll('.modal')) m.hidden = true; }
   }
   toast(text) { this.feed({ text, kind: 'info', side: -1, t: this.app.battle ? this.app.battle.t : 0 }); }
@@ -149,41 +179,115 @@ export class UI {
     this.labels.clear();
     $('feed').innerHTML = '';
     $('top').hidden = false; $('bottom').hidden = false; $('mini').hidden = false;
-    this.buildGroups();
+    this.buildCards();
     this.miniBg = null;
+    this.adv = { cd: {}, shown: [], last: 0 };
+    $('advice').innerHTML = ''; $('advice').hidden = true;
     b.listeners.push((e) => this.onEvent(e));
+    if (app.player < 2) this.buildPlans(); else $('plans').innerHTML = '';
     this.updateCard();
   }
-  buildGroups() {
-    const b = this.app.battle, side = this.app.player;
-    const el = $('groups');
+
+  // ------------------------------------------------- plans de bataille
+  buildPlans() {
+    const app = this.app, b = app.battle;
+    const list = STRATEGIES[b.scn.id][app.player];
+    const el = $('plans');
+    const cur = app.strategy ? app.strategy.id : 'free';
+    const card = (id, name, tag, desc, pros, cons) => `<div class="plan${id === cur ? ' on' : ''}" data-id="${id}">
+      <div class="ph"><b>${name}</b>${tag ? `<span class="tag">${tag}</span>` : ''}</div>
+      <p>${desc}</p>
+      ${pros.length ? `<ul>${pros.map((x) => `<li class="pro">${x}</li>`).join('')}${cons.map((x) => `<li class="con">${x}</li>`).join('')}</ul>` : ''}
+      <button class="${id === cur ? 'ghost' : 'primary'} sm" data-apply="${id}">${id === cur ? 'Plan choisi' : 'Appliquer ce plan'}</button></div>`;
+    el.innerHTML = list.map((p) => card(p.id, p.name, p.tag, p.desc, p.pros, p.cons)).join('')
+      + card('free', 'Commandement libre', '', "Déploiement historique, aucun plan : chaque unité attend tes ordres.", [], []);
+    for (const btn of el.querySelectorAll('[data-apply]')) btn.onclick = () => {
+      const id = btn.dataset.apply;
+      app.applyStrategy(id === 'free' ? null : list.find((p) => p.id === id));
+      this.buildPlans();
+      this.toast(id === 'free' ? 'Commandement libre : tes unités attendent tes ordres.' : `Plan « ${list.find((p) => p.id === id).name} » : tes officiers l'exécuteront. Tu peux reprendre n'importe quelle unité à tout moment.`);
+    };
+  }
+
+  // -------------------------------------------- conseiller du légat
+  updateAdvice() {
+    const app = this.app, b = app.battle, box = $('advice');
+    if (app.player > 1 || app.deploying || b.over || !this.adviceOn) { box.hidden = true; return; }
+    const list = advise(b, app.player).filter((a) => !((this.adv.cd[a.key] || -1) > b.t)).slice(0, innerWidth < 760 ? 1 : 2);
+    const keys = list.map((a) => a.key).join('|');
+    if (keys === this.adv.keys) return;
+    this.adv.keys = keys; this.adv.list = list;
+    box.hidden = !list.length;
+    const who = app.player === 0 ? 'Le légat' : 'Ton officier';
+    box.innerHTML = `<div class="ah">${who} propose</div>` + list.map((a, i) => `<div class="adv"><p data-f="${i}">${a.text}</p><div class="aa"><button class="primary sm" data-a="${i}">${a.label}</button><button class="ghost sm" data-x="${i}">Ignorer</button></div></div>`).join('');
+    for (const el of box.querySelectorAll('[data-a]')) el.onclick = () => {
+      const a = this.adv.list[+el.dataset.a]; if (!a) return;
+      a.act(); this.adv.cd[a.key] = b.t + 90; this.adv.keys = '';
+      this.feed({ text: `Ordre transmis : ${a.label.toLowerCase()}.`, side: app.player, t: b.t });
+      this.sound('charge'); this.updateAdvice(); this.updateCard();
+    };
+    for (const el of box.querySelectorAll('[data-x]')) el.onclick = () => { const a = this.adv.list[+el.dataset.x]; if (a) this.adv.cd[a.key] = b.t + 150; this.adv.keys = ''; this.updateAdvice(); };
+    for (const el of box.querySelectorAll('[data-f]')) el.onclick = () => { const a = this.adv.list[+el.dataset.f]; if (a) this.focus(a.units); };
+  }
+  // --------------------------------------- cartes d'unités (façon Total War)
+  buildCards() {
+    const b = this.app.battle, side = this.app.player, el = $('cards');
     el.innerHTML = '';
-    if (side > 1) return;
-    const scnId = b.scn.id;
-    const roles = new Set(b.units.filter((u) => u.side === side).map((u) => u.role));
+    this.cardEls = new Map();
     this.groupDefs = [];
-    for (const [rs, label] of GROUPS[scnId]) {
-      if (!rs.some((r) => roles.has(r))) continue;
+    el.hidden = side > 1;
+    if (side > 1) return;
+    for (const [rs, label] of GROUPS[b.scn.id][side]) {
       const us = b.units.filter((u) => u.side === side && rs.includes(u.role));
       if (!us.length) continue;
-      const chip = document.createElement('button');
-      chip.className = 'chip';
-      chip.innerHTML = `${label}<b>${us.length}</b>`;
-      chip.onclick = (ev) => {
+      const sec = document.createElement('div'); sec.className = 'sec';
+      const head = document.createElement('button'); head.className = 'sh'; head.textContent = label; head.title = 'Sélectionner le groupe (double-clic : y aller)';
+      head.onclick = (ev) => {
         if (!ev.shiftKey) this.sel.clear();
         this.inspect = null;
         for (const u of us) if (u.alive && !u.routing) this.sel.add(u);
-        if (chip.dataset.last && performance.now() - chip.dataset.last < 450) this.focus(us);
-        chip.dataset.last = performance.now();
+        if (head.dataset.last && performance.now() - head.dataset.last < 450) this.focus(us);
+        head.dataset.last = performance.now();
         this.updateCard();
       };
-      el.appendChild(chip);
-      this.groupDefs.push({ chip, us });
+      sec.appendChild(head);
+      for (const u of us) {
+        const c = document.createElement('button');
+        c.className = 'uc' + (side ? ' c' : '');
+        c.title = u.name;
+        c.innerHTML = `${tsvg(u)}<span class="n num"></span><i class="hp"><b></b></i><i class="mo"><b></b></i><span class="fl"></span>`;
+        c.onclick = (ev) => {
+          if (!ev.shiftKey && !ev.ctrlKey) this.sel.clear();
+          if (this.sel.has(u) && (ev.shiftKey || ev.ctrlKey)) this.sel.delete(u); else if (u.alive) this.sel.add(u);
+          this.inspect = null;
+          if (c.dataset.last && performance.now() - c.dataset.last < 450) this.focus([u]);
+          c.dataset.last = performance.now();
+          this.updateCard();
+        };
+        sec.appendChild(c);
+        this.cardEls.set(u, c);
+      }
+      el.appendChild(sec);
+      this.groupDefs.push({ chip: head, us });
     }
-    const all = document.createElement('button');
-    all.className = 'chip'; all.textContent = 'Toute l\'armée';
-    all.onclick = () => { this.sel = new Set(b.units.filter((u) => u.side === side && u.active)); this.updateCard(); };
-    el.appendChild(all);
+    this.updateCards();
+  }
+  updateCards() {
+    if (!this.cardEls) return;
+    for (const [u, c] of this.cardEls) {
+      const dead = !u.alive || u.men < 1;
+      c.classList.toggle('dead', dead);
+      c.classList.toggle('sel', this.sel.has(u));
+      c.classList.toggle('rt', u.routing);
+      c.classList.toggle('eng', u.engaged && !u.routing);
+      c.classList.toggle('man', u.manual && !!this.app.strategy);
+      c.children[1].textContent = dead ? '✕' : u.men >= 1000 ? (u.men / 1000).toFixed(1).replace('.', ',') + 'k' : Math.round(u.men);
+      c.children[2].firstChild.style.width = `${(u.men / u.men0) * 100}%`;
+      const mo = c.children[3].firstChild;
+      mo.style.width = `${Math.max(4, u.morale)}%`;
+      mo.style.background = u.routing ? '#777' : u.morale > 50 ? 'var(--ok)' : u.morale > 25 ? 'var(--warn)' : 'var(--bad)';
+      c.children[4].textContent = u.routing ? '⚑' : u.form !== 'normal' ? FORM[u.form][0] : u.nSides >= 2 ? '!' : '';
+    }
   }
   focus(us) {
     const a = us.filter((u) => u.alive); if (!a.length) return;
@@ -293,7 +397,7 @@ export class UI {
     this.app.effects.ghosts = null;
     for (const p of plan) {
       if (this.app.deploying) { if (this.inZone(p.u, p.x, p.z)) { p.u.setFiles(p.files); this.app.place(p.u, p.x, p.z, th); } }
-      else { p.u.setFiles(p.files); p.u.command({ kind: 'move', x: p.x, z: p.z, th }); }
+      else { p.u.manual = true; p.u.setFiles(p.files); p.u.command({ kind: 'move', x: p.x, z: p.z, th }); }
     }
     this.sound('move');
     this.updateCard();
@@ -314,13 +418,13 @@ export class UI {
       const tx = gx + ox * c + oz * s, tz = gz - ox * s + oz * c;
       const uth = units.length > 1 || dist > 90 ? th : u.th;
       if (this.app.deploying) { if (this.inZone(u, tx, tz)) this.app.place(u, tx, tz, uth); else this.toast('Hors de la zone de déploiement.'); }
-      else u.command({ kind: 'move', x: tx, z: tz, th: uth });
+      else { u.manual = true; u.command({ kind: 'move', x: tx, z: tz, th: uth }); }
     }
     this.sound('move');
   }
   attack(units, t) {
     if (this.app.deploying) { this.toast("La bataille n'est pas encore engagée."); return; }
-    for (const u of units) u.command({ kind: 'attack', target: t });
+    for (const u of units) { u.manual = true; u.command({ kind: 'attack', target: t }); }
     this.sound('charge');
   }
   sound(kind) {
@@ -335,8 +439,21 @@ export class UI {
     const app = this.app, units = this.selected();
     if (!units.length) return;
     const dep = app.deploying;
+    const b = app.battle;
+    const passive = ['follow', 'rank', 'release', 'pila', 'harangue', 'rally', 'horns', 'fire', 'skirm'];
+    if (!dep && !passive.includes(kind)) for (const u of units) u.manual = true;
+    const form = (u, f) => { const ok = u.setForm(u.form === f ? 'normal' : f); if (ok && dep) app.place(u, u.x, u.z, u.th); return ok; };
+    if (kind === 'horns') { if (!b.horns(app.player)) this.toast('Les trompettes viennent de sonner : attends un peu.'); this.updateCard(); return; }
     for (const u of units) {
       switch (kind) {
+        case 'orbis': form(u, 'orbis'); break;
+        case 'wall': form(u, 'wall'); break;
+        case 'wedge': form(u, 'cuneus'); break;
+        case 'loose': form(u, 'loose'); break;
+        case 'release': u.manual = false; break;
+        case 'pila': if (!b.throwPila(u) && units.length === 1) this.toast(u.pila > 0 ? 'Aucun ennemi à moins de 30 pas devant.' : 'Les pila ont déjà été lancés.'); break;
+        case 'harangue': if (u.gen && !b.harangue(u)) this.toast(`${u.name} doit reprendre son souffle (${Math.ceil(u.cd.harangue || 0)} s).`); break;
+        case 'rally': if (u.gen && !b.rally(u)) this.toast(`${u.name} ne peut pas encore rallier (${Math.ceil(u.cd.rally || 0)} s).`); break;
         case 'advance': if (!dep) u.command({ kind: 'advance' }); break;
         case 'charge': {
           if (dep) break;
@@ -402,6 +519,19 @@ export class UI {
     if (missile) B.push(['fire', units.every((u) => !u.T.missile || u.fireHold) ? 'Tir retenu' : 'Tir à volonté', '', units.some((u) => u.fireHold)]);
     if (light) B.push(['skirm', units.some((u) => u.skirmish) ? 'Se dérobe' : 'Tient le contact', '', units.some((u) => u.skirmish)]);
     if (relief) B.push(['relief', 'Relève']);
+    const inf = units.filter((u) => u.T.cat === 'inf' && !u.T.light), cav = units.filter((u) => u.isCav && !u.isGen);
+    if (inf.length) B.push(['orbis', 'Orbis', '', inf.every((u) => u.form === 'orbis')]);
+    if (units.some((u) => u.T.spear)) B.push(['wall', 'Mur de lances', '', units.filter((u) => u.T.spear).every((u) => u.form === 'wall')]);
+    if (units.some((u) => u.T.cat === 'inf')) B.push(['loose', 'Ordre lâche', '', units.filter((u) => u.T.cat === 'inf').every((u) => u.form === 'loose')]);
+    if (cav.length) B.push(['wedge', 'Coin (cuneus)', '', cav.every((u) => u.form === 'cuneus')]);
+    if (!dep && units.some((u) => u.pila > 0)) B.push(['pila', 'Lancer les pila']);
+    const gens = units.filter((u) => u.gen && u.genState < 2);
+    if (!dep && gens.length) {
+      const g = gens[0];
+      B.push(['harangue', (g.cd.harangue || 0) > 0 ? `Haranguer (${Math.ceil(g.cd.harangue)} s)` : 'Haranguer'], ['rally', (g.cd.rally || 0) > 0 ? `Rallier (${Math.ceil(g.cd.rally)} s)` : 'Rallier']);
+      if (this.app.battle.units.some((e) => e.isEle && e.side !== this.app.player && e.active)) B.push(['horns', 'Trompettes']);
+    }
+    if (!dep && this.app.strategy && units.some((u) => u.manual)) B.push(['release', 'Rendre au plan']);
     B.push(['follow', 'Suivre']);
     if (units.length === 1 && !dep) B.push(['rank', 'Dans le rang']);
     ord.innerHTML = B.map(([k, l, kb, on]) => `<button class="ord${on ? ' on' : ''}" data-o="${k}">${svg(k)}${l}${kb ? ` <kbd>${kb}</kbd>` : ''}</button>`).join('');
@@ -427,7 +557,8 @@ export class UI {
         ${m('Moral', mor, morCol, u.moraleText())}
         ${m('Fatigue', fat, fat > 60 ? 'var(--bad)' : 'var(--warn)', u.fatigueText())}
         ${m('Cohésion', u.coh * 100, 'var(--bronze)', `<span class="num">${Math.round(u.coh * 100)} %</span>`)}
-        <div class="sub" style="margin:4px 0 0">${Math.round(u.files)} hommes de front sur ${Math.max(1, Math.round(u.ranks))} rangs${ammo ? ' · ' + ammo : ''}</div>
+        <div class="sub" style="margin:4px 0 0">${u.form !== 'normal' ? FORM[u.form] + ' · ' : ''}${Math.round(u.files)} hommes de front sur ${Math.max(1, Math.round(u.ranks))} rangs${ammo ? ' · ' + ammo : ''}</div>
+        ${this.mine(u) && this.app.strategy ? `<div class="sub" style="margin:2px 0 0;color:${u.manual ? 'var(--bronze)' : 'var(--muted)'}">${u.manual ? 'Sous tes ordres directs' : 'Suit le plan : ' + this.app.strategy.name}</div>` : ''}
         <details><summary>Qui sont-ils ?</summary><p>${T.desc}</p></details>`;
     } else {
       const men = units.reduce((a, x) => a + x.men, 0), mor = units.reduce((a, x) => a + x.morale * x.men, 0) / Math.max(1, men);
@@ -450,7 +581,7 @@ export class UI {
       if (e.kind === 'horns') { a.horn('tuba', 0.6); setTimeout(() => a.horn('elephant', 0.45), 900); }
       if (e.kind === 'charge' && u && u.isEle && d < 900) a.horn('elephant', 0.4);
     }
-    const important = ['plan', 'gen', 'surround', 'horns', 'end', 'trample', 'contact'].includes(e.kind)
+    const important = ['plan', 'gen', 'surround', 'horns', 'end', 'trample', 'contact', 'ability'].includes(e.kind)
       || (e.kind === 'rout' && u && !u.light && (u.men0 > 500 || u.isGen))
       || (e.kind === 'rally' && u && !u.light)
       || ((e.kind === 'flank' || e.kind === 'rear') && u && (u.side === p || u.men0 > 1500))
@@ -514,7 +645,7 @@ export class UI {
       const sc = b.sideCache || [b.sideState(0), b.sideState(1)];
       $('romeN').textContent = fmt(sc[0].active); $('carthN').textContent = fmt(sc[1].active);
       $('barR').style.width = `${(sc[0].active / sc[0].men0) * 50}%`; $('barC').style.width = `${(sc[1].active / sc[1].men0) * 50}%`;
-      for (const g of this.groupDefs || []) { const n = g.us.filter((u) => u.active).length; g.chip.querySelector('b').textContent = n; }
+      this.updateCards();
       if (this.sel.size || this.inspect) {
         for (const u of [...this.sel]) if (!u.alive) this.sel.delete(u);
         if (this.inspect && !this.inspect.alive) this.inspect = null;
@@ -522,45 +653,50 @@ export class UI {
       }
     }
     if (now - this.lastLbl > 66) { this.lastLbl = now; this.updateLabels(); }
-    if (now - this.lastMini > 200) { this.lastMini = now; this.drawMini(); }
+    if (now - this.lastMini > (this.miniBig ? 120 : 200)) { this.lastMini = now; this.drawMini(); }
+    if (now - this.adv.last > 1500) { this.adv.last = now; this.updateAdvice(); }
   }
+  // Bannières au-dessus des unités : symbole du type, effectif et moral
   updateLabels() {
     const app = this.app, b = app.battle, cam = app.camera.position;
     if (app.state !== 'battle' || !document.getElementById('menu').hidden) { for (const el of this.labels.values()) el.hidden = true; return; }
     const camH = cam.y - app.terrain.height(cam.x, cam.z);
-    const showAll = this.overlay === 'on' || (this.overlay === 'auto' && camH > 380);
+    const showAll = this.overlay !== 'off' && camH > 45;
     const placed = [];
     const want = new Set();
     const list = b.units.filter((u) => u.alive && u.men >= 1).sort((a, c) => (this.sel.has(c) - this.sel.has(a)) || c.men - a.men);
     for (const u of list) {
       const sel = this.sel.has(u) || this.inspect === u;
-      if (!sel && (!showAll || u.light && !u.routing)) continue;
+      if (!sel && !showAll) continue;
       const p = this.project(u.x, u.y + (u.isCav ? 9 : 7), u.z);
       if (!p || p[0] < -50 || p[1] < -20 || p[0] > innerWidth + 50 || p[1] > innerHeight + 20) continue;
-      if (!sel && placed.some(([x, y]) => Math.abs(x - p[0]) < 70 && Math.abs(y - p[1]) < 22)) continue;
+      if (!sel && placed.some(([x, y]) => Math.abs(x - p[0]) < 24 && Math.abs(y - p[1]) < 30)) continue;
       placed.push(p);
       want.add(u);
       let el = this.labels.get(u);
       if (!el) {
         el = document.createElement('div');
-        el.className = 'lbl' + (u.side ? ' c' : '');
-        el.innerHTML = `<span></span><i><b></b></i>`;
+        el.className = 'bn' + (u.side ? ' c' : '');
+        el.innerHTML = `<span class="fg">${tsvg(u)}</span><i class="hp"><b></b></i><i class="mo"><b></b></i><span class="nm"></span>`;
         $('labels').appendChild(el);
         this.labels.set(u, el);
       }
-      el.style.left = p[0] + 'px'; el.style.top = p[1] + 'px';
-      el.classList.toggle('sel', sel); el.classList.toggle('rt', u.routing);
-      const nm = camH > 1500 && !sel ? u.T.short : u.name;
-      if (el.dataset.n !== nm) { el.firstChild.textContent = nm; el.dataset.n = nm; }
-      const bb = el.lastChild.firstChild;
-      bb.style.width = `${(u.men / u.men0) * 100}%`;
-      bb.style.background = u.routing ? '#777' : u.morale > 50 ? 'var(--ok)' : u.morale > 25 ? 'var(--warn)' : 'var(--bad)';
+      el.style.transform = `translate(${p[0] - 12}px, ${p[1] - 40}px)`;
+      el.classList.toggle('sel', sel); el.classList.toggle('rt', u.routing); el.classList.toggle('eng', u.engaged && !u.routing);
+      const nm = sel || this.overlay === 'on' ? u.name : '';
+      if (el.dataset.n !== nm) { el.lastChild.textContent = nm; el.dataset.n = nm; }
+      el.children[1].firstChild.style.width = `${(u.men / u.men0) * 100}%`;
+      const mo = el.children[2].firstChild;
+      mo.style.width = `${Math.max(4, u.morale)}%`;
+      mo.style.background = u.routing ? '#777' : u.morale > 50 ? 'var(--ok)' : u.morale > 25 ? 'var(--warn)' : 'var(--bad)';
       el.hidden = false;
     }
     for (const [u, el] of this.labels) if (!want.has(u)) el.hidden = true;
   }
   drawMini() {
     const app = this.app, b = app.battle, cv = $('miniC'), ctx = cv.getContext('2d');
+    const want = this.miniBig ? 900 : 392;
+    if (cv.width !== want) { cv.width = cv.height = want; this.miniBg = null; }
     const S = cv.width, span = (this.miniSpan = 2200);
     const toPx = (x) => (x / span / 2 + 0.5) * S;
     if (!this.miniBg && app.world.groundCanvas) {

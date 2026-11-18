@@ -5,6 +5,7 @@
    Le joueur garde la main sur ses unités ; seuls les réflexes s'appliquent aux siennes. */
 import { FRONT, RIGHT, REAR, LEFT } from './sim.js';
 import { clamp } from './noise.js';
+import { doctrine, strategyById } from './plans.js';
 
 const HALFPI = Math.PI / 2;
 
@@ -24,16 +25,25 @@ export class Commander {
     if (this.t < this.next) return;
     this.next = this.t + 0.5;
     const us = this.mine;
-    if (!this.auto && this.plan) PLANS[this.plan](this, us);
-    if (!this.auto && this.t > 1200) this.exploit(us);
+    if (this.plan) {
+      this.b.aiSide = this.side;
+      try {
+        if (this.plan.startsWith('doc:')) doctrine(this, us, strategyById(this.b.scn.id, this.plan.slice(4)));
+        else PLANS[this.plan](this, us);
+      } finally { this.b.aiSide = -1; }
+    }
+    if ((!this.auto || this.plan) && this.t > 1200) this.exploit(us.filter((u) => !u.manual));
     for (const u of us) this.reflex(u);
   }
 
   // ------------------------------------------------------------ réflexes
+  // unité tenue par le joueur (et non par ses officiers)
+  pc(u) { return this.auto && (u.manual || !this.plan); }
+  setPlan(p) { this.plan = p; this.mem = {}; for (const u of this.mine) { u.ai = {}; } }
   reflex(u) {
-    if (u.routing || u.turnT > 0) return;
+    if (u.routing || u.turnT > 0 || u.form === 'orbis' || u.form === 'wall') return;
     // faire face à une attaque de flanc ou de dos si l'avant est libre
-    if (!u.isCav && u.eS[FRONT] === 0 && u.engaged && (this.auto ? u.order.kind === 'hold' || u.order.kind === 'advance' || u.order.kind === 'attack' : true)) {
+    if (!u.isCav && u.eS[FRONT] === 0 && u.engaged && (this.pc(u) ? u.order.kind === 'hold' || u.order.kind === 'advance' || u.order.kind === 'attack' : true)) {
       let best = -1, bl = 8;
       for (const s of [RIGHT, REAR, LEFT]) if (u.eS[s] > bl) { bl = u.eS[s]; best = s; }
       const serious = u.contacts.some((k) => k.side === best && !k.o.light && !k.o.routing);
@@ -44,7 +54,7 @@ export class Commander {
       }
     }
     // cavalerie prise de flanc : elle pivote librement
-    if (u.isCav && u.engaged && u.eS[FRONT] === 0 && !this.auto) {
+    if (u.isCav && u.engaged && u.eS[FRONT] === 0 && !this.pc(u)) {
       const c = u.contacts[0];
       if (c) u.command({ kind: 'attack', target: c.o });
     }
@@ -64,7 +74,7 @@ export class Commander {
       }
     }
     // unités IA au repos : engager l'ennemi proche
-    if (!this.auto && u.order.kind === 'hold' && !u.engaged && !u.isGen && !u.ai.noEngage) {
+    if (!this.pc(u) && u.order.kind === 'hold' && !u.engaged && !u.isGen && !u.ai.noEngage) {
       const r = u.isCav ? 110 : u.light ? 0 : 35;
       if (r > 0) {
         const e = this.nearestFoe(u, (e) => !e.isGen && (!e.routing || u.isCav || Math.hypot(e.x - u.x, e.z - u.z) < u.rad + e.rad + 60), r + 40);
@@ -576,5 +586,5 @@ const PLANS = {
 
 export function makeCommanders(b, scnId, playerSide) {
   const plans = scnId === 'cannae' ? ['varro_cannae', 'hannibal_cannae'] : ['scipio_zama', 'hannibal_zama'];
-  return [0, 1].map((s) => new Commander(b, s, plans[s], s === playerSide));
+  return [0, 1].map((s) => new Commander(b, s, s === playerSide ? null : plans[s], s === playerSide));
 }

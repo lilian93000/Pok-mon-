@@ -80,6 +80,8 @@ function body(b, s, lod) {
   // tête
   b.cyl(0.05, 0.055, 0.1, 5, { p: [0, 1.48, 0], mat: 0 });
   b.sph(0.105, 7, 5, { p: [0, 1.6, 0], mat: 0, part: 5, pv: PV.neck });
+  b.box(0.028, 0.05, 0.035, { p: [0, 1.585, 0.105], r: [0.25, 0, 0], mat: 0, part: 5, pv: PV.neck });
+  if (s.beard) b.box(0.13, 0.07, 0.06, { p: [0, 1.535, 0.07], mat: 10, part: 5, pv: PV.neck });
   if (s.hair) {
     b.sph(0.112, 7, 3, { p: [0, 1.62, -0.012], mat: 10, part: 5, pv: PV.neck }, true);
     if (s.longHair) b.box(0.2, 0.2, 0.06, { p: [0, 1.52, -0.08], mat: 10, part: 5, pv: PV.neck });
@@ -142,12 +144,22 @@ function sword(b, part, len, lod) {
   b.box(0.05, 0.012, len, { p: [-0.25, 0.79, 0.08 + len / 2], part, pv: PV.armR, mat: 4 });
   b.box(0.12, 0.03, 0.03, { p: [-0.25, 0.79, 0.07], part, pv: PV.armR, mat: 3 });
 }
+const SHIELD_DIMS = { scutum: [0.64, 1.15, 0.07], oval: [0.58, 1.12, 0.04], round: [0.9, 0.9, 0.05], parma: [0.85, 0.85, 0.04], caetra: [0.55, 0.55, 0.04], cav: [0.65, 0.65, 0.04], hide: [0.5, 0.75, 0.03] };
+const shieldY = (S) => (S === 'round' ? 1.15 : S === 'caetra' ? 1.0 : 1.02);
+// centre et demi-tailles du bouclier dans le repère du modèle, et motif peint
+export function shieldInfo(key) {
+  const a = ARCH[key], S = a.spec.shield;
+  if (!S) return [0, -10, 1, 1, 9];
+  const [w, h] = SHIELD_DIMS[S];
+  const dy = a.kind === 'rider' ? (a.spec.pony ? 0.88 : 1) * 1.47 - 0.95 + 0.02 : 0;
+  const style = S === 'scutum' ? 0 : S === 'oval' ? (key === 'gaul' || key === 'ligur' ? 1 : 3) : S === 'round' ? 2 : 3;
+  return [0.142, shieldY(S) + dy, w / 2, h / 2, style];
+}
 function shield(b, s, lod) {
   const S = s.shield; if (!S) return;
   const pv = PV.armL, part = 4;
-  const dims = { scutum: [0.64, 1.15, 0.07], oval: [0.58, 1.12, 0.04], round: [0.9, 0.9, 0.05], parma: [0.85, 0.85, 0.04], caetra: [0.55, 0.55, 0.04], cav: [0.65, 0.65, 0.04], hide: [0.5, 0.75, 0.03] }[S];
-  const [w, h, t] = dims;
-  const y = S === 'round' ? 1.15 : S === 'caetra' ? 1.0 : 1.02;
+  const [w, h, t] = SHIELD_DIMS[S];
+  const y = shieldY(S);
   const p = [0.13, y, 0.3];
   if (lod) { b.box(w, h, t + 0.02, { p, part, pv, mat: 7, r: [0, -0.2, 0] }); return; }
   b.add(new THREE.CylinderGeometry(0.5, 0.5, t, 11, 1), { p, r: [Math.PI / 2, -0.2, 0], ro: 'YXZ', s: [w, 1, h], part, pv, mat: 7 });
@@ -155,8 +167,16 @@ function shield(b, s, lod) {
   if (S === 'scutum' || S === 'oval') b.box(0.04, h * 0.85, 0.02, { p: [p[0] + 0.012, p[1], p[2] + t / 2], r: [0, -0.2, 0], part, pv, mat: S === 'scutum' ? 8 : 6 });
   if (S === 'round') b.add(new THREE.TorusGeometry(0.45, 0.02, 3, 12), { p: [p[0] + 0.01, p[1], p[2] + 0.02], r: [0, -0.2, 0], part, pv, mat: 3 });
 }
+// silhouette minimale : soldats très lointains et morts au sol
+function simpleHuman(b, s) {
+  b.box(0.26, 0.9, 0.15, { p: [0, 0.46, 0], mat: s.trousers ? 2 : 0 });
+  b.box(0.4, 0.86, 0.27, { p: [0, 1.04, 0], mat: s.bare ? 0 : s.armor === 'mail' ? 4 : s.armor === 'linen' ? 14 : 1 });
+  b.box(0.2, 0.22, 0.2, { p: [0, 1.6, 0], mat: s.helmet ? (s.helmet === 'cap' ? 5 : s.helmet === 'hood' ? 15 : 3) : s.hair ? 10 : 0 });
+  if (s.shield) { const [w, h] = SHIELD_DIMS[s.shield]; b.box(w * 0.9, h * 0.9, 0.06, { p: [0.13, shieldY(s.shield), 0.3], mat: 7, part: 4, pv: PV.armL }); }
+}
 export function buildHuman(s, lod) {
   const b = new Builder();
+  if (lod === 2) { simpleHuman(b, s); return b.build(); }
   legs(b, s, lod); body(b, s, lod); arms(b, s, lod); weapons(b, s, lod); shield(b, s, lod);
   return b.build();
 }
@@ -202,6 +222,15 @@ function rider(b, s, lod) {
 }
 export function buildRider(s, lod) {
   const b = new Builder();
+  if (lod === 2) {
+    const k = s.pony ? 0.88 : 1;
+    b.box(0.55 * k, 0.55 * k, 1.6 * k, { p: [0, 1.15 * k, 0], mat: 12 });
+    b.box(0.22, 0.6, 0.3, { p: [0, 1.6 * k, 0.95 * k], r: [-0.6, 0, 0], mat: 12 });
+    b.box(0.3, 1.0 * k, 1.3 * k, { p: [0, 0.5 * k, 0], mat: 12 });
+    b.box(0.36, 0.7, 0.24, { p: [0, 1.47 * k + 0.4, 0], mat: s.armor === 'muscle' ? 3 : 1 });
+    b.box(0.2, 0.22, 0.2, { p: [0, 1.47 * k + 0.86, 0], mat: s.helmet ? 3 : 10 });
+    return b.build();
+  }
   horse(b, s, lod); rider(b, s, lod);
   return b.build();
 }
@@ -209,6 +238,7 @@ export function buildRider(s, lod) {
 // ---------------------------------------------------------------- éléphants
 export function buildElephant(s, lod) {
   const b = new Builder();
+  if (lod === 2) lod = 1;
   b.sph(1.0, lod ? 6 : 10, lod ? 5 : 8, { p: [0, 1.95, -0.05], s: [0.95, 0.95, 1.4], mat: 12 });
   const hp = [0, 2.35, 1.25];
   b.sph(0.62, lod ? 6 : 9, lod ? 5 : 7, { p: hp, mat: 12 });
@@ -250,7 +280,7 @@ export const ARCH = {
   veles: { kind: 'human', style: 3, spec: { helmet: 'hood', shield: 'parma', weapon: 'javelins' }, pal: pal({ 1: '#b8ab8e', 24: '#8f7d62', 7: '#7a5a3a', 16: '#7a5a3a', 17: '#8d6b45', 18: '#6e4e30', 19: '#9a7650' }) },
   gaul: { kind: 'human', style: 1, spec: { bare: true, trousers: true, hair: true, longHair: true, moustache: true, torque: true, shield: 'oval', weapon: 'longsword' }, pal: pal({ 0: '#c4906c', 2: '#6b5a3a', 25: '#4a5a6a', 10: '#b0803e', 7: '#3d5a8a', 16: '#3d5a8a', 17: '#a8892f', 18: '#7a3a2a', 19: '#2f5a3a', 8: '#5a5a5e' }) },
   iber: { kind: 'human', style: 0, spec: { trim: true, helmet: 'cap', shield: 'oval', weapon: 'falcata' }, pal: pal({ 1: '#e6e0d2', 24: '#ddd5c2', 2: '#7c1830', 7: '#6a4a30', 16: '#6a4a30', 17: '#d9cfb8', 18: '#7a2a20', 19: '#4a3a2a', 8: '#5a5a5e' }) },
-  libyan: { kind: 'human', style: 0, spec: { armor: 'mail', helmet: 'montefortino', shield: 'scutum', weapon: 'sword' }, pal: pal({ 0: '#9c6a48', 1: '#d4c29a', 24: '#c9b48a', 16: '#6e5a3a', 17: '#8a5a34', 18: '#5a4a3a', 19: '#9a8a6a', 7: '#6e5a3a' }) },
+  libyan: { kind: 'human', style: 0, spec: { armor: 'mail', helmet: 'montefortino', shield: 'scutum', weapon: 'sword', beard: true }, pal: pal({ 0: '#9c6a48', 1: '#d4c29a', 24: '#c9b48a', 16: '#6e5a3a', 17: '#8a5a34', 18: '#5a4a3a', 19: '#9a8a6a', 7: '#6e5a3a' }) },
   slinger: { kind: 'human', style: 4, spec: { hair: true, headband: true }, pal: pal({ 0: '#b98a66', 1: '#a89a7c', 24: '#8c7c60' }) },
   lonch: { kind: 'human', style: 3, spec: { hair: true, shield: 'caetra', weapon: 'javelins' }, pal: pal({ 0: '#9c6a48', 1: '#c2ae8a', 24: '#a8946e', 16: '#8a6a45', 17: '#6e5236', 18: '#9a7a50', 19: '#5a4430' }) },
   carthcit: { kind: 'human', style: 2, spec: { armor: 'linen', helmet: 'attic', crest: 'crest', shield: 'round', weapon: 'spear', greave: true }, pal: pal({ 1: '#6b2a5f', 24: '#7a3060', 9: '#e8e0d0', 16: '#b08040', 17: '#e6dcc8', 18: '#6b2a5f', 19: '#8a2e24' }) },
@@ -260,7 +290,7 @@ export const ARCH = {
   eques_socii: { kind: 'rider', style: 10, spec: { armor: 'linen', helmet: 'montefortino', shield: 'cav', weapon: 'spear', cloth: 11 }, pal: pal({ 11: '#5a4a6a', 16: '#6a5a3a', 17: '#8a6a3a', 18: '#5a3a2a', 19: '#7a6a4a' }) },
   gen_rom: { kind: 'rider', style: 10, spec: { armor: 'muscle', helmet: 'attic', crest: 'crest', shield: 'cav', weapon: 'sword', cloak: true, cloth: 11 }, pal: pal({ 11: '#a01818', 9: '#b01515', 20: '#d6d0c4', 21: '#cfc8bb', 22: '#e0dace', 23: '#bdb6a8' }) },
   ibercav: { kind: 'rider', style: 10, spec: { trim: true, helmet: 'cap', crest: 'crest', shield: 'oval', weapon: 'spear', cloth: 2 }, pal: pal({ 1: '#e6e0d2', 2: '#7c1830', 9: '#1a1a1a', 16: '#6a4a30', 17: '#d9cfb8', 18: '#7a2a20', 19: '#3d5a8a' }) },
-  numid: { kind: 'rider', style: 11, spec: { hair: true, shield: 'caetra', weapon: 'javelins', pony: true }, pal: pal({ 0: '#8a5a3c', 1: '#d8ccb0', 24: '#c2b490', 10: '#1a1410', 16: '#8a6a45', 17: '#6e5236', 18: '#9a7a50', 19: '#5a4430', 20: '#6a3c22', 21: '#8a5a32', 22: '#3a2a1e', 23: '#a08a6a' }) },
+  numid: { kind: 'rider', style: 11, spec: { hair: true, beard: true, shield: 'caetra', weapon: 'javelins', pony: true }, pal: pal({ 0: '#8a5a3c', 1: '#d8ccb0', 24: '#c2b490', 10: '#1a1410', 16: '#8a6a45', 17: '#6e5236', 18: '#9a7a50', 19: '#5a4430', 20: '#6a3c22', 21: '#8a5a32', 22: '#3a2a1e', 23: '#a08a6a' }) },
   gen_carth: { kind: 'rider', style: 10, spec: { armor: 'muscle', helmet: 'attic', crest: 'crest', shield: 'round', weapon: 'sword', cloak: true, cloth: 11 }, pal: pal({ 11: '#4e1c48', 9: '#e8e0d0', 16: '#b08040', 17: '#b08040', 18: '#b08040', 19: '#b08040', 20: '#1c1612', 21: '#241c16', 22: '#2a2018', 23: '#18120e' }) },
   carthcav: { kind: 'rider', style: 10, spec: { armor: 'linen', helmet: 'attic', shield: 'round', weapon: 'spear', cloth: 11 }, pal: pal({ 1: '#6b2a5f', 11: '#6b2a5f', 16: '#b08040', 17: '#e6dcc8', 18: '#6b2a5f', 19: '#8a2e24' }) },
   elephant: { kind: 'elephant', style: 20, spec: { cloth: 11 }, pal: pal({ 0: '#9a6a48', 1: '#c2ae8a', 11: '#6b2a5f', 12: '#6e6a64', 20: '#6e6a64', 21: '#7a746c', 22: '#5e5a54', 23: '#807868', 13: '#3a3632', 14: '#e8dcc0' }) },

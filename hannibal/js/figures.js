@@ -5,7 +5,8 @@
    Rendu : un maillage instancié par archétype et par niveau de détail ; les membres sont
    animés dans le vertex shader (marche, course, coups, lancers, chute). */
 import * as THREE from 'three';
-import { ARCH, buildArch } from './models.js';
+import { ARCH, buildArch, shieldInfo } from './models.js';
+import { CLOUD, CLOUD_GLSL } from './nature.js';
 import { ST } from './sim.js';
 import { hash1, angDiff } from './noise.js';
 
@@ -13,10 +14,10 @@ const TAU = Math.PI * 2;
 export const A = { IDLE: 0, WALK: 1, RUN: 2, FIGHT: 3, THROW: 4, DEAD: 5, KNEEL: 6, BRACE: 7, ROUT: 8 };
 
 const HEAD = /* glsl */`
-attribute float aPart; attribute float aMat; attribute vec3 aPivot;
+attribute float aPart; attribute float aMat; attribute vec3 aPivot; attribute vec2 aOff; attribute float aCopy;
 attribute vec4 iPos; attribute vec4 iAnim;
 uniform float uTime; uniform vec3 uPal[26]; uniform float uStyle; uniform vec3 uDust;
-varying vec3 vCol; varying vec2 vMR;
+varying vec3 vCol; varying vec2 vMR; varying vec3 vWP; varying vec3 vLoc; varying float vMatF;
 mat3 rX(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0.,0.,c,s,0.,-s,c);}
 mat3 rY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s,0.,1.,0.,s,0.,c);}
 mat3 rZ(float a){float c=cos(a),s=sin(a);return mat3(c,s,0.,-s,c,0.,0.,0.,1.);}
@@ -25,7 +26,7 @@ float throwArc(float ph){ float c = fract(ph/6.2832); return c<0.55 ? mix(-0.2,0
 vec3 figAnim(vec3 p, inout vec3 n) {
   float st = mod(iAnim.x, 16.0);
   float fl = floor(iAnim.x / 16.0 + 0.001);
-  float ph = iAnim.y, dth = iAnim.z, sd = iAnim.w, part = aPart;
+  float sd = fract(iAnim.w + aCopy * 0.618), ph = iAnim.y + aCopy * 2.1, dth = iAnim.z, part = aPart;
   vec3 pv = aPivot;
   bool runS = isv(st,2.) || isv(st,8.);
   if (uStyle < 9.5) {
@@ -108,11 +109,13 @@ vec3 figAnim(vec3 p, inout vec3 n) {
     if (uStyle < 9.5) { mat3 D = rX(dir*1.48*f) * rZ((fract(sd*7.)-0.5)*0.7*f); p = D*p; n = D*n; p.y += 0.12*f; }
     else { mat3 D = rZ(dir*1.42*f); p = D*p; n = D*n; p.y += (uStyle > 19.5 ? 0.9 : 0.32)*f; }
   }
+  // soldats supplémentaires d'une même figurine (densité réelle des rangs)
+  p.xz += aOff + (vec2(fract(sd * 31.7), fract(sd * 17.3)) - 0.5) * 0.4 * step(0.01, length(aOff));
   mat3 H = rY(iPos.w); p = H*p; n = H*n;
   return p + iPos.xyz;
 }
 void figColor() {
-  int mi = int(aMat + 0.5); float sd = iAnim.w;
+  int mi = int(aMat + 0.5); float sd = fract(iAnim.w + aCopy * 0.618);
   vec3 c;
   if (mi == 7) c = uPal[16 + int(fract(sd*7.31)*3.999)];
   else if (mi == 12) c = uPal[20 + int(fract(sd*3.17)*3.999)];
@@ -123,26 +126,70 @@ void figColor() {
   else if (mi == 10) c *= 0.45 + 0.75*fract(sd*9.1);
   else if (mi == 9) { if (fract(sd*4.3) > 0.5) c = vec3(0.018,0.016,0.02); }
   else c *= 0.88 + 0.24*fract(sd*17.9);
+  vLoc = position; vMatF = aMat;
   float low = 1. - smoothstep(0.05, 0.75, position.y);
   vCol = mix(c, uDust, 0.32*low);
   vMR = (mi==3||mi==8) ? vec2(0.85, 0.36) : mi==4 ? vec2(0.75, 0.45) : vec2(0.0, 0.86);
 }
 `;
 
-function figMaterial(arch, uniforms) {
+
+const FRAG = /* glsl */`
+varying vec3 vCol; varying vec2 vMR; varying vec3 vWP; varying vec3 vLoc; varying float vMatF;
+uniform vec4 uShield; uniform float uShieldStyle;
+${CLOUD_GLSL}
+float hsh3(vec3 p){ return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453); }
+// détails peints et matières : tissu, mailles, bronze patiné, boucliers décorés
+vec3 figDetail() {
+  int m = int(vMatF + 0.5);
+  vec3 k = vec3(1.0);
+  if (m == 1 || m == 2 || m == 11 || m == 14) {
+    k *= 0.9 + 0.12 * hsh3(floor(vLoc * 90.0)) + 0.04 * sin(vLoc.y * 160.0);
+  } else if (m == 4) {
+    k *= 0.78 + 0.42 * hsh3(floor(vLoc * 140.0));
+  } else if (m == 3 || m == 8) {
+    k *= 0.86 + 0.22 * hsh3(floor(vLoc * 28.0));
+  } else if (m == 7) {
+    vec2 q = (vLoc.xy - uShield.xy) / uShield.zw;
+    float r = length(q);
+    vec3 paint = vec3(1.0);
+    if (uShieldStyle < 0.5) {
+      float wing = step(abs(q.y), 0.08 + 0.22 * abs(q.x)) * step(0.22, abs(q.x)) * step(abs(q.x), 0.78);
+      float bolt = step(abs(q.x - 0.13 * sin(q.y * 9.0)), 0.055) * step(0.28, abs(q.y)) * step(abs(q.y), 0.82);
+      paint = mix(paint, vec3(1.6, 1.38, 0.88), max(wing, bolt) * 0.9);
+    } else if (uShieldStyle < 1.5) {
+      float ring = step(abs(r - 0.56), 0.06), stripe = step(abs(q.x), 0.07);
+      paint = mix(paint, vec3(0.42), max(ring, stripe) * 0.7);
+      paint = mix(paint, vec3(1.7, 1.55, 1.2), step(abs(r - 0.34), 0.035));
+    } else if (uShieldStyle < 2.5) {
+      float circle = step(length(q - vec2(0.0, 0.34)), 0.15);
+      float bar = step(abs(q.y - 0.1), 0.04) * step(abs(q.x), 0.36);
+      float tri = step(q.y, 0.05) * step(-0.62, q.y) * step(abs(q.x), (0.05 - q.y) * 0.55);
+      paint = mix(paint, vec3(1.75, 1.58, 1.15), max(max(circle, bar), tri));
+    } else if (uShieldStyle < 3.5) {
+      float ring = min(1.0, step(abs(r - 0.62), 0.05) + step(abs(r - 0.3), 0.04));
+      paint = mix(paint, vec3(0.5), ring * 0.8);
+    }
+    k = paint * (1.0 - smoothstep(0.84, 0.9, r) * 0.45) * (0.92 + 0.12 * hsh3(floor(vLoc * 40.0)));
+  }
+  return k;
+}`;
+
+function figMaterial(arch, uniforms, key) {
   const pal = [];
   for (let i = 0; i < 26; i++) pal.push(new THREE.Color(arch.pal[i]));
-  const u = { uTime: uniforms.uTime, uDust: uniforms.uDust, uPal: { value: pal }, uStyle: { value: arch.style } };
+  const si = shieldInfo(key);
+  const u = { uTime: uniforms.uTime, uDust: uniforms.uDust, uPal: { value: pal }, uStyle: { value: arch.style }, uShield: { value: new THREE.Vector4(si[0], si[1], si[2], si[3]) }, uShieldStyle: { value: si[4] }, ...CLOUD };
   const m = new THREE.MeshStandardMaterial({ roughness: 0.85, metalness: 0 });
   m.onBeforeCompile = (sh) => {
     Object.assign(sh.uniforms, u);
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', '#include <common>\n' + HEAD)
-      .replace('#include <beginnormal_vertex>', 'vec3 objectNormal = normal; vec3 animP = figAnim(position, objectNormal); figColor();')
+      .replace('#include <beginnormal_vertex>', 'vec3 objectNormal = normal; vec3 animP = figAnim(position, objectNormal); vWP = animP; figColor();')
       .replace('#include <begin_vertex>', 'vec3 transformed = animP;');
     sh.fragmentShader = sh.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vCol; varying vec2 vMR;')
-      .replace('vec4 diffuseColor = vec4( diffuse, opacity );', 'vec4 diffuseColor = vec4( vCol, opacity );')
+      .replace('#include <common>', '#include <common>\n' + FRAG)
+      .replace('vec4 diffuseColor = vec4( diffuse, opacity );', 'vec4 diffuseColor = vec4( vCol * figDetail() * (1.0 - cloudShadow(vWP)), opacity );')
       .replace('float roughnessFactor = roughness;', 'float roughnessFactor = vMR.y;')
       .replace('float metalnessFactor = metalness;', 'float metalnessFactor = vMR.x;');
   };
@@ -156,6 +203,24 @@ function figMaterial(arch, uniforms) {
   };
   d.customProgramCacheKey = () => 'figure-depth';
   return [m, d];
+}
+
+// recopie le modèle aux places des hommes que représente une figurine
+function replicate(geo, offs) {
+  const n = geo.attributes.position.count, k = offs.length;
+  const g = new THREE.BufferGeometry();
+  for (const name of ['position', 'normal', 'aPart', 'aMat', 'aPivot']) {
+    const a = geo.attributes[name], src = a.array, isz = a.itemSize;
+    const dst = new Float32Array(n * k * isz);
+    for (let c = 0; c < k; c++) dst.set(src, c * n * isz);
+    g.setAttribute(name, new THREE.BufferAttribute(dst, isz));
+  }
+  const off = new Float32Array(n * k * 2), cp = new Float32Array(n * k);
+  for (let c = 0; c < k; c++) for (let i = 0; i < n; i++) { off[(c * n + i) * 2] = offs[c][0]; off[(c * n + i) * 2 + 1] = offs[c][1]; cp[c * n + i] = c; }
+  g.setAttribute('aOff', new THREE.BufferAttribute(off, 2));
+  g.setAttribute('aCopy', new THREE.BufferAttribute(cp, 1));
+  g.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 1e6);
+  return g;
 }
 
 class Layer {
@@ -232,18 +297,26 @@ export class Figures {
     this.layers = {};
     for (const key in perArch) {
       const a = ARCH[key];
-      const [mat, depth] = figMaterial(a, this.uniforms);
-      const near = buildArch(key, 0), far = buildArch(key, 1);
+      const [mat, depth] = figMaterial(a, this.uniforms, key);
+      // nombre de soldats dessinés par figurine (2 ou 4 en qualité haute)
+      const T0 = battle.units.find((u) => u.T.arch === key).T;
+      const sc = T0.perFigure ? 1 : this.scale;
+      const copies = Math.min(opts.copies || 1, sc >= 4 ? 4 : sc >= 2 ? 2 : 1);
+      const a2 = (T0.spX * Math.sqrt(sc)) / 4, b2 = (T0.spZ * Math.sqrt(sc)) / 4;
+      const offs = copies === 4 ? [[-a2, -b2], [a2, -b2], [-a2, b2], [a2, b2]] : copies === 2 ? [[-a2, 0], [a2, 0]] : [[0, 0]];
+      const near = replicate(buildArch(key, 0), offs), far = replicate(buildArch(key, 1), offs);
+      const lite = buildArch(key, 2), dist = replicate(lite, [[0, 0]]), dead = replicate(lite, offs);
       const cap = perArch[key];
       const L = {
         near: new Layer(near, Math.min(cap, this.nearCap), mat, depth, this.shadows),
         far: new Layer(far, cap, mat, depth, false),
         farS: new Layer(far, cap, mat, depth, this.shadows),
-        dead: new Layer(far, cap, mat, depth, false),
+        dist: new Layer(dist, cap, mat, depth, false),
+        dead: new Layer(dead, cap, mat, depth, false),
       };
       L.dead.mesh.castShadow = false;
       this.layers[key] = L;
-      scene.add(L.near.mesh, L.far.mesh, L.farS.mesh, L.dead.mesh);
+      scene.add(L.near.mesh, L.far.mesh, L.farS.mesh, L.dist.mesh, L.dead.mesh);
     }
     this.frustum = new THREE.Frustum();
     this.m4 = new THREE.Matrix4();
@@ -324,7 +397,7 @@ export class Figures {
     this.frustum.setFromProjectionMatrix(this.m4);
     const cx = camera.position.x, cy = camera.position.y, cz = camera.position.z;
     const nd2 = this.nearDist * this.nearDist;
-    for (const k in this.layers) { const L = this.layers[k]; L.near.n = 0; L.far.n = 0; L.farS.n = 0; }
+    for (const k in this.layers) { const L = this.layers[k]; L.near.n = 0; L.far.n = 0; L.farS.n = 0; L.dist.n = 0; }
     const sb = this.shadowBox;
     let vis = 0;
     for (const u of this.b.units) {
@@ -360,7 +433,7 @@ export class Figures {
     }
     for (const k in this.layers) {
       const L = this.layers[k];
-      L.near.flush(); L.far.flush(); L.farS.flush();
+      L.near.flush(); L.far.flush(); L.farS.flush(); L.dist.flush();
       if (L.dead.dirty) {
         L.dead.dirty = false;
         L.dead.g.instanceCount = L.dead.n;
@@ -389,6 +462,8 @@ export class Figures {
     const flags = (T.pila && u.pila === 0) || (T.pila && u.engaged) ? 16 : 0;
     const k = Math.min(1, dt * 4);
     const t = this.time;
+    const orb = u.form === 'orbis' && !routing, wedge = u.form === 'cuneus';
+    let ringI = 0, ringK = 0, ringR = Math.min(u.hw, u.hd) - sx * 0.5, ringC = Math.max(1, Math.floor((2 * Math.PI * ringR) / sx));
     const ids = fg.ids, X = this.fx, Z = this.fz, Y = this.fy, H = this.fh, VX = this.fvx, VZ = this.fvz, PH = this.fph, SD = this.fsd;
     for (let s = 0; s < n; s++) {
       const id = ids[s], file = s % F, rank = (s / F) | 0;
@@ -396,9 +471,19 @@ export class Figures {
       let lx = fo * sx - u.hw + this.fjx[id] * sx, lz = u.hd - (rank + 0.5) * sz + this.fjz[id] * sz;
       let fight = false, face = u.th;
       const sd = SD[id];
+      if (wedge) lx *= 0.3 + (0.7 * (rank + 1)) / R;
       if (routing) {
         lx = lx * 1.6 + this.fjx[id] * 40 + Math.sin(t * 0.4 + sd * 50) * 2.5;
         lz = lz * 1.8 + this.fjz[id] * 50;
+      } else if (orb) {
+        // orbis : cercles concentriques, chacun face à l'extérieur
+        if (ringK >= ringC) { ringI++; ringK = 0; ringR = Math.max(0.5, ringR - sz); ringC = Math.max(1, Math.floor((2 * Math.PI * ringR) / sx)); }
+        const a = ((ringK + (ringI % 2) * 0.5) / ringC) * Math.PI * 2;
+        lx = Math.sin(a) * ringR; lz = Math.cos(a) * ringR;
+        ringK++;
+        const wx = u.rx * lx + u.fx * lz, wz = u.rz * lx + u.fz * lz;
+        face = Math.atan2(wx, wz);
+        if (u.engaged && ringI === 0) fight = true;
       } else if (u.engaged) {
         if (eF && rank <= (cav ? 0 : 1)) { fight = true; lz += 0.25 + 0.25 * Math.sin(PH[id] * 0.5); }
         else if (eB && rank >= R - 2) { fight = true; face = u.th + Math.PI; }
@@ -432,7 +517,9 @@ export class Figures {
       if (PH[id] > 1e4) PH[id] -= 1e4;
       if (L) {
         const dx = x - cx, dy = y - cy, dz = z - cz;
-        const lay = dx * dx + dy * dy + dz * dz < nd2 && L.near.n < L.near.cap ? L.near
+        const d2 = dx * dx + dy * dy + dz * dz;
+        const lay = d2 < nd2 && L.near.n < L.near.cap ? L.near
+          : d2 > nd2 * 14 ? L.dist
           : sb && Math.abs(x - sb.x) < sb.e && Math.abs(z - sb.z) < sb.e ? L.farS : L.far;
         lay.push(x, y, z, H[id], st + flags, PH[id], 0, sd);
       }

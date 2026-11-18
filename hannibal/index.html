@@ -73,8 +73,59 @@ body.deploying #feed { display: none; }
 /* ---------- bas : groupes, unité, ordres */
 #bottom { position: fixed; z-index: 5; left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(10px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
 #bottom > * { pointer-events: auto; }
-#groups { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; max-width: calc(100% - 210px); }
-#groups::-webkit-scrollbar { display: none; }
+#cards { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: thin; padding: 4px 2px 6px; max-width: calc(100% - 210px); }
+#cards .sec { display: flex; gap: 3px; align-items: flex-end; flex: 0 0 auto; }
+#cards .sh { writing-mode: vertical-rl; transform: rotate(180deg); height: 70px; padding: 4px 3px; border: 1px solid var(--line); border-radius: 5px; background: var(--panel); font: 700 10.5px var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--bronze); white-space: nowrap; overflow: hidden; }
+.uc { position: relative; width: 50px; height: 70px; flex: 0 0 auto; border-radius: 5px; border: 1px solid rgba(255,255,255,0.08); background: linear-gradient(180deg, #4a1a16, #22100d); padding: 4px 3px 0; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.uc.c { background: linear-gradient(180deg, #3b2046, #1c1022); }
+.uc svg { width: 26px; height: 26px; fill: none; stroke: #f0e2c4; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.uc .n { font-size: 11px; color: var(--ink); line-height: 1; }
+.uc i { display: block; width: 100%; height: 4px; background: rgba(0,0,0,0.5); border-radius: 2px; overflow: hidden; }
+.uc i b { display: block; height: 100%; background: #e9dfcc; }
+.uc .fl { position: absolute; top: 1px; right: 3px; font: 700 11px var(--font-body); color: var(--warn); }
+.uc.sel { border-color: var(--bronze); box-shadow: 0 0 0 2px var(--bronze), 0 0 14px rgba(201,158,92,0.45); }
+.uc.eng { border-color: rgba(217,164,65,0.7); }
+.uc.rt { filter: saturate(0.2) brightness(0.8); }
+.uc.dead { opacity: 0.3; }
+.uc.man::after { content: ""; position: absolute; left: 3px; top: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--bronze); }
+.bn { position: absolute; left: 0; top: 0; width: 24px; display: flex; flex-direction: column; align-items: center; pointer-events: none; will-change: transform; }
+.bn .fg { width: 24px; height: 28px; display: grid; place-items: center; background: #8e2b22; clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%); }
+.bn.c .fg { background: #5e2f74; }
+.bn .fg svg { width: 16px; height: 16px; margin-top: -4px; fill: none; stroke: #f6ead0; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.bn i { display: block; width: 24px; height: 3px; margin-top: 1px; background: rgba(0,0,0,0.6); }
+.bn i b { display: block; height: 100%; background: #f0e6d2; }
+.bn .nm { margin-top: 2px; padding: 1px 5px; border-radius: 3px; background: rgba(12,11,9,0.8); font-size: 11px; white-space: nowrap; }
+.bn .nm:empty { display: none; }
+.bn.sel .fg { background: #b8862f; }
+.bn.c.sel .fg { background: #b8862f; }
+.bn.eng i:first-of-type { background: rgba(217,164,65,0.6); }
+.bn.rt { opacity: 0.5; }
+#deploy { flex-direction: column; align-items: stretch; width: min(1100px, 100%); }
+#deploy .dh { display: flex; gap: 10px 12px; align-items: center; flex-wrap: wrap; }
+#plans { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.plan { flex: 0 0 240px; display: flex; flex-direction: column; gap: 4px; padding: 9px 11px; border-radius: 7px; border: 1px solid var(--line); background: rgba(255,255,255,0.03); }
+#deploy { max-height: calc(100vh - 190px); overflow-y: auto; flex-wrap: nowrap; }
+.plan.on { border-color: var(--bronze); background: rgba(201,158,92,0.12); }
+.plan .ph { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.plan .ph b { font: 700 14px var(--font-display); letter-spacing: 0.04em; }
+.plan .tag { font: 11px var(--font-data); color: var(--bronze); white-space: nowrap; }
+.plan p { margin: 0; font-size: 12.5px; color: #d6ccbb; text-wrap: pretty; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.plan ul { margin: 0; padding: 0; list-style: none; font-size: 12px; display: grid; gap: 1px; }
+@media (max-height: 760px) { .plan li.pro + li.pro, .plan li.con + li.con { display: none; } .plan p { -webkit-line-clamp: 3; } }
+.plan li.pro::before { content: "+ "; color: var(--ok); font-weight: 700; }
+.plan li.con::before { content: "− "; color: var(--bad); font-weight: 700; }
+.plan button { margin-top: auto; }
+.sm { padding: 6px 11px; font-size: 12px; }
+#advice { position: fixed; z-index: 6; right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(220px + env(safe-area-inset-bottom, 0px)); width: min(340px, calc(100vw - 24px)); padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+#advice .ah { font: 700 11px var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--bronze); }
+#advice .adv { display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--line); padding-top: 7px; }
+#advice .ah + .adv { border-top: 0; padding-top: 0; }
+#advice p { margin: 0; font-size: 13.5px; cursor: pointer; text-wrap: pretty; }
+#advice .aa { display: flex; gap: 6px; flex-wrap: wrap; }
+.iconbtn.off svg { opacity: 0.35; }
+#mapBtn { position: absolute; right: 4px; top: 4px; width: 28px; height: 28px; border-radius: 5px; border: 1px solid var(--line); background: rgba(12,11,9,0.7); display: grid; place-items: center; padding: 0; }
+#mapBtn svg { width: 16px; height: 16px; fill: none; stroke: var(--ink); stroke-width: 1.8; }
+#mini.big { width: min(86vw, 78vh); height: min(86vw, 78vh); right: 50%; bottom: 50%; transform: translate(50%, 50%); z-index: 15; }
 .chip { flex: 0 0 auto; padding: 7px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-size: 13.5px; white-space: nowrap; }
 .chip b { font-family: var(--font-data); font-weight: 500; color: var(--muted); margin-left: 4px; font-size: 12px; }
 .chip.on { border-color: var(--bronze); background: rgba(201, 158, 92, 0.18); }
@@ -171,7 +222,14 @@ body.deploying #feed { display: none; }
   #feed div { font-size: 12.5px; }
   #mini { width: 112px; height: 112px; bottom: auto; top: calc(118px + env(safe-area-inset-top, 0px)); }
   #deploy p { font-size: 12.5px; flex-basis: 100%; }
-  #groups, #unitbar { max-width: 100%; }
+  #cards, #unitbar { max-width: 100%; }
+  .uc { width: 42px; height: 60px; }
+  .uc svg { width: 22px; height: 22px; }
+  #cards .sh { height: 60px; font-size: 9.5px; }
+  .plan { flex-basis: 230px; }
+  #deploy .dh p { display: none; }
+  #advice { bottom: auto; top: calc(240px + env(safe-area-inset-top, 0px)); }
+  #mini.big { top: 50%; bottom: auto; }
   #unitbar { flex-direction: column; }
   #card { width: 100%; padding: 8px 10px; }
   #card details { display: none; }
@@ -207,6 +265,7 @@ body.deploying #feed { display: none; }
     </div>
   <div id="topR">
     <button class="iconbtn" id="soundBtn" title="Son" aria-label="Son"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" id="waves"/></svg></button>
+    <button class="iconbtn" id="advBtn" title="Conseiller" aria-label="Conseiller"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-3.5 10.9V17h7v-3.1A6 6 0 0 0 12 3zM9.5 20h5"/></svg></button>
     <button class="iconbtn" id="viewBtn" title="Aide tactique" aria-label="Aide tactique"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="1"/><path d="M12 6V3M9 3h6"/></svg></button>
     <button class="iconbtn" id="helpBtn" title="Commandes" aria-label="Commandes"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg></button>
     <button class="iconbtn" id="menuBtn" title="Menu" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
@@ -218,17 +277,19 @@ body.deploying #feed { display: none; }
 
 <section id="bottom" hidden>
   <div id="deploy" class="glass" hidden>
-    <p><b>Déploiement.</b> Choisis une unité ou un groupe, puis touche le sol pour le placer dans ta moitié du champ. Les unités que tu ne bouges pas gardent l'ordre de bataille historique.</p>
+    <div class="dh"><p><b>Plans de bataille.</b> Choisis une stratégie : tes officiers la déploient et l'exécutent. Tu peux aussi placer toi-même chaque unité et reprendre la main à tout moment.</p>
     <button class="ghost" id="resetDeploy">Ordre historique</button>
-    <button class="primary" id="engage">Engager la bataille</button>
+    <button class="primary" id="engage">Engager la bataille</button></div>
+    <div id="plans"></div>
   </div>
-  <div id="groups" role="toolbar" aria-label="Groupes d'unités"></div>
+  <div id="cards" role="toolbar" aria-label="Unités"></div>
   <div id="unitbar" hidden>
     <div id="card" class="glass"></div>
     <div id="orders" class="glass" role="toolbar" aria-label="Ordres"></div>
   </div>
 </section>
-<div id="mini" class="glass" hidden><canvas id="miniC" width="392" height="392" aria-label="Carte du champ de bataille"></canvas></div>
+<div id="mini" class="glass" hidden><canvas id="miniC" width="392" height="392" aria-label="Carte du champ de bataille"></canvas><button id="mapBtn" title="Carte tactique (Tab)" aria-label="Agrandir la carte"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div>
+<aside id="advice" class="glass" hidden aria-live="polite"></aside>
 
 <div id="menu" hidden>
   <div class="wrap">
@@ -241,7 +302,7 @@ body.deploying #feed { display: none; }
     <div class="opts glass">
       <div class="opt"><label>Ton camp</label><div class="seg" id="sideSeg"><button data-v="0" class="on">Rome</button><button data-v="1">Carthage</button><button data-v="2">Spectateur</button></div><small id="sideNote"></small></div>
       <div class="opt"><label>Soldats affichés</label><div class="seg" id="scaleSeg"><button data-v="1">1:1</button><button data-v="2">1:2</button><button data-v="4">1:4</button><button data-v="8">1:8</button><button data-v="16">1:16</button></div><small id="scaleNote"></small></div>
-      <div class="opt"><label>Qualité graphique</label><div class="seg" id="qualSeg"><button data-v="low">Légère</button><button data-v="medium">Normale</button><button data-v="high">Haute</button></div><small>Ombres, végétation, poussière et distance de détail.</small></div>
+      <div class="opt"><label>Qualité graphique</label><div class="seg" id="qualSeg"><button data-v="low">Légère</button><button data-v="medium">Normale</button><button data-v="high">Haute</button><button data-v="ultra">Ultra 4K</button></div><small id="qualNote">Ombres, végétation, poussière et distance de détail.</small></div>
     </div>
     <div id="brief" class="glass"></div>
     <div class="go"><button class="primary" id="startBtn">Prendre le commandement</button><small>Les ordres se donnent en pause comme en mouvement.</small></div>

@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { Sky } from 'three/addons/objects/Sky.js';
 import { HALF } from './terrain.js';
 import { mulberry32, makeNoise2D, smoothstep } from './noise.js';
+import { CLOUD, CLOUD_GLSL, makeCloudTexture, makeCloudLayer, makeStrawTexture, GrassField, addRocks, addReeds } from './nature.js';
 
 export class World {
   constructor(renderer, scene, terrain, scn, q) {
@@ -30,10 +31,18 @@ export class World {
     scene.fog = new THREE.FogExp2(0xc9c6bb, 0.00011);
     this.sunDir = new THREE.Vector3();
     this.lastEnvEl = -99;
+    this.uTime = { value: 0 };
+    if (!CLOUD.uCloudTex.value) CLOUD.uCloudTex.value = makeCloudTexture(256);
+    CLOUD.uCloudCover.value = scn.id === 'zama' ? 0.52 : 0.6;
+    this.zone = { uZone: { value: new THREE.Vector4(0, 0, 0, 0) } };
     this.buildTerrain();
     if (terrain.hasRiver) this.buildRiver();
     this.buildVegetation();
     this.buildCamps();
+    addRocks(scene, terrain, q.rocks || 0, !!q.rocksShadow);
+    addReeds(scene, terrain, q.reeds || 0, this.uTime);
+    this.clouds = q.clouds === false ? null : makeCloudLayer(scene);
+    this.grass = q.grass ? new GrassField(scene, terrain, this, q.grass, q.grassTile || 90) : null;
     this.setTime(this.hour, true);
   }
 
@@ -54,6 +63,7 @@ export class World {
     this.sunEl = el; this.sunAz = az;
     this.sunDir.set(Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el));
     this.sky.material.uniforms.sunPosition.value.copy(this.sunDir);
+    CLOUD.uSunDir.value.copy(this.sunDir);
     const e = Math.max(0, Math.sin(el));
     const warm = 1 - smoothstep(0.05, 0.5, e);
     this.sun.color.setRGB(1, 0.93 - 0.25 * warm, 0.84 - 0.45 * warm);
@@ -61,6 +71,7 @@ export class World {
     this.hemi.intensity = 0.25 + 0.2 * e;
     const fogC = new THREE.Color().setRGB(0.80 - 0.08 * warm, 0.79 - 0.12 * warm, 0.74 - 0.18 * warm);
     this.scene.fog.color.copy(fogC);
+    if (this.clouds) { this.clouds.material.uniforms.uFogCol.value.copy(fogC); this.clouds.material.uniforms.uSunCol.value.setRGB(1, 0.96 - 0.15 * warm, 0.9 - 0.3 * warm); }
     if (force || Math.abs(el - this.lastEnvEl) > 0.035) {
       this.lastEnvEl = el;
       if (this.env) this.env.dispose();
@@ -118,7 +129,7 @@ export class World {
     }
     ctx.putImageData(img, 0, 0);
     this.groundCanvas = cv;
-    const colTex = new THREE.CanvasTexture(cv);
+    const colTex = (this.colTex = new THREE.CanvasTexture(cv));
     colTex.colorSpace = THREE.SRGBColorSpace; colTex.anisotropy = 8;
     colTex.wrapS = colTex.wrapT = THREE.ClampToEdgeWrapping;
     // détail fin répété (chaume, mottes, cailloux)
@@ -131,7 +142,11 @@ export class World {
     this.trTex.needsUpdate = true;
     const mat = new THREE.MeshStandardMaterial({ map: colTex, roughness: 0.95, metalness: 0 });
     const zama = t.kind === 'zama';
+    const straw = makeStrawTexture(this.q.strawTex || 1024, zama);
     mat.onBeforeCompile = (sh) => {
+      Object.assign(sh.uniforms, CLOUD, this.zone);
+      sh.uniforms.uStraw = { value: straw };
+      sh.uniforms.uBump = { value: this.q.bump ?? 1 };
       sh.uniforms.uDetail = { value: detail };
       sh.uniforms.uTrample = { value: this.trTex };
       sh.uniforms.uMud = { value: new THREE.Color(zama ? '#a27c56' : '#a48c6a') };
@@ -139,7 +154,20 @@ export class World {
         .replace('#include <common>', '#include <common>\nvarying vec3 vW;')
         .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvW = (modelMatrix * vec4(transformed,1.0)).xyz;');
       sh.fragmentShader = sh.fragmentShader
-        .replace('#include <common>', '#include <common>\nvarying vec3 vW; uniform sampler2D uDetail; uniform sampler2D uTrample; uniform vec3 uMud;')
+        .replace('#include <common>', `#include <common>
+          varying vec3 vW; uniform sampler2D uDetail; uniform sampler2D uTrample; uniform vec3 uMud; uniform sampler2D uStraw; uniform float uBump; uniform vec4 uZone;
+          ${CLOUD_GLSL}
+          // relief fin : perturbation de la normale par les dérivées écran (comme un bump map)
+          vec3 bumpN(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy, float faceDirection) {
+            vec3 vSigmaX = normalize(dFdx(surf_pos)); vec3 vSigmaY = normalize(dFdy(surf_pos));
+            vec3 R1 = cross(vSigmaY, surf_norm); vec3 R2 = cross(surf_norm, vSigmaX);
+            float fDet = dot(vSigmaX, R1) * faceDirection;
+            vec3 vGrad = sign(fDet) * (dHdxy.x * R1 + dHdxy.y * R2);
+            return normalize(abs(fDet) * surf_norm - vGrad);
+          }
+          float groundH(vec2 p, float near) {
+            return texture2D(uStraw, p / 3.7).r * 0.06 * near + texture2D(uDetail, p / 3.1).r * 0.12 + texture2D(uDetail, p / 23.0).g * 0.35;
+          }`)
         .replace('#include <map_fragment>', `
           vec2 guv = (vW.xz + ${HALF.toFixed(1)}) / ${(HALF * 2).toFixed(1)};
           vec4 gc = texture2D(map, guv);
@@ -148,11 +176,25 @@ export class World {
           float camD = length(vW - cameraPosition);
           dd = mix(dd, 1.0, smoothstep(250.0, 1400.0, camD));
           dd *= mix(0.9 + 0.2*d3, 1.0, smoothstep(10.0, 60.0, camD));
+          float nearF = 1.0 - smoothstep(25.0, 180.0, camD);
+          float stv = texture2D(uStraw, vW.xz / 3.7).r;
+          dd *= mix(1.0, 0.7 + 0.62 * stv, nearF);
           vec3 col = gc.rgb * dd;
           vec4 tr = texture2D(uTrample, guv);
           col = mix(col, uMud * (0.8 + 0.35*d1), clamp(tr.r * 1.2, 0.0, 0.8));
           col = mix(col, vec3(0.2, 0.07, 0.05), clamp(tr.g * 0.6, 0.0, 0.32) * (0.6 + 0.4*d3));
-          diffuseColor.rgb *= col;`);
+          col *= 1.0 - cloudShadow(vW);
+          if (uZone.x > 0.5) {
+            float inZ = step(uZone.y, vW.z) * step(vW.z, uZone.z) * step(abs(vW.x), uZone.w);
+            float edge = 1.0 - smoothstep(0.0, 6.0, min(min(abs(vW.z - uZone.y), abs(vW.z - uZone.z)), abs(abs(vW.x) - uZone.w)));
+            col = mix(col, vec3(0.95, 0.78, 0.45), inZ * (0.10 + 0.5 * edge));
+          }
+          diffuseColor.rgb *= col;
+          float bumpK = uBump * (1.0 - smoothstep(60.0, 420.0, camD));
+          float Hh = groundH(vW.xz, nearF) * (1.0 - clamp(tr.r, 0.0, 0.6));
+          vec2 dHdxy = vec2(dFdx(Hh), dFdy(Hh)) * bumpK * 6.0;`)
+        .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
+          normal = bumpN(-vViewPosition, normal, dHdxy, faceDirection);`);
     };
     mat.customProgramCacheKey = () => 'ground';
     this.ground = new THREE.Mesh(g, mat);
@@ -353,7 +395,15 @@ export class World {
     this.scene.add(tm);
   }
 
-  update(dt, time) {
+  // zone de déploiement du joueur visible au sol
+  setZone(side) {
+    const v = this.zone.uZone.value;
+    if (side === 0) v.set(1, -2500, -120, 1650); else if (side === 1) v.set(1, 120, 2500, 1650); else v.set(0, 0, 0, 0);
+  }
+  update(dt, time, gdt, wind, cam, target) {
+    this.uTime.value = time;
+    if (gdt) CLOUD.uCloudOff.value.x += (wind.x * (wind.speed + 3) * gdt) / 5200, CLOUD.uCloudOff.value.y += (wind.z * (wind.speed + 3) * gdt) / 5200;
+    if (this.grass && cam) this.grass.update(cam, target, time, wind);
     if (this.waterMat) {
       this.waterMat.normalMap.offset.set(0, -time * 0.02);
     }
@@ -369,15 +419,35 @@ function treeGeo(kind) {
     g.setAttribute('color', new THREE.BufferAttribute(c, 3));
     parts.push(g.index ? g.toNonIndexed() : g);
   };
-  if (kind === 'olive') {
-    const tr = new THREE.CylinderGeometry(0.22, 0.38, 2.4, 5); tr.translate(0, 1.2, 0); tr.rotateZ(0.12); push(tr, '#6a5a48');
-    for (const [x, y, z, s] of [[0, 3.6, 0, 2.4], [1.3, 3.1, 0.6, 1.7], [-1.1, 3.2, -0.5, 1.8]]) {
-      const c = new THREE.IcosahedronGeometry(s, 0); c.scale(1, 0.7, 1); c.translate(x, y, z); push(c, '#ffffff');
+  const nz = makeNoise2D(kind.length * 7);
+  const blob = (s, det, sx, sy, sz, x, y, z, shade) => {
+    const c = new THREE.IcosahedronGeometry(s, det);
+    const p = c.attributes.position;
+    for (let i = 0; i < p.count; i++) {
+      const a = p.getX(i), b = p.getY(i), d = p.getZ(i);
+      const k = 1 + 0.22 * nz(a * 1.3 + x, d * 1.3 + b + y) + 0.1 * nz(a * 3 + 7, b * 3 + z);
+      p.setXYZ(i, a * k * sx + x, b * k * sy + y, d * k * sz + z);
     }
+    c.computeVertexNormals();
+    const n = p.count, col = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) { const t = Math.max(0, Math.min(1, (p.getY(i) - (y - s * sy)) / (2 * s * sy))); const v = shade * (0.62 + 0.45 * t); col[i * 3] = col[i * 3 + 1] = col[i * 3 + 2] = v; }
+    c.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    parts.push(c.index ? c.toNonIndexed() : c);
+  };
+  if (kind === 'olive') {
+    // tronc noueux et torsadé, branches, feuillage en touffes
+    const tr = new THREE.CylinderGeometry(0.2, 0.42, 1.6, 6); tr.translate(0, 0.8, 0); tr.rotateZ(0.12); push(tr, '#5e5040');
+    const tr2 = new THREE.CylinderGeometry(0.13, 0.22, 1.5, 5); tr2.rotateZ(-0.5); tr2.translate(0.55, 2.0, 0); push(tr2, '#5e5040');
+    const tr3 = new THREE.CylinderGeometry(0.12, 0.2, 1.4, 5); tr3.rotateZ(0.6); tr3.rotateY(1.2); tr3.translate(-0.4, 2.0, 0.3); push(tr3, '#5e5040');
+    for (const [x, y, z, s] of [[0.1, 3.4, 0, 1.9], [1.4, 3.0, 0.5, 1.4], [-1.1, 3.1, -0.4, 1.5], [0.4, 2.8, -1.2, 1.2], [-0.5, 2.7, 1.1, 1.2], [0.2, 4.1, 0.3, 1.1]]) blob(s, 1, 1, 0.66, 1, x, y, z, 1);
   } else if (kind === 'poplar') {
-    const tr = new THREE.CylinderGeometry(0.15, 0.3, 4, 5); tr.translate(0, 2, 0); push(tr, '#5a4a3a');
-    const c = new THREE.IcosahedronGeometry(1.9, 0); c.scale(1, 3.6, 1); c.translate(0, 9, 0); push(c, '#ffffff');
+    const tr = new THREE.CylinderGeometry(0.15, 0.32, 5, 6); tr.translate(0, 2.5, 0); push(tr, '#5a4a3a');
+    blob(1.8, 1, 1, 3.3, 1, 0, 8.6, 0, 1);
+    blob(1.2, 1, 1, 1.8, 1, 0.3, 12.5, 0.2, 1.05);
   } else {
+    blob(1.1, 1, 1.2, 0.72, 1.2, 0, 0.55, 0, 1);
+  }
+  if (false) {
     const c = new THREE.IcosahedronGeometry(1.1, 0); c.scale(1.2, 0.8, 1.2); c.translate(0, 0.6, 0); push(c, '#ffffff');
   }
   // fusion
