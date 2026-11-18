@@ -9,14 +9,19 @@ import { makeNoise2D, smoothstep, clamp } from './noise.js';
 export const HALF = 3000;
 
 export class Terrain {
-  constructor(kind = 'cannae', seed = 7, N = 385) {
+  constructor(kind = 'cannae', seed = 7, N = 385, opts = {}) {
+    // kind : cannae, zama (batailles historiques) ; plain, hills, river, arid (campagne)
     this.kind = kind;
+    this.dry = kind === 'zama' || kind === 'arid';
+    this.lush = opts.lush || 0; // verdure (hiver, collines boisées)
+    this.town = opts.town || null; // ville de la province, au bord du champ
     this.n = makeNoise2D(seed);
     this.m = makeNoise2D(seed * 3 + 1);
     this.N = N;
     this.size = HALF * 2;
     this.cell = this.size / (this.N - 1);
-    this.hasRiver = kind === 'cannae';
+    this.hasRiver = kind === 'cannae' || kind === 'river';
+    this.riverOff = kind === 'river' ? (seed % 2 ? 1 : -1) : -1;
     this.h = new Float32Array(this.N * this.N);
     for (let j = 0; j < this.N; j++) {
       const z = -HALF + j * this.cell;
@@ -29,7 +34,8 @@ export class Terrain {
 
   // Tracé de l'Aufide (Ofanto) : il longe le flanc droit romain, à l'ouest du champ
   riverX(z) {
-    return -1330 + 95 * Math.sin(z / 610 + 0.7) + 42 * Math.sin(z / 233 + 2.1) - 0.00006 * Math.max(0, z - 900) ** 2;
+    const x = -1330 + 95 * Math.sin(z / 610 + 0.7) + 42 * Math.sin(z / 233 + 2.1) - 0.00006 * Math.max(0, z - 900) ** 2;
+    return this.riverOff < 0 ? x : -x;
   }
   riverDist(x, z) {
     if (!this.hasRiver) return 1e9;
@@ -40,7 +46,17 @@ export class Terrain {
 
   raw(x, z) {
     const n = this.n;
-    if (this.kind === 'zama') {
+    if (this.kind === 'hills' || this.kind === 'plain') {
+      // collines d'Italie ou de Gaule, ou plaine ondulée ; le centre reste praticable
+      const hilly = this.kind === 'hills' ? 1 : 0.45;
+      let h = 9 * hilly * n.fbm(x / 1300, z / 1300, 4) + 1.3 * n.fbm(x / 280 + 5, z / 280, 3);
+      const core = 1 - smoothstep(800, 1700, Math.max(Math.abs(x) * 0.85, Math.abs(z)));
+      h *= 1 - 0.55 * core;
+      h += 70 * hilly * smoothstep(1500, 3000, Math.max(Math.abs(x) * 0.9, Math.abs(z))) * (0.35 + 0.65 * this.m.ridge(x / 1700 + 2, z / 1700, 3));
+      h += 28 * hilly * Math.exp(-(((x - 1500 * Math.sign(n.fbm(3, 7, 1) || 1)) / 520) ** 2 + ((z - 300) / 600) ** 2));
+      return h;
+    }
+    if (this.dry) {
       let h = 7 * n.fbm(x / 1700, z / 1700, 4) + 1.2 * n.fbm(x / 260 + 3, z / 260, 3);
       const flat = 1 - 0.55 * (1 - smoothstep(900, 1700, Math.max(Math.abs(x) * 0.9, Math.abs(z))));
       h *= flat;
@@ -57,12 +73,18 @@ export class Terrain {
     let h = 4.2 * n.fbm(x / 1500, z / 1500, 4) + 1.1 * n.fbm(x / 300 + 5, z / 300, 3);
     const core = 1 - smoothstep(700, 1500, Math.max(Math.abs(x) * 0.8, Math.abs(z)));
     h *= 1 - 0.5 * core;
-    h += 7 * smoothstep(1400, 3000, x);
-    h += 44 * Math.exp(-(((x - 900) / 430) ** 2 + ((z - 1950) / 330) ** 2)); // colline de Cannes
-    h += 20 * Math.exp(-(((x - 1600) / 700) ** 2 + ((z - 2450) / 520) ** 2));
+    const ro = -this.riverOff; // côté opposé au fleuve
+    h += 7 * smoothstep(1400, 3000, x * ro);
+    if (this.kind === 'cannae') {
+      h += 44 * Math.exp(-(((x - 900) / 430) ** 2 + ((z - 1950) / 330) ** 2)); // colline de Cannes
+      h += 20 * Math.exp(-(((x - 1600) / 700) ** 2 + ((z - 2450) / 520) ** 2));
+    } else {
+      h += 26 * Math.exp(-(((x * ro - 1300) / 600) ** 2 + ((z + 1700) / 500) ** 2));
+    }
     h += 14 * smoothstep(1600, 2950, z) * (0.6 + 0.4 * n.fbm(x / 700, 3.3));
     h += 11 * smoothstep(-1900, -2950, z) * (0.7 + 0.3 * n.fbm(x / 800, 7.7));
-    h += 7 * smoothstep(-1500, -2900, x);
+    h += 7 * smoothstep(-1500, -2900, x * ro);
+    if (!this.hasRiver) return h;
     const d = this.riverDist(x, z);
     h -= 5.5 * Math.exp(-((d / 170) ** 2));
     h -= 3.4 * (1 - smoothstep(22, 46, d));
@@ -84,7 +106,7 @@ export class Terrain {
     const r = Math.max(Math.abs(x), Math.abs(z));
     const t = smoothstep(HALF, HALF * 4, r);
     const base = this.raw(clamp(x, -HALF, HALF), clamp(z, -HALF, HALF));
-    const hills = 60 * this.m.ridge(x / 5000, z / 5000, 4) * t + 140 * smoothstep(9000, 30000, -x) * (this.kind === 'cannae' ? 1 : 0.4);
+    const hills = 60 * this.m.ridge(x / 5000, z / 5000, 4) * t * (this.kind === 'hills' ? 2 : 1) + 140 * smoothstep(9000, 30000, -x) * (this.kind === 'cannae' ? 1 : 0.4);
     return base * (1 - t) + hills + 8 * t;
   }
 
@@ -107,7 +129,7 @@ export class Terrain {
   // Début août en Apulie : tout est sec et doré, sauf le long de l'eau.
   groundColor(x, z) {
     const n = this.n, m = this.m;
-    const zama = this.kind === 'zama';
+    const zama = this.dry;
     // parcelles agricoles (champs orientés comme un cadastre)
     const a = 0.32, ca = Math.cos(a), sa = Math.sin(a);
     const v = x * sa + z * ca;
@@ -161,6 +183,11 @@ export class Terrain {
       const scrub = smoothstep(0.35, 0.65, m.fbm(x / 120 + 9, z / 120, 3));
       c = mix3(c, [0.42, 0.40, 0.26], scrub * 0.35);
     }
+    // verdure : prairies d'hiver, collines boisées
+    if (this.lush > 0) {
+      const g = this.lush * (0.75 + 0.25 * big) * (0.85 + 0.3 * r2);
+      c = mix3(c, r2 > 0.82 ? [0.42, 0.34, 0.24] : [0.40 + 0.06 * mid, 0.47 + 0.05 * big, 0.26], Math.min(0.85, g));
+    }
     // haut des collines : herbe plus verte, pâturages
     c = mix3(c, zama ? [0.6, 0.52, 0.34] : [0.52, 0.52, 0.32], smoothstep(18, 45, h) * 0.35);
     return c;
@@ -176,7 +203,8 @@ export class Terrain {
       if (rd < 40) return 0;
       d = Math.max(d, (1 - smoothstep(45, 110, rd)) * 0.9 * (core > 900 ? 1 : 0.15));
     }
-    if (this.kind === 'zama') d *= 0.35;
+    if (this.dry) d *= 0.35;
+    if (this.kind === 'hills') d = Math.min(1, d * 1.6 + smoothstep(0.55, 0.8, this.m.fbm(x / 400, z / 400 + 3, 3)) * smoothstep(1100, 1600, core) * 0.5);
     return d;
   }
 }

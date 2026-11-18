@@ -33,7 +33,7 @@ export class World {
     this.lastEnvEl = -99;
     this.uTime = { value: 0 };
     if (!CLOUD.uCloudTex.value) CLOUD.uCloudTex.value = makeCloudTexture(256);
-    CLOUD.uCloudCover.value = scn.id === 'zama' ? 0.52 : 0.6;
+    CLOUD.uCloudCover.value = terrain.dry ? 0.52 : scn.winter ? 0.74 : 0.6;
     this.zone = { uZone: { value: new THREE.Vector4(0, 0, 0, 0) } };
     this.buildTerrain();
     if (terrain.hasRiver) this.buildRiver();
@@ -141,7 +141,7 @@ export class World {
     this.trTex.magFilter = THREE.LinearFilter; this.trTex.minFilter = THREE.LinearFilter;
     this.trTex.needsUpdate = true;
     const mat = new THREE.MeshStandardMaterial({ map: colTex, roughness: 0.95, metalness: 0 });
-    const zama = t.kind === 'zama';
+    const zama = t.dry;
     const straw = makeStrawTexture(this.q.strawTex || 1024, zama);
     mat.onBeforeCompile = (sh) => {
       Object.assign(sh.uniforms, CLOUD, this.zone);
@@ -278,7 +278,7 @@ export class World {
   // ---------------------------------------------------------- végétation
   buildVegetation() {
     const t = this.ter, rnd = mulberry32(42);
-    const zama = t.kind === 'zama';
+    const zama = t.dry;
     const want = this.q.trees;
     const olives = [], poplars = [], bushes = [];
     let tries = 0;
@@ -318,7 +318,7 @@ export class World {
 
   // --------------------------------------------------------- camps, ville
   buildCamps() {
-    const t = this.ter, zama = t.kind === 'zama';
+    const t = this.ter, zama = t.dry;
     const boxes = [], tents = [];
     const camp = (cx, cz, w, d, ang, roman) => {
       const ca = Math.cos(ang), sa = Math.sin(ang);
@@ -349,7 +349,28 @@ export class World {
       const [px, pz] = P(0, 0);
       boxes.push({ x: px, z: pz, y: 2.5, w: 18, h: 5, d: 14, a: ang, c: roman ? '#a8322a' : '#5a2a50' });
     };
-    if (zama) {
+    // ville ou village fortifié : maisons à toits de tuiles, muraille, temple
+    const town = (cx, cz, R, seed, walls = 1, temple = false) => {
+      const rnd = mulberry32(seed);
+      const n = Math.round(R * R / 320);
+      for (let i = 0; i < n; i++) {
+        const a = rnd() * Math.PI * 2, r = Math.sqrt(rnd()) * R * 0.86;
+        const x = cx + Math.cos(a) * r, z = cz + Math.sin(a) * r * 0.75;
+        boxes.push({ x, z, y: 2, w: 6 + rnd() * 8, h: 4 + rnd() * 3, d: 6 + rnd() * 8, a: rnd() * 0.3, c: rnd() < 0.5 ? '#c9b89a' : '#b8a283', roof: true });
+      }
+      const k = Math.round(R / 3.6);
+      for (let i = 0; i < k; i++) {
+        const a = (i / k) * Math.PI * 2;
+        boxes.push({ x: cx + Math.cos(a) * R * 1.16, z: cz + Math.sin(a) * R * 0.9, y: 2.5 + walls, w: 3, h: 5 + walls * 2, d: (R * 2 * Math.PI) / k + 1, a: -a, c: '#b7a98e' });
+        if (walls > 1 && i % 6 === 0) boxes.push({ x: cx + Math.cos(a) * R * 1.16, z: cz + Math.sin(a) * R * 0.9, y: 5 + walls * 2, w: 9, h: 10 + walls * 3, d: 9, a: -a, c: '#ad9f84' });
+      }
+      if (temple) boxes.push({ x: cx, z: cz, y: 6, w: 22, h: 12, d: 36, a: 0.1, c: '#e0d6c2', roof: true });
+    };
+    if (this.scn.camps) {
+      for (const k of this.scn.camps) camp(k.x, k.z, k.w, k.d, k.a, k.roman);
+      const tw = this.scn.town;
+      if (tw) town(tw.x, tw.z, tw.r, tw.seed || 7, tw.walls, tw.temple);
+    } else if (zama) {
       camp(-200, -1900, 560, 520, 0.05, true);
       camp(300, 2100, 600, 480, -0.1, false);
     } else {
@@ -357,16 +378,7 @@ export class World {
       camp(-2080, 300, 380, 360, 0.1, true);
       camp(-650, 1700, 560, 520, -0.12, false);
       // Cannes : village fortifié et grenier sur la colline
-      const rnd = mulberry32(216);
-      for (let i = 0; i < 70; i++) {
-        const a = rnd() * Math.PI * 2, r = Math.sqrt(rnd()) * 150;
-        const x = 900 + Math.cos(a) * r, z = 1950 + Math.sin(a) * r * 0.75;
-        boxes.push({ x, z, y: 2, w: 6 + rnd() * 8, h: 4 + rnd() * 3, d: 6 + rnd() * 8, a: rnd() * 0.3, c: rnd() < 0.5 ? '#c9b89a' : '#b8a283', roof: true });
-      }
-      for (let i = 0; i < 48; i++) {
-        const a = (i / 48) * Math.PI * 2;
-        boxes.push({ x: 900 + Math.cos(a) * 175, z: 1950 + Math.sin(a) * 135, y: 2.5, w: 3, h: 5, d: 24, a: -a, c: '#b7a98e' });
-      }
+      town(900, 1950, 150, 216, 1);
     }
     const bg = new THREE.BoxGeometry(1, 1, 1);
     const bm = new THREE.InstancedMesh(bg, new THREE.MeshStandardMaterial({ roughness: 0.95 }), boxes.length);

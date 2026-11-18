@@ -16,6 +16,8 @@ export class RTSCamera {
     this.onTap = null; this.onDragOrder = null; this.onBox = null;
     this.ray = new THREE.Raycaster();
     this.lock = false;
+    // limites (bataille par défaut ; la carte de campagne les resserre)
+    this.lim = { x0: -6000, x1: 6000, z0: -6000, z1: 6000, dmin: 5, dmax: 5000, pmin: null, pmax: 1.45 };
     const el = dom;
     el.addEventListener('pointerdown', (e) => this.down(e));
     window.addEventListener('pointermove', (e) => this.move(e));
@@ -96,9 +98,9 @@ export class RTSCamera {
     p.x = e.clientX; p.y = e.clientY;
     if (this.mode === 'pinch' && this.pointers.size >= 2) {
       const s = this.pinchState(), s0 = this.pinch0;
-      this.dist = clamp(s0.dist * (s0.d / Math.max(10, s.d)), 5, 5000);
+      this.dist = clamp(s0.dist * (s0.d / Math.max(10, s.d)), this.lim.dmin, this.lim.dmax);
       this.yaw = s0.yaw - (s.ang - s0.ang);
-      this.pitch = clamp(s0.pitch + (s.my - s0.my) * 0.004, this.minPitch(), 1.45);
+      this.pitch = clamp(s0.pitch + (s.my - s0.my) * 0.004, this.minPitch(), this.lim.pmax);
       return;
     }
     const moved = Math.hypot(p.x - p.sx, p.y - p.sy);
@@ -122,7 +124,7 @@ export class RTSCamera {
       }
     } else if (this.mode === 'rotate' || this.mode === 'look') {
       this.yaw -= (p.x - px) * 0.005;
-      this.pitch = clamp(this.pitch + (p.y - py) * 0.004, this.rank ? -0.6 : this.minPitch(), this.rank ? 0.8 : 1.45);
+      this.pitch = clamp(this.pitch + (p.y - py) * 0.004, this.rank ? -0.6 : this.minPitch(), this.rank ? 0.8 : this.lim.pmax);
       if (this.rank) { this.cur.yaw = this.yaw; this.cur.pitch = this.pitch; }
     } else if (this.mode === 'order' && this.onDragOrder) {
       const g = this.ground(p.x, p.y);
@@ -153,7 +155,7 @@ export class RTSCamera {
     this.orbit = 0;
     if (this.rank) { this.exitRank(); return; }
     const k = Math.exp(clamp(e.deltaY, -200, 200) * 0.0016);
-    const nd = clamp(this.dist * k, 5, 5000);
+    const nd = clamp(this.dist * k, this.lim.dmin, this.lim.dmax);
     // zoom vers le point visé
     const g = this.ground(e.clientX, e.clientY);
     if (g && k < 1) {
@@ -163,7 +165,7 @@ export class RTSCamera {
     this.dist = nd;
     this.follow = null;
   }
-  minPitch() { return this.dist < 60 ? 0.03 : this.dist < 300 ? 0.12 : 0.22; }
+  minPitch() { if (this.lim.pmin !== null) return this.lim.pmin; return this.dist < 60 ? 0.03 : this.dist < 300 ? 0.12 : 0.22; }
 
   enterRank(getPose) { this.rank = getPose; this.yaw = 0; this.pitch = 0; this.cur.yaw = 0; this.cur.pitch = 0; }
   exitRank() {
@@ -186,6 +188,16 @@ export class RTSCamera {
   }
 
   update(dt) {
+    // appui long au doigt avec des unités choisies : tracer une ligne de bataille
+    if (this.mode === 'pending' && this.ptype !== 'mouse' && this.pointers.size === 1 && this.canHoldOrder) {
+      const p = [...this.pointers.values()][0];
+      if (performance.now() - p.t > 380 && Math.hypot(p.x - p.sx, p.y - p.sy) < 8 && this.canHoldOrder(p.sx, p.sy)) {
+        this.mode = 'order';
+        this.orderStart = this.ground(p.sx, p.sy);
+        if (navigator.vibrate) try { navigator.vibrate(12); } catch (e) { /* refusé */ }
+        if (this.onHoldStart) this.onHoldStart(p.sx, p.sy);
+      }
+    }
     if (this.rank) {
       const p = this.rank();
       if (!p) { this.rank = null; return; }
@@ -211,10 +223,10 @@ export class RTSCamera {
       }
       if (K.has('KeyQ')) this.yaw += dt * 1.2;
       if (K.has('KeyE')) this.yaw -= dt * 1.2;
-      if (K.has('KeyR')) this.pitch = clamp(this.pitch + dt * 0.8, this.minPitch(), 1.45);
-      if (K.has('KeyF')) this.pitch = clamp(this.pitch - dt * 0.8, this.minPitch(), 1.45);
-      if (K.has('Equal') || K.has('NumpadAdd')) this.dist = clamp(this.dist * (1 - dt * 1.5), 5, 5000);
-      if (K.has('Minus') || K.has('NumpadSubtract')) this.dist = clamp(this.dist * (1 + dt * 1.5), 5, 5000);
+      if (K.has('KeyR')) this.pitch = clamp(this.pitch + dt * 0.8, this.minPitch(), this.lim.pmax);
+      if (K.has('KeyF')) this.pitch = clamp(this.pitch - dt * 0.8, this.minPitch(), this.lim.pmax);
+      if (K.has('Equal') || K.has('NumpadAdd')) this.dist = clamp(this.dist * (1 - dt * 1.5), this.lim.dmin, this.lim.dmax);
+      if (K.has('Minus') || K.has('NumpadSubtract')) this.dist = clamp(this.dist * (1 + dt * 1.5), this.lim.dmin, this.lim.dmax);
     }
     if (this.orbit) this.yaw += this.orbit * dt;
     if (this.follow) {
@@ -222,8 +234,8 @@ export class RTSCamera {
       if (!u.alive) this.follow = null;
       else { this.target.x += (u.x - this.target.x) * Math.min(1, dt * 3); this.target.z += (u.z - this.target.z) * Math.min(1, dt * 3); }
     }
-    this.target.x = clamp(this.target.x, -6000, 6000); this.target.z = clamp(this.target.z, -6000, 6000);
-    this.pitch = clamp(this.pitch, this.minPitch(), 1.45);
+    this.target.x = clamp(this.target.x, this.lim.x0, this.lim.x1); this.target.z = clamp(this.target.z, this.lim.z0, this.lim.z1);
+    this.pitch = clamp(this.pitch, this.minPitch(), this.lim.pmax);
     const c = this.cur, k = 1 - Math.exp(-dt * 9);
     c.x += (this.target.x - c.x) * k; c.z += (this.target.z - c.z) * k;
     c.dist += (this.dist - c.dist) * k; c.pitch += (this.pitch - c.pitch) * k;

@@ -4,6 +4,8 @@ import { SCENARIOS, TYPES } from './data.js';
 import { ST, FRONT } from './sim.js';
 import { HALF } from './terrain.js';
 import { STRATEGIES, advise } from './plans.js';
+import { FACTIONS } from './campaign.js';
+import { loadSave } from './campui.js';
 
 const $ = (id) => document.getElementById(id);
 const nf = new Intl.NumberFormat('fr-FR');
@@ -35,8 +37,9 @@ const ICON = {
   rally: '<path d="M6 21V4M6 4h11l-3 4 3 4H6"/>',
   horns: '<path d="M3 10c6 0 10-4 18-6v16c-8-2-12-6-18-6z"/>',
   release: '<path d="M4 12h12M12 6l6 6-6 6"/>',
+  multi: '<rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><path d="M14 17h6M17 14v6"/>',
 };
-const TI = {
+export const TI = {
   legion: '<path d="M6 14a6 6 0 0 1 12 0v2H6z"/><path d="M12 8V3M9.5 4.5L12 3l2.5 1.5"/><path d="M8 16l-1 4M16 16l1 4"/>',
   spear: '<path d="M12 2l2.2 5h-4.4zM12 7v15"/><path d="M6.5 15a5.5 5.5 0 0 1 11 0"/>',
   javelin: '<path d="M4 20L18 6M18 6l-1 4M18 6l-4 1"/><circle cx="8" cy="9" r="3.5"/>',
@@ -48,7 +51,7 @@ const TI = {
   round: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/>',
   ele: '<path d="M4 15c0-6 4-9 9-9 4 0 7 3 7 7v6h-3v-4h-2v4h-3v-4H9c0 3-1 5-3 5"/><path d="M6 15c-2 1-2 4 0 5"/>',
 };
-const ARCH_ICON = { hastatus: 'legion', princeps: 'legion', triarius: 'spear', veles: 'javelin', gaul: 'oval', iber: 'sword', libyan: 'legion', veteran: 'legion', ligur: 'oval', slinger: 'sling', lonch: 'javelin', carthcit: 'round', eques: 'horse', eques_socii: 'horse', ibercav: 'horse', numid: 'horse', carthcav: 'horse', gen_rom: 'gen', gen_carth: 'gen', elephant: 'ele' };
+export const ARCH_ICON = { hastatus: 'legion', princeps: 'legion', triarius: 'spear', veles: 'javelin', gaul: 'oval', iber: 'sword', libyan: 'legion', veteran: 'legion', ligur: 'oval', slinger: 'sling', lonch: 'javelin', carthcit: 'round', eques: 'horse', eques_socii: 'horse', ibercav: 'horse', numid: 'horse', carthcav: 'horse', gen_rom: 'gen', gen_carth: 'gen', elephant: 'ele' };
 const tsvg = (u) => `<svg viewBox="0 0 24 24" aria-hidden="true">${TI[ARCH_ICON[u.T.arch]] || TI.legion}</svg>`;
 const FORM = { normal: '', orbis: 'Orbis', cuneus: 'Coin', wall: 'Mur de lances', loose: 'Ordre lâche', tight: 'Ordre serré' };
 const svg = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[k]}</svg>`;
@@ -81,6 +84,34 @@ export class UI {
 
   // ---------------------------------------------------------------- menu
   buildMenu() {
+    const app = this.app;
+    this.mode = this.mode || 'camp';
+    for (const b of document.querySelectorAll('#menu .mode')) {
+      b.classList.toggle('on', b.dataset.m === this.mode);
+      b.setAttribute('aria-selected', b.dataset.m === this.mode);
+      b.onclick = () => { this.mode = b.dataset.m; this.buildMenu(); if (this.mode === 'hist' && app.state === 'menu') app.preview(this.cfg.scn); };
+    }
+    const camp = this.mode === 'camp';
+    $('campMenu').hidden = !camp; $('histMenu').hidden = camp; $('histGo').hidden = camp; $('sideOpt').hidden = camp;
+    // ---- campagne
+    this.cfg.fac = this.cfg.fac ?? 0;
+    const FD = [
+      { ds: "Tiens l'Italie face au plus grand général de l'Antiquité. Tes légions se relèvent de chaque défaite ; ta flotte domine la mer. Porte ensuite la guerre en Hispanie et en Afrique.", gen: 'Scipion, Fabius, Marcellus' },
+      { ds: "Pars de Carthagène, franchis les Pyrénées et les Alpes, soulève les Gaulois et brise la confédération italienne avant que Rome ne lève de nouvelles légions.", gen: 'Hannibal, Hasdrubal, Magon' },
+    ];
+    $('facs').innerHTML = [0, 1].map((s) => `<button class="fac${this.cfg.fac === s ? ' on' : ''}" data-s="${s}" style="--fc:${FACTIONS[s].color}"><span class="emb"></span><b>${FACTIONS[s].name}</b><span class="ds">${FD[s].ds}</span><span class="gen">${FD[s].gen}</span></button>`).join('');
+    for (const b of $('facs').querySelectorAll('.fac')) b.onclick = () => { this.cfg.fac = +b.dataset.s; this.buildMenu(); };
+    const save = loadSave();
+    const cont = $('campCont');
+    cont.hidden = !save || app.camp && app.state === 'campaign';
+    if (save) cont.textContent = `Continuer : ${FACTIONS[save.player].name}, ${save.turn % 2 ? 'hiver' : 'été'} ${218 - Math.floor(save.turn / 2)}`;
+    cont.onclick = () => app.continueCampaign();
+    $('campNew').onclick = () => app.newCampaign(this.cfg.fac);
+    const res = $('campResume');
+    res.hidden = !(app.camp && (app.state === 'campaign' || app.campBattle));
+    res.textContent = app.campBattle ? 'Reprendre la bataille' : 'Reprendre la campagne';
+    res.onclick = () => { $('menu').hidden = true; if (app.campBattle) app.resume(); };
+    // ---- batailles historiques
     const box = $('scns');
     box.innerHTML = '';
     for (const id of ['cannae', 'zama']) {
@@ -91,8 +122,8 @@ export class UI {
       b.className = 'scn' + (id === this.cfg.scn ? ' on' : '');
       b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', id === this.cfg.scn);
       b.dataset.id = id;
-      b.innerHTML = `<span class="nm">${s.name}</span><span class="dt">${s.date}</span><span class="ds">${s.place}. ${id === 'cannae' ? "Hannibal enveloppe une armée presque deux fois plus nombreuse que la sienne." : "Scipion affronte Hannibal et ses éléphants aux portes de Carthage."}</span><span class="vs"><span style="color:var(--rome)">Rome ${fmt(r)}</span><span style="color:var(--carthage)">Carthage ${fmt(c)}${id === 'zama' ? ' et 80 éléphants' : ''}</span></span>`;
-      b.onclick = () => { this.cfg.scn = id; this.buildMenu(); this.app.preview(id); };
+      b.innerHTML = `<span class="nm">${s.name}</span><span class="dt">${s.date}</span><span class="ds">${s.place}. ${id === 'cannae' ? "Hannibal enveloppe une armée presque deux fois plus nombreuse que la sienne." : "Scipion affronte Hannibal et ses éléphants aux portes de Carthage."}</span><span class="vs"><span style="color:#d4554a">Rome ${fmt(r)}</span><span style="color:#a874c4">Carthage ${fmt(c)}${id === 'zama' ? ' et 80 éléphants' : ''}</span></span>`;
+      b.onclick = () => { this.cfg.scn = id; this.buildMenu(); if (app.state === 'menu') app.preview(id); };
       box.appendChild(b);
     }
     const seg = (id, key, conv) => {
@@ -105,21 +136,20 @@ export class UI {
     seg('sideSeg', 'side', Number); seg('scaleSeg', 'scale', Number); seg('qualSeg', 'quality', String);
     const s = SCENARIOS[this.cfg.scn];
     const total = s.units().reduce((a, u) => a + u.men, 0);
-    $('scaleNote').textContent = this.cfg.scale === 1 ? `Chaque homme est représenté : ${fmt(total)} soldats. Pour un ordinateur puissant.` : `Une figurine pour ${this.cfg.scale} hommes : environ ${fmt(total / this.cfg.scale)} figurines.`;
+    $('scaleNote').textContent = camp ? `Batailles de campagne : une figurine pour ${this.cfg.scale} homme${this.cfg.scale > 1 ? 's' : ''}.` : this.cfg.scale === 1 ? `Chaque homme est représenté : ${fmt(total)} soldats. Pour un ordinateur puissant.` : `Une figurine pour ${this.cfg.scale} hommes : environ ${fmt(total / this.cfg.scale)} figurines.`;
     $('qualNote').textContent = { low: 'Pour téléphones et petits ordinateurs.', medium: 'Herbes 3D près de la caméra, nuages et rendu cinéma.', high: 'Relief deux fois plus fin, anticrénelage, halo, 90 000 touffes d\'herbe.', ultra: 'Rendu interne en 4K, 180 000 touffes d\'herbe, détail des soldats jusqu\'à 260 m. Carte graphique puissante conseillée.' }[this.cfg.quality];
     $('sideNote').textContent = this.cfg.side === 2 ? "L'ordinateur suit le plan historique des deux généraux." : `Tu commandes ${s.commanders[this.cfg.side]}. L'adversaire suit le plan historique.`;
     $('brief').innerHTML = `<b>${s.name}, ${s.date}.</b> ${s.brief[this.cfg.side]}`;
-    $('startBtn').onclick = () => this.app.start({ ...this.cfg });
-  }
-  showMenu(running) {
-    $('menu').hidden = false;
+    $('startBtn').onclick = () => app.start({ ...this.cfg });
+    const running = app.state === 'battle' && app.battle && !app.campBattle;
     $('startBtn').textContent = running ? 'Recommencer' : 'Prendre le commandement';
-    let r = $('resumeBtn');
-    if (running && !r) {
-      r = document.createElement('button'); r.id = 'resumeBtn'; r.className = 'ghost'; r.textContent = 'Reprendre la bataille';
-      $('startBtn').after(r);
-    }
-    if (r) { r.hidden = !running; r.onclick = () => { $('menu').hidden = true; this.app.resume(); }; }
+    let rb = $('resumeBtn');
+    if (running && !rb) { rb = document.createElement('button'); rb.id = 'resumeBtn'; rb.className = 'ghost'; rb.textContent = 'Reprendre la bataille'; $('startBtn').after(rb); }
+    if (rb) { rb.hidden = !running; rb.onclick = () => { $('menu').hidden = true; app.resume(); }; }
+  }
+  showMenu() {
+    $('menu').hidden = false;
+    this.buildMenu();
   }
 
   // ------------------------------------------------------------ HUD
@@ -137,7 +167,8 @@ export class UI {
     };
     $('helpBtn').onclick = () => { $('helpM').hidden = false; };
     for (const b of document.querySelectorAll('[data-close]')) b.onclick = () => { b.closest('.modal').hidden = true; };
-    $('menuBtn').onclick = () => { this.app.setSpeed(0); this.showMenu(true); };
+    $('menuBtn').onclick = () => { this.app.setSpeed(0); if (this.app.campBattle) this.fieldMenu(); else this.showMenu(true); };
+    this.multi = false;
     this.adviceOn = true;
     $('advBtn').onclick = () => { this.adviceOn = !this.adviceOn; $('advBtn').classList.toggle('off', !this.adviceOn); this.adv.keys = ''; this.updateAdvice(); this.toast(this.adviceOn ? 'Conseiller activé.' : 'Conseiller désactivé.'); };
     $('mapBtn').onclick = (e) => { e.stopPropagation(); this.miniBig = !this.miniBig; $('mini').classList.toggle('big', this.miniBig); this.drawMini(); };
@@ -179,6 +210,12 @@ export class UI {
     this.labels.clear();
     $('feed').innerHTML = '';
     $('top').hidden = false; $('bottom').hidden = false; $('mini').hidden = false;
+    const cols = b.scn.sideColors || ['#c0392b', '#8e4fa6'];
+    document.documentElement.style.setProperty('--rome', cols[0]);
+    document.documentElement.style.setProperty('--carthage', cols[1]);
+    const nb = document.querySelectorAll('#forces b');
+    nb[0].textContent = b.scn.sideNames[0]; nb[1].textContent = b.scn.sideNames[1];
+    this.multi = false;
     this.buildCards();
     this.miniBg = null;
     this.adv = { cd: {}, shown: [], last: 0 };
@@ -198,7 +235,7 @@ export class UI {
       <div class="ph"><b>${name}</b>${tag ? `<span class="tag">${tag}</span>` : ''}</div>
       <p>${desc}</p>
       ${pros.length ? `<ul>${pros.map((x) => `<li class="pro">${x}</li>`).join('')}${cons.map((x) => `<li class="con">${x}</li>`).join('')}</ul>` : ''}
-      <button class="${id === cur ? 'ghost' : 'primary'} sm" data-apply="${id}">${id === cur ? 'Plan choisi' : 'Appliquer ce plan'}</button></div>`;
+      <button class="${id === cur ? 'ghost' : 'primary'} sm" data-apply="${id}">${id === cur ? 'Plan choisi' : 'Appliquer'}</button></div>`;
     el.innerHTML = list.map((p) => card(p.id, p.name, p.tag, p.desc, p.pros, p.cons)).join('')
       + card('free', 'Commandement libre', '', "Déploiement historique, aucun plan : chaque unité attend tes ordres.", [], []);
     for (const btn of el.querySelectorAll('[data-apply]')) btn.onclick = () => {
@@ -237,7 +274,7 @@ export class UI {
     this.groupDefs = [];
     el.hidden = side > 1;
     if (side > 1) return;
-    for (const [rs, label] of GROUPS[b.scn.id][side]) {
+    for (const [rs, label] of (b.scn.groups || GROUPS[b.scn.id])[side]) {
       const us = b.units.filter((u) => u.side === side && rs.includes(u.role));
       if (!us.length) continue;
       const sec = document.createElement('div'); sec.className = 'sec';
@@ -257,8 +294,9 @@ export class UI {
         c.title = u.name;
         c.innerHTML = `${tsvg(u)}<span class="n num"></span><i class="hp"><b></b></i><i class="mo"><b></b></i><span class="fl"></span>`;
         c.onclick = (ev) => {
-          if (!ev.shiftKey && !ev.ctrlKey) this.sel.clear();
-          if (this.sel.has(u) && (ev.shiftKey || ev.ctrlKey)) this.sel.delete(u); else if (u.alive) this.sel.add(u);
+          const add = ev.shiftKey || ev.ctrlKey || this.multi;
+          if (!add) this.sel.clear();
+          if (this.sel.has(u) && add) this.sel.delete(u); else if (u.alive) this.sel.add(u);
           this.inspect = null;
           if (c.dataset.last && performance.now() - c.dataset.last < 450) this.focus([u]);
           c.dataset.last = performance.now();
@@ -338,7 +376,7 @@ export class UI {
     }
     if (u && this.mine(u)) {
       this.inspect = null;
-      if (o.shift || o.ctrl) { if (this.sel.has(u)) this.sel.delete(u); else this.sel.add(u); }
+      if (o.shift || o.ctrl || this.multi) { if (this.sel.has(u)) this.sel.delete(u); else this.sel.add(u); }
       else if (this.sel.size === 1 && this.sel.has(u) && o.touch) { /* déjà choisie */ }
       else { this.sel.clear(); this.sel.add(u); }
       this.updateCard();
@@ -440,6 +478,7 @@ export class UI {
     if (!units.length) return;
     const dep = app.deploying;
     const b = app.battle;
+    if (kind === 'multi') { this.multi = !this.multi; this.toast(this.multi ? 'Sélection multiple : touche les unités à ajouter ou retirer.' : 'Sélection simple.'); this.updateCard(); return; }
     const passive = ['follow', 'rank', 'release', 'pila', 'harangue', 'rally', 'horns', 'fire', 'skirm'];
     if (!dep && !passive.includes(kind)) for (const u of units) u.manual = true;
     const form = (u, f) => { const ok = u.setForm(u.form === f ? 'normal' : f); if (ok && dep) app.place(u, u.x, u.z, u.th); return ok; };
@@ -534,7 +573,8 @@ export class UI {
     if (!dep && this.app.strategy && units.some((u) => u.manual)) B.push(['release', 'Rendre au plan']);
     B.push(['follow', 'Suivre']);
     if (units.length === 1 && !dep) B.push(['rank', 'Dans le rang']);
-    ord.innerHTML = B.map(([k, l, kb, on]) => `<button class="ord${on ? ' on' : ''}" data-o="${k}">${svg(k)}${l}${kb ? ` <kbd>${kb}</kbd>` : ''}</button>`).join('');
+    if (this.app.touch) B.unshift(['multi', this.multi ? 'Plusieurs : oui' : 'Plusieurs', '', this.multi]);
+    ord.innerHTML = B.map(([k, l, kb, on]) => `<button class="ord${on ? ' on' : ''}" data-o="${k}" title="${l}" aria-label="${l}">${svg(k)}<span class="l">${l}</span>${kb ? ` <kbd>${kb}</kbd>` : ''}</button>`).join('');
     for (const b of ord.querySelectorAll('button')) b.onclick = () => this.order(b.dataset.o);
   }
   renderCard() {
@@ -545,18 +585,18 @@ export class UI {
     if (u) {
       const T = u.T, mor = u.morale, fat = u.fatigue;
       const stCol = u.routing ? 'var(--bad)' : u.nSides >= 2 || u.eS[2] > 0 ? 'var(--warn)' : u.engaged ? 'var(--bronze)' : 'var(--ink)';
-      const m = (lab, v, col, txt) => `<div class="meter"><span>${lab}</span><span class="g"><i style="width:${Math.max(0, Math.min(100, v))}%;background:${col}"></i></span><span>${txt}</span></div>`;
+      const m = (lab, v, col, txt, cls = '') => `<div class="meter ${cls}"><span>${lab}</span><span class="g"><i style="width:${Math.max(0, Math.min(100, v))}%;background:${col}"></i></span><span>${txt}</span></div>`;
       const morCol = mor > 50 ? 'var(--ok)' : mor > 25 ? 'var(--warn)' : 'var(--bad)';
       let ammo = '';
       if (T.pila) ammo = `Pila : ${u.pila} volée${u.pila > 1 ? 's' : ''}`;
       if (T.missile) ammo = `${T.missile.kind === 'sling' ? 'Balles' : 'Javelots'} : ${Math.max(0, u.ammo).toFixed(1).replace('.', ',')} par homme`;
       const gen = u.gen ? `<div class="sub">${u.gen.name}${u.genState === 1 ? ' · blessé' : u.genState === 2 ? ' · tombé' : ''} · rayon d'autorité ${u.gen.aura} m</div>` : '';
-      card.innerHTML = `${close}<h3>${u.name}</h3><div class="sub">${T.name} · ${u.side === 0 ? 'Rome' : 'Carthage'}${this.mine(u) ? '' : ' (ennemi)'}</div>${gen}
+      card.innerHTML = `${close}<h3>${u.name}</h3><div class="sub">${T.name} · ${this.app.battle.scn.sideNames[u.side]}${this.mine(u) ? '' : ' (ennemi)'}${u.def.xp ? ' · vétérans ' + '›'.repeat(u.def.xp) : ''}</div>${gen}
         <div class="st" style="color:${stCol}">${u.statusText()}</div>
         ${m('Effectif', (u.men / u.men0) * 100, 'var(--ink)', `<span class="num">${fmt(u.men)}</span>`)}
         ${m('Moral', mor, morCol, u.moraleText())}
-        ${m('Fatigue', fat, fat > 60 ? 'var(--bad)' : 'var(--warn)', u.fatigueText())}
-        ${m('Cohésion', u.coh * 100, 'var(--bronze)', `<span class="num">${Math.round(u.coh * 100)} %</span>`)}
+        ${m('Fatigue', fat, fat > 60 ? 'var(--bad)' : 'var(--warn)', u.fatigueText(), 'mx')}
+        ${m('Cohésion', u.coh * 100, 'var(--bronze)', `<span class="num">${Math.round(u.coh * 100)} %</span>`, 'mx')}
         <div class="sub" style="margin:4px 0 0">${u.form !== 'normal' ? FORM[u.form] + ' · ' : ''}${Math.round(u.files)} hommes de front sur ${Math.max(1, Math.round(u.ranks))} rangs${ammo ? ' · ' + ammo : ''}</div>
         ${this.mine(u) && this.app.strategy ? `<div class="sub" style="margin:2px 0 0;color:${u.manual ? 'var(--bronze)' : 'var(--muted)'}">${u.manual ? 'Sous tes ordres directs' : 'Suit le plan : ' + this.app.strategy.name}</div>` : ''}
         <details><summary>Qui sont-ils ?</summary><p>${T.desc}</p></details>`;
@@ -605,6 +645,7 @@ export class UI {
   // ------------------------------------------------------------ bilan
   showEnd(w) {
     const b = this.app.battle, p = this.app.player, scn = b.scn;
+    if (scn.field) { this.fieldEnd(w); return; }
     const rows = [0, 1].map((s) => {
       let pris = 0, fuite = b.sides[s].fled, ordre = 0;
       for (const u of b.units) {
@@ -629,6 +670,56 @@ export class UI {
     $('endWatch').onclick = () => { $('endM').hidden = true; };
     $('endAgain').onclick = () => { $('endM').hidden = true; this.app.start({ ...this.app.cfg }); };
     $('endMenu').onclick = () => { $('endM').hidden = true; this.showMenu(false); };
+  }
+
+  // bilan d'une bataille de campagne
+  lossRows() {
+    const b = this.app.battle;
+    return [0, 1].map((s) => {
+      let pris = 0, fuite = b.sides[s].fled, ordre = 0;
+      for (const u of b.units) {
+        if (u.side !== s || u.state === ST.DEAD || u.state === ST.FLED) continue;
+        if (u.routing) { if (u.trapped || u.nSides >= 2) pris += u.men; else fuite += u.men; }
+        else ordre += u.men;
+      }
+      return { s, men0: b.sides[s].men0, killed: b.sides[s].killed, fuite, pris, ordre };
+    });
+  }
+  fieldEnd(w) {
+    const b = this.app.battle, p = this.app.player, scn = b.scn;
+    const mins = Math.round(b.t / 60);
+    const won = w === p;
+    $('endBox').innerHTML = `<div class="cap" style="color:var(--bronze);font-size:12px">${scn.name} · ${scn.date} · ${Math.floor(mins / 60)} h ${String(mins % 60).padStart(2, '0')} de combat</div>
+      <h2>${won ? 'Victoire' : 'Défaite'}</h2>
+      <p>${won ? "L'ennemi est rompu. Ta cavalerie poursuit les fuyards tant qu'il fait jour." : "Ton armée est rompue. Les survivants se replient vers la province voisine."}</p>
+      ${this.lossTable(scn)}
+      <div class="row2"><button class="primary" id="endCamp">Retour à la carte</button><button class="ghost" id="endWatch">Regarder la poursuite</button></div>`;
+    $('endM').hidden = false;
+    $('endCamp').onclick = () => { $('endM').hidden = true; this.app.endField(false); };
+    $('endWatch').onclick = () => { $('endM').hidden = true; this.toast('Le menu (en haut à droite) ramène à la carte.'); };
+  }
+  lossTable(scn) {
+    const rows = this.lossRows();
+    return `<table class="tbl"><thead><tr><th></th><th>Engagés</th><th>Tués</th><th>Encerclés</th><th>En fuite</th><th>En ordre</th></tr></thead><tbody>
+      ${rows.map((r) => `<tr><td style="font-family:var(--font-display);color:${r.s ? 'var(--carthage)' : 'var(--rome)'}">${scn.sideNames[r.s]}</td><td>${fmt(r.men0)}</td><td>${fmt(r.killed)}</td><td>${fmt(r.pris)}</td><td>${fmt(r.fuite)}</td><td>${fmt(r.ordre)}</td></tr>`).join('')}
+      </tbody></table>`;
+  }
+  // menu pendant une bataille de campagne
+  fieldMenu() {
+    const app = this.app, b = app.battle, scn = b.scn;
+    $('endBox').innerHTML = `<div class="cap" style="color:var(--bronze);font-size:12px">${scn.name} · ${scn.date}</div><h2>${b.over ? 'La bataille est jouée' : 'Bataille en cours'}</h2>
+      ${this.lossTable(scn)}
+      <div class="row2">${b.over ? '<button class="primary" data-f="map">Retour à la carte</button>' : `<button class="primary" data-f="resume">Reprendre</button><button class="ghost" data-f="auto">Laisser les officiers finir</button><button class="ghost" data-f="retreat">Sonner la retraite</button>`}<button class="ghost" data-f="menu">Menu principal</button></div>`;
+    $('endM').hidden = false;
+    for (const btn of $('endBox').querySelectorAll('[data-f]')) btn.onclick = () => {
+      const f = btn.dataset.f;
+      $('endM').hidden = true;
+      if (f === 'resume') app.resume();
+      if (f === 'map') app.endField(false);
+      if (f === 'auto') app.autoFinish();
+      if (f === 'retreat') app.endField(true);
+      if (f === 'menu') this.showMenu();
+    };
   }
 
   // ------------------------------------------------- boucle d'affichage
@@ -715,7 +806,7 @@ export class UI {
       ctx.translate(toPx(u.x), toPx(u.z));
       ctx.rotate(-u.th);
       const w = Math.max(3, (u.w / span / 2) * S), d = Math.max(2, (u.d / span / 2) * S);
-      ctx.fillStyle = u.routing ? 'rgba(200,200,200,0.55)' : u.side === 0 ? '#d0453a' : '#a066c0';
+      ctx.fillStyle = u.routing ? 'rgba(200,200,200,0.55)' : (b.scn.sideColors ? b.scn.sideColors[u.side] : u.side === 0 ? '#d0453a' : '#a066c0');
       if (this.sel.has(u)) { ctx.strokeStyle = '#f0d9a0'; ctx.lineWidth = 3; ctx.strokeRect(-w / 2 - 1, -d / 2 - 1, w + 2, d + 2); }
       ctx.fillRect(-w / 2, -d / 2, w, d);
       ctx.restore();

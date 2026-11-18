@@ -183,6 +183,41 @@ export const STRATEGIES = {
     ],
   },
 };
+// Batailles de campagne : plans valables pour toute armée (rôles génériques)
+const FIELD_ROLES = (o) => Object.assign({
+  light: 'screen', ele: 'ele',
+  hastati: { d: 'line', advance: true, delay: 25 }, principes: { d: 'support' }, triarii: { d: 'reserve', radius: 300 },
+  line1: { d: 'line', advance: true, delay: 25 }, line2: { d: 'support', leader: 'line1', gap: 40 },
+  cavL: 'cavStrike', cavR: 'cavStrike',
+}, o);
+const FIELD = [
+  {
+    id: 'attack', name: 'Assaut général', tag: 'Offensif',
+    desc: "Toute la ligne marche à l'ennemi derrière l'écran des tirailleurs ; la cavalerie charge celle d'en face puis revient sur les flancs.",
+    pros: ['Profite du nombre et de l\'élan', 'Simple à suivre'], cons: ['Les réserves s\'usent vite'],
+    ai: 'doc:attack', roles: FIELD_ROLES({}), deploy: (us) => keep(us, () => null),
+  },
+  {
+    id: 'hammer', name: 'Marteau et enclume', tag: 'Classique',
+    desc: "L'infanterie tient sur place comme une enclume ; la cavalerie balaie les cavaliers ennemis puis frappe l'infanterie dans le dos.",
+    pros: ['Décisif si ta cavalerie est la meilleure'], cons: ['Long si la cavalerie ennemie résiste'],
+    ai: 'doc:hammer', roles: FIELD_ROLES({ hastati: { d: 'line', advance: false }, line1: { d: 'line', advance: false } }), deploy: (us) => keep(us, () => null),
+  },
+  {
+    id: 'defend', name: 'Tenir la position', tag: 'Défensif',
+    desc: "Personne ne bouge : l'ennemi doit venir s'user sur ta ligne. Les réserves bouchent les brèches, la cavalerie protège les flancs et ne s'élance qu'après cinq minutes.",
+    pros: ['Le relief et le temps jouent pour toi', 'Flancs couverts'], cons: ['L\'initiative est à l\'ennemi'],
+    ai: 'doc:defend', roles: FIELD_ROLES({ hastati: { d: 'line', advance: false }, line1: { d: 'line', advance: false }, line2: { d: 'reserve', radius: 260 }, cavL: { d: 'cavGuard', release: 300 }, cavR: { d: 'cavGuard', release: 300 } }), deploy: (us) => keep(us, () => null),
+  },
+  {
+    id: 'skirmish', name: 'Harceler puis frapper', tag: 'Rusé',
+    desc: "Les tirailleurs et la cavalerie légère usent l'ennemi à distance pendant quatre minutes ; la ligne ne s'avance qu'ensuite, contre un adversaire fatigué.",
+    pros: ['Use le moral ennemi sans pertes'], cons: ['Peu efficace sans troupes de jet'],
+    ai: 'doc:skirmish', roles: FIELD_ROLES({ hastati: { d: 'line', advance: true, delay: 240 }, line1: { d: 'line', advance: true, delay: 240 }, cavL: { d: 'cavGuard', release: 240 }, cavR: 'cavHarass' }), deploy: (us) => keep(us, () => null),
+  },
+];
+STRATEGIES.field = { 0: FIELD, 1: FIELD };
+
 export function strategyById(scn, id) {
   for (const s of [0, 1]) for (const p of STRATEGIES[scn][s]) if (p.id === id) return p;
   return null;

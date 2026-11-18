@@ -585,6 +585,6 @@ const PLANS = {
 };
 
 export function makeCommanders(b, scnId, playerSide) {
-  const plans = scnId === 'cannae' ? ['varro_cannae', 'hannibal_cannae'] : ['scipio_zama', 'hannibal_zama'];
+  const plans = scnId === 'cannae' ? ['varro_cannae', 'hannibal_cannae'] : scnId === 'zama' ? ['scipio_zama', 'hannibal_zama'] : [0, 1].map((s) => 'doc:' + b.scn.aiPlan[s]);
   return [0, 1].map((s) => new Commander(b, s, s === playerSide ? null : plans[s], s === playerSide));
 }

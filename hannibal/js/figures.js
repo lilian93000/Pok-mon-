@@ -262,7 +262,7 @@ export class Figures {
     this.nearDist = opts.nearDist || 140;
     this.nearCap = opts.nearCap || 6000;
     this.shadows = opts.shadows !== false;
-    this.uniforms = { uTime: { value: 0 }, uDust: { value: new THREE.Color(battle.scn.terrain === 'zama' ? '#9a7650' : '#8f7a58') } };
+    this.uniforms = { uTime: { value: 0 }, uDust: { value: new THREE.Color(battle.terrain.dry ? '#9a7650' : '#8f7a58') } };
     // figurines
     let total = 0;
     const perArch = {};

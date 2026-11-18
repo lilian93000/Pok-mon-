@@ -71,6 +71,8 @@ export class Effects {
     this.dustGeo = qg;
     scene.add(this.dustMesh);
     // ----------------------------------------------------------- étendards
+    const sc = this.b.scn.sideColors;
+    this.sideRGB = sc ? sc.map((h) => { const c = new THREE.Color(h); return [c.r ** 0.45, c.g ** 0.45, c.b ** 0.45]; }) : null;
     this.buildStandards();
     // ------------------------------------------------- contours tactiques
     this.lineGeo = new THREE.BufferGeometry();
@@ -114,8 +116,10 @@ export class Effects {
     };
     this.cloths = new THREE.InstancedMesh(cloth, clothMat, units.length);
     const c = new THREE.Color();
+    const sc = this.b.scn.sideColors;
     units.forEach((u, i) => {
       const rome = u.side === 0;
+      if (sc) { this.cloths.setColorAt(i, c.set(sc[u.side]).multiplyScalar(u.isGen ? 0.95 : 0.75)); return; }
       const col = u.isGen ? (rome ? '#a01818' : '#5a1f52') : u.isCav ? (rome ? '#8e1c1c' : '#6b2a5f') : rome ? '#8e1c1c' : u.type === 'gauls' || u.type === 'gauls_merc' ? '#2e4f7a' : '#6b2a5f';
       this.cloths.setColorAt(i, c.set(col));
     });
@@ -219,7 +223,7 @@ export class Effects {
     this.dustMat.uniforms.uCamU.value.set(e[4], e[5], e[6]);
     // la poussière est éclairée comme le sol : soleil direct + lumière du ciel
     const light = 0.9 + world.sun.intensity * Math.max(0.15, Math.sin(world.sunEl || 0.6)) * 0.85;
-    const base = this.b.scn.terrain === 'zama' ? [0.74, 0.58, 0.42] : [0.78, 0.69, 0.53];
+    const base = this.b.terrain.dry ? [0.74, 0.58, 0.42] : [0.78, 0.69, 0.53];
     this.dustMat.uniforms.uCol.value.setRGB(base[0], base[1], base[2]).convertSRGBToLinear().multiplyScalar(light * 0.62);
   }
 
@@ -269,7 +273,7 @@ export class Effects {
       const sel = selection.has(u);
       if (!sel && !showAll) continue;
       const rome = u.side === 0;
-      let [r, g, bb] = rome ? [0.85, 0.2, 0.15] : [0.55, 0.3, 0.75];
+      let [r, g, bb] = this.sideRGB ? this.sideRGB[u.side] : rome ? [0.85, 0.2, 0.15] : [0.55, 0.3, 0.75];
       if (u.routing) { r = g = bb = 0.75; }
       const k = sel ? 1.25 : 0.7;
       r = Math.min(1, r * k + (sel ? 0.25 : 0)); g = Math.min(1, g * k + (sel ? 0.25 : 0)); bb = Math.min(1, bb * k + (sel ? 0.25 : 0));

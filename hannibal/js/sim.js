@@ -40,7 +40,7 @@ export class Unit {
     this.z = def.zf - this.fz * this.hd;
     this.y = b.terrain.height(this.x, this.z);
     this.vx = 0; this.vz = 0; this.px = this.x; this.pz = this.z;
-    this.morale = T.morale; this.fatigue = 0; this.coh = 1;
+    this.morale = Math.min(98, T.morale + (def.xp || 0) * 4); this.fatigue = 0; this.coh = 1;
     this.state = ST.READY;
     this.order = { kind: 'hold' };
     this.contacts = [];

@@ -164,7 +164,7 @@ export class GrassField {
     }
     g.setAttribute('iOff', new THREE.InstancedBufferAttribute(off, 4));
     g.instanceCount = count;
-    const zama = ter.kind === 'zama';
+    const zama = ter.dry;
     this.u = {
       uCenter: { value: new THREE.Vector2() }, uTile: { value: tile }, uTime: { value: 0 },
       uWind: { value: new THREE.Vector2() }, uHeight: { value: heightTexture(ter) }, uHN: { value: ter.N }, uCell: { value: ter.cell },
@@ -235,7 +235,7 @@ export function addRocks(scene, ter, count, shadows) {
   const m = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ roughness: 0.95, flatShading: true }), count);
   const o = new THREE.Object3D(), c = new THREE.Color();
   let i = 0, tries = 0;
-  const zama = ter.kind === 'zama';
+  const zama = ter.dry;
   while (i < count && tries++ < count * 30) {
     const x = (rnd() * 2 - 1) * HALF, z = (rnd() * 2 - 1) * HALF;
     const sl = Math.abs(ter.height(x + 5, z) - ter.height(x - 5, z)) + Math.abs(ter.height(x, z + 5) - ter.height(x, z - 5));

@@ -1,8 +1,11 @@
 # Hannibal ad portas
 
-Simulateur 3D de bataille antique dans le navigateur : **Rome contre Hannibal**, à **Cannes**
-(2 août 216 av. J.-C.) et à **Zama** (19 octobre 202 av. J.-C.). HTML et JavaScript purs,
-Three.js chargé depuis un CDN, aucune installation.
+Jeu de stratégie dans le navigateur sur la **deuxième guerre punique** (218-202 av. J.-C.) :
+une **grande campagne** au tour par tour sur une carte en relief de la Méditerranée occidentale,
+et des **batailles en temps réel en 3D**, soldat par soldat. Deux batailles historiques sont aussi
+jouables seules : **Cannes** (2 août 216 av. J.-C.) et **Zama** (19 octobre 202 av. J.-C.).
+HTML et JavaScript purs, Three.js chargé depuis un CDN, aucune installation. Le jeu se joue à la
+souris ou au doigt, sur ordinateur, tablette ou téléphone tenu à l'horizontale.
 
 ## Lancer
 
@@ -12,6 +15,48 @@ python3 -m http.server 8000
 ```
 
 Il faut être connecté (Three.js et les polices viennent d'un CDN).
+
+## Grande campagne
+
+- **La carte** : Hispanie, Gaule du Sud, Italie, Sicile, Sardaigne, Corse, Baléares et Afrique du
+  Nord en relief, côtes, Alpes, Pyrénées, Apennins, Atlas et grands fleuves tracés à la main,
+  31 provinces avec leur ville, leur peuple, leur revenu, leur garnison et leur muraille.
+- **Les camps** : Rome (15 provinces, la mer, des légions qui se relèvent de chaque défaite) ou
+  Carthage (Hannibal à Carthagène avec ses éléphants, l'Hispanie, l'Afrique). Les peuples libres
+  (Insubres, Boïens, Ligures, Volques, Celtibères, Lusitaniens, Numides, Maures) défendent leurs terres.
+- **Deux tours par an** : en été, deux mouvements ; en hiver, un seul, et le passage des Alpes
+  coûte deux fois plus d'hommes. Les traversées par mer prennent un tour, et la flotte romaine
+  interdit à Carthage les routes de la mer Tyrrhénienne.
+- **Armées et généraux** : 20 unités au plus par armée, menées par les vrais généraux (Hannibal,
+  Hasdrubal, Magon, Maharbal, les Scipion, Fabius, Marcellus, Varron…) notés d'une à cinq étoiles.
+  Les unités gagnent de l'expérience ; les généraux peuvent tomber au combat.
+- **Économie** : chaque ville lève les troupes de son peuple (légions dans le Latium, Libyens et
+  éléphants en Afrique, Ibères en Hispanie, Gaulois dans la plaine du Pô) ; chaque unité coûte une
+  solde à chaque tour, et un trésor vide fait déserter les troupes.
+- **Sièges** : une ville fortifiée se prend par la faim (quelques saisons) ou par l'assaut.
+- **Batailles** : quand deux armées se rencontrent, le jeu montre le rapport des forces et propose
+  de livrer bataille en 3D, de la résoudre automatiquement ou de se replier. Le champ de bataille
+  est construit à partir des armées en présence (triple ligne romaine, ligne et réserve, cavalerie
+  aux ailes, éléphants en tête) et du terrain de la province (collines d'Étrurie, plaine du Pô,
+  plaine de l'Aufide près de Cannes, plaine d'Afrique), en été ou en hiver. Les pertes reviennent
+  dans la campagne.
+- **Histoire** : soulèvement des Gaulois cisalpins à l'arrivée d'Hannibal, dictature de Fabius
+  après deux désastres, défection de Capoue et des cités du Sud, « Hannibal ad portas » et levée
+  des légions urbaines, Syracuse qui change de camp, arrivée du jeune Scipion, ralliement de
+  Massinissa, rappel d'Hannibal en Afrique.
+- **Victoire** : Rome gagne en prenant Carthage ; Carthage en prenant Rome ou en détachant de Rome
+  neuf provinces d'Italie. À la fin de 202 av. J.-C., le camp qui tient le plus de provinces impose
+  la paix. La partie est sauvegardée dans le navigateur à chaque action.
+
+## Sur téléphone
+
+- Interface pensée pour l'écran à l'horizontale : barre du haut compacte, ordres en colonne
+  d'icônes à droite, cartes d'unités en bas, plans de bataille en une ligne.
+- Au doigt : toucher une unité pour la choisir, toucher le sol pour l'y envoyer, un ennemi pour
+  l'attaquer ; **appui long puis glisser** pour tracer la ligne de bataille ; bouton « Plusieurs »
+  pour choisir plusieurs unités ; glisser, pincer et tourner à deux doigts pour la caméra.
+- Plein écran (Android et ordinateurs), invitation à tourner l'écran, qualité « Légère » et
+  une figurine pour huit hommes par défaut, résolution qui s'adapte à la fluidité.
 
 ## Ce qui est simulé
 
@@ -92,7 +137,7 @@ est dessinée comme un groupe de 2 à 4 soldats : les rangs ont leur vraie densi
 
 ## Jouer
 
-- Choisis la bataille, ton camp (Rome, Carthage ou spectateur), l'échelle et la qualité.
+- Choisis la grande campagne ou une bataille historique, ton camp (Rome, Carthage ou spectateur), l'échelle et la qualité.
 - **Déploiement** : avant la bataille, déplace tes unités dans ta moitié du champ.
 - **Sélection** : clic sur une unité (Maj pour en ajouter), Maj+glisser pour un rectangle, ou
   les boutons de groupe en bas (double-clic pour y aller).
@@ -127,6 +172,11 @@ l'encerclement et une lourde défaite romaine.
 | `js/sim.js` | Moteur de bataille (sans Three.js, testable dans Node) |
 | `js/ai.js` | Plans d'Hannibal, de Varron et de Scipion, réflexes des unités |
 | `js/plans.js` | Plans proposés au joueur, doctrine des officiers, conseiller |
+| `js/campaign.js` | Campagne : provinces, armées, généraux, économie, sièges, événements, IA (sans Three.js) |
+| `js/battlegen.js` | Batailles de campagne : déploiement des armées, terrain, retour des pertes |
+| `js/geo.js` | Côtes, montagnes et fleuves de la Méditerranée occidentale |
+| `js/campmap.js` | Carte de campagne en 3D : relief, provinces, villes, armées |
+| `js/campui.js` | Interface de la campagne : sélection, marche, levées, batailles, tours |
 | `js/nature.js` | Herbes 3D, rochers, roseaux, nuages et leurs ombres, textures fines du sol |
 | `js/post.js` | Rendu cinéma (anticrénelage, halo, étalonnage) |
 | `js/terrain.js` | Relief, rivière, nature du sol |
