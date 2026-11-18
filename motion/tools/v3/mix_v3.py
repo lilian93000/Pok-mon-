@@ -21,7 +21,7 @@ from specs import SPECS  # noqa: E402
 import voix_v3  # noqa: E402
 
 SR = 48000
-TAIL = 0.35   # la boucle repart vite
+LOOP_PAD = 0.12   # boucle : on coupe juste après le dernier mot, la vidéo repart aussitôt sur la 1re phrase
 
 
 def load(path):
@@ -93,7 +93,10 @@ if __name__ == "__main__":
     owner = {li: k for k, sc in enumerate(spec["scenes"]) for li in sc["groups"]}
     W = [[owner[w[0]], w[1], round(w[2], 3), round(w[3], 3)] for w in words]
     vo = load(voice)
-    dur = round(len(vo) / SR + TAIL, 2)
+    cut = min(len(vo) / SR, W[-1][3] + LOOP_PAD)       # pas de blanc final : la dernière phrase enchaîne sur la première
+    vo = vo[: int(cut * SR)].copy()
+    fade = int(0.03 * SR); vo[-fade:] *= np.linspace(1, 0, fade)
+    dur = round(len(vo) / SR, 3)
     bus = np.zeros(int(dur * SR) + SR)
     place(bus, vo, 0.0)
     S = lambda f: load(os.path.join(sfx, f))  # noqa: E731

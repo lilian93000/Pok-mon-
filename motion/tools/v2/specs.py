@@ -179,7 +179,7 @@ SPECS["notaire3"] = dict(
 SPECS["etatdeslieux3"] = dict(
     title="ÉTAT DES LIEUX : LE DÉLAI SECRET",
     comment="10 jours pour compléter l'état des lieux d'entrée (1er mois de chauffe pour le chauffage), commission de conciliation, présomption de bon état sans état des lieux ; voix v3, fin en boucle.",
-    tag="LOCATAIRE · TES DROITS",
+    tag="ANALYSETACOPRO · LOCATAIRE",
     source="Loi du 6 juillet 1989, art. 3-2 · Code civil, art. 1731",
     script="voix-off/v3/etatdeslieux.txt",
     display={"dix jours": "10 jours"},
@@ -191,7 +191,7 @@ SPECS["etatdeslieux3"] = dict(
         dict(type="rule", groups=[5], n="2/3", big="RECOMMANDÉ", sub="avec photos datées", chip="garde une preuve", at="recommand", chip_at="photo", glow="#3b82f6"),
         dict(type="rule", groups=[6, 7], n="3/3", big="GRATUIT", sub="commission de conciliation", chip="si le proprio refuse", at="commission", chip_at="refus", glow="#a855f7"),
         dict(type="punch", groups=[8, 9, 10], big="BON ÉTAT", sub="sans état des lieux : présumé", at="bon", glow="#ef4444"),
-        dict(type="hook", groups=[11], pre="Ton état des lieux d'entrée :", big="10 JOURS", sub="pas un de plus", glow="#22c55e"),
+        dict(type="hook", groups=[11], pre="État des lieux d'entrée :", big="DÉLAI SECRET", fs=128, sub="que personne ne te dit", glow="#ef4444"),  # = 1re image : la boucle est invisible
     ],
 )
 
@@ -239,7 +239,7 @@ SPECS["vfloc3"] = dict(
 SPECS["pvag3"] = dict(
     title="3 PHRASES D'UN PV D'AG QUI DOIVENT TE FAIRE FUIR",
     comment="Travaux votés à appeler (payés par l'acheteur sauf clause du compromis, décret 1967 art. 6-2), question reportée, expertise en cours ; voix v3, fin en boucle.",
-    tag="ACHETER · LA COPRO",
+    tag="ANALYSETACOPRO · ACHETER",
     source="Décret du 17 mars 1967, art. 6-2 · procès-verbaux d'assemblée générale",
     script="voix-off/v3/pvag.txt",
     display={"Trois phrases": "3 phrases"},
@@ -249,6 +249,6 @@ SPECS["pvag3"] = dict(
         dict(type="rule", groups=[4, 5], n="2/3", big="REPORTÉ", sub="« à la prochaine assemblée »", chip="le problème traîne", at="report", chip_at="train", glow="#eab308"),
         dict(type="rule", groups=[6, 7], n="3/3", big="EXPERTISE", sub="« en cours sur les fissures »", chip="pas encore chiffrée", at="expertis", chip_at="chiffr", glow="#a855f7"),
         dict(type="punch", groups=[8], big="ON TRAQUE", sub="ces phrases pour toi", at="traqu", glow="#22c55e"),
-        dict(type="hook", groups=[9], pre="Dans un PV d'AG :", big="3 PHRASES", sub="…", glow="#ef4444"),
+        dict(type="hook", groups=[9], pre="Dans un PV d'AG :", big="3 PHRASES", sub="qui doivent te faire fuir", glow="#ef4444"),  # = 1re image : la boucle est invisible
     ],
 )

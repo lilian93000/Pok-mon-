@@ -3,6 +3,8 @@
 Méthode (fixée par Lilian) :
 - eleven_v3, stability 0.0 (« Creative »), similarity 0.8, style 1.0, speaker boost ; tout le texte en UNE génération (/with-timestamps).
 - Une phrase courte par ligne, un tag d'émotion devant chaque phrase, mots clés en MAJUSCULES, « … » avant le mot important.
+- Boucle : la dernière phrase ne répète pas la première, elle y MÈNE (« Alors retiens bien ça… » → 1re phrase) ;
+  pas d’intro séparée devant, dernière image = première image, son coupé juste après le dernier mot (mix_v3).
 - Montage : chaque blanc de plus de 0,12 s ramené à 0,12 s (silencedetect −38 dB), début et fin intacts, puis atempo ×1,15.
 - Les horodatages v3 sont imprécis : on ne coupe jamais d'après eux. Contrôle par retranscription faster-whisper (medium, fr).
 
