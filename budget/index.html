@@ -404,6 +404,7 @@ function installCfg(cfg, txOnly){
   const set = cfg.s || cfg;
   if(!txOnly){ S = Object.assign({}, DEFAULTS, set); S.goals = Object.assign({}, DEFAULTS.goals, set.goals||{}); store.set('settings',S); }
   let added=0;
+  if(cfg.b) store.set('balances',cfg.b);
   if(Array.isArray(cfg.t)){
     if(cfg.replace) TXS=[];
     const ids=new Set(TXS.map(t=>t.id));
@@ -694,6 +695,44 @@ function pickerCard(){
 function bindPicker(){ document.querySelectorAll('[data-mm]').forEach(b=>b.onclick=e=>{ store.set('starter',b.dataset.mm); store.set('stageSeen',stageFor(S.savingsBalance)); store.set('seenTx',TXS.length);
   mmBurst(e.clientX,e.clientY,['✨','🪙','💛','⭐'],22); toast(`${monById(b.dataset.mm).stages[0].name} te rejoint ! 🎉`); render(); }); }
 
+
+/* ---------- argent restant total ---------- */
+function balanceInfo(M){
+  const b=store.get('balances',null), man=store.get('balanceManual',null);
+  if(!b && !man) return null;
+  const fromStmt = b ? (b.P||0)+(b.C||0)*S.rate+(b.J||0) : null;
+  const useMan = man && (!b || man.date>=b.date);
+  const total = useMan ? man.v : fromStmt;
+  // charges fixes encore à payer avant la fin du mois de paie
+  const due = S.fixed.filter(f=>f.day).map(f=>({n:f.n,v:+(f.amt||f.v),d:nextDate(f.day,f.every||1,f.last,M.today)})).filter(x=>x.d<=M.C.end);
+  const dueSum = due.reduce((a,x)=>a+x.v,0);
+  return {b,man,useMan,total,dueSum,due,perDay:(total-dueSum)/Math.max(M.daysLeft,1)};
+}
+function balanceCard(M){
+  const I=balanceInfo(M);
+  if(!I) return `<div class="card anim" style="--i:1"><div class="h"><span>💰 Argent restant total</span></div><button class="ghost" id="balEdit" style="margin:0">✏️ Indiquer combien il me reste</button><div id="balForm"></div></div>`;
+  const src = I.useMan ? `Montant saisi le ${dFr(I.man.date)}` : `Tes 3 comptes · relevé du ${dFr(I.b.date)}`;
+  return `<div class="card anim" style="--i:1"><div class="h"><span>💰 Argent restant total</span><span class="r">${src}</span></div>
+    <div style="font-size:42px;font-weight:900;letter-spacing:-.03em;line-height:1.05" class="num" id="balTotal">0 €</div>
+    ${!I.useMan&&I.b?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+      <span class="pill rev" style="margin:0;font-size:12px;padding:4px 10px">Perso € ${fmt(I.b.P,2)}</span>
+      <span class="pill rev" style="margin:0;font-size:12px;padding:4px 10px">Perso CHF ${(I.b.C||0).toLocaleString('fr-FR',{minimumFractionDigits:2})} CHF ≈ ${fmt((I.b.C||0)*S.rate)}</span>
+      <span class="pill rev" style="margin:0;font-size:12px;padding:4px 10px">Joint ${fmt(I.b.J,2)}</span></div>`:''}
+    <p style="margin:12px 0 0;font-size:14px">Jusqu'à la paie (${M.daysLeft} j) : <b>≈ ${fmt(Math.max(I.perDay,0))} / jour</b>${I.dueSum?` <span class="muted">après ${fmt(I.dueSum)} de prélèvements à venir</span>`:''}</p>
+    <div style="display:flex;gap:8px;margin-top:4px"><button class="ghost" id="balEdit">✏️ J'ai un autre montant</button>${I.useMan&&I.b?'<button class="ghost" id="balReset">↩︎ Relevé</button>':''}</div>
+    <div id="balForm"></div></div>`;
+}
+function bindBalance(M){
+  const I=balanceInfo(M); if(I&&$('balTotal')) countUp($('balTotal'),I.total,{d:0});
+  if($('balEdit')) $('balEdit').onclick=()=>{
+    $('balForm').innerHTML=`<div class="amount" style="margin-top:10px"><input id="balIn" type="number" inputmode="decimal" placeholder="${I?Math.round(I.total):'1500'}" aria-label="Argent restant en euros"><span>€</span></div><button class="bigbtn" id="balSave">Enregistrer</button>`;
+    $('balIn').focus();
+    $('balSave').onclick=()=>{ const v=parseFloat($('balIn').value); if(!(v>=0)){ toast('Indique un montant'); return; }
+      store.set('balanceManual',{v,date:M.today}); toast('Montant enregistré ✅'); render(); };
+  };
+  if($('balReset')) $('balReset').onclick=()=>{ store.set('balanceManual',null); render(); };
+}
+
 function companionCard(M){
   const m=monById(store.get('starter',null)); if(!m) return '';
   const sav=S.savingsBalance||0, st=stageFor(sav), f=monForm(m,st), lvl=levelFor(sav), mood=moodOf(M);
@@ -826,6 +865,7 @@ function renderToday(M){
     <div class="foot"><div><span style="opacity:.8">Dépensé ce mois</span><b class="num" id="lifeSpent">0 €</b></div>
       <div style="text-align:right"><span style="opacity:.8">Il reste</span><b class="num" id="lifeLeft">0 €</b></div></div>
   </div>
+  ${balanceCard(M)}
   ${hasMon&&hasData?battleCard(M):''}
   ${hasData?'':`<div class="card anim" style="--i:1;display:flex;align-items:center;gap:12px"><span style="font-size:28px">📥</span><div style="flex:1;font-size:14px"><b>Aucune opération pour l'instant</b><br><span class="muted">Importe ton relevé dans Réglages.</span></div><button class="importbtn" id="goImport">Réglages</button></div>`}
   <div class="card anim proj" style="--i:1">
@@ -853,6 +893,7 @@ function renderToday(M){
     <div id="list"></div><button class="more" id="moreBtn">Voir tout</button></div>`;
 
   if($('goImport')) $('goImport').onclick=()=>show('settings');
+  bindBalance(M);
   if(hasMon){ bindCompanion(M); if($('replay')) $('replay').onclick=()=>playBattle(M);
     if(hasData && TXS.length>store.get('seenTx',0)){ store.set('seenTx',TXS.length); setTimeout(()=>playBattle(M),1200); }
     checkEvolution(); } else bindPicker();
