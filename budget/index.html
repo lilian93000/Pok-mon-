@@ -406,6 +406,7 @@ function installCfg(cfg, txOnly){
   let added=0;
   if(cfg.b) store.set('balances',cfg.b);
   if(Array.isArray(cfg.t)){
+    store.set('dataTs', Date.now());
     if(cfg.replace) TXS=[];
     const ids=new Set(TXS.map(t=>t.id));
     cfg.t.forEach(([id,d,desc,amt,cur,type,product])=>{ if(!ids.has(id)){ TXS.push({id,d,desc,amt,cur,type,product}); added++; } });
@@ -486,11 +487,11 @@ const dLong = s => D(s).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric'
 const daysBetween = (a,b)=>Math.round((D(b)-D(a))/864e5);
 const sum = a => a.reduce((s,x)=>s+x.v,0);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-function countUp(el,to,{d=0,dur=1000,suffix=''}={}){
+function countUp(el,to,{d=0,dur=1000,suffix='',from=0}={}){
   if(!el) return;
   if(reduce){el.textContent=fmt(to,d)+suffix;return;}
   const t0=performance.now();
-  const step=t=>{const p=Math.min((t-t0)/dur,1), e=1-Math.pow(1-p,4); el.textContent=fmt(to*e,d)+suffix; if(p<1) requestAnimationFrame(step);};
+  const step=t=>{const p=Math.min((t-t0)/dur,1), e=1-Math.pow(1-p,4); el.textContent=fmt(from+(to-from)*e,d)+suffix; if(p<1) requestAnimationFrame(step);};
   requestAnimationFrame(step);
 }
 let toastT; function toast(msg){const t=$('toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),3200);}
@@ -613,8 +614,14 @@ function classify(t){
   if(/transfer|virement|^to |^virement/i.test(t.type+' '+desc)) return 'envoi';
   return 'autre';
 }
+let QUICK = store.get('quick',[]);
+function coverDate(){ const b=store.get('balances',null); let d=b&&b.date||''; TXS.forEach(t=>{ if(t.d>d) d=t.d; }); return d; }
 function enrich(){
-  return TXS.map(t=>{ const v=Math.abs(t.amt)*(t.cur==='CHF'?S.rate:t.cur==='EUR'?1:1); return Object.assign({},t,{c:classify(t),v,sign:t.amt<0?-1:1}); });
+  const base = TXS.map(t=>{ const v=Math.abs(t.amt)*(t.cur==='CHF'?S.rate:t.cur==='EUR'?1:1); return Object.assign({},t,{c:classify(t),v,sign:t.amt<0?-1:1}); });
+  const cov = coverDate();
+  const dts = store.get('dataTs',0);
+  const q = QUICK.filter(x=>x.d>cov || x.ts>dts).map(x=>({id:'q'+x.ts,ts:x.ts,d:x.d,desc:x.label,amt:-x.v,cur:'EUR',type:'manual',product:'quick',c:x.c,v:x.v,sign:-1,quick:true}));
+  return base.concat(q).sort((a,b)=>a.d.localeCompare(b.d));
 }
 function fixedLabel(t){ for(const f of S.fixed){ if(f.kw && t.desc.toLowerCase().includes(f.kw.toLowerCase()) && (!f.strict||Math.abs(t.v-f.v)<1.5)) return f.n; } return null; }
 
@@ -651,7 +658,7 @@ function compute(){
   const pace = vieSpent/daysElapsed;
   const projVie = vieSpent + pace*(daysLeft-1);
   const projSave = salaryEur - fixTotal - projVie - funSpent;
-  const lastTx = all.length ? all[all.length-1].d : null;
+  const lastTx = TXS.length ? TXS.reduce((m,t)=>t.d>m?t.d:m,'') : null;
   return {all,today,C,inC,vie,fun,fix,rev,epa,salaryEur,fixTotal,vieGoal,perDayGoal,totalDays,daysLeft,daysElapsed,BUDGET,vieSpent,funSpent,vieToday,leftVie,perDayBase,perDayNow,pace,projVie,projSave,lastTx};
 }
 
@@ -702,11 +709,14 @@ function balanceInfo(M){
   if(!b && !man) return null;
   const fromStmt = b ? (b.P||0)+(b.C||0)*S.rate+(b.J||0) : null;
   const useMan = man && (!b || man.date>=b.date);
-  const total = useMan ? man.v : fromStmt;
+  const anchor = useMan ? {v:man.v,date:man.date,ts:man.ts||0} : {v:fromStmt,date:b.date,ts:0};
+  const moved = M.all.filter(t=>!t.quick && t.d>anchor.date && !['interne','epargne'].includes(t.c)).reduce((a,t)=>a+t.sign*t.v,0);
+  const quick = M.all.filter(t=>t.quick && t.ts>anchor.ts).reduce((a,t)=>a+t.v,0);
+  const total = anchor.v + moved - quick;
   // charges fixes encore à payer avant la fin du mois de paie
   const due = S.fixed.filter(f=>f.day).map(f=>({n:f.n,v:+(f.amt||f.v),d:nextDate(f.day,f.every||1,f.last,M.today)})).filter(x=>x.d<=M.C.end);
   const dueSum = due.reduce((a,x)=>a+x.v,0);
-  return {b,man,useMan,total,dueSum,due,perDay:(total-dueSum)/Math.max(M.daysLeft,1)};
+  return {b,man,useMan,total,moved,quick,dueSum,due,perDay:(total-dueSum)/Math.max(M.daysLeft,1)};
 }
 function balanceCard(M){
   const I=balanceInfo(M);
@@ -719,16 +729,37 @@ function balanceCard(M){
       <span class="pill rev" style="margin:0;font-size:12px;padding:4px 10px">Perso CHF ${(I.b.C||0).toLocaleString('fr-FR',{minimumFractionDigits:2})} CHF ≈ ${fmt((I.b.C||0)*S.rate)}</span>
       <span class="pill rev" style="margin:0;font-size:12px;padding:4px 10px">Joint ${fmt(I.b.J,2)}</span></div>`:''}
     <p style="margin:12px 0 0;font-size:14px">Jusqu'à la paie (${M.daysLeft} j) : <b>≈ ${fmt(Math.max(I.perDay,0))} / jour</b>${I.dueSum?` <span class="muted">après ${fmt(I.dueSum)} de prélèvements à venir</span>`:''}</p>
+    ${I.quick||I.moved?`<p class="muted" style="margin:6px 0 0;font-size:12px">Depuis : ${I.moved?`relevé ${I.moved>0?'+':'−'}${fmt(Math.abs(I.moved),2)}`:''}${I.moved&&I.quick?' · ':''}${I.quick?`dépenses saisies −${fmt(I.quick,2)}`:''}</p>`:''}
+    <button class="bigbtn" id="qAdd" style="background:linear-gradient(120deg,#ef4444,#db2777);margin-top:12px">➖ J'ai dépensé</button>
+    <div id="qForm"></div>
     <div style="display:flex;gap:8px;margin-top:4px"><button class="ghost" id="balEdit">✏️ J'ai un autre montant</button>${I.useMan&&I.b?'<button class="ghost" id="balReset">↩︎ Relevé</button>':''}</div>
     <div id="balForm"></div></div>`;
 }
 function bindBalance(M){
-  const I=balanceInfo(M); if(I&&$('balTotal')) countUp($('balTotal'),I.total,{d:0});
+  const I=balanceInfo(M);
+  if(I&&$('balTotal')){ const from=window._balFrom; window._balFrom=undefined;
+    if(from!==undefined){ $('balTotal').textContent=fmt(from); setTimeout(()=>{ countUp($('balTotal'),I.total,{from,dur:1400}); $('balTotal').animate([{color:'var(--danger)',transform:'scale(1.06)'},{color:'var(--ink)',transform:'none'}],{duration:1600}); },350); }
+    else countUp($('balTotal'),I.total,{d:0}); }
+  if($('qAdd')) $('qAdd').onclick=()=>{
+    const QC=[['courses','🛒 Courses'],['essence','⛽ Essence'],['fastfood','🍔 Fast-food'],['resto','🍽️ Resto'],['plaisir','🎁 Plaisir'],['parking','🅿️ Parking'],['paris','🎰 Paris'],['autre','❓ Autre']];
+    $('qForm').innerHTML=`<div class="amount" style="margin-top:10px"><input id="qIn" type="number" inputmode="decimal" placeholder="Montant" aria-label="Montant dépensé"><span>€</span></div>
+      <div class="catgrid" style="grid-template-columns:repeat(4,1fr)">${QC.map(([k,n])=>`<button data-qc="${k}" class="${k==='courses'?'on':''}"><span class="e">${n.split(' ')[0]}</span>${n.split(' ').slice(1).join(' ')}</button>`).join('')}</div>
+      <button class="bigbtn" id="qSave">Enregistrer la dépense</button>`;
+    let cat='courses'; $('qIn').focus();
+    document.querySelectorAll('[data-qc]').forEach(b=>b.onclick=()=>{ cat=b.dataset.qc; document.querySelectorAll('[data-qc]').forEach(x=>x.classList.toggle('on',x===b)); });
+    $('qSave').onclick=()=>{ const v=Math.round(parseFloat($('qIn').value)*100)/100; if(!(v>0)){ toast('Indique un montant'); return; }
+      window._balFrom=I?I.total:0;
+      QUICK.push({ts:Date.now(),d:M.today,v,c:cat,label:CATS[cat].n+' (saisi)'}); store.set('quick',QUICK);
+      render();
+      setTimeout(()=>{ const m=$('mmMon'); if(m&&!reduce) m.animate([0,1,2,3,4].map(i=>({transform:`translateX(${i%2?8:-8}px)`})).concat([{transform:'none'}]),{duration:400});
+        mmSay(`Aïe ! −${fmt(v,2)} ${CATS[cat].e}`); const r=$('balTotal').getBoundingClientRect(); mmBurst(r.left+60,r.top+20,['💸','−€'],8); },500);
+      toast(`−${fmt(v,2)} enregistrés`); };
+  };
   if($('balEdit')) $('balEdit').onclick=()=>{
     $('balForm').innerHTML=`<div class="amount" style="margin-top:10px"><input id="balIn" type="number" inputmode="decimal" placeholder="${I?Math.round(I.total):'1500'}" aria-label="Argent restant en euros"><span>€</span></div><button class="bigbtn" id="balSave">Enregistrer</button>`;
     $('balIn').focus();
     $('balSave').onclick=()=>{ const v=parseFloat($('balIn').value); if(!(v>=0)){ toast('Indique un montant'); return; }
-      store.set('balanceManual',{v,date:M.today}); toast('Montant enregistré ✅'); render(); };
+      store.set('balanceManual',{v,date:M.today,ts:Date.now()}); toast('Montant enregistré ✅'); render(); };
   };
   if($('balReset')) $('balReset').onclick=()=>{ store.set('balanceManual',null); render(); };
 }
@@ -1029,6 +1060,11 @@ function bindSetupCard(){
    ===================================================================== */
 function openSheet(t){
   if(!t) return;
+  if(t.quick){ const bd=document.createElement('div'); bd.className='backdrop';
+    bd.innerHTML=`<div class="sheetbox" role="dialog" aria-modal="true"><div class="muted" style="font-size:12px">${dLong(t.d)} · −${fmt(t.v,2)}</div><h3>${esc(t.desc)}</h3><p class="muted" style="font-size:13px">Dépense saisie à la main. Elle disparaît toute seule quand ton relevé couvre ce jour-là.</p><button class="ghost danger" id="qDel">Supprimer cette dépense</button><button class="ghost" id="qClose">Fermer</button></div>`;
+    document.body.appendChild(bd); const close=()=>bd.remove(); bd.onclick=e=>{ if(e.target===bd) close(); }; bd.querySelector('#qClose').onclick=close;
+    bd.querySelector('#qDel').onclick=()=>{ QUICK=QUICK.filter(x=>'q'+x.ts!==t.id); store.set('quick',QUICK); close(); toast('Dépense supprimée'); render(); };
+    return; }
   const k=merchantKey(t), order=['courses','essence','fastfood','paris','resto','parking','peage','maison','sante','envoi','autre','plaisir','fixe','epargne','revenu','interne'];
   const bd=document.createElement('div'); bd.className='backdrop';
   bd.innerHTML=`<div class="sheetbox" role="dialog" aria-modal="true" aria-label="Changer la catégorie">
