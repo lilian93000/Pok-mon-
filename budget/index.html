@@ -365,9 +365,11 @@ const CATS = {
   plaisir:{n:'Plaisir',e:'🎁',bg:'#fce7f3'}, fixe:{n:'Charge fixe',e:'🔒',bg:'#e0e7ff'},
   epargne:{n:'Épargne',e:'🏦',bg:'#d1fae5'}, revenu:{n:'Rentrée',e:'💰',bg:'#d1fae5'},
   interne:{n:'Entre mes comptes',e:'🔁',bg:'#f1f5f9'},
+  paris:{n:'Jeux d\'argent',e:'🎰',bg:'#fee2e2'},
 };
-const VIE_CATS = ['courses','essence','fastfood','resto','parking','peage','maison','sante','envoi','autre'];
+const VIE_CATS = ['courses','essence','fastfood','resto','parking','peage','maison','sante','envoi','paris','autre'];
 const RULES = [
+  ['paris',/winamax|betclic|unibet|\bpmu\b|\bfdj\b|parions|pokerstars|bwin|zebet|betsson|casino en ligne|loterie|euromillion/i],
   ['plaisir',/amazon(?!.*prime)|kiabi|zara|h&m|playstation|steam|nintendo|xbox|fnac|darty|electro d[ée]p[ôo]t|grande r[ée]cr[ée]|animshop|shein|primark|decathlon|nike|adidas|elevenlabs|aliexpress|temu|micromania|sephora|jd sports|courir|apple store/i],
   ['fastfood',/mcdonald|burger king|autogrill|kfc|\bquick\b|five guys|o'?tacos|subway|domino|pizza hut|uber ?eats|deliveroo|just ?eat/i],
   ['courses',/intermarch|carrefour|leclerc|auchan|magasin u|super u|hyper u|march[ée] u|lidl|aldi|migros(?!.*(restaurant))|\bcoop\b|denner|monoprix|franprix|casino|picard|grand frais|netto|spar|biocoop/i],
@@ -382,7 +384,7 @@ const RULES = [
 /* ---------- réglages par défaut (génériques : les tiens arrivent par ton lien privé) ---------- */
 const DEFAULTS = {
   salaryChf:0, rate:1.08, payDay:24, savingsGoal:1000, plaisir:150, savingsBalance:0,
-  ownNames:'', fixed:[], goals:{courses:600,essence:200,fastfood:0,resto:50,parking:80,peage:50,maison:60,sante:50,envoi:100,autre:50,plaisir:150},
+  ownNames:'', fixed:[], goals:{paris:0,courses:600,essence:200,fastfood:0,resto:50,parking:80,peage:50,maison:60,sante:50,envoi:100,autre:50,plaisir:150},
 };
 
 /* ---------- stockage ---------- */
@@ -403,6 +405,7 @@ function installCfg(cfg, txOnly){
   if(!txOnly){ S = Object.assign({}, DEFAULTS, set); S.goals = Object.assign({}, DEFAULTS.goals, set.goals||{}); store.set('settings',S); }
   let added=0;
   if(Array.isArray(cfg.t)){
+    if(cfg.replace) TXS=[];
     const ids=new Set(TXS.map(t=>t.id));
     cfg.t.forEach(([id,d,desc,amt,cur,type,product])=>{ if(!ids.has(id)){ TXS.push({id,d,desc,amt,cur,type,product}); added++; } });
     TXS.sort((a,b)=>a.d.localeCompare(b.d)); store.set('tx',TXS);
@@ -439,7 +442,7 @@ async function unlock(code, quiet){
     const r = installCfg(cfg, !first);
     store.set('code', cleanCode(code)); store.set('dataV', ENC.v);
     if(!quiet) toast(`Tes chiffres sont là ✅`);
-    else if(r.added) toast(`${r.added} nouvelle${r.added>1?'s':''} opération${r.added>1?'s':''} ajoutée${r.added>1?'s':''} ✅`);
+    else if(r.added) toast(cfg.replace?`Relevé mis à jour ✅`:`${r.added} nouvelle${r.added>1?'s':''} opération${r.added>1?'s':''} ajoutée${r.added>1?'s':''} ✅`);
     render(); return true;
   }catch(e){ if(!quiet) toast('Code incorrect'); return false; }
 }
@@ -985,7 +988,7 @@ function bindSetupCard(){
    ===================================================================== */
 function openSheet(t){
   if(!t) return;
-  const k=merchantKey(t), order=['courses','essence','fastfood','resto','parking','peage','maison','sante','envoi','autre','plaisir','fixe','epargne','revenu','interne'];
+  const k=merchantKey(t), order=['courses','essence','fastfood','paris','resto','parking','peage','maison','sante','envoi','autre','plaisir','fixe','epargne','revenu','interne'];
   const bd=document.createElement('div'); bd.className='backdrop';
   bd.innerHTML=`<div class="sheetbox" role="dialog" aria-modal="true" aria-label="Changer la catégorie">
     <div class="muted" style="font-size:12px">${dLong(t.d)} · ${t.sign>0?'+':'−'}${fmt(t.v,2)}</div>
