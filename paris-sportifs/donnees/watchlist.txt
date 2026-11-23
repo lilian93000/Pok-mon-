@@ -1,3 +1,4 @@
+Abigail Rencheli
 Abigayel Vosloo
 Adriana Reami
 Adrienn Nagy
@@ -29,6 +30,7 @@ Anastasia Gasanova
 Anastasia Kulikova
 Anastasia Tikhonova
 Anastasia Zakharova
+Anastasia Zolotareva
 Andrea Lazaro Garcia
 Andressa Silva Gomes
 Ane Mintegi Del Olmo
@@ -61,6 +63,7 @@ Aurora Zantedeschi
 Ayana Akli
 Ayla Aksu
 Aysegul Mert
+Barbara Gatica
 Barbora Krejcikova
 Barbora Palicova
 Beatriz Haddad Maia
@@ -72,6 +75,7 @@ Bianca Mendonca Bernardes Bia Bernardes
 Boyoung Jeong
 Cadence Brace
 Cagla Buyukakcay
+Caijsa Wilda Hennemann
 Camila Osorio
 Camilla Zanolini
 Capucine Jauffret
@@ -200,6 +204,7 @@ Hong Yi Cody Wong
 Ida Wobker
 Iga Swiatek
 Ilay Yoruk
+Ipek Oz
 Irene Burillo Escorihuela
 Iryna Shymanovich
 Isabella Maria Serban
@@ -225,6 +230,7 @@ Jil Teichmann
 Joanna Garland
 Jodie Burrage
 Jordyn Hazelitt
+Josefina Estevez
 Julia Avdeeva
 Julia Grabher
 Julia Konishi Camargo Silva
@@ -360,6 +366,7 @@ Mina Hodzic
 Mireia Sagrista Bermejo
 Miriam Bianca Bulgaru
 Mirra Andreeva
+Mischka Sinclaire Goenadi
 Momoko Kobori
 Mona Barthel
 Moyuka Uchijima
@@ -412,6 +419,7 @@ Ruien Zhang
 Ruth Roura Llaverias
 Sada Nahimana
 Sahaja Yamalapalli
+Samantha Alvarez
 Samira De Stefano
 Sana Garakani
 Sandra Samir
@@ -509,9 +517,3 @@ Zhibek Kulambayeva
 Zhuoxuan Bai
 Zongyu Li
 Zuzanna Pawlikowska
-Samantha Alvarez
-Anastasia Zolotareva
-Ipek Oz
-Barbara Gatica
-Caijsa Wilda Hennemann
-Mischka Sinclaire Goenadi
